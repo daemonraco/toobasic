@@ -1,6 +1,11 @@
 <?php
 
-class ActionsManager extends Singleton {
+class ActionsManager extends UrlManager {
 	//
 	// Magic methods.
+	//
+	// Public methods.
+	public function run() {
+		
+	}
 }

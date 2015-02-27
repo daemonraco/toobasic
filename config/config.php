@@ -19,3 +19,6 @@ $Uris = array();
 $Uris["includes"] = Sanitizer::UriPath(ROOTURI."/includes");
 
 require_once __DIR__."/loader.php";
+
+$ActionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : false;
+$ServiceName = isset($_REQUEST["service"]) ? $_REQUEST["service"] : false;

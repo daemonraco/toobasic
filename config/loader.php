@@ -13,7 +13,8 @@ spl_autoload_register(function($class) {
 	);
 	$managersIncludes = array(
 		"ActionsManager",
-		"ServicesManager"
+		"ServicesManager",
+		"UrlManager"
 	);
 
 	if(!$found) {
