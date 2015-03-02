@@ -1,9 +1,6 @@
 <?php
 
-abstract class Service {
+abstract class Service extends Exporter{
 	//
 	// Magic methods.
-	public function __construct() {
-		$this->init();
-	}
 }

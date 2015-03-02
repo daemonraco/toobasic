@@ -1,6 +1,6 @@
 <?php
 
-abstract class UrlManager extends Manager {
+abstract class Manager extends Singleton {
 	//
 	// Magic methods.
 	//

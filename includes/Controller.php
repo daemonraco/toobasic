@@ -1,9 +1,6 @@
 <?php
 
-abstract class Controller {
+abstract class Controller extends Exporter {
 	//
 	// Magic methods.
-	public function __construct() {
-		$this->init();
-	}
 }

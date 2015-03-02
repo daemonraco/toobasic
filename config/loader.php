@@ -7,12 +7,16 @@ spl_autoload_register(function($class) {
 
 	$basicIncludes = array(
 		"Controller",
+		"Exporter",
+		"Model",
+		"ModelsFactory",
 		"Paths",
 		"Service",
 		"Singleton"
 	);
 	$managersIncludes = array(
 		"ActionsManager",
+		"Manager",
 		"ServicesManager",
 		"UrlManager"
 	);
