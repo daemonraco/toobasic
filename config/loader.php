@@ -1,11 +1,12 @@
 <?php
 
 spl_autoload_register(function($class) {
-	$found = false;
+	$path = false;
 
 	global $Directories;
 
 	$basicIncludes = array(
+		"Adapter",
 		"Controller",
 		"Exporter",
 		"Model",
@@ -20,24 +21,31 @@ spl_autoload_register(function($class) {
 		"ServicesManager",
 		"UrlManager"
 	);
+	$cacheAdapters = array(
+		"CacheAdapter",
+		"CacheAdapterFile"
+	);
 
-	if(!$found) {
+	if(!$path) {
 		if(in_array($class, $basicIncludes)) {
 			$path = Sanitizer::DirPath("{$Directories["includes"]}/{$class}.php");
-			if(is_readable($path)) {
-				require_once $path;
-				$found = true;
-			}
+			$path = is_readable($path) ? $path : false;
+		}
+	}
+	if(!$path) {
+		if(in_array($class, $managersIncludes)) {
+			$path = Sanitizer::DirPath("{$Directories["managers"]}/{$class}.php");
+			$path = is_readable($path) ? $path : false;
+		}
+	}
+	if(!$path) {
+		if(in_array($class, $cacheAdapters)) {
+			$path = Sanitizer::DirPath("{$Directories["adapters-cache"]}/{$class}.php");
+			$path = is_readable($path) ? $path : false;
 		}
 	}
 
-	if(!$found) {
-		if(in_array($class, $managersIncludes)) {
-			$path = Sanitizer::DirPath("{$Directories["managers"]}/{$class}.php");
-			if(is_readable($path)) {
-				require_once $path;
-				$found = true;
-			}
-		}
+	if($path) {
+		require_once $path;
 	}
 });

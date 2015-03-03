@@ -6,11 +6,11 @@ abstract class Model {
 	protected static $_IsSingleton = true;
 	//
 	// Protected properties.
-	protected $_ModelsFactory = false;
+	protected $_modelsFactory = false;
 	//
 	// Magic methods.
 	public function __construct() {
-		$this->_ModelsFactory = ModelsFactory::Instance();
+		$this->_modelsFactory = ModelsFactory::Instance();
 		$this->init();
 	}
 	/**
@@ -23,7 +23,7 @@ abstract class Model {
 		$out = false;
 
 		if($prop == "model") {
-			$out = $this->_ModelsFactory;
+			$out = $this->_modelsFactory;
 		}
 
 		return $out;

@@ -13,7 +13,7 @@ class ActionsManager extends UrlManager {
 		$actionPath = Paths::Instance()->controllerPath($actionName);
 		require_once $actionPath;
 
-		$actionClassName = ucfirst($actionName)."Controller";
+		$actionClassName = (is_numeric($actionName) ? "N" : "").ucfirst($actionName)."Controller";
 		$actionClass = new $actionClassName();
 		$actionClass->run();
 	}

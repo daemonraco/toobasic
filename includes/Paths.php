@@ -2,11 +2,21 @@
 
 class Paths extends Singleton {
 	//
+	// Constants.
+	const ExtensionCSS = "css";
+	const ExtensionHTML = "html";
+	const ExtensionJS = "js";
+	const ExtensionJSON = "json";
+	const ExtensionPHP = "php";
+	//
 	// Protected properties.
+	protected $_configPaths = false;
 	protected $_controllerPaths = false;
+	protected $_jsPaths = false;
 	protected $_manifests = false;
 	protected $_modelsPaths = false;
 	protected $_modules = false;
+	protected $_cssPaths = false;
 	//
 	// Public methods.
 	/**
@@ -14,87 +24,34 @@ class Paths extends Singleton {
 	 * @param type $actionName
 	 * @return string
 	 */
-	public function configPaths() {
-		global $Directories;
+	public function configPath($configName, $extension = self::ExtensionPHP, $full = false) {
+		global $Paths;
 
-		$out = array();
-
-		foreach($this->_modules as $module) {
-			$out[] = "{$Directories["modules"]}/{$module}/config.php";
+		if($this->_configPaths === false) {
+			global $Directories;
+			$this->_configPaths = $this->genPaths($Paths["configs"]);
+			array_unshift($this->_configPaths, $Directories["configs"]);
 		}
-		sort($out);
 
-		$out = array_merge(array(ROOTDIR."/config.php"), $out);
-
-		foreach($out as $key => $path) {
-			if(!is_readable($path)) {
-				unset($out[$key]);
-			}
-		}
+		$out = $this->find($this->_configPaths, $Paths["configs"], $configName, $extension, $full);
 
 		return $out;
 	}
-	public function controllerPath($actionName) {
-		$out = false;
-
-		global $Directories;
+	public function controllerPath($actionName, $full = false) {
 		global $Paths;
-
-		if($this->_controllerPaths === false) {
-			$this->loadModules();
-			$this->_controllerPaths = array();
-
-			foreach($this->_modules as $module) {
-				$this->_controllerPaths[] = Sanitizer::DirPath("{$Directories["modules"]}/{$module}/{$Paths["controllers"]}\n");
-			}
-			$this->_controllerPaths[] = Sanitizer::DirPath("{$Directories["site"]}/{$Paths["controllers"]}");
-
-			if(isset($_REQUEST["_debugcontrollerspath"])) {
-				debugit($this->_controllerPaths, true);
-			}
-		}
-
-		$filename = "{$actionName}.php";
-		foreach($this->_controllerPaths as $path) {
-			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
-			if(is_readable($filepath)) {
-				$out = $filepath;
-				break;
-			}
-		}
-
-		return $out;
+		return $this->find($this->_controllerPaths, $Paths["controllers"], $actionName, self::ExtensionPHP, $full);
 	}
-	public function modelPath($modelName) {
-		$out = false;
-
-		global $Directories;
+	public function cssPath($cssName, $full = false) {
 		global $Paths;
-
-		if($this->_modelsPaths === false) {
-			$this->loadModules();
-			$this->_modelsPaths = array();
-
-			foreach($this->_modules as $module) {
-				$this->_modelsPaths[] = Sanitizer::DirPath("{$Directories["modules"]}/{$module}/{$Paths["models"]}\n");
-			}
-			$this->_modelsPaths[] = Sanitizer::DirPath("{$Directories["site"]}/{$Paths["models"]}");
-
-			if(isset($_REQUEST["_debugmodelspath"])) {
-				debugit($this->_modelsPaths, true);
-			}
-		}
-
-		$filename = "{$modelName}.php";
-		foreach($this->_modelsPaths as $path) {
-			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
-			if(is_readable($filepath)) {
-				$out = $filepath;
-				break;
-			}
-		}
-
-		return $out;
+		return $this->find($this->_cssPaths, $Paths["css"], $cssName, self::ExtensionCSS, $full);
+	}
+	public function jsPath($jsName, $full = false) {
+		global $Paths;
+		return $this->find($this->_jsPaths, $Paths["js"], $jsName, self::ExtensionJS, $full);
+	}
+	public function modelPath($modelName, $full = false) {
+		global $Paths;
+		return $this->find($this->_modelsPaths, $Paths["models"], $modelName, self::ExtensionPHP, $full);
 	}
 	public function manifests() {
 		return $this->_manifests;
@@ -104,6 +61,44 @@ class Paths extends Singleton {
 	}
 	//
 	// Protected methods.
+	protected function genPaths($folder) {
+		$list = array();
+
+		global $Directories;
+
+		$this->loadModules();
+		foreach($this->_modules as $module) {
+			$list[] = Sanitizer::DirPath("{$Directories["modules"]}/{$module}/{$folder}");
+		}
+		$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$folder}");
+
+		return $list;
+	}
+	protected function find(&$list, $folder, $name, $extension, $full = false) {
+		$out = array();
+
+		if($list === false) {
+			$list = $this->genPaths($folder);
+		}
+
+		$filename = $name;
+		if($extension) {
+			$filename = "{$filename}.{$extension}";
+		}
+
+		foreach($list as $path) {
+			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
+			if(is_readable($filepath)) {
+				$out[] = $filepath;
+			}
+		}
+
+		if(!$full) {
+			$out = count($out) > 0 ? array_shift($out) : false;
+		}
+
+		return $out;
+	}
 	protected function loadModules() {
 		if($this->_modules === false) {
 			global $Directories;
