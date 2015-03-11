@@ -6,7 +6,12 @@
 abstract class Exporter {
 	//
 	// Constants
-	const ComputingPrefix = "C";
+	const FormatBasic = "basic";
+	const FormatJSON = "json";
+	const ModeAction = "action";
+	const ModeModal = "modal";
+	const PrefixComputing = "C";
+	const PrefixRender = "R";
 	//
 	// Protected class properties
 	protected static $_Cache = false;
@@ -15,17 +20,44 @@ abstract class Exporter {
 	protected $_assignments = array();
 	protected $_cached = false;
 	protected $_cacheKey = false;
-	protected $_cachePrefix = false;
 	protected $_cacheParams = array();
+	protected $_format = false;
+	protected $_lastRun = false;
+	protected $_mode = false;
+	protected $_name = false;
 	protected $_modelsFactory = false;
 	protected $_params = array();
 	protected $_requiredParams = array(
 		"GET" => array()
 	);
+	protected $_viewAdapter = false;
 	//
 	// Magic methods.
 	public function __construct() {
 		$this->_modelsFactory = ModelsFactory::Instance();
+
+		global $Defaults;
+
+		if(isset($_REQUEST["format"]) && in_array($_REQUEST["format"], array(self::FormatBasic, self::FormatJSON))) {
+			$this->_format = $_REQUEST["format"];
+		} else {
+			$this->_format = self::FormatBasic;
+		}
+
+		if(isset($_REQUEST["mode"]) && in_array($_REQUEST["mode"], array(self::ModeAction, self::ModeModal))) {
+			$this->_mode = $_REQUEST["mode"];
+		} else {
+			$this->_mode = self::ModeAction;
+		}
+
+		$this->_name = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
+
+		$this->_viewAdapter = new $Defaults["view-adapter"]();
+
+		if(isset($_REQUEST["debugwithoutcache"])) {
+			$this->_cached = false;
+		}
+
 		$this->init();
 	}
 	/**
@@ -56,8 +88,14 @@ abstract class Exporter {
 	public function assign($key, $data) {
 		$this->_assignments[$key] = $data;
 	}
+	public function assignments() {
+		return $this->_assignments;
+	}
 	public function get($key) {
 		return isset($this->_assignments[$key]) ? $this->_assignments[$prop] : false;
+	}
+	public function lastRun() {
+		return $this->_lastRun;
 	}
 	public function resetCache() {
 		$this->cache->delete($this->cacheKey());
@@ -72,10 +110,52 @@ abstract class Exporter {
 
 		$this->checkParams();
 
-		if($this->_cached) {
-			$out = $this->cachedRun();
-		} else {
-			$out = $this->dryRun();
+		$key = $this->cacheKey();
+		//
+		// Computing cache.
+		{
+			$prefix = $this->cachePrefix(Exporter::PrefixComputing);
+
+			if($this->_cached) {
+				$this->_lastRun = $this->cache->get($prefix, $key);
+			} else {
+				$this->_lastRun = false;
+			}
+
+			if($this->_lastRun && !isset($_REQUEST["debugresetcache"])) {
+				$this->_assignments = $this->_lastRun["assignments"];
+				$out = $this->_lastRun["result"];
+			} else {
+				$out = $this->dryRun();
+				$this->_lastRun = array(
+					"result" => $out,
+					"assignments" => $this->_assignments
+				);
+
+				if($this->_cached) {
+					$this->cache->save($prefix, $key, $this->_lastRun);
+				}
+			}
+		}
+		//
+		// Render cache.
+		{
+			$prefix = $this->cachePrefix(Exporter::PrefixRender);
+
+			if($this->_cached) {
+				$this->_lastRun["render"] = $this->cache->get($prefix, $key);
+			} else {
+				$this->_lastRun["render"] = false;
+			}
+
+			if(!$this->_lastRun["render"] || isset($_REQUEST["debugresetcache"])) {
+				$this->_viewAdapter->autoAssigns();
+				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_name}.".Paths::ExtensionTemplate));
+
+				if($this->_cached) {
+					$this->cache->save($prefix, $key, $this->_lastRun["render"]);
+				}
+			}
 		}
 
 		return $out;
@@ -111,18 +191,42 @@ abstract class Exporter {
 		//
 		// Computing cache.
 		{
-			$prefix = $this->cachePrefix(Exporter::ComputingPrefix);
+			$prefix = $this->cachePrefix(Exporter::PrefixComputing);
 
-			$dataBlock = $this->cache->get($prefix, $key);
-			if($dataBlock) {
-				$this->_assignments = $dataBlock["assignments"];
-				$out = $dataBlock["result"];
+			if($this->_cached) {
+				$this->_lastRun = $this->cache->get($prefix, $key);
+			} else {
+				$this->_lastRun = false;
+			}
+
+			if($this->_lastRun) {
+				$this->_assignments = $this->_lastRun["assignments"];
+				$out = $this->_lastRun["result"];
 			} else {
 				$out = $this->dryRun();
-				$dataBlock = $this->cache->save($prefix, $key, array(
+				$this->_lastRun = array(
 					"result" => $out,
 					"assignments" => $this->_assignments
-				));
+				);
+
+				if($this->_cached) {
+					$this->cache->save($prefix, $key, $this->_lastRun);
+				}
+			}
+		}
+		//
+		// Render cache.
+		{
+			$prefix = $this->cachePrefix(Exporter::PrefixRender);
+
+			$this->_lastRun["render"] = $this->cache->get($prefix, $key);
+			if(!$out) {
+				$this->_viewAdapter->autoAssigns();
+				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_name}.".Paths::ExtensionTemplate));
+
+				if($this->_cached) {
+					$this->cache->save($prefix, $key, $this->_lastRun["render"]);
+				}
 			}
 		}
 
@@ -132,11 +236,11 @@ abstract class Exporter {
 		
 	}
 	protected function cachePrefix($extra = "") {
-		if($this->_cachePrefix === false) {
-			$this->_cachePrefix = get_called_class()."_{$extra}";
+		if($extra == self::PrefixRender) {
+			$extra = "{$extra}_".strtoupper($this->_format);
 		}
 
-		return $this->_cachePrefix;
+		return get_called_class()."_{$extra}";
 	}
 	/**
 	 * @todo doc

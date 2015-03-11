@@ -9,6 +9,11 @@ class Adapter {
 	//
 	// Protected properties.
 	//
+	// Magic methods.
+	public function __construct() {
+		
+	}
+	//
 	// Public methods.
 	//
 	// Protected methods.

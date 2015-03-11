@@ -15,6 +15,8 @@ class CacheAdapterFile extends CacheAdapter {
 	public function get($prefix, $key) {
 		$path = $this->path($prefix, $key);
 
+		$this->cleanPath($path);
+
 		$data = null;
 		if(is_readable($path)) {
 			$data = unserialize(file_get_contents($path));
@@ -27,6 +29,11 @@ class CacheAdapterFile extends CacheAdapter {
 	}
 	//
 	// Protected methods.
+	protected function cleanPath($path, $forced = false) {
+		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= 3600)) {
+			unlink($path);
+		}
+	}
 	protected function path($prefix, $key, $genDir = false) {
 		global $Directories;
 

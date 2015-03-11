@@ -7,6 +7,13 @@ abstract class ViewAdapter extends Adapter {
 	// Protected properties.
 	protected $_useLayout = true;
 	//
+	// Magic methods.
+	public function __construct() {
+		parent::__construct();
+
+		$this->_templateDirs = Paths::Instance()->templateDirs();
+	}
+	//
 	// Public methods.
 	public function disableLayout() {
 		$this->_useLayout = false;

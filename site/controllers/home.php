@@ -11,6 +11,10 @@ class HomeController extends Controller {
 
 		$this->assign("test", "something");
 
+		if(isset($_REQUEST["example"]) && $_REQUEST["example"] == "hellomodule") {
+			$this->model->example->sayHi();
+		}
+
 		return $out;
 	}
 }

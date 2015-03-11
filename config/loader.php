@@ -25,6 +25,10 @@ spl_autoload_register(function($class) {
 		"CacheAdapter",
 		"CacheAdapterFile"
 	);
+	$viewAdapters = array(
+		"ViewAdapter",
+		"ViewAdapterSmarty"
+	);
 
 	if(!$path) {
 		if(in_array($class, $basicIncludes)) {
@@ -43,6 +47,28 @@ spl_autoload_register(function($class) {
 			$path = Sanitizer::DirPath("{$Directories["adapters-cache"]}/{$class}.php");
 			$path = is_readable($path) ? $path : false;
 		}
+	}
+	if(!$path) {
+		if(in_array($class, $viewAdapters)) {
+			$path = Sanitizer::DirPath("{$Directories["adapters-view"]}/{$class}.php");
+			$path = is_readable($path) ? $path : false;
+		}
+	}
+
+	if($path) {
+		require_once $path;
+	}
+});
+//
+// Known librearies
+spl_autoload_register(function($class) {
+	$path = false;
+
+	global $Directories;
+
+	if(!$path && $class == "Smarty") {
+		$path = Sanitizer::DirPath("{$Directories["libraries"]}/smarty/Smarty.class.php");
+		$path = is_readable($path) ? $path : false;
 	}
 
 	if($path) {

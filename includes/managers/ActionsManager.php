@@ -5,16 +5,29 @@ class ActionsManager extends UrlManager {
 	// Magic methods.
 	//
 	// Public methods.
-	public function run() {
+	public function run($autoDisplay = true) {
 		global $Defaults;
 
 		$actionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
 
-		$actionPath = Paths::Instance()->controllerPath($actionName);
-		require_once $actionPath;
+		$controllerPath = Paths::Instance()->controllerPath($actionName);
+		require_once $controllerPath;
 
-		$actionClassName = (is_numeric($actionName) ? "N" : "").ucfirst($actionName)."Controller";
-		$actionClass = new $actionClassName();
-		$actionClass->run();
+		$controllerClassName = (is_numeric($actionName) ? "N" : "").ucfirst($actionName)."Controller";
+		$controllerClass = new $controllerClassName();
+		$controllerClass->run();
+
+		$lastRun = $controllerClass->lastRun();
+
+		if($autoDisplay) {
+			echo $lastRun["render"];
+		}
+
+		return $lastRun["render"];
+	}
+	//
+	// Protected methods.
+	protected function init() {
+		parent::init();
 	}
 }

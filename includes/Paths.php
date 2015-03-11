@@ -8,15 +8,17 @@ class Paths extends Singleton {
 	const ExtensionJS = "js";
 	const ExtensionJSON = "json";
 	const ExtensionPHP = "php";
+	const ExtensionTemplate = "html";
 	//
 	// Protected properties.
 	protected $_configPaths = false;
 	protected $_controllerPaths = false;
+	protected $_cssPaths = false;
 	protected $_jsPaths = false;
 	protected $_manifests = false;
 	protected $_modelsPaths = false;
 	protected $_modules = false;
-	protected $_cssPaths = false;
+	protected $_templatesPaths = false;
 	//
 	// Public methods.
 	/**
@@ -59,6 +61,18 @@ class Paths extends Singleton {
 	public function modules() {
 		return $this->_modules;
 	}
+	public function templateDirs() {
+		global $Paths;
+
+		if($this->_templatesPaths === false) {
+			global $Directories;
+			$this->_templatesPaths = $this->genPaths($Paths["templates"]);
+			array_unshift($this->_templatesPaths, Sanitizer::DirPath("{$Directories["site"]}/{$Paths["templates"]}"));
+			$this->_templatesPaths = array_unique($this->_templatesPaths);
+		}
+
+		return $this->_templatesPaths;
+	}
 	//
 	// Protected methods.
 	protected function genPaths($folder) {
@@ -69,6 +83,19 @@ class Paths extends Singleton {
 		$this->loadModules();
 		foreach($this->_modules as $module) {
 			$list[] = Sanitizer::DirPath("{$Directories["modules"]}/{$module}/{$folder}");
+		}
+		$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$folder}");
+
+		return $list;
+	}
+	protected function genSitePaths($folder) {
+		$list = array();
+
+		global $Directories;
+
+		$this->loadModules();
+		foreach($this->_modules as $module) {
+			$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$module}/{$folder}");
 		}
 		$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$folder}");
 
