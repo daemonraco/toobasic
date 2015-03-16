@@ -12,6 +12,8 @@ spl_autoload_register(function($class) {
 		"Exporter",
 		"Model",
 		"ModelsFactory",
+		"Params",
+		"ParamsStack",
 		"Paths",
 		"Service",
 		"Singleton"

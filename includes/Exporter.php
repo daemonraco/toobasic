@@ -31,10 +31,7 @@ abstract class Exporter {
 	protected $_mode = false;
 	protected $_name = false;
 	protected $_modelsFactory = false;
-	protected $_params = array(
-		"GET" => array(),
-		"POST" => array()
-	);
+	protected $_params = null;
 	protected $_requiredParams = array(
 		"GET" => array(),
 		"POST" => array()
@@ -47,6 +44,8 @@ abstract class Exporter {
 		$this->_modelsFactory = ModelsFactory::Instance();
 
 		global $Defaults;
+
+		$this->_params = Params::Instance();
 
 		if(isset($_REQUEST["format"]) && in_array($_REQUEST["format"], array(self::FormatBasic, self::FormatJSON))) {
 			$this->_format = $_REQUEST["format"];
@@ -218,14 +217,11 @@ abstract class Exporter {
 			$this->_cacheKey = get_called_class();
 			foreach($this->_cacheParams as $method => $names) {
 				foreach($names as $name) {
-					$value = "";
-					if(isset($this->_params[$method][$name])) {
-						$value = $this->_params[$method][$name];
-					}
-
+					$value = $this->_params->{$method}->{$name};
 					$this->_cacheKey.= "_{$name}_{$value}";
 				}
 			}
+			debugit($this->_cacheKey, true);
 		}
 
 		return $this->_cacheKey;
@@ -238,7 +234,7 @@ abstract class Exporter {
 		  "POST" => array()
 		  );
 		 */
-		$this->loadParams();
+//		$this->loadParams();
 	}
 	protected function cachePrefix($extra = "") {
 		if($extra == self::PrefixRender) {
@@ -271,16 +267,16 @@ abstract class Exporter {
 	protected function init() {
 		
 	}
-	protected function loadParams() {
-		foreach($_GET as $name => $value) {
-			$this->_params["GET"][$name] = $value;
-		}
-		if($_SERVER["REQUEST_METHOD"] == "POST") {
-			foreach($_POST as $name => $value) {
-				$this->_params["POST"][$name] = $value;
-			}
-		}
-	}
+//	protected function loadParams() {
+//		foreach($_GET as $name => $value) {
+//			$this->_params["GET"][$name] = $value;
+//		}
+//		if($_SERVER["REQUEST_METHOD"] == "POST") {
+//			foreach($_POST as $name => $value) {
+//				$this->_params["POST"][$name] = $value;
+//			}
+//		}
+//	}
 	protected function setError($code, $message) {
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
