@@ -18,4 +18,12 @@ class ParamsStack {
 
 		return $out;
 	}
+	public function __isset($name) {
+		return isset($this->_params[$name]);
+	}
+	//
+	// Protected properties.
+	public function all() {
+		return $this->_params;
+	}
 }

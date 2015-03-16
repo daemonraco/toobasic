@@ -28,6 +28,14 @@ abstract class ErrorController extends Controller {
 
 			$this->assign("errors", $this->_failingController->errors());
 			$this->assign("lasterror", $this->_failingController->lastError());
+
+			$this->assign("currenterror", null);
+			foreach($this->_failingController->errors() as $error) {
+				if($error["code"] == $this->_name) {
+					$this->assign("currenterror", $error);
+					break;
+				}
+			}
 		} else {
 			$this->assign("errorinfo", false);
 		}

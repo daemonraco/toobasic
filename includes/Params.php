@@ -31,6 +31,18 @@ class Params extends Singleton {
 
 		return $out;
 	}
+	public function __isset($name) {
+		$out = false;
+
+		$methodName = strtolower($name);
+		if(isset($this->_paramsStacks[$methodName])) {
+			$out = true;
+		} else {
+			$out = true;
+		}
+
+		return $out;
+	}
 	//
 	// Public methods.
 	//

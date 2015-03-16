@@ -129,14 +129,14 @@ abstract class Exporter {
 	 * @return boolean Returns true if the execution had no errors.
 	 */
 	public function run() {
-		$this->_status = false;
+		$this->_status = true;
 
 		$this->checkParams();
 
 		$key = $this->cacheKey();
 		//
 		// Computing cache.
-		{
+		if($this->_status) {
 			$prefixComputing = $this->cachePrefix(Exporter::PrefixComputing);
 
 			if($this->_cached) {
@@ -167,7 +167,7 @@ abstract class Exporter {
 		}
 		//
 		// Render cache.
-		{
+		if($this->_status) {
 			$prefixRender = $this->cachePrefix(Exporter::PrefixRender);
 
 			if($this->_cached) {
@@ -221,20 +221,18 @@ abstract class Exporter {
 					$this->_cacheKey.= "_{$name}_{$value}";
 				}
 			}
-			debugit($this->_cacheKey, true);
 		}
 
 		return $this->_cacheKey;
 	}
 	protected function checkParams() {
-		/** @todo */
-		/*
-		  protected $_requiredParams = array(
-		  "GET" => array(),
-		  "POST" => array()
-		  );
-		 */
-//		$this->loadParams();
+		foreach($this->_requiredParams as $method => $params) {
+			foreach($params as $param) {
+				if(!isset($this->_params->{$method}->{$param})) {
+					$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).")");
+				}
+			}
+		}
 	}
 	protected function cachePrefix($extra = "") {
 		if($extra == self::PrefixRender) {
@@ -267,16 +265,6 @@ abstract class Exporter {
 	protected function init() {
 		
 	}
-//	protected function loadParams() {
-//		foreach($_GET as $name => $value) {
-//			$this->_params["GET"][$name] = $value;
-//		}
-//		if($_SERVER["REQUEST_METHOD"] == "POST") {
-//			foreach($_POST as $name => $value) {
-//				$this->_params["POST"][$name] = $value;
-//			}
-//		}
-//	}
 	protected function setError($code, $message) {
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
