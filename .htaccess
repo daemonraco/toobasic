@@ -1,0 +1,15 @@
+#<Files "config/*.php">
+#    Order Deny,Allow
+#    Deny from all
+#</Files>
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} (config|includes|site)(.*)/$
+RewriteRule (.*)$ index.php?action=403 [L]
+
+RewriteCond %{REQUEST_URI} (config|includes|site)/(.*)\.(json|php)$
+RewriteRule (.*)$ index.php?action=403 [L]
+#
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule (.*)$ index.php?action=404 [L]

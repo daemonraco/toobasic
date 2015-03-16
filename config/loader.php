@@ -8,6 +8,7 @@ spl_autoload_register(function($class) {
 	$basicIncludes = array(
 		"Adapter",
 		"Controller",
+		"ErrorController",
 		"Exporter",
 		"Model",
 		"ModelsFactory",
@@ -27,6 +28,7 @@ spl_autoload_register(function($class) {
 	);
 	$viewAdapters = array(
 		"ViewAdapter",
+		"ViewAdapterJSON",
 		"ViewAdapterSmarty"
 	);
 

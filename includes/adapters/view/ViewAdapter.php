@@ -5,7 +5,8 @@ abstract class ViewAdapter extends Adapter {
 	// Constants.
 	//
 	// Protected properties.
-	protected $_useLayout = true;
+	protected $_autoAssigns = array();
+	protected $_headers = array();
 	//
 	// Magic methods.
 	public function __construct() {
@@ -15,11 +16,16 @@ abstract class ViewAdapter extends Adapter {
 	}
 	//
 	// Public methods.
-	public function disableLayout() {
-		$this->_useLayout = false;
+	public function autoAssigns() {
+		global $Defaults;
+
+		$this->_autoAssigns["ROOTDIR"] = ROOTDIR;
+		$this->_autoAssigns["ROOTURL"] = ROOTURI;
+		$this->_autoAssigns["SERVER"] = $_SERVER;
+		$this->_autoAssigns["defaults"] = $Defaults;
 	}
-	public function enableLayout() {
-		$this->_useLayout = true;
+	public function headers() {
+		return $this->_headers;
 	}
 	abstract public function render($assignments, $action = false);
 	//

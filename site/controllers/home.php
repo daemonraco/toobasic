@@ -7,14 +7,23 @@ class HomeController extends Controller {
 	//
 	// Public methods.
 	protected function basicRun() {
-		$out = false;
-
-		$this->assign("test", "something");
+		$out = true;
 
 		if(isset($_REQUEST["example"]) && $_REQUEST["example"] == "hellomodule") {
+			$this->assign("currentexample", $_REQUEST["example"]);
 			$this->model->example->sayHi();
+		} else {
+			$knownDebugs = array(
+				"debugwithoutcache"=>"",
+				"debugresetcache"=>""
+			);
+			ksort($knownDebugs);
+			$this->assign("knowndebugs", $knownDebugs);
 		}
 
 		return $out;
+	}
+	protected function init() {
+		$this->_cacheParams["GET"][] = "example";
 	}
 }

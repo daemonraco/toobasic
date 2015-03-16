@@ -3,6 +3,7 @@
 define("ROOTDIR", dirname(__DIR__));
 define("ROOTURI", dirname($_SERVER["SCRIPT_NAME"]));
 
+require_once __DIR__."/define.php";
 require_once ROOTDIR."/includes/corefunctions.php";
 require_once ROOTDIR."/includes/Sanitizer.php";
 

@@ -15,7 +15,7 @@ if(!function_exists("get_called_class")) {
 		return $matches[1];
 	}
 }
-function debugit($data, $final = false, $specific = false, $name = null) {
+function debugit($data, $final = false, $specific = false, $name = null, $showTrace = false) {
 	echo '<pre style="border:dashed gray 1px;width:100%;padding:5px;">';
 
 	if($name) {
@@ -37,17 +37,17 @@ function debugit($data, $final = false, $specific = false, $name = null) {
 	}
 
 	$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-//print_r($trace);
-//die;
 
-	$caller = array(
-		"file" => __FILE__
-	);
-	while($caller["file"] == __FILE__ && $trace) {
-		$caller = array_shift($trace);
+	$callingLine = array_shift($trace);
+	$callerLine = array_shift($trace);
+
+	if($showTrace) {
+		echo "\n";
+		debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 	}
+
 	echo "\n";
-	echo "At: ".(isset($caller["class"]) ? "{$caller["class"]}::" : "")."{$caller["function"]}() [{$caller["file"]}:{$caller["line"]}]\n";
+	echo "At: ".(isset($callerLine["class"]) ? "{$callerLine["class"]}::" : "")."{$callerLine["function"]}() [{$callingLine["file"]}:{$callingLine["line"]}]\n";
 
 	echo "</pre>\n";
 	if($final) {

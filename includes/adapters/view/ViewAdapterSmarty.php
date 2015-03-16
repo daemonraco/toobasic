@@ -35,15 +35,10 @@ class ViewAdapterSmarty extends ViewAdapter {
 	}
 	//
 	// Public methods.
-	public function autoAssigns() {
-		global $Defaults;
-
-		$this->_smarty->assign("ROOTDIR", ROOTDIR);
-		$this->_smarty->assign("ROOTURL", ROOTURI);
-		$this->_smarty->assign("SERVER", $_SERVER);
-		$this->_smarty->assign("defaults", $Defaults);
-	}
 	public function render($assignments, $template = false) {
+		foreach($this->_autoAssigns as $key => $value) {
+			$this->_smarty->assign($key, $value);
+		}
 		foreach($assignments as $key => $value) {
 			$this->_smarty->assign($key, $value);
 		}
