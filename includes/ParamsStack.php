@@ -3,11 +3,21 @@
 class ParamsStack {
 	//
 	// Protected properties.
+	protected $_debugs = array();
+	protected $_hasDebugs = false;
 	protected $_params = array();
 	//
 	// Magic methods.
 	public function __construct($list) {
 		$this->_params = $list;
+		//
+		// Detecting debug parameters
+		foreach($this->_params as $param => $value) {
+			if(preg_match("/^debug([a-z0-9]*)$/", $param)) {
+				$this->_hasDebugs = true;
+				$this->_debugs[$param] = $value;
+			}
+		}
 	}
 	public function __get($name) {
 		$out = null;
@@ -22,8 +32,14 @@ class ParamsStack {
 		return isset($this->_params[$name]);
 	}
 	//
-	// Protected properties.
+	// Public properties.
 	public function all() {
 		return $this->_params;
+	}
+	public function debugs() {
+		return $this->_debugs;
+	}
+	public function hasDebugs() {
+		return $this->_hasDebugs;
 	}
 }

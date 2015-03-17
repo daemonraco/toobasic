@@ -9,4 +9,9 @@ abstract class Controller extends Exporter {
 	// Public methods.
 	//
 	// Protected methods.
+	protected function autoAssigns() {
+		parent::autoAssigns();
+
+		$this->assign("tr", $this->translate);
+	}
 }

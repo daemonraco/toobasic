@@ -37,11 +37,13 @@ abstract class Exporter {
 		"POST" => array()
 	);
 	protected $_status = true;
+	protected $_translate = null;
 	protected $_viewAdapter = false;
 	//
 	// Magic methods.
 	public function __construct() {
 		$this->_modelsFactory = ModelsFactory::Instance();
+		$this->_translate = Translate::Instance();
 
 		global $Defaults;
 
@@ -71,7 +73,7 @@ abstract class Exporter {
 				break;
 		}
 
-		if(isset($_REQUEST["debugwithoutcache"])) {
+		if(isset($this->_params->debugwithoutcache)) {
 			$this->_cached = false;
 		}
 
@@ -88,6 +90,8 @@ abstract class Exporter {
 
 		if($prop == "model") {
 			$out = $this->_modelsFactory;
+		} elseif($prop == "translate") {
+			$out = $this->_translate;
 		} elseif($prop == "cache") {
 			if(self::$_Cache === false) {
 				global $Defaults;
@@ -145,7 +149,7 @@ abstract class Exporter {
 				$this->_lastRun = false;
 			}
 
-			if($this->_lastRun && !isset($_REQUEST["debugresetcache"])) {
+			if($this->_lastRun && !isset($this->_params->debugresetcache)) {
 				$this->_assignments = $this->_lastRun["assignments"];
 				$this->_status = $this->_lastRun["status"];
 				$this->_errors = $this->_lastRun["errors"];
@@ -179,7 +183,7 @@ abstract class Exporter {
 				$this->_lastRun["render"] = false;
 			}
 
-			if(!$this->_lastRun["render"] || isset($_REQUEST["debugresetcache"])) {
+			if(!$this->_lastRun["render"] || isset($this->_params->debugresetcache)) {
 				$this->_viewAdapter->autoAssigns();
 				$this->_lastRun["headers"] = $this->_viewAdapter->headers();
 				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_name}.".Paths::ExtensionTemplate));
@@ -263,7 +267,9 @@ abstract class Exporter {
 		return $out;
 	}
 	protected function init() {
-		
+		if($this->_params->hasDebgus()) {
+			$this->_cached = false;
+		}
 	}
 	protected function setError($code, $message) {
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

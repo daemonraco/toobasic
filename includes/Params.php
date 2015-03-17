@@ -7,6 +7,8 @@ class Params extends Singleton {
 	const TypePOST = "post";
 	//
 	// Protected properties.
+	protected $_debugs = false;
+	protected $_hasDebugs = false;
 	protected $_paramsStacks = array(
 	);
 	//
@@ -18,14 +20,11 @@ class Params extends Singleton {
 		if(isset($this->_paramsStacks[$methodName])) {
 			$out = $this->_paramsStacks[$methodName];
 		} else {
-			switch($_SERVER["REQUEST_METHOD"]) {
-				case "POST":
-					$out = $this->_paramsStacks[self::TypePOST];
+			foreach($this->_paramsStacks as $stack) {
+				$out = $stack->{$name};
+				if($out !== null) {
 					break;
-				case "GET":
-				default:
-					$out = $this->_paramsStacks[self::TypeGET];
-					break;
+				}
 			}
 		}
 
@@ -38,13 +37,34 @@ class Params extends Singleton {
 		if(isset($this->_paramsStacks[$methodName])) {
 			$out = true;
 		} else {
-			$out = true;
+			foreach($this->_paramsStacks as $stack) {
+				$out = isset($stack->{$name});
+				if($out) {
+					break;
+				}
+			}
 		}
 
 		return $out;
 	}
 	//
 	// Public methods.
+	public function debugs() {
+		if($this->_debugs === false) {
+			$this->_debugs = array();
+			foreach($this->_paramsStacks as $stack) {
+				if($stack->hasDebugs()) {
+					$this->_hasDebugs = true;
+					$this->_debugs = array_merge($this->_debugs, $stack->debgus());
+				}
+			}
+		}
+
+		return $this->_debugs;
+	}
+	public function hasDebugs() {
+		return $this->_hasDebugs;
+	}
 	//
 	// Protected methods.
 	protected function init() {

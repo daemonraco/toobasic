@@ -16,7 +16,8 @@ spl_autoload_register(function($class) {
 		"ParamsStack",
 		"Paths",
 		"Service",
-		"Singleton"
+		"Singleton",
+		"Translate"
 	);
 	$managersIncludes = array(
 		"ActionsManager",

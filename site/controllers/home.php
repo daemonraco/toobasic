@@ -15,7 +15,8 @@ class HomeController extends Controller {
 		} else {
 			$knownDebugs = array(
 				"debugwithoutcache"=>"",
-				"debugresetcache"=>""
+				"debugresetcache"=>"",
+				"debugnolang"=>"Disables all translations and prints keys."
 			);
 			ksort($knownDebugs);
 			$this->assign("knowndebugs", $knownDebugs);

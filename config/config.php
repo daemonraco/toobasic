@@ -1,7 +1,22 @@
 <?php
 
+//
+// Detecting current root directory.
 define("ROOTDIR", dirname(__DIR__));
-define("ROOTURI", dirname($_SERVER["SCRIPT_NAME"]));
+//
+// Detecting command line access.
+if(php_sapi_name() == "cli") {
+	define("__SHELL__", php_sapi_name());
+}
+//
+// Detecting current URI.
+define("ROOTURI", !defined("__SHELL__") ? dirname($_SERVER["SCRIPT_NAME"]) : false);
+
+//
+// Detected mobile access.
+if(!defined("__SHELL__") && isset($_SERVER["HTTP_USER_AGENT"]) && preg_match('/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|philips|phone|sagem|sharp|sie-|smartphone|sony|symbian|t-mobile|telus|up\.browser|up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i', $_SERVER["HTTP_USER_AGENT"])) {
+	define("__IS_MOBILE__", true);
+}
 
 require_once __DIR__."/define.php";
 require_once ROOTDIR."/includes/corefunctions.php";
@@ -16,6 +31,8 @@ $Defaults["service"] = "";
 $Defaults["cache-adapter"] = "CacheAdapterFile";
 $Defaults["cache-permissions"] = 0777;
 $Defaults["view-adapter"] = "ViewAdapterSmarty";
+$Defaults["langs-defaultlang"] = "en_us";
+$Defaults["langs-built"] = false;
 //
 // Directory configurations.
 $Directories = array();
@@ -28,6 +45,7 @@ $Directories["adapters"] = Sanitizer::DirPath(ROOTDIR."/includes/adapters");
 $Directories["adapters-cache"] = Sanitizer::DirPath(ROOTDIR."/includes/adapters/cache");
 $Directories["adapters-view"] = Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
 $Directories["modules"] = Sanitizer::DirPath(ROOTDIR."/modules");
+$Directories["shell"] = Sanitizer::DirPath(ROOTDIR."/shell");
 $Directories["site"] = Sanitizer::DirPath(ROOTDIR."/site");
 //
 // Directory configurations.
@@ -40,8 +58,10 @@ $Paths["configs"] = "/configs";
 $Paths["controllers"] = "/controllers";
 $Paths["css"] = "/styles";
 $Paths["js"] = "/scripts";
+$Paths["langs"] = "/langs";
 $Paths["layouts"] = "/layouts";
 $Paths["models"] = "/models";
+$Paths["shell"] = "/shell";
 $Paths["templates"] = "/templates";
 
 require_once __DIR__."/loader.php";

@@ -15,6 +15,7 @@ class Paths extends Singleton {
 	protected $_controllerPaths = false;
 	protected $_cssPaths = false;
 	protected $_jsPaths = false;
+	protected $_langPaths = array();
 	protected $_manifests = false;
 	protected $_modelsPaths = false;
 	protected $_modules = false;
@@ -35,9 +36,7 @@ class Paths extends Singleton {
 			array_unshift($this->_configPaths, $Directories["configs"]);
 		}
 
-		$out = $this->find($this->_configPaths, $Paths["configs"], $configName, $extension, $full);
-
-		return $out;
+		return $this->find($this->_configPaths, $Paths["configs"], $configName, $extension, $full);
 	}
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
@@ -60,6 +59,30 @@ class Paths extends Singleton {
 	}
 	public function modules() {
 		return $this->_modules;
+	}
+	public function langPaths($lang) {
+		global $Paths;
+
+		if(!isset($this->_langPaths[$lang])) {
+			global $Defaults;
+			global $Directories;
+
+			if($Defaults["langs-built"]) {
+				$this->_langPaths[$lang] = array();
+				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories["cache"]}/{$Paths["langs"]}");
+			} else {
+				$this->_langPaths[$lang] = $this->genPaths("{$Paths["langs"]}");
+			}
+		}
+
+		$out = $this->find($this->_langPaths[$lang], $Paths["langs"], $lang, self::ExtensionJSON, true);
+		foreach($out as $pos => $path) {
+			if(!is_readable($path)) {
+				unset($out[$pos]);
+			}
+		}
+
+		return $out;
 	}
 	public function templateDirs() {
 		global $Paths;
