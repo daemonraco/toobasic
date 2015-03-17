@@ -23,6 +23,7 @@ spl_autoload_register(function($class) {
 		"ActionsManager",
 		"Manager",
 		"ServicesManager",
+		"ShellManager",
 		"UrlManager"
 	);
 	$cacheAdapters = array(
@@ -56,6 +57,28 @@ spl_autoload_register(function($class) {
 	if(!$path) {
 		if(in_array($class, $viewAdapters)) {
 			$path = Sanitizer::DirPath("{$Directories["adapters-view"]}/{$class}.php");
+			$path = is_readable($path) ? $path : false;
+		}
+	}
+
+	if($path) {
+		require_once $path;
+	}
+});
+//
+// Shell includes
+spl_autoload_register(function($class) {
+	$path = false;
+
+	global $Directories;
+
+	$basicIncludes = array(
+		"XXXXXXX"
+	);
+
+	if(!$path) {
+		if(in_array($class, $basicIncludes)) {
+			$path = Sanitizer::DirPath("{$Directories["shell-includes"]}/{$class}.php");
 			$path = is_readable($path) ? $path : false;
 		}
 	}

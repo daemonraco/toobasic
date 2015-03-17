@@ -16,11 +16,7 @@ if(!function_exists("get_called_class")) {
 	}
 }
 function debugit($data, $final = false, $specific = false, $name = null, $showTrace = false) {
-	echo '<pre style="border:dashed gray 1px;width:100%;padding:5px;">';
-
-	if($name) {
-		echo ">>> {$name}\n";
-	}
+	ob_start();
 
 	if($specific) {
 		var_dump($data);
@@ -49,7 +45,33 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 	echo "\n";
 	echo "At: ".(isset($callerLine["class"]) ? "{$callerLine["class"]}::" : "")."{$callerLine["function"]}() [{$callingLine["file"]}:{$callingLine["line"]}]\n";
 
-	echo "</pre>\n";
+	$out = ob_get_contents();
+	ob_end_clean();
+
+	if(defined("__SHELL__")) {
+		$out = explode("\n", $out);
+		array_walk($out, function(&$item) {
+			$item = "| {$item}";
+		});
+		$out = implode("\n", $out);
+
+		$delim = "------------------------------------------------------";
+		if($name) {
+			$aux = "+-< {$name} >{$delim}";
+			echo substr($aux, 0, strlen($delim)+1)."\n";
+		} else {
+			echo "+{$delim}\n";
+		}
+		echo "{$out}\n";
+		echo "+{$delim}\n";
+	} else {
+		echo '<pre style="border:dashed gray 1px;width:100%;padding:5px;">';
+		if($name) {
+			echo ">>> {$name}\n";
+		}
+		echo "{$out}</pre>";
+	}
+
 	if($final) {
 		die;
 	}

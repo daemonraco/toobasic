@@ -46,6 +46,7 @@ $Directories["adapters-cache"] = Sanitizer::DirPath(ROOTDIR."/includes/adapters/
 $Directories["adapters-view"] = Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
 $Directories["modules"] = Sanitizer::DirPath(ROOTDIR."/modules");
 $Directories["shell"] = Sanitizer::DirPath(ROOTDIR."/shell");
+$Directories["shell-includes"] = Sanitizer::DirPath(ROOTDIR."/shell/includes");
 $Directories["site"] = Sanitizer::DirPath(ROOTDIR."/site");
 //
 // Directory configurations.
