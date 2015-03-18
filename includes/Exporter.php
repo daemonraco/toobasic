@@ -44,7 +44,6 @@ abstract class Exporter {
 	public function __construct() {
 		$this->_modelsFactory = ModelsFactory::Instance();
 		$this->_translate = Translate::Instance();
-
 		global $Defaults;
 
 		$this->_params = Params::Instance();
@@ -267,7 +266,7 @@ abstract class Exporter {
 		return $out;
 	}
 	protected function init() {
-		if($this->_params->hasDebgus()) {
+		if($this->_params->hasDebugs()) {
 			$this->_cached = false;
 		}
 	}
