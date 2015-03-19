@@ -16,7 +16,8 @@ class HomeController extends TooBasic\Controller {
 			$knownDebugs = array(
 				"debugwithoutcache" => "",
 				"debugresetcache" => "",
-				"debugnolang" => "Disables all translations and prints keys."
+				"debugnolang" => "Disables all translations and prints keys.",
+				"debugnolayout" => "Disables current layout if any."
 			);
 			ksort($knownDebugs);
 			$this->assign("knowndebugs", $knownDebugs);

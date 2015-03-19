@@ -142,6 +142,12 @@ And your template:
 </html>
 ```
 Now you're also using translations, both inside your template and your controller.
+
+### Suggestions
+After all we said you should visit this documentation pages:
+* [Using Layouts](docs/uselayout.md)
+* [Using Languages](docs/uselanguage.md)
+
 # Thanks
 ## Smarty
 ![Alt:smarty](http://www.smarty.net/images/icons/smarty-80x15.png)

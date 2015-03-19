@@ -4,16 +4,66 @@ namespace TooBasic;
 
 class ActionsManager extends UrlManager {
 	//
+	// Protected properties.
+	protected $_usesLayout = false;
+	//
 	// Magic methods.
 	//
 	// Public methods.
 	public function run($autoDisplay = true) {
-		global $Defaults;
+		global $ActionName;
+		global $LayoutName;
+		//
+		// Current action execution.
+		$actionLastRun = self::ExecuteAction($ActionName);
+		//
+		// Layout execution (if any).
+		$layoutLastRun = false;
+		if($this->usesLayout()) {
+			$layoutLastRun = self::ExecuteAction($LayoutName);
+		}
+		//
+		// Displaying if required.
+		if($autoDisplay) {
+			$headers = array();
+			if($layoutLastRun) {
+				$headers = array_merge($headers, $layoutLastRun["headers"]);
+			}
+			$headers = array_merge($headers, $actionLastRun["headers"]);
 
-		$actionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
+			foreach($headers as $name => $value) {
+				header("{$name}: {$value}");
+			}
 
-		$status = false;
-		$controllerClass = $this->getController($actionName);
+			if($layoutLastRun) {
+				echo str_replace("%TOO_BASIC_ACTION_CONTENT%", $actionLastRun["render"], $layoutLastRun["render"]);
+			} else {
+				echo $actionLastRun["render"];
+			}
+		}
+
+		return $actionLastRun;
+	}
+	public function usesLayout() {
+		return $this->_usesLayout;
+	}
+	//
+	// Protected methods.
+	protected function init() {
+		parent::init();
+
+		global $LayoutName;
+
+		if($LayoutName && !isset($this->_params->debugnolayout)) {
+			$this->_usesLayout = true;
+		}
+	}
+	//
+	// Public class methods.
+	public static function ExecuteAction($actionName) {
+		$status = true;
+
+		$controllerClass = self::FetchController($actionName);
 		if($controllerClass !== false) {
 			$status = $controllerClass->run();
 		}
@@ -23,7 +73,7 @@ class ActionsManager extends UrlManager {
 			$lastRun = $controllerClass->lastRun();
 		} else {
 			$errorActionName = HTTPERROR_NOT_FOUND;
-			if($controllerClass !== false) {
+			if($controllerClass instanceof Exporter) {
 				$lastError = $controllerClass->lastError();
 				if($lastError) {
 					$errorActionName = $lastError["code"];
@@ -32,7 +82,7 @@ class ActionsManager extends UrlManager {
 				}
 			}
 
-			$errorControllerClass = $this->getController($errorActionName);
+			$errorControllerClass = self::FetchController($errorActionName);
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			}
@@ -40,19 +90,9 @@ class ActionsManager extends UrlManager {
 			$lastRun = $errorControllerClass->lastRun();
 		}
 
-
-		if($autoDisplay) {
-			foreach($lastRun["headers"] as $name => $value) {
-				header("{$name}: {$value}");
-			}
-			echo $lastRun["render"];
-		}
-
 		return $lastRun;
 	}
-	//
-	// Protected methods.
-	protected function getController($actionName) {
+	public static function FetchController($actionName) {
 		$out = false;
 
 		$controllerPath = Paths::Instance()->controllerPath($actionName);
@@ -60,12 +100,13 @@ class ActionsManager extends UrlManager {
 			require_once $controllerPath;
 
 			$controllerClassName = (is_numeric($actionName) ? "N" : "").ucfirst($actionName)."Controller";
-			$out = new $controllerClassName();
+			$out = new $controllerClassName($actionName);
 		}
 
 		return $out;
 	}
-	protected function init() {
-		parent::init();
+	public static function InsertAction($actionName) {
+		$lastRun = self::ExecuteAction($actionName);
+		return $lastRun["render"];
 	}
 }

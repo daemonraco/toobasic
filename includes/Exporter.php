@@ -43,10 +43,12 @@ abstract class Exporter {
 	protected $_viewAdapter = false;
 	//
 	// Magic methods.
-	public function __construct() {
+	public function __construct($actionName = false) {
 		$this->_modelsFactory = ModelsFactory::Instance();
 		$this->_translate = Translate::Instance();
+
 		global $Defaults;
+		global $ActionName;
 
 		$this->_params = Params::Instance();
 
@@ -62,7 +64,7 @@ abstract class Exporter {
 			$this->_mode = self::ModeAction;
 		}
 
-		$this->_name = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
+		$this->_name = $actionName ? $actionName : $ActionName;
 
 		switch($this->_format) {
 			case self::FormatJSON:

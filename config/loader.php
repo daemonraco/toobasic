@@ -11,7 +11,7 @@ spl_autoload_register(function($class) {
 
 		$path = false;
 
-		$basicIncludes = array(
+		static $basicIncludes = array(
 			"Adapter",
 			"Controller",
 			"ErrorController",
@@ -25,18 +25,18 @@ spl_autoload_register(function($class) {
 			"Singleton",
 			"Translate"
 		);
-		$managersIncludes = array(
+		static $managersIncludes = array(
 			"ActionsManager",
 			"Manager",
 			"ServicesManager",
 			"ShellManager",
 			"UrlManager"
 		);
-		$cacheAdapters = array(
+		static $cacheAdapters = array(
 			"CacheAdapter",
 			"CacheAdapterFile"
 		);
-		$viewAdapters = array(
+		static $viewAdapters = array(
 			"ViewAdapter",
 			"ViewAdapterJSON",
 			"ViewAdapterSmarty"
@@ -85,7 +85,7 @@ spl_autoload_register(function($class) {
 
 		global $Directories;
 
-		$basicIncludes = array(
+		static $basicIncludes = array(
 			"XXXXXXX"
 		);
 

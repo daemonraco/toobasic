@@ -38,9 +38,6 @@ class ViewAdapterSmarty extends ViewAdapter {
 	//
 	// Public methods.
 	public function render($assignments, $template = false) {
-		foreach($this->_autoAssigns as $key => $value) {
-			$this->_smarty->assign($key, $value);
-		}
 		foreach($assignments as $key => $value) {
 			$this->_smarty->assign($key, $value);
 		}

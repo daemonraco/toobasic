@@ -73,6 +73,7 @@ if(is_readable($localConfig)) {
 	require_once $localConfig;
 }
 
-$ActionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : false;
+$ActionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
+$LayoutName = isset($_REQUEST["layout"]) ? $_REQUEST["layout"] : $Defaults["layout"];
 $ServiceName = isset($_REQUEST["service"]) ? $_REQUEST["service"] : false;
 $ModeName = isset($_REQUEST["mode"]) ? $_REQUEST["mode"] : false;
