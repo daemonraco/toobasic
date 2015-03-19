@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 abstract class Controller extends Exporter {
 	//
 	// Protected properties.

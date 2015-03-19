@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class Sanitizer {
 	//
 	// Magic methods.

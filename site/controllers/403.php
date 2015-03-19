@@ -1,6 +1,6 @@
 <?php
 
-class N403Controller extends ErrorController {
+class N403Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties
 	//

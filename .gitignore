@@ -2,3 +2,4 @@ gitcomments.txt
 cache/filecache/*.data
 cache/smarty/*
 libraries/*
+tools.sh

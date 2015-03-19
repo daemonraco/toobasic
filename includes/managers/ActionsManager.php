@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class ActionsManager extends UrlManager {
 	//
 	// Magic methods.

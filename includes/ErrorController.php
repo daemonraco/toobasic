@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 abstract class ErrorController extends Controller {
 	//
 	// Protected properties.

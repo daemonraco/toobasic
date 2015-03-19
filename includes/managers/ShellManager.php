@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class ShellManager extends Manager {
 	//
 	// Magic methods.

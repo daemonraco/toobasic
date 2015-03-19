@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class Params extends Singleton {
 	//
 	// Constants.

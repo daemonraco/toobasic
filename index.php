@@ -3,7 +3,7 @@
 include __DIR__."/config/config.php";
 
 if($ServiceName) {
-	ServicesManager::Instance()->run();
+	TooBasic\ServicesManager::Instance()->run();
 } else {
-	ActionsManager::Instance()->run();
+	TooBasic\ActionsManager::Instance()->run();
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class ModelsFactory extends Singleton {
 	//
 	// Protected properties.

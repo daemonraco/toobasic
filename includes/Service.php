@@ -1,6 +1,8 @@
 <?php
 
-abstract class Service extends Exporter{
+namespace TooBasic;
+
+abstract class Service extends Exporter {
 	//
 	// Magic methods.
 }

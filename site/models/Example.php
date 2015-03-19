@@ -1,6 +1,6 @@
 <?php
 
-class ExampleModel extends Model {
+class ExampleModel extends TooBasic\Model {
 	//
 	// Public methods.
 	public function sayHi() {

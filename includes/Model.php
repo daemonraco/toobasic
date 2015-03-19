@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 abstract class Model {
 	//
 	// Protected class properties.

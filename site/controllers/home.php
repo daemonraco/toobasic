@@ -1,6 +1,6 @@
 <?php
 
-class HomeController extends Controller {
+class HomeController extends TooBasic\Controller {
 	//
 	// Protected properties
 	protected $_cached = true;
@@ -14,9 +14,9 @@ class HomeController extends Controller {
 			$this->model->example->sayHi();
 		} else {
 			$knownDebugs = array(
-				"debugwithoutcache"=>"",
-				"debugresetcache"=>"",
-				"debugnolang"=>"Disables all translations and prints keys."
+				"debugwithoutcache" => "",
+				"debugresetcache" => "",
+				"debugnolang" => "Disables all translations and prints keys."
 			);
 			ksort($knownDebugs);
 			$this->assign("knowndebugs", $knownDebugs);

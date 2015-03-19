@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class ParamsStack {
 	//
 	// Protected properties.

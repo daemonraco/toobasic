@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 class ViewAdapterSmarty extends ViewAdapter {
 	//
 	// Constants.
@@ -21,7 +23,7 @@ class ViewAdapterSmarty extends ViewAdapter {
 
 		global $Directories;
 
-		$this->_smarty = new Smarty();
+		$this->_smarty = new \Smarty();
 
 		foreach($this->_templateDirs as $path) {
 			$this->_smarty->addTemplateDir($path);

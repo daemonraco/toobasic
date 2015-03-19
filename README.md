@@ -4,24 +4,39 @@ Well __TooBasic__ is a too basic php framework with some basic features. Its mai
 ## Basic Features?
 __TooBasic__ provide some sort of solution to features like:
 * Services
+> Controllers that only return a JSON result avoiding presentation logics.
 * Plugins (modules)
+> A simple mechanism to expand your site through plugins
 * Shell Tools
+> Some sites usually have background tools to perform heavy tasks, __TooBasic__ provides a way to define and manage this tools.
 * Crons
+> Something like tools but restricted to cron-type executions.
 * Cache
+> It already has a simple way to cache controller result avoiding its logic on a second request.
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a few you may need to know.
 * `ROOTDIR`
-    * `site`: Mainly, all your site's stuff goes somewhere inside this folder.
-        * `controllers`: Here you start all your PHP files with controller specifications.
-        * `templates`: Here your store all your templates separated by the way you show them.
+    * `site`
+    > Mainly, all your site's stuff goes somewhere inside this folder.
+        * `controllers`
+            >> Here you start all your PHP files with controller specifications.
+        * `templates`
+            >> Here your store all your templates separated by the way you show them.
             * `action`
+            >>> here you store the way your controllers are seen by default.
             * `modal`
+            >>> and here the way your controllers are seen whem they are used as modals.
         * `config`
+        >> Specific configuration for your site goes here.
         * `models`
+        >> Well, this are a bunch of classes that represent your real site's logic. Remember, your controllers shouldn't have complex logics.
         * `langs`
+        >> Translations.
     * `modules`
+    > Consider these as plugins.
     * `cache`
+    > All the dynamic stuff of your site like cache files, smarty compilations, etc. will be stored here.
 
 ## How To Create A Basic Page
 In order to create a basic page you need to create two files, a contorller and a template, and one name. 
@@ -33,7 +48,7 @@ The controller will be a simple PHP class where you assign values to a set of na
 Basically, this new controller will look like this:
 ```php
 <?php
-class MyactionController extends Controller {
+class MyactionController extends TooBasic\Controller {
 	protected function basicRun() {
 		return true;
 	}
@@ -67,7 +82,7 @@ Well, yes, that's all you need, now go to your browser, and enter your URL using
 Ya ya ya, I know, this seems to be too complicated to build just a HTML, where is the magic? well, suppose your controller looks like this:
 ```php
 <?php
-class MyactionController extends Controller {
+class MyactionController extends TooBasic\Controller {
     protected $_cached = true;
 	protected function basicRun() {
 	    $this->assign("hello", "Hello World!");
@@ -105,7 +120,7 @@ Also, you may create a file called __en_us.json__ inside __ROOTDIR/site/langs/__
 Modify your controller:
 ```php
 <?php
-class MyactionController extends Controller {
+class MyactionController extends TooBasic\Controller {
     protected function basicRun() {
 	    $this->assign("hello", $this->translate->hello);
 		return true;

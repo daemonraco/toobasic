@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 abstract class ViewAdapter extends Adapter {
 	//
 	// Constants.

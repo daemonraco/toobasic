@@ -1,5 +1,7 @@
 <?php
 
+namespace TooBasic;
+
 abstract class CacheAdapter extends Adapter {
 	//
 	// Constants.
