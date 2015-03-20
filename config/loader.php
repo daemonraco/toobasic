@@ -2,11 +2,10 @@
 
 spl_autoload_register(function($class) {
 	$classExpanded = explode("\\", $class);
-	$namespace = array_shift($classExpanded);
+	$class = array_pop($classExpanded);
+	$namespace = implode("\\", $classExpanded);
 
 	if($namespace == "TooBasic") {
-		$class = array_pop($classExpanded);
-
 		global $Directories;
 
 		$path = false;
@@ -76,17 +75,17 @@ spl_autoload_register(function($class) {
 // Shell includes
 spl_autoload_register(function($class) {
 	$classExpanded = explode("\\", $class);
-	$namespace = array_shift($classExpanded);
+	$class = array_pop($classExpanded);
+	$namespace = implode("\\", $classExpanded);
 
-	if($namespace == "TooBasic") {
-		$class = array_pop($classExpanded);
-
+	if($namespace == "TooBasic\Shell") {
 		$path = false;
 
 		global $Directories;
 
 		static $basicIncludes = array(
-			"XXXXXXX"
+			"Option",
+			"Options"
 		);
 
 		if(!$path) {

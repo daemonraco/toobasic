@@ -1,0 +1,96 @@
+<?php
+
+namespace TooBasic\Shell;
+
+class Option {
+	//
+	// Constants.
+	const TypeNoValue = "novalue";
+	const TypeValue = "value";
+	const TypeMultiValue = "multivalue";
+	// 
+	// Protected properties.
+	protected $_activated = false;
+	protected $_lastValue = false;
+	protected $_name = false;
+	protected $_needsMore = false;
+	protected $_triggers = array();
+	protected $_type = false;
+	protected $_values = array();
+	//
+	// Magic methods.
+	public function __construct($name, $type = self::TypeNoValue) {
+		$this->_name = $name;
+		$this->_type = $type;
+
+		$this->reset();
+	}
+	//
+	// Public methods.
+	public function activated() {
+		return $this->_activated;
+	}
+	public function addTrigger($trigger) {
+		return $this->_triggers[] = $trigger;
+	}
+	public function check($param) {
+		$matched = false;
+
+		if($this->_needsMore) {
+			$this->_values[] = $param;
+			$this->_lastValue = $param;
+			$this->_needsMore = false;
+
+			$matched = true;
+		} else {
+			if(in_array($param, $this->_triggers)) {
+				static $needingMoreTypes = array(
+					self::TypeValue,
+					self::TypeMultiValue
+				);
+				$this->_activated = true;
+				if(in_array($this->_type, $needingMoreTypes)) {
+					$this->_needsMore = true;
+				}
+
+				$matched = true;
+			}
+		}
+
+		return $matched;
+	}
+	public function name() {
+		return $this->_name;
+	}
+	public function needsMore() {
+		return $this->_needsMore;
+	}
+	public function reset() {
+		$this->_activated = false;
+		$this->_lastValue = false;
+		$this->_needsMore = false;
+		$this->_values = array();
+	}
+	public function stauts() {
+		return $this->_name && $this->_triggers;
+	}
+	public function value() {
+		$out = false;
+
+		if($this->activated()) {
+			switch($this->_type) {
+				case self::TypeNoValue:
+					$out = true;
+					break;
+				case self::TypeValue:
+					$out = $this->_lastValue;
+					break;
+				case self::TypeMultiValue:
+					$out = $this->_values;
+					break;
+			}
+		}
+
+		return $out;
+	}
+}
