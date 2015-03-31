@@ -15,6 +15,7 @@ spl_autoload_register(function($class) {
 			"Controller",
 			"ErrorController",
 			"Exporter",
+			"Layout",
 			"Model",
 			"ModelsFactory",
 			"Params",

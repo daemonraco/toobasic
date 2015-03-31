@@ -1,5 +1,6 @@
-gitcomments.txt
-cache/filecache/*.data
-cache/smarty/*
-libraries/*
-tools.sh
+/gitcomments.txt
+/cache/filecache/*.data
+/cache/smarty/*
+/libraries/*/*
+/tools.sh
+/nbproject

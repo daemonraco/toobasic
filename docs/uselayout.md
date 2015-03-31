@@ -81,7 +81,6 @@ In this way, you may enter your page just specifiying your action.
 Also, you may do this to have a default action:
 ```php
 <?php
-
 $Defaults["layout"] = "mylayout";
 $Defaults["action"] = "myaction";
 ```

@@ -5,7 +5,7 @@ class HomeController extends TooBasic\Controller {
 	// Protected properties
 	protected $_cached = true;
 	//
-	// Public methods.
+	// Protected methods.
 	protected function basicRun() {
 		$out = true;
 
@@ -26,6 +26,8 @@ class HomeController extends TooBasic\Controller {
 		return $out;
 	}
 	protected function init() {
+		parent::init();
+
 		$this->_cacheParams["GET"][] = "example";
 	}
 }

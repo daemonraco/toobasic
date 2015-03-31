@@ -127,6 +127,10 @@ abstract class Exporter {
 	public function lastRun() {
 		return $this->_lastRun;
 	}
+	public function massiveAssign($list) {
+		$this->_assignments = array_merge($this->assignments(), $list);
+		return $this->assignments();
+	}
 	public function resetCache() {
 		$this->cache->delete($this->cacheKey());
 	}

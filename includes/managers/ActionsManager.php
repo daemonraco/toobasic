@@ -5,22 +5,22 @@ namespace TooBasic;
 class ActionsManager extends UrlManager {
 	//
 	// Protected properties.
-	protected $_usesLayout = false;
 	//
 	// Magic methods.
 	//
 	// Public methods.
 	public function run($autoDisplay = true) {
 		global $ActionName;
-		global $LayoutName;
+
+		$layoutName = false;
 		//
 		// Current action execution.
-		$actionLastRun = self::ExecuteAction($ActionName);
+		$actionLastRun = self::ExecuteAction($ActionName, null, $layoutName);
 		//
 		// Layout execution (if any).
 		$layoutLastRun = false;
-		if($this->usesLayout()) {
-			$layoutLastRun = self::ExecuteAction($LayoutName);
+		if($layoutName) {
+			$layoutLastRun = self::ExecuteAction($layoutName, $actionLastRun);
 		}
 		//
 		// Displaying if required.
@@ -44,27 +44,21 @@ class ActionsManager extends UrlManager {
 
 		return $actionLastRun;
 	}
-	public function usesLayout() {
-		return $this->_usesLayout;
-	}
 	//
 	// Protected methods.
-	protected function init() {
-		parent::init();
-
-		global $LayoutName;
-
-		if($LayoutName && !isset($this->_params->debugnolayout)) {
-			$this->_usesLayout = true;
-		}
-	}
 	//
 	// Public class methods.
-	public static function ExecuteAction($actionName) {
+	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
 		$status = true;
 
 		$controllerClass = self::FetchController($actionName);
 		if($controllerClass !== false) {
+			$layoutName = $controllerClass->layout();
+
+			if(is_array($previousActionRun)) {
+				$controllerClass->massiveAssign($previousActionRun["assignments"]);
+			}
+
 			$status = $controllerClass->run();
 		}
 
@@ -86,6 +80,7 @@ class ActionsManager extends UrlManager {
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			}
+			$layoutName = $errorControllerClass->layout();
 			$errorControllerClass->run();
 			$lastRun = $errorControllerClass->lastRun();
 		}
