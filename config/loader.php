@@ -27,6 +27,7 @@ spl_autoload_register(function($class) {
 		);
 		static $managersIncludes = array(
 			"ActionsManager",
+			"DBManager",
 			"Manager",
 			"ServicesManager",
 			"ShellManager",
@@ -36,6 +37,9 @@ spl_autoload_register(function($class) {
 			"CacheAdapter",
 			"CacheAdapterFile"
 		);
+		static $dbAdapters = array(
+			"DBAdapter"
+		);
 		static $viewAdapters = array(
 			"ViewAdapter",
 			"ViewAdapterJSON",
@@ -44,25 +48,31 @@ spl_autoload_register(function($class) {
 
 		if(!$path) {
 			if(in_array($class, $basicIncludes)) {
-				$path = TooBasic\Sanitizer::DirPath("{$Directories["includes"]}/{$class}.php");
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_INCLUDES]}/{$class}.php");
 				$path = is_readable($path) ? $path : false;
 			}
 		}
 		if(!$path) {
 			if(in_array($class, $managersIncludes)) {
-				$path = TooBasic\Sanitizer::DirPath("{$Directories["managers"]}/{$class}.php");
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MANAGERS]}/{$class}.php");
 				$path = is_readable($path) ? $path : false;
 			}
 		}
 		if(!$path) {
 			if(in_array($class, $cacheAdapters)) {
-				$path = TooBasic\Sanitizer::DirPath("{$Directories["adapters-cache"]}/{$class}.php");
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/{$class}.php");
+				$path = is_readable($path) ? $path : false;
+			}
+		}
+		if(!$path) {
+			if(in_array($class, $dbAdapters)) {
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/{$class}.php");
 				$path = is_readable($path) ? $path : false;
 			}
 		}
 		if(!$path) {
 			if(in_array($class, $viewAdapters)) {
-				$path = TooBasic\Sanitizer::DirPath("{$Directories["adapters-view"]}/{$class}.php");
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/{$class}.php");
 				$path = is_readable($path) ? $path : false;
 			}
 		}
@@ -91,7 +101,7 @@ spl_autoload_register(function($class) {
 
 		if(!$path) {
 			if(in_array($class, $basicIncludes)) {
-				$path = TooBasic\Sanitizer::DirPath("{$Directories["shell-includes"]}/{$class}.php");
+				$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/{$class}.php");
 				$path = is_readable($path) ? $path : false;
 			}
 		}
@@ -109,7 +119,7 @@ spl_autoload_register(function($class) {
 	global $Directories;
 
 	if(!$path && $class == "Smarty") {
-		$path = TooBasic\Sanitizer::DirPath("{$Directories["libraries"]}/smarty/Smarty.class.php");
+		$path = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php");
 		$path = is_readable($path) ? $path : false;
 	}
 

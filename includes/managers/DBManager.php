@@ -1,0 +1,37 @@
+<?php
+
+namespace TooBasic;
+
+class DBManager extends Manager {
+	//
+	// Protected properties.
+	protected $_connections = array();
+	//
+	// Magic methods.
+	public function __get($dbname) {
+		return $this->get($dbname);
+	}
+	//
+	// Public methods.
+	public function getDefault() {
+		global $Connections;
+		return $this->get($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]);
+	}
+	public function get($dbname) {
+		$out = false;
+
+		if(!isset($this->_connections[$dbname])) {
+			global $Connections;
+
+			if(isset($Connections[GC_CONNECTIONS_DB][$dbname])) {
+				$this->_connections[$dbname] = new DBAdapter($dbname);
+			}
+		}
+
+		$out = $this->_connections[$dbname];
+
+		return $out;
+	}
+	//
+	// Protected methods.
+}

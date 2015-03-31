@@ -24,56 +24,76 @@ require_once ROOTDIR."/includes/Sanitizer.php";
 //
 // Default constants configurations.
 $Defaults = array();
-$Defaults["action"] = "home";
-$Defaults["cache-adapter"] = "TooBasic\CacheAdapterFile";
-$Defaults["cache-permissions"] = 0777;
-$Defaults["installed"] = false;
-$Defaults["langs-defaultlang"] = "en_us";
-$Defaults["layout"] = false;
-$Defaults["langs-built"] = false;
-$Defaults["service"] = "";
-$Defaults["view-adapter"] = "TooBasic\ViewAdapterSmarty";
+$Defaults[GC_DEFAULTS_ACTION] = "home";
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "TooBasic\CacheAdapterFile";
+$Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_INSTALLED] = false;
+$Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = "en_us";
+$Defaults[GC_DEFAULTS_LAYOUT] = false;
+$Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
+$Defaults[GC_DEFAULTS_SERVICE] = "";
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "TooBasic\ViewAdapterSmarty";
 //
 // Directory configurations.
 $Directories = array();
-$Directories["cache"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/cache");
-$Directories["configs"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/config");
-$Directories["includes"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes");
-$Directories["libraries"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/libraries");
-$Directories["managers"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/managers");
-$Directories["adapters"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters");
-$Directories["adapters-cache"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/cache");
-$Directories["adapters-view"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
-$Directories["modules"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/modules");
-$Directories["shell"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell");
-$Directories["shell-includes"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell/includes");
-$Directories["site"] = TooBasic\Sanitizer::DirPath(ROOTDIR."/site");
+$Directories[GC_DIRECTORIES_CACHE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/cache");
+$Directories[GC_DIRECTORIES_CONFIGS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/config");
+$Directories[GC_DIRECTORIES_INCLUDES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes");
+$Directories[GC_DIRECTORIES_LIBRARIES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/libraries");
+$Directories[GC_DIRECTORIES_MANAGERS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/managers");
+$Directories[GC_DIRECTORIES_ADAPTERS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters");
+$Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/cache");
+$Directories[GC_DIRECTORIES_ADAPTERS_DB] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/db");
+$Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
+$Directories[GC_DIRECTORIES_MODULES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/modules");
+$Directories[GC_DIRECTORIES_SHELL] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell");
+$Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell/includes");
+$Directories[GC_DIRECTORIES_SITE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/site");
+//
+// Connections.
+$Connections = array();
+//
+// Conection specs:
+// $Connections[GC_CONNECTIONS_DB]["<name>"] = array(
+//      GC_CONNECTIONS_DB_ENGINE   => "", // Something like: "mysqli"
+//      GC_CONNECTIONS_DB_SERVER   => "", // IP or server address.
+//      GC_CONNECTIONS_DB_PORT     => "", // false when defatul.
+//      GC_CONNECTIONS_DB_NAME     => "", // Database name or schema.
+//      GC_CONNECTIONS_DB_USERNAME => "",
+//      GC_CONNECTIONS_DB_PASSWORD => "",
+//      GC_CONNECTIONS_DB_PREFIX   => false  // optiona.
+//      GC_CONNECTIONS_DB_SID      => false  // for Oracle only.
+// );
+// @{
+$Connections[GC_CONNECTIONS_DB] = array();
+$Connections[GC_CONNECTIONS_DEFAUTLS] = array();
+$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
 //
 // Directory configurations.
 $Uris = array();
-$Uris["includes"] = TooBasic\Sanitizer::UriPath(ROOTURI."/includes");
+$Uris[GC_URIS_INCLUDES] = TooBasic\Sanitizer::UriPath(ROOTURI."/includes");
 //
 // Paths configurations.
 $Paths = array();
-$Paths["configs"] = "/configs";
-$Paths["controllers"] = "/controllers";
-$Paths["css"] = "/styles";
-$Paths["js"] = "/scripts";
-$Paths["langs"] = "/langs";
-$Paths["layouts"] = "/layouts";
-$Paths["models"] = "/models";
-$Paths["shell"] = "/shell";
-$Paths["templates"] = "/templates";
+$Paths[GC_PATHS_CONFIGS] = "/configs";
+$Paths[GC_PATHS_CONTROLLERS] = "/controllers";
+$Paths[GC_PATHS_CSS] = "/styles";
+$Paths[GC_PATHS_JS] = "/scripts";
+$Paths[GC_PATHS_LANGS] = "/langs";
+$Paths[GC_PATHS_LAYOUTS] = "/layouts";
+$Paths[GC_PATHS_MODELS] = "/models";
+$Paths[GC_PATHS_SHELL] = "/shell";
+$Paths[GC_PATHS_TEMPLATES] = "/templates";
 
 require_once __DIR__."/loader.php";
 //
 // Local configuration.
-$localConfig = TooBasic\Sanitizer::DirPath("{$Directories["site"]}/config.php");
+$localConfig = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");
 if(is_readable($localConfig)) {
 	require_once $localConfig;
 }
 
-$ActionName = isset($_REQUEST["action"]) ? $_REQUEST["action"] : $Defaults["action"];
-$LayoutName = isset($_REQUEST["layout"]) ? $_REQUEST["layout"] : $Defaults["layout"];
-$ServiceName = isset($_REQUEST["service"]) ? $_REQUEST["service"] : false;
-$ModeName = isset($_REQUEST["mode"]) ? $_REQUEST["mode"] : false;
+$ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults["action"];
+$LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults["layout"];
+$ServiceName = isset($_REQUEST[GC_REQUEST_SERVICE]) ? $_REQUEST[GC_REQUEST_SERVICE] : false;
+$ModeName = isset($_REQUEST[GC_REQUEST_MODE]) ? $_REQUEST[GC_REQUEST_MODE] : false;
