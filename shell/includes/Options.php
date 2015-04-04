@@ -7,6 +7,8 @@ class Options extends \TooBasic\Singleton {
 	// Constants.
 	// 
 	// Protected properties.
+	protected $_activeOptions = false;
+	protected $_helpText = false;
 	protected $_mainOptions = array();
 	protected $_options = array();
 	protected $_unknownParams = array();
@@ -17,6 +19,19 @@ class Options extends \TooBasic\Singleton {
 	}
 	//
 	// Public methods.
+	public function activeOptions() {
+		if($this->_activeOptions === false) {
+			$this->_activeOptions = array();
+
+			foreach($this->_options as $name => $option) {
+				if($option->activated()) {
+					$this->_activeOptions[] = $name;
+				}
+			}
+		}
+
+		return $this->_activeOptions;
+	}
 	public function addMainOption($name) {
 		$this->_mainOptions[$name] = false;
 	}
@@ -24,6 +39,8 @@ class Options extends \TooBasic\Singleton {
 		$this->_options[$option->name()] = $option;
 	}
 	public function check($params = null) {
+		$ok = true;
+
 		if($params === null) {
 			global $argv;
 			$params = $argv;
@@ -37,26 +54,61 @@ class Options extends \TooBasic\Singleton {
 		$lastOption = false;
 		foreach($params as $param) {
 			if($needsMore) {
-				$option->check($param);
+				$lastOption->check($param);
 				$lastOption = false;
+				$needsMore = false;
 			} else {
 				foreach($this->_options as &$option) {
 					if($option->check($param)) {
-						$lastOption = $option;
-						$needsMore = true;
+						if($option->needsMore()) {
+							$lastOption = $option;
+							$needsMore = true;
+						}
 						break;
 					}
 				}
 			}
 		}
-//		debugit("------", true);
+
+		if($needsMore) {
+			$ok = false;
+		}
+
+		return $ok;
+	}
+	public function helpText($spacer = "") {
+		$out = "";
+
+		if($this->_helpText) {
+			$out.="{$this->_helpText}\n\n";
+		}
+
+		foreach($this->_options as $option) {
+			$out.=$option->helpText($spacer);
+		}
+
+		$out = explode("\n", $out);
+		foreach($out as &$line) {
+			$line = "{$spacer}{$line}";
+		}
+		$out = implode("\n", $out);
+		$out.= "\n";
+
+		return $out;
+	}
+	public function option($name) {
+		return isset($this->_options[$name]) ? $this->_options[$name] : null;
 	}
 	public function reset() {
+		$this->_activeOptions = false;
 		$this->_mainOptions = array();
 		$this->_unknownParams = array();
 
 		foreach($this->_options as $option) {
 			$option->reset();
 		}
+	}
+	public function setHelpText($text) {
+		return $this->_helpText = $text;
 	}
 }

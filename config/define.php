@@ -68,6 +68,8 @@ define("GC_PATHS_LANGS", "langs");
 define("GC_PATHS_LAYOUTS", "layouts");
 define("GC_PATHS_MODELS", "models");
 define("GC_PATHS_SHELL", "shell");
+define("GC_PATHS_SHELL_CRONS", "shell-crons");
+define("GC_PATHS_SHELL_TOOLS", "shell-tools");
 define("GC_PATHS_TEMPLATES", "templates");
 // @}
 //

@@ -1,5 +1,7 @@
 <?php
 
+use \TooBasic\Sanitizer as TB_Sanitizer;
+
 //
 // Detecting current root directory.
 define("ROOTDIR", dirname(__DIR__));
@@ -20,6 +22,7 @@ if(!defined("__SHELL__") && isset($_SERVER["HTTP_USER_AGENT"]) && preg_match('/(
 // Basic requirements.
 require_once __DIR__."/define.php";
 require_once ROOTDIR."/includes/corefunctions.php";
+require_once ROOTDIR."/includes/toobasicfunctions.php";
 require_once ROOTDIR."/includes/Sanitizer.php";
 //
 // Default constants configurations.
@@ -36,19 +39,19 @@ $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "TooBasic\ViewAdapterSmarty";
 //
 // Directory configurations.
 $Directories = array();
-$Directories[GC_DIRECTORIES_CACHE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/cache");
-$Directories[GC_DIRECTORIES_CONFIGS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/config");
-$Directories[GC_DIRECTORIES_INCLUDES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes");
-$Directories[GC_DIRECTORIES_LIBRARIES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/libraries");
-$Directories[GC_DIRECTORIES_MANAGERS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/managers");
-$Directories[GC_DIRECTORIES_ADAPTERS] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters");
-$Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/cache");
-$Directories[GC_DIRECTORIES_ADAPTERS_DB] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/db");
-$Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TooBasic\Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
-$Directories[GC_DIRECTORIES_MODULES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/modules");
-$Directories[GC_DIRECTORIES_SHELL] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell");
-$Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TooBasic\Sanitizer::DirPath(ROOTDIR."/shell/includes");
-$Directories[GC_DIRECTORIES_SITE] = TooBasic\Sanitizer::DirPath(ROOTDIR."/site");
+$Directories[GC_DIRECTORIES_CACHE] = TB_Sanitizer::DirPath(ROOTDIR."/cache");
+$Directories[GC_DIRECTORIES_CONFIGS] = TB_Sanitizer::DirPath(ROOTDIR."/config");
+$Directories[GC_DIRECTORIES_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR."/includes");
+$Directories[GC_DIRECTORIES_LIBRARIES] = TB_Sanitizer::DirPath(ROOTDIR."/libraries");
+$Directories[GC_DIRECTORIES_MANAGERS] = TB_Sanitizer::DirPath(ROOTDIR."/includes/managers");
+$Directories[GC_DIRECTORIES_ADAPTERS] = TB_Sanitizer::DirPath(ROOTDIR."/includes/adapters");
+$Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TB_Sanitizer::DirPath(ROOTDIR."/includes/adapters/cache");
+$Directories[GC_DIRECTORIES_ADAPTERS_DB] = TB_Sanitizer::DirPath(ROOTDIR."/includes/adapters/db");
+$Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR."/includes/adapters/view");
+$Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR."/modules");
+$Directories[GC_DIRECTORIES_SHELL] = TB_Sanitizer::DirPath(ROOTDIR."/shell");
+$Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR."/shell/includes");
+$Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR."/site");
 //
 // Connections.
 $Connections = array();
@@ -71,7 +74,7 @@ $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
 //
 // Directory configurations.
 $Uris = array();
-$Uris[GC_URIS_INCLUDES] = TooBasic\Sanitizer::UriPath(ROOTURI."/includes");
+$Uris[GC_URIS_INCLUDES] = TB_Sanitizer::UriPath(ROOTURI."/includes");
 //
 // Paths configurations.
 $Paths = array();
@@ -83,12 +86,14 @@ $Paths[GC_PATHS_LANGS] = "/langs";
 $Paths[GC_PATHS_LAYOUTS] = "/layouts";
 $Paths[GC_PATHS_MODELS] = "/models";
 $Paths[GC_PATHS_SHELL] = "/shell";
+$Paths[GC_PATHS_SHELL_CRONS] = "/shell/crons";
+$Paths[GC_PATHS_SHELL_TOOLS] = "/shell/tools";
 $Paths[GC_PATHS_TEMPLATES] = "/templates";
 
 require_once __DIR__."/loader.php";
 //
 // Local configuration.
-$localConfig = TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");
+$localConfig = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");
 if(is_readable($localConfig)) {
 	require_once $localConfig;
 }

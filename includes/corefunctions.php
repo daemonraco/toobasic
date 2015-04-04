@@ -58,7 +58,7 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 		$delim = "------------------------------------------------------";
 		if($name) {
 			$aux = "+-< {$name} >{$delim}";
-			echo substr($aux, 0, strlen($delim)+1)."\n";
+			echo substr($aux, 0, strlen($delim) + 1)."\n";
 		} else {
 			echo "+{$delim}\n";
 		}

@@ -21,6 +21,8 @@ class Paths extends Singleton {
 	protected $_manifests = false;
 	protected $_modelsPaths = false;
 	protected $_modules = false;
+	protected $_shellCronsPaths = false;
+	protected $_shellToolsPaths = false;
 	protected $_templatesPaths = false;
 	//
 	// Public methods.
@@ -34,27 +36,27 @@ class Paths extends Singleton {
 
 		if($this->_configPaths === false) {
 			global $Directories;
-			$this->_configPaths = $this->genPaths($Paths["configs"]);
-			array_unshift($this->_configPaths, $Directories["configs"]);
+			$this->_configPaths = $this->genPaths($Paths[GC_PATHS_CONFIGS]);
+			array_unshift($this->_configPaths, $Directories[GC_DIRECTORIES_CONFIGS]);
 		}
 
-		return $this->find($this->_configPaths, $Paths["configs"], $configName, $extension, $full);
+		return $this->find($this->_configPaths, $Paths[GC_PATHS_CONFIGS], $configName, $extension, $full);
 	}
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
-		return $this->find($this->_controllerPaths, $Paths["controllers"], $actionName, self::ExtensionPHP, $full);
+		return $this->find($this->_controllerPaths, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
 	}
 	public function cssPath($cssName, $full = false) {
 		global $Paths;
-		return $this->find($this->_cssPaths, $Paths["css"], $cssName, self::ExtensionCSS, $full);
+		return $this->find($this->_cssPaths, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
 	}
 	public function jsPath($jsName, $full = false) {
 		global $Paths;
-		return $this->find($this->_jsPaths, $Paths["js"], $jsName, self::ExtensionJS, $full);
+		return $this->find($this->_jsPaths, $Paths[GC_PATHS_JS], $jsName, self::ExtensionJS, $full);
 	}
 	public function modelPath($modelName, $full = false) {
 		global $Paths;
-		return $this->find($this->_modelsPaths, $Paths["models"], $modelName, self::ExtensionPHP, $full);
+		return $this->find($this->_modelsPaths, $Paths[GC_PATHS_MODELS], $modelName, self::ExtensionPHP, $full);
 	}
 	public function manifests() {
 		return $this->_manifests;
@@ -71,13 +73,13 @@ class Paths extends Singleton {
 
 			if($Defaults["langs-built"]) {
 				$this->_langPaths[$lang] = array();
-				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories["cache"]}/{$Paths["langs"]}");
+				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$Paths[GC_PATHS_LANGS]}");
 			} else {
-				$this->_langPaths[$lang] = $this->genPaths("{$Paths["langs"]}");
+				$this->_langPaths[$lang] = $this->genPaths($Paths[GC_PATHS_LANGS]);
 			}
 		}
 
-		$out = $this->find($this->_langPaths[$lang], $Paths["langs"], $lang, self::ExtensionJSON, true);
+		$out = $this->find($this->_langPaths[$lang], $Paths[GC_PATHS_LANGS], $lang, self::ExtensionJSON, true);
 		foreach($out as $pos => $path) {
 			if(!is_readable($path)) {
 				unset($out[$pos]);
@@ -86,13 +88,33 @@ class Paths extends Singleton {
 
 		return $out;
 	}
+	public function shellCron($name, $full = false) {
+		global $Paths;
+
+		if($this->_shellCronsPaths === false) {
+			$this->_shellCronsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_CRONS]);
+			$this->_shellCronsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_CRONS]}");
+		}
+
+		return $this->find($this->_shellCronsPaths, $Paths[GC_PATHS_SHELL_CRONS], $name, self::ExtensionPHP, $full);
+	}
+	public function shellTool($name, $full = false) {
+		global $Paths;
+
+		if($this->_shellToolsPaths === false) {
+			$this->_shellToolsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_TOOLS]);
+			$this->_shellToolsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_TOOLS]}");
+		}
+
+		return $this->find($this->_shellToolsPaths, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::ExtensionPHP, $full);
+	}
 	public function templateDirs() {
 		global $Paths;
 
 		if($this->_templatesPaths === false) {
 			global $Directories;
-			$this->_templatesPaths = $this->genPaths($Paths["templates"]);
-			array_unshift($this->_templatesPaths, Sanitizer::DirPath("{$Directories["site"]}/{$Paths["templates"]}"));
+			$this->_templatesPaths = $this->genPaths($Paths[GC_PATHS_TEMPLATES]);
+			array_unshift($this->_templatesPaths, Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_TEMPLATES]}"));
 			$this->_templatesPaths = array_unique($this->_templatesPaths);
 		}
 
@@ -107,9 +129,9 @@ class Paths extends Singleton {
 
 		$this->loadModules();
 		foreach($this->_modules as $module) {
-			$list[] = Sanitizer::DirPath("{$Directories["modules"]}/{$module}/{$folder}");
+			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$module}/{$folder}");
 		}
-		$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$folder}");
+		$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$folder}");
 
 		return $list;
 	}
@@ -120,9 +142,9 @@ class Paths extends Singleton {
 
 		$this->loadModules();
 		foreach($this->_modules as $module) {
-			$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$module}/{$folder}");
+			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$module}/{$folder}");
 		}
-		$list[] = Sanitizer::DirPath("{$Directories["site"]}/{$folder}");
+		$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$folder}");
 
 		return $list;
 	}
@@ -158,7 +180,7 @@ class Paths extends Singleton {
 
 			$this->_modules = array();
 			$this->_manifests = array();
-			foreach(glob("{$Directories["modules"]}/*", GLOB_ONLYDIR) as $pathname) {
+			foreach(glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {
 				$path = pathinfo($pathname);
 				if(!preg_match('/([\._])(.*)/', $path["filename"])) {
 					$this->_modules[] = $path["filename"];

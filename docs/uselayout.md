@@ -7,7 +7,7 @@ Let's follow an old example an create an action called __myaction__ this way:
 * A controller in __ROOTDIR/site/controllers/myaction.php__:
 ```php
 <?php
-class MyactionController extends TooBasic\Controller {
+class MyactionController extends \TooBasic\Controller {
 	protected function basicRun() {
 		$this->assign("helloaciton", "Hello World!");
 		return true;
@@ -27,7 +27,7 @@ Let's create another action to emule a navigation bar and call it __mynav__:
 * A controller in __ROOTDIR/site/controllers/nav.php__:
 ```php
 <?php
-class MynavController extends TooBasic\Controller {
+class MynavController extends \TooBasic\Controller {
 	protected function basicRun() {
 		$this->assign("hellonav", "I'm a nav");
 		return true;
@@ -45,7 +45,7 @@ Now that you have a main content to show, let's create another controller called
 * A controller in __ROOTDIR/site/templates/action/mylayout.html__:
 ```php
 <?php
-class MylayoutController extends TooBasic\Controller {
+class MylayoutController extends \TooBasic\Layout {
 	protected function basicRun() {
 		return true;
 	}

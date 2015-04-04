@@ -12,8 +12,8 @@ class ModelsFactory extends Singleton {
 	public function __get($className) {
 		$out = null;
 
-		$classFileName = ucfirst($className);
-		$className = ucfirst($className)."Model";
+		$classFileName = \TooBasic\classname($className);
+		$className = "{$classFileName}Model";
 
 		if(isset($this->_singletons[$className])) {
 			$out = $this->_singletons[$className];

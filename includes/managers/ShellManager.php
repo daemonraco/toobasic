@@ -8,6 +8,7 @@ class ShellManager extends Manager {
 	protected $_mode = false;
 	protected $_script = false;
 	protected $_tool = false;
+	protected $_toolClass = null;
 	//
 	// Magic methods.
 	//
@@ -50,12 +51,35 @@ class ShellManager extends Manager {
 	}
 	protected function runCron() {
 		$tool = $this->loadCron();
-		echo "ITS A CRON called: {$this->_tool}\n";
+
+		if($this->_tool) {
+			debugit("ITS A CRON called: {$this->_tool}");
+		} else {
+			die("ERROR: No tool name specified\n");
+		}
 	}
 	protected function runTool() {
 		$tool = $this->loadTool();
 
-		echo "ITS A TOOL called: {$this->_tool}\n";
+		if($this->_tool) {
+			$path = Paths::Instance()->shellTool($this->_tool);
+			if($path) {
+				require_once $path;
+
+				$className = classname($this->_tool)."Tool";
+
+				if(class_exists($className)) {
+					$this->_toolClass = new $className ();
+					$this->_toolClass->run();
+				} else {
+					die("ERROR: Class '{$className}' doesn't exist.\n");
+				}
+			} else {
+				die("ERROR: Unkown tool called {$this->_tool}\n");
+			}
+		} else {
+			die("ERROR: No tool name specified\n");
+		}
 	}
 	protected function starterOptions() {
 		$options = Shell\Options::Instance();

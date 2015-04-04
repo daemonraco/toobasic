@@ -96,7 +96,8 @@ spl_autoload_register(function($class) {
 
 		static $basicIncludes = array(
 			"Option",
-			"Options"
+			"Options",
+			"ShellTool"
 		);
 
 		if(!$path) {

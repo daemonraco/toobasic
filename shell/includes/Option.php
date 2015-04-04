@@ -11,6 +11,8 @@ class Option {
 	// 
 	// Protected properties.
 	protected $_activated = false;
+	protected $_helpText = false;
+	protected $_helpTextFull = false;
 	protected $_lastValue = false;
 	protected $_name = false;
 	protected $_needsMore = false;
@@ -36,7 +38,7 @@ class Option {
 	public function check($param) {
 		$matched = false;
 
-		if($this->_needsMore) {
+		if($this->needsMore()) {
 			$this->_values[] = $param;
 			$this->_lastValue = $param;
 			$this->_needsMore = false;
@@ -59,6 +61,44 @@ class Option {
 
 		return $matched;
 	}
+	public function helpText($spacer = "") {
+		$out = "";
+
+		if($this->_helpTextFull === false) {
+			$subSpacer = "        ";
+
+			$values = "";
+			if(in_array($this->_type, array(self::TypeMultiValue, self::TypeValue))) {
+				$values = " <value>";
+			}
+
+			foreach($this->_triggers as $trigger) {
+				if($out) {
+					$out.=", ";
+				} else {
+					$out = $subSpacer;
+				}
+				$out.="{$trigger}{$values}";
+			}
+			$out.="\n";
+
+			if($this->_helpText) {
+				$auxText = explode("\n", $this->_helpText);
+				foreach($auxText as &$line) {
+					$line = "{$subSpacer}{$subSpacer}{$line}";
+				}
+				$out.= implode("\n", $auxText);
+				$out.="\n";
+			}
+			$out.="\n";
+
+			$this->_helpTextFull = $out;
+		} else {
+			$out = $this->_helpTextFull;
+		}
+
+		return $out;
+	}
 	public function name() {
 		return $this->_name;
 	}
@@ -70,6 +110,11 @@ class Option {
 		$this->_lastValue = false;
 		$this->_needsMore = false;
 		$this->_values = array();
+		$this->_helpText = false;
+		$this->_helpTextFull = false;
+	}
+	public function setHelpText($text) {
+		return $this->_helpText = $text;
 	}
 	public function stauts() {
 		return $this->_name && $this->_triggers;
