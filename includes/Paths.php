@@ -54,16 +54,6 @@ class Paths extends Singleton {
 		global $Paths;
 		return $this->find($this->_jsPaths, $Paths[GC_PATHS_JS], $jsName, self::ExtensionJS, $full);
 	}
-	public function modelPath($modelName, $full = false) {
-		global $Paths;
-		return $this->find($this->_modelsPaths, $Paths[GC_PATHS_MODELS], $modelName, self::ExtensionPHP, $full);
-	}
-	public function manifests() {
-		return $this->_manifests;
-	}
-	public function modules() {
-		return $this->_modules;
-	}
 	public function langPaths($lang) {
 		global $Paths;
 
@@ -87,6 +77,20 @@ class Paths extends Singleton {
 		}
 
 		return $out;
+	}
+	public function modelPath($modelName, $full = false) {
+		global $Paths;
+		return $this->find($this->_modelsPaths, $Paths[GC_PATHS_MODELS], $modelName, self::ExtensionPHP, $full);
+	}
+	public function manifests() {
+		return $this->_manifests;
+	}
+	public function modules() {
+		return $this->_modules;
+	}
+	public function servicePath($serviceName, $full = false) {
+		global $Paths;
+		return $this->find($this->_controllerPaths, $Paths[GC_PATHS_SERVICES], $serviceName, self::ExtensionPHP, $full);
 	}
 	public function shellCron($name, $full = false) {
 		global $Paths;

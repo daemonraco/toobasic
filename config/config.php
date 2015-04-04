@@ -80,6 +80,7 @@ $Uris[GC_URIS_INCLUDES] = TB_Sanitizer::UriPath(ROOTURI."/includes");
 $Paths = array();
 $Paths[GC_PATHS_CONFIGS] = "/configs";
 $Paths[GC_PATHS_CONTROLLERS] = "/controllers";
+$Paths[GC_PATHS_SERVICES] = "/services";
 $Paths[GC_PATHS_CSS] = "/styles";
 $Paths[GC_PATHS_JS] = "/scripts";
 $Paths[GC_PATHS_LANGS] = "/langs";

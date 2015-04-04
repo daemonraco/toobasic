@@ -60,6 +60,8 @@ class ActionsManager extends UrlManager {
 			}
 
 			$status = $controllerClass->run();
+		} else {
+			$status = false;
 		}
 
 		$lastRun = false;
@@ -94,7 +96,7 @@ class ActionsManager extends UrlManager {
 		if(is_readable($controllerPath)) {
 			require_once $controllerPath;
 
-			$controllerClassName = (is_numeric($actionName) ? "N" : "").ucfirst($actionName)."Controller";
+			$controllerClassName = (is_numeric($actionName) ? "N" : "").\TooBasic\classname($actionName)."Controller";
 			$out = new $controllerClassName($actionName);
 		}
 

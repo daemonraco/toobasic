@@ -63,6 +63,7 @@ define("GC_URIS_INCLUDES", "includes");
 // Paths @{
 define("GC_PATHS_CONFIGS", "configs");
 define("GC_PATHS_CONTROLLERS", "controllers");
+define("GC_PATHS_SERVICES", "services");
 define("GC_PATHS_CSS", "css");
 define("GC_PATHS_JS", "js");
 define("GC_PATHS_LANGS", "langs");
