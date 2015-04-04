@@ -13,6 +13,7 @@ class Option {
 	protected $_activated = false;
 	protected $_helpText = false;
 	protected $_helpTextFull = false;
+	protected $_helpValueName = false;
 	protected $_lastValue = false;
 	protected $_name = false;
 	protected $_needsMore = false;
@@ -69,7 +70,7 @@ class Option {
 
 			$values = "";
 			if(in_array($this->_type, array(self::TypeMultiValue, self::TypeValue))) {
-				$values = " <value>";
+				$values = " <{$this->_helpValueName}>";
 			}
 
 			foreach($this->_triggers as $trigger) {
@@ -112,8 +113,10 @@ class Option {
 		$this->_values = array();
 		$this->_helpText = false;
 		$this->_helpTextFull = false;
+		$this->_helpValueName = false;
 	}
-	public function setHelpText($text) {
+	public function setHelpText($text, $valueName = "value") {
+		$this->_helpValueName = $valueName;
 		return $this->_helpText = $text;
 	}
 	public function stauts() {

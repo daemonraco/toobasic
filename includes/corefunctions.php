@@ -76,3 +76,38 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 		die;
 	}
 }
+function recursive_unlink($path, $keepFather = false) {
+	//
+	// Creating a list of errors to be returned.
+	$out = array();
+	if(is_readable($path)) {
+		if(is_dir($path)) {
+			if($dir = @opendir($path)) {
+				while($entry = readdir($dir)) {
+					if($entry != ".." && $entry != ".") {
+						foreach(recursive_unlink($path.DIRECTORY_SEPARATOR.$entry, false) as $v) {
+							array_push($out, $v);
+						}
+					}
+				}
+				closedir($dir);
+				if(!$keepFather) {
+					if(!@rmdir($path)) {
+						array_push($out, error_get_last());
+					}
+				}
+			} else {
+				array_push($out, error_get_last());
+			}
+		} else {
+			if(!@unlink($path)) {
+				array_push($out, error_get_last());
+			}
+		}
+	} else {
+		array_push($out, "$path: No such a file o directory");
+	}
+	//
+	// Returning the list of errors.
+	return $out;
+}

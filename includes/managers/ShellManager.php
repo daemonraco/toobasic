@@ -4,7 +4,15 @@ namespace TooBasic;
 
 class ShellManager extends Manager {
 	//
+	// Constants.
+	const ErrorNoMode = 1;
+	const ErrorNotValidMode = 2;
+	const ErrorNoToolName = 3;
+	const ErrorNoToolClass = 4;
+	const ErrorUnknownTool = 5;
+	//
 	// Protected properties.
+	protected $_errors = array();
 	protected $_mode = false;
 	protected $_script = false;
 	protected $_tool = false;
@@ -13,7 +21,13 @@ class ShellManager extends Manager {
 	// Magic methods.
 	//
 	// Public methods.
-	public function run() {
+	public function errors() {
+		return $this->_errors;
+	}
+	public function hasErrors() {
+		return count($this->errors()) > 0;
+	}
+	public function run($spacer = "") {
 		$options = $this->starterOptions();
 		$options->check();
 
@@ -23,19 +37,21 @@ class ShellManager extends Manager {
 
 		switch($this->_mode) {
 			case "tool":
-				$this->runTool();
+				$this->runTool($spacer);
 				break;
 			case "cron":
-				$this->runCron();
+				$this->runCron($spacer);
 				break;
 			default:
 				/** @todo this should be a little more pretty. */
 				if($this->_mode) {
-					die("ERROR: No valid mode specified\n");
+					$this->setError(self::ErrorNotValidMode, "No valid mode specified");
 				} else {
-					die("ERROR: No mode specified\n");
+					$this->setError(self::ErrorNoMode, "No mode specified");
 				}
 		}
+
+		$this->promptErrors($spacer);
 	}
 	//
 	// Protected methods.
@@ -49,16 +65,21 @@ class ShellManager extends Manager {
 
 		return $out;
 	}
-	protected function runCron() {
+	protected function promptErrors($spacer) {
+		foreach($this->errors() as $error) {
+			echo "{$spacer}Error: [{$error["code"]}] {$error["message"]}.\n";
+		}
+	}
+	protected function runCron($spacer) {
 		$tool = $this->loadCron();
 
 		if($this->_tool) {
 			debugit("ITS A CRON called: {$this->_tool}");
 		} else {
-			die("ERROR: No tool name specified\n");
+			$this->setError(self::ErrorNoToolName, "No tool name specified");
 		}
 	}
-	protected function runTool() {
+	protected function runTool($spacer) {
 		$tool = $this->loadTool();
 
 		if($this->_tool) {
@@ -70,16 +91,38 @@ class ShellManager extends Manager {
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className ();
-					$this->_toolClass->run();
+					$this->_toolClass->run($spacer);
+					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
 				} else {
-					die("ERROR: Class '{$className}' doesn't exist.\n");
+					$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
 				}
 			} else {
-				die("ERROR: Unkown tool called {$this->_tool}\n");
+				$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
 			}
 		} else {
-			die("ERROR: No tool name specified\n");
+			$this->setError(self::ErrorNoToolName, "No tool name specified");
 		}
+	}
+	protected function setError($code, $message) {
+		if(is_numeric($code)) {
+			$code = sprintf("%03d", $code);
+		}
+
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+		$callingLine = array_shift($trace);
+		$callerLine = array_shift($trace);
+
+		$error = array(
+			"code" => "SM-{$code}",
+			"message" => $message,
+			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
+			"method" => $callerLine["function"],
+			"file" => $callingLine["file"],
+			"line" => $callingLine["line"]
+		);
+
+		$this->_errors[] = $error;
 	}
 	protected function starterOptions() {
 		$options = Shell\Options::Instance();

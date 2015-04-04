@@ -5,6 +5,8 @@ namespace TooBasic\Shell;
 abstract class ShellTool {
 	//
 	// Constants.
+	const ErrorWrongParameters = 1;
+	const ErrorNoTask = 2;
 	const OptionNameHelp = "Help";
 	const OptionNameInfo = "Info";
 	const OptionNameVersion = "Version";
@@ -14,6 +16,7 @@ abstract class ShellTool {
 	// Protected class properties.
 	//
 	// Protected properties.
+	protected $_errors = array();
 	/**
 	 * @var \TooBasic\ModelsFactory
 	 */
@@ -58,6 +61,12 @@ abstract class ShellTool {
 	}
 	//
 	// Public methods.
+	public function errors() {
+		return $this->_errors;
+	}
+	public function hasErrors() {
+		return count($this->errors()) > 0;
+	}
 	public function run($spacer = "") {
 		if($this->_options->check()) {
 			$activeOptions = $this->_options->activeOptions();
@@ -88,15 +97,55 @@ abstract class ShellTool {
 			// Running the appropiate task.
 			$this->{$taskName}($spacer);
 		} else {
-			echo "{$spacer}ERROR: There's something wrong with your parameters.\n\n";
+			$this->setCoreError(self::ErrorWrongParameters, "There's something wrong with your parameters");
 			$this->taskHelp($spacer);
 		}
 	}
 	//
 	// Protected methods.
 	protected function mainTask($spacer = "") {
-		echo "{$spacer}ERROR: No Task specified\n\n";
+		$this->setCoreError(self::ErrorNoTask, "No task specified");
 		$this->taskHelp($spacer);
+	}
+	private function setCoreError($code, $message) {
+		if(is_numeric($code)) {
+			$code = sprintf("%03d", $code);
+		}
+
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+		$callingLine = array_shift($trace);
+		$callerLine = array_shift($trace);
+
+		$error = array(
+			"code" => "ST-{$code}",
+			"message" => $message,
+			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
+			"method" => $callerLine["function"],
+			"file" => $callingLine["file"],
+			"line" => $callingLine["line"]
+		);
+		$this->_errors[] = $error;
+	}
+	protected function setError($code, $message) {
+		if(is_numeric($code)) {
+			$code = sprintf("%03d", $code);
+		}
+
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+
+		$callingLine = array_shift($trace);
+		$callerLine = array_shift($trace);
+
+		$error = array(
+			"code" => "T-{$code}",
+			"message" => $message,
+			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
+			"method" => $callerLine["function"],
+			"file" => $callingLine["file"],
+			"line" => $callingLine["line"]
+		);
+		$this->_errors[] = $error;
 	}
 	abstract protected function setOptions();
 	protected function starterOptions() {
