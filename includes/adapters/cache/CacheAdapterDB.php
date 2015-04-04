@@ -81,12 +81,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 	// Protected methods.
 	abstract protected function checkTables();
 	abstract protected function cleanOld($prefix, $key);
-	protected function cleanPath($path, $forced = false) {
-//		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= 3600)) {
-//			unlink($path);
-//		}
-	}
-	protected function fullKey($prefix, $key, $genDir = false) {
+	protected function fullKey($prefix, $key) {
 		$key = sha1($key);
 		$prefix.= ($prefix ? "_" : "");
 

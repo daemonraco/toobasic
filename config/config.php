@@ -36,6 +36,7 @@ $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
 $Defaults[GC_DEFAULTS_SERVICE] = "";
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "\TooBasic\ViewAdapterSmarty";
+$Defaults[GC_DEFAULTS_MEMCACHED] = array();
 //
 // Directory configurations.
 $Directories = array();

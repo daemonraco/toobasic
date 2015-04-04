@@ -81,4 +81,10 @@ define("GC_REQUEST_LAYOUT", "layout");
 define("GC_REQUEST_MODE", "mode");
 define("GC_REQUEST_SERVICE", "service");
 // @}
+//
+// Memcached parameters @{
+define("GC_DEFAULTS_MEMCACHED", "memcached");
+define("GC_DEFAULTS_MEMCACHED_SERVER", "server");
+define("GC_DEFAULTS_MEMCACHED_PORT", "port");
+// @}
 // @}
