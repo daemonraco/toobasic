@@ -32,7 +32,7 @@ class CacheAdapterFile extends CacheAdapter {
 	//
 	// Protected methods.
 	protected function cleanPath($path, $forced = false) {
-		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= 3600)) {
+		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= $this->_expirationLength)) {
 			unlink($path);
 		}
 	}

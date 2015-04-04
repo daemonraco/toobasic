@@ -35,6 +35,8 @@ spl_autoload_register(function($class) {
 		);
 		static $cacheAdapters = array(
 			"CacheAdapter",
+			"CacheAdapterDB",
+			"CacheAdapterDBMySQL",
 			"CacheAdapterFile"
 		);
 		static $dbAdapters = array(

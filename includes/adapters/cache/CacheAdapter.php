@@ -7,6 +7,7 @@ abstract class CacheAdapter extends Adapter {
 	// Constants.
 	//
 	// Protected properties.
+	protected $_expirationLength = 3600;
 	//
 	// Public methods.
 	abstract public function delete($prefix, $key);

@@ -28,14 +28,14 @@ require_once ROOTDIR."/includes/Sanitizer.php";
 // Default constants configurations.
 $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = "home";
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "TooBasic\CacheAdapterFile";
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "\TooBasic\CacheAdapterFile";
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
 $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = "en_us";
 $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
 $Defaults[GC_DEFAULTS_SERVICE] = "";
-$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "TooBasic\ViewAdapterSmarty";
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "\TooBasic\ViewAdapterSmarty";
 //
 // Directory configurations.
 $Directories = array();
