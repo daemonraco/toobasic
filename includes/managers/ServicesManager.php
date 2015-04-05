@@ -59,6 +59,7 @@ class ServicesManager extends UrlManager {
 		$serviceClass = self::FetchService($serviceName);
 		if($serviceClass !== false) {
 			$status = $serviceClass->run();
+			$lastRun = $serviceClass->lastRun();
 		} else {
 			$status = false;
 
@@ -66,10 +67,6 @@ class ServicesManager extends UrlManager {
 			$lastRun["error"]["message"] = "Service '{$serviceName}' not found";
 			$lastRun["headers"] = array();
 			$lastRun["data"] = null;
-		}
-
-		if($status) {
-			$lastRun = $serviceClass->lastRun();
 		}
 
 		return $lastRun;

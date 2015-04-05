@@ -16,8 +16,9 @@ abstract class ItemRepresentation {
 	// Protected class properties.
 	//
 	// Protected core properties.
-	protected $_CP_IDColumn = "";
 	protected $_CP_ColumnsPerfix = "";
+	protected $_CP_IDColumn = "";
+	protected $_CP_NameColumn = "name";
 	protected $_CP_ReadOnlyColumns = array();
 	protected $_CP_Table = "";
 	//
@@ -61,7 +62,7 @@ abstract class ItemRepresentation {
 			} else {
 				$value = $this->_properties[$realName];
 			}
-		} elseif(isset($this->_extraProperties[$name])) {
+		} else {
 			$this->_extraProperties[$name] = $value;
 		}
 
@@ -94,6 +95,23 @@ abstract class ItemRepresentation {
 			$this->postLoad();
 		} else {
 			$this->_exists = false;
+		}
+
+		return $this->exists();
+	}
+	public function loadByName($name) {
+		$this->reset();
+
+		if($this->_CP_NameColumn) {
+			$query = "select  {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} as id \n";
+			$query.= "from    {$this->_dbprefix}{$this->_CP_Table} \n";
+			$query.= "where   {$this->_CP_ColumnsPerfix}{$this->_CP_NameColumn} = :name \n";
+			$stmt = $this->_db->prepare($query);
+
+			if($stmt->execute(array(":name" => $name)) && $stmt->rowCount() > 0) {
+				$row = $stmt->fetch();
+				$this->load($row["id"]);
+			}
 		}
 
 		return $this->exists();

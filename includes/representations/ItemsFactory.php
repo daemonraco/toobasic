@@ -57,6 +57,25 @@ abstract class ItemsFactory extends Singleton {
 
 		return $item;
 	}
+	public function itemByName($name) {
+		$item = self::GetClass($this->_CP_RepresentationClass);
+		$item->loadByName($name);
+
+		if(!$item->exists()) {
+			$item = null;
+		}
+
+		return $item;
+	}
+	public function items() {
+		$out = array();
+
+		foreach($this->ids() as $id) {
+			$out[$id] = $this->item($id);
+		}
+
+		return $out;
+	}
 	//
 	// Protected methods.
 	protected function init() {
