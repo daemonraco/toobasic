@@ -30,6 +30,8 @@ class ModelsFactory extends Singleton {
 	protected function loadAndGet($classFileName, $className) {
 		$out = null;
 
+		//
+		// @todo There's something wrong here for multiple loadings.
 		$filename = Paths::Instance()->modelPath($classFileName);
 		if($filename) {
 			require_once $filename;
@@ -42,7 +44,11 @@ class ModelsFactory extends Singleton {
 				if($className::IsSingleton()) {
 					$this->_singletons[$className] = $out;
 				}
+			} else {
+				trigger_error("Class '{$className}' is not defined.", E_USER_ERROR);
 			}
+		} else {
+			trigger_error("Cannot load model file '{$classFileName}'.", E_USER_ERROR);
 		}
 
 		return $out;

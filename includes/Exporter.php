@@ -16,9 +16,6 @@ abstract class Exporter {
 	const PrefixRender = "R";
 	const PrefixService = "S";
 	//
-	// Protected class properties
-	protected static $_Cache = false;
-	//
 	// Protected properties
 	protected $_assignments = array();
 	protected $_cached = false;
@@ -33,21 +30,16 @@ abstract class Exporter {
 	protected $_lastRun = false;
 	protected $_mode = false;
 	protected $_name = false;
-	protected $_modelsFactory = false;
 	protected $_params = null;
 	protected $_requiredParams = array(
 		"GET" => array(),
 		"POST" => array()
 	);
 	protected $_status = true;
-	protected $_translate = null;
 	protected $_viewAdapter = false;
 	//
 	// Magic methods.
 	public function __construct($actionName = false) {
-		$this->_modelsFactory = ModelsFactory::Instance();
-		$this->_translate = Translate::Instance();
-
 		global $Defaults;
 		global $ActionName;
 
@@ -92,17 +84,9 @@ abstract class Exporter {
 	public function __get($prop) {
 		$out = false;
 
-		if($prop == "model") {
-			$out = $this->_modelsFactory;
-		} elseif($prop == "translate") {
-			$out = $this->_translate;
-		} elseif($prop == "cache") {
-			if(self::$_Cache === false) {
-				global $Defaults;
-				self::$_Cache = Adapter::Factory($Defaults["cache-adapter"]);
-			}
-			$out = self::$_Cache;
-		} else {
+		try {
+			$out = MagicProp::Instance()->{$prop};
+		} catch(MagicPropException $ex) {
 			$out = $this->get($prop);
 		}
 

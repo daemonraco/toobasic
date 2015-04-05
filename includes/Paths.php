@@ -21,6 +21,8 @@ class Paths extends Singleton {
 	protected $_manifests = false;
 	protected $_modelsPaths = false;
 	protected $_modules = false;
+	protected $_representationPaths = false;
+	protected $_servicePaths = false;
 	protected $_shellCronsPaths = false;
 	protected $_shellToolsPaths = false;
 	protected $_templatesPaths = false;
@@ -88,9 +90,13 @@ class Paths extends Singleton {
 	public function modules() {
 		return $this->_modules;
 	}
+	public function representationPath($representationName, $full = false) {
+		global $Paths;
+		return $this->find($this->_representationPaths, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, self::ExtensionPHP, $full);
+	}
 	public function servicePath($serviceName, $full = false) {
 		global $Paths;
-		return $this->find($this->_controllerPaths, $Paths[GC_PATHS_SERVICES], $serviceName, self::ExtensionPHP, $full);
+		return $this->find($this->_servicePaths, $Paths[GC_PATHS_SERVICES], $serviceName, self::ExtensionPHP, $full);
 	}
 	public function shellCron($name, $full = false) {
 		global $Paths;

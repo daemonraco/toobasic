@@ -24,8 +24,10 @@ abstract class Model {
 	public function __get($prop) {
 		$out = false;
 
-		if($prop == "model") {
-			$out = $this->_modelsFactory;
+		try {
+			$out = MagicProp::Instance()->{$prop};
+		} catch(MagicPropException $ex) {
+			
 		}
 
 		return $out;
