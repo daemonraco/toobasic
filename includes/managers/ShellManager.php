@@ -55,33 +55,34 @@ class ShellManager extends Manager {
 	}
 	//
 	// Protected methods.
-	protected function loadCron() {
-		$out = false;
-
-		return $out;
-	}
-	protected function loadTool() {
-		$out = false;
-
-		return $out;
-	}
 	protected function promptErrors($spacer) {
 		foreach($this->errors() as $error) {
 			echo "{$spacer}Error: [{$error["code"]}] {$error["message"]}.\n";
 		}
 	}
 	protected function runCron($spacer) {
-		$tool = $this->loadCron();
-
 		if($this->_tool) {
-			debugit("ITS A CRON called: {$this->_tool}");
+			$path = Paths::Instance()->shellCron($this->_tool);
+			if($path) {
+				require_once $path;
+
+				$className = classname($this->_tool)."Cron";
+
+				if(class_exists($className)) {
+					$this->_toolClass = new $className();
+					$this->_toolClass->run($spacer);
+					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
+				} else {
+					$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
+				}
+			} else {
+				$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
+			}
 		} else {
 			$this->setError(self::ErrorNoToolName, "No tool name specified");
 		}
 	}
 	protected function runTool($spacer) {
-		$tool = $this->loadTool();
-
 		if($this->_tool) {
 			$path = Paths::Instance()->shellTool($this->_tool);
 			if($path) {
@@ -90,7 +91,7 @@ class ShellManager extends Manager {
 				$className = classname($this->_tool)."Tool";
 
 				if(class_exists($className)) {
-					$this->_toolClass = new $className ();
+					$this->_toolClass = new $className();
 					$this->_toolClass->run($spacer);
 					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
 				} else {

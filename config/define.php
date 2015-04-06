@@ -39,6 +39,7 @@ define("GC_DIRECTORIES_ADAPTERS_VIEW", "adapters-view");
 define("GC_DIRECTORIES_MODULES", "modules");
 define("GC_DIRECTORIES_SHELL", "shell");
 define("GC_DIRECTORIES_SHELL_INCLUDES", "shell-includes");
+define("GC_DIRECTORIES_SHELL_FLAGS", "shell-flags");
 define("GC_DIRECTORIES_SITE", "site");
 // @}
 //

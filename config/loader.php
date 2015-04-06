@@ -112,6 +112,7 @@ spl_autoload_register(function($class) {
 		static $basicIncludes = array(
 			"Option",
 			"Options",
+			"ShellCron",
 			"ShellTool"
 		);
 

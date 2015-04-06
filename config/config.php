@@ -53,6 +53,7 @@ $Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR."/inc
 $Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR."/modules");
 $Directories[GC_DIRECTORIES_SHELL] = TB_Sanitizer::DirPath(ROOTDIR."/shell");
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR."/shell/includes");
+$Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR."/cache/shellflags");
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR."/site");
 //
 // Connections.
