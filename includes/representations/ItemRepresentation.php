@@ -140,10 +140,6 @@ abstract class ItemRepresentation {
 			$query.= " \n";
 
 			$query.= "where   {$idName} = :id\n";
-			debugit(array(
-				$query,
-				$params)
-			);
 			$stmt = $this->_db->prepare($query);
 
 			if($stmt->execute($params)) {

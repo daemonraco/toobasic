@@ -16,6 +16,9 @@ abstract class Exporter {
 	const PrefixRender = "R";
 	const PrefixService = "S";
 	//
+	// Protected class properties.
+	protected static $_Shares = array();
+	//
 	// Protected properties
 	protected $_assignments = array();
 	protected $_cached = false;
@@ -132,6 +135,13 @@ abstract class Exporter {
 	//
 	// Protected methods.
 	protected function autoAssigns() {
+		global $ActionName;
+		global $ServiceName;
+		global $LayoutName;
+
+		$this->assign("action", $ActionName);
+		$this->assign("service", $ServiceName);
+		$this->assign("layout", $LayoutName);
 		$this->assign("name", $this->_name);
 	}
 	/**
@@ -218,5 +228,15 @@ abstract class Exporter {
 		if($this->_status && $code != HTTPERROR_OK) {
 			$this->_status = false;
 		}
+	}
+	//
+	// Protected class methods.
+	protected static function GetShare($key) {
+		return isset(self::$_Shares[$key]) ? self::$_Shares[$key] : null;
+	}
+	protected static function Share($key, $value) {
+		self::$_Shares[$key] = $value;
+
+		return self::GetShare($key);
 	}
 }
