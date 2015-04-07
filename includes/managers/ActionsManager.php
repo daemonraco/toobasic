@@ -102,8 +102,4 @@ class ActionsManager extends UrlManager {
 
 		return $out;
 	}
-	public static function InsertAction($actionName) {
-		$lastRun = self::ExecuteAction($actionName);
-		return $lastRun["render"];
-	}
 }

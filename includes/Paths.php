@@ -25,6 +25,7 @@ class Paths extends Singleton {
 	protected $_servicePaths = false;
 	protected $_shellCronsPaths = false;
 	protected $_shellToolsPaths = false;
+	protected $_snippetsPaths = false;
 	protected $_templatesPaths = false;
 	//
 	// Public methods.
@@ -117,6 +118,10 @@ class Paths extends Singleton {
 		}
 
 		return $this->find($this->_shellToolsPaths, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::ExtensionPHP, $full);
+	}
+	public function snippetPath($snippetName, $full = false) {
+		global $Paths;
+		return $this->find($this->_snippetsPaths, $Paths[GC_PATHS_SNIPPETS], $snippetName, self::ExtensionTemplate, $full);
 	}
 	public function templateDirs() {
 		global $Paths;

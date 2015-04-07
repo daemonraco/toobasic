@@ -93,6 +93,7 @@ $Paths[GC_PATHS_REPRESENTATIONS] = "/models/representations";
 $Paths[GC_PATHS_SHELL] = "/shell";
 $Paths[GC_PATHS_SHELL_CRONS] = "/shell/crons";
 $Paths[GC_PATHS_SHELL_TOOLS] = "/shell/tools";
+$Paths[GC_PATHS_SNIPPETS] = "/snippets";
 $Paths[GC_PATHS_TEMPLATES] = "/templates";
 
 require_once __DIR__."/loader.php";

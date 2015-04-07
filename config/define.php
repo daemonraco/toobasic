@@ -75,6 +75,7 @@ define("GC_PATHS_REPRESENTATIONS", "representations");
 define("GC_PATHS_SHELL", "shell");
 define("GC_PATHS_SHELL_CRONS", "shell-crons");
 define("GC_PATHS_SHELL_TOOLS", "shell-tools");
+define("GC_PATHS_SNIPPETS", "snippets");
 define("GC_PATHS_TEMPLATES", "templates");
 // @}
 //

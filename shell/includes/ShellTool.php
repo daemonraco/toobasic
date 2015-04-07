@@ -16,6 +16,7 @@ abstract class ShellTool {
 	// Protected class properties.
 	//
 	// Protected properties.
+	protected $_coreTasks = array();
 	protected $_errors = array();
 	/**
 	 * @var \TooBasic\Shell\Options

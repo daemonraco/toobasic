@@ -6,6 +6,7 @@ abstract class Controller extends Exporter {
 	//
 	// Protected properties.
 	protected $_layout = null;
+	protected $_snippetAssignments = array();
 	//
 	// Magic methods.
 	public function __construct($actionName = false) {
@@ -34,10 +35,37 @@ abstract class Controller extends Exporter {
 	//
 	// Public methods.
 	public function insert($actionName) {
-		return (string) ActionsManager::InsertAction($actionName);
+		$lastRun = ActionsManager::ExecuteAction($actionName);
+		return $lastRun["render"];
 	}
 	public function layout() {
 		return $this->_layout;
+	}
+	public function setSnippetDataSet($key, $value = null) {
+		if($value === null) {
+			unset($this->_snippetAssignments[$key]);
+		} else {
+			$this->_snippetAssignments[$key] = $value;
+		}
+	}
+	public function snippet($snippetName, $snippetDataSet = false) {
+		$output = "";
+
+		$path = Paths::Instance()->snippetPath($snippetName);
+		if($path) {
+			if($snippetDataSet == false || !isset($this->_snippetAssignments[$snippetDataSet])) {
+				$snippetDataSet = false;
+			}
+
+			if($this->_format == self::FormatBasic) {
+				global $Defaults;
+
+				$viewAdapter = new $Defaults["view-adapter"]();
+				$output = $viewAdapter->render($snippetDataSet ? $this->_snippetAssignments[$snippetDataSet] : $this->assignments(), $path);
+			}
+		}
+
+		return (string) $output;
 	}
 	/**
 	 * @todo doc

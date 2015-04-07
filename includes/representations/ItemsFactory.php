@@ -19,6 +19,7 @@ abstract class ItemsFactory extends Singleton {
 	// Protected core properties.
 	protected $_CP_IDColumn = "";
 	protected $_CP_ColumnsPerfix = "";
+	protected $_CP_OrderBy = false;
 	protected $_CP_RepresentationClass = "";
 	protected $_CP_Table = "";
 	//
@@ -37,6 +38,10 @@ abstract class ItemsFactory extends Singleton {
 
 		$query = "select  {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} as id \n";
 		$query.= "from    {$this->_dbprefix}{$this->_CP_Table} \n";
+		if($this->_CP_OrderBy != false) {
+			$query.= "order by $this->_CP_OrderBy \n";
+		}
+
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute();

@@ -16,7 +16,6 @@ abstract class ShellCron extends ShellTool {
 	// Protected class properties.
 	//
 	// Protected properties.
-	protected $_coreTasks = array();
 	//
 	// Magic methods.
 	public function __construct() {
