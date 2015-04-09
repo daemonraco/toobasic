@@ -14,8 +14,8 @@ class CacheAdapterMemcached extends CacheAdapter {
 		parent::__construct();
 		global $Defaults;
 
-		if(!isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT])) {
-			trigger_error("Memcached is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER] and \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT].", E_USER_ERROR);
+		if(!isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX])) {
+			trigger_error("Memcached is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX].", E_USER_ERROR);
 		}
 
 		$this->_conn = new \Memcached();
@@ -64,9 +64,11 @@ class CacheAdapterMemcached extends CacheAdapter {
 	//
 	// Protected methods.
 	protected function fullKey($prefix, $key) {
+		global $Defaults;
+
 		$key = sha1($key);
 		$prefix.= ($prefix ? "_" : "");
-		$out = "{$prefix}{$key}";
+		$out = "{$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX]}_{$prefix}{$key}";
 
 		return $out;
 	}

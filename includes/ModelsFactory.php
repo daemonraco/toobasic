@@ -41,7 +41,7 @@ class ModelsFactory extends Singleton {
 
 				$out = new $className();
 
-				if($className::IsSingleton()) {
+				if($out->isSingleton()) {
 					$this->_singletons[$className] = $out;
 				}
 			} else {

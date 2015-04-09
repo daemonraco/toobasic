@@ -24,7 +24,7 @@ abstract class ViewAdapter extends Adapter {
 		$this->_autoAssigns["ROOTDIR"] = ROOTDIR;
 		$this->_autoAssigns["ROOTURL"] = ROOTURI;
 		$this->_autoAssigns["SERVER"] = $_SERVER;
-		$this->_autoAssigns["defaults"] = $Defaults;
+//		$this->_autoAssigns["defaults"] = $Defaults;/** @todo SECURITY ISSUES */
 	}
 	public function headers() {
 		return $this->_headers;

@@ -107,7 +107,10 @@ abstract class Exporter {
 		return $this->_errors;
 	}
 	public function get($key) {
-		return isset($this->_assignments[$key]) ? $this->_assignments[$prop] : false;
+		return isset($this->_assignments[$key]) ? $this->_assignments[$key] : false;
+	}
+	public function isAssigned($key) {
+		return isset($this->_assignments[$key]);
 	}
 	public function lastError() {
 		return $this->_lastError;

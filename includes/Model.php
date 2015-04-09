@@ -5,10 +5,10 @@ namespace TooBasic;
 abstract class Model {
 	//
 	// Protected class properties.
-	protected static $_IsSingleton = true;
 	//
 	// Protected properties.
 	protected $_modelsFactory = false;
+	protected $_isSingleton = true;
 	//
 	// Magic methods.
 	public function __construct() {
@@ -33,11 +33,11 @@ abstract class Model {
 		return $out;
 	}
 	//
+	// Public methods.
+	public function isSingleton() {
+		return $this->_isSingleton;
+	}
+	//
 	// Protected methods.
 	abstract protected function init();
-	//
-	// Public class methods.
-	public static function IsSingleton() {
-		return self::$_IsSingleton;
-	}
 }

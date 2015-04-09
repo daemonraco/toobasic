@@ -36,13 +36,6 @@ class Paths extends Singleton {
 	 */
 	public function configPath($configName, $extension = self::ExtensionPHP, $full = false) {
 		global $Paths;
-
-		if($this->_configPaths === false) {
-			global $Directories;
-			$this->_configPaths = $this->genPaths($Paths[GC_PATHS_CONFIGS]);
-			array_unshift($this->_configPaths, $Directories[GC_DIRECTORIES_CONFIGS]);
-		}
-
 		return $this->find($this->_configPaths, $Paths[GC_PATHS_CONFIGS], $configName, $extension, $full);
 	}
 	public function controllerPath($actionName, $full = false) {

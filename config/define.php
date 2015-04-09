@@ -90,5 +90,6 @@ define("GC_REQUEST_SERVICE", "service");
 define("GC_DEFAULTS_MEMCACHED", "memcached");
 define("GC_DEFAULTS_MEMCACHED_SERVER", "server");
 define("GC_DEFAULTS_MEMCACHED_PORT", "port");
+define("GC_DEFAULTS_MEMCACHED_PREFIX", "prefix");
 // @}
 // @}

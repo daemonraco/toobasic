@@ -24,6 +24,7 @@ spl_autoload_register(function($class) {
 			"Paths",
 			"Service",
 			"Singleton",
+			"Timer",
 			"Translate"
 		);
 		static $managersIncludes = array(

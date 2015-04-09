@@ -1,6 +1,7 @@
 <?php
 
 use \TooBasic\Sanitizer as TB_Sanitizer;
+use \TooBasic\Paths as TB_Paths;
 
 //
 // Detecting current root directory.
@@ -97,6 +98,19 @@ $Paths[GC_PATHS_SNIPPETS] = "/snippets";
 $Paths[GC_PATHS_TEMPLATES] = "/templates";
 
 require_once __DIR__."/loader.php";
+//
+// Modules' configurations files.
+{
+	$pathsProvider = TB_Paths::Instance();
+	//
+	// Requiring each extension and site sub-config file named 'config.php'.
+	foreach($pathsProvider->configPath("config", TB_Paths::ExtensionPHP, true) as $subConfig) {
+		require_once $subConfig;
+	}
+
+	unset($pathsProvider);
+	unset($subConfig);
+}
 //
 // Local configuration.
 $localConfig = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");

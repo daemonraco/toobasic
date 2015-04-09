@@ -141,4 +141,19 @@ class Option {
 
 		return $out;
 	}
+	//
+	// Public class methods
+	public static function EasyFactory($name, $triggers, $type = self::TypeNoValue, $helpText = false, $helpTextValue = "value") {
+		$out = new self($name, $type);
+
+		foreach($triggers as $trigger) {
+			$out->addTrigger($trigger);
+		}
+
+		if($helpText !== false) {
+			$out->setHelpText($helpText, $helpTextValue);
+		}
+
+		return $out;
+	}
 }
