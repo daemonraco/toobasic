@@ -127,7 +127,7 @@ class ThingsController extends \TooBasic\Controller {
 	}
 }
 ```
-* And you template into this:
+* And your template into this:
 ```html
 <div class="Things">
 	{foreach from=$things item=thing}
@@ -166,8 +166,8 @@ By default this will have no effect unless some changes are made in the controll
 class ExampleController extends \TooBasic\Controller {
 	protected function basicRun() {
 		$this->setSnippetDataSet("set1", array("key"=>"A","value"=>1));
-		$this->setSnippetDataSet("set1", array("key"=>"B","value"=>2));
-		$this->setSnippetDataSet("set1", array("key"=>"C","value"=>3));
+		$this->setSnippetDataSet("set2", array("key"=>"B","value"=>2));
+		$this->setSnippetDataSet("set3", array("key"=>"C","value"=>3));
 		return true;
 	}
 }
