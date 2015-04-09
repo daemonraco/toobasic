@@ -48,7 +48,7 @@ The controller will be a simple PHP class where you assign values to a set of na
 Basically, this new controller will look like this:
 ```php
 <?php
-class MyactionController extends TooBasic\Controller {
+class MyactionController extends \TooBasic\Controller {
 	protected function basicRun() {
 		return true;
 	}
@@ -82,7 +82,7 @@ Well, yes, that's all you need, now go to your browser, and enter your URL using
 Ya ya ya, I know, this seems to be too complicated to build just a HTML, where is the magic? well, suppose your controller looks like this:
 ```php
 <?php
-class MyactionController extends TooBasic\Controller {
+class MyactionController extends \TooBasic\Controller {
     protected $_cached = true;
 	protected function basicRun() {
 	    $this->assign("hello", "Hello World!");
@@ -104,7 +104,7 @@ And your template looks like this:
     </body>
 </html>
 ```
-The result may be the same, but now you are using names previously set in your controller and also you're saving a cache file of what you seen in your browser (for an hour), so the next time you refresh your page, the method __basicRun()__ won't be called, its logic won't be used and a cached result will be returned.
+The result may be the same, but now you are using names previously set in your controller and also you're saving a cache file of what you've seen in your browser (for an hour), so the next time you refresh your page, the method __basicRun()__ won't be called, its logic won't be used and a cached result will be returned.
 
 Also, you may create a file called __en_us.json__ inside __ROOTDIR/site/langs/__ with something like:
 ```json
@@ -120,7 +120,7 @@ Also, you may create a file called __en_us.json__ inside __ROOTDIR/site/langs/__
 Modify your controller:
 ```php
 <?php
-class MyactionController extends TooBasic\Controller {
+class MyactionController extends \TooBasic\Controller {
     protected function basicRun() {
 	    $this->assign("hello", $this->translate->hello);
 		return true;

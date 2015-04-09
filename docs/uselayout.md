@@ -89,6 +89,32 @@ And then access this way:
 
 ## Doubts
 ### What the Heck is That?
-You've probably seen an extrange word/constant/keyword/thing call __%TOO_BASIC_ACTION_CONTENT%__, this is a keyword you must use inside your template in the place where you want to put your main content.
+You've probably seen an extrange word/constant/keyword/thing called __%TOO_BASIC_ACTION_CONTENT%__, this is a keyword you must use inside your template in the place where you want to put your main content.
 ### Insert?
-If you look closely to our example youl find something like `{$ctrl->insert("mynav")}`. This sentence "inserts" the results of an action called __mynav__. Of course you can import that part with AJAX later on, but in this way, that part will be add to your layout cache when it's activated.
+If you look closely to our example you'll find something like `{$ctrl->insert("mynav")}`. This sentence "inserts" the results of an action called __mynav__. Of course you can import that part with AJAX later on, but in this way, that part will be add to your layout cache when it's activated.
+
+## Wrong Layout?
+If for any reason you create an action that requires a differente layout, you can change it writing something like this:
+```php
+<?php
+class MyactionController extends \TooBasic\Controller {
+	protected $_layout = "otherlayout";
+	protected function basicRun() {
+		. . .
+	}
+}
+```
+And if you don't want a layout at all, you may write this:
+```php
+<?php
+class MyactionController extends \TooBasic\Controller {
+	protected $_layout = false;
+	protected function basicRun() {
+		. . .
+	}
+}
+```
+
+## Suggestions
+If you want you may visit this documentation pages:
+* [Using Snippets](usesnippets.md)
