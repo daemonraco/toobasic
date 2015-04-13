@@ -29,9 +29,6 @@ abstract class Singleton {
 	}
 	//
 	// Public class methods.
-	final public static function &I() {
-		return self::Instance();
-	}
 	final public static function &Instance() {
 		static $Instances = array();
 

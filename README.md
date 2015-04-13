@@ -1,6 +1,10 @@
 # TooBasic 0.1
 ## What is it?
 Well __TooBasic__ is a too basic php framework with some basic features. Its main reason for existence is to provide a simple and quick framework in which you can start right away building your site while __TooBasic__ takes cake of some common stuff.
+
+## Why would I use this at all?
+Well, there's no real reason, you'll probably find much better solutions in the first page of a google search, but if you want to try a simple framework, keep reading.
+
 ## Basic Features?
 __TooBasic__ provide some sort of solution to features like:
 * Services
@@ -13,6 +17,8 @@ __TooBasic__ provide some sort of solution to features like:
 > Something like tools but restricted to cron-type executions.
 * Cache
 > It already has a simple way to cache controller result avoiding its logic on a second request.
+* Database Wrapping
+> Provides a simple way access tables in a database by representation.
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a few you may need to know.
@@ -147,6 +153,9 @@ Now you're also using translations, both inside your template and your controlle
 After all we said you should visit this documentation pages:
 * [Using Layouts](docs/uselayout.md)
 * [Using Languages](docs/uselanguage.md)
+* [Databases](docs/databases.md)
+* [Cache](docs/cache.md)
+* [Representations](docs/representations.md)
 
 # Thanks
 ## Smarty

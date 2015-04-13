@@ -7,7 +7,7 @@
 
 namespace TooBasic;
 
-abstract class ItemsFactory extends Singleton {
+abstract class ItemsFactory {
 	//
 	// Constants.
 	//
@@ -28,9 +28,22 @@ abstract class ItemsFactory extends Singleton {
 	 * @var \TooBasic\DBAdapter
 	 */
 	protected $_db = false;
+	protected $_dbname = false;
 	protected $_dbprefix = "";
 	//
 	// Magic methods.
+	/**
+	 * Prevent users from directly creating the singleton's instance.
+	 */
+	protected function __constructor() {
+		
+	}
+	/**
+	 * Prevent users from clone the singleton's instance.
+	 */
+	final public function __clone() {
+		trigger_error(get_called_class()."::".__FUNCTION__.": Clone is not allowed.", E_USER_ERROR);
+	}
 	//
 	// Public methods.
 	public function ids() {
@@ -53,7 +66,7 @@ abstract class ItemsFactory extends Singleton {
 		return $out;
 	}
 	public function item($id) {
-		$item = self::GetClass($this->_CP_RepresentationClass);
+		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
 		$item->load($id);
 
 		if(!$item->exists()) {
@@ -63,7 +76,7 @@ abstract class ItemsFactory extends Singleton {
 		return $item;
 	}
 	public function itemByName($name) {
-		$item = self::GetClass($this->_CP_RepresentationClass);
+		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
 		$item->loadByName($name);
 
 		if(!$item->exists()) {
@@ -84,18 +97,34 @@ abstract class ItemsFactory extends Singleton {
 	//
 	// Protected methods.
 	protected function init() {
-		parent::init();
-
-		$this->_db = DBManager::Instance()->getDefault();
+		$this->_db = DBManager::Instance()->{$this->_dbname};
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	//
 	// Public class methods.
+	final public static function &Instance($dbname = false) {
+		static $Instances = array();
+
+		if($dbname === false) {
+			global $Connections;
+			$dbname = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+		}
+
+		$classname = get_called_class();
+		if(!isset($Instances[$classname][$dbname])) {
+			if(!isset($Instances[$classname])) {
+				$Instances[$classname] = array();
+			}
+			$Instances[$classname][$dbname] = new $classname();
+			$Instances[$classname][$dbname]->_dbname = $dbname;
+			$Instances[$classname][$dbname]->init();
+		}
+
+		return $Instances[$classname][$dbname];
+	}
 	//
 	// Protected class methods.
-	protected static function GetClass($name) {
-		$out = null;
-
+	protected static function GetClass($name, $dbname) {
 		$name = classname($name)."Representation";
 
 		if(!in_array($name, self::$_LoadedClasses)) {
@@ -113,6 +142,6 @@ abstract class ItemsFactory extends Singleton {
 			}
 		}
 
-		return new $name();
+		return new $name($dbname);
 	}
 }

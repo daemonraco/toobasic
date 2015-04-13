@@ -34,8 +34,8 @@ abstract class ItemRepresentation {
 	protected $_properties = array();
 	//
 	// Magic methods.
-	public function __construct() {
-		$this->_db = DBManager::Instance()->getDefault();
+	public function __construct($dbname) {
+		$this->_db = DBManager::Instance()->{$dbname};
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	public function __toString() {
