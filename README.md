@@ -153,6 +153,7 @@ Now you're also using translations, both inside your template and your controlle
 After all we said you should visit this documentation pages:
 * [Using Layouts](docs/uselayout.md)
 * [Using Languages](docs/uselanguage.md)
+* [Models](docs/models.md)
 * [Databases](docs/databases.md)
 * [Cache](docs/cache.md)
 * [Representations](docs/representations.md)

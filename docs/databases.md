@@ -47,6 +47,7 @@ This will executes a __select__ in your database __census__ and print out every 
 Not very usefull and rubust, but gives an idea of how it works.
 
 Also, you can go further and write something like this:
+```php
 <?php
 class SomeModel extends \TooBasic\Model {
 	public function printSomeData($type) {
@@ -62,3 +63,10 @@ class SomeModel extends \TooBasic\Model {
 }
 ```
 This makes use of prepared queries  improve your database performance.
+
+## Defaults
+To make things a little bit easer, there are a few extra configuration you can make to set a database as default:
+* __Main Database__: You can set the name of your default database configuration in `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]`. This is the connection to be used on every database access where no database-name is specified.
+    * It's recommended to set this global to avoid error when using databases.
+* __Cache Database__: If you site uses cache on database, you may want to set such information into a differente connection. If that's the case, you can configure a database-name into `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE]`.
+    * The default behavior is to use the default database.
