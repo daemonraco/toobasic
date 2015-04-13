@@ -2,30 +2,40 @@
 
 namespace TooBasic;
 
-class Adapter {
+/**
+ * @class Adapter 
+ * @abstract
+ * 
+ * This is the most basic representation of an adapter in TooBasic.
+ */
+abstract class Adapter {
 	//
-	// Constants.
-	//
-	// Protected static properties.
+	// Protected class properties.
+	/**
+	 *
+	 * @var \TooBasic\Adapter[]
+	 */
 	protected static $_Adapters = array();
-	//
-	// Protected properties.
 	//
 	// Magic methods.
 	public function __construct() {
 		
 	}
 	//
-	// Public methods.
-	//
-	// Protected methods.
-	//
 	// Public class mehtods.
+	/**
+	 * Returns an adapter baset on its name.
+	 * 
+	 * @param string $adapterName Adapters name.
+	 * @return \TooBasic\Adapter Returns the requested adapter or false.
+	 */
 	public static function Factory($adapterName) {
 		$out = false;
 
 		if(!isset(self::$_Adapters[$adapterName])) {
 			self::$_Adapters[$adapterName] = new $adapterName();
+			$out = self::$_Adapters[$adapterName];
+		} else {
 			$out = self::$_Adapters[$adapterName];
 		}
 

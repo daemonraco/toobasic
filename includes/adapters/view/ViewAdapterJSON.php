@@ -4,10 +4,6 @@ namespace TooBasic;
 
 class ViewAdapterJSON extends ViewAdapter {
 	//
-	// Constants.
-	//
-	// Protected properties.
-	//
 	// Magic methods.
 	public function __construct() {
 		parent::__construct();
@@ -21,6 +17,4 @@ class ViewAdapterJSON extends ViewAdapter {
 
 		return $out;
 	}
-	//
-	// Protected methods.
 }

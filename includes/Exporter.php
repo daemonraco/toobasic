@@ -33,7 +33,6 @@ abstract class Exporter {
 	protected $_lastRun = false;
 	protected $_mode = false;
 	protected $_name = false;
-	protected $_params = null;
 	protected $_requiredParams = array(
 		"GET" => array(),
 		"POST" => array()
@@ -45,37 +44,41 @@ abstract class Exporter {
 	public function __construct($actionName = false) {
 		global $Defaults;
 		global $ActionName;
-
-		$this->_params = Params::Instance();
-
-		if(isset($_REQUEST["format"]) && in_array($_REQUEST["format"], array(self::FormatBasic, self::FormatJSON))) {
-			$this->_format = $_REQUEST["format"];
+		//
+		// Checking requested format.
+		if(isset($this->params->get->format) && in_array($this->params->get->format, array_keys($Defaults[GC_DEFAULTS_FORMATS]))) {
+			$this->_format = $this->params->get->format;
 		} else {
+			//
+			// In case no format was requested or the requested one
+			// is wrong, "basic" is used.
 			$this->_format = self::FormatBasic;
 		}
-
-		if(isset($_REQUEST["mode"]) && in_array($_REQUEST["mode"], array(self::ModeAction, self::ModeModal))) {
-			$this->_mode = $_REQUEST["mode"];
+		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
+			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
 		} else {
+			trigger_error("There's no configuration for format '{$this->_format}'", E_USER_ERROR);
+		}
+		//
+		// Checking modes.
+		if(isset($this->params->get->mode) && in_array($this->params->get->mode, $Defaults[GC_DEFAULTS_MODES])) {
+			$this->_mode = $this->params->get->mode;
+		} else {
+			//
+			// In case no mode was requested or the requested one
+			// is wrong, "action" is used.
 			$this->_mode = self::ModeAction;
 		}
-
+		//
+		// Picking a name for this controller.
 		$this->_name = $actionName ? $actionName : $ActionName;
-
-		switch($this->_format) {
-			case self::FormatJSON:
-				$this->_viewAdapter = new ViewAdapterJSON();
-				break;
-			case self::FormatBasic:
-			default:
-				$this->_viewAdapter = new $Defaults["view-adapter"]();
-				break;
-		}
-
-		if(isset($this->_params->debugwithoutcache)) {
+		//
+		// Disabling cache if requested.
+		if(isset($this->params->debugwithoutcache)) {
 			$this->_cached = false;
 		}
-
+		//
+		// Triggering init method.
 		$this->init();
 	}
 	/**
@@ -159,7 +162,7 @@ abstract class Exporter {
 			$this->_cacheKey = get_called_class();
 			foreach($this->_cacheParams as $method => $names) {
 				foreach($names as $name) {
-					$value = $this->_params->{$method}->{$name};
+					$value = $this->params->{$method}->{$name};
 					$this->_cacheKey.= "_{$name}_{$value}";
 				}
 			}
@@ -170,7 +173,7 @@ abstract class Exporter {
 	protected function checkParams() {
 		foreach($this->_requiredParams as $method => $params) {
 			foreach($params as $param) {
-				if(!isset($this->_params->{$method}->{$param})) {
+				if(!isset($this->params->{$method}->{$param})) {
 					$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).")");
 				}
 			}
@@ -205,9 +208,13 @@ abstract class Exporter {
 		return $out;
 	}
 	protected function init() {
-		if($this->_params->hasDebugs()) {
+		if($this->params->hasDebugs()) {
 			$this->_cached = false;
 		}
+		//
+		// This is to avoid cache collision when a controller is
+		// requested with different modes.
+		$this->_cacheParams["GET"][] = "mode";
 	}
 	protected function setError($code, $message) {
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);

@@ -23,6 +23,8 @@ define("GC_DEFAULTS_LAYOUT", "layout");
 define("GC_DEFAULTS_LANGS_BUILT", "langs-built");
 define("GC_DEFAULTS_SERVICE", "service");
 define("GC_DEFAULTS_VIEW_ADAPTER", "view-adapter");
+define("GC_DEFAULTS_FORMATS", "formats");
+define("GC_DEFAULTS_MODES", "modes");
 // @}
 //
 // Directories @{

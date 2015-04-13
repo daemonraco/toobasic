@@ -5,7 +5,7 @@ namespace TooBasic;
 class ViewAdapterSmarty extends ViewAdapter {
 	//
 	// Constants.
-//	const SmartyTemplatesDirectory="/smarty/";
+//	const SmartyTemplatesDirectory = "/smarty/";
 	const SmartyStuffDirectory = "/smarty";
 	const SmartyCompileDirectory = "/smarty/compile";
 	const SmartyCacheDirectory = "/smarty/cache";

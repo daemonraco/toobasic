@@ -37,6 +37,14 @@ $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
 $Defaults[GC_DEFAULTS_SERVICE] = "";
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "\TooBasic\ViewAdapterSmarty";
+$Defaults[GC_DEFAULTS_FORMATS] = array(
+	"basic" => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
+	"json" => "\TooBasic\ViewAdapterJSON"
+);
+$Defaults[GC_DEFAULTS_MODES] = array(
+	"action",
+	"modal"
+);
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 //
 // Directory configurations.
@@ -117,7 +125,11 @@ $localConfig = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config
 if(is_readable($localConfig)) {
 	require_once $localConfig;
 }
-
+//
+// Final touches.
+$Defaults[GC_DEFAULTS_FORMATS]["basic"] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
+//
+//
 $ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults["action"];
 $LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults["layout"];
 $ServiceName = isset($_REQUEST[GC_REQUEST_SERVICE]) ? $_REQUEST[GC_REQUEST_SERVICE] : false;

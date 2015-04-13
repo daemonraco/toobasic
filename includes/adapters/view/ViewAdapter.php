@@ -4,10 +4,14 @@ namespace TooBasic;
 
 abstract class ViewAdapter extends Adapter {
 	//
-	// Constants.
-	//
 	// Protected properties.
+	/**
+	 * @var mixed[string]
+	 */
 	protected $_autoAssigns = array();
+	/**
+	 * @var string[string]
+	 */
 	protected $_headers = array();
 	//
 	// Magic methods.
@@ -19,17 +23,15 @@ abstract class ViewAdapter extends Adapter {
 	//
 	// Public methods.
 	public function autoAssigns() {
-		global $Defaults;
-
 		$this->_autoAssigns["ROOTDIR"] = ROOTDIR;
 		$this->_autoAssigns["ROOTURL"] = ROOTURI;
 		$this->_autoAssigns["SERVER"] = $_SERVER;
+
+//		global $Defaults;
 //		$this->_autoAssigns["defaults"] = $Defaults;/** @todo SECURITY ISSUES */
 	}
 	public function headers() {
 		return $this->_headers;
 	}
 	abstract public function render($assignments, $action = false);
-	//
-	// Protected methods.
 }
