@@ -7,46 +7,32 @@ Well, there's no real reason, you'll probably find much better solutions in the 
 
 ## Basic Features?
 __TooBasic__ provide some sort of solution to features like:
-* Services
-> Controllers that only return a JSON result avoiding presentation logics.
-* Plugins (modules)
-> A simple mechanism to expand your site through plugins
-* Shell Tools
-> Some sites usually have background tools to perform heavy tasks, __TooBasic__ provides a way to define and manage this tools.
-* Crons
-> Something like tools but restricted to cron-type executions.
-* Cache
-> It already has a simple way to cache controller result avoiding its logic on a second request.
-* Database Wrapping
-> Provides a simple way access tables in a database by representation.
+
+* __Services__: Controllers that only return a JSON result avoiding presentation logics.
+* __Plugins (modules)__: A simple mechanism to expand your site through plugins
+* __Shell Tools__: Some sites usually have background tools to perform heavy tasks, __TooBasic__ provides a way to define and manage this tools.
+	* __Crons__: Something like tools but restricted to cron-type executions.
+* __Cache__: It already has a simple way to cache controller result avoiding its logic on a second request (visit [Cache](docs/cache.md)).
+* __Database Wrapping__: Provides a simple way access tables in a database by representation (visit [Databases](docs/databases.md)).
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a few you may need to know.
+
 * `ROOTDIR`
-    * `site`
-    > Mainly, all your site's stuff goes somewhere inside this folder.
-        * `controllers`
-            >> Here you start all your PHP files with controller specifications.
-        * `templates`
-            >> Here your store all your templates separated by the way you show them.
-            * `action`
-            >>> here you store the way your controllers are seen by default.
-            * `modal`
-            >>> and here the way your controllers are seen whem they are used as modals.
-        * `config`
-        >> Specific configuration for your site goes here.
-        * `models`
-        >> Well, this are a bunch of classes that represent your real site's logic. Remember, your controllers shouldn't have complex logics.
-        * `langs`
-        >> Translations.
-    * `modules`
-    > Consider these as plugins.
-    * `cache`
-    > All the dynamic stuff of your site like cache files, smarty compilations, etc. will be stored here.
+    * `site`: Mainly, all your site's stuff goes somewhere inside this folder.
+        * `controllers`: Here you start all your PHP files with controller specifications.
+        * `templates`: Here your store all your templates separated by the way you show them.
+            * `action`: here you store the way your controllers are seen by default.
+            * `modal`: and here the way your controllers are seen whem they are used as modals.
+        * `config`: Specific configuration for your site goes here.
+        * `models`: Well, this are a bunch of classes that represent your real site's logic. Remember, your controllers shouldn't have complex logics.
+        * `langs`: Translations.
+    * `modules`: Consider these as plugins.
+    * `cache`: All the dynamic stuff of your site like cache files, smarty compilations, etc. will be stored here.
 
 ## How To Create A Basic Page
 In order to create a basic page you need to create two files, a contorller and a template, and one name. 
-The name must be a lower-case string without spaces or special characters (geeky info: `"/([a-z0-9]+)/"`).
+The name must be a lower-case string without spaces or special characters (geeky info: `"/([a-z0-9_]+)/"`).
 
 Why a name? well, this name will become the name of your action, your controller, your template and also the parameter to use in your browser, so, its an important name. For our examples we'll use __myaction__ as our _chosen one_.
 ### Controller
@@ -151,6 +137,7 @@ Now you're also using translations, both inside your template and your controlle
 
 ### Suggestions
 After all we said you should visit this documentation pages:
+
 * [Using Layouts](docs/uselayout.md)
 * [Using Languages](docs/uselanguage.md)
 * [Models](docs/models.md)
@@ -164,4 +151,4 @@ After all we said you should visit this documentation pages:
 
 Even though you can use other mechanisms, __TooBasic__ provides and adapter for templace using [Smarty](http://www.smarty.net/) as engine, and it's selected by default. Therefore, you should visit its documentation at [smarty.net Documentation](http://www.smarty.net/documentation).
 
-Of course, if you want to use a different template interpreter, you may visit the [Adapters Doc](includes/adapters/view/README.md) to find an alternative.
+Of course, if you want to use a different template interpreter, you may visit the [Adapters Doc](docs/adapters.md) to find an alternative.

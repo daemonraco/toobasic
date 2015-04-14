@@ -34,6 +34,7 @@ class UserModel extends \TooBasic\Model {
 ```
 ## Using a Model
 Now that we have a model for our example, we need to create a service and a controller that uses it.
+
 * Create a controller and save it at __ROOTDIR/site/controllers/usercmp.php__:
 ```php
 <?php

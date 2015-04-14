@@ -4,6 +4,7 @@ True, we all know what a [cache](http://en.wikipedia.org/wiki/Cache_%28computing
 
 ## What is it cached?
 Internally, __TooBasic__ separates the stuff it caches in two kinds:
+
 * __Computing Cache__: This can also be called _controller cache_ because it stores all the asignments made by a controller.
 * __View Cache__: You can see this as a HTML cache where you store the final result of rendering a controller call.
 
@@ -65,6 +66,7 @@ class UserinfoController extends \TooBasic\Controller {
 }
 ```
 Now, let's say we want to cache this contoller's called based on the _user ID_ and a parameter called _bgcolor_. For that we need to do two things:
+
 * First, we need to activate the use of cache:
 ```php
 <?php
@@ -108,6 +110,7 @@ class UserinfoController extends \TooBasic\Controller {
 }
 ```
 And that's it, from now on, our controller saves cache entries and calls like these will have different entries:
+
 * http://www.example.com/?action=userinfo&userid=10&bgcolor=green
 * http://www.example.com/?action=userinfo&userid=10&bgcolor=blue
 * http://www.example.com/?action=userinfo&userid=12&bgcolor=green

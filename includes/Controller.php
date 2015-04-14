@@ -27,7 +27,7 @@ abstract class Controller extends Exporter {
 		//
 		// It doesn't matter what it's set for the current class, there
 		// are rules first.
-		if(isset($this->_params->debugnolayout)) {
+		if(isset($this->params->debugnolayout)) {
 			//
 			// Removing layout setting.
 			$this->_layout = false;
@@ -156,7 +156,7 @@ abstract class Controller extends Exporter {
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if($this->_lastRun && !isset($this->_params->debugresetcache)) {
+			if($this->_lastRun && !isset($this->params->debugresetcache)) {
 				//
 				// Loading data from the previous execution.
 				$this->_assignments = $this->_lastRun["assignments"];
@@ -204,7 +204,7 @@ abstract class Controller extends Exporter {
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if(!$this->_lastRun["render"] || isset($this->_params->debugresetcache)) {
+			if(!$this->_lastRun["render"] || isset($this->params->debugresetcache)) {
 				//
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();

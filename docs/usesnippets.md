@@ -8,6 +8,7 @@ For example, if some of your actions show a section to jump between pages (let's
 
 ## Pager Snippet
 For our examples we're are going to create a snippet called 'pager' to show page buttons inside an action with pagination.
+
 * Let's create a file with this content:
 ```html
 {if $show}
@@ -77,6 +78,7 @@ Why a model? well this will help you avoid some settings and make your code simp
 
 ## Current Problem
 Let's suppouse your are working with an action that lists a long list of thing and you endend up with something like this:
+
 * Controller __ROOTDIR/site/controllers/things.php__:
 ```php
 <?php
@@ -110,6 +112,7 @@ The model 'stuff' doesn't really exist, it's just and example... duh :)
 
 ## Adding Pages
 Let's add some code using our snippet:
+
 * Modify your controller into something like this:
 ```php
 class ThingsController extends \TooBasic\Controller {

@@ -3,7 +3,7 @@
 class HomeController extends TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = false; //true;
+	protected $_cached = true;
 	//
 	// Protected methods.
 	protected function basicRun() {

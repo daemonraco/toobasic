@@ -1,6 +1,6 @@
 <?php
 
-class LayoutController extends TooBasic\Layout {
+class MdlayoutController extends TooBasic\Layout {
 	//
 	// Protected properties
 	protected $_cached = true;
@@ -8,5 +8,9 @@ class LayoutController extends TooBasic\Layout {
 	// Protected methods.
 	protected function basicRun() {
 		return true;
+	}
+	protected function init() {
+		parent::init();
+		$this->_cacheParams["GET"][] = "doc";
 	}
 }

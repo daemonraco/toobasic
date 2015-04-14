@@ -4,6 +4,7 @@ Well, you know, the part of your page that sourounds your main content an usuall
 ## Create a Site with Layout
 ### Main Content
 Let's follow an old example an create an action called __myaction__ this way:
+
 * A controller in __ROOTDIR/site/controllers/myaction.php__:
 ```php
 <?php
@@ -24,6 +25,7 @@ class MyactionController extends \TooBasic\Controller {
 After all of this you'll find a page saying __Hello World!__.
 ### Nav Bar
 Let's create another action to emule a navigation bar and call it __mynav__:
+
 * A controller in __ROOTDIR/site/controllers/nav.php__:
 ```php
 <?php
@@ -42,6 +44,7 @@ class MynavController extends \TooBasic\Controller {
 
 ### Layout
 Now that you have a main content to show, let's create another controller called __mylayout__ for your layout:
+
 * A controller in __ROOTDIR/site/templates/action/mylayout.html__:
 ```php
 <?php
@@ -73,7 +76,6 @@ class MylayoutController extends \TooBasic\Layout {
 As you may see, using a parameter called __layout__ on each url may not be pretty, therefore you can configure your site by creating a file in __ROOTDIR/site/config.php__ with this content:
 ```php
 <?php
-
 $Defaults["layout"] = "mylayout";
 ```
 In this way, you may enter your page just specifiying your action.
@@ -117,4 +119,5 @@ class MyactionController extends \TooBasic\Controller {
 
 ## Suggestions
 If you want you may visit this documentation pages:
+
 * [Using Snippets](usesnippets.md)
