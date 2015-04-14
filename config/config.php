@@ -94,6 +94,7 @@ $Paths[GC_PATHS_CONFIGS] = "/configs";
 $Paths[GC_PATHS_CONTROLLERS] = "/controllers";
 $Paths[GC_PATHS_SERVICES] = "/services";
 $Paths[GC_PATHS_CSS] = "/styles";
+$Paths[GC_PATHS_IMAGES] = "/images";
 $Paths[GC_PATHS_JS] = "/scripts";
 $Paths[GC_PATHS_LANGS] = "/langs";
 $Paths[GC_PATHS_LAYOUTS] = "/layouts";

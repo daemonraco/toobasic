@@ -232,6 +232,6 @@ abstract class Controller extends Exporter {
 		$this->assign("format", $this->_format);
 		$this->assign("mode", $this->_mode);
 		$this->assign("tr", $this->translate);
-		$this->assign("ctrl", $this);
+		$this->assign("ctrl", new ControllerExports($this));
 	}
 }

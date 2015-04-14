@@ -13,6 +13,7 @@ spl_autoload_register(function($class) {
 		static $basicIncludes = array(
 			"Adapter",
 			"Controller",
+			"ControllerExports",
 			"ErrorController",
 			"Exporter",
 			"Layout",

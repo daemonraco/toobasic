@@ -69,6 +69,7 @@ define("GC_PATHS_CONFIGS", "configs");
 define("GC_PATHS_CONTROLLERS", "controllers");
 define("GC_PATHS_SERVICES", "services");
 define("GC_PATHS_CSS", "css");
+define("GC_PATHS_IMAGES", "images");
 define("GC_PATHS_JS", "js");
 define("GC_PATHS_LANGS", "langs");
 define("GC_PATHS_LAYOUTS", "layouts");

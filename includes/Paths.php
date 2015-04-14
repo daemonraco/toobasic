@@ -16,6 +16,7 @@ class Paths extends Singleton {
 	protected $_configPaths = false;
 	protected $_controllerPaths = false;
 	protected $_cssPaths = false;
+	protected $_imagesPaths = false;
 	protected $_jsPaths = false;
 	protected $_langPaths = array();
 	protected $_manifests = false;
@@ -45,6 +46,10 @@ class Paths extends Singleton {
 	public function cssPath($cssName, $full = false) {
 		global $Paths;
 		return $this->find($this->_cssPaths, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
+	}
+	public function imagePath($imageName, $imageExtension, $full = false) {
+		global $Paths;
+		return $this->find($this->_imagesPaths, $Paths[GC_PATHS_IMAGES], $imageName, $imageExtension, $full);
 	}
 	public function jsPath($jsName, $full = false) {
 		global $Paths;
@@ -117,13 +122,9 @@ class Paths extends Singleton {
 		return $this->find($this->_snippetsPaths, $Paths[GC_PATHS_SNIPPETS], $snippetName, self::ExtensionTemplate, $full);
 	}
 	public function templateDirs() {
-		global $Paths;
-
 		if($this->_templatesPaths === false) {
-			global $Directories;
+			global $Paths;
 			$this->_templatesPaths = $this->genPaths($Paths[GC_PATHS_TEMPLATES]);
-			array_unshift($this->_templatesPaths, Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_TEMPLATES]}"));
-			$this->_templatesPaths = array_unique($this->_templatesPaths);
 		}
 
 		return $this->_templatesPaths;
@@ -156,7 +157,7 @@ class Paths extends Singleton {
 
 		return $list;
 	}
-	protected function find(&$list, $folder, $name, $extension, $full = false) {
+	protected function find(&$list, $folder, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
 
 		if($list === false) {
@@ -200,5 +201,10 @@ class Paths extends Singleton {
 				}
 			}
 		}
+	}
+	//
+	// Public class methods.
+	public static function Path2Uri($path) {
+		return Sanitizer::UriPath(substr($path, strlen($_SERVER["DOCUMENT_ROOT"])));
 	}
 }
