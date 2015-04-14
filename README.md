@@ -32,7 +32,7 @@ __TooBasic__ has many folders and we're not going to list them all here, Just a 
 
 ## How To Create A Basic Page
 In order to create a basic page you need to create two files, a contorller and a template, and one name. 
-The name must be a lower-case string without spaces or special characters (geeky info: `"/([a-z0-9_]+)/"`).
+The name must be a lower-case string without spaces or special characters (geeky info: `/([a-z0-9_]+)/`).
 
 Why a name? well, this name will become the name of your action, your controller, your template and also the parameter to use in your browser, so, its an important name. For our examples we'll use __myaction__ as our _chosen one_.
 ### Controller
@@ -144,6 +144,7 @@ After all we said you should visit this documentation pages:
 * [Databases](docs/databases.md)
 * [Cache](docs/cache.md)
 * [Representations](docs/representations.md)
+* [Shell Tools](docs/shelltools.md)
 
 # Thanks
 ## Smarty
