@@ -89,6 +89,14 @@ define("GC_REQUEST_MODE", "mode");
 define("GC_REQUEST_SERVICE", "service");
 // @}
 //
+// Class Suffixes @{
+define("GC_CLASS_SUFFIX_CONTROLLER", "Controller");
+define("GC_CLASS_SUFFIX_CRON", "Cron");
+define("GC_CLASS_SUFFIX_MODEL", "Model");
+define("GC_CLASS_SUFFIX_SERVICE", "Service");
+define("GC_CLASS_SUFFIX_TOOL", "Tool");
+// @}
+//
 // Memcached parameters @{
 define("GC_DEFAULTS_MEMCACHED", "memcached");
 define("GC_DEFAULTS_MEMCACHED_SERVER", "server");

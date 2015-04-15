@@ -78,7 +78,7 @@ class ServicesManager extends UrlManager {
 		if(is_readable($servicePath)) {
 			require_once $servicePath;
 
-			$serviceClassName = (is_numeric($serviceName) ? "N" : "").\TooBasic\classname($serviceName)."Service";
+			$serviceClassName = (is_numeric($serviceName) ? "N" : "").\TooBasic\classname($serviceName).GC_CLASS_SUFFIX_SERVICE;
 
 			if(class_exists($serviceClassName)) {
 				$out = new $serviceClassName($serviceName);

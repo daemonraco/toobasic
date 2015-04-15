@@ -23,6 +23,7 @@ class MagicProp extends Singleton {
 	protected $_cache = false;
 	protected $_modelsFactory = false;
 	protected $_params = false;
+	protected $_paths = false;
 	protected $_representations = false;
 	protected $_translate = false;
 	//
@@ -43,6 +44,8 @@ class MagicProp extends Singleton {
 			$out = $this->params();
 		} elseif($prop == "cache") {
 			$out = $this->cache();
+		} elseif($prop == "paths") {
+			$out = $this->paths();
 		} else {
 			throw new MagicPropException("Unhandled propoerty '{$prop}'");
 		}
@@ -74,6 +77,13 @@ class MagicProp extends Singleton {
 		}
 
 		return $this->_params;
+	}
+	protected function paths() {
+		if($this->_paths === false) {
+			$this->_paths = Paths::Instance();
+		}
+
+		return $this->_paths;
 	}
 	protected function representations() {
 		if($this->_representations === false) {

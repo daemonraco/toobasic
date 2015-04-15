@@ -95,7 +95,7 @@ abstract class Controller extends Exporter {
 		$output = "";
 		//
 		// Looking for the snippet.
-		$path = Paths::Instance()->snippetPath($snippetName);
+		$path = $this->paths->snippetPath($snippetName);
 		if($path) {
 			if($snippetDataSet == false || !isset($this->_snippetAssignments[$snippetDataSet])) {
 				$snippetDataSet = false;

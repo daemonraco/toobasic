@@ -4,10 +4,6 @@ namespace TooBasic;
 
 class ActionsManager extends UrlManager {
 	//
-	// Protected properties.
-	//
-	// Magic methods.
-	//
 	// Public methods.
 	public function run($autoDisplay = true) {
 		global $ActionName;
@@ -44,8 +40,6 @@ class ActionsManager extends UrlManager {
 
 		return $actionLastRun;
 	}
-	//
-	// Protected methods.
 	//
 	// Public class methods.
 	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
@@ -96,7 +90,7 @@ class ActionsManager extends UrlManager {
 		if(is_readable($controllerPath)) {
 			require_once $controllerPath;
 
-			$controllerClassName = (is_numeric($actionName) ? "N" : "").\TooBasic\classname($actionName)."Controller";
+			$controllerClassName = (is_numeric($actionName) ? "N" : "").\TooBasic\classname($actionName).GC_CLASS_SUFFIX_CONTROLLER;
 			$out = new $controllerClassName($actionName);
 		}
 

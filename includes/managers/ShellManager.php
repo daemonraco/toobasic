@@ -18,8 +18,6 @@ class ShellManager extends Manager {
 	protected $_tool = false;
 	protected $_toolClass = null;
 	//
-	// Magic methods.
-	//
 	// Public methods.
 	public function errors() {
 		return $this->_errors;
@@ -43,12 +41,16 @@ class ShellManager extends Manager {
 				$this->runCron($spacer);
 				break;
 			default:
-				/** @todo this should be a little more pretty. */
 				if($this->_mode) {
-					$this->setError(self::ErrorNotValidMode, "No valid mode specified");
+					$this->setError(self::ErrorNotValidMode, "Mode '{$this->_mode}' is not valid");
 				} else {
 					$this->setError(self::ErrorNoMode, "No mode specified");
 				}
+
+				echo "{$spacer}Available modes are:\n";
+				echo "{$spacer}\t- tool\n";
+				echo "{$spacer}\t- cron\n";
+				echo "\n";
 		}
 
 		$this->promptErrors($spacer);
@@ -66,7 +68,7 @@ class ShellManager extends Manager {
 			if($path) {
 				require_once $path;
 
-				$className = classname($this->_tool)."Cron";
+				$className = classname($this->_tool).GC_CLASS_SUFFIX_CRON;
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
@@ -80,6 +82,13 @@ class ShellManager extends Manager {
 			}
 		} else {
 			$this->setError(self::ErrorNoToolName, "No tool name specified");
+
+			echo "{$spacer}Available crons:\n";
+			foreach($this->paths->shellCron("*", true) as $path) {
+				$pathinfo = pathinfo($path);
+				echo "{$spacer}\t- {$pathinfo["filename"]}\n";
+			}
+			echo "\n";
 		}
 	}
 	protected function runTool($spacer) {
@@ -88,7 +97,7 @@ class ShellManager extends Manager {
 			if($path) {
 				require_once $path;
 
-				$className = classname($this->_tool)."Tool";
+				$className = classname($this->_tool).GC_CLASS_SUFFIX_TOOL;
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
@@ -102,6 +111,13 @@ class ShellManager extends Manager {
 			}
 		} else {
 			$this->setError(self::ErrorNoToolName, "No tool name specified");
+
+			echo "{$spacer}Available tools:\n";
+			foreach($this->paths->shellTool("*", true) as $path) {
+				$pathinfo = pathinfo($path);
+				echo "{$spacer}\t- {$pathinfo["filename"]}\n";
+			}
+			echo "\n";
 		}
 	}
 	protected function setError($code, $message) {

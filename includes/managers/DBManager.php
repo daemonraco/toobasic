@@ -28,8 +28,6 @@ class DBManager extends Manager {
 		return $this->get($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]);
 	}
 	public function get($dbname) {
-		$out = false;
-
 		if(!isset($this->_connections[$dbname])) {
 			global $Connections;
 
@@ -42,6 +40,4 @@ class DBManager extends Manager {
 
 		return $out;
 	}
-	//
-	// Protected methods.
 }
