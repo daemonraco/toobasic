@@ -39,7 +39,11 @@ $Defaults[GC_DEFAULTS_SERVICE] = "";
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = "\TooBasic\ViewAdapterSmarty";
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	"basic" => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
-	"json" => "\TooBasic\ViewAdapterJSON"
+	"dump" => "\TooBasic\ViewAdapterDump",
+	"json" => "\TooBasic\ViewAdapterJSON",
+	"print" => "\TooBasic\ViewAdapterPrint",
+	"serialize" => "\TooBasic\ViewAdapterSerialize",
+	"xml" => "\TooBasic\ViewAdapterXML"
 );
 $Defaults[GC_DEFAULTS_MODES] = array(
 	"action",

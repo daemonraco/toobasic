@@ -28,7 +28,7 @@ class CacheAdapterMemcached extends CacheAdapter {
 		$data = $this->_conn->delete($fullKey);
 
 		if(isset(Params::Instance()->get->debugmemcached)) {
-			echo "<!-- memcached delete: $fullKey [NOT FOUND]-->\n";
+			echo "<!-- memcached delete: {$fullKey} [NOT FOUND]-->\n";
 		}
 	}
 	public function get($prefix, $key) {
@@ -40,13 +40,13 @@ class CacheAdapterMemcached extends CacheAdapter {
 			$data = unserialize($data);
 
 			if(isset(Params::Instance()->get->debugmemcached)) {
-				echo "<!-- memcached get: $fullKey [FOUND]-->\n";
+				echo "<!-- memcached get: {$fullKey} [FOUND]-->\n";
 			}
 		} else {
 			$data = null;
 
 			if(isset(Params::Instance()->get->debugmemcached)) {
-				echo "<!-- memcached get: $fullKey [NOT FOUND]-->\n";
+				echo "<!-- memcached get: {$fullKey} [NOT FOUND]-->\n";
 			}
 		}
 

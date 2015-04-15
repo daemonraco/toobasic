@@ -48,8 +48,13 @@ spl_autoload_register(function($class) {
 		);
 		static $viewAdapters = array(
 			"ViewAdapter",
+			"ViewAdapterBasic",
+			"ViewAdapterDump",
 			"ViewAdapterJSON",
-			"ViewAdapterSmarty"
+			"ViewAdapterPrint",
+			"ViewAdapterSerialize",
+			"ViewAdapterSmarty",
+			"ViewAdapterXML"
 		);
 		static $representations = array(
 			"ItemRepresentation",
