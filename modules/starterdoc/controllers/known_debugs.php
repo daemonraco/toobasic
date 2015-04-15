@@ -9,9 +9,10 @@ class KnownDebugsController extends TooBasic\Controller {
 	protected function basicRun() {
 		$knownDebugs = array(
 			"debugwithoutcache" => "",
-			"debugresetcache" => "",
+			"debugresetcache" => "Avoids current cache an regenerates it.",
 			"debugnolang" => "Disables all translations and prints keys.",
-			"debugnolayout" => "Disables current layout if any."
+			"debugnolayout" => "Disables current layout if any.",
+			"debugmemcached" => "Prompts in HTML comments cashe keys used by memcached."
 		);
 		ksort($knownDebugs);
 		$this->assign("knowndebugs", $knownDebugs);
