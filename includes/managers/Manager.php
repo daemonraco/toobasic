@@ -4,17 +4,22 @@ namespace TooBasic;
 
 abstract class Manager extends Singleton {
 	//
-	// Protected properties.
-	protected $_params = null;
-	//
 	// Magic methods.
-	//
-	// Public methods.
-	//
-	// Protected methods.
-	protected function init() {
-		parent::init();
+	/**
+	 * @todo doc
+	 *
+	 * @param string $prop @todo doc
+	 * @return mixed @todo doc
+	 */
+	public function __get($prop) {
+		$out = false;
 
-		$this->_params = Params::Instance();
+		try {
+			$out = MagicProp::Instance()->{$prop};
+		} catch(MagicPropException $ex) {
+			
+		}
+
+		return $out;
 	}
 }

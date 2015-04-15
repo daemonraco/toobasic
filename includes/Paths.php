@@ -171,8 +171,10 @@ class Paths extends Singleton {
 
 		foreach($list as $path) {
 			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
-			if(is_readable($filepath)) {
-				$out[] = $filepath;
+			foreach(glob($filepath) as $subpath) {
+				if(is_readable($subpath)) {
+					$out[] = $subpath;
+				}
 			}
 		}
 
