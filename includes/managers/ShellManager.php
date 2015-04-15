@@ -64,7 +64,7 @@ class ShellManager extends Manager {
 	}
 	protected function runCron($spacer) {
 		if($this->_tool) {
-			$path = Paths::Instance()->shellCron($this->_tool);
+			$path = $this->paths->shellCron($this->_tool);
 			if($path) {
 				require_once $path;
 
@@ -93,7 +93,7 @@ class ShellManager extends Manager {
 	}
 	protected function runTool($spacer) {
 		if($this->_tool) {
-			$path = Paths::Instance()->shellTool($this->_tool);
+			$path = $this->paths->shellTool($this->_tool);
 			if($path) {
 				require_once $path;
 
