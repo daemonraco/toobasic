@@ -5,6 +5,9 @@ namespace TooBasic;
 /**
  * @abstract
  * @class Controller
+ * 
+ * This class represents a general controller with all its logic for checks,
+ * execution and display
  */
 abstract class Controller extends Exporter {
 	//
@@ -20,9 +23,18 @@ abstract class Controller extends Exporter {
 	protected $_snippetAssignments = array();
 	//
 	// Magic methods.
+	/**
+	 * Class constructor
+	 * 
+	 * @param string $actionName An indentifier name for this controller, by
+	 * default it's currect action's name.
+	 */
 	public function __construct($actionName = false) {
+		//
+		// Initializing parent class
 		parent::__construct($actionName);
-
+		//
+		// Global requirements.
 		global $Defaults;
 		//
 		// It doesn't matter what it's set for the current class, there
@@ -31,10 +43,10 @@ abstract class Controller extends Exporter {
 			//
 			// Removing layout setting.
 			$this->_layout = false;
-		} elseif(isset($_REQUEST["layout"])) {
+		} elseif(isset($this->params->get->layout)) {
 			//
 			// Using forced layout.
-			$this->_layout = $_REQUEST["layout"];
+			$this->_layout = $this->params->get->layout;
 		} elseif($this->_layout === null) {
 			//
 			// If nothing is set, then the default is used.
@@ -226,12 +238,19 @@ abstract class Controller extends Exporter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method adds some default values to any controller assignments.
+	 */
 	protected function autoAssigns() {
 		parent::autoAssigns();
 
 		$this->assign("format", $this->_format);
 		$this->assign("mode", $this->_mode);
+		//
+		// Translation object
 		$this->assign("tr", $this->translate);
+		//
+		// Controllers exported methods.
 		$this->assign("ctrl", new ControllerExports($this));
 	}
 }

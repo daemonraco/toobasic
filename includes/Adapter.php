@@ -12,8 +12,8 @@ abstract class Adapter {
 	//
 	// Protected class properties.
 	/**
-	 *
-	 * @var \TooBasic\Adapter[]
+	 * @var \TooBasic\Adapter[] List of loaded adapters. Avoids multiple
+	 * instances.
 	 */
 	protected static $_Adapters = array();
 	//
@@ -24,7 +24,7 @@ abstract class Adapter {
 	//
 	// Public class mehtods.
 	/**
-	 * Returns an adapter baset on its name.
+	 * Returns an adapter based on its name.
 	 * 
 	 * @param string $adapterName Adapters name.
 	 * @return \TooBasic\Adapter Returns the requested adapter or false.
