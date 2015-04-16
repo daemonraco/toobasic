@@ -1,4 +1,7 @@
 # TooBasic 0.1
+
+![ ](docs/images/TooBasic-logo-128px.png)
+
 ## What is it?
 Well __TooBasic__ is a too basic php framework with some basic features. Its main reason for existence is to provide a simple and quick framework in which you can start right away building your site while __TooBasic__ takes cake of some common stuff.
 
