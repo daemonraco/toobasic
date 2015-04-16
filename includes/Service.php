@@ -44,7 +44,7 @@ abstract class Service extends Exporter {
 				$dataBlock = $this->cache->get($prefixComputing, $key);
 			}
 //
-			if($dataBlock && !isset($this->_params->debugresetcache)) {
+			if($dataBlock && !isset($this->params->debugresetcache)) {
 				$this->_lastRun = $dataBlock;
 
 				$this->_status = $this->_lastRun["status"];
