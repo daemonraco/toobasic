@@ -1,0 +1,9 @@
+{
+	"debugs": {
+		"debugwithoutcache": "",
+		"debugresetcache": "Avoids current cache an regenerates it.",
+		"debugnolang": "Disables all translations and prints keys.",
+		"debugnolayout": "Disables current layout if any.",
+		"debugmemcached": "Prompts in HTML comments cashe keys used by memcached."
+	}
+}

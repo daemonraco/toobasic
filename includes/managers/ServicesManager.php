@@ -12,10 +12,21 @@ class ServicesManager extends UrlManager {
 	//
 	// Public methods.
 	public function run($autoDisplay = true) {
-		global $ServiceName;
 		//
-		// Current action execution.
-		$serviceLastRun = self::ExecuteService($ServiceName);
+		// Global requirements.
+		global $ServiceName;
+
+		if(isset($this->params->get->explaininterface)) {
+			if(isset($this->params->get->service)) {
+				$serviceLastRun = $this->explainInterface($ServiceName);
+			} else {
+				$serviceLastRun = $this->explainInterfaces();
+			}
+		} else {
+			//
+			// Current action execution.
+			$serviceLastRun = self::ExecuteService($ServiceName);
+		}
 		//
 		// Displaying if required.
 		if($autoDisplay) {
@@ -41,6 +52,93 @@ class ServicesManager extends UrlManager {
 		}
 
 		return $serviceLastRun;
+	}
+	//
+	// Protected methods.
+	protected function explainInterface($serviceName) {
+		$out = array(
+			"status" => true,
+			"interface" => null,
+			"headers" => array(),
+			"error" => false,
+			"errors" => array()
+		);
+
+		$out["interface"] = array(
+			"name" => $serviceName,
+			"cached" => false,
+			"methods" => array()
+		);
+
+		$serviceFile = $this->paths->servicePath($serviceName);
+		$service = false;
+		if($serviceFile && is_readable($serviceFile)) {
+			$pathinfo = pathinfo($serviceFile);
+
+			$service = array(
+				"path" => $serviceFile,
+				"name" => $pathinfo["filename"],
+				"class" => classname($pathinfo["filename"]).GC_CLASS_SUFFIX_SERVICE
+			);
+		} else {
+			$error = array(
+				"code" => self::ErrorUnknownService,
+				"message" => "Service '{$serviceName}' not found",
+				"location" => array(
+					"method" => __CLASS__."::".__FUNCTION__."()",
+					"file" => __FILE__,
+					"line" => __LINE__
+				)
+			);
+
+			$out["status"] = false;
+			$out["interface"] = false;
+			$out["error"] = $error;
+			$out["errors"][] = $error;
+		}
+
+		if($service) {
+			require_once $service["path"];
+
+			$object = new $service["class"]();
+
+			$out["interface"]["required_params"] = $object->requiredParams();
+			$out["interface"]["cached"] = $object->cached();
+			$out["interface"]["cache_params"] = $object->cacheParams();
+
+			foreach(get_class_methods($object) as $name) {
+				if(preg_match("/^run(?<method>[A-Z]*)$/", $name, $matches)) {
+					$matches["method"] = $matches["method"] ? $matches["method"] : "GET";
+					$out["interface"]["methods"][] = $matches["method"];
+				}
+			}
+
+			foreach($out["interface"]["required_params"] as $method => $value) {
+				if(!$value) {
+					unset($out["interface"]["required_params"][$method]);
+				}
+			}
+		}
+
+		return $out;
+	}
+	protected function explainInterfaces() {
+		$out = array(
+			"status" => true,
+			"services" => array(),
+			"headers" => array(),
+			"error" => false,
+			"errors" => array()
+		);
+
+		foreach($this->paths->servicePath("*", true) as $serviceFile) {
+			$pathinfo = pathinfo($serviceFile);
+
+			$service = $this->explainInterface($pathinfo["filename"]);
+			$out["services"][] = $service["interface"];
+		}
+
+		return $out;
 	}
 	//
 	// Public class methods.

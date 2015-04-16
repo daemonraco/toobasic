@@ -106,6 +106,9 @@ abstract class Exporter {
 	public function assignments() {
 		return $this->_assignments;
 	}
+	public function cached() {
+		return $this->_cached;
+	}
 	public function cacheParams() {
 		return $this->_cacheParams;
 	}

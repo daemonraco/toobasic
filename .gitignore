@@ -1,4 +1,5 @@
 /gitcomments.txt
+/to_doc.txt
 /cache/filecache/*.data
 /cache/smarty/*
 /libraries/*/*
