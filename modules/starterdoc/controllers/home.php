@@ -4,12 +4,15 @@ class HomeController extends TooBasic\Controller {
 	//
 	// Protected properties
 	protected $_cached = true;
+	protected $_layout = "mdlayout";
 	//
 	// Protected methods.
 	protected function basicRun() {
 		if(isset($this->params->get->example) && $this->params->get->example == "hellomodel") {
 			$this->assign("currentexample", $this->params->get->example);
 			$this->model->example->sayHi();
+		} else {
+			$this->assign("title", "Starter Doc");
 		}
 
 		return true;

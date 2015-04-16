@@ -14,12 +14,7 @@ class MddocController extends TooBasic\Controller {
 
 		$filepath = TB_Sanitizer::DirPath(ROOTDIR."/{$this->params->get->doc}");
 		if(is_readable($filepath)) {
-			$uri = explode("/", TB_Sanitizer::UriPath($this->params->get->doc));
-			array_pop($uri);
-			$uri = implode("/", $uri);
-			$this->assign("mdDocUri", $uri ? "{$uri}/" : "");
-
-			$this->assign("title", $this->params->get->doc);
+			$this->assign("title", "Doc: {$this->params->get->doc}");
 			$this->assign("content", "\n".file_get_contents($filepath));
 		} else {
 			$this->setError(HTTPERROR_BAD_REQUEST, "File '{$this->params->get->doc}' does not exist");

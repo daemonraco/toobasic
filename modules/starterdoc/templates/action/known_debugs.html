@@ -1,7 +1,7 @@
-<h2 id="known-debugs">Known Debugs</h2>
-<p>This is a list of known url parameter that may help on debugging time.</p>
-<ul>
-	{foreach from=$knowndebugs key=debug item=desc}
-	<li><code>{$debug}</code>{if $desc}: {$desc}{/if}</li>
-	{/foreach}
-</ul>
+## Known Debugs
+This is a list of known url parameter that may help on debugging time:
+
+{foreach from=$knowndebugs key=debug item=desc}
+* `{$debug}`{if $desc}: {$desc}{/if}
+
+{/foreach}

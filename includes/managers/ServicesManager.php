@@ -1,7 +1,12 @@
 <?php
 
 namespace TooBasic;
-
+/**
+ * @class ServicesManager
+ * 
+ * This manager is the one in charge of interpreting a service request and
+ * executing it.
+ */
 class ServicesManager extends UrlManager {
 	//
 	// Magic methods.

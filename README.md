@@ -144,6 +144,7 @@ After all we said you should visit this documentation pages:
 * [Databases](docs/databases.md)
 * [Cache](docs/cache.md)
 * [Representations](docs/representations.md)
+* [Services](docs/services.md)
 * [Shell Tools](docs/shelltools.md)
 
 # Thanks
