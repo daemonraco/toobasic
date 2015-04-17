@@ -18,7 +18,7 @@ abstract class ViewAdapterBasic extends ViewAdapter {
 	//
 	// Public methods.
 	public function noise() {
-		$this->_noise;
+		return $this->_noise;
 	}
 	//
 	// Protected methods.
