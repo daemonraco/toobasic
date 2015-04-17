@@ -159,13 +159,6 @@ abstract class Exporter {
 		$this->assign("layout", $LayoutName);
 		$this->assign("name", $this->_name);
 	}
-	/**
-	 * @abstract
-	 * @todo doc
-	 * 
-	 * @return boolean Returns true if the execution had no errors.
-	 */
-	abstract protected function basicRun();
 	protected function cacheKey() {
 		if($this->_cacheKey === false) {
 			$this->_cacheKey = get_called_class();
@@ -210,8 +203,10 @@ abstract class Exporter {
 		// it is run, otherwise the basic run method is called
 		if(method_exists($this, "run{$method}")) {
 			$out = $this->{"run{$method}"}();
-		} else {
+		} elseif(method_exists($this, "basicRun")) {
 			$out = $this->basicRun();
+		} else {
+			$this->setError(HTTPERROR_NOT_IMPLEMENTED, "Request method '{$method}' is not implemented");
 		}
 
 		return $out;

@@ -1,6 +1,7 @@
 <?php
 
 namespace TooBasic;
+
 /**
  * @class ServicesManager
  * 
@@ -106,17 +107,22 @@ class ServicesManager extends UrlManager {
 			require_once $service["path"];
 
 			$object = new $service["class"]();
+			$reflectionObject = new \ReflectionClass($object);
 
 			$out["interface"]["required_params"] = $object->requiredParams();
 			$out["interface"]["cached"] = $object->cached();
 			$out["interface"]["cache_params"] = $object->cacheParams();
 
-			foreach(get_class_methods($object) as $name) {
-				if(preg_match("/^run(?<method>[A-Z]*)$/", $name, $matches)) {
-					$matches["method"] = $matches["method"] ? $matches["method"] : "GET";
+			$matches = false;
+			foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
+				if(preg_match("/^run(?<method>[A-Z]+)$/", $reflection->name, $matches)) {
+					$matches["method"] = $matches["method"];
 					$out["interface"]["methods"][] = $matches["method"];
+				} elseif($reflection->name == "basicRun") {
+					$out["interface"]["methods"][] = "GET";
 				}
 			}
+			$out["interface"]["methods"] = array_unique($out["interface"]["methods"]);
 
 			foreach($out["interface"]["required_params"] as $method => $value) {
 				if(!$value) {
