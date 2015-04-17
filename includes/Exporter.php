@@ -150,6 +150,7 @@ abstract class Exporter {
 	//
 	// Protected methods.
 	protected function autoAssigns() {
+		global $Defaults;
 		global $ActionName;
 		global $ServiceName;
 		global $LayoutName;
@@ -158,6 +159,7 @@ abstract class Exporter {
 		$this->assign("service", $ServiceName);
 		$this->assign("layout", $LayoutName);
 		$this->assign("name", $this->_name);
+		$this->assign("lang", $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG]);
 	}
 	protected function cacheKey() {
 		if($this->_cacheKey === false) {

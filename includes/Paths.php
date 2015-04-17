@@ -55,6 +55,10 @@ class Paths extends Singleton {
 		global $Paths;
 		return $this->find($this->_jsPaths, $Paths[GC_PATHS_JS], $jsName, self::ExtensionJS, $full);
 	}
+	public function langNonBuiltPaths() {
+		global $Paths;
+		return $this->genPaths($Paths[GC_PATHS_LANGS]);
+	}
 	public function langPaths($lang) {
 		global $Paths;
 
