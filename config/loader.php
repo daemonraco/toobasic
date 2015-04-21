@@ -41,7 +41,8 @@ spl_autoload_register(function($class) {
 			"CacheAdapterDB",
 			"CacheAdapterDBMySQL",
 			"CacheAdapterFile",
-			"CacheAdapterMemcached"
+			"CacheAdapterMemcached",
+			"CacheAdapterNoCache"
 		);
 		static $dbAdapters = array(
 			"DBAdapter"

@@ -117,3 +117,8 @@ And that's it, from now on, our controller saves cache entries and calls like th
 * http://www.example.com/?action=userinfo&userid=10
 
 What about the last one? well, if you don't pass a parameter called _bgcolor_ it will consider it as empty and generate a different key.
+
+## What if you don't want it?
+Yes, what if you don't want any cache system and the use of `&debugresetcache` in the url annoys you?
+Well, there's an adapter called __CacheAdapterNoCache__ that acts as a dummy providing you with the solution.
+It will interact as any other cache adapter but it won't do a thing and you'll be working without cache.
