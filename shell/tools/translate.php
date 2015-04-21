@@ -3,7 +3,7 @@
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Translate as TB_Translate;
 
-class TranslateCron extends TooBasic\Shell\ShellCron {
+class TranslateTool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
 	const OptionCompile = "Compile";
