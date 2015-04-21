@@ -1,6 +1,6 @@
 # TooBasic: Using Layouts
 ## What is a Layout?
-Well, you know, the part of your page that sourounds your main content an usually stays always the same.
+Well, you know, the part of your page that surrounds your main content an usually stays always the same.
 ## Create a Site with Layout
 ### Main Content
 Let's follow an old example an create an action called __myaction__ this way:
@@ -24,7 +24,7 @@ class MyactionController extends \TooBasic\Controller {
 
 After all of this you'll find a page saying __Hello World!__.
 ### Nav Bar
-Let's create another action to emule a navigation bar and call it __mynav__:
+Let's create another action to emulate a navigation bar and call it __mynav__:
 
 * A controller in __ROOTDIR/site/controllers/nav.php__:
 ```php
@@ -78,7 +78,7 @@ As you may see, using a parameter called __layout__ on each url may not be prett
 <?php
 $Defaults["layout"] = "mylayout";
 ```
-In this way, you may enter your page just specifiying your action.
+In this way, you may enter your page just specifying your action.
 
 Also, you may do this to have a default action:
 ```php
@@ -96,7 +96,7 @@ You've probably seen an extrange word/constant/keyword/thing called __%TOO_BASIC
 If you look closely to our example you'll find something like `{$ctrl->insert("mynav")}`. This sentence "inserts" the results of an action called __mynav__. Of course you can import that part with AJAX later on, but in this way, that part will be add to your layout cache when it's activated.
 
 ## Wrong Layout?
-If for any reason you create an action that requires a differente layout, you can change it writing something like this:
+If for any reason you create an action that requires a different layout, you can change it writing something like this:
 ```php
 <?php
 class MyactionController extends \TooBasic\Controller {

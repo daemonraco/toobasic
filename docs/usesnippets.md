@@ -32,7 +32,7 @@ For our examples we're are going to create a snippet called 'pager' to show page
 * And save it in __ROOTDIR/site/snippets/pager.html__.
 
 ## Pager Snippet Mananger
-To make things a little more interesting, let's create a model to manage this new snippet. Somethig like the next code and store it in __ROOTDIR/site/models/Pager.php__:
+To make things a little more interesting, let's create a model to manage this new snippet. Something like the next code and store it in __ROOTDIR/site/models/Pager.php__:
 ```php
 <?php
 class PagerModel extends \TooBasic\Model {
@@ -77,7 +77,7 @@ class PagerModel extends \TooBasic\Model {
 Why a model? well this will help you avoid some settings and make your code simpler.
 
 ## Current Problem
-Let's suppouse your are working with an action that lists a long list of thing and you endend up with something like this:
+Let's suppose your are working with an action that lists a long list of thing and you ended up with something like this:
 
 * Controller __ROOTDIR/site/controllers/things.php__:
 ```php
@@ -145,7 +145,7 @@ class ThingsController extends \TooBasic\Controller {
 
 All done! Now your controller sends just a chunk to its template and also set the information for the snippet 'pager'.
 
-## Explaint It!
+## Explain It!
 The example may be a little vague, so let's explain a few things.
 
 ### How to Invoke a Snippet.

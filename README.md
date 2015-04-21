@@ -3,7 +3,8 @@
 ![ ](docs/images/TooBasic-logo-128px.png)
 
 ## What is it?
-Well __TooBasic__ is a too basic php framework with some basic features. Its main reason for existence is to provide a simple and quick framework in which you can start right away building your site while __TooBasic__ takes cake of some common stuff.
+Well __TooBasic__ is a too basic php framework with some basic features, in other words, a micro-framework.
+Its main reason for existence is to provide a simple and quick framework in which you can start right away building your site while __TooBasic__ takes care of some common stuff.
 
 ## Why would I use this at all?
 Well, there's no real reason, you'll probably find much better solutions in the first page of a google search, but if you want to try a simple framework, keep reading.
@@ -26,7 +27,7 @@ __TooBasic__ has many folders and we're not going to list them all here, Just a 
         * `controllers`: Here you start all your PHP files with controller specifications.
         * `templates`: Here your store all your templates separated by the way you show them.
             * `action`: here you store the way your controllers are seen by default.
-            * `modal`: and here the way your controllers are seen whem they are used as modals.
+            * `modal`: and here the way your controllers are seen when they are used as modals.
         * `config`: Specific configuration for your site goes here.
         * `models`: Well, this are a bunch of classes that represent your real site's logic. Remember, your controllers shouldn't have complex logics.
         * `langs`: Translations.
@@ -34,7 +35,7 @@ __TooBasic__ has many folders and we're not going to list them all here, Just a 
     * `cache`: All the dynamic stuff of your site like cache files, smarty compilations, etc. will be stored here.
 
 ## How To Create A Basic Page
-In order to create a basic page you need to create two files, a contorller and a template, and one name. 
+In order to create a basic page you need to create two files, a controller and a template, and one name. 
 The name must be a lower-case string without spaces or special characters (geeky info: `/([a-z0-9_]+)/`).
 
 Why a name? well, this name will become the name of your action, your controller, your template and also the parameter to use in your browser, so, its an important name. For our examples we'll use __myaction__ as our _chosen one_.
@@ -70,7 +71,7 @@ Now that you have a controller, you need a template to specify the way you new a
 ```
 Now you save this code into a file called __myaction.html__ inside __ROOTDIR/site/templates/action/__.
 ### Is That It?
-Well, yes, that's all you need, now go to your browser, and enter your URL using the name of your action. somethin like this:
+Well, yes, that's all you need, now go to your browser, and enter your URL using the name of your action. something like this:
 > http://www.example.com/?action=myaction
 
 ### But?

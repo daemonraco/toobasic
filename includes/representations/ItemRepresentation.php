@@ -39,7 +39,7 @@ abstract class ItemRepresentation {
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	public function __toString() {
-		return $this->exists() ? get_called_class()."()[($this->id)]" : "NULL";
+		return $this->exists() ? get_called_class()."()[(".$this->{$this->_CP_IDColumn}.")]" : "NULL";
 	}
 	public function __get($name) {
 		$out = null;
@@ -122,7 +122,7 @@ abstract class ItemRepresentation {
 		if($this->dirty() && $this->prePersist()) {
 			$idName = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
 			$params = array(
-				":id" => $this->id
+				":id" => $this->{$this->_CP_IDColumn}
 			);
 
 			$query = "update  {$this->_dbprefix}{$this->_CP_Table}\n";

@@ -5,7 +5,7 @@ Similar to other systems, representations is an abstraction of database tables a
 If you are not familiar with this it may seem heavy stuff, but it's not. Let's go through an example and see if it helps.
 
 ## A Table
-Let's suppouse you have a table in your database called __ss_people__ (__ss__ is the prefix for all your tables) and it has this fields on each row:
+Let's suppose you have a table in your database called __ss_people__ (__ss__ is the prefix for all your tables) and it has this fields on each row:
 
 * ppl_id: Numeric unique identifier, also primary key.
 * ppl_name: Characters string.
@@ -13,7 +13,7 @@ Let's suppouse you have a table in your database called __ss_people__ (__ss__ is
 * ppl_username: Unique characters string identifier.
 * ppl_children: How many kids a represented person has.
 
-Now let's suppouse you have this rows inside your table:
+Now let's suppose you have this rows inside your table:
 
 | ppl_id | ppl_fullname | ppl_age | ppl_username | ppl_children |
 |:------:|--------------|:-------:|--------------|-------------:|
@@ -55,7 +55,7 @@ class PersonRepresentation extends \TooBasic\ItemRepresentation {
 Yup, "Core Property" :'(
 
 ## Table Representation
-The second and last thing we need to represent is the table itself, and for that we take a similar action writing a code like the next one and storing it at __ROOTDIR/site/models/representations/PeopleFactory.php__ (sounds wierd to say "people factory", just ignore that fact):
+The second and last thing we need to represent is the table itself, and for that we take a similar action writing a code like the next one and storing it at __ROOTDIR/site/models/representations/PeopleFactory.php__ (sounds weird to say "people factory", just ignore that fact):
 ```php
 <?php
 class PeopleFactory extends \TooBasic\ItemsFactory {
@@ -67,7 +67,7 @@ class PeopleFactory extends \TooBasic\ItemsFactory {
 ```
 Here you have some properties you already know, so let's explain those you don't
 
-* `$_CP_RepresentationClass`: This is a way to point the class we've created in the previous step and it will be used to obtain row representations. For examples, the proper nane is "person" and it will translate into "PersonRepresentation" as a class name.
+* `$_CP_RepresentationClass`: This is a way to point the class we've created in the previous step and it will be used to obtain row representations. For examples, the proper name is "person" and it will translate into "PersonRepresentation" as a class name.
 * `$_CP_OrderBy`: It's a piece of SQL code you may write to sort your results when their are fetched for database. In our example, it may by `protected $_CP_OrderBy = "ppl_fullname asc,ppl_username asc";`.
 
 ## Let's Use It
@@ -96,10 +96,25 @@ And that's it. Now, what just happend here?:
 
 As you can see here, you can access a row columns as if they were properties and without the need of their prefixes.
 
-## Requirements
+## Database
 An obvious requirement is the use of a database, so you probably want to check on that.
 
-Which database? the one you've set as default.
+Which database? the one you've set as default would be the first option, but you may change this behavior by acquiring the factory in a different way, check the next example:
+```php
+class KidsModel extends \TooBasic\Model {
+	public function kidsChanged($personId) {
+		$personNew = $this->representation->people->item($personId);
+		$personOld = $this->representation->people("backup")->item($personId);
+		return !personOld || $personNew->kids != $personOld->kids;
+	}
+	protected function init() {}
+}
+```
+In the example we've created a method that works with two database connections.
+The variable `$personNew` represents a person store inside the default database while `$personOld` may represent the same person stored in a backup database.
+Based on that idea, the method `kidsChanged()` allows us to know if the current person had changes in its children count since the last time the backup was updated.
+
+This is how you can obtain a people factory pointing to a different database, in our case __backup__.
 
 ## Suggestions
 If you want or need, you may visit this documentation pages:

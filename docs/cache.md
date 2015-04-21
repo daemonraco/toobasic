@@ -5,16 +5,16 @@ True, we all know what a [cache](http://en.wikipedia.org/wiki/Cache_%28computing
 ## What is it cached?
 Internally, __TooBasic__ separates the stuff it caches in two kinds:
 
-* __Computing Cache__: This can also be called _controller cache_ because it stores all the asignments made by a controller.
+* __Computing Cache__: This can also be called _controller cache_ because it stores all the assignments made by a controller.
 * __View Cache__: You can see this as a HTML cache where you store the final result of rendering a controller call.
 
 Why is it separated? well, if recall a cache controller but requesting a different format, you wouldn't want to run all your logics and queries and etc. when you only need a different format.
 
 ## Adapters
-From factory, __TooBasic__ provides three types of cache adaptations you can choose on for your site and we are going to descrive them.
+From factory, __TooBasic__ provides three types of cache adaptations you can choose on for your site and we are going to describe them.
 
-### File Cache Adpater
-The most basic (and default) cache adapater provided by __TooBasic__ is a class called __\TooBasic\CacheAdapterFile__ and it stores data inside a files. When active, you'll find files coming and going inside __ROOTDIR/cache/filecache__
+### File Cache Adapter
+The most basic (and default) cache adapter provided by __TooBasic__ is a class called __\TooBasic\CacheAdapterFile__ and it stores data inside a files. When active, you'll find files coming and going inside __ROOTDIR/cache/filecache__.
 
 ### Database Cache Adapter
 A not very polite way of caching data is store it inside a database, but in some cases it could be useful.
@@ -28,11 +28,11 @@ create table if not exists cache (
         primary key(cch_key)
 ) engine=myisam default charset=utf8 collate=utf8_bin
 ```
-By default, __TooBasic__ will attept to create this table everytime it's invoked, if you want to avoid this behavior you can set the global `$Defaults[GC_DEFAULTS_INSTALLED]` to `true`.
+By default, __TooBasic__ will attempt to create this table every time it's invoked, if you want to avoid this behavior you can set the global `$Defaults[GC_DEFAULTS_INSTALLED]` to `true`.
 
 ### Memcached Adapter
-A better approche is to use something like [__Memcached__](http://php.net/manual/en/book.memcached.php) where you can store data in memory inside a cache service prepared for that task.
-For this, __TooBasic__ provides a cache adaptar class called __\TooBasic\CacheAdapterMemcached__ and it requires settings like these:
+A better approach is to use something like [__Memcached__](http://php.net/manual/en/book.memcached.php) where you can store data in memory inside a cache service prepared for that task.
+For this, __TooBasic__ provides a cache adapter class called __\TooBasic\CacheAdapterMemcached__ and it requires settings like these:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER] = "localhost";
@@ -65,7 +65,7 @@ class UserinfoController extends \TooBasic\Controller {
     }
 }
 ```
-Now, let's say we want to cache this contoller's called based on the _user ID_ and a parameter called _bgcolor_. For that we need to do two things:
+Now, let's say we want to cache this controller's called based on the _user ID_ and a parameter called _bgcolor_. For that we need to do two things:
 
 * First, we need to activate the use of cache:
 ```php

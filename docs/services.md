@@ -45,7 +45,7 @@ Or this when there's an error:
 
 
 ## Let's use an example
-Let's think you have a site that handles users and it must provide a way to log-in from anywhere without using a web page, say a cellphone application or another site with REST access.
+Let's think you have a site that handles users and it must provide a way to log-in from anywhere without using a web page, say a cell phone application or another site with REST access.
 When you provide the right username and password, you obtain a token you can use later on every request.
 
 ## Creating a service
@@ -91,7 +91,7 @@ Possible answer:
 
 Let's explain how this works:
 
-* As you've probably guessed already, we are indicating that post paramateres `username` and `password` are required.
+* As you've probably guessed already, we are indicating that post parameters `username` and `password` are required.
 * We're making sure this service is been called as a `POST` request.
 	* Otherwise, we trigger an error.
 * If it's `POST` we validate the user and generate a token for it.

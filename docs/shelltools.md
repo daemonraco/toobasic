@@ -5,7 +5,7 @@ A _shell tool_ is one of those processes written in a way __TooBasic__ can handl
 
 Once again, let's use a simple example to understand how it works.
 Suppose we have a strict site where inactive users get removed, so, if you haven't logged in the last 3 months you loose your account.
-For this, you created a _model_ saved at __ROOTDIR/site/models/Users.php__ that allowes you to remove inactive users and your tried to use it in your log-in service.
+For this, you created a _model_ saved at __ROOTDIR/site/models/Users.php__ that allows you to remove inactive users and your tried to use it in your log-in service.
 Using it there was a good idea at first but your site now have thousands and thousands of users and that operation is taking a long time.
 Let's port that idea into a _shell tool_ so it could be executed in the server whenever your site admin sees it fit.
 
@@ -146,8 +146,8 @@ Also, you are using a simpler way to add options.
 ## Cron Tools
 What is a _cron tool_? well, basicly is a _shell tool_ but it controls that only one instance of a task is running at the same time.
 
-In our example, if more than one user or automatic proces is using the option to remove invalid users, it may cause collisions when removing historic files, cleaning database tables, etc.
-This is an excelente example of a task that must run one at a time.
+In our example, if more than one user or an automatic process is using the option to remove invalid users, it may cause collisions when removing historic files, cleaning database tables, etc.
+This is an excellent example of a task that must run one at a time.
 
 ## Create a Cron Tool
 At this point we've realized that our _shell tool_ must be a _cron tool_ and we're going to make some changes:
