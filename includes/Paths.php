@@ -47,6 +47,51 @@ class Paths extends Singleton {
 		global $Paths;
 		return $this->find($this->_cssPaths, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
 	}
+	/**
+	 * Search recursively for files matching given patterns.
+	 * 
+	 * @param string $dirpath Directory path where to start.
+	 * @param string[] $pattern Pattern or list of patterns to look for (something like 'glob()').
+	 * @param boolean $hiddens Whether to include or not hidden files.
+	 * @param boolean $includeDirpaths Whether to include or not directory paths.
+	 * @return string[] Returns a list of found files.
+	 */
+	public function findAll($dirpath, $pattern = "*", $hiddens = false, $includeDirpaths = false) {
+		$out = array();
+
+		$realpath = realpath($dirpath);
+		$patterns = is_array($pattern) ? $pattern : array($pattern);
+		if($realpath && is_readable($realpath) && is_dir($realpath)) {
+			$d = dir($realpath);
+			while(false !== ($entry = $d->read())) {
+				$fullPath = $realpath.DIRECTORY_SEPARATOR.$entry;
+				if(preg_match("/^([\.]{1,2})$/", $entry)) {
+					continue;
+				}
+
+				if(!$hiddens && preg_match("/^\./", $entry)) {
+					continue;
+				}
+
+				if(is_dir($fullPath)) {
+					if($includeDirpaths) {
+						$out[] = $fullPath;
+					}
+					$out = array_merge($out, $this->findAll($fullPath, $patterns));
+				} else {
+					foreach($patterns as $pat) {
+						if(fnmatch($pat, $entry)) {
+							$out[] = $fullPath;
+							break;
+						}
+					}
+				}
+			}
+			$d->close();
+		}
+
+		return array_unique($out);
+	}
 	public function imagePath($imageName, $imageExtension, $full = false) {
 		global $Paths;
 		return $this->find($this->_imagesPaths, $Paths[GC_PATHS_IMAGES], $imageName, $imageExtension, $full);
@@ -62,11 +107,11 @@ class Paths extends Singleton {
 	public function langPaths($lang) {
 		global $Paths;
 
-		if (!isset($this->_langPaths[$lang])) {
+		if(!isset($this->_langPaths[$lang])) {
 			global $Defaults;
 			global $Directories;
 
-			if ($Defaults["langs-built"]) {
+			if($Defaults["langs-built"]) {
 				$this->_langPaths[$lang] = array();
 				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$Paths[GC_PATHS_LANGS]}");
 			} else {
@@ -75,8 +120,8 @@ class Paths extends Singleton {
 		}
 
 		$out = $this->find($this->_langPaths[$lang], $Paths[GC_PATHS_LANGS], $lang, self::ExtensionJSON, true);
-		foreach ($out as $pos => $path) {
-			if (!is_readable($path)) {
+		foreach($out as $pos => $path) {
+			if(!is_readable($path)) {
 				unset($out[$pos]);
 			}
 		}
@@ -104,9 +149,9 @@ class Paths extends Singleton {
 	public function shellCron($name, $full = false) {
 		global $Paths;
 
-		if ($this->_shellCronsPaths === false) {
+		if($this->_shellCronsPaths === false) {
 			$this->_shellCronsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_CRONS]);
-			$this->_shellCronsPaths[] = Sanitizer::DirPath(ROOTDIR . "/{$Paths[GC_PATHS_SHELL_CRONS]}");
+			$this->_shellCronsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_CRONS]}");
 		}
 
 		return $this->find($this->_shellCronsPaths, $Paths[GC_PATHS_SHELL_CRONS], $name, self::ExtensionPHP, $full);
@@ -114,9 +159,9 @@ class Paths extends Singleton {
 	public function shellTool($name, $full = false) {
 		global $Paths;
 
-		if ($this->_shellToolsPaths === false) {
+		if($this->_shellToolsPaths === false) {
 			$this->_shellToolsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_TOOLS]);
-			$this->_shellToolsPaths[] = Sanitizer::DirPath(ROOTDIR . "/{$Paths[GC_PATHS_SHELL_TOOLS]}");
+			$this->_shellToolsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_TOOLS]}");
 		}
 
 		return $this->find($this->_shellToolsPaths, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::ExtensionPHP, $full);
@@ -126,7 +171,7 @@ class Paths extends Singleton {
 		return $this->find($this->_snippetsPaths, $Paths[GC_PATHS_SNIPPETS], $snippetName, self::ExtensionTemplate, $full);
 	}
 	public function templateDirs() {
-		if ($this->_templatesPaths === false) {
+		if($this->_templatesPaths === false) {
 			global $Paths;
 			$this->_templatesPaths = $this->genPaths($Paths[GC_PATHS_TEMPLATES]);
 		}
@@ -140,17 +185,17 @@ class Paths extends Singleton {
 
 		global $Directories;
 
-		if (!is_array($folders)) {
+		if(!is_array($folders)) {
 			$folders = array($folders);
 		}
 
 		$this->loadModules();
-		foreach ($this->_modules as $module) {
-			foreach ($folders as $subpath) {
+		foreach($this->_modules as $module) {
+			foreach($folders as $subpath) {
 				$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$module}/{$subpath}");
 			}
 		}
-		foreach ($folders as $subpath) {
+		foreach($folders as $subpath) {
 			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$subpath}");
 		}
 
@@ -162,7 +207,7 @@ class Paths extends Singleton {
 		global $Directories;
 
 		$this->loadModules();
-		foreach ($this->_modules as $module) {
+		foreach($this->_modules as $module) {
 			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$module}/{$folder}");
 		}
 		$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$folder}");
@@ -172,44 +217,44 @@ class Paths extends Singleton {
 	protected function find(&$list, $folders, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
 
-		if ($list === false) {
+		if($list === false) {
 			$list = $this->genPaths($folders);
 		}
 
 		$filename = $name;
-		if ($extension) {
+		if($extension) {
 			$filename = "{$filename}.{$extension}";
 		}
 
-		foreach ($list as $path) {
+		foreach($list as $path) {
 			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
-			foreach (glob($filepath) as $subpath) {
-				if (is_readable($subpath)) {
+			foreach(glob($filepath) as $subpath) {
+				if(is_readable($subpath)) {
 					$out[] = $subpath;
 				}
 			}
 		}
 
-		if (!$full) {
+		if(!$full) {
 			$out = count($out) > 0 ? array_shift($out) : false;
 		}
 
 		return $out;
 	}
 	protected function loadModules() {
-		if ($this->_modules === false) {
+		if($this->_modules === false) {
 			global $Directories;
 
 
 			$this->_modules = array();
 			$this->_manifests = array();
-			foreach (glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {
+			foreach(glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {
 				$path = pathinfo($pathname);
-				if (!preg_match('/([\._])(.*)/', $path["filename"])) {
+				if(!preg_match('/([\._])(.*)/', $path["filename"])) {
 					$this->_modules[] = $path["filename"];
 
 					$this->_manifests[$path["filename"]] = false;
-					if (is_readable("{$pathname}/manifest.json")) {
+					if(is_readable("{$pathname}/manifest.json")) {
 						$this->_manifests[$path["filename"]] = "{$pathname}/manifest.json";
 					}
 				}
