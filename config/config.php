@@ -83,7 +83,6 @@ $Connections = array();
 //      GC_CONNECTIONS_DB_PREFIX   => false  // optiona.
 //      GC_CONNECTIONS_DB_SID      => false  // for Oracle only.
 // );
-// @{
 $Connections[GC_CONNECTIONS_DB] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
@@ -109,12 +108,38 @@ $Paths[GC_PATHS_SHELL_CRONS] = "/shell/crons";
 $Paths[GC_PATHS_SHELL_TOOLS] = "/shell/tools";
 $Paths[GC_PATHS_SNIPPETS] = "/snippets";
 $Paths[GC_PATHS_TEMPLATES] = "/templates";
-
+//
+// Cron profiles:
+// $Connections[GC_CONNECTIONS_DB]["<name>"] = array();
+// $Connections[GC_CONNECTIONS_DB]["<name>"][] = array(
+//        GC_CRONPROFILES_TOOL   => "",
+//        GC_CRONPROFILES_PARAMS => array()
+// );
+$CronProfiles = array();
+//
+// Loading lazy requires.
 require_once __DIR__."/loader.php";
 //
 // Modules' configurations files.
 {
 	$pathsProvider = TB_Paths::Instance();
+	//
+	// Loading specific configurations for shell or web accesses.
+	if(defined("__SHELL__")) {
+		//
+		// Requiring each extension and site sub-config file named
+		// 'config_http.php'.
+		foreach($pathsProvider->configPath("config_shell", TB_Paths::ExtensionPHP, true) as $subConfig) {
+			require_once $subConfig;
+		}
+	} else {
+		//
+		// Requiring each extension and site sub-config file named
+		// 'config_http.php'.
+		foreach($pathsProvider->configPath("config_http", TB_Paths::ExtensionPHP, true) as $subConfig) {
+			require_once $subConfig;
+		}
+	}
 	//
 	// Requiring each extension and site sub-config file named 'config.php'.
 	foreach($pathsProvider->configPath("config", TB_Paths::ExtensionPHP, true) as $subConfig) {

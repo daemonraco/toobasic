@@ -82,6 +82,11 @@ define("GC_PATHS_SNIPPETS", "snippets");
 define("GC_PATHS_TEMPLATES", "templates");
 // @}
 //
+// Cron profile's parameters @{
+define("GC_CRONPROFILES_TOOL", "tool");
+define("GC_CRONPROFILES_PARAMS", "params");
+// @}
+//
 // Request parameters @{
 define("GC_REQUEST_ACTION", "action");
 define("GC_REQUEST_LAYOUT", "layout");

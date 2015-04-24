@@ -10,11 +10,17 @@ class ShellManager extends Manager {
 	const ErrorNoToolName = 3;
 	const ErrorNoToolClass = 4;
 	const ErrorUnknownTool = 5;
+	const ErrorNoProfileName = 6;
+	const ErrorUnknownProfile = 7;
+	const ModeCron = "cron";
+	const ModeProfile = "profile";
+	const ModeTool = "tool";
 	//
 	// Protected properties.
 	protected $_errors = array();
 	protected $_mode = false;
 	protected $_script = false;
+	protected $_profile = false;
 	protected $_tool = false;
 	protected $_toolClass = null;
 	//
@@ -34,10 +40,15 @@ class ShellManager extends Manager {
 		$this->_tool = $options->tool;
 
 		switch($this->_mode) {
-			case "tool":
+			case self::ModeProfile:
+				$this->_profile = $this->_tool;
+				$this->_tool = false;
+				$this->runProfile($spacer);
+				break;
+			case self::ModeTool:
 				$this->runTool($spacer);
 				break;
-			case "cron":
+			case self::ModeCron:
 				$this->runCron($spacer);
 				break;
 			default:
@@ -48,8 +59,9 @@ class ShellManager extends Manager {
 				}
 
 				echo "{$spacer}Available modes are:\n";
-				echo "{$spacer}\t- tool\n";
-				echo "{$spacer}\t- cron\n";
+				echo "{$spacer}\t- ".self::ModeTool."\n";
+				echo "{$spacer}\t- ".self::ModeProfile."\n";
+				echo "{$spacer}\t- ".self::ModeCron."\n";
 				echo "\n";
 		}
 
@@ -62,7 +74,7 @@ class ShellManager extends Manager {
 			echo "{$spacer}Error: [{$error["code"]}] {$error["message"]}.\n";
 		}
 	}
-	protected function runCron($spacer) {
+	protected function runCron($spacer, $params = null) {
 		if($this->_tool) {
 			$path = $this->paths->shellCron($this->_tool);
 			if($path) {
@@ -72,13 +84,13 @@ class ShellManager extends Manager {
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
-					$this->_toolClass->run($spacer);
+					$this->_toolClass->run($spacer, $params);
 					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
 				} else {
 					$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
 				}
 			} else {
-				$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
+				$this->setError(self::ErrorUnknownTool, "Unkown cron tool called '{$this->_tool}'");
 			}
 		} else {
 			$this->setError(self::ErrorNoToolName, "No tool name specified");
@@ -91,7 +103,49 @@ class ShellManager extends Manager {
 			echo "\n";
 		}
 	}
-	protected function runTool($spacer) {
+	protected function runProfile($spacer) {
+		global $CronProfiles;
+
+		if($this->_profile) {
+			if(isset($CronProfiles[$this->_profile])) {
+				echo "{$spacer}Running profile '{$this->_profile}':\n";
+				foreach($CronProfiles[$this->_profile] as $tool) {
+					$this->_tool = $tool[GC_CRONPROFILES_TOOL];
+
+					$mainParams = array(
+						$this->_script,
+						self::ModeCron,
+						$this->_tool
+					);
+
+					$this->runCron("{$spacer}\t", array_merge($mainParams, $tool[GC_CRONPROFILES_PARAMS]));
+				}
+			} else {
+				$this->setError(self::ErrorUnknownProfile, "Unkown profile called '{$this->_profile}'");
+			}
+		} else {
+			$this->setError(self::ErrorNoProfileName, "No profile name specified");
+
+			echo "{$spacer}Available profiles:\n";
+			if(count($CronProfiles)) {
+				foreach($CronProfiles as $name => $tools) {
+					echo "{$spacer}\t- '{$name}' runs:\n";
+					foreach($tools as $config) {
+						echo "{$spacer}\t\t- {$config[GC_CRONPROFILES_TOOL]}";
+						if(count($config[GC_CRONPROFILES_PARAMS])) {
+							echo " (".implode(" ", $config[GC_CRONPROFILES_PARAMS]).")";
+						}
+						echo "\n";
+					}
+				}
+			} else {
+				echo "{$spacer}\tNo profile available\n";
+			}
+
+			echo "\n";
+		}
+	}
+	protected function runTool($spacer, $params = null) {
 		if($this->_tool) {
 			$path = $this->paths->shellTool($this->_tool);
 			if($path) {
@@ -101,7 +155,7 @@ class ShellManager extends Manager {
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
-					$this->_toolClass->run($spacer);
+					$this->_toolClass->run($spacer, $params);
 					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
 				} else {
 					$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");

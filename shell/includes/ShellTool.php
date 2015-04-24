@@ -61,8 +61,8 @@ abstract class ShellTool {
 	public function hasErrors() {
 		return count($this->errors()) > 0;
 	}
-	public function run($spacer = "") {
-		if($this->_options->check()) {
+	public function run($spacer = "", $params = null) {
+		if($this->_options->check($params)) {
 			$taskName = $this->guessTask();
 			//
 			// Running the appropiate task.

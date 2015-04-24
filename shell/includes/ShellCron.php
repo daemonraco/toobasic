@@ -25,8 +25,8 @@ abstract class ShellCron extends ShellTool {
 	}
 	//
 	// Public methods.
-	public function run($spacer = "") {
-		if($this->_options->check()) {
+	public function run($spacer = "", $params = null) {
+		if($this->_options->check($params)) {
 			$taskName = $this->guessTask($isCore);
 			//
 			// Running the appropiate task.
