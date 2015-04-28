@@ -32,43 +32,66 @@ class ShellManager extends Manager {
 		return count($this->errors()) > 0;
 	}
 	public function run($spacer = "") {
-		$options = $this->starterOptions();
-		$options->check();
+		//
+		// Checking for start errors.
+		if(!$this->hasErrors()) {
+			$options = $this->starterOptions();
+			$options->check();
 
-		$this->_script = $options->script;
-		$this->_mode = $options->mode;
-		$this->_tool = $options->tool;
+			$this->_script = $options->script;
+			$this->_mode = $options->mode;
+			$this->_tool = $options->tool;
 
-		switch($this->_mode) {
-			case self::ModeProfile:
-				$this->_profile = $this->_tool;
-				$this->_tool = false;
-				$this->runProfile($spacer);
-				break;
-			case self::ModeTool:
-				$this->runTool($spacer);
-				break;
-			case self::ModeCron:
-				$this->runCron($spacer);
-				break;
-			default:
-				if($this->_mode) {
-					$this->setError(self::ErrorNotValidMode, "Mode '{$this->_mode}' is not valid");
-				} else {
-					$this->setError(self::ErrorNoMode, "No mode specified");
-				}
+			switch($this->_mode) {
+				case self::ModeProfile:
+					$this->_profile = $this->_tool;
+					$this->_tool = false;
+					$this->runProfile($spacer);
+					break;
+				case self::ModeTool:
+					$this->runTool($spacer);
+					break;
+				case self::ModeCron:
+					$this->runCron($spacer);
+					break;
+				default:
+					if($this->_mode) {
+						$this->setError(self::ErrorNotValidMode, "Mode '{$this->_mode}' is not valid");
+					} else {
+						$this->setError(self::ErrorNoMode, "No mode specified");
+					}
 
-				echo "{$spacer}Available modes are:\n";
-				echo "{$spacer}\t- ".self::ModeTool."\n";
-				echo "{$spacer}\t- ".self::ModeProfile."\n";
-				echo "{$spacer}\t- ".self::ModeCron."\n";
-				echo "\n";
+					echo "{$spacer}Available modes are:\n";
+					echo "{$spacer}\t- ".self::ModeTool."\n";
+					echo "{$spacer}\t- ".self::ModeProfile."\n";
+					echo "{$spacer}\t- ".self::ModeCron."\n";
+					echo "\n";
+			}
 		}
 
 		$this->promptErrors($spacer);
 	}
 	//
 	// Protected methods.
+	protected function init() {
+		parent::init();
+
+		$dbStructureManager = DBStructureManager::Instance();
+		if($dbStructureManager->hasErrors()) {
+			foreach($dbStructureManager->errors() as $error) {
+				$code = $error["code"];
+				if(is_numeric($code)) {
+					$code = sprintf("%03d", $code);
+				}
+
+				$this->setError("DB-{$code}", $error["message"]);
+			}
+		} else {
+			if(!$dbStructureManager->check()) {
+				$dbStructureManager->upgrade();
+			}
+		}
+	}
 	protected function promptErrors($spacer) {
 		foreach($this->errors() as $error) {
 			echo "{$spacer}Error: [{$error["code"]}] {$error["message"]}.\n";

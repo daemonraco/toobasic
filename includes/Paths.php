@@ -16,6 +16,7 @@ class Paths extends Singleton {
 	protected $_configPaths = false;
 	protected $_controllerPaths = false;
 	protected $_cssPaths = false;
+	protected $_dbSpecPaths = false;
 	protected $_imagesPaths = false;
 	protected $_jsPaths = false;
 	protected $_langPaths = array();
@@ -46,6 +47,10 @@ class Paths extends Singleton {
 	public function cssPath($cssName, $full = false) {
 		global $Paths;
 		return $this->find($this->_cssPaths, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
+	}
+	public function dbSpecPaths() {
+		global $Paths;
+		return $this->find($this->_dbSpecPaths, $Paths[GC_PATHS_DBSPECS], "*", self::ExtensionJSON, true);
 	}
 	/**
 	 * Search recursively for files matching given patterns.

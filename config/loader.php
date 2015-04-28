@@ -31,6 +31,7 @@ spl_autoload_register(function($class) {
 		static $managersIncludes = array(
 			"ActionsManager",
 			"DBManager",
+			"DBStructureManager",
 			"Manager",
 			"ServicesManager",
 			"ShellManager",

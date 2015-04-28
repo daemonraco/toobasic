@@ -87,6 +87,10 @@ $Connections[GC_CONNECTIONS_DB] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
 //
+// Database structure configurations.
+$Database = array();
+$Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR."/config/dbspecs.json");
+//
 // Directory configurations.
 $Uris = array();
 $Uris[GC_URIS_INCLUDES] = TB_Sanitizer::UriPath(ROOTURI."/includes");
@@ -97,6 +101,7 @@ $Paths[GC_PATHS_CONFIGS] = "/configs";
 $Paths[GC_PATHS_CONTROLLERS] = "/controllers";
 $Paths[GC_PATHS_SERVICES] = "/services";
 $Paths[GC_PATHS_CSS] = "/styles";
+$Paths[GC_PATHS_DBSPECS] = "/db";
 $Paths[GC_PATHS_IMAGES] = "/images";
 $Paths[GC_PATHS_JS] = "/scripts";
 $Paths[GC_PATHS_LANGS] = "/langs";

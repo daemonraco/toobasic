@@ -1,0 +1,9 @@
+{
+	"configs": {
+		"prefixes": {
+			"index": "idx_",
+			"key": "unq_",
+			"primary": "pk_"
+		}
+	}
+}

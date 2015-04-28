@@ -60,6 +60,10 @@ define("GC_CONNECTIONS_DEFAUTLS_DB", "db");
 define("GC_CONNECTIONS_DEFAUTLS_CACHE", "cache");
 // @}
 //
+// Database structure @{
+define("GC_DATABASE_DEFAULT_SPECS", "default-specs");
+// @}
+//
 // URIs @{
 define("GC_URIS_INCLUDES", "includes");
 // @}
@@ -69,6 +73,7 @@ define("GC_PATHS_CONFIGS", "configs");
 define("GC_PATHS_CONTROLLERS", "controllers");
 define("GC_PATHS_SERVICES", "services");
 define("GC_PATHS_CSS", "css");
+define("GC_PATHS_DBSPECS", "dbspecs");
 define("GC_PATHS_IMAGES", "images");
 define("GC_PATHS_JS", "js");
 define("GC_PATHS_LANGS", "langs");

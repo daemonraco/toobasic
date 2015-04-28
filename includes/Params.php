@@ -5,8 +5,11 @@ namespace TooBasic;
 class Params extends Singleton {
 	//
 	// Constants.
+	const TypeCOOKIE = "cookie";
+	const TypeENV = "env";
 	const TypeGET = "get";
 	const TypePOST = "post";
+	const TypeSERVER = "server";
 	//
 	// Protected properties.
 	protected $_debugs = false;
@@ -75,5 +78,8 @@ class Params extends Singleton {
 	protected function loadParams() {
 		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
 		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
+		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
+		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
+		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
 	}
 }

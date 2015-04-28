@@ -41,6 +41,28 @@ class ActionsManager extends UrlManager {
 		return $actionLastRun;
 	}
 	//
+	// Protected methods.
+	protected function init() {
+		parent::init();
+
+		$dbStructureManager = DBStructureManager::Instance();
+		if($dbStructureManager->hasErrors()) {
+			foreach($dbStructureManager->errors() as $error) {
+				$code = $error["code"];
+				if(is_numeric($code)) {
+					$code = sprintf("%03d", $code);
+				}
+
+				trigger_error("[DB-{$code}] {$error["message"]}", E_USER_WARNING);
+			}
+			trigger_error("There are database errors specs", E_USER_ERROR);
+		} else {
+			if(!$dbStructureManager->check()) {
+				$dbStructureManager->upgrade();
+			}
+		}
+	}
+	//
 	// Public class methods.
 	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
 		$status = true;
