@@ -75,22 +75,22 @@ class ShellManager extends Manager {
 	// Protected methods.
 	protected function init() {
 		parent::init();
-
-		$dbStructureManager = DBStructureManager::Instance();
-		if($dbStructureManager->hasErrors()) {
-			foreach($dbStructureManager->errors() as $error) {
-				$code = $error["code"];
-				if(is_numeric($code)) {
-					$code = sprintf("%03d", $code);
-				}
-
-				$this->setError("DB-{$code}", $error["message"]);
-			}
-		} else {
-			if(!$dbStructureManager->check()) {
-				$dbStructureManager->upgrade();
-			}
-		}
+//
+//		$dbStructureManager = DBStructureManager::Instance();
+//		if($dbStructureManager->hasErrors()) {
+//			foreach($dbStructureManager->errors() as $error) {
+//				$code = $error["code"];
+//				if(is_numeric($code)) {
+//					$code = sprintf("%03d", $code);
+//				}
+//
+//				$this->setError("DB-{$code}", $error["message"]);
+//			}
+//		} else {
+//			if(!$dbStructureManager->check()) {
+//				$dbStructureManager->upgrade();
+//			}
+//		}
 	}
 	protected function promptErrors($spacer) {
 		foreach($this->errors() as $error) {
