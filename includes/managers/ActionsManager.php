@@ -58,7 +58,9 @@ class ActionsManager extends UrlManager {
 			trigger_error("There are database errors specs", E_USER_ERROR);
 		} else {
 			if(!$dbStructureManager->check()) {
-				$dbStructureManager->upgrade();
+				if(!$dbStructureManager->upgrade()) {
+					trigger_error("Database couldn't be upgraded", E_USER_ERROR);
+				}
 			}
 		}
 	}

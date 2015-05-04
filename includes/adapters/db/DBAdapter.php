@@ -87,6 +87,10 @@ class DBAdapter extends Adapter {
 		// Returning the resulting statement.
 		return $result;
 	}
+	public function keepUnknowns() {
+		global $Connections;
+		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];
+	}
 	/**
 	 * This method allows to get the last id used by an INSERT operation.
 	 *

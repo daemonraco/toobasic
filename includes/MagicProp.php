@@ -13,12 +13,6 @@ class MagicPropException extends \Exception {
 
 class MagicProp extends Singleton {
 	//
-	// Constants.
-	//
-	// Public class properties.
-	//
-	// Protected class properties.
-	//
 	// Protected properties.
 	protected $_cache = false;
 	protected $_modelsFactory = false;
@@ -52,8 +46,6 @@ class MagicProp extends Singleton {
 
 		return $out;
 	}
-	//
-	// Public methods.
 	//
 	// Protected methods.
 	protected function cache() {
@@ -99,8 +91,4 @@ class MagicProp extends Singleton {
 
 		return $this->_translate;
 	}
-	//
-	// Public class methods.
-	//
-	// Protected class methods.
 }

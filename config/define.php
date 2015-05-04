@@ -57,11 +57,14 @@ define("GC_CONNECTIONS_DB_PREFIX", "prefix");
 define("GC_CONNECTIONS_DB_SID", "sid");
 define("GC_CONNECTIONS_DEFAUTLS", "defaults");
 define("GC_CONNECTIONS_DEFAUTLS_DB", "db");
+define("GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS", "keep-unknowns");
+define("GC_CONNECTIONS_DEFAUTLS_INSTALL", "dbinstall");
 define("GC_CONNECTIONS_DEFAUTLS_CACHE", "cache");
 // @}
 //
 // Database structure @{
 define("GC_DATABASE_DEFAULT_SPECS", "default-specs");
+define("GC_DATABASE_DB_ADAPTERS", "db-adapters");
 // @}
 //
 // URIs @{

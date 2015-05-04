@@ -46,7 +46,9 @@ spl_autoload_register(function($class) {
 			"CacheAdapterNoCache"
 		);
 		static $dbAdapters = array(
-			"DBAdapter"
+			"DBAdapter",
+			"DBSpecAdapter",
+			"DBSpecAdapterMySQL"
 		);
 		static $viewAdapters = array(
 			"ViewAdapter",

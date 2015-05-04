@@ -74,7 +74,7 @@ $Connections = array();
 //
 // Conection specs:
 // $Connections[GC_CONNECTIONS_DB]["<name>"] = array(
-//      GC_CONNECTIONS_DB_ENGINE   => "", // Something like: "mysqli"
+//      GC_CONNECTIONS_DB_ENGINE   => "", // Something like: "mysql"
 //      GC_CONNECTIONS_DB_SERVER   => "", // IP or server address.
 //      GC_CONNECTIONS_DB_PORT     => "", // false when defatul.
 //      GC_CONNECTIONS_DB_NAME     => "", // Database name or schema.
@@ -86,10 +86,14 @@ $Connections = array();
 $Connections[GC_CONNECTIONS_DB] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS] = array();
 $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
+$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = false;
 //
 // Database structure configurations.
 $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR."/config/dbspecs.json");
+$Database[GC_DATABASE_DB_ADAPTERS] = array(
+	"mysql" => "\TooBasic\DBSpecAdapterMySQL"
+);
 //
 // Directory configurations.
 $Uris = array();

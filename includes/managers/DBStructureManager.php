@@ -2,6 +2,10 @@
 
 namespace TooBasic;
 
+class DBStructureManagerExeption extends \Exception {
+	
+}
+
 class DBStructureManager extends Manager {
 	//
 	// Constants.
@@ -15,6 +19,14 @@ class DBStructureManager extends Manager {
 	const ColumnTypeInt = "int";
 	const ColumnTypeText = "text";
 	const ColumnTypeVarchar = "varchar";
+	const TaskTypeCreateColumn = "create-column";
+	const TaskTypeCreateIndex = "create-indexes";
+	const TaskTypeCreateTable = "create-tables";
+	const TaskTypeDropColumn = "drop-column";
+	const TaskTypeDropIndex = "drop-indexes";
+	const TaskTypeDropTable = "drop-tables";
+	const TaskTypeUpdateColumn = "update-column";
+	const TaskStatus = "status";
 	// 
 	// Protected class properties.
 	protected static $_AllowedColumnTypes = array(
@@ -26,18 +38,105 @@ class DBStructureManager extends Manager {
 	);
 	// 
 	// Protected properties.
+	/**
+	 * @var \TooBasic\DBAdapter[string] 
+	 */
+	protected $_dbAdapters = array();
+	/**
+	 * @var \TooBasic\DBManager
+	 */
+	protected $_dbManager = false;
 	protected $_errors = array();
 	protected $_installed = false;
+	protected $_perConnection = array();
 	protected $_specFiles = array();
 	protected $_specs = false;
+	protected $_tasks = false;
 	//
 	// Public methods.
 	public function check() {
 		$ok = false;
 
-		if(!$this->_installed) {
+		if(!$this->_installed && !$this->hasErrors()) {
+			if($this->_tasks !== false) {
+				$ok = $this->_tasks[self::TaskStatus];
+			} else {
+				$ok = true;
 
-			$ok = $this->hasErrors();
+				$this->_tasks = array(
+					self::TaskTypeCreateIndex => array(),
+					self::TaskTypeCreateColumn => array(),
+					self::TaskTypeCreateTable => array(),
+					self::TaskTypeDropColumn => array(),
+					self::TaskTypeDropIndex => array(),
+					self::TaskTypeDropTable => array(),
+					self::TaskTypeUpdateColumn => array()
+				);
+				//
+				// Checking tables existence.
+				foreach($this->_specs->tables as $tKey => $table) {
+					$adapter = $this->getAdapter($table->connection);
+
+					if(!$adapter->tableExists($table->fullname)) {
+						$this->_tasks[self::TaskTypeCreateTable][] = $tKey;
+						$ok = false;
+					} else {
+						// 
+						// Check columns.
+						$creates = array();
+						$drops = array();
+						$updates = array();
+						$adapter->compareTable($table, $creates, $drops, $updates);
+						if($creates) {
+							$this->_tasks[self::TaskTypeCreateColumn][$tKey] = $creates;
+							$ok = false;
+						}
+						if(!$adapter->keepUnknowns() && $drops) {
+							$this->_tasks[self::TaskTypeDropColumn][$tKey] = $drops;
+							$ok = false;
+						}
+						if($updates) {
+							$this->_tasks[self::TaskTypeUpdateColumn][$tKey] = $updates;
+							$ok = false;
+						}
+					}
+				}
+				//
+				// Checking indexes existence.
+				foreach($this->_specs->indexes as $iKey => $index) {
+					$adapter = $this->getAdapter($index->connection);
+
+					if(!$adapter->indexExists($index->fullname)) {
+						$this->_tasks[self::TaskTypeCreateIndex][] = $iKey;
+						$ok = false;
+					}
+				}
+				if(!$this->_dbManager->keepUnknowns()) {
+					foreach($this->_perConnection as $connName => $connection) {
+						$adapter = $this->getAdapter($connName);
+						foreach($adapter->getIndexes() as $dbIndex) {
+							if(!in_array($dbIndex, $connection["indexes"])) {
+								$this->_tasks[self::TaskTypeDropIndex][] = array(
+									"connection" => $connName,
+									"name" => $dbIndex
+								);
+								$ok = false;
+							}
+						}
+						foreach($adapter->getTables() as $dbTable) {
+							if(!in_array($dbTable, $connection["tables"])) {
+								$this->_tasks[self::TaskTypeDropTable][] = array(
+									"connection" => $connName,
+									"name" => $dbTable
+								);
+								$ok = false;
+							}
+						}
+					}
+				}
+
+				$this->_tasks[self::TaskStatus] = $ok;
+			}
 		} else {
 			$ok = true;
 		}
@@ -50,22 +149,126 @@ class DBStructureManager extends Manager {
 	public function hasErrors() {
 		return boolval($this->_errors);
 	}
+	public function specs() {
+		return $this->_specs;
+	}
+	public function tasks() {
+		$this->check();
+		return $this->_tasks;
+	}
 	public function upgrade() {
-		debugit("@TODO", true);
+		$out = true;
+
+		if(!$this->check()) {
+			$this->createTables();
+			$this->createIndexes();
+			$this->createColumns();
+			$this->updateColumns();
+			$this->dropColumns();
+			$this->dropIndexes();
+			$this->dropTables();
+
+			$this->_tasks = false;
+			$out = $this->check();
+		}
+
+		return $out;
 	}
 	//
 	// Protected methods.
 	protected function checkSpecs() {
 		//
 		// Checking indexes.
-		foreach($this->_specs->indexes as $iKey => $index) {
+		foreach($this->_specs->indexes as $iKey => &$index) {
 			$tKey = sha1("{$index->connection}-{$index->table}");
 			if(!isset($this->_specs->tables[$tKey])) {
 				$this->setError(self::ErrorUnknownTable, "Index '{$index->fullname}' uses an unknown table called '{$index->table}'");
 				unset($this->_specs->indexes[$iKey]);
-				continue;
+			} else {
+				$table = $this->_specs->tables[$tKey];
+				$index->table = $table->fullname;
+
+				$prefix = $table->prefix;
+				foreach($index->fields as &$field) {
+					$field = "{$prefix}{$field}";
+				}
 			}
 		}
+	}
+	protected function createColumns() {
+		foreach($this->_tasks[self::TaskTypeCreateColumn] as $tKey => $columns) {
+			$table = $this->_specs->tables[$tKey];
+			$adapter = $this->getAdapter($table->connection);
+			foreach($columns as $column) {
+				$adapter->createTableColumn($table, $column);
+			}
+		}
+	}
+	protected function createIndexes() {
+		foreach($this->_tasks[self::TaskTypeCreateIndex] as $iKey) {
+			$index = $this->_specs->indexes[$iKey];
+			$adapter = $this->getAdapter($index->connection);
+			$adapter->createIndex($index);
+		}
+	}
+	protected function createTables() {
+		foreach($this->_tasks[self::TaskTypeCreateTable] as $tKey) {
+			$table = $this->_specs->tables[$tKey];
+			$adapter = $this->getAdapter($table->connection);
+			$adapter->createTable($table);
+		}
+	}
+	protected function dropColumns() {
+		foreach($this->_tasks[self::TaskTypeDropColumn] as $tKey => $columns) {
+			$table = $this->_specs->tables[$tKey];
+			$adapter = $this->getAdapter($table->connection);
+			foreach($columns as $column) {
+				$adapter->dropTableColumn($table, $column);
+			}
+		}
+	}
+	protected function dropIndexes() {
+		foreach($this->_tasks[self::TaskTypeDropIndex] as $data) {
+			$adapter = $this->getAdapter($data["connection"]);
+			$adapter->dropIndex($data["name"]);
+		}
+	}
+	protected function dropTables() {
+		foreach($this->_tasks[self::TaskTypeDropTable] as $data) {
+			$adapter = $this->getAdapter($data["connection"]);
+			$adapter->dropTable($data["name"]);
+		}
+	}
+	protected function getAdapter($connectionName) {
+		$out = false;
+
+		if(!isset($this->_dbAdapters[$connectionName])) {
+			global $Connections;
+			global $Database;
+
+			$engine = false;
+			if(isset($Connections[GC_CONNECTIONS_DB][$connectionName]) && isset($Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE]) && isset($Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE])) {
+				$engine = $Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE];
+			} else {
+				throw new DBStructureManagerExeption("Unable to obtain connection '{$connectionName}' configuration");
+			}
+			if(!isset($Database[GC_DATABASE_DB_ADAPTERS][$engine])) {
+				throw new DBStructureManagerExeption("There's no adapter for engine '{$engine}'");
+			}
+
+			$db = DBManager::Instance()->{$connectionName};
+			if($db) {
+				$adapterName = $Database[GC_DATABASE_DB_ADAPTERS][$engine];
+				$this->_dbAdapters[$connectionName] = new $adapterName($db);
+				$out = $this->_dbAdapters[$connectionName];
+			} else {
+				throw new DBStructureManagerExeption("Unable to obtaing a connetion to '{$connectionName}'");
+			}
+		} else {
+			$out = $this->_dbAdapters[$connectionName];
+		}
+
+		return $out;
 	}
 	protected function init() {
 		parent::init();
@@ -107,6 +310,8 @@ class DBStructureManager extends Manager {
 		// If the system is not flagged as installed, it must load the
 		// database specification and check it.
 		if(!$this->_installed) {
+			$this->_dbManager = DBManager::Instance();
+
 			$this->loadSpecs();
 			$this->parseSpecs();
 			$this->checkSpecs();
@@ -135,6 +340,9 @@ class DBStructureManager extends Manager {
 		}
 
 		$json = json_decode(file_get_contents($path));
+		if(!$json) {
+			trigger_error("JSON spec at '{$path}' is broken. [".json_last_error()."] ".json_last_error_msg(), E_USER_ERROR);
+		}
 
 		$this->parseSpecConfigs(isset($json->configs) ? $json->configs : new \stdClass());
 		$this->parseSpecTables(isset($json->tables) ? $json->tables : new \stdClass());
@@ -173,13 +381,17 @@ class DBStructureManager extends Manager {
 		global $Connections;
 
 		foreach($indexes as $index) {
-			$aux = self::CopyAndEnforce(array("name", "table", "type", "connection"), $index, new \stdClass());
+			$aux = self::CopyAndEnforce(array("name", "table", "type", "connection", "fields"), $index, new \stdClass(), array("fields" => array()));
+
+			if(!$aux->fields) {
+				continue;
+			}
 
 			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
 				if($aux->connection) {
 					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
 				}
-				$aux->connection = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+				$aux->connection = $this->_dbManager->getInstallName();
 			}
 
 			$prefix = "";
@@ -187,13 +399,27 @@ class DBStructureManager extends Manager {
 				$prefix = $this->_specs->configs->prefixes->{$aux->type};
 			}
 			$aux->fullname = "{$prefix}{$aux->name}";
-
-			$this->_specs->indexes[sha1("{$aux->connection}-{$aux->fullname}")] = $aux;
+			//
+			// Accepting index spec.
+			$key = sha1("{$aux->connection}-{$aux->fullname}");
+			$this->_specs->indexes[$key] = $aux;
+			if(!isset($this->_perConnection[$aux->connection])) {
+				$this->_perConnection[$aux->connection] = array();
+			}
+			if(!isset($this->_perConnection[$aux->connection]["indexes"])) {
+				$this->_perConnection[$aux->connection]["indexes"] = array();
+			}
+			$this->_perConnection[$aux->connection]["indexes"][] = $aux->fullname;
 		}
 	}
 	protected function parseSpecs() {
 		foreach($this->_specFiles as $path) {
 			$this->parseSpec($path);
+		}
+		foreach($this->_perConnection as &$connection) {
+			foreach($connection as &$type) {
+				$type = array_unique($type);
+			}
 		}
 	}
 	protected function parseSpecTables($tables) {
@@ -210,11 +436,11 @@ class DBStructureManager extends Manager {
 				continue;
 			}
 
-			$aux = self::CopyAndEnforce(array("name", "connection", "prefix"), $table, new \stdClass());
+			$aux = self::CopyAndEnforce(array("name", "connection", "prefix", "engine"), $table, new \stdClass());
 
 			$aux->fields = array();
 			foreach($table->fields as $field) {
-				$auxField = self::CopyAndEnforce(array("name", "type", "autoincrement"), $field, new \stdClass());
+				$auxField = self::CopyAndEnforce(array("name", "type", "autoincrement", "null", "comment"), $field, new \stdClass(), array("autoincrement" => false, "null" => false));
 				$auxField->fullname = "{$aux->prefix}{$auxField->name}";
 
 				if(!isset($auxField->type->type)) {
@@ -228,6 +454,12 @@ class DBStructureManager extends Manager {
 					$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision");
 					continue;
 				}
+				if(isset($field->default)) {
+					$auxField->default = $field->default;
+					$auxField->hasDefault = true;
+				} else {
+					$auxField->hasDefault = false;
+				}
 
 				$aux->fields[$auxField->fullname] = $auxField;
 			}
@@ -239,7 +471,7 @@ class DBStructureManager extends Manager {
 				if($aux->connection) {
 					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
 				}
-				$aux->connection = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+				$aux->connection = $this->_dbManager->getInstallName();
 			}
 
 			$prefix = "";
@@ -247,7 +479,8 @@ class DBStructureManager extends Manager {
 				$prefix = $Connections[GC_CONNECTIONS_DB][$aux->connection][GC_CONNECTIONS_DB_PREFIX];
 			}
 			$aux->fullname = "{$prefix}{$aux->name}";
-
+			//
+			// Acception table specs.
 			$key = sha1("{$aux->connection}-{$aux->name}");
 			if(!isset($this->_specs->tables[$key])) {
 				$this->_specs->tables[$key] = $aux;
@@ -258,6 +491,13 @@ class DBStructureManager extends Manager {
 					}
 				}
 			}
+			if(!isset($this->_perConnection[$aux->connection])) {
+				$this->_perConnection[$aux->connection] = array();
+			}
+			if(!isset($this->_perConnection[$aux->connection]["tables"])) {
+				$this->_perConnection[$aux->connection]["tables"] = array();
+			}
+			$this->_perConnection[$aux->connection]["tables"][] = $aux->fullname;
 		}
 	}
 	protected function setError($code, $message) {
@@ -266,14 +506,27 @@ class DBStructureManager extends Manager {
 			"message" => $message
 		);
 	}
+	protected function updateColumns() {
+		foreach($this->_tasks[self::TaskTypeUpdateColumn] as $tKey => $columns) {
+			$table = $this->_specs->tables[$tKey];
+			$adapter = $this->getAdapter($table->connection);
+			foreach($columns as $column) {
+				$adapter->updateTableColumn($table, $column);
+			}
+		}
+	}
 	//
 	// Protected class methods.
-	protected static function CopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = "") {
+	protected static function CopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = array()) {
+		if(!is_array($defualt)) {
+			$defualt = array();
+		}
+
 		foreach($fields as $field) {
 			if(isset($origin->{$field})) {
 				$destination->{$field} = $origin->{$field};
 			} elseif(!isset($destination->{$field})) {
-				$destination->{$field} = $defualt;
+				$destination->{$field} = isset($defualt[$field]) ? $defualt[$field] : "";
 			}
 		}
 
