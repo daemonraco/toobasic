@@ -15,9 +15,11 @@ class DBStructureManager extends Manager {
 	const ErrorUnknownType = 3;
 	const ErrorUnknownConnection = 4;
 	const ColumnTypeBlob = "blob";
+	const ColumnTypeEnum = "enum";
 	const ColumnTypeFloat = "float";
 	const ColumnTypeInt = "int";
 	const ColumnTypeText = "text";
+	const ColumnTypeTimestamp = "timestamp";
 	const ColumnTypeVarchar = "varchar";
 	const TaskTypeCreateColumn = "create-column";
 	const TaskTypeCreateIndex = "create-indexes";
@@ -31,9 +33,11 @@ class DBStructureManager extends Manager {
 	// Protected class properties.
 	protected static $_AllowedColumnTypes = array(
 		self::ColumnTypeBlob,
+		self::ColumnTypeEnum,
 		self::ColumnTypeFloat,
 		self::ColumnTypeInt,
 		self::ColumnTypeText,
+		self::ColumnTypeTimestamp,
 		self::ColumnTypeVarchar
 	);
 	// 
@@ -161,12 +165,18 @@ class DBStructureManager extends Manager {
 
 		if(!$this->check()) {
 			$this->createTables();
-			$this->createIndexes();
 			$this->createColumns();
 			$this->updateColumns();
+
+			$this->createIndexes();
+
 			$this->dropColumns();
 			$this->dropIndexes();
 			$this->dropTables();
+
+			if(isset(Params::Instance()->debugdbemulation)) {
+				debugit("Database upgrade emulation", true);
+			}
 
 			$this->_tasks = false;
 			$out = $this->check();
@@ -451,8 +461,13 @@ class DBStructureManager extends Manager {
 					continue;
 				}
 				if(!isset($auxField->type->precision)) {
-					$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision");
-					continue;
+					if($auxField->type->type == self::ColumnTypeEnum && !isset($auxField->type->values)) {
+						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value");
+						continue;
+					} elseif($auxField->type->type != self::ColumnTypeEnum) {
+						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision");
+						continue;
+					}
 				}
 				if(isset($field->default)) {
 					$auxField->default = $field->default;

@@ -10,6 +10,7 @@ abstract class DBSpecAdapter extends Adapter {
 	 */
 	protected $_db = false;
 	protected $_debugUpgrade = false;
+	protected $_debugdbEmulation = false;
 	//
 	// Magic methods.
 	public function __construct(DBAdapter $db) {
@@ -17,6 +18,8 @@ abstract class DBSpecAdapter extends Adapter {
 
 		$this->_db = $db;
 		$this->_debugUpgrade = isset(Params::Instance()->debugdbupgrade);
+		$this->_debugdbEmulation = isset(Params::Instance()->debugdbemulation);
+		$this->_debugUpgrade = $this->_debugdbEmulation ? true : $this->_debugUpgrade;
 	}
 	//
 	// Public methods.
@@ -42,5 +45,9 @@ abstract class DBSpecAdapter extends Adapter {
 		if($this->_debugUpgrade) {
 			debugit($query);
 		}
+	}
+	public function exec($query) {
+		$this->debugUpgradeQuery($query);
+		return $this->_debugdbEmulation ? "true" : $this->_db->exec($query, false) !== false;
 	}
 }

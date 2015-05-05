@@ -107,8 +107,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 
 		$query.= "        )\n";
 
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, false) !== false;
+		return $this->exec($query);
 	}
 	public function createTable(\stdClass $table) {
 		$query = "create table {$table->fullname} ( \n";
@@ -124,9 +123,9 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		if(isset($table->engine)) {
 			$query.= "engine={$table->engine} ";
 		}
+		$query.= " default charset=utf8 collate=utf8_bin auto_increment=1 ";
 
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, false) !== false;
+		return $this->exec($query);
 	}
 	public function createTableColumn(\stdClass $table, $columnName) {
 		$query = "alter table {$table->fullname} \n";
@@ -134,8 +133,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$field = $table->fields[$columnName];
 		$query.= "        add column {$field->fullname} {$this->buildFullColumnType($field, false)}";
 
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, false) !== false;
+		return $this->exec($query);
 	}
 	public function dropIndex($indexName) {
 		$out = false;
@@ -151,23 +149,20 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 			$row = $result->fetch();
 
 			$query = "drop index {$indexName} on {$row["table"]}";
-			$this->debugUpgradeQuery($query);
-			$out = $this->_db->exec($query, false) !== false;
+			$out = $this->exec($query);
 		}
 
 		return $out;
 	}
 	public function dropTable($tableName) {
 		$query = "drop table {$tableName}";
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, false) !== false;
+		return $this->exec($query);
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
 		$query = "alter table {$table->fullname} \n";
 		$query.= "        drop column {$columnName}";
 
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, false) !== false;
+		return $this->exec($query);
 	}
 	public function getIndexes() {
 		$out = array();
@@ -229,8 +224,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$field = $table->fields[$columnName];
 		$query.= "        modify column {$field->fullname} {$this->buildFullColumnType($field, false)}";
 
-		$this->debugUpgradeQuery($query);
-		return $this->_db->exec($query, true) !== false;
+		return $this->exec($query);
 	}
 	//
 	// Protected methods.
@@ -238,19 +232,25 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$out = "";
 
 		switch($type->type) {
-			case DBStructureManager::ColumnTypeBlob :
+			case DBStructureManager::ColumnTypeBlob:
 				$out = "blob";
 				break;
-			case DBStructureManager::ColumnTypeFloat :
+			case DBStructureManager::ColumnTypeEnum:
+				$out = "enum('".implode("','", $type->values)."')";
+				break;
+			case DBStructureManager::ColumnTypeFloat:
 				$out = "float({$type->precision}) ";
 				break;
-			case DBStructureManager::ColumnTypeText :
+			case DBStructureManager::ColumnTypeText:
 				$out = "text ";
 				break;
 			case DBStructureManager::ColumnTypeVarchar:
 				$out = "varchar({$type->precision})";
 				break;
-			case DBStructureManager::ColumnTypeInt :
+			case DBStructureManager::ColumnTypeTimestamp:
+				$out = "timestamp";
+				break;
+			case DBStructureManager::ColumnTypeInt:
 				$out = "int({$type->precision})";
 				break;
 			default:
@@ -267,7 +267,9 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type)} ";
 		}
-
+		if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeVarchar))) {
+			$out.= "collate utf8_bin ";
+		}
 		if(!$spec->null) {
 			$out.= "not null ";
 		}
@@ -285,7 +287,13 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 			}
 		}
 		if($spec->autoincrement) {
-			$out.= "primary key auto_increment ";
+			/** @fixme this is some kind impolite @{ */
+			if($includeName) {
+				$out.= "primary key auto_increment ";
+			} else {
+				$out.= "auto_increment ";
+			}
+			/** @} */
 		}
 		if($spec->comment) {
 			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
