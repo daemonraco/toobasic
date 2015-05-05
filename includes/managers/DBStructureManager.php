@@ -28,6 +28,7 @@ class DBStructureManager extends Manager {
 	const TaskTypeDropIndex = "drop-indexes";
 	const TaskTypeDropTable = "drop-tables";
 	const TaskTypeUpdateColumn = "update-column";
+	const TaskTypeUpdateData = "update-data";
 	const TaskStatus = "status";
 	// 
 	// Protected class properties.
@@ -74,7 +75,8 @@ class DBStructureManager extends Manager {
 					self::TaskTypeDropColumn => array(),
 					self::TaskTypeDropIndex => array(),
 					self::TaskTypeDropTable => array(),
-					self::TaskTypeUpdateColumn => array()
+					self::TaskTypeUpdateColumn => array(),
+					self::TaskTypeUpdateData => array()
 				);
 				//
 				// Checking tables existence.
@@ -115,6 +117,27 @@ class DBStructureManager extends Manager {
 						$ok = false;
 					}
 				}
+				//
+				// Checking data existence.
+				foreach($this->_specs->data as $tKey => $entries) {
+					$table = $this->_specs->tables[$tKey];
+					$adapter = $this->getAdapter($table->connection);
+
+					$this->_tasks[self::TaskTypeUpdateData][$tKey] = array();
+					foreach($entries as $eKey => $entry) {
+						if(!$adapter->checkTableEntry($table, $entry)) {
+							$this->_tasks[self::TaskTypeUpdateData][$tKey][] = $eKey;
+							$ok = false;
+						}
+					}
+				}
+				foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
+					if(!$eKeys) {
+						unset($this->_tasks[self::TaskTypeUpdateData][$tKey]);
+					}
+				}
+				//
+				//
 				if(!$this->_dbManager->keepUnknowns()) {
 					foreach($this->_perConnection as $connName => $connection) {
 						$adapter = $this->getAdapter($connName);
@@ -168,6 +191,7 @@ class DBStructureManager extends Manager {
 			$this->createColumns();
 			$this->updateColumns();
 
+			$this->insertData();
 			$this->createIndexes();
 
 			$this->dropColumns();
@@ -201,6 +225,28 @@ class DBStructureManager extends Manager {
 				$prefix = $table->prefix;
 				foreach($index->fields as &$field) {
 					$field = "{$prefix}{$field}";
+				}
+			}
+		}
+		//
+		// Checking data.
+		foreach($this->_specs->data as $tKey => &$entries) {
+			if(!isset($this->_specs->tables[$tKey])) {
+				unset($this->_specs->data[$tKey]);
+			} else {
+				$table = $this->_specs->tables[$tKey];
+				$prefix = $table->prefix;
+				foreach($entries as &$entry) {
+					foreach($entry->check as &$cfield) {
+						$cfield = "{$prefix}{$cfield}";
+					}
+
+					$newEntry = new \stdClass();
+					foreach($entry->entry as $efield => $value) {
+						$name = "{$prefix}{$efield}";
+						$newEntry->{$name} = $value;
+					}
+					$entry->entry = $newEntry;
 				}
 			}
 		}
@@ -335,6 +381,16 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	protected function insertData() {
+		foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
+			$table = $this->_specs->tables[$tKey];
+			$adapter = $this->getAdapter($table->connection);
+			foreach($eKeys as $eKey) {
+				$entry = $this->_specs->data[$tKey][$eKey];
+				$adapter->addTableEntry($table, $entry);
+			}
+		}
+	}
 	protected function loadSpecs() {
 		//
 		// Adding configuration.
@@ -355,8 +411,9 @@ class DBStructureManager extends Manager {
 		}
 
 		$this->parseSpecConfigs(isset($json->configs) ? $json->configs : new \stdClass());
-		$this->parseSpecTables(isset($json->tables) ? $json->tables : new \stdClass());
-		$this->parseSpecIndexes(isset($json->indexes) ? $json->indexes : new \stdClass());
+		$this->parseSpecTables(isset($json->tables) ? $json->tables : array());
+		$this->parseSpecIndexes(isset($json->indexes) ? $json->indexes : array());
+		$this->parseSpecData(isset($json->data) ? $json->data : array());
 	}
 	protected function parseSpecConfigs($configs) {
 		//
@@ -380,6 +437,46 @@ class DBStructureManager extends Manager {
 		//
 		// Loading prefixes.
 		$this->_specs->configs->prefixes = self::CopyAndEnforce(array("index", "key", "primary"), $configs->prefixes, $this->_specs->configs->prefixes);
+	}
+	protected function parseSpecData($data) {
+		//
+		// Creating main object when it's not there.
+		if(!isset($this->_specs->data)) {
+			$this->_specs->data = array();
+		}
+		global $Connections;
+		foreach($data as $datum) {
+			$aux = self::CopyAndEnforce(array("table", "connection", "checkfields", "entries"), $datum, new \stdClass());
+
+			if(!$aux->table || !$aux->checkfields || !$aux->entries) {
+				continue;
+			}
+
+			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
+				if($aux->connection) {
+					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
+				}
+				$aux->connection = $this->_dbManager->getInstallName();
+			}
+			//
+			// Guessing table identifier and creating a pull for its
+			// entries.
+			$tKey = sha1("{$aux->connection}-{$aux->table}");
+			$this->_specs->data[$tKey] = array();
+
+			foreach($aux->entries as $entry) {
+				$auxEntry = new \stdClass();
+				$auxEntry->check = $aux->checkfields;
+				$auxEntry->entry = $entry;
+
+				$dKey = "";
+				foreach($aux->checkfields as $fName) {
+					$dKey.= "|{$fName}={$entry->$fName}|";
+				}
+				$dKey = sha1($dKey);
+				$this->_specs->data[$tKey][$dKey] = $auxEntry;
+			}
+		}
 	}
 	protected function parseSpecIndexes($indexes) {
 		//

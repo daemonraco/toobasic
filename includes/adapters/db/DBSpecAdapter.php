@@ -23,6 +23,8 @@ abstract class DBSpecAdapter extends Adapter {
 	}
 	//
 	// Public methods.
+	abstract public function addTableEntry(\stdClass $table, \stdClass $entry);
+	abstract public function checkTableEntry(\stdClass $table, \stdClass $entry);
 	abstract public function compareTable(\stdClass $table, &$creates, &$drops, &$updates);
 	abstract public function createIndex(\stdClass $index);
 	abstract public function createTable(\stdClass $table);

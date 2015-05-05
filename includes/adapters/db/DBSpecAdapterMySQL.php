@@ -5,6 +5,37 @@ namespace TooBasic;
 class DBSpecAdapterMySQL extends DBSpecAdapter {
 	//
 	// Public methods.
+	public function addTableEntry(\stdClass $table, \stdClass $entry) {
+		$keys = array();
+		$values = array();
+		foreach($entry->entry as $key => $value) {
+			$keys[] = $key;
+			$values[] = str_replace("'", "''", $value);
+		}
+
+		$query = "insert \n";
+		$query.= "        into {$table->fullname} (".implode(",", $keys).") \n";
+		$query.= "        values ('".implode("','", $values)."') \n";
+
+		return $this->exec($query);
+	}
+	public function checkTableEntry(\stdClass $table, \stdClass $entry) {
+		$out = false;
+
+		$query = "select  * \n";
+		$query.= "from    {$table->fullname} \n";
+		$query.= "where   1 = 1 \n";
+		foreach($entry->check as $field) {
+			$query.= " and    {$field} = '{$entry->entry->$field}' \n";
+		}
+
+		$result = $this->_db->query($query, false);
+		if($result) {
+			$out = $result->rowCount() > 0;
+		}
+
+		return $out;
+	}
 	public function compareTable(\stdClass $table, &$creates, &$drops, &$updates) {
 		$query = "select  column_name, \n";
 		$query.= "        column_default, \n";
