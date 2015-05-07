@@ -73,6 +73,7 @@ To make things a little bit easer, there are a few extra configuration you can m
     * The default behavior is to use the default database.
 
 ## Suggestions
-If you want or need, you may visit this documentation pages:
+If you want or need it, you may visit this documentation pages:
 
 * [Representations](representations.md)
+* [Database Structure Specifications](databasespecs.md)
