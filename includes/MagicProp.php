@@ -79,7 +79,7 @@ class MagicProp extends Singleton {
 	}
 	protected function representations() {
 		if($this->_representations === false) {
-			$this->_representations = ItemsFactoryStack::Instance();
+			$this->_representations = ItemsFactoryProvider::Instance();
 		}
 
 		return $this->_representations;

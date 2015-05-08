@@ -7,7 +7,7 @@
 
 namespace TooBasic;
 
-class ItemsFactoryStack extends Singleton {
+class ItemsFactoryProvider extends Singleton {
 	//
 	// Protected properties.
 	protected $_loadedClases = array();
