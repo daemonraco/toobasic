@@ -61,7 +61,7 @@ spl_autoload_register(function($class) {
 		static $representations = array(
 			"ItemRepresentation",
 			"ItemsFactory",
-			"ItemsFactoryStack"
+			"ItemsFactoryProvider"
 		);
 
 		if(!$path) {
