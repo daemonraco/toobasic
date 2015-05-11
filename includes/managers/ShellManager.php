@@ -46,7 +46,7 @@ class ShellManager extends Manager {
 				case self::ModeProfile:
 					$this->_profile = $this->_tool;
 					$this->_tool = false;
-					$this->runProfile($spacer);
+					$this->runProfile($spacer, $options->unknownParams());
 					break;
 				case self::ModeTool:
 					$this->runTool($spacer);
@@ -126,7 +126,7 @@ class ShellManager extends Manager {
 			echo "\n";
 		}
 	}
-	protected function runProfile($spacer) {
+	protected function runProfile($spacer, $extraParams) {
 		global $CronProfiles;
 
 		if($this->_profile) {
@@ -141,7 +141,7 @@ class ShellManager extends Manager {
 						$this->_tool
 					);
 
-					$this->runCron("{$spacer}\t", array_merge($mainParams, $tool[GC_CRONPROFILES_PARAMS]));
+					$this->runCron("{$spacer}\t", array_merge($mainParams, $tool[GC_CRONPROFILES_PARAMS], $extraParams));
 				}
 			} else {
 				$this->setError(self::ErrorUnknownProfile, "Unkown profile called '{$this->_profile}'");

@@ -58,14 +58,20 @@ class Options extends \TooBasic\Singleton {
 				$lastOption = false;
 				$needsMore = false;
 			} else {
+				$found = false;
 				foreach($this->_options as &$option) {
 					if($option->check($param)) {
 						if($option->needsMore()) {
 							$lastOption = $option;
 							$needsMore = true;
 						}
+
+						$found = true;
 						break;
 					}
+				}
+				if(!$found) {
+					$this->_unknownParams[] = $param;
 				}
 			}
 		}
@@ -110,5 +116,8 @@ class Options extends \TooBasic\Singleton {
 	}
 	public function setHelpText($text) {
 		return $this->_helpText = $text;
+	}
+	public function unknownParams() {
+		return $this->_unknownParams;
 	}
 }
