@@ -25,6 +25,7 @@ abstract class DBSpecAdapter extends Adapter {
 	// Public methods.
 	abstract public function addTableEntry(\stdClass $table, \stdClass $entry);
 	abstract public function checkTableEntry(\stdClass $table, \stdClass $entry);
+	abstract public function compareIndex(\stdClass $index);
 	abstract public function compareTable(\stdClass $table, &$creates, &$drops, &$updates);
 	abstract public function createIndex(\stdClass $index);
 	abstract public function createTable(\stdClass $table);
@@ -40,6 +41,7 @@ abstract class DBSpecAdapter extends Adapter {
 		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];
 	}
 	abstract public function tableExists($tableName);
+	abstract public function updateIndex(\stdClass $index);
 	abstract public function updateTableColumn(\stdClass $table, $columnName);
 	//
 	// Protected methods.

@@ -36,6 +36,33 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 
 		return $out;
 	}
+	public function compareIndex(\stdClass $index) {
+		$ok = true;
+
+		$query = "select  column_name \n";
+		$query.= "from    information_schema.statistics \n";
+		$query.= "where   table_catalog = 'def' \n";
+		$query.= " and    index_schema  = database() \n";
+		$query.= " and    index_name    = '{$index->fullname}' \n";
+
+		$indexSpecs = $this->_db->query($query)->fetchAll();
+
+		$dbColumnCount = count($indexSpecs);
+		$spectColumnCount = count($index->fields);
+
+		if($dbColumnCount == $spectColumnCount) {
+			for($position = 0; $position < $dbColumnCount; $position++) {
+				if($indexSpecs[$position]["column_name"] != $index->fields[$position]) {
+					$ok = false;
+					break;
+				}
+			}
+		} else {
+			$ok = false;
+		}
+
+		return $ok;
+	}
 	public function compareTable(\stdClass $table, &$creates, &$drops, &$updates) {
 		$query = "select  column_name, \n";
 		$query.= "        column_default, \n";
@@ -172,7 +199,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$query = "select  distinct table_name as 'table' \n";
 		$query.= "from    information_schema.statistics \n";
 		$query.= "where   table_catalog = 'def' \n";
-		$query.= " and    table_schema  = database() \n";
+		$query.= " and    index_schema  = database() \n";
 		$query.= " and    index_name    = '{$indexName}' \n";
 
 		$result = $this->_db->query($query, false);
@@ -248,6 +275,9 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 	}
 	public function tableExists($tableName) {
 		return $this->_db->query("select 1 from {$tableName}", false) !== false;
+	}
+	public function updateIndex(\stdClass $index) {
+		return $this->dropIndex($index->fullname) && $this->createIndex($index);
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
 		$query = "alter table {$table->fullname} \n";

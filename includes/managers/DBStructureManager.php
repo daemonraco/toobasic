@@ -29,6 +29,7 @@ class DBStructureManager extends Manager {
 	const TaskTypeDropTable = "drop-tables";
 	const TaskTypeUpdateColumn = "update-column";
 	const TaskTypeUpdateData = "update-data";
+	const TaskTypeUpdateIndex = "update-index";
 	const TaskStatus = "status";
 	// 
 	// Protected class properties.
@@ -76,7 +77,8 @@ class DBStructureManager extends Manager {
 					self::TaskTypeDropIndex => array(),
 					self::TaskTypeDropTable => array(),
 					self::TaskTypeUpdateColumn => array(),
-					self::TaskTypeUpdateData => array()
+					self::TaskTypeUpdateData => array(),
+					self::TaskTypeUpdateIndex => array()
 				);
 				//
 				// Checking tables existence.
@@ -108,13 +110,18 @@ class DBStructureManager extends Manager {
 					}
 				}
 				//
-				// Checking indexes existence.
+				// Checking indexes existence and structure.
 				foreach($this->_specs->indexes as $iKey => $index) {
 					$adapter = $this->getAdapter($index->connection);
 
 					if(!$adapter->indexExists($index->fullname)) {
 						$this->_tasks[self::TaskTypeCreateIndex][] = $iKey;
 						$ok = false;
+					} else {
+						if(!$adapter->compareIndex($index)) {
+							$this->_tasks[self::TaskTypeUpdateIndex][] = $iKey;
+							$ok = false;
+						}
 					}
 				}
 				//
@@ -193,6 +200,7 @@ class DBStructureManager extends Manager {
 
 			$this->insertData();
 			$this->createIndexes();
+			$this->updateIndexes();
 
 			$this->dropColumns();
 			$this->dropIndexes();
@@ -625,6 +633,13 @@ class DBStructureManager extends Manager {
 			foreach($columns as $column) {
 				$adapter->updateTableColumn($table, $column);
 			}
+		}
+	}
+	protected function updateIndexes() {
+		foreach($this->_tasks[self::TaskTypeUpdateIndex] as $iKey) {
+			$index = $this->_specs->indexes[$iKey];
+			$adapter = $this->getAdapter($index->connection);
+			$adapter->updateIndex($index);
 		}
 	}
 	//
