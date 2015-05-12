@@ -116,4 +116,11 @@ define("GC_DEFAULTS_MEMCACHED_SERVER", "server");
 define("GC_DEFAULTS_MEMCACHED_PORT", "port");
 define("GC_DEFAULTS_MEMCACHED_PREFIX", "prefix");
 // @}
+// Memcached parameters @{
+define("GC_DEFAULTS_MEMCACHE", "memcache");
+define("GC_DEFAULTS_MEMCACHE_SERVER", "server");
+define("GC_DEFAULTS_MEMCACHE_PORT", "port");
+define("GC_DEFAULTS_MEMCACHE_PREFIX", "prefix");
+define("GC_DEFAULTS_MEMCACHE_COMPRESSED", "compressed");
+// @}
 // @}
