@@ -62,91 +62,108 @@ class ServicesManager extends UrlManager {
 	//
 	// Protected methods.
 	protected function explainInterface($serviceName) {
-		$out = array(
-			"status" => true,
-			"interface" => null,
-			"headers" => array(),
-			"error" => false,
-			"errors" => array()
-		);
-
-		$out["interface"] = array(
-			"name" => $serviceName,
-			"cached" => false,
-			"methods" => array()
-		);
-
-		$serviceFile = $this->paths->servicePath($serviceName);
-		$service = false;
-		if($serviceFile && is_readable($serviceFile)) {
-			$pathinfo = pathinfo($serviceFile);
-
-			$service = array(
-				"path" => $serviceFile,
-				"name" => $pathinfo["filename"],
-				"class" => classname($pathinfo["filename"]).GC_CLASS_SUFFIX_SERVICE
-			);
-		} else {
-			$error = array(
-				"code" => self::ErrorUnknownService,
-				"message" => "Service '{$serviceName}' not found",
-				"location" => array(
-					"method" => __CLASS__."::".__FUNCTION__."()",
-					"file" => __FILE__,
-					"line" => __LINE__
-				)
+		$cachePrefix = "SERVICEINTERFACE";
+		$cacheKey = $serviceName;
+		$cache = MagicProp::Instance()->cache;
+		$out = $cache->get($cachePrefix, $cacheKey);
+		if(!$out) {
+			$out = array(
+				"status" => true,
+				"interface" => null,
+				"headers" => array(),
+				"error" => false,
+				"errors" => array()
 			);
 
-			$out["status"] = false;
-			$out["interface"] = false;
-			$out["error"] = $error;
-			$out["errors"][] = $error;
-		}
+			$out["interface"] = array(
+				"name" => $serviceName,
+				"cached" => false,
+				"methods" => array()
+			);
 
-		if($service) {
-			require_once $service["path"];
+			$serviceFile = $this->paths->servicePath($serviceName);
+			$service = false;
+			if($serviceFile && is_readable($serviceFile)) {
+				$pathinfo = pathinfo($serviceFile);
 
-			$object = new $service["class"]();
-			$reflectionObject = new \ReflectionClass($object);
+				$service = array(
+					"path" => $serviceFile,
+					"name" => $pathinfo["filename"],
+					"class" => classname($pathinfo["filename"]).GC_CLASS_SUFFIX_SERVICE
+				);
+			} else {
+				$error = array(
+					"code" => self::ErrorUnknownService,
+					"message" => "Service '{$serviceName}' not found",
+					"location" => array(
+						"method" => __CLASS__."::".__FUNCTION__."()",
+						"file" => __FILE__,
+						"line" => __LINE__
+					)
+				);
 
-			$out["interface"]["required_params"] = $object->requiredParams();
-			$out["interface"]["cached"] = $object->cached();
-			$out["interface"]["cache_params"] = $object->cacheParams();
+				$out["status"] = false;
+				$out["interface"] = false;
+				$out["error"] = $error;
+				$out["errors"][] = $error;
+			}
 
-			$matches = false;
-			foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
-				if(preg_match("/^run(?<method>[A-Z]+)$/", $reflection->name, $matches)) {
-					$matches["method"] = $matches["method"];
-					$out["interface"]["methods"][] = $matches["method"];
-				} elseif($reflection->name == "basicRun") {
-					$out["interface"]["methods"][] = "GET";
+			if($service) {
+				require_once $service["path"];
+
+				$object = new $service["class"]();
+				$reflectionObject = new \ReflectionClass($object);
+
+				$out["interface"]["required_params"] = $object->requiredParams();
+				$out["interface"]["cached"] = $object->cached();
+				$out["interface"]["cache_params"] = $object->cacheParams();
+
+				$matches = false;
+				foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
+					if(preg_match("/^run(?<method>[A-Z]+)$/", $reflection->name, $matches)) {
+						$matches["method"] = $matches["method"];
+						$out["interface"]["methods"][] = $matches["method"];
+					} elseif($reflection->name == "basicRun") {
+						$out["interface"]["methods"][] = "GET";
+					}
+				}
+				$out["interface"]["methods"] = array_unique($out["interface"]["methods"]);
+
+				foreach($out["interface"]["required_params"] as $method => $value) {
+					if(!$value) {
+						unset($out["interface"]["required_params"][$method]);
+					}
 				}
 			}
-			$out["interface"]["methods"] = array_unique($out["interface"]["methods"]);
 
-			foreach($out["interface"]["required_params"] as $method => $value) {
-				if(!$value) {
-					unset($out["interface"]["required_params"][$method]);
-				}
-			}
+			$cache->save($cachePrefix, $cacheKey, $out);
 		}
 
 		return $out;
 	}
 	protected function explainInterfaces() {
-		$out = array(
-			"status" => true,
-			"services" => array(),
-			"headers" => array(),
-			"error" => false,
-			"errors" => array()
-		);
+		$cachePrefix = "SERVICEINTERFACES";
+		$cacheKey = "FULL";
+		$cache = MagicProp::Instance()->cache;
+		$out = $cache->get($cachePrefix, $cacheKey);
 
-		foreach($this->paths->servicePath("*", true) as $serviceFile) {
-			$pathinfo = pathinfo($serviceFile);
+		if(!$out) {
+			$out = array(
+				"status" => true,
+				"services" => array(),
+				"headers" => array(),
+				"error" => false,
+				"errors" => array()
+			);
 
-			$service = $this->explainInterface($pathinfo["filename"]);
-			$out["services"][] = $service["interface"];
+			foreach($this->paths->servicePath("*", true) as $serviceFile) {
+				$pathinfo = pathinfo($serviceFile);
+
+				$service = $this->explainInterface($pathinfo["filename"]);
+				$out["services"][] = $service["interface"];
+			}
+
+			$cache->save($cachePrefix, $cacheKey, $out);
 		}
 
 		return $out;
