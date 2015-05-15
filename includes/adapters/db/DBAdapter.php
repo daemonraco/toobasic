@@ -176,6 +176,24 @@ class DBAdapter extends Adapter {
 		// Returning the resulting statement.
 		return $result;
 	}
+	/**
+	 * Similar to query() but it always returns an array of rows.
+	 *
+	 * @param string $query SQL query to be executed.
+	 * @param boolean $dieOnError When true, if there were any problem
+	 * performing the query, it raises an exception.
+	 * @return mixed[] Returns a list of found items.
+	 */
+	public function queryData($query, $dieOnError = true) {
+		$out = array();
+
+		$result = $this->query($query, $dieOnError);
+		if($result) {
+			$out = $result->fetchAll();
+		}
+
+		return $out;
+	}
 	//
 	// Protected methods.
 	protected function getConnectionString($dbname) {

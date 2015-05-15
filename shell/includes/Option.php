@@ -13,7 +13,7 @@ class Option {
 	protected $_activated = false;
 	protected $_helpText = false;
 	protected $_helpTextFull = false;
-	protected $_helpValueName = false;
+	protected $_helpValueName = "value";
 	protected $_lastValue = false;
 	protected $_name = false;
 	protected $_needsMore = false;
@@ -113,7 +113,7 @@ class Option {
 		$this->_values = array();
 		$this->_helpText = false;
 		$this->_helpTextFull = false;
-		$this->_helpValueName = false;
+		$this->_helpValueName = "value";
 	}
 	public function setHelpText($text, $valueName = "value") {
 		$this->_helpValueName = $valueName;
@@ -140,6 +140,9 @@ class Option {
 		}
 
 		return $out;
+	}
+	public function triggers() {
+		return $this->_triggers;
 	}
 	//
 	// Public class methods
