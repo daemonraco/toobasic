@@ -10,10 +10,18 @@ class ModelsFactory extends Singleton {
 	//
 	// Magic methods.
 	public function __get($className) {
+		return $this->get($className, false);
+	}
+	public function get($className, $namespace = false) {
 		$out = null;
 
+		$namespace = $namespace ? "\\{$namespace}\\" : "\\";
+		while(strpos($namespace, "\\\\") !== false) {
+			$namespace = str_replace("\\\\", "\\", $namespace);
+		}
+
 		$classFileName = \TooBasic\classname($className);
-		$className = "{$classFileName}Model";
+		$className = "{$namespace}{$classFileName}Model";
 
 		if(isset($this->_singletons[$className])) {
 			$out = $this->_singletons[$className];
@@ -29,7 +37,6 @@ class ModelsFactory extends Singleton {
 	// Protected methods.
 	protected function loadAndGet($classFileName, $className) {
 		$out = null;
-
 		//
 		// @todo There's something wrong here for multiple loadings.
 		$filename = Paths::Instance()->modelPath($classFileName);
