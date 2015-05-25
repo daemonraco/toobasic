@@ -50,6 +50,7 @@ $Defaults[GC_DEFAULTS_MODES] = array(
 	"modal"
 );
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
+$Defaults[GC_DEFAULTS_MEMCACHE] = array();
 //
 // Directory configurations.
 $Directories = array();

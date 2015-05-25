@@ -122,6 +122,7 @@ spl_autoload_register(function($class) {
 		global $Directories;
 
 		static $basicIncludes = array(
+			"Color",
 			"Option",
 			"Options",
 			"ShellCron",
