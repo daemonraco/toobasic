@@ -15,6 +15,7 @@ define("HTTPERROR_NOT_IMPLEMENTED", "501");
 //
 // Directories @{
 define("GC_DEFAULTS_ACTION", "action");
+define("GC_DEFAULTS_ALLOW_ROUTES", "allow-routes");
 define("GC_DEFAULTS_CACHE_ADAPTER", "cache-adapter");
 define("GC_DEFAULTS_CACHE_PERMISSIONS", "cache-permissions");
 define("GC_DEFAULTS_INSTALLED", "installed");

@@ -29,6 +29,7 @@ require_once ROOTDIR."/includes/Sanitizer.php";
 // Default constants configurations.
 $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = "home";
+$Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "\TooBasic\CacheAdapterFile";
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
@@ -168,6 +169,11 @@ if(is_readable($localConfig)) {
 //
 // Final touches.
 $Defaults[GC_DEFAULTS_FORMATS]["basic"] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
+//
+// Routes
+if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($_REQUEST["route"])) {
+	\TooBasic\RoutesManager::Instance()->load();
+}
 //
 //
 $ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults["action"];

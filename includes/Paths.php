@@ -24,6 +24,7 @@ class Paths extends Singleton {
 	protected $_modelsPaths = false;
 	protected $_modules = false;
 	protected $_representationPaths = false;
+	protected $_routesPaths = false;
 	protected $_servicePaths = false;
 	protected $_shellCronsPaths = false;
 	protected $_shellToolsPaths = false;
@@ -146,6 +147,10 @@ class Paths extends Singleton {
 	public function representationPath($representationName, $full = false) {
 		global $Paths;
 		return $this->find($this->_representationPaths, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, self::ExtensionPHP, $full);
+	}
+	public function routesPaths() {
+		global $Paths;
+		return $this->find($this->_routesPaths, $Paths[GC_PATHS_CONFIGS], "routes", self::ExtensionJSON, true);
 	}
 	public function servicePath($serviceName, $full = false) {
 		global $Paths;

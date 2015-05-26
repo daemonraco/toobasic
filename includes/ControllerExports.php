@@ -68,6 +68,22 @@ class ControllerExports {
 		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
 	}
 	/**
+	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
+	 * full uri path.
+	 * 
+	 * @param string $libPath Library elemet to be rendered.
+	 * @return string Rendered result.
+	 */
+	public function lib($libPath) {
+		global $Directories;
+		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
+		if(!is_file($path) || !is_readable($path)) {
+			$path = "";
+		}
+
+		return Paths::Path2Uri($path);
+	}
+	/**
 	 * It takes an snippet name an returns its rendered result.
 	 * 
 	 * @param string $snippetName Name of the snippet to render.

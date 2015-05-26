@@ -11,3 +11,18 @@ function classname($simpleName) {
 
 	return $out;
 }
+function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = array()) {
+	if(!is_array($defualt)) {
+		$defualt = array();
+	}
+
+	foreach($fields as $field) {
+		if(isset($origin->{$field})) {
+			$destination->{$field} = $origin->{$field};
+		} elseif(!isset($destination->{$field})) {
+			$destination->{$field} = isset($defualt[$field]) ? $defualt[$field] : "";
+		}
+	}
+
+	return $destination;
+}

@@ -33,6 +33,7 @@ spl_autoload_register(function($class) {
 			"DBManager",
 			"DBStructureManager",
 			"Manager",
+			"RoutesManager",
 			"ServicesManager",
 			"ShellManager",
 			"UrlManager"
