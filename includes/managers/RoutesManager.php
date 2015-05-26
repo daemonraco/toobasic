@@ -17,8 +17,82 @@ class RoutesManager extends Manager {
 	protected $_routes = array();
 	//
 	// Public methods.
+	public function enroute($path) {
+		$out = $path;
+
+		global $Defaults;
+
+		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			$newPath = array();
+			$url = parse_url($path);
+			$url['query'] = isset($url['query']) ? explode('&', $url['query']) : array();
+			foreach($url['query'] as $key => $value) {
+				unset($url['query'][$key]);
+
+				$aux = explode('=', $value);
+				if(isset($aux[1])) {
+					$url['query'][$aux[0]] = $aux[1];
+				} else {
+					$url['query'][$aux[0]] = "true";
+				}
+			}
+
+			$matchingRoute = false;
+			if(isset($url['query']['action'])) {
+				foreach($this->routes() as $route) {
+					if($route->action == $url['query']['action']) {
+						$matchingRoute = $route;
+						break;
+					}
+				}
+			}
+
+			if($matchingRoute) {
+				unset($url['query']['action']);
+
+				foreach($matchingRoute->pattern as $piece) {
+					if($piece->type == self::PatternTypeLiteral) {
+						$newPath[] = $piece->name;
+					} elseif($piece->type == self::PatternTypeParameter) {
+						if(isset($url['query'][$piece->name])) {
+							$newPath[] = $url['query'][$piece->name];
+//@TODO
+//						switch($piece->valueType) {
+//							case self::ValueTypeInteger:
+//								$settings[$piece->name] = $settings[$piece->name] + 0;
+//								$matches = is_integer($settings[$piece->name]);
+//								break;
+//							case self::ValueTypeString:
+//								$matches = is_string($settings[$piece->name]);
+//								break;
+//						}
+							unset($url['query'][$piece->name]);
+						} else {
+							$matchingRoute = false;
+							break;
+						}
+					}
+				}
+			}
+
+			if($matchingRoute) {
+				$out = "{$url['path']}/".implode('/', $newPath);
+				if($url['query']) {
+					$aux = array();
+					foreach($url['query'] as $key => $value) {
+						$aux[] = "{$key}={$value}";
+					}
+					$out.= '?'.implode('&', $aux);
+				}
+			}
+		}
+
+		return $out;
+	}
 	public function load() {
-		if(isset($_REQUEST['route'])) {
+		global $Defaults;
+
+		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($_REQUEST["route"])) {
 			$path = explode('/', $_REQUEST['route']);
 
 			$matches = false;
@@ -78,8 +152,6 @@ class RoutesManager extends Manager {
 			} else {
 				$_GET['action'] = $_REQUEST['action'] = '404';
 			}
-
-//			debugit([$path, '$matches' => $matches, $extraRoute, $matchingRoute, $settings, $_REQUEST, $_GET], true);
 		}
 	}
 	public function routes() {
@@ -134,8 +206,12 @@ class RoutesManager extends Manager {
 		}
 	}
 	protected function parseConfigs() {
-		foreach(Paths::Instance()->routesPaths() as $path) {
-			$this->parseConfig($path);
+		global $Defaults;
+
+		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			foreach(Paths::Instance()->routesPaths() as $path) {
+				$this->parseConfig($path);
+			}
 		}
 	}
 }

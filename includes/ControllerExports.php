@@ -84,6 +84,27 @@ class ControllerExports {
 		return Paths::Path2Uri($path);
 	}
 	/**
+	 * Takes a link url from, for example, an anchor and change it into
+	 * something cleaner, adding an absolute prefix and, if possible,
+	 * converting it into a format for routes analysis.
+	 * 
+	 * @param string $link Link to check and transform.
+	 * @return string Returns a well formated url.
+	 */
+	public function link($link) {
+		$out = Sanitizer::UriPath($link);
+
+		if($link == "") {
+			$out = ROOTURI;
+		} elseif(preg_match('/^\?/', $link)) {
+			$out = ROOTURI.$link;
+		}
+
+		$out = RoutesManager::Instance()->enroute($out);
+
+		return $out;
+	}
+	/**
 	 * It takes an snippet name an returns its rendered result.
 	 * 
 	 * @param string $snippetName Name of the snippet to render.

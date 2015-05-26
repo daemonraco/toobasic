@@ -171,9 +171,7 @@ if(is_readable($localConfig)) {
 $Defaults[GC_DEFAULTS_FORMATS]["basic"] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
 //
 // Routes
-if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($_REQUEST["route"])) {
-	\TooBasic\RoutesManager::Instance()->load();
-}
+\TooBasic\RoutesManager::Instance()->load();
 //
 //
 $ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults["action"];
