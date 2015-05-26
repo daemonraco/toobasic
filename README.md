@@ -1,4 +1,4 @@
-# TooBasic 0.2.0
+# TooBasic 0.3.0
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 
@@ -18,6 +18,7 @@ __TooBasic__ provide some sort of solution to features like:
 	* __Crons__: Something like tools but restricted to cron-type executions.
 * __Cache__: It already has a simple way to cache controller result avoiding its logic on a second request (visit [Cache](docs/cache.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by representation (visit [Databases](docs/databases.md)).
+* __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a few you may need to know.

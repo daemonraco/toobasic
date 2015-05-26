@@ -25,6 +25,7 @@ class RoutesManager extends Manager {
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
 			$newPath = array();
 			$url = parse_url($path);
+
 			$url['query'] = isset($url['query']) ? explode('&', $url['query']) : array();
 			foreach($url['query'] as $key => $value) {
 				unset($url['query'][$key]);
@@ -38,7 +39,7 @@ class RoutesManager extends Manager {
 			}
 
 			$matchingRoute = false;
-			if(isset($url['query']['action'])) {
+			if(!isset($url["host"]) && isset($url['query']['action'])) {
 				foreach($this->routes() as $route) {
 					if($route->action == $url['query']['action']) {
 						$matchingRoute = $route;
@@ -50,28 +51,35 @@ class RoutesManager extends Manager {
 			if($matchingRoute) {
 				unset($url['query']['action']);
 
+				$wrong = false;
 				foreach($matchingRoute->pattern as $piece) {
 					if($piece->type == self::PatternTypeLiteral) {
 						$newPath[] = $piece->name;
 					} elseif($piece->type == self::PatternTypeParameter) {
 						if(isset($url['query'][$piece->name])) {
 							$newPath[] = $url['query'][$piece->name];
-//@TODO
-//						switch($piece->valueType) {
-//							case self::ValueTypeInteger:
-//								$settings[$piece->name] = $settings[$piece->name] + 0;
-//								$matches = is_integer($settings[$piece->name]);
-//								break;
-//							case self::ValueTypeString:
-//								$matches = is_string($settings[$piece->name]);
-//								break;
-//						}
+
+							switch($piece->valueType) {
+								case self::ValueTypeInteger:
+									$wrong = !is_integer($url['query'][$piece->name]);
+									break;
+								case self::ValueTypeString:
+									$wrong = !is_string($url['query'][$piece->name]);
+									break;
+							}
+
 							unset($url['query'][$piece->name]);
 						} else {
-							$matchingRoute = false;
-							break;
+							$wrong = true;
 						}
 					}
+					if($wrong) {
+						break;
+					}
+				}
+
+				if($wrong) {
+					$matchingRoute = false;
 				}
 			}
 

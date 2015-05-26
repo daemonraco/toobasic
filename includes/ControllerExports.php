@@ -91,8 +91,8 @@ class ControllerExports {
 	 * @param string $link Link to check and transform.
 	 * @return string Returns a well formated url.
 	 */
-	public function link($link) {
-		$out = Sanitizer::UriPath($link);
+	public function link($link = '') {
+		$out = $link;
 
 		if($link == "") {
 			$out = ROOTURI;
