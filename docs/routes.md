@@ -17,11 +17,12 @@ _Routes_ allows you to use it in cleaner way like this:
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
 
 ## Before we start
-Hold your horses! Before we start there are a bunch of things you need to check to
-be sure you can use routes.
+Hold your horses!
+Before we start there are a bunch of things you need to check to be sure you can
+use routes.
 
 ### mod_rewrite
-Check you _Apache_ configuration (here we suppose you're using
+Check your _Apache_ configuration (here we suppose you're using
 [_Apache_](http://httpd.apache.org/)) and make sure you are loading the module
 __mod_rewrite__.
 If your are not sure how to check that, write a simple php file in your site
@@ -95,7 +96,7 @@ a product.
 * `id`: The id of a product to display.
 * `view_mode`: The way a product has to be displayed.
 
-Based on this, we may want to transform this url in something simpler something
+Based on this, we may want to transform this url into something simpler, something
 like our example:
 
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
@@ -122,7 +123,7 @@ __ROOTDIR/site/configs/routes.json__ with something like this:
 }
 ```
 
-Now, what the heck is going on here.
+Now, what the heck is going on here?
 First thing you need to know is that every route specification has two important
 parameters __route__ and __action__, in other words, the way the url looks like
 and the action/controller that is going to take care of it.
@@ -133,7 +134,7 @@ __view_mode__ with the value _clean_.
 
 ## Route Analysis
 Ok, we've seen how to configure a route, but, how does the __route__ pattern work?
-Well the first thing you need to now is that __TooBasic__ splits this value on
+Well the first thing you need to know is that __TooBasic__ splits this value on
 each slash (`/`) and checks each piece against the current url, also split in the
 same manner.
 
@@ -141,7 +142,7 @@ First two pieces, `product` and `cleaned` are considered to be _literal_ which
 means they must be exact matches.
 The third piece is a little more tricky and it's considered a _parameter_.
 
-Now, a _parameter_ is not a piece of url it has to be check, in fact is a piece
+Now, a _parameter_ is not a piece of url that has to be check, in fact is a piece
 that has to be transformed into a url query's parameter.
 In our example, when we say `:id:` we are saying the piece is a parameter (that's
 the meaning of those colons) and it's name will be __id__.
