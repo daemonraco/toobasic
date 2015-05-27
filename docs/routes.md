@@ -111,15 +111,11 @@ To achieve this we are going to write a file at
 __ROOTDIR/site/configs/routes.json__ with something like this:
 ```json
 {
-    "routes": [
-        {
-            "route": "product/cleaned/:id:int",
-            "action": "product",
-            "params": {
-                "view_mode": "clean"
-            }
-        }
-    ]
+    "routes": [{
+        "route": "product/cleaned/:id:int",
+        "action": "product",
+        "params": {"view_mode": "clean"}
+    }]
 }
 ```
 
@@ -154,7 +150,46 @@ When validating parameters types, you may use this:
 
 * `string` or `str`: for string values.
 * `integer` or `int`: for numeric values.
+* `enum`: validation against a list of possible values.
 * nothing: for no validation.
+
+### Let's write a few more
+Let's use the things we've said and write something like this:
+```json
+{
+    "routes": [{
+        "route": "product/cleaned/:id:int",
+        "action": "product",
+        "params": {"view_mode": "clean"}
+    },{
+        "route": "product/:view_mode:enum:clean,compact,full/:id:int",
+        "action": "product",
+        "params": {"view_mode": "clean"}
+    },{
+        "route": "product/:id:int",
+        "action": "product",
+        "params": {"view_mode": "clean"}
+    },{
+        "route": "product",
+        "action": "products"
+    },{
+        "route": "products",
+        "action": "products"
+    }]
+}
+```
+Here is a bunch of valid url for these routes:
+>http://www.myhost.com/mysite/product/cleaned/204578?expand=description
+
+>http://www.myhost.com/mysite/product/clean/204578?expand=description
+
+>http://www.myhost.com/mysite/product/full/204578
+
+>http://www.myhost.com/mysite/product/compact/204578
+
+>http://www.myhost.com/mysite/product
+
+>http://www.myhost.com/mysite/products
 
 ## Url issues
 All this may look interesting, clean and fun, but there are a few aspects that can

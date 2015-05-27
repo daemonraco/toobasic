@@ -9,6 +9,7 @@
 		"debugdbemulation": "Generates every DDL and DML query to upgrade the database and displays them, but runs nothing.",
 		"debugdbstructure": "Displays parsed full database specification.",
 		"debugdbupgrade": "Displays every DDL and DML query it runs during database upgraded.",
-		"debugmemcache": "Prompts in HTML comments cache keys used by memcache."
+		"debugmemcache": "Prompts in HTML comments cache keys used by memcache.",
+		"debugroutes": "List current routes configuration."
 	}
 }

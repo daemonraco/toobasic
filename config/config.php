@@ -172,6 +172,11 @@ $Defaults[GC_DEFAULTS_FORMATS]["basic"] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
 //
 // Routes
 \TooBasic\RoutesManager::Instance()->load();
+if(isset($_REQUEST['debugroutes'])) {
+	//
+	// This is here to avoid wrong debug prompting.
+	\TooBasic\RoutesManager::Instance()->routes();
+}
 //
 //
 $ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults["action"];

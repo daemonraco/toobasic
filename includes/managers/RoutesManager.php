@@ -10,11 +10,12 @@ class RoutesManager extends Manager {
 	// Constants.
 	const PatternTypeLiteral = 'L';
 	const PatternTypeParameter = 'P';
+	const ValueTypeEnumerative = 'enum';
 	const ValueTypeInteger = 'integer';
 	const ValueTypeString = 'string';
 	//
 	// Protected properties.
-	protected $_routes = array();
+	protected $_routes = false;
 	//
 	// Public methods.
 	public function enroute($path) {
@@ -23,6 +24,8 @@ class RoutesManager extends Manager {
 		global $Defaults;
 
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			$this->parseConfigs();
+
 			$newPath = array();
 			$url = parse_url($path);
 
@@ -61,10 +64,13 @@ class RoutesManager extends Manager {
 
 							switch($piece->valueType) {
 								case self::ValueTypeInteger:
-									$wrong = !is_integer($url['query'][$piece->name]);
+									$wrong = !is_numeric($url['query'][$piece->name]);
 									break;
 								case self::ValueTypeString:
 									$wrong = !is_string($url['query'][$piece->name]);
+									break;
+								case self::ValueTypeEnumerative:
+									$wrong = !in_array($url['query'][$piece->name], $piece->values);
 									break;
 							}
 
@@ -73,6 +79,7 @@ class RoutesManager extends Manager {
 							$wrong = true;
 						}
 					}
+
 					if($wrong) {
 						break;
 					}
@@ -101,6 +108,8 @@ class RoutesManager extends Manager {
 		global $Defaults;
 
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($_REQUEST["route"])) {
+			$this->parseConfigs();
+
 			$path = explode('/', $_REQUEST['route']);
 
 			$matches = false;
@@ -123,10 +132,13 @@ class RoutesManager extends Manager {
 						switch($route->pattern[$i]->valueType) {
 							case self::ValueTypeInteger:
 								$settings[$route->pattern[$i]->name] = $settings[$route->pattern[$i]->name] + 0;
-								$matches = is_integer($settings[$route->pattern[$i]->name]);
+								$matches = is_numeric($settings[$route->pattern[$i]->name]);
 								break;
 							case self::ValueTypeString:
 								$matches = is_string($settings[$route->pattern[$i]->name]);
+								break;
+							case self::ValueTypeEnumerative:
+								$matches = in_array($path[$i], $route->pattern[$i]->values);
 								break;
 						}
 					} else {
@@ -157,12 +169,14 @@ class RoutesManager extends Manager {
 				}
 
 				$_GET['action'] = $_REQUEST['action'] = $matchingRoute->action;
+				$_SERVER['TOOBASIC_ROUTE'] = $matchingRoute->route;
 			} else {
-				$_GET['action'] = $_REQUEST['action'] = '404';
+				$_GET['action'] = $_REQUEST['action'] = HTTPERROR_NOT_FOUND;
 			}
 		}
 	}
 	public function routes() {
+		$this->parseConfigs();
 		return $this->_routes;
 	}
 	//
@@ -172,7 +186,7 @@ class RoutesManager extends Manager {
 
 		foreach(explode('/', $route->route) as $piece) {
 			$patPiece = new \stdClass();
-			if(preg_match('/:(?<pname>.+):(?<vtype>.*)/', $piece, $matches)) {
+			if(preg_match('/:(?<pname>[^:]*):(?<vtype>[^:]*)(:(?<vtypedata>.*)|)/', $piece, $matches)) {
 				$patPiece->type = self::PatternTypeParameter;
 				$patPiece->name = $matches['pname'];
 				switch($matches['vtype']) {
@@ -183,6 +197,13 @@ class RoutesManager extends Manager {
 					case 'str':
 					case 'string':
 						$patPiece->valueType = self::ValueTypeString;
+						break;
+					case 'enum':
+						$vdata = isset($matches['vtypedata']) ? explode(',', $matches['vtypedata']) : array();
+						if($vdata) {
+							$patPiece->valueType = self::ValueTypeEnumerative;
+							$patPiece->values = $vdata;
+						}
 						break;
 					default:
 						$patPiece->valueType = false;
@@ -196,8 +217,54 @@ class RoutesManager extends Manager {
 
 		$route->pattern = $pattern;
 	}
-	protected function init() {
-		$this->parseConfigs();
+	protected function debugRoutes() {
+		echo "<pre style=\"border:dashed gray 1px;width:100%;padding:5px;\">\nRoutes:\n";
+		foreach($this->routes() as $route) {
+			echo "- '{$route->route}':\n";
+			echo "\tAction: '{$route->action}'\n";
+
+			echo "\tPieces:\n";
+			$i = 0;
+			foreach($route->pattern as $pat) {
+				$i++;
+				echo "\t\t[{$i}] '{$pat->name}'";
+				switch($pat->type) {
+					case self::PatternTypeParameter:
+						echo "[parameter]";
+						switch($pat->valueType) {
+							case self::ValueTypeInteger:
+								echo ' (must be numeric)';
+								break;
+							case self::ValueTypeString:
+								echo ' (must be a string)';
+								break;
+							case self::ValueTypeEnumerative:
+								echo "\n\t\t\tMust be one of these:";
+								foreach($pat->values as $val) {
+									echo "\n\t\t\t\t- '{$val}'";
+								}
+								break;
+						}
+						break;
+					case self::PatternTypeLiteral:
+					default:
+						echo "[literal] (must be an exact match)";
+						break;
+				}
+				echo "\n";
+			}
+
+			if($route->params) {
+				echo "\tForced Url Parameters:\n";
+				foreach($route->params as $key => $value) {
+					echo "\t\t'{$key}': '{$value}'\n";
+				}
+			}
+
+			echo "\n";
+		}
+		echo "</pre>\n";
+		die;
 	}
 	protected function parseConfig($path) {
 		$json = json_decode(file_get_contents($path));
@@ -214,11 +281,23 @@ class RoutesManager extends Manager {
 		}
 	}
 	protected function parseConfigs() {
-		global $Defaults;
+		if($this->_routes === false) {
+			$this->_routes = array();
 
-		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
-			foreach(Paths::Instance()->routesPaths() as $path) {
-				$this->parseConfig($path);
+			global $Defaults;
+
+			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+				foreach(Paths::Instance()->routesPaths() as $path) {
+					$this->parseConfig($path);
+				}
+
+				if(isset($_REQUEST['debugroutes'])) {
+					$this->debugRoutes();
+				}
+			} else {
+				if(isset($_REQUEST['debugroutes'])) {
+					debugit("Routes are disabled", true);
+				}
 			}
 		}
 	}
