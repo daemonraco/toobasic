@@ -122,7 +122,7 @@ class RoutesManager extends Manager {
 
 				$len = count($route->pattern);
 				for($i = 0; $i < $len && $matches; $i++) {
-					if(!strlen($path[$i])) {
+					if(!isset($path[$i]) || !strlen($path[$i])) {
 						$matches = false;
 					} elseif($route->pattern[$i]->type == self::PatternTypeLiteral) {
 						$matches = $route->pattern[$i]->name == $path[$i];

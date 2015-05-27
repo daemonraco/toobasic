@@ -153,6 +153,7 @@ After all we said you should visit this documentation pages:
 * [Services](docs/services.md)
 * [Shell Tools](docs/shelltools.md)
 * [MagicProp](docs/magicprop.md)
+* [Routes](docs/routes.md)
 
 # Thanks
 ## Smarty

@@ -300,12 +300,10 @@ Your browser may end up receiving something like this:
 ... Supposing you have this route too:
 ```json
 {
-    "routes": [
-        {
-            "route": "product/:id:int",
-            "action": "product"
-        }
-    ]
+    "routes": [{
+        "route": "product/:id:int",
+        "action": "product"
+    }]
 }
 ```
 
