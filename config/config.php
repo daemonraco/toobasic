@@ -1,5 +1,9 @@
 <?php
 
+//
+// First thing to do is to start a PHP session.
+session_start();
+
 use \TooBasic\Sanitizer as TB_Sanitizer;
 use \TooBasic\Paths as TB_Paths;
 
@@ -181,8 +185,8 @@ if(isset($_REQUEST['debugroutes'])) {
 }
 //
 //
-$ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults['action'];
-$LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults['layout'];
+$ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults[GC_DEFAULTS_ACTION];
+$LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults[GC_DEFAULTS_LAYOUT];
 $ServiceName = isset($_REQUEST[GC_REQUEST_SERVICE]) ? $_REQUEST[GC_REQUEST_SERVICE] : false;
 $ModeName = isset($_REQUEST[GC_REQUEST_MODE]) ? $_REQUEST[GC_REQUEST_MODE] : false;
-$SkinName = isset($_REQUEST[GC_REQUEST_SKIN]) ? $_REQUEST[GC_REQUEST_SKIN] : $Defaults[GC_DEFAULTS_SKIN];
+$SkinName = isset($_REQUEST[GC_REQUEST_SKIN]) ? $_REQUEST[GC_REQUEST_SKIN] : (isset($_SESSION[GC_SESSION_SKIN]) ? $_SESSION[GC_SESSION_SKIN] : $Defaults[GC_DEFAULTS_SKIN]);

@@ -98,6 +98,10 @@ define('GC_CRONPROFILES_TOOL', 'tool');
 define('GC_CRONPROFILES_PARAMS', 'params');
 // @}
 //
+// Session parameters @{
+define('GC_SESSION_SKIN', 'toobasic-skin');
+// @}
+//
 // Request parameters @{
 define('GC_REQUEST_ACTION', 'action');
 define('GC_REQUEST_LAYOUT', 'layout');
