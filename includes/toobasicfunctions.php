@@ -26,3 +26,10 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 
 	return $destination;
 }
+function setSessionSkin($name) {
+	if($name) {
+		$_SESSION[GC_SESSION_SKIN] = $name;
+	} elseif(isset($_SESSION[GC_SESSION_SKIN])) {
+		unset($_SESSION[GC_SESSION_SKIN]);
+	}
+}

@@ -190,3 +190,14 @@ $LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT]
 $ServiceName = isset($_REQUEST[GC_REQUEST_SERVICE]) ? $_REQUEST[GC_REQUEST_SERVICE] : false;
 $ModeName = isset($_REQUEST[GC_REQUEST_MODE]) ? $_REQUEST[GC_REQUEST_MODE] : false;
 $SkinName = isset($_REQUEST[GC_REQUEST_SKIN]) ? $_REQUEST[GC_REQUEST_SKIN] : (isset($_SESSION[GC_SESSION_SKIN]) ? $_SESSION[GC_SESSION_SKIN] : $Defaults[GC_DEFAULTS_SKIN]);
+//
+// Skin debugs.
+if(isset($_REQUEST['debugskin'])) {
+	echo "<pre style=\"border:dashed gray 1px;width:100%;padding:5px;\">\n";
+	echo "Current Skin: '{$SkinName}'\n\n";
+	echo 'Default Skin: '.($Defaults[GC_DEFAULTS_SKIN] ? "'{$Defaults[GC_DEFAULTS_SKIN]}'" : 'Not set')."\n";
+	echo 'Session Skin: '.(isset($_SESSION[GC_SESSION_SKIN]) ? "'{$_SESSION[GC_SESSION_SKIN]}'" : 'Not set')."\n";
+	echo 'URL Skin:     '.(isset($_REQUEST[GC_REQUEST_SKIN]) ? "'{$_REQUEST[GC_REQUEST_SKIN]}'" : 'Not set')."\n";
+	echo '</pre>';
+	die;
+}
