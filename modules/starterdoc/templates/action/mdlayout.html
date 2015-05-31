@@ -1,18 +1,45 @@
 <!DOCTYPE html>
 <html>
-	<title>{$title}</title>
-	<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
+	<head>
+		<title>{$title}</title>
+		<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
+	</head>
+	<body>
+		<div class="pull-right">
+			<label>
+				Skin:
+				<select id="SelectSkin" class="form-control input-sm">
+{foreach from=$skins item=skin}
+					<option value="{$skin.value}"{if $skin.current} selected="selected"{/if}>{$skin.value}</option>
+{/foreach}
+				</select>
+			</label>
+		</div>
 
-	<xmp theme="united" style="display:none;">
+		{$ctrl->snippet('xmp_opentag')}
 %TOO_BASIC_ACTION_CONTENT%
-	</xmp>
+		</xmp>
 
-	<script type="text/javascript">
-		var MD_DOC_URI = "{$mdDocUri}";
-	</script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript" src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-	<script type="text/javascript" src="{$ctrl->js('starterdoc_mdfix')}"></script>
+		<script type="text/javascript">
+			var MD_DOC_URI = "{$mdDocUri}";
+
+			$('#SelectSkin').on('change', function(){
+				$.post(
+					'?service=setcurrentskin',
+					{
+						setskin: $('#SelectSkin').val()
+					},
+					function(data) {
+						location.reload();
+					}
+				);
+			});
+		</script>
+
+		<script type="text/javascript" src="{$ctrl->js('starterdoc_mdfix')}"></script>
+	</body>
 </html>

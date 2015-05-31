@@ -27,6 +27,7 @@ define('GC_DEFAULTS_VIEW_ADAPTER', 'view-adapter');
 define('GC_DEFAULTS_FORMATS', 'formats');
 define('GC_DEFAULTS_MODES', 'modes');
 define('GC_DEFAULTS_SKIN', 'skin');
+define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
 // @}
 //
 // Directories @{

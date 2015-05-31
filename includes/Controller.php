@@ -128,7 +128,7 @@ abstract class Controller extends Exporter {
 			}
 		}
 
-		return (string)$output;
+		return (string) $output;
 	}
 	/**
 	 * This is the main method that trigger the real excution and rendering
@@ -252,5 +252,15 @@ abstract class Controller extends Exporter {
 		//
 		// Controllers exported methods.
 		$this->assign("ctrl", new ControllerExports($this));
+	}
+	protected function cachePrefix($extra = "") {
+		global $SkinName;
+
+		$skinPrefix = '';
+		if($SkinName) {
+			$skinPrefix = "_sk_{$SkinName}";
+		}
+
+		return parent::cachePrefix($extra).$skinPrefix;
 	}
 }
