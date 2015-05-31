@@ -47,7 +47,7 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 
 	return $destination;
 }
-function setSessionSkin($name) {
+function setSessionSkin($name = false) {
 	global $Defaults;
 
 	$sessionKey = GC_SESSION_SKIN.($Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] ? "-{$Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX]}" : '');
