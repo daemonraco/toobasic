@@ -8,7 +8,8 @@ explain it for us and follow these links:
 * [Semantic URL](http://en.wikipedia.org/wiki/Semantic_URL)
 * [Rewrite Engine](http://en.wikipedia.org/wiki/Rewrite_engine)
 
-Perhaps too much to read and not that much understanding, well let's say you have this complex and ugly url here:
+Perhaps too much to read and not that much understanding, well let's say you have
+this complex and ugly url here:
 
 >http://www.myhost.com/mysite/?action=product&id=204578&view_mode=clean&expand=description
 

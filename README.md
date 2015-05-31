@@ -6,7 +6,8 @@
 Well __TooBasic__ is a too basic php framework with some basic features, in other
 words, a micro-framework.
 Its main reason for existence is to provide a simple and quick framework in which
-you can start right away building your site while __TooBasic__ takes care of some common stuff.
+you can start right away building your site while __TooBasic__ takes care of some
+common stuff.
 
 ## Why would I use this at all?
 Well, there's no real reason, you'll probably find much better solutions in the
@@ -27,7 +28,8 @@ logic on a second request (visit [Cache](docs/cache.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by
 representation (visit [Databases](docs/databases.md)).
 * __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
-* __Skins__: Provide different ways of displaying your sites (visit [Skins](docs/skins.md)).
+* __Skins__: Provide different ways of displaying your sites (visit
+[Skins](docs/skins.md)).
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a
