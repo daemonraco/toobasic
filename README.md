@@ -27,6 +27,7 @@ logic on a second request (visit [Cache](docs/cache.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by
 representation (visit [Databases](docs/databases.md)).
 * __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
+* __Skins__: Provide different ways of displaying your sites (visit [Skins](docs/skins.md)).
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a
