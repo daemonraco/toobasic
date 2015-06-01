@@ -11,6 +11,8 @@
 		"debugdbupgrade": "Displays every DDL and DML query it runs during database upgraded.",
 		"debugmemcache": "Prompts in HTML comments cache keys used by memcache.",
 		"debugroutes": "List current routes configuration.",
-		"debugskin": "Prompts current skin selection."
+		"debugskin": "Prompts current skin selection.",
+		"debugphpinfo": "Prompts PHP information, in other words 'phpinfo()'.",
+		"debugdb": "Prompts used database connections' information."
 	}
 }

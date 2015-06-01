@@ -9,7 +9,7 @@ class DBAdapter extends Adapter {
 	// Protected properties.
 	protected $_engine = false;
 	protected $_dblink = false;
-	protected $_prefix = "";
+	protected $_prefix = '';
 	//
 	// Magic methods.
 	public function __construct($dbname) {
@@ -22,6 +22,18 @@ class DBAdapter extends Adapter {
 		self::SanitizeConnectionSpec($dbname);
 		if(isset($Connections[GC_CONNECTIONS_DB][$dbname])) {
 			$connString = $this->getConnectionString($dbname);
+			if(isset(Params::Instance()->debugdb)) {
+				echo "<pre style=\"border:dashed gray 1px;width:100%;padding:5px;\">\n";
+				echo "DB connection: {$dbname} [{$this->engine()}]\n\n";
+				echo "DB connection data:\n";
+				echo "        Connection string: '{$connString}'\n";
+				foreach($Connections[GC_CONNECTIONS_DB][$dbname] as $key => $value) {
+					if($key != GC_CONNECTIONS_DB_PASSWORD && $value) {
+						echo "        {$key}: '{$value}'\n";
+					}
+				}
+				echo '</pre>';
+			}
 			//
 			// Attempting to connect.
 			try {
@@ -43,6 +55,9 @@ class DBAdapter extends Adapter {
 	// Public methods.
 	public function connected() {
 		return boolval($this->_dblink);
+	}
+	public function engine() {
+		return $this->_engine;
 	}
 	/**
 	 * This method is similar than 'query()', but it uses the method
@@ -80,7 +95,7 @@ class DBAdapter extends Adapter {
 				$info = $this->_dblink->errorInfo();
 				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
 			} else {
-				trigger_error(__CLASS__.": Not connected", E_USER_ERROR);
+				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
 			}
 		}
 		//
@@ -169,7 +184,7 @@ class DBAdapter extends Adapter {
 				$info = $this->_dblink->errorInfo();
 				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
 			} else {
-				trigger_error(__CLASS__.": Not connected", E_USER_ERROR);
+				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
 			}
 		}
 		//
@@ -197,17 +212,30 @@ class DBAdapter extends Adapter {
 	//
 	// Protected methods.
 	protected function getConnectionString($dbname) {
-		$out = "";
+		$out = '';
 
 		global $Connections;
 
 		if(isset($Connections[GC_CONNECTIONS_DB][$dbname])) {
 			$connData = &$Connections[GC_CONNECTIONS_DB][$dbname];
-			$out = $connData[GC_CONNECTIONS_DB_ENGINE];
-			$out.= ":host={$connData[GC_CONNECTIONS_DB_SERVER]}";
-			$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
 
 			$this->_engine = $connData[GC_CONNECTIONS_DB_ENGINE];
+
+			switch($this->engine()) {
+				case 'sqlite':
+					$connData[GC_CONNECTIONS_DB_USERNAME] = false;
+					$connData[GC_CONNECTIONS_DB_PASSWORD] = false;
+
+					$out = $connData[GC_CONNECTIONS_DB_ENGINE];
+					$out.= ":{$connData[GC_CONNECTIONS_DB_SERVER]}";
+					$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
+					break;
+				case 'mysql':
+				default:
+					$out = $connData[GC_CONNECTIONS_DB_ENGINE];
+					$out.= ":host={$connData[GC_CONNECTIONS_DB_SERVER]}";
+					$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
+			}
 		} else {
 			$this->_engine = false;
 		}
@@ -226,7 +254,7 @@ class DBAdapter extends Adapter {
 				$connData[GC_CONNECTIONS_DB_PORT] = false;
 			}
 			if(!isset($connData[GC_CONNECTIONS_DB_PREFIX]) || !$connData[GC_CONNECTIONS_DB_PREFIX]) {
-				$connData[GC_CONNECTIONS_DB_PREFIX] = "";
+				$connData[GC_CONNECTIONS_DB_PREFIX] = '';
 			}
 			if(!isset($connData[GC_CONNECTIONS_DB_SID]) || !$connData[GC_CONNECTIONS_DB_SID]) {
 				$connData[GC_CONNECTIONS_DB_SID] = false;
