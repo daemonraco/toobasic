@@ -1,71 +1,72 @@
 <?php
 
 spl_autoload_register(function($class) {
-	$classExpanded = explode("\\", $class);
+	$classExpanded = explode('\\', $class);
 	$class = array_pop($classExpanded);
-	$namespace = implode("\\", $classExpanded);
+	$namespace = implode('\\', $classExpanded);
 
-	if($namespace == "TooBasic") {
+	if($namespace == 'TooBasic') {
 		global $Directories;
 
 		$path = false;
 
 		static $basicIncludes = array(
-			"Adapter",
-			"Controller",
-			"ControllerExports",
-			"ErrorController",
-			"Exporter",
-			"Layout",
-			"MagicProp",
-			"Model",
-			"ModelsFactory",
-			"Params",
-			"ParamsStack",
-			"Paths",
-			"Service",
-			"Singleton",
-			"Timer",
-			"Translate"
+			'Adapter',
+			'Controller',
+			'ControllerExports',
+			'ErrorController',
+			'Exporter',
+			'Layout',
+			'MagicProp',
+			'Model',
+			'ModelsFactory',
+			'Params',
+			'ParamsStack',
+			'Paths',
+			'Service',
+			'Singleton',
+			'Timer',
+			'Translate'
 		);
 		static $managersIncludes = array(
-			"ActionsManager",
-			"DBManager",
-			"DBStructureManager",
-			"Manager",
-			"RoutesManager",
-			"ServicesManager",
-			"ShellManager",
-			"UrlManager"
+			'ActionsManager',
+			'DBManager',
+			'DBStructureManager',
+			'Manager',
+			'RoutesManager',
+			'ServicesManager',
+			'ShellManager',
+			'UrlManager'
 		);
 		static $cacheAdapters = array(
-			"CacheAdapter",
-			"CacheAdapterDB",
-			"CacheAdapterDBMySQL",
-			"CacheAdapterFile",
-			"CacheAdapterMemcache",
-			"CacheAdapterMemcached",
-			"CacheAdapterNoCache"
+			'CacheAdapter',
+			'CacheAdapterDB',
+			'CacheAdapterDBMySQL',
+			'CacheAdapterFile',
+			'CacheAdapterMemcache',
+			'CacheAdapterMemcached',
+			'CacheAdapterNoCache'
 		);
 		static $dbAdapters = array(
-			"DBAdapter",
-			"DBSpecAdapter",
-			"DBSpecAdapterMySQL"
+			'DBAdapter',
+			'DBSpecAdapter',
+			'DBSpecAdapterMySQL',
+			'DBSpecAdapterSQLite'
 		);
 		static $viewAdapters = array(
-			"ViewAdapter",
-			"ViewAdapterBasic",
-			"ViewAdapterDump",
-			"ViewAdapterJSON",
-			"ViewAdapterPrint",
-			"ViewAdapterSerialize",
-			"ViewAdapterSmarty",
-			"ViewAdapterXML"
+			'ViewAdapter',
+			'ViewAdapterBasic',
+			'ViewAdapterDump',
+			'ViewAdapterJSON',
+			'ViewAdapterPrint',
+			'ViewAdapterSerialize',
+			'ViewAdapterSmarty',
+			'ViewAdapterXML'
 		);
 		static $representations = array(
-			"ItemRepresentation",
-			"ItemsFactory",
-			"ItemsFactoryProvider"
+			'ItemRepresentation',
+			'ItemsFactory',
+			'ItemsFactoryProvider'
 		);
 
 		if(!$path) {
@@ -113,21 +114,21 @@ spl_autoload_register(function($class) {
 //
 // Shell includes
 spl_autoload_register(function($class) {
-	$classExpanded = explode("\\", $class);
+	$classExpanded = explode('\\', $class);
 	$class = array_pop($classExpanded);
-	$namespace = implode("\\", $classExpanded);
+	$namespace = implode('\\', $classExpanded);
 
-	if($namespace == "TooBasic\Shell") {
+	if($namespace == 'TooBasic\\Shell') {
 		$path = false;
 
 		global $Directories;
 
 		static $basicIncludes = array(
-			"Color",
-			"Option",
-			"Options",
-			"ShellCron",
-			"ShellTool"
+			'Color',
+			'Option',
+			'Options',
+			'ShellCron',
+			'ShellTool'
 		);
 
 		if(!$path) {

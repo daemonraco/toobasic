@@ -452,7 +452,9 @@ class DBStructureManager extends Manager {
 		if(!isset($this->_specs->data)) {
 			$this->_specs->data = array();
 		}
+
 		global $Connections;
+
 		foreach($data as $datum) {
 			$aux = self::CopyAndEnforce(array("table", "connection", "checkfields", "entries"), $datum, new \stdClass());
 

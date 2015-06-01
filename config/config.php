@@ -100,7 +100,8 @@ $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = fa
 $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
 $Database[GC_DATABASE_DB_ADAPTERS] = array(
-	'mysql' => '\TooBasic\DBSpecAdapterMySQL'
+	'mysql' => '\TooBasic\DBSpecAdapterMySQL',
+	'sqlite' => '\TooBasic\DBSpecAdapterSQLite'
 );
 //
 // Directory configurations.
