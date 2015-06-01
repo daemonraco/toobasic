@@ -1,0 +1,44 @@
+		<hr/>
+		<footer class="container well well-sm">
+			<div class="SkinSelector ">
+				<label>
+					Current skin:
+					<select id="SelectSkin" class="form-control input-sm">
+{foreach from=$skins item=skin}
+						<option value="{$skin.value}"{if $skin.current} selected="selected"{/if}>{$skin.value}</option>
+{/foreach}
+					</select>
+				</label>
+			</div>
+			<ul class="Sponsors">
+				<li>
+					<a href="http://www.daemonraco.com/" target="_blank">
+						<img src="{$ctrl->img('daemonraco-logo')}" alt="DAEMonRaco"/>
+					</a>
+				</li>
+				<li>
+					<a href="http://php.net/" target="_blank">
+						<img src="{$ctrl->img('php-logo')}" alt="PHP"/>
+					</a>
+				</li>
+				<li>
+					<a href="http://www.smarty.net/" target="_blank">
+						<img src="{$ctrl->img('smarty-80x15')}" alt="Smarty"/>
+					</a>
+				</li>
+				<li>
+					<a href="https://github.com/" target="_blank">
+						<img src="{$ctrl->img('github-80x15')}" alt="Github"/>
+					</a>
+				</li>
+			</ul>
+		</footer>
+		<script type="text/javascript">
+			$('#SelectSkin').on('change', function() {
+				$.post('?service=setcurrentskin', {
+					setskin: $('#SelectSkin').val()
+				}, function(data) {
+					location.reload();
+				});
+			});
+		</script>
