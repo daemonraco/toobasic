@@ -22,6 +22,11 @@ abstract class Adapter {
 		
 	}
 	//
+	// Protected mehtods.
+	protected function init() {
+		
+	}
+	//
 	// Public class mehtods.
 	/**
 	 * Returns an adapter based on its name.
@@ -34,6 +39,7 @@ abstract class Adapter {
 
 		if(!isset(self::$_Adapters[$adapterName])) {
 			self::$_Adapters[$adapterName] = new $adapterName();
+			self::$_Adapters[$adapterName]->init();
 			$out = self::$_Adapters[$adapterName];
 		} else {
 			$out = self::$_Adapters[$adapterName];

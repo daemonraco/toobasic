@@ -4,8 +4,6 @@ namespace TooBasic;
 
 class CacheAdapterMemcache extends CacheAdapter {
 	//
-	// Constants.
-	//
 	// Protected properties.
 	protected $_conn = false;
 	protected $_compress = false;
@@ -38,7 +36,7 @@ class CacheAdapterMemcache extends CacheAdapter {
 			echo "<!-- memcached delete: {$fullKey} [NOT FOUND]-->\n";
 		}
 	}
-	public function get($prefix, $key) {
+	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
 		$data = null;
 		$fullKey = $this->fullKey($prefix, $key);
 
@@ -59,10 +57,10 @@ class CacheAdapterMemcache extends CacheAdapter {
 
 		return $data;
 	}
-	public function save($prefix, $key, $data) {
+	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
 		$fullKey = $this->fullKey($prefix, $key);
 		$this->_conn->delete($fullKey);
-		$this->_conn->set($fullKey, serialize($data), $this->_compress, time() + $this->_expirationLength);
+		$this->_conn->set($fullKey, serialize($data), $this->_compress, time() + $this->expirationLength($delay));
 
 		if(isset(Params::Instance()->get->debugmemcache)) {
 			echo "<!-- memcached set: {$fullKey} -->\n";

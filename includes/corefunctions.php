@@ -1,5 +1,8 @@
 <?php
 
+//
+// Defining function 'get_called_class()' in case the current PHP version doesn't
+// have it.
 if(!function_exists("get_called_class")) {
 	function get_called_class() {
 		$bt = debug_backtrace();
@@ -15,9 +18,22 @@ if(!function_exists("get_called_class")) {
 		return $matches[1];
 	}
 }
+/**
+ * Prompt an object in a pretty way and adding some useful info like where it is
+ * being called from.
+ * 
+ * @param type $data Object to be prompt.
+ * @param type $final When true, abort the execution after prompting.
+ * @param type $specific Uses 'var_dump()' instead of 'print_r()'.
+ * @param type $name Adds a title to the seccion where the object is prompted.
+ * @param type $showTrace Adds callback trace.
+ */
 function debugit($data, $final = false, $specific = false, $name = null, $showTrace = false) {
+	//
+	// Storing data displayed in a buffer for post processing.
 	ob_start();
-
+	//
+	// 
 	if($specific) {
 		var_dump($data);
 	} else {

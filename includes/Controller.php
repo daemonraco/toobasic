@@ -161,7 +161,7 @@ abstract class Controller extends Exporter {
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.
 			if($this->_cached) {
-				$this->_lastRun = $this->cache->get($prefixComputing, $key);
+				$this->_lastRun = $this->cache->get($prefixComputing, $key, $this->_cached);
 			} else {
 				$this->_lastRun = false;
 			}
@@ -191,7 +191,7 @@ abstract class Controller extends Exporter {
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
-					$this->cache->save($prefixComputing, $key, $this->_lastRun);
+					$this->cache->save($prefixComputing, $key, $this->_lastRun, $this->_cached);
 				}
 			}
 		}
@@ -206,7 +206,7 @@ abstract class Controller extends Exporter {
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.
 			if($this->_cached) {
-				$dataBlock = $this->cache->get($prefixRender, $key);
+				$dataBlock = $this->cache->get($prefixRender, $key, $this->_cached);
 				$this->_lastRun["headers"] = $dataBlock["headers"];
 				$this->_lastRun["render"] = $dataBlock["render"];
 			} else {
@@ -229,7 +229,7 @@ abstract class Controller extends Exporter {
 					$this->cache->save($prefixRender, $key, array(
 						"headers" => $this->_lastRun["headers"],
 						"render" => $this->_lastRun["render"]
-					));
+					), $this->_cached);
 				}
 			}
 		}

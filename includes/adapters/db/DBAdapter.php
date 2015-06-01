@@ -228,7 +228,6 @@ class DBAdapter extends Adapter {
 
 					$out = $connData[GC_CONNECTIONS_DB_ENGINE];
 					$out.= ":{$connData[GC_CONNECTIONS_DB_SERVER]}";
-					$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
 					break;
 				case 'mysql':
 				default:

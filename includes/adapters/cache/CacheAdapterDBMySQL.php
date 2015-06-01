@@ -4,12 +4,6 @@ namespace TooBasic;
 
 class CacheAdapterDBMySQL extends CacheAdapterDB {
 	//
-	// Constants.
-	//
-	// Protected properties.
-	//
-	// Public methods.
-	//
 	// Protected methods.
 	protected function checkTables() {
 		$query = "create table if not exists {$this->_dbprefix}cache ( \n";

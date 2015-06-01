@@ -211,7 +211,6 @@ class Paths extends Singleton {
 		//
 		// Adding the no-skin subpath.
 		$skinDirs[] = '';
-#debugit([$skin,$skinDirs,$folders]);
 		// @}
 		//
 		// At this point '$folders' must be a list, if not it is

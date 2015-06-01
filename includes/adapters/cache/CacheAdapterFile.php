@@ -8,16 +8,14 @@ class CacheAdapterFile extends CacheAdapter {
 	const SubFolder = "filecache";
 	const CacheExtension = "data";
 	//
-	// Protected properties.
-	//
 	// Public methods.
 	public function delete($prefix, $key) {
 		@unlink($this->path($prefix, $key));
 	}
-	public function get($prefix, $key) {
+	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
 		$path = $this->path($prefix, $key);
 
-		$this->cleanPath($path);
+		$this->cleanPath($path, $delay);
 
 		$data = null;
 		if(is_readable($path)) {
@@ -26,13 +24,13 @@ class CacheAdapterFile extends CacheAdapter {
 
 		return $data;
 	}
-	public function save($prefix, $key, $data) {
+	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
 		file_put_contents($this->path($prefix, $key, true), serialize($data));
 	}
 	//
 	// Protected methods.
-	protected function cleanPath($path, $forced = false) {
-		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= $this->_expirationLength)) {
+	protected function cleanPath($path, $delay, $forced = false) {
+		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= $this->expirationLength($delay))) {
 			unlink($path);
 		}
 	}

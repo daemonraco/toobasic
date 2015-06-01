@@ -35,6 +35,7 @@ $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = 'home';
 $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\TooBasic\CacheAdapterFile';
+$Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
 $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = 'en_us';
