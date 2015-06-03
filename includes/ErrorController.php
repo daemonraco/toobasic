@@ -59,6 +59,7 @@ abstract class ErrorController extends Controller {
 			}
 		} else {
 			$this->assign("errorinfo", false);
+			$this->assign("currenterror", null);
 		}
 
 		return $out;
