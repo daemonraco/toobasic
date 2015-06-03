@@ -1,6 +1,6 @@
 <?php
 
-class HomeController extends TooBasic\Controller {
+class StarterdocController extends TooBasic\Controller {
 	//
 	// Protected properties
 	protected $_cached = true;
