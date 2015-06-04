@@ -5,6 +5,7 @@ namespace TooBasic;
 abstract class CacheAdapter extends Adapter {
 	//
 	// Constants.
+	const ExpirationSizeDouble = 'double';
 	const ExpirationSizeLarge = 'large';
 	const ExpirationSizeMedium = 'medium';
 	const ExpirationSizeSmall = 'small';
@@ -27,6 +28,9 @@ abstract class CacheAdapter extends Adapter {
 				break;
 			case self::ExpirationSizeSmall:
 				$out = ceil($this->_expirationLength / 4);
+				break;
+			case self::ExpirationSizeDouble:
+				$out = $this->_expirationLength * 2;
 				break;
 			case self::ExpirationSizeLarge:
 			default:
