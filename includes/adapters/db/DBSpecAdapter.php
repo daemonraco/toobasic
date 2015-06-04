@@ -47,7 +47,7 @@ abstract class DBSpecAdapter extends Adapter {
 	// Protected methods.
 	final public function debugUpgradeQuery($query) {
 		if($this->_debugUpgrade) {
-			debugit($query);
+			\TooBasic\debugThing($query);
 		}
 	}
 	public function exec($query) {

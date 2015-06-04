@@ -187,6 +187,13 @@ if(isset($_REQUEST['debugroutes'])) {
 	\TooBasic\RoutesManager::Instance()->routes();
 }
 //
+// Mandatory permissions
+if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
+	//
+	// This is here to avoid wrong debug prompting.
+	\TooBasic\checkBasicPermissions();
+}
+//
 //
 $ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults[GC_DEFAULTS_LAYOUT];

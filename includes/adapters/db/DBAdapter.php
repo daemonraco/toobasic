@@ -23,16 +23,15 @@ class DBAdapter extends Adapter {
 		if(isset($Connections[GC_CONNECTIONS_DB][$dbname])) {
 			$connString = $this->getConnectionString($dbname);
 			if(isset(Params::Instance()->debugdb)) {
-				echo "<pre style=\"border:dashed gray 1px;width:100%;padding:5px;\">\n";
-				echo "DB connection: {$dbname} [{$this->engine()}]\n\n";
-				echo "DB connection data:\n";
-				echo "        Connection string: '{$connString}'\n";
+				$out = "DB connection: {$dbname} [{$this->engine()}]\n\n";
+				$out.= "DB connection data:\n";
+				$out.= "        Connection string: '{$connString}'\n";
 				foreach($Connections[GC_CONNECTIONS_DB][$dbname] as $key => $value) {
 					if($key != GC_CONNECTIONS_DB_PASSWORD && $value) {
-						echo "        {$key}: '{$value}'\n";
+						$out.= "        {$key}: '{$value}'\n";
 					}
 				}
-				echo '</pre>';
+				\TooBasic\debugThing($out);
 			}
 			//
 			// Attempting to connect.

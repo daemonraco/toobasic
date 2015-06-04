@@ -8,7 +8,10 @@ class MdfooterController extends TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
+		global $Defaults;
 		global $SkinName;
+
+		$this->assign('allowSkins', $Defaults['starterdoc-allow-skins']);
 
 		$skins = array();
 #		$skins[] = array(

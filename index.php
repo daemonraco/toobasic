@@ -1,11 +1,11 @@
 <?php
 
+include __DIR__.'/config/config.php';
+
 if(isset($_REQUEST['debugphpinfo'])) {
-	phpinfo();
+	\TooBasic\debugThing('phpinfo');
 	die;
 }
-
-include __DIR__.'/config/config.php';
 
 if($ServiceName || isset(\TooBasic\Params::Instance()->get->explaininterface)) {
 	TooBasic\ServicesManager::Instance()->run();

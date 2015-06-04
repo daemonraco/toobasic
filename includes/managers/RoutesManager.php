@@ -218,52 +218,54 @@ class RoutesManager extends Manager {
 		$route->pattern = $pattern;
 	}
 	protected function debugRoutes() {
-		echo "<pre style=\"border:dashed gray 1px;width:100%;padding:5px;\">\nRoutes:\n";
-		foreach($this->routes() as $route) {
-			echo "- '{$route->route}':\n";
-			echo "\tAction: '{$route->action}'\n";
+		$out = '';
 
-			echo "\tPieces:\n";
+		foreach($this->routes() as $route) {
+			$out.= "- '{$route->route}':\n";
+			$out.= "\tAction: '{$route->action}'\n";
+
+			$out.= "\tPieces:\n";
 			$i = 0;
 			foreach($route->pattern as $pat) {
 				$i++;
-				echo "\t\t[{$i}] '{$pat->name}'";
+				$out.= "\t\t[{$i}] '{$pat->name}'";
 				switch($pat->type) {
 					case self::PatternTypeParameter:
-						echo "[parameter]";
+						$out.= "[parameter]";
 						switch($pat->valueType) {
 							case self::ValueTypeInteger:
-								echo ' (must be numeric)';
+								$out.= ' (must be numeric)';
 								break;
 							case self::ValueTypeString:
-								echo ' (must be a string)';
+								$out.= ' (must be a string)';
 								break;
 							case self::ValueTypeEnumerative:
-								echo "\n\t\t\tMust be one of these:";
+								$out.= "\n\t\t\tMust be one of these:";
 								foreach($pat->values as $val) {
-									echo "\n\t\t\t\t- '{$val}'";
+									$out.= "\n\t\t\t\t- '{$val}'";
 								}
 								break;
 						}
 						break;
 					case self::PatternTypeLiteral:
 					default:
-						echo "[literal] (must be an exact match)";
+						$out.= "[literal] (must be an exact match)";
 						break;
 				}
-				echo "\n";
+				$out.= "\n";
 			}
 
 			if($route->params) {
-				echo "\tForced Url Parameters:\n";
+				$out.= "\tForced Url Parameters:\n";
 				foreach($route->params as $key => $value) {
-					echo "\t\t'{$key}': '{$value}'\n";
+					$out.= "\t\t'{$key}': '{$value}'\n";
 				}
 			}
 
-			echo "\n";
+			$out.= "\n";
 		}
-		echo "</pre>\n";
+
+		\TooBasic\debugThing($out);
 		die;
 	}
 	protected function parseConfig($path) {

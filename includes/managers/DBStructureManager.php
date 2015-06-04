@@ -207,7 +207,8 @@ class DBStructureManager extends Manager {
 			$this->dropTables();
 
 			if(isset(Params::Instance()->debugdbemulation)) {
-				debugit("Database upgrade emulation", true);
+				\TooBasic\debugThing("Database upgrade emulation");
+				die;
 			}
 
 			$this->_tasks = false;
@@ -381,7 +382,7 @@ class DBStructureManager extends Manager {
 			$this->checkSpecs();
 
 			if(isset(Params::Instance()->debugdbstructure)) {
-				debugit(array(
+				\TooBasic\debugThing(array(
 					"errors" => $this->_errors,
 					"files" => $this->_specFiles,
 					"specs" => $this->_specs

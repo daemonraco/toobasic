@@ -1,15 +1,17 @@
 		<hr/>
 		<footer class="container well well-sm">
+{if $allowSkins}
 			<div class="SkinSelector ">
 				<label>
 					Current skin:
 					<select id="SelectSkin" class="form-control input-sm">
-{foreach from=$skins item=skin}
+	{foreach from=$skins item=skin}
 						<option value="{$skin.value}"{if $skin.current} selected="selected"{/if}>{$skin.value}</option>
-{/foreach}
+	{/foreach}
 					</select>
 				</label>
 			</div>
+{/if}
 			<ul class="Sponsors">
 				<li>
 					<a href="http://www.daemonraco.com/" target="_blank">
