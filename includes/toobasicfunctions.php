@@ -63,6 +63,10 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 		array_walk($out, function(& $item) {
 			$item = "| {$item}";
 		});
+		$lastEntry = array_pop($out);
+		if($lastEntry != '| ') {
+			$out[] = $lastEntry;
+		}
 		$out = implode("\n", $out);
 
 		$shellOut = '';
@@ -73,8 +77,7 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 		} else {
 			$shellOut .= "+{$delim}\n";
 		}
-		$shellOut .= " {
-		$out}\n";
+		$shellOut .= "{$out}\n";
 		$shellOut .= "+{$delim}\n";
 
 		switch($type) {
