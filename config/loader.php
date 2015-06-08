@@ -153,6 +153,11 @@ spl_autoload_register(function($class) {
 	if(!$path && $class == "Smarty") {
 		$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php");
 		$path = is_readable($path) ? $path : false;
+
+		if(!$path) {
+			$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php");
+			$path = is_readable($path) ? $path : false;
+		}
 	}
 
 	if($path) {
