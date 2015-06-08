@@ -11,7 +11,7 @@ class ViewAdapterJSON extends ViewAdapterBasic {
 	}
 	//
 	// Public methods.
-	public function render($assignments, $template = false) {
+	public function render($assignments, $template) {
 		return json_encode($this->cleanRendering($assignments));
 	}
 }

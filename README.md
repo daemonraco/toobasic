@@ -184,19 +184,22 @@ Now you're also using translations, both inside your template and your controlle
 ## Suggestions
 After all we said you should visit this documentation pages:
 
-* [Troubleshooting](docs/troubleshooting.md)
-* [Using Layouts](docs/uselayout.md)
-* [Using Languages](docs/uselanguage.md)
-* [Models](docs/models.md)
-* [Using Configs](docs/useconfigs.md)
-* [Databases](docs/databases.md)
-* [Cache](docs/cache.md)
-* [Representations](docs/representations.md)
-* [Services](docs/services.md)
-* [Shell Tools](docs/shelltools.md)
-* [MagicProp](docs/magicprop.md)
-* [Routes](docs/routes.md)
-* [Skins](docs/skins.md)
+* If you're having problems:
+	* [Troubleshooting](docs/troubleshooting.md)
+* If you want to know more:
+	* [Using Layouts](docs/uselayout.md)
+	* [Using Languages](docs/uselanguage.md)
+	* [Models](docs/models.md)
+	* [Using Configs](docs/useconfigs.md)
+	* [Services](docs/services.md)
+	* [Cache](docs/cache.md)
+* If you want the heavy stuff:
+	* [Databases](docs/databases.md)
+	* [Representations](docs/representations.md)
+	* [Skins](docs/skins.md)
+	* [Shell Tools](docs/shelltools.md)
+	* [Routes](docs/routes.md)
+	* [MagicProp](docs/magicprop.md)
 
 # Thanks
 ## Smarty

@@ -21,6 +21,10 @@ abstract class Controller extends Exporter {
 	 * @var mixed[string] Assignments made for snippets.
 	 */
 	protected $_snippetAssignments = array();
+	/**
+	 * @var string Current view template to render for this contorller.
+	 */
+	protected $_viewName = false;
 	//
 	// Magic methods.
 	/**
@@ -33,6 +37,11 @@ abstract class Controller extends Exporter {
 		//
 		// Initializing parent class
 		parent::__construct($actionName);
+		//
+		// By default current view name is the same than the controller's
+		// name. But it could be overriden by a controller allowing flex
+		// views.
+		$this->_viewName = $this->_name;
 		//
 		// Global requirements.
 		global $Defaults;
@@ -221,7 +230,7 @@ abstract class Controller extends Exporter {
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();
 				$this->_lastRun["headers"] = $this->_viewAdapter->headers();
-				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_name}.".Paths::ExtensionTemplate));
+				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
 				// @}
 				//
 				// Storing a cache entry if it's active.

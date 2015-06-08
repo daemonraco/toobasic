@@ -5,7 +5,7 @@ namespace TooBasic;
 class ViewAdapterDump extends ViewAdapterBasic {
 	//
 	// Public methods.
-	public function render($assignments, $template = false) {
+	public function render($assignments, $template) {
 		ob_start();
 
 		var_dump($this->cleanRendering($assignments));
