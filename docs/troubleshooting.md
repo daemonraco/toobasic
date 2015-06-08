@@ -36,6 +36,7 @@ tell you this when possible, but just to be sure check this folders:
 * `ROOTDIR/cache/filecache`
 * `ROOTDIR/cache/langs`
 * `ROOTDIR/cache/shellflags`
+
 Of course, writing permission means that the system user your HTTP server uses has
 to be able to write inside this folders.
 If you use a standard *nix system with apache, it usually is __www-data__.
@@ -46,7 +47,9 @@ Well this doesn't mean there are no errors, perhaps they're been shown in a file
 you haven't checked yet.
 If you are under a standard *nix installation using apache, check these files:
 >/var/log/apache2/error.log
+
 >/var/log/apache2/access.log
+
 They may give a hint of your problem.
 
 If you are not on a standard *nix system, google where you can find this files.
