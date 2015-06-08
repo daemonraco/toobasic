@@ -35,16 +35,16 @@ abstract class Controller extends Exporter {
 	 */
 	public function __construct($actionName = false) {
 		//
-		// Initializing parent class
-		parent::__construct($actionName);
-		//
-		// By default current view name is the same than the controller's
-		// name. But it could be overriden by a controller allowing flex
-		// views.
-		$this->_viewName = $this->_name;
-		//
 		// Global requirements.
 		global $Defaults;
+		global $ActionName
+		//
+		// Picking a name for this controller's view. It could be
+		// overriden by a controller allowing flex views.
+		$this->_viewName = $actionName ? $actionName : $ActionName;
+		//
+		// Initializing parent class
+		parent::__construct($actionName);
 		//
 		// It doesn't matter what it's set for the current class, there
 		// are rules first.

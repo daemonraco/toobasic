@@ -13,6 +13,7 @@
 		"debugroutes": "List current routes configuration.",
 		"debugskin": "Prompts current skin selection.",
 		"debugphpinfo": "Prompts PHP information, in other words 'phpinfo()'.",
-		"debugdb": "Prompts used database connections' information."
+		"debugdb": "Prompts used database connections' information.",
+		"debugpaths": "Prompts every searched path and how it was solved."
 	}
 }

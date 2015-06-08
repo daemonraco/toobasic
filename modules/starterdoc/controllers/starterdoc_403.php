@@ -11,4 +11,7 @@ class Starterdoc403Controller extends TooBasic\ErrorController {
 		$this->assign("title", $this->tr->HTTPERROR_403);
 		return parent::basicRun();
 	}
+	protected function init() {
+		$this->_viewName = 'starterdoc_httperror';
+	}
 }

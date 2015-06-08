@@ -259,6 +259,9 @@ class Paths extends Singleton {
 	protected function find(&$list, $skin, $folders, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
 
+		$debugPathsActive = isset(Params::Instance()->debugpaths);
+		$debugPaths = array();
+
 		if($list === false) {
 			$list = $this->genPaths($folders, $skin);
 		}
@@ -277,8 +280,22 @@ class Paths extends Singleton {
 			}
 		}
 
+		if($debugPathsActive) {
+			$debugPaths['name'] = $name;
+			$debugPaths['extension'] = $extension;
+			$debugPaths['skin'] = $skin;
+			$debugPaths['subfolders'] = $folders;
+			$debugPaths['possibilities'] = $list;
+		}
+
 		if(!$full) {
 			$out = count($out) > 0 ? array_shift($out) : false;
+		}
+
+		if($debugPathsActive) {
+			$debugPaths['result'] = $out;
+
+			\TooBasic\debugThing($debugPaths);
 		}
 
 		return $out;
