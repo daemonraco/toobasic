@@ -181,9 +181,10 @@ And your template:
 ```
 Now you're also using translations, both inside your template and your controller.
 
-### Suggestions
+## Suggestions
 After all we said you should visit this documentation pages:
 
+* [Troubleshooting](docs/troubleshooting.md)
 * [Using Layouts](docs/uselayout.md)
 * [Using Languages](docs/uselanguage.md)
 * [Models](docs/models.md)

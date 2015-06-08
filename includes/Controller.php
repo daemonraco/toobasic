@@ -229,7 +229,7 @@ abstract class Controller extends Exporter {
 					$this->cache->save($prefixRender, $key, array(
 						"headers" => $this->_lastRun["headers"],
 						"render" => $this->_lastRun["render"]
-					), $this->_cached);
+						), $this->_cached);
 				}
 			}
 		}
@@ -253,14 +253,27 @@ abstract class Controller extends Exporter {
 		// Controllers exported methods.
 		$this->assign("ctrl", new ControllerExports($this));
 	}
+	/**
+	 * Controllers has a specific method to generate cache prefixes in order
+	 * to include skins.
+	 * 
+	 * @global string $SkinName
+	 * @param string $extra
+	 * @return string
+	 */
 	protected function cachePrefix($extra = "") {
 		global $SkinName;
 
 		$skinPrefix = '';
+		//
+		// Generating a prefix containing the skin's name, unless there's
+		// no skin set.
 		if($SkinName) {
 			$skinPrefix = "_sk_{$SkinName}";
 		}
-
+		//
+		// Resulting prefix is a combination of the current skin name and
+		// the prefix built by this class parent.
 		return parent::cachePrefix($extra).$skinPrefix;
 	}
 }

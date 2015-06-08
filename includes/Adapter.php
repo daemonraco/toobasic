@@ -36,7 +36,9 @@ abstract class Adapter {
 	 */
 	public static function Factory($adapterName) {
 		$out = false;
-
+		//
+		// Cheking if this adapter has already been loaded. If not, it is.
+		// Adapters work as singletons.
 		if(!isset(self::$_Adapters[$adapterName])) {
 			self::$_Adapters[$adapterName] = new $adapterName();
 			self::$_Adapters[$adapterName]->init();
@@ -44,7 +46,8 @@ abstract class Adapter {
 		} else {
 			$out = self::$_Adapters[$adapterName];
 		}
-
+		//
+		// Returning found adapter.
 		return $out;
 	}
 }
