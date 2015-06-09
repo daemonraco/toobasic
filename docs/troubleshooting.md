@@ -1,15 +1,15 @@
 # TooBasic: Troubleshooting
 ## What is this page?
 This page won't be the _hitchhiker's guide to the galaxy_ for __TooBasic__, but
-_don't panic_.
+_don't panic_, this won't be [vogon poetry](http://i.imgur.com/MDIPz9j.jpg).
 Here we are going to talk about some usual problem found when installing
 __TooBasic__ in your server.
 
 ## Have you installed _Smarty_?
 If you used a `git clone` instead of downloading the recommended release package,
 you'll end up with an almost empty folder at __ROOTDIR/libraries__.
-This means your site will start throwing error everywhere because it's looking for
-Smarty.
+This means your site will start throwing errors everywhere because it's looking
+for Smarty.
 
 What to do? Well there's the easy way and the hard way.
 The easy way is to run (we're supposing you used `git clone`):

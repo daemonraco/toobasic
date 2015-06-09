@@ -37,7 +37,7 @@ abstract class Controller extends Exporter {
 		//
 		// Global requirements.
 		global $Defaults;
-		global $ActionName
+		global $ActionName;
 		//
 		// Picking a name for this controller's view. It could be
 		// overriden by a controller allowing flex views.
