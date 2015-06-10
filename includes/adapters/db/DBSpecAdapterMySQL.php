@@ -364,4 +364,21 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 
 		return $out;
 	}
+	protected function specificExecuteCallback($data) {
+		$out = true;
+
+		foreach(explode(';', $data) as $query) {
+			$query = trim($query);
+			if(!$query) {
+				continue;
+			}
+
+			$out = $this->exec($query);
+			if(!$out) {
+				break;
+			}
+		}
+
+		return $out;
+	}
 }

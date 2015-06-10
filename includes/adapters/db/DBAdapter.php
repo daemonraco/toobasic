@@ -58,6 +58,12 @@ class DBAdapter extends Adapter {
 	public function engine() {
 		return $this->_engine;
 	}
+	public function errorCode() {
+		return $this->_dblink ? $this->_dblink->errorCode() : false;
+	}
+	public function errorInfo() {
+		return $this->_dblink ? $this->_dblink->errorInfo() : false;
+	}
 	/**
 	 * This method is similar than 'query()', but it uses the method
 	 * '\PDO::exec()'.

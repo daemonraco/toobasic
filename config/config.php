@@ -116,6 +116,7 @@ $Paths[GC_PATHS_CONTROLLERS] = '/controllers';
 $Paths[GC_PATHS_SERVICES] = '/services';
 $Paths[GC_PATHS_CSS] = '/styles';
 $Paths[GC_PATHS_DBSPECS] = '/db';
+$Paths[GC_PATHS_DBSPECSCALLBACK] = '/db';
 $Paths[GC_PATHS_IMAGES] = '/images';
 $Paths[GC_PATHS_JS] = '/scripts';
 $Paths[GC_PATHS_LANGS] = '/langs';

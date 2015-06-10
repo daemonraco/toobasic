@@ -33,6 +33,16 @@ abstract class DBSpecAdapter extends Adapter {
 	abstract public function dropIndex($indexName);
 	abstract public function dropTable($tableName);
 	abstract public function dropTableColumn(\stdClass $table, $columnName);
+	public function executeCallback($callback) {
+		$data = file_get_contents($callback['path']);
+		$replacements = array(
+			':tb_table_prefix:' => $this->_db->prefix()
+		);
+		foreach($replacements as $key => $replacement) {
+			$data = preg_replace("/({$key})/", $replacement, $data);
+		}
+		$this->specificExecuteCallback($data);
+	}
 	abstract public function getIndexes();
 	abstract public function getTables();
 	abstract public function indexExists($indexName);
@@ -45,13 +55,21 @@ abstract class DBSpecAdapter extends Adapter {
 	abstract public function updateTableColumn(\stdClass $table, $columnName);
 	//
 	// Protected methods.
-	final public function debugUpgradeQuery($query) {
+	final protected function debugUpgradeQuery($query) {
 		if($this->_debugUpgrade) {
 			\TooBasic\debugThing($query);
 		}
 	}
-	public function exec($query) {
+	protected function exec($query) {
 		$this->debugUpgradeQuery($query);
-		return $this->_debugdbEmulation ? "true" : $this->_db->exec($query, false) !== false;
+		$out = $this->_debugdbEmulation ? 'true' : $this->_db->exec($query, false) !== false;
+
+		if(!$out) {
+			$info = $this->_db->errorInfo();
+			\TooBasic\debugThing("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_db->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", \TooBasic\DebugThingTypeError);
+		}
+
+		return $out;
 	}
+	abstract protected function specificExecuteCallback($data);
 }

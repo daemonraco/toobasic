@@ -10,12 +10,14 @@ class Paths extends Singleton {
 	const ExtensionJS = 'js';
 	const ExtensionJSON = 'json';
 	const ExtensionPHP = 'php';
+	const ExtensionSQL = 'sql';
 	const ExtensionTemplate = 'html';
 	//
 	// Protected properties.
 	protected $_configPaths = false;
 	protected $_controllerPaths = false;
 	protected $_cssPaths = false;
+	protected $_dbSpecCallbackPaths = false;
 	protected $_dbSpecPaths = false;
 	protected $_imagesPaths = false;
 	protected $_jsPaths = false;
@@ -48,6 +50,10 @@ class Paths extends Singleton {
 	public function cssPath($cssName, $full = false) {
 		global $Paths;
 		return $this->find($this->_cssPaths, true, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
+	}
+	public function dbSpecCallbackPaths($callbackName) {
+		global $Paths;
+		return $this->find($this->_dbSpecCallbackPaths, false, $Paths[GC_PATHS_DBSPECSCALLBACK], $callbackName, self::ExtensionSQL, false);
 	}
 	public function dbSpecPaths() {
 		global $Paths;
