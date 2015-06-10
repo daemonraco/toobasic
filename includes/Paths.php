@@ -259,7 +259,7 @@ class Paths extends Singleton {
 	protected function find(&$list, $skin, $folders, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
 
-		$debugPathsActive = isset(Params::Instance()->debugpaths);
+		$debugPathsActive = isset($_REQUEST['debugpaths']);
 		$debugPaths = array();
 
 		if($list === false) {
