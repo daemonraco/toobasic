@@ -14,6 +14,7 @@
 		"debugskin": "Prompts current skin selection.",
 		"debugphpinfo": "Prompts PHP information, in other words 'phpinfo()'.",
 		"debugdb": "Prompts used database connections' information.",
-		"debugpaths": "Prompts every searched path and how it was solved."
+		"debugpaths": "Prompts every searched path and how it was solved.",
+		"debugloader": "Show the location of each class loaded through a SuperLoader setting."
 	}
 }

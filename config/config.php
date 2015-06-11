@@ -130,6 +130,9 @@ $Paths[GC_PATHS_SKINS] = '/skins';
 $Paths[GC_PATHS_SNIPPETS] = '/snippets';
 $Paths[GC_PATHS_TEMPLATES] = '/templates';
 //
+// SuperLoader main list.
+$SuperLoader = array();
+//
 // Cron profiles:
 // $Connections[GC_CONNECTIONS_DB]['<name>'] = array();
 // $Connections[GC_CONNECTIONS_DB]['<name>'][] = array(
