@@ -96,7 +96,7 @@ class Translate extends Singleton {
 				$out = $this->_tr[$key];
 
 				foreach($params as $name => $value) {
-					$out = str_replace("%{$name}%", (string)$value);
+					$out = str_replace("%{$name}%", (string) $value);
 				}
 			}
 		}
@@ -108,7 +108,7 @@ class Translate extends Singleton {
 	protected function init() {
 		global $Defaults;
 
-		$this->_currentLang = $Defaults["langs-defaultlang"];
+		$this->_currentLang = $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG];
 	}
 	protected function load() {
 		if(!$this->_loaded) {

@@ -121,6 +121,20 @@ define('GC_CLASS_SUFFIX_SERVICE', 'Service');
 define('GC_CLASS_SUFFIX_TOOL', 'Tool');
 // @}
 //
+// View formats @{
+define('GC_VIEW_FORMAT_BASIC', 'basic');
+define('GC_VIEW_FORMAT_DUMP', 'dump');
+define('GC_VIEW_FORMAT_JSON', 'json');
+define('GC_VIEW_FORMAT_PRINT', 'print');
+define('GC_VIEW_FORMAT_SERIALIZE', 'serialize');
+define('GC_VIEW_FORMAT_XML', 'xml');
+// @}
+//
+// View modes @{
+define('GC_VIEW_MODE_ACTION', 'action');
+define('GC_VIEW_MODE_MODAL', 'modal');
+// @}
+//
 // Memcached parameters @{
 define('GC_DEFAULTS_MEMCACHED', 'memcached');
 define('GC_DEFAULTS_MEMCACHED_SERVER', 'server');

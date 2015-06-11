@@ -3,29 +3,31 @@
 namespace TooBasic;
 
 /**
+ * @class Exporter
  * @abstract
+ * 
+ * This class is the main specification for any controller in TooBasic.
  */
 abstract class Exporter {
 	//
-	// Constants
-	const FormatBasic = "basic";
-	const FormatJSON = "json";
-	const ModeAction = "action";
-	const ModeModal = "modal";
-	const PrefixComputing = "C";
-	const PrefixRender = "R";
-	const PrefixService = "S";
+	// Constants.
+	const PrefixComputing = 'C';
+	const PrefixRender = 'R';
+	const PrefixService = 'S';
 	//
 	// Protected class properties.
+	/**
+	 * @var string[string] Values shared among controllers.
+	 */
 	protected static $_Shares = array();
 	//
-	// Protected properties
+	// Protected properties.
 	protected $_assignments = array();
 	protected $_cached = false;
 	protected $_cacheKey = false;
 	protected $_cacheParams = array(
-		"GET" => array(),
-		"POST" => array()
+		'GET' => array(),
+		'POST' => array()
 	);
 	protected $_errors = array();
 	protected $_format = false;
@@ -34,8 +36,8 @@ abstract class Exporter {
 	protected $_mode = false;
 	protected $_name = false;
 	protected $_requiredParams = array(
-		"GET" => array(),
-		"POST" => array()
+		'GET' => array(),
+		'POST' => array()
 	);
 	protected $_status = true;
 	protected $_viewAdapter = false;
@@ -51,8 +53,8 @@ abstract class Exporter {
 		} else {
 			//
 			// In case no format was requested or the requested one
-			// is wrong, "basic" is used.
-			$this->_format = self::FormatBasic;
+			// is wrong, 'basic' is used.
+			$this->_format = GC_VIEW_FORMAT_BASIC;
 		}
 		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
 			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
@@ -66,8 +68,8 @@ abstract class Exporter {
 		} else {
 			//
 			// In case no mode was requested or the requested one
-			// is wrong, "action" is used.
-			$this->_mode = self::ModeAction;
+			// is wrong, 'action' is used.
+			$this->_mode = GC_VIEW_MODE_ACTION;
 		}
 		//
 		// Picking a name for this controller.
@@ -155,11 +157,11 @@ abstract class Exporter {
 		global $ServiceName;
 		global $LayoutName;
 
-		$this->assign("action", $ActionName);
-		$this->assign("service", $ServiceName);
-		$this->assign("layout", $LayoutName);
-		$this->assign("name", $this->_name);
-		$this->assign("lang", $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG]);
+		$this->assign('action', $ActionName);
+		$this->assign('service', $ServiceName);
+		$this->assign('layout', $LayoutName);
+		$this->assign('name', $this->_name);
+		$this->assign('lang', $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG]);
 	}
 	protected function cacheKey() {
 		if($this->_cacheKey === false) {
@@ -178,12 +180,12 @@ abstract class Exporter {
 		foreach($this->_requiredParams as $method => $params) {
 			foreach($params as $param) {
 				if(!isset($this->params->{$method}->{$param})) {
-					$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).")");
+					$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).')');
 				}
 			}
 		}
 	}
-	protected function cachePrefix($extra = "") {
+	protected function cachePrefix($extra = '') {
 		if($extra == self::PrefixRender) {
 			$extra = "{$extra}_".strtoupper($this->_format);
 		}
@@ -205,7 +207,7 @@ abstract class Exporter {
 		// it is run, otherwise the basic run method is called
 		if(method_exists($this, "run{$method}")) {
 			$out = $this->{"run{$method}"}();
-		} elseif(method_exists($this, "basicRun")) {
+		} elseif(method_exists($this, 'basicRun')) {
 			$out = $this->basicRun();
 		} else {
 			$this->setError(HTTPERROR_NOT_IMPLEMENTED, "Request method '{$method}' is not implemented");
@@ -220,7 +222,7 @@ abstract class Exporter {
 		//
 		// This is to avoid cache collision when a controller is
 		// requested with different modes.
-		$this->_cacheParams["GET"][] = "mode";
+		$this->_cacheParams['GET'][] = 'mode';
 	}
 	protected function setError($code, $message) {
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -229,12 +231,12 @@ abstract class Exporter {
 		$callerLine = array_shift($trace);
 
 		$error = array(
-			"code" => $code,
-			"message" => $message,
-			"location" => array(
-				"method" => (isset($callerLine["class"]) ? "{$callerLine["class"]}::" : "")."{$callerLine["function"]}()",
-				"file" => $callingLine["file"],
-				"line" => $callingLine["line"]
+			'code' => $code,
+			'message' => $message,
+			'location' => array(
+				'method' => (isset($callerLine['class']) ? "{$callerLine['class']}::" : '')."{$callerLine['function']}()",
+				'file' => $callingLine['file'],
+				'line' => $callingLine['line']
 			)
 		);
 

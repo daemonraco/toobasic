@@ -93,13 +93,16 @@ class ControllerExports {
 	 */
 	public function link($link = '') {
 		$out = $link;
-
-		if($link == "") {
+		//
+		// If the parameter is empty the site's root URI has to be
+		// returned.
+		if($link == '') {
 			$out = ROOTURI;
 		} elseif(preg_match('/^\?/', $link)) {
 			$out = ROOTURI.$link;
 		}
-
+		//
+		// Cleaning url applying routes.
 		$out = RoutesManager::Instance()->enroute($out);
 
 		return $out;

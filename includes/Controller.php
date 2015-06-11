@@ -13,8 +13,8 @@ abstract class Controller extends Exporter {
 	//
 	// Protected properties.
 	/**
-	 * @var string Name of the layout current controller uses. "false" means
-	 * no layout and "null" means default layout.
+	 * @var string Name of the layout current controller uses. 'false' means
+	 * no layout and 'null' means default layout.
 	 */
 	protected $_layout = null;
 	/**
@@ -63,7 +63,7 @@ abstract class Controller extends Exporter {
 			// @note: NULL means there's no setting for this
 			// controllers layout. FALSE means this controller uses
 			// no layout.
-			$this->_layout = $Defaults["layout"];
+			$this->_layout = $Defaults[GC_DEFAULTS_LAYOUT];
 		}
 	}
 	//
@@ -77,13 +77,13 @@ abstract class Controller extends Exporter {
 	 */
 	public function insert($actionName) {
 		$lastRun = ActionsManager::ExecuteAction($actionName);
-		return $lastRun["render"];
+		return $lastRun['render'];
 	}
 	/**
 	 * Allows to know which layout is to be used when this controller is
 	 * render.
 	 * 
-	 * @return string Layout name. 'false" when no layout and null when it
+	 * @return string Layout name. 'false' when no layout and null when it
 	 * must be default.
 	 */
 	public function layout() {
@@ -113,7 +113,7 @@ abstract class Controller extends Exporter {
 	 * @return string Result of rendering the snippet.
 	 */
 	public function snippet($snippetName, $snippetDataSet = false) {
-		$output = "";
+		$output = '';
 		//
 		// Looking for the snippet.
 		$path = $this->paths->snippetPath($snippetName);
@@ -124,12 +124,12 @@ abstract class Controller extends Exporter {
 			//
 			// Snippets are rendered only when when a basic format
 			// is in used.
-			if($this->_format == self::FormatBasic) {
+			if($this->_format == GC_VIEW_FORMAT_BASIC) {
 				global $Defaults;
 				//
 				// Generating a view adapter to render the
 				// snippet.
-				$viewAdapter = new $Defaults["view-adapter"]();
+				$viewAdapter = new $Defaults[GC_DEFAULTS_VIEW_ADAPTER]();
 				//
 				// Rendering using the specified list of
 				// assignments.
@@ -151,7 +151,7 @@ abstract class Controller extends Exporter {
 	 */
 	public function run() {
 		//
-		// When this method starts, "status" is considered to be ok.
+		// When this method starts, 'status' is considered to be ok.
 		$this->_status = true;
 		//
 		// Checking parameters.
@@ -180,10 +180,10 @@ abstract class Controller extends Exporter {
 			if($this->_lastRun && !isset($this->params->debugresetcache)) {
 				//
 				// Loading data from the previous execution.
-				$this->_assignments = $this->_lastRun["assignments"];
-				$this->_status = $this->_lastRun["status"];
-				$this->_errors = $this->_lastRun["errors"];
-				$this->_lastError = $this->_lastRun["lasterror"];
+				$this->_assignments = $this->_lastRun['assignments'];
+				$this->_status = $this->_lastRun['status'];
+				$this->_errors = $this->_lastRun['errors'];
+				$this->_lastError = $this->_lastRun['lasterror'];
 			} else {
 				$this->autoAssigns();
 				//
@@ -192,10 +192,10 @@ abstract class Controller extends Exporter {
 				//
 				// Genering the last execution structure.
 				$this->_lastRun = array(
-					"status" => $this->_status,
-					"assignments" => $this->_assignments,
-					"errors" => $this->_errors,
-					"lasterror" => $this->_lastError
+					'status' => $this->_status,
+					'assignments' => $this->_assignments,
+					'errors' => $this->_errors,
+					'lasterror' => $this->_lastError
 				);
 				//
 				// Storing a cache entry if it's active.
@@ -216,28 +216,28 @@ abstract class Controller extends Exporter {
 			// previous execution.
 			if($this->_cached) {
 				$dataBlock = $this->cache->get($prefixRender, $key, $this->_cached);
-				$this->_lastRun["headers"] = $dataBlock["headers"];
-				$this->_lastRun["render"] = $dataBlock["render"];
+				$this->_lastRun['headers'] = $dataBlock['headers'];
+				$this->_lastRun['render'] = $dataBlock['render'];
 			} else {
-				$this->_lastRun["headers"] = array();
-				$this->_lastRun["render"] = false;
+				$this->_lastRun['headers'] = array();
+				$this->_lastRun['render'] = false;
 			}
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if(!$this->_lastRun["render"] || isset($this->params->debugresetcache)) {
+			if(!$this->_lastRun['render'] || isset($this->params->debugresetcache)) {
 				//
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();
-				$this->_lastRun["headers"] = $this->_viewAdapter->headers();
-				$this->_lastRun["render"] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
+				$this->_lastRun['headers'] = $this->_viewAdapter->headers();
+				$this->_lastRun['render'] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
 				// @}
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
 					$this->cache->save($prefixRender, $key, array(
-						"headers" => $this->_lastRun["headers"],
-						"render" => $this->_lastRun["render"]
+						'headers' => $this->_lastRun['headers'],
+						'render' => $this->_lastRun['render']
 						), $this->_cached);
 				}
 			}
@@ -251,16 +251,21 @@ abstract class Controller extends Exporter {
 	 * This method adds some default values to any controller assignments.
 	 */
 	protected function autoAssigns() {
+		//
+		// Adding parent's default assignments.
 		parent::autoAssigns();
-
-		$this->assign("format", $this->_format);
-		$this->assign("mode", $this->_mode);
+		//
+		// Current fromat.
+		$this->assign('format', $this->_format);
+		//
+		// Current mode.
+		$this->assign('mode', $this->_mode);
 		//
 		// Translation object
-		$this->assign("tr", $this->translate);
+		$this->assign('tr', $this->translate);
 		//
 		// Controllers exported methods.
-		$this->assign("ctrl", new ControllerExports($this));
+		$this->assign('ctrl', new ControllerExports($this));
 	}
 	/**
 	 * Controllers has a specific method to generate cache prefixes in order
@@ -270,9 +275,12 @@ abstract class Controller extends Exporter {
 	 * @param string $extra
 	 * @return string
 	 */
-	protected function cachePrefix($extra = "") {
+	protected function cachePrefix($extra = '') {
+		//
+		// Global dependecies.
 		global $SkinName;
-
+		//
+		// Default prefix.
 		$skinPrefix = '';
 		//
 		// Generating a prefix containing the skin's name, unless there's

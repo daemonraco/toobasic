@@ -51,7 +51,7 @@ class MagicProp extends Singleton {
 	protected function cache() {
 		if($this->_cache === false) {
 			global $Defaults;
-			$this->_cache = Adapter::Factory($Defaults["cache-adapter"]);
+			$this->_cache = Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
 		}
 
 		return $this->_cache;

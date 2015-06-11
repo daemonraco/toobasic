@@ -123,7 +123,7 @@ class Paths extends Singleton {
 			global $Defaults;
 			global $Directories;
 
-			if($Defaults['langs-built']) {
+			if($Defaults[GC_DEFAULTS_LANGS_BUILT]) {
 				$this->_langPaths[$lang] = array();
 				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$Paths[GC_PATHS_LANGS]}");
 			} else {

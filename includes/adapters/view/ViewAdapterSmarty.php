@@ -49,13 +49,13 @@ class ViewAdapterSmarty extends ViewAdapter {
 	protected function checkDirectories() {
 		global $Defaults;
 
-		if(!$Defaults["installed"]) {
+		if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 			global $Directories;
 
 			foreach(array(self::SmartyStuffDirectory, self::SmartyCacheDirectory, self::SmartyCompileDirectory, self::SmartyConfigDirectory) as $subPath) {
 				$dirPath = Sanitizer::DirPath("{$Directories["cache"]}/{$subPath}");
 				if(!is_dir($dirPath)) {
-					mkdir($dirPath, $Defaults["cache-permissions"], true);
+					mkdir($dirPath, $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS], true);
 				}
 			}
 

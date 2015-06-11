@@ -45,11 +45,15 @@ abstract class ErrorController extends Controller {
 		//
 		// Checking if there's a controller reporting problems.
 		if($this->_failingController !== null) {
+			//
+			// Setting error information to be shown.
 			$this->assign("errorinfo", true);
-
+			//
+			// Setting error messages and codes.
 			$this->assign("errors", $this->_failingController->errors());
 			$this->assign("lasterror", $this->_failingController->lastError());
-
+			//
+			// Adding extra information about the current error.
 			$this->assign("currenterror", null);
 			foreach($this->_failingController->errors() as $error) {
 				if($error["code"] == $this->_name) {
@@ -58,6 +62,8 @@ abstract class ErrorController extends Controller {
 				}
 			}
 		} else {
+			//
+			// Disabling error information.
 			$this->assign("errorinfo", false);
 			$this->assign("currenterror", null);
 		}

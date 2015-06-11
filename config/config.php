@@ -44,16 +44,16 @@ $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
 $Defaults[GC_DEFAULTS_SERVICE] = '';
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\TooBasic\ViewAdapterSmarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
-	'basic' => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
-	'dump' => '\TooBasic\ViewAdapterDump',
-	'json' => '\TooBasic\ViewAdapterJSON',
-	'print' => '\TooBasic\ViewAdapterPrint',
-	'serialize' => '\TooBasic\ViewAdapterSerialize',
-	'xml' => '\TooBasic\ViewAdapterXML'
+	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
+	GC_VIEW_FORMAT_DUMP => '\TooBasic\ViewAdapterDump',
+	GC_VIEW_FORMAT_JSON => '\TooBasic\ViewAdapterJSON',
+	GC_VIEW_FORMAT_PRINT => '\TooBasic\ViewAdapterPrint',
+	GC_VIEW_FORMAT_SERIALIZE => '\TooBasic\ViewAdapterSerialize',
+	GC_VIEW_FORMAT_XML => '\TooBasic\ViewAdapterXML'
 );
 $Defaults[GC_DEFAULTS_MODES] = array(
-	'action',
-	'modal'
+	GC_VIEW_MODE_ACTION,
+	GC_VIEW_MODE_MODAL
 );
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 $Defaults[GC_DEFAULTS_MEMCACHE] = array();
