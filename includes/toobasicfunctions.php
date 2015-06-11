@@ -116,16 +116,18 @@ function guessSkin() {
 	global $Defaults;
 	global $SkinName;
 
+	$auxParamsManager = Params::Instance();
+
 	$sessionKey = GC_SESSION_SKIN.($Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] ? "-{$Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX]}" : '');
 
-	$SkinName = isset($_REQUEST[GC_REQUEST_SKIN]) ? $_REQUEST[GC_REQUEST_SKIN] : (isset($_SESSION[$sessionKey]) ? $_SESSION[$sessionKey] : $Defaults[GC_DEFAULTS_SKIN]);
+	$SkinName = isset($auxParamsManager->{GC_REQUEST_SKIN}) ? $auxParamsManager->{GC_REQUEST_SKIN} : (isset($_SESSION[$sessionKey]) ? $_SESSION[$sessionKey] : $Defaults[GC_DEFAULTS_SKIN]);
 	//
 	// Skin debugs.
-	if(isset($_REQUEST['debugskin'])) {
+	if(isset($auxParamsManager->debugskin)) {
 		$out = "Current Skin: '{$SkinName}'\n\n";
 		$out.= 'Default Skin: '.($Defaults[GC_DEFAULTS_SKIN] ? "'{$Defaults[GC_DEFAULTS_SKIN]}'" : 'Not set')."\n";
 		$out.= 'Session Skin: '.(isset($_SESSION[$sessionKey]) ? "'{$_SESSION[$sessionKey]}'" : 'Not set')."\n";
-		$out.= 'URL Skin:     '.(isset($_REQUEST[GC_REQUEST_SKIN]) ? "'{$_REQUEST[GC_REQUEST_SKIN]}'" : 'Not set')."\n";
+		$out.= 'URL Skin:     '.(isset($auxParamsManager->{GC_REQUEST_SKIN}) ? "'".$auxParamsManager->{GC_REQUEST_SKIN}."'" : 'Not set')."\n";
 
 		\TooBasic\debugThing($out);
 		die;

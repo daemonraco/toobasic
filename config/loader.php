@@ -1,6 +1,9 @@
 <?php
 
 //
+// SuperLoader main list.
+$SuperLoader = array();
+//
 // Basics @{
 $SuperLoader['TooBasic\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";

@@ -2,7 +2,7 @@
 
 include __DIR__.'/config/config.php';
 
-if(isset($_REQUEST['debugphpinfo'])) {
+if(isset(TooBasic\Params::Instance()->debugphpinfo)) {
 	\TooBasic\debugThing('phpinfo');
 	die;
 }

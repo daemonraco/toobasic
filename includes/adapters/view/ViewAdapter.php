@@ -40,7 +40,7 @@ abstract class ViewAdapter extends Adapter {
 	public function autoAssigns() {
 		$this->_autoAssigns["ROOTDIR"] = ROOTDIR;
 		$this->_autoAssigns["ROOTURL"] = ROOTURI;
-		$this->_autoAssigns["SERVER"] = $_SERVER;
+		$this->_autoAssigns["SERVER"] = Params::Instance()->allOf(Params::TypeSERVER);
 
 //		global $Defaults;
 //		$this->_autoAssigns["defaults"] = $Defaults;/** @todo SECURITY ISSUES */

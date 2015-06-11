@@ -35,6 +35,13 @@ class ParamsStack {
 	}
 	//
 	// Public properties.
+	public function addValues($values) {
+		foreach($values as $key => $value) {
+			if(!is_numeric($key)) {
+				$this->_params[$key] = $value;
+			}
+		}
+	}
 	public function all() {
 		return $this->_params;
 	}

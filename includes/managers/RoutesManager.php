@@ -15,6 +15,7 @@ class RoutesManager extends Manager {
 	const ValueTypeString = 'string';
 	//
 	// Protected properties.
+	protected $_params = false;
 	protected $_routes = false;
 	//
 	// Public methods.
@@ -107,10 +108,10 @@ class RoutesManager extends Manager {
 	public function load() {
 		global $Defaults;
 
-		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($_REQUEST["route"])) {
+		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($this->_params->route)) {
 			$this->parseConfigs();
 
-			$path = explode('/', $_REQUEST['route']);
+			$path = explode('/', $this->_params->route);
 
 			$matches = false;
 			$matchingRoute = false;
@@ -159,19 +160,19 @@ class RoutesManager extends Manager {
 
 			if($matchingRoute) {
 				foreach($matchingRoute->params as $key => $value) {
-					$_GET[$key] = $_REQUEST[$key] = $value;
+					$this->_params->addValues(Params::TypeGET, array($key => $value));
 				}
 				foreach($settings as $key => $value) {
-					$_GET[$key] = $_REQUEST[$key] = $value;
+					$this->_params->addValues(Params::TypeGET, array($key => $value));
 				}
 				if($extraRoute) {
-					$_GET['_route'] = $_REQUEST['_route'] = $extraRoute;
+					$this->_params->addValues(Params::TypeGET, array('_route' => $extraRoute));
 				}
 
-				$_GET['action'] = $_REQUEST['action'] = $matchingRoute->action;
-				$_SERVER['TOOBASIC_ROUTE'] = $matchingRoute->route;
+				$this->_params->addValues(Params::TypeGET, array('action' => $matchingRoute->action));
+				$this->_params->addValues(Params::TypeSERVER, array('TOOBASIC_ROUTE' => $matchingRoute->route));
 			} else {
-				$_GET['action'] = $_REQUEST['action'] = HTTPERROR_NOT_FOUND;
+				$this->_params->addValues(Params::TypeGET, array('action' => HTTPERROR_NOT_FOUND));
 			}
 		}
 	}
@@ -268,6 +269,9 @@ class RoutesManager extends Manager {
 		\TooBasic\debugThing($out);
 		die;
 	}
+	protected function init() {
+		$this->_params = Params::Instance();
+	}
 	protected function parseConfig($path) {
 		$json = json_decode(file_get_contents($path));
 		if(json_last_error() != JSON_ERROR_NONE) {
@@ -293,11 +297,11 @@ class RoutesManager extends Manager {
 					$this->parseConfig($path);
 				}
 
-				if(isset($_REQUEST['debugroutes'])) {
+				if(isset($this->_params->debugroutes)) {
 					$this->debugRoutes();
 				}
 			} else {
-				if(isset($_REQUEST['debugroutes'])) {
+				if(isset($this->_params->debugroutes)) {
 					debugit("Routes are disabled", true);
 				}
 			}

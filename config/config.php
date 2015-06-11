@@ -182,10 +182,12 @@ if(is_readable($localConfig)) {
 //
 // Final touches.
 $Defaults[GC_DEFAULTS_FORMATS]['basic'] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
+
+$auxParamsManager = TooBasic\Params::Instance();
 //
 // Routes
 \TooBasic\RoutesManager::Instance()->load();
-if(isset($_REQUEST['debugroutes'])) {
+if(isset($auxParamsManager->debugroutes)) {
 	//
 	// This is here to avoid wrong debug prompting.
 	\TooBasic\RoutesManager::Instance()->routes();
@@ -199,8 +201,10 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 }
 //
 //
-$ActionName = isset($_REQUEST[GC_REQUEST_ACTION]) ? $_REQUEST[GC_REQUEST_ACTION] : $Defaults[GC_DEFAULTS_ACTION];
-$LayoutName = isset($_REQUEST[GC_REQUEST_LAYOUT]) ? $_REQUEST[GC_REQUEST_LAYOUT] : $Defaults[GC_DEFAULTS_LAYOUT];
-$ServiceName = isset($_REQUEST[GC_REQUEST_SERVICE]) ? $_REQUEST[GC_REQUEST_SERVICE] : false;
-$ModeName = isset($_REQUEST[GC_REQUEST_MODE]) ? $_REQUEST[GC_REQUEST_MODE] : false;
+$ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
+$LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
+$ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->G{C_REQUEST_SERVICE} : false;
+$ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
 \TooBasic\guessSkin();
+
+unset($auxParamsManager);

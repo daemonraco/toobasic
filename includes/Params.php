@@ -54,6 +54,29 @@ class Params extends Singleton {
 	}
 	//
 	// Public methods.
+	/**
+	 * 
+	 * @param string $type
+	 * @param string[string] $values
+	 */
+	public function addValues($type, $values) {
+		if(isset($this->_paramsStacks[$type])) {
+			$this->_paramsStacks[$type]->addValues($values);
+		} else {
+			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+		}
+	}
+	public function allOf($type) {
+		$out = array();
+
+		if(isset($this->_paramsStacks[$type])) {
+			$out = $this->_paramsStacks[$type]->all();
+		} else {
+			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+		}
+
+		return $out;
+	}
 	public function debugs() {
 		if($this->_debugs === false) {
 			$this->_debugs = array();

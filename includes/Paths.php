@@ -265,7 +265,7 @@ class Paths extends Singleton {
 	protected function find(&$list, $skin, $folders, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
 
-		$debugPathsActive = isset($_REQUEST['debugpaths']);
+		$debugPathsActive = isset(Params::Instance()->debugpaths);
 		$debugPaths = array();
 
 		if($list === false) {
@@ -329,6 +329,6 @@ class Paths extends Singleton {
 	//
 	// Public class methods.
 	public static function Path2Uri($path) {
-		return Sanitizer::UriPath(substr($path, strlen($_SERVER['DOCUMENT_ROOT'])));
+		return Sanitizer::UriPath(substr($path, strlen(Params::Instance()->server->DOCUMENT_ROOT)));
 	}
 }

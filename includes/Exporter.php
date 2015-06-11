@@ -199,7 +199,7 @@ abstract class Exporter {
 		$out = false;
 		//
 		// Detecting current request method.
-		$method = $_SERVER["REQUEST_METHOD"];
+		$method = Params::Instance()->server->REQUEST_METHOD;
 		//
 		// If there's a specific method for the current request method,
 		// it is run, otherwise the basic run method is called
