@@ -182,7 +182,7 @@ And your template:
 Now you're also using translations, both inside your template and your controller.
 
 ## Suggestions
-After all we said you should visit this documentation pages:
+After all we said you should visit these documentation pages:
 
 * If you're having problems:
 	* [Troubleshooting](docs/troubleshooting.md)
