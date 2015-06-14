@@ -9,12 +9,12 @@ Its main reason for existence is to provide a simple and quick framework in whic
 you can start right away building your site while __TooBasic__ takes care of some
 common stuff.
 
-## Why would I use this at all?
+## Why would i use this at all?
 Well, there's no real reason, you'll probably find much better solutions in the
 first page of a google search, but if you want to try a simple framework, keep
 reading.
 
-## Basic Features?
+## Basic features?
 __TooBasic__ provide some sort of solution to features like:
 
 * __Services__: Controllers that only return a JSON result avoiding presentation
@@ -53,7 +53,7 @@ few you may need to know.
     * `cache`: All the dynamic stuff of your site like cache files, smarty
     compilations, etc. will be stored here.
 
-## How To Create A Basic Page
+## How to create a basic page
 In order to create a basic page you need to create two files, a controller and a
 template, and one name. 
 The name must be a lower-case string without spaces or special characters (geeky
@@ -105,7 +105,7 @@ action is seen when it's called. You may write something like this:
 ```
 Now you save this code into a file called __myaction.html__ inside
 __ROOTDIR/site/templates/action/__.
-### Is That It?
+### Is that it?
 Well, yes, that's all you need, now go to your browser, and enter your URL using
 the name of your action.
 Something like this:
@@ -180,6 +180,17 @@ And your template:
 </html>
 ```
 Now you're also using translations, both inside your template and your controller.
+
+## Even more basic
+How about we make things even simpler, let's say you just want to put some content
+under some action name and not worry about its controller and its settings and
+assignments and bla bla bla.
+Well there's is a solition for that, just create the HTML file as we explained
+before and let __TooBasic__ use its own _virtual controller_ to render your page.
+__TooBasic__ will take care of applying the layout when it's set and using the
+cache system to keep it fast.
+And in the future, if you think you need it, you can create a controller for that
+action and modify it as you please.
 
 ## Suggestions
 After all we said you should visit these documentation pages:
