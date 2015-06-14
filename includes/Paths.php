@@ -182,6 +182,22 @@ class Paths extends Singleton {
 
 		return $this->_templatesPaths;
 	}
+	public function templatePath($templateName, $mode = false) {
+		//
+		// Global dependencies.
+		global $Paths;
+		//
+		// Loading available templates paths.
+		$this->templateDirs();
+		//
+		// Default mode.
+		if(!$mode) {
+			$mode = 'action';
+		}
+		//
+		// Looking for and returning template's path.
+		return $this->find($this->_templatesPaths, true, $Paths[GC_PATHS_TEMPLATES], Sanitizer::DirPath("{$mode}/{$templateName}"), self::ExtensionTemplate, false);
+	}
 	//
 	// Protected methods.
 	protected function genPaths($folders, $skin = false) {

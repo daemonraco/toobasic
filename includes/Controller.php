@@ -90,56 +90,6 @@ abstract class Controller extends Exporter {
 		return $this->_layout;
 	}
 	/**
-	 * Allows to set a list of assignment to use when a snippet is called.
-	 * 
-	 * @param string $key List of assignments' name.
-	 * @param mixed[string] $value Assignments. When null, it removes the
-	 * entry.
-	 */
-	public function setSnippetDataSet($key, $value = null) {
-		if($value === null) {
-			unset($this->_snippetAssignments[$key]);
-		} else {
-			$this->_snippetAssignments[$key] = $value;
-		}
-	}
-	/**
-	 * This is an exported method that can be used inside templates. It
-	 * takes an snippet name an returns its rendered result.
-	 * 
-	 * @param string $snippetName Name of the snippet to render.
-	 * @param string $snippetDataSet List of assignments' name to use when
-	 * rendering.
-	 * @return string Result of rendering the snippet.
-	 */
-	public function snippet($snippetName, $snippetDataSet = false) {
-		$output = '';
-		//
-		// Looking for the snippet.
-		$path = $this->paths->snippetPath($snippetName);
-		if($path) {
-			if($snippetDataSet == false || !isset($this->_snippetAssignments[$snippetDataSet])) {
-				$snippetDataSet = false;
-			}
-			//
-			// Snippets are rendered only when when a basic format
-			// is in used.
-			if($this->_format == GC_VIEW_FORMAT_BASIC) {
-				global $Defaults;
-				//
-				// Generating a view adapter to render the
-				// snippet.
-				$viewAdapter = \TooBasic\Adapter::Factory($Defaults[GC_DEFAULTS_VIEW_ADAPTER]);
-				//
-				// Rendering using the specified list of
-				// assignments.
-				$output = $viewAdapter->render($snippetDataSet ? $this->_snippetAssignments[$snippetDataSet] : $this->assignments(), $path);
-			}
-		}
-
-		return (string) $output;
-	}
-	/**
 	 * This is the main method that trigger the real excution and rendering
 	 * of current controller.
 	 * 	* Checks parameters.
@@ -244,6 +194,72 @@ abstract class Controller extends Exporter {
 		}
 
 		return $this->status();
+	}
+	/**
+	 * Allows to set a list of assignment to use when a snippet is called.
+	 * 
+	 * @param string $key List of assignments' name.
+	 * @param mixed[string] $value Assignments. When null, it removes the
+	 * entry.
+	 */
+	public function setSnippetDataSet($key, $value = null) {
+		if($value === null) {
+			unset($this->_snippetAssignments[$key]);
+		} else {
+			$this->_snippetAssignments[$key] = $value;
+		}
+	}
+	/**
+	 * Allows to set view name for this controller.
+	 * 
+	 * @param string $viewName Name to be set.
+	 */
+	public function setViewName($viewName) {
+		$this->_viewName = $viewName;
+	}
+	/**
+	 * This is an exported method that can be used inside templates. It
+	 * takes an snippet name an returns its rendered result.
+	 * 
+	 * @param string $snippetName Name of the snippet to render.
+	 * @param string $snippetDataSet List of assignments' name to use when
+	 * rendering.
+	 * @return string Result of rendering the snippet.
+	 */
+	public function snippet($snippetName, $snippetDataSet = false) {
+		$output = '';
+		//
+		// Looking for the snippet.
+		$path = $this->paths->snippetPath($snippetName);
+		if($path) {
+			if($snippetDataSet == false || !isset($this->_snippetAssignments[$snippetDataSet])) {
+				$snippetDataSet = false;
+			}
+			//
+			// Snippets are rendered only when when a basic format
+			// is in used.
+			if($this->_format == GC_VIEW_FORMAT_BASIC) {
+				global $Defaults;
+				//
+				// Generating a view adapter to render the
+				// snippet.
+				$viewAdapter = \TooBasic\Adapter::Factory($Defaults[GC_DEFAULTS_VIEW_ADAPTER]);
+				//
+				// Rendering using the specified list of
+				// assignments.
+				$output = $viewAdapter->render($snippetDataSet ? $this->_snippetAssignments[$snippetDataSet] : $this->assignments(), $path);
+			}
+		}
+
+		return (string) $output;
+	}
+	/**
+	 * Allows to access the view name of this controller.
+	 * 
+	 * @return string Name of current view.
+	 */
+	public function viewName() {
+		return $this->_viewName;
 	}
 	//
 	// Protected methods.

@@ -3,7 +3,7 @@
 class StarterdocController extends TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = true;
+	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
 	protected $_layout = "mdlayout";
 	//
 	// Protected methods.
