@@ -47,6 +47,7 @@ define('GC_DIRECTORIES_SHELL', 'shell');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
+define('GC_DIRECTORIES_SYSTEM', 'system');
 // @}
 //
 // Connections @{

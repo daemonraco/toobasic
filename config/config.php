@@ -77,6 +77,7 @@ $Directories[GC_DIRECTORIES_SHELL] = TB_Sanitizer::DirPath(ROOTDIR.'/shell');
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/shell/includes');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
+$Directories[GC_DIRECTORIES_SYSTEM] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system');
 //
 // Connections.
 $Connections = array();

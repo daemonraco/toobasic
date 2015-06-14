@@ -164,22 +164,10 @@ class Paths extends Singleton {
 	}
 	public function shellCron($name, $full = false) {
 		global $Paths;
-
-		if($this->_shellCronsPaths === false) {
-			$this->_shellCronsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_CRONS]);
-			$this->_shellCronsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_CRONS]}");
-		}
-
 		return $this->find($this->_shellCronsPaths, false, $Paths[GC_PATHS_SHELL_CRONS], $name, self::ExtensionPHP, $full);
 	}
 	public function shellTool($name, $full = false) {
 		global $Paths;
-
-		if($this->_shellToolsPaths === false) {
-			$this->_shellToolsPaths = $this->genPaths($Paths[GC_PATHS_SHELL_TOOLS]);
-			$this->_shellToolsPaths[] = Sanitizer::DirPath(ROOTDIR."/{$Paths[GC_PATHS_SHELL_TOOLS]}");
-		}
-
 		return $this->find($this->_shellToolsPaths, false, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::ExtensionPHP, $full);
 	}
 	public function snippetPath($snippetName, $full = false) {
@@ -228,22 +216,27 @@ class Paths extends Singleton {
 		// Loading all modules.
 		$this->loadModules();
 		//
-		// Checking inside every skin subpaths.
+		// Adding folders inside every skin subpaths.
 		foreach($skinDirs as $skinDir) {
 			//
-			// Checking inside every module subpaths.
+			// Adding folders inside every module subpaths.
 			foreach($this->_modules as $module) {
 				//
-				// Checking inside every specified subpaths.
+				// Adding folders inside every specified subpaths.
 				foreach($folders as $subpath) {
 					$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$module}/{$skinDir}/{$subpath}");
 				}
 			}
 			//
-			// Checking inside the site's path.
+			// Adding folders inside the site's path.
 			foreach($folders as $subpath) {
 				$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$skinDir}/{$subpath}");
 			}
+		}
+		//
+		// Adding system directory.
+		foreach($folders as $subpath) {
+			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SYSTEM]}/{$subpath}");
 		}
 		//
 		// Returning the built list.
