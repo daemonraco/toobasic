@@ -24,6 +24,8 @@ class ActionsManager extends UrlManager {
 		//
 		// Layout execution (if any).
 		$layoutLastRun = false;
+		//
+		// Running layout's controller.
 		if($layoutName) {
 			$layoutLastRun = self::ExecuteAction($layoutName, $actionLastRun);
 		}
@@ -111,6 +113,8 @@ class ActionsManager extends UrlManager {
 			$errorControllerClass = self::FetchController($errorActionName);
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
+			} else {
+				$errorControllerClass->setErrorMessage("Unable to find action '{$actionName}'");
 			}
 			$layoutName = $errorControllerClass->layout();
 			$errorControllerClass->run();

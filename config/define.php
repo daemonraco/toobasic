@@ -1,6 +1,10 @@
 <?php
 
 //
+// TooBasic generic constants @{
+define('TOOBASIC_VERSION', '0.3.0');
+// @}
+//
 // HTTP errors @{
 define('HTTPERROR_OK', '200');
 define('HTTPERROR_BAD_REQUEST', '400');

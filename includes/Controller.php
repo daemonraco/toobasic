@@ -271,11 +271,14 @@ abstract class Controller extends Exporter {
 		// Adding parent's default assignments.
 		parent::autoAssigns();
 		//
-		// Current fromat.
+		// Current format.
 		$this->assign('format', $this->_format);
 		//
 		// Current mode.
 		$this->assign('mode', $this->_mode);
+		//
+		// Current view name.
+		$this->assign('view', $this->_viewName);
 		//
 		// Translation object
 		$this->assign('tr', $this->translate);
