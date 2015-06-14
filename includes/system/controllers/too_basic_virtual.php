@@ -2,25 +2,11 @@
 
 class TooBasicVirtualController extends \TooBasic\Controller {
 	//
-	// Constants.
-	//
-	// Public class properties.
-	//
-	// Protected class properties.
-	//
 	// Protected properties.	
-	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
-	//
-	// Magic methods.
-	//
-	// Public methods.
+	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeDouble;
 	//
 	// Protected methods.
 	protected function basicRun() {
 		return true;
 	}
-	//
-	// Public class methods.
-	//
-	// Protected class methods.
 }
