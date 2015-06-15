@@ -15,6 +15,7 @@
 		"debugphpinfo": "Prompts PHP information, in other words 'phpinfo()'.",
 		"debugdb": "Prompts used database connections' information.",
 		"debugpaths": "Prompts every searched path and how it was solved.",
-		"debugloader": "Show the location of each class loaded through a SuperLoader setting."
+		"debugloader": "Show the location of each class loaded through a SuperLoader setting.",
+		"debuglang":"Prompts current language, translation files used, and every key and its value. It works only if a translation gets used."
 	}
 }

@@ -16,14 +16,15 @@
 			</div>
 			<div class="row text-center">
 				<h1>{$title}</h1>
-				{if $currenterror}
+{if $currenterror}
 				<h4>{$tr->last_error_message}:</h4>
 				<p>{$lasterror.message}</p>
-				{/if}
-				{if $errormessage}
+{/if}
+
+{if $errormessage}
 				<h2>{$tr->message}:</h2>
 				<p>{$errormessage}</p>
-				{/if}
+{/if}
 			</div>
 		</div>
 	</body>

@@ -17,7 +17,7 @@ class Translate extends Singleton {
 	// Public methods.
 	public function compileLangs() {
 		$results = array(
-			"counts" => array()
+			'counts' => array()
 		);
 
 		global $Directories;
@@ -39,17 +39,17 @@ class Translate extends Singleton {
 
 			$info = pathinfo($path);
 
-			if(!isset($files[$info["filename"]])) {
-				$files[$info["filename"]] = array();
+			if(!isset($files[$info['filename']])) {
+				$files[$info['filename']] = array();
 			}
-			$files[$info["filename"]][] = $path;
+			$files[$info['filename']][] = $path;
 		}
-		$results["langs"] = array_keys($files);
-		$results["files"] = $files;
+		$results['langs'] = array_keys($files);
+		$results['files'] = $files;
 
-		$results["counts"]["keys"] = 0;
-		$results["counts"]["keys-by-lang"] = array();
-		$results["compilations"] = array();
+		$results['counts']['keys'] = 0;
+		$results['counts']['keys-by-lang'] = array();
+		$results['compilations'] = array();
 		foreach($files as $lang => $paths) {
 			$compFile = Sanitizer::DirPath("{$compDir}/{$lang}.json");
 			$compStructure = new \stdClass();
@@ -67,8 +67,8 @@ class Translate extends Singleton {
 			}
 			ksort($keys);
 
-			$results["counts"]["keys-by-lang"][$lang] = count($keys);
-			$results["counts"]["keys"] += $results["counts"]["keys-by-lang"][$lang];
+			$results['counts']['keys-by-lang'][$lang] = count($keys);
+			$results['counts']['keys'] += $results['counts']['keys-by-lang'][$lang];
 
 			$keysObj = array();
 			foreach($keys as $key => $value) {
@@ -82,7 +82,7 @@ class Translate extends Singleton {
 
 			file_put_contents($compFile, json_encode($compStructure));
 
-			$results["compilations"][] = $compFile;
+			$results['compilations'][] = $compFile;
 		}
 
 		return $results;
@@ -116,6 +116,26 @@ class Translate extends Singleton {
 				$this->loadFile($path);
 			}
 
+			if(isset(Params::Instance()->debuglang)) {
+				$thing = '';
+
+				$thing.= "Current language: '{$this->_currentLang}'\n\n";
+
+				$thing.= "Translation files:\n";
+				foreach(Paths::Instance()->langPaths($this->_currentLang) as $path) {
+					$thing.= "\t- '{$path}'\n";
+				}
+
+				$thing.= "\nTranslation keys:\n";
+				ksort($this->_tr);
+				foreach($this->_tr as $key => $value) {
+					$thing.= "\t- '{$key}': '{$value}'\n";
+				}
+
+				\TooBasic\debugThing($thing);
+				die;
+			}
+
 			$this->_loaded = true;
 		}
 	}
@@ -125,7 +145,7 @@ class Translate extends Singleton {
 		$json = json_decode(file_get_contents($path));
 		if(json_last_error() !== JSON_ERROR_NONE) {
 			$error = true;
-			debugit("[".json_last_error()."] ".json_last_error_msg(), true);
+			debugit('['.json_last_error().'] '.json_last_error_msg(), true);
 		}
 
 		if(!$error) {

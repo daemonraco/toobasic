@@ -9,7 +9,7 @@ Its main reason for existence is to provide a simple and quick framework in whic
 you can start right away building your site while __TooBasic__ takes care of some
 common stuff.
 
-## Why would i use this at all?
+## Why would I use this at all?
 Well, there's no real reason, you'll probably find much better solutions in the
 first page of a google search, but if you want to try a simple framework, keep
 reading.
