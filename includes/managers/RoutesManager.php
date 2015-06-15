@@ -183,7 +183,7 @@ class RoutesManager extends Manager {
 				$this->_params->addValues(Params::TypeSERVER, array('TOOBASIC_ROUTE' => $matchingRoute->route));
 			} else {
 				$this->_params->addValues(Params::TypeGET, array('action' => HTTPERROR_NOT_FOUND));
-				$this->_lastErrorMessage = "Unable to find a matching route for '{$this->_params->route}'.";
+				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		}
 	}
