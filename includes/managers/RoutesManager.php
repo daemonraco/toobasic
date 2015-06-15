@@ -15,6 +15,7 @@ class RoutesManager extends Manager {
 	const ValueTypeString = 'string';
 	//
 	// Protected properties.
+	protected $_lastErrorMessage = false;
 	protected $_params = false;
 	protected $_routes = false;
 	//
@@ -105,10 +106,19 @@ class RoutesManager extends Manager {
 
 		return $out;
 	}
+	public function lastErrorMessage() {
+		return $this->_lastErrorMessage;
+	}
 	public function load() {
+		//
+		// Global dependencies.
 		global $Defaults;
-
+		//
+		// This method works only when routes are active and there is a
+		// route in the url query.
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($this->_params->route)) {
+			//
+			// Loading route configuration files.
 			$this->parseConfigs();
 
 			$path = explode('/', $this->_params->route);
@@ -173,10 +183,13 @@ class RoutesManager extends Manager {
 				$this->_params->addValues(Params::TypeSERVER, array('TOOBASIC_ROUTE' => $matchingRoute->route));
 			} else {
 				$this->_params->addValues(Params::TypeGET, array('action' => HTTPERROR_NOT_FOUND));
+				$this->_lastErrorMessage = "Unable to find a matching route for '{$this->_params->route}'.";
 			}
 		}
 	}
 	public function routes() {
+		//
+		// Forcing routes to be loaded.
 		$this->parseConfigs();
 		return $this->_routes;
 	}

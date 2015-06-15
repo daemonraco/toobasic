@@ -52,8 +52,23 @@ abstract class ErrorController extends Controller {
 		$this->assign('currenterror', null);
 		$this->assign('errormessage', null);
 		//
+		// Checking for global errors.
+		if(!$this->_failingController && !$this->_errorMessage) {
+			//
+			// Global dependencies.
+			global $Defaults;
+			//
+			// Checking for routing errors.
+			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+				$routesError = RoutesManager::Instance()->lastErrorMessage();
+				if($routesError) {
+					$this->_errorMessage = $routesError;
+				}
+			}
+		}
+		//
 		// Checking if there's a controller reporting problems.
-		if($this->_failingController !== null) {
+		if($this->_failingController) {
 			//
 			// Setting error information to be shown.
 			$this->assign('errorinfo', true);
