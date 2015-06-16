@@ -126,6 +126,7 @@ $Paths[GC_PATHS_MODELS] = '/models';
 $Paths[GC_PATHS_REPRESENTATIONS] = '/models/representations';
 $Paths[GC_PATHS_SHELL] = '/shell';
 $Paths[GC_PATHS_SHELL_CRONS] = '/shell/crons';
+$Paths[GC_PATHS_SHELL_SYSTOOLS] = '/shell/sys';
 $Paths[GC_PATHS_SHELL_TOOLS] = '/shell/tools';
 $Paths[GC_PATHS_SKINS] = '/skins';
 $Paths[GC_PATHS_SNIPPETS] = '/snippets';

@@ -256,7 +256,7 @@ $CronProfiles["mysite_cron"] = array(
 	)
 );
 ```
-Now, let's change out _crontab_ configuration into something like this:
+Now, let's change our _crontab_ configuration into something like this:
 ```sh
 #
 # m h  dom mon dow   command

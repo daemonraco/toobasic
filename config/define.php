@@ -95,6 +95,7 @@ define('GC_PATHS_MODELS', 'models');
 define('GC_PATHS_REPRESENTATIONS', 'representations');
 define('GC_PATHS_SHELL', 'shell');
 define('GC_PATHS_SHELL_CRONS', 'shell-crons');
+define('GC_PATHS_SHELL_SYSTOOLS', 'shell-sys');
 define('GC_PATHS_SHELL_TOOLS', 'shell-tools');
 define('GC_PATHS_SKINS', 'skins');
 define('GC_PATHS_SNIPPETS', 'snippets');
@@ -124,6 +125,7 @@ define('GC_CLASS_SUFFIX_CRON', 'Cron');
 define('GC_CLASS_SUFFIX_MODEL', 'Model');
 define('GC_CLASS_SUFFIX_SERVICE', 'Service');
 define('GC_CLASS_SUFFIX_TOOL', 'Tool');
+define('GC_CLASS_SUFFIX_SYSTOOL', 'Systool');
 // @}
 //
 // View formats @{

@@ -74,4 +74,4 @@ class UserinfoService extends \TooBasic\Service {
 ```
 
 In both cases you don't need to care about _how_ the user information is build,
-you just worry about forwarding the information letting the model do it's job.
+you just worry about forwarding the information letting the model do its job.

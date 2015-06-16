@@ -29,6 +29,7 @@ class Paths extends Singleton {
 	protected $_routesPaths = false;
 	protected $_servicePaths = false;
 	protected $_shellCronsPaths = false;
+	protected $_shellSysPaths = false;
 	protected $_shellToolsPaths = false;
 	protected $_snippetsPaths = false;
 	protected $_templatesPaths = false;
@@ -165,6 +166,10 @@ class Paths extends Singleton {
 	public function shellCron($name, $full = false) {
 		global $Paths;
 		return $this->find($this->_shellCronsPaths, false, $Paths[GC_PATHS_SHELL_CRONS], $name, self::ExtensionPHP, $full);
+	}
+	public function shellSys($name, $full = false) {
+		global $Paths;
+		return $this->find($this->_shellSysPaths, false, $Paths[GC_PATHS_SHELL_SYSTOOLS], $name, self::ExtensionPHP, $full);
 	}
 	public function shellTool($name, $full = false) {
 		global $Paths;
