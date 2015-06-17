@@ -16,6 +16,7 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Protected properties.
 	protected $_render = false;
+	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
 	protected function addRoute($newRoute, $path, &$error, &$fatal) {
