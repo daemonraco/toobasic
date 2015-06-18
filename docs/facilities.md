@@ -9,7 +9,7 @@ familiar, not as powerful as that, of course, this is _too basic_ after all :)
 
 In this page we are going show them and explain their use.
 
-## _controller_
+## Sys-tool _controller_
 The first and perhaps obvious choice is the _sys-tool_ to create controllers.
 This tool allows you to create a basic and functional controller along with its
 view, deploy it and, if active, set a route for it in one command line.
@@ -98,3 +98,159 @@ $ php shell.php sys controller remove my_action
 ```
 It will run almost in the same way than `create`, but it will delete files instead
 of creating them.
+
+## Sys-tool _shell_
+Shell tool allow you to perform scheduled tasks or some background operation from
+a command line, so it would be useful if you can have something that creates one
+of these _things_ so you can start typing your logic.
+Well that's what this tool is for.
+
+if you want to know more about shell tools press [this link](shelltools.md).
+
+### Creating a simple tool
+Let's say you want to create a new tool called __manage_users__ to perform some
+important maintenance tasks on your site's users and it sounds like a headache to
+start writing such tool from the scratch.
+Basically you should run a command like this one:
+```plain
+$ php shell.php sys shell create manage_users --type tool
+```
+This command will:
+
+* Create a file at __ROOTDIR/site/shell/tools/manage_users.php__.
+	* It will also create required directories.
+* It will define a class called __ManageUsersTool__ and add initial methods to it.
+
+### Basic parameters
+Now let's say you need to read parameters to do some stuff inside your tool.
+This sys-tool provides your with a way to specify possible parameters executing
+something like this:
+```plain
+$ php shell.php sys shell create manage_users --type tool --param dead-users --param id:M
+```
+By doing this you are asking to have two parameters at least, one called
+__DeadUsers__ and other called __Id__.
+The first parameter will be a simple parameter that requires no values and its
+triggers will be `--dead-users` and `-d`.
+The second will be a multi-value parameter, which means you can specify it as many
+time you need on a command line, and its triggers will be `--id` and `-i`.
+
+Now here is a tricky thing, we've said _multi-value_, but how did that happened?
+Well, if you look closely we've added a suffix `:M` on the name of our parameter
+meaning that it is a multi-value parameter.
+You can also use `:V` for a parameters with only one value or `:N` (the default)
+for no values.
+
+### Master parameters
+On the previous example, __DeadUsers__ seems to be a specific task you would
+probably want to attend in a separated method inside your tool.
+In these cases you need change a little the command and do something like this:
+```plain
+$ php shell.php sys shell create manage_users --type tool --master-param dead-users --param id:M
+```
+This will create a protected method called __ taskDeadUsers()__ inside your tool
+and will be automatically called when you use `--dead-users` or `-d`.
+
+### What do I have?
+At this point you may end up with a tool looking like this:
+```php
+<?php
+
+use TooBasic\Shell\Option as TBS_Option;
+
+class ManageUsersTool extends TooBasic\Shell\ShellTool {
+        //
+        // Constants.
+        const OptionDeadUsers = 'DeadUsers';
+        const OptionId = 'Id';
+        //
+        // Protected methods.
+        protected function setOptions() {
+                $this->_options->setHelpText("TODO tool summary");
+
+                $text = "TODO help text for: '--dead-users', '-d'.";
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, array('--dead-users', '-d'), TBS_Option::TypeNoValue, $text, 'value'));
+
+                $text = "TODO help text for: '--id', '-i'.";
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, array('--id', '-i'), TBS_Option::TypeMultiValue, $text, 'value'));
+        }
+        protected function taskDeadUsers($spacer = "") {
+                debugit("TODO write some valid code for this option.", true);
+        }
+        protected function taskInfo($spacer = "") {
+        }
+}
+```
+And probably be able to do something like this:
+```plain
+$ php shell.php tool manage_users --help
+TODO tool summary
+
+        --help, -h
+                Shows this help text.
+
+        --version, -V
+                Shows this tool's version number.
+
+        --info, -I
+                Shows this tool's information.
+
+        --dead-users, -d
+                TODO help text for: '--dead-users', '-d'.
+
+        --id <value>, -i <value>
+                TODO help text for: '--id', '-i'.
+```
+
+### In a module
+If you want your tool to be created inside a module you may run this:
+```plain
+$ php shell.php sys shell create manage_users --type tool --module my_module --master-param dead-users --param id:M
+```
+
+### Destroy it
+If you need to remove it, do this:
+```plain
+$ php shell.php sys shell remove manage_users --type tool
+```
+
+### Cron shell tool
+If you want create a tool that can be called on a _cron_ execution, just change
+the type, something like this:
+```plain
+$ php shell.php sys shell create manage_users --type cron --module my_module --master-param dead-users --param id:M
+```
+and you'll end up with something like this:
+```php
+<?php
+
+use TooBasic\Shell\Option as TBS_Option;
+
+class ManageUsersCron extends TooBasic\Shell\ShellCron {
+        //
+        // Constants.
+        const OptionDeadUsers = 'DeadUsers';
+        const OptionId = 'Id';
+        //
+        // Protected methods.
+        protected function setOptions() {
+                $this->_options->setHelpText("TODO tool summary");
+
+                $text = "TODO help text for: '--dead-users', '-d'.";
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, array('--dead-users', '-d'), TBS_Option::TypeNoValue, $text, 'value'));
+
+                $text = "TODO help text for: '--id', '-i'.";
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, array('--id', '-i'), TBS_Option::TypeMultiValue, $text, 'value'));
+        }
+        protected function taskDeadUsers($spacer = "") {
+                debugit("TODO write some valid code for this option.", true);
+        }
+        protected function taskInfo($spacer = "") {
+        }
+}
+```
+
+## Suggestions
+Here are some links you may like to read:
+
+* [Shell Tools and Cron](shelltools.md)

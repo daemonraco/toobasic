@@ -248,12 +248,12 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 		return $ok;
 	}
 	protected function setOptions() {
-		$this->_options->setHelpText('This tool allows you to manage you controllers.');
+		$this->_options->setHelpText('This tool allows you to manage your controllers.');
 
 		$text = 'Allows you to create a new controller and deploy it in your site.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'controller-name'));
 
-		$text = 'Allows you to eliminate a controller and it\'s view from your site.';
+		$text = 'Allows you to eliminate a controller and its view from your site.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), TBS_Option::TypeValue, $text, 'controller-name'));
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
