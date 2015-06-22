@@ -21,7 +21,7 @@ class ModelsFactory extends Singleton {
 		}
 
 		$classFileName = \TooBasic\classname($className);
-		$className = "{$namespace}{$classFileName}Model";
+		$className = "{$namespace}{$classFileName}".GC_CLASS_SUFFIX_MODEL;
 
 		if(isset($this->_singletons[$className])) {
 			$out = $this->_singletons[$className];

@@ -197,7 +197,8 @@ After all we said you should visit these documentation pages:
 
 * If you're having problems:
 	* [Troubleshooting](docs/troubleshooting.md)
-	* [Author's Note](docs/authorsnote.md) (yes, is somehow problems related)
+	* [Author's Note](docs/authorsnote.md) (yes, it's somehow problems
+related)
 * If you want to know more:
 	* [Using Layouts](docs/uselayout.md)
 	* [Using Languages](docs/uselanguage.md)

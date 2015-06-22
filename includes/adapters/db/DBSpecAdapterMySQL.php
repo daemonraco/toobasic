@@ -178,7 +178,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$query.= implode(", \n", $lines)." \n";
 
 		$query.= ") ";
-		if(isset($table->engine)) {
+		if(isset($table->engine) && $table->engine) {
 			$query.= "engine={$table->engine} ";
 		}
 		$query.= " default charset=utf8 collate=utf8_bin auto_increment=1 ";

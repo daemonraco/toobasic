@@ -4,194 +4,114 @@ use TooBasic\Shell\Color as TBS_Color;
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
-class ControllerSystool extends TooBasic\Shell\ShellTool {
+class ControllerSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
 	const OptionCached = 'Cached';
-	const OptionCreate = 'Create';
 	const OptionLayout = 'Layout';
-	const OptionModule = 'Module';
 	const OptionParam = 'Param';
-	const OptionRemove = 'Remove';
 	//
 	// Protected properties.
 	protected $_render = false;
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
-	protected function addRoute($newRoute, $path, &$error, &$fatal) {
-		$ok = true;
+	protected function genAssignments() {
+		//
+		// Default values.
+		if($this->_assignments === false) {
+			parent::genAssignments();
+			//
+			// Assignments.
+			$this->_assignments['name'] = $this->_names['name'];
+			$this->_assignments['method'] = 'GET';
+			$this->_assignments['controller'] = $this->_names['controller-name'];
+			$this->_assignments['init'] = true;
+			$this->_assignments['nocache'] = false;
+			$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
 
-		$backup = false;
-		$fatal = false;
-		$error = '';
-
-		if(!is_file($path)) {
-			if(!file_put_contents($path, '{"routes":[]}')) {
-				$ok = false;
-				$error = "unable to create file '{$path}'";
-				$fatal = true;
-			}
-		}
-		$config = false;
-		if($ok) {
-			$backup = file_get_contents($path);
-			$config = json_decode($backup);
-			if(!$config) {
-				$ok = false;
-				$error = "unable to use routes file";
-				$fatal = true;
-			}
-		}
-		if($ok) {
-			foreach($config->routes as $route) {
-				if($route->action == $newRoute->action) {
-					$ok = false;
-					$error = "there's another rule for this controller";
-					break;
+			$opt = $this->_options->option(self::OptionCached);
+			if($opt->activated()) {
+				switch($opt->value()) {
+					case 'double':
+						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeDouble';
+						break;
+					case 'large':
+						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
+						break;
+					case 'medium':
+						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeMedium';
+						break;
+					case 'small':
+						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeSmall';
+						break;
+					case 'NOCACHE':
+						$this->_assignments['cached'] = 'false';
+						$this->_assignments['nocache'] = true;
+						break;
+					case 'large':
+					default:
+						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
 				}
 			}
-		}
-		if($ok) {
-			$config->routes[] = $newRoute;
-			if(!file_put_contents($path, json_encode($config, JSON_PRETTY_PRINT))) {
-				$ok = false;
-				$error = "something went wrong writing back routes file";
-				$fatal = true;
-				file_put_contents($path, $backup);
-			}
-		}
 
-		return $ok;
-	}
-	protected function genAssignments($names) {
-		//
-		// Default values.
-		$assignments = array();
-		//
-		// Assignments.
-		$assignments['name'] = $names['name'];
-		$assignments['method'] = 'GET';
-		$assignments['controller'] = $names['controller-name'];
-		$assignments['init'] = true;
-		$assignments['nocache'] = false;
-		$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
-		$opt = $this->_options->option(self::OptionCached);
-		if($opt->activated()) {
-			switch($opt->value()) {
-				case 'double':
-					$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeDouble';
-					break;
-				case 'large':
-					$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
-					break;
-				case 'medium':
-					$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeMedium';
-					break;
-				case 'small':
-					$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeSmall';
-					break;
-				case 'NOCACHE':
-					$assignments['cached'] = 'false';
-					$assignments['nocache'] = true;
-					break;
-				case 'large':
-				default:
-					$assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
+			$this->_assignments['layout'] = false;
+			$opt = $this->_options->option(self::OptionLayout);
+			if($opt->activated()) {
+				if($opt->value() == 'NOLAYOUT') {
+					$this->_assignments['layout'] = 'false';
+				} else {
+					$this->_assignments['layout'] = "'{$opt->value()}'";
+				}
 			}
-		}
-		$assignments['layout'] = false;
-		$opt = $this->_options->option(self::OptionLayout);
-		if($opt->activated()) {
-			if($opt->value() == 'NOLAYOUT') {
-				$assignments['layout'] = 'false';
+
+			$opt = $this->_options->option(self::OptionParam);
+			if($opt->activated()) {
+				$this->_assignments['cache_params'] = $opt->value();
+				$this->_assignments['required_params'] = $opt->value();
 			} else {
-				$assignments['layout'] = "'{$opt->value()}'";
+				$this->_assignments['cache_params'] = array();
+				$this->_assignments['required_params'] = array();
 			}
 		}
-		$opt = $this->_options->option(self::OptionParam);
-		if($opt->activated()) {
-			$assignments['cache_params'] = $opt->value();
-			$assignments['required_params'] = $opt->value();
-		} else {
-			$assignments['cache_params'] = array();
-			$assignments['required_params'] = array();
-		}
-
-		return $assignments;
 	}
-	protected function genControllerFile($names, &$error) {
-		//
-		// Default values.
-		$out = true;
-		//
-		// Forcing render to be loaded.
-		$this->loadRender();
-		//
-		// Assignments.
-		$assignments = $this->genAssignments($names);
-		//
-		// Generating file content.
-		$output = $this->_render->render($assignments, "skeletons/controller.html");
+	protected function genNames() {
+		if($this->_names === false) {
+			parent::genNames();
+			//
+			// Global dependencies.
+			global $Paths;
 
-		$result = file_put_contents($names['controller-path'], $output);
-		if($result === false) {
-			$error = "Unable to write file '{$names['controller-path']}'";
-			$out = false;
+			$this->_names['module-name'] = false;
+			$this->_names['controller-name'] = \TooBasic\classname($this->_names['name']).GC_CLASS_SUFFIX_CONTROLLER;
+
+			$this->_names['controller-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php");
+			$this->_names['view-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html");
+			$this->_names['routes-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
+
+			$this->_requiredDirectories[] = dirname($this->_names['controller-path']);
+			$this->_requiredDirectories[] = dirname($this->_names['view-path']);
+			$this->_requiredDirectories[] = dirname($this->_names['routes-path']);
 		}
-
-		return $out;
 	}
-	protected function genNames($baseName) {
-		//
-		// Default values.
-		$out = array();
-		//
-		// Global dependencies.
-		global $Directories;
-		global $Paths;
-
-		$out['name'] = $baseName;
-		$out['module-name'] = false;
-		$out['controller-name'] = \TooBasic\classname($baseName).GC_CLASS_SUFFIX_CONTROLLER;
-
-		$opt = $this->_options->option(self::OptionModule);
-		if($opt->activated()) {
-			$out['module-name'] = $opt->value();
-			$out['controller-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$out['module-name']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$baseName}.php");
-			$out['view-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$out['module-name']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$baseName}.html");
-			$out['routes-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$out['module-name']}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
-		} else {
-			$out['controller-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$baseName}.php");
-			$out['view-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$baseName}.html");
-			$out['routes-path'] = TB_Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
+	protected function genRoutes() {
+		if($this->_routes === false) {
+			//
+			// Routes list.
+			$this->_routes = array();
+			//
+			// Controller's route.
+			$route = new \stdClass();
+			$route->route = $this->_names['name'];
+			$opt = $this->_options->option(self::OptionParam);
+			if($opt->activated()) {
+				foreach($opt->value() as $param) {
+					$route->route .= "/:{$param}:";
+				}
+			}
+			$route->action = $this->_names['name'];
+			$this->_routes[] = $route;
 		}
-
-		return $out;
-	}
-	protected function genViewFile($names, &$error) {
-		//
-		// Default values.
-		$out = true;
-		$assignments = array();
-		//
-		// Forcing render to be loaded.
-		$this->loadRender();
-		//
-		// Assignments.
-		$assignments['name'] = $names['name'];
-		$assignments['controller'] = $names['controller-name'];
-		//
-		// Generating file content.
-		$output = $this->_render->render($assignments, "skeletons/view.html");
-
-		$result = file_put_contents($names['view-path'], $output);
-		if($result === false) {
-			$error = "Unable to write file '{$names['view-path']}'";
-			$out = false;
-		}
-
-		return $out;
 	}
 	protected function loadRender() {
 		if(!$this->_render) {
@@ -202,59 +122,16 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 			$engine->right_delimiter = '%>';
 		}
 	}
-	protected function removeRoute($badRoute, $path, &$error, &$fatal) {
-		$ok = true;
-
-		$backup = false;
-		$fatal = false;
-		$error = '';
-
-		if(!is_file($path)) {
-			$ok = false;
-			$error = "unable to find file '{$path}'";
-			$fatal = true;
-		}
-		$config = false;
-		if($ok) {
-			$backup = file_get_contents($path);
-			$config = json_decode($backup);
-			if(!$config) {
-				$ok = false;
-				$error = "unable to use routes file";
-				$fatal = true;
-			}
-		}
-		if($ok) {
-			$found = false;
-			foreach($config->routes as $routeKey => $route) {
-				if($route->action == $badRoute->action) {
-					unset($config->routes[$routeKey]);
-					$found = true;
-				}
-			}
-			if($found) {
-				if(!file_put_contents($path, json_encode($config, JSON_PRETTY_PRINT))) {
-					$ok = false;
-					$error = "something went wrong writing back routes file";
-					$fatal = true;
-					file_put_contents($path, $backup);
-				}
-			} else {
-				$ok = false;
-				$error = "no routes found";
-			}
-		}
-
-		return $ok;
-	}
 	protected function setOptions() {
 		$this->_options->setHelpText('This tool allows you to manage your controllers.');
 
+		parent::setOptions();
+
 		$text = 'Allows you to create a new controller and deploy it in your site.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'controller-name'));
+		$this->_options->option(self::OptionCreate)->setHelpText($text, 'controller-name');
 
 		$text = 'Allows you to eliminate a controller and its view from your site.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), TBS_Option::TypeValue, $text, 'controller-name'));
+		$this->_options->option(self::OptionRemove)->setHelpText($text, 'controller-name');
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
@@ -266,9 +143,6 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionParam, array('--param', '-p'), TBS_Option::TypeMultiValue, $text, 'param-name'));
-
-		$text = 'Generate files inside a module.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionModule, array('--module', '-m'), TBS_Option::TypeValue, $text, 'module-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$ok = true;
@@ -276,45 +150,22 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 		// Global dependencies.
 		global $Defaults;
 
-		$name = $this->_options->option(self::OptionCreate)->value();
-
-		$names = $this->genNames($name);
-		echo "{$spacer}Creating controller '{$name}':\n";
+		$this->genNames();
+		echo "{$spacer}Creating controller '{$this->_names['name']}':\n";
 
 		if($ok) {
-			echo "{$spacer}\tCreating required directories:\n";
-			$dirPaths = array(
-				dirname($names['controller-path']),
-				dirname($names['view-path']),
-				dirname($names['routes-path'])
-			);
-
-			foreach($dirPaths as $dirPath) {
-				if(!is_dir($dirPath)) {
-					echo "{$spacer}\t\tCreating '{$dirPath}': ";
-					@mkdir($dirPath, 0777, true);
-
-					if(is_dir($dirPath)) {
-						echo TBS_Color::Green('Ok');
-					} else {
-						echo TBS_Color::Red('Failed');
-						$ok = false;
-						break;
-					}
-					echo "\n";
-				}
-			}
+			$ok = $this->genRequiredDirectories($spacer);
 		}
 
 		if($ok) {
 			echo "{$spacer}\tCreating controller file: ";
-			if(is_file($names['controller-path'])) {
+			if(is_file($this->_names['controller-path'])) {
 				echo TBS_Color::Yellow('Ignored').' (controller already exists)';
 			} else {
 				$error = false;
-				if($this->genControllerFile($names, $error)) {
+				if($this->genFileByTemplate($this->_names['controller-path'], 'skeletons/controller.html', $error)) {
 					echo TBS_Color::Green('Ok');
-					echo "\n{$spacer}\t\t'{$names['controller-path']}'";
+					echo "\n{$spacer}\t\t'{$this->_names['controller-path']}'";
 				} else {
 					echo TBS_Color::Red('Failed')." ({$error})";
 					$ok = false;
@@ -325,13 +176,13 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 
 		if($ok) {
 			echo "{$spacer}\tCreating view file: ";
-			if(is_file($names['view-path'])) {
+			if(is_file($this->_names['view-path'])) {
 				echo TBS_Color::Yellow('Ignored').' (view already exists)';
 			} else {
 				$error = false;
-				if($this->genViewFile($names, $error)) {
+				if($this->genFileByTemplate($this->_names['view-path'], 'skeletons/view.html', $error)) {
 					echo TBS_Color::Green('Ok');
-					echo "\n{$spacer}\t\t'{$names['view-path']}'";
+					echo "\n{$spacer}\t\t'{$this->_names['view-path']}'";
 				} else {
 					echo TBS_Color::Red('Failed')." ({$error})";
 					$ok = false;
@@ -341,57 +192,31 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 		}
 
 		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
-			echo "{$spacer}\tAdding route configuration: ";
-
-			$route = new \stdClass();
-			$route->route = $name;
-			$opt = $this->_options->option(self::OptionParam);
-			if($opt->activated()) {
-				foreach($opt->value() as $param) {
-					$route->route .= "/:{$param}:";
-				}
-			}
-			$route->action = $name;
-
-			$error = '';
-			$fatal = false;
-			if($this->addRoute($route, $names['routes-path'], $error, $fatal)) {
-				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$names['routes-path']}'";
-			} else {
-				if($fatal) {
-					echo TBS_Color::Red('Failed');
-					$ok = false;
-				} else {
-					echo TBS_Color::Yellow('Ignored');
-				}
-				echo " ({$error})";
-			}
-			echo "\n";
+			echo "{$spacer}\tAdding route configuration:\n";
+			$this->addAllRoutes("{$spacer}\t\t");
 		}
 	}
 	protected function taskInfo($spacer = '') {
 		
 	}
 	protected function taskRemove($spacer = '') {
-		$name = $this->_options->option(self::OptionRemove)->value();
 		$ok = true;
 		//
 		// Global dependencies.
 		global $Defaults;
 
-		$names = $this->genNames($name);
+		$this->genNames();
 
-		echo "{$spacer}Removing controller '{$name}':\n";
+		echo "{$spacer}Removing controller '{$this->_names['name']}':\n";
 
 		echo "{$spacer}\tRemoving controller file: ";
-		if(!is_file($names['controller-path'])) {
+		if(!is_file($this->_names['controller-path'])) {
 			echo TBS_Color::Yellow('Ignored').' (controller already removed)';
 		} else {
-			@unlink($names['controller-path']);
-			if(!is_file($names['controller-path'])) {
+			@unlink($this->_names['controller-path']);
+			if(!is_file($this->_names['controller-path'])) {
 				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$names['controller-path']}'";
+				echo "\n{$spacer}\t\t'{$this->_names['controller-path']}'";
 			} else {
 				echo TBS_Color::Red('Failed')." (unable to remove it)";
 				$ok = false;
@@ -400,13 +225,13 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 		echo "\n";
 
 		echo "{$spacer}\tRemoving view file: ";
-		if(!is_file($names['view-path'])) {
+		if(!is_file($this->_names['view-path'])) {
 			echo TBS_Color::Yellow('Ignored').' (view already removed)';
 		} else {
-			@unlink($names['view-path']);
-			if(!is_file($names['view-path'])) {
+			@unlink($this->_names['view-path']);
+			if(!is_file($this->_names['view-path'])) {
 				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$names['view-path']}'";
+				echo "\n{$spacer}\t\t'{$this->_names['view-path']}'";
 			} else {
 				echo TBS_Color::Red('Failed')." (unable to remove it)";
 				$ok = false;
@@ -415,26 +240,8 @@ class ControllerSystool extends TooBasic\Shell\ShellTool {
 		echo "\n";
 
 		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
-			echo "{$spacer}\tRemoving route configuration: ";
-
-			$route = new \stdClass();
-			$route->action = $name;
-
-			$error = '';
-			$fatal = false;
-			if($this->removeRoute($route, $names['routes-path'], $error, $fatal)) {
-				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$names['routes-path']}'";
-			} else {
-				if($fatal) {
-					echo TBS_Color::Red('Failed');
-					$ok = false;
-				} else {
-					echo TBS_Color::Yellow('Ignored');
-				}
-				echo " ({$error})";
-			}
-			echo "\n";
+			echo "{$spacer}\tRemoving route configuration:\n";
+			$this->removeAllRoutes("{$spacer}\t\t");
 		}
 	}
 }

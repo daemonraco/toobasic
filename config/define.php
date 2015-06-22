@@ -122,7 +122,9 @@ define('GC_REQUEST_SKIN', 'skin');
 // Class Suffixes @{
 define('GC_CLASS_SUFFIX_CONTROLLER', 'Controller');
 define('GC_CLASS_SUFFIX_CRON', 'Cron');
+define('GC_CLASS_SUFFIX_FACTORY', 'Factory');
 define('GC_CLASS_SUFFIX_MODEL', 'Model');
+define('GC_CLASS_SUFFIX_REPRESENTATION', 'Representation');
 define('GC_CLASS_SUFFIX_SERVICE', 'Service');
 define('GC_CLASS_SUFFIX_TOOL', 'Tool');
 define('GC_CLASS_SUFFIX_SYSTOOL', 'Systool');

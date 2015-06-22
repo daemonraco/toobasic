@@ -125,7 +125,7 @@ abstract class ItemsFactory {
 	//
 	// Protected class methods.
 	protected static function GetClass($name, $dbname) {
-		$name = classname($name)."Representation";
+		$name = classname($name).GC_CLASS_SUFFIX_REPRESENTATION;
 
 		if(!in_array($name, self::$_LoadedClasses)) {
 			$filename = Paths::Instance()->representationPath($name);

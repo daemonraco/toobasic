@@ -74,6 +74,7 @@ $SuperLoader['TooBasic\\Shell\\Option'] = "{$Directories[GC_DIRECTORIES_SHELL_IN
 $SuperLoader['TooBasic\\Shell\\Options'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Options.php";
 $SuperLoader['TooBasic\\Shell\\ShellCron'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellCron.php";
 $SuperLoader['TooBasic\\Shell\\ShellTool'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellTool.php";
+$SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Scaffold.php";
 // @}
 //
 // Known librearies @{

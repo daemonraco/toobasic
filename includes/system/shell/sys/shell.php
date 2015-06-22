@@ -44,6 +44,12 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 		$pNames = array_merge($mpNames, $pOpt->activated() ? $pOpt->value() : array());
 		$triggers = array();
 		$fullOption = array();
+		//
+		// Cleaning master option names.
+		foreach($mpNames as &$mpName) {
+			$pieces = explode(':', $mpName);
+			$mpName = $pieces[0];
+		}
 
 		foreach($pNames as $name) {
 			$p = explode(':', $name);
@@ -147,9 +153,6 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 			$parentDir = $Directories[GC_DIRECTORIES_SITE];
 		}
 
-		$out['name'] = $baseName;
-		$out['type'] = $this->_currentType;
-		$out['module-name'] = false;
 		$out['tool-name'] = \TooBasic\classname($baseName);
 		switch($this->_currentType) {
 			case self::TypeCron:
@@ -203,14 +206,19 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 		$text = 'Allows you to create a new shell tool and deploy it in your site.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'controller-name'));
 
-		$text = 'Allows you to eliminate a shell tool and its view from your site.';
+		$text = 'Allows you to eliminate a shell tool from your site.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), TBS_Option::TypeValue, $text, 'controller-name'));
 
 		$text = 'This option allows you to select which type of tool you want to create. ';
 		$text.= 'Options are: cron or tool';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionType, array('--type', '-t'), TBS_Option::TypeValue, $text, 'tool-type'));
 
-		$text = 'Adds a param to be use in command line.';
+		$text = 'Adds a param to be use in command line. ';
+		$text.= 'You can specify a type by writing something like \'--param name:V\'. ';
+		$text.= "Possiblilities values are \n";
+		$text.= "\t- 'N' for simple parameters (default).\n";
+		$text.= "\t- 'V' for options with one value.\n";
+		$text.= "\t- 'M' for options with multiple values.\n";
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionParam, array('--param', '-p'), TBS_Option::TypeMultiValue, $text, 'param-name'));
 
 		$text = 'Adds a param that triggers a method.';
@@ -225,10 +233,6 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 		$this->guessType();
 
 		if(!$this->hasErrors()) {
-			//
-			// Global dependencies.
-			global $Defaults;
-
 			$name = $this->_options->option(self::OptionCreate)->value();
 
 			$names = $this->genNames($name);
