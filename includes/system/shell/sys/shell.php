@@ -1,20 +1,16 @@
 <?php
 
-use TooBasic\Shell\Color as TBS_Color;
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
-class ShellSystool extends TooBasic\Shell\ShellTool {
+class ShellSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
 	const ErrorOk = 0;
 	const ErrorType = 1;
 	const ErrorParameters = 2;
-	const OptionCreate = 'Create';
 	const OptionMasterParam = 'MasterParam';
-	const OptionModule = 'Module';
 	const OptionParam = 'Param';
-	const OptionRemove = 'Remove';
 	const OptionType = 'Type';
 	const TypeCron = 'cron';
 	const TypeSys = 'sys';
@@ -22,157 +18,122 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Protected properties.
 	protected $_currentType = false;
-	protected $_render = false;
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
-	protected function genAssignments($names) {
-		//
-		// Default values.
-		$assignments = array();
-		//
-		// Assignments.
-		$assignments['name'] = $names['name'];
-		$assignments['tool'] = $names['tool-name'];
-		$assignments['toolParent'] = $names['tool-parent'];
-		$assignments['options'] = array();
-		$assignments['masterOptions'] = array();
+	protected function genAssignments() {
+		if($this->_assignments === false) {
+			parent::genAssignments();
+			//
+			// Assignments.
+			$this->_assignments['tool'] = $this->_names['tool-name'];
+			$this->_assignments['toolParent'] = $this->_names['tool-parent'];
+			$this->_assignments['options'] = array();
+			$this->_assignments['masterOptions'] = array();
 
-		$mpOpt = $this->_options->option(self::OptionMasterParam);
-		$mpNames = $mpOpt->activated() ? $mpOpt->value() : array();
-		$pOpt = $this->_options->option(self::OptionParam);
-		$pNames = array_merge($mpNames, $pOpt->activated() ? $pOpt->value() : array());
-		$triggers = array();
-		$fullOption = array();
-		//
-		// Cleaning master option names.
-		foreach($mpNames as &$mpName) {
-			$pieces = explode(':', $mpName);
-			$mpName = $pieces[0];
-		}
-
-		foreach($pNames as $name) {
-			$p = explode(':', $name);
-			$p = $p[0];
-
-			$fullName = "--{$p}";
-			if(!in_array($fullName, $triggers)) {
-				$fullOption[$name] = array(
-					$fullName
-				);
-			} else {
-				$this->setError(self::ErrorParameters, "Trigger '{$fullName}' seems to be duplicated");
+			$mpOpt = $this->_options->option(self::OptionMasterParam);
+			$mpNames = $mpOpt->activated() ? $mpOpt->value() : array();
+			$pOpt = $this->_options->option(self::OptionParam);
+			$pNames = array_merge($mpNames, $pOpt->activated() ? $pOpt->value() : array());
+			$triggers = array();
+			$fullOption = array();
+			//
+			// Cleaning master option names.
+			foreach($mpNames as &$mpName) {
+				$pieces = explode(':', $mpName);
+				$mpName = $pieces[0];
 			}
-			$shortName = "-{$p[0]}";
-			if(!in_array($shortName, $triggers)) {
-				$fullOption[$name][] = $shortName;
-			} else {
-				$shortName = strtoupper($shortName);
+
+			foreach($pNames as $name) {
+				$p = explode(':', $name);
+				$p = $p[0];
+
+				$fullName = "--{$p}";
+				if(!in_array($fullName, $triggers)) {
+					$fullOption[$name] = array(
+						$fullName
+					);
+				} else {
+					$this->setError(self::ErrorParameters, "Trigger '{$fullName}' seems to be duplicated");
+				}
+				$shortName = "-{$p[0]}";
 				if(!in_array($shortName, $triggers)) {
 					$fullOption[$name][] = $shortName;
+				} else {
+					$shortName = strtoupper($shortName);
+					if(!in_array($shortName, $triggers)) {
+						$fullOption[$name][] = $shortName;
+					}
+				}
+				$triggers[] = $fullName;
+				$triggers[] = $shortName;
+			}
+
+			foreach($fullOption as $name => $optTriggers) {
+				$name = explode(':', $name);
+				$paramType = 'N';
+				if(isset($name[1])) {
+					$paramType = strtoupper($name[1]);
+				}
+				$name = $name[0];
+
+				$aux = array(
+					'name' => str_replace(' ', '', ucwords(implode(' ', explode('-', $name)))),
+					'triggers' => $optTriggers
+				);
+				switch($paramType) {
+					case 'M':
+						$aux['type'] = 'TypeMultiValue';
+						break;
+					case 'V':
+						$aux['type'] = 'TypeValue';
+						break;
+					case 'N':
+					default:
+						$aux['type'] = 'TypeNoValue';
+						break;
+				}
+
+				$this->_assignments['options'][] = $aux;
+				if(in_array($name, $mpNames)) {
+					$this->_assignments['masterOptions'][] = $aux;
 				}
 			}
-			$triggers[] = $fullName;
-			$triggers[] = $shortName;
 		}
+	}
+	protected function genNames() {
+		if($this->_names === false) {
+			parent::genNames();
+			//
+			// Global dependencies.
+			global $Paths;
 
-		foreach($fullOption as $name => $optTriggers) {
-			$name = explode(':', $name);
-			$paramType = 'N';
-			if(isset($name[1])) {
-				$paramType = strtoupper($name[1]);
+			$this->_names['type'] = $this->_currentType;
+
+			$this->_names['tool-name'] = \TooBasic\classname($this->_names['name']);
+			switch($this->_currentType) {
+				case self::TypeCron:
+					$this->_names['tool-name'].= GC_CLASS_SUFFIX_CRON;
+					$this->_names['tool-parent'] = 'ShellCron';
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names['name']}.php");
+					break;
+				case self::TypeSys:
+					$this->_names['tool-name'].= GC_CLASS_SUFFIX_SYSTOOL;
+					$this->_names['tool-parent'] = 'ShellTool';
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names['name']}.php");
+					break;
+				case self::TypeTool:
+					$this->_names['tool-name'].= GC_CLASS_SUFFIX_TOOL;
+					$this->_names['tool-parent'] = 'ShellTool';
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names['name']}.php");
+					break;
 			}
-			$name = $name[0];
-
-			$aux = array(
-				'name' => str_replace(' ', '', ucwords(implode(' ', explode('-', $name)))),
-				'triggers' => $optTriggers
+			$this->_files[] = array(
+				'path' => $this->_names['tool-path'],
+				'template' => 'skeletons/tool.html',
+				'description' => 'tool file'
 			);
-			switch($paramType) {
-				case 'M':
-					$aux['type'] = 'TypeMultiValue';
-					break;
-				case 'V':
-					$aux['type'] = 'TypeValue';
-					break;
-				case 'N':
-				default:
-					$aux['type'] = 'TypeNoValue';
-					break;
-			}
-
-			$assignments['options'][] = $aux;
-			if(in_array($name, $mpNames)) {
-				$assignments['masterOptions'][] = $aux;
-			}
 		}
-
-		return $assignments;
-	}
-	protected function genToolFile($names, &$error) {
-		//
-		// Default values.
-		$out = true;
-		//
-		// Forcing render to be loaded.
-		$this->loadRender();
-		//
-		// Assignments.
-		$assignments = $this->genAssignments($names);
-		//
-		// Generating file content.
-		$output = $this->_render->render($assignments, "skeletons/tool.html");
-
-		$result = file_put_contents($names['tool-path'], $output);
-		if($result === false) {
-			$error = "Unable to write file '{$names['tool-path']}'";
-			$out = false;
-		}
-
-		return $out;
-	}
-	protected function genNames($baseName) {
-		//
-		// Default values.
-		$out = array();
-		//
-		// Global dependencies.
-		global $Directories;
-		global $Paths;
-
-		$parentDir = '';
-		$out['name'] = $baseName;
-		$out['type'] = $this->_currentType;
-		$out['module-name'] = false;
-
-		$opt = $this->_options->option(self::OptionModule);
-		if($opt->activated()) {
-			$out['module-name'] = $opt->value();
-			$parentDir = "{$Directories[GC_DIRECTORIES_MODULES]}/{$out['module-name']}";
-		} else {
-			$parentDir = $Directories[GC_DIRECTORIES_SITE];
-		}
-
-		$out['tool-name'] = \TooBasic\classname($baseName);
-		switch($this->_currentType) {
-			case self::TypeCron:
-				$out['tool-name'].= GC_CLASS_SUFFIX_CRON;
-				$out['tool-parent'] = 'ShellCron';
-				$out['tool-path'] = TB_Sanitizer::DirPath("{$parentDir}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$baseName}.php");
-				break;
-			case self::TypeSys:
-				$out['tool-name'].= GC_CLASS_SUFFIX_SYSTOOL;
-				$out['tool-parent'] = 'ShellTool';
-				$out['tool-path'] = TB_Sanitizer::DirPath("{$parentDir}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$baseName}.php");
-				break;
-			case self::TypeTool:
-				$out['tool-name'].= GC_CLASS_SUFFIX_TOOL;
-				$out['tool-parent'] = 'ShellTool';
-				$out['tool-path'] = TB_Sanitizer::DirPath("{$parentDir}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$baseName}.php");
-				break;
-		}
-
-		return $out;
 	}
 	protected function guessType() {
 		$opt = $this->_options->option(self::OptionType);
@@ -191,23 +152,16 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 			$this->setError(self::ErrorType, "No type specified");
 		}
 	}
-	protected function loadRender() {
-		if(!$this->_render) {
-			$this->_render = \TooBasic\Adapter::Factory('\TooBasic\ViewAdapterSmarty');
-
-			$engine = $this->_render->engine();
-			$engine->left_delimiter = '<%';
-			$engine->right_delimiter = '%>';
-		}
-	}
 	protected function setOptions() {
 		$this->_options->setHelpText('This tool allows you to manage your shell tools.');
 
+		parent::setOptions();
+
 		$text = 'Allows you to create a new shell tool and deploy it in your site.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'controller-name'));
+		$this->_options->option(self::OptionCreate)->setHelpText($text, 'tool-name');
 
 		$text = 'Allows you to eliminate a shell tool from your site.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), TBS_Option::TypeValue, $text, 'controller-name'));
+		$this->_options->option(self::OptionRemove)->setHelpText($text, 'tool-name');
 
 		$text = 'This option allows you to select which type of tool you want to create. ';
 		$text.= 'Options are: cron or tool';
@@ -223,9 +177,6 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 
 		$text = 'Adds a param that triggers a method.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionMasterParam, array('--master-param', '-mp'), TBS_Option::TypeMultiValue, $text, 'param-name'));
-
-		$text = 'Generate files inside a module.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionModule, array('--module', '-m'), TBS_Option::TypeValue, $text, 'module-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$ok = true;
@@ -233,51 +184,14 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 		$this->guessType();
 
 		if(!$this->hasErrors()) {
-			$name = $this->_options->option(self::OptionCreate)->value();
+			$this->genNames();
 
-			$names = $this->genNames($name);
-			echo "{$spacer}Creating shell tool '{$name}' (type: {$this->_currentType}):\n";
+			echo "{$spacer}Creating shell tool '{$this->_names['name']}' (type: {$this->_currentType}):\n";
 
-			if($ok) {
-				echo "{$spacer}\tCreating required directories:\n";
-				$dirPaths = array(
-					dirname($names['tool-path'])
-				);
-
-				foreach($dirPaths as $dirPath) {
-					if(!is_dir($dirPath)) {
-						echo "{$spacer}\t\tCreating '{$dirPath}': ";
-						@mkdir($dirPath, 0777, true);
-
-						if(is_dir($dirPath)) {
-							echo TBS_Color::Green('Ok');
-						} else {
-							echo TBS_Color::Red('Failed');
-							$ok = false;
-							break;
-						}
-						echo "\n";
-					}
-				}
-			}
-
-			if($ok) {
-				echo "{$spacer}\tCreating tool file: ";
-				if(is_file($names['tool-path'])) {
-					echo TBS_Color::Yellow('Ignored').' (tool already exists)';
-				} else {
-					$error = false;
-					if($this->genToolFile($names, $error)) {
-						echo TBS_Color::Green('Ok');
-						echo "\n{$spacer}\t\t'{$names['tool-path']}'";
-					} else {
-						echo TBS_Color::Red('Failed')." ({$error})";
-						$ok = false;
-					}
-				}
-				echo "\n";
-			}
+			$ok = parent::taskCreate($spacer);
 		}
+
+		return $ok;
 	}
 	protected function taskInfo($spacer = '') {
 		
@@ -288,26 +202,13 @@ class ShellSystool extends TooBasic\Shell\ShellTool {
 		$this->guessType();
 
 		if(!$this->hasErrors()) {
-			$name = $this->_options->option(self::OptionRemove)->value();
+			$this->genNames();
 
-			$names = $this->genNames($name);
+			echo "{$spacer}Removing tool '{$this->_names['name']}' (type: {$this->_currentType}):\n";
 
-			echo "{$spacer}Removing tool '{$name}' (type: {$this->_currentType}):\n";
-
-			echo "{$spacer}\tRemoving tool file: ";
-			if(!is_file($names['tool-path'])) {
-				echo TBS_Color::Yellow('Ignored').' (tool already removed)';
-			} else {
-				@unlink($names['tool-path']);
-				if(!is_file($names['tool-path'])) {
-					echo TBS_Color::Green('Ok');
-					echo "\n{$spacer}\t\t'{$names['tool-path']}'";
-				} else {
-					echo TBS_Color::Red('Failed')." (unable to remove it)";
-					$ok = false;
-				}
-			}
-			echo "\n";
+			$ok = parent::taskRemove($spacer);
 		}
+
+		return $ok;
 	}
 }

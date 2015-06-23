@@ -17,8 +17,6 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Protected methods.
 	protected function genAssignments() {
-		//
-		// Default values.
 		if($this->_assignments === false) {
 			parent::genAssignments();
 			//
@@ -82,16 +80,19 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['module-name'] = false;
 			$this->_names['controller-name'] = \TooBasic\classname($this->_names['name']).GC_CLASS_SUFFIX_CONTROLLER;
-
-			$this->_names['controller-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php");
-			$this->_names['view-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html");
-			$this->_names['routes-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
-
-			$this->_requiredDirectories[] = dirname($this->_names['controller-path']);
-			$this->_requiredDirectories[] = dirname($this->_names['view-path']);
-			$this->_requiredDirectories[] = dirname($this->_names['routes-path']);
+			//
+			// Files.
+			$this->_files[] = array(
+				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php"),
+				'template' => 'skeletons/controller.html',
+				'description' => 'controller file'
+			);
+			$this->_files[] = array(
+				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html"),
+				'template' => 'skeletons/view.html',
+				'description' => 'view file'
+			);
 		}
 	}
 	protected function genRoutes() {
@@ -111,15 +112,6 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			}
 			$route->action = $this->_names['name'];
 			$this->_routes[] = $route;
-		}
-	}
-	protected function loadRender() {
-		if(!$this->_render) {
-			$this->_render = \TooBasic\Adapter::Factory('\TooBasic\ViewAdapterSmarty');
-
-			$engine = $this->_render->engine();
-			$engine->left_delimiter = '<%';
-			$engine->right_delimiter = '%>';
 		}
 	}
 	protected function setOptions() {
@@ -145,103 +137,20 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionParam, array('--param', '-p'), TBS_Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
-		$ok = true;
-		//
-		// Global dependencies.
-		global $Defaults;
-
 		$this->genNames();
+
 		echo "{$spacer}Creating controller '{$this->_names['name']}':\n";
 
-		if($ok) {
-			$ok = $this->genRequiredDirectories($spacer);
-		}
-
-		if($ok) {
-			echo "{$spacer}\tCreating controller file: ";
-			if(is_file($this->_names['controller-path'])) {
-				echo TBS_Color::Yellow('Ignored').' (controller already exists)';
-			} else {
-				$error = false;
-				if($this->genFileByTemplate($this->_names['controller-path'], 'skeletons/controller.html', $error)) {
-					echo TBS_Color::Green('Ok');
-					echo "\n{$spacer}\t\t'{$this->_names['controller-path']}'";
-				} else {
-					echo TBS_Color::Red('Failed')." ({$error})";
-					$ok = false;
-				}
-			}
-			echo "\n";
-		}
-
-		if($ok) {
-			echo "{$spacer}\tCreating view file: ";
-			if(is_file($this->_names['view-path'])) {
-				echo TBS_Color::Yellow('Ignored').' (view already exists)';
-			} else {
-				$error = false;
-				if($this->genFileByTemplate($this->_names['view-path'], 'skeletons/view.html', $error)) {
-					echo TBS_Color::Green('Ok');
-					echo "\n{$spacer}\t\t'{$this->_names['view-path']}'";
-				} else {
-					echo TBS_Color::Red('Failed')." ({$error})";
-					$ok = false;
-				}
-			}
-			echo "\n";
-		}
-
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
-			echo "{$spacer}\tAdding route configuration:\n";
-			$this->addAllRoutes("{$spacer}\t\t");
-		}
+		return parent::taskCreate($spacer);
 	}
 	protected function taskInfo($spacer = '') {
 		
 	}
 	protected function taskRemove($spacer = '') {
-		$ok = true;
-		//
-		// Global dependencies.
-		global $Defaults;
-
 		$this->genNames();
 
 		echo "{$spacer}Removing controller '{$this->_names['name']}':\n";
 
-		echo "{$spacer}\tRemoving controller file: ";
-		if(!is_file($this->_names['controller-path'])) {
-			echo TBS_Color::Yellow('Ignored').' (controller already removed)';
-		} else {
-			@unlink($this->_names['controller-path']);
-			if(!is_file($this->_names['controller-path'])) {
-				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$this->_names['controller-path']}'";
-			} else {
-				echo TBS_Color::Red('Failed')." (unable to remove it)";
-				$ok = false;
-			}
-		}
-		echo "\n";
-
-		echo "{$spacer}\tRemoving view file: ";
-		if(!is_file($this->_names['view-path'])) {
-			echo TBS_Color::Yellow('Ignored').' (view already removed)';
-		} else {
-			@unlink($this->_names['view-path']);
-			if(!is_file($this->_names['view-path'])) {
-				echo TBS_Color::Green('Ok');
-				echo "\n{$spacer}\t\t'{$this->_names['view-path']}'";
-			} else {
-				echo TBS_Color::Red('Failed')." (unable to remove it)";
-				$ok = false;
-			}
-		}
-		echo "\n";
-
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
-			echo "{$spacer}\tRemoving route configuration:\n";
-			$this->removeAllRoutes("{$spacer}\t\t");
-		}
+		return parent::taskRemove($spacer);
 	}
 }

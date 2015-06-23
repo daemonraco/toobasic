@@ -15,33 +15,46 @@ abstract class Scaffold extends ShellTool {
 	//
 	// Protected properties.
 	protected $_assignments = false;
+	protected $_files = array();
 	protected $_names = false;
 	protected $_render = false;
 	protected $_requiredDirectories = array();
+	protected $_routes = false;
 	//
 	// Protected methods.
 	protected function addAllRoutes($spacer) {
+		//
+		// Default values-
 		$ok = true;
+		//
+		// Global dependencies.
+		global $Defaults;
 
-		$this->genRoutes();
-		foreach($this->_routes as $route) {
-			echo "{$spacer}-'{$route->route}': ";
+		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			$this->genRoutes();
 
-			$error = '';
-			$fatal = false;
-			if($this->addRoute($route, $error, $fatal)) {
-				echo TBS_Color::Green('Ok');
-			} else {
-				if($fatal) {
-					echo TBS_Color::Red('Failed');
-					$ok = false;
-					break;
-				} else {
-					echo TBS_Color::Yellow('Ignored');
+			if(count($this->_routes)) {
+				echo "{$spacer}Adding routes configuration:\n";
+				foreach($this->_routes as $route) {
+					echo "{$spacer}\t- '{$route->route}': ";
+
+					$error = '';
+					$fatal = false;
+					if($this->addRoute($route, $error, $fatal)) {
+						echo TBS_Color::Green('Ok');
+					} else {
+						if($fatal) {
+							echo TBS_Color::Red('Failed');
+							$ok = false;
+							break;
+						} else {
+							echo TBS_Color::Yellow('Ignored');
+						}
+						echo " ({$error})";
+					}
+					echo "\n";
 				}
-				echo " ({$error})";
 			}
-			echo "\n";
 		}
 
 		return $ok;
@@ -92,6 +105,21 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	protected function enforceFilesList() {
+		foreach($this->_files as &$file) {
+			if(!isset($file['description'])) {
+				$file['description'] = "file '".basename($file['path'])."'";
+			}
+			if(!isset($file['generator'])) {
+				$file['generator'] = 'genFileByTemplate';
+			}
+			if(!isset($file['template'])) {
+				$file['template'] = false;
+			}
+
+			$this->_requiredDirectories[] = dirname($file['path']);
+		}
+	}
 	protected function genAssignments() {
 		$this->genNames();
 		if($this->_assignments === false) {
@@ -99,6 +127,26 @@ abstract class Scaffold extends ShellTool {
 			// Default values.
 			$this->_assignments = array();
 		}
+	}
+	protected function genFile($path, $template = false, $callback = 'genFileByTemplate') {
+		//
+		// Default values.
+		$ok = true;
+
+		if(is_file($path)) {
+			echo TBS_Color::Yellow('Ignored').' (file already exist)';
+		} else {
+			$error = false;
+			if($this->{$callback}($path, $template, $error)) {
+				echo TBS_Color::Green('Ok')." ({$path})";
+			} else {
+				echo TBS_Color::Red('Failed')." ({$error})";
+				$ok = false;
+			}
+		}
+		echo "\n";
+
+		return $ok;
 	}
 	protected function genFileByTemplate($path, $template, &$error) {
 		//
@@ -183,7 +231,9 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
-	abstract protected function genRoutes();
+	protected function genRoutes() {
+		$this->_routes = array();
+	}
 	protected function loadRender() {
 		if(!$this->_render) {
 			$this->_render = \TooBasic\Adapter::Factory('\TooBasic\ViewAdapterSmarty');
@@ -194,28 +244,59 @@ abstract class Scaffold extends ShellTool {
 		}
 	}
 	protected function removeAllRoutes($spacer) {
+		//
+		// Default values-
+		$ok = true;
+		//
+		// Global dependencies.
+		global $Defaults;
+
+		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			$this->genRoutes();
+
+			if(count($this->_routes)) {
+				echo "{$spacer}Removing routes configuration:\n";
+				foreach($this->_routes as $route) {
+					echo "{$spacer}\t- '{$route->route}': ";
+
+					$error = '';
+					$fatal = false;
+					if($this->removeRoute($route, $error, $fatal)) {
+						echo TBS_Color::Green('Ok');
+					} else {
+						if($fatal) {
+							echo TBS_Color::Red('Failed');
+							$ok = false;
+							break;
+						} else {
+							echo TBS_Color::Yellow('Ignored');
+						}
+						echo " ({$error})";
+					}
+					echo "\n";
+				}
+			}
+		}
+
+		return $ok;
+	}
+	protected function removeFile($path) {
+		//
+		// Default values.
 		$ok = true;
 
-		$this->genRoutes();
-		foreach($this->_routes as $route) {
-			echo "{$spacer}-'{$route->route}': ";
-
-			$error = '';
-			$fatal = false;
-			if($this->removeRoute($route, $error, $fatal)) {
-				echo TBS_Color::Green('Ok');
+		if(!is_file($path)) {
+			echo TBS_Color::Yellow('Ignored').' (file already removed)';
+		} else {
+			@unlink($path);
+			if(!is_file($path)) {
+				echo TBS_Color::Green('Ok')." ({$path})";
 			} else {
-				if($fatal) {
-					echo TBS_Color::Red('Failed');
-					$ok = false;
-					break;
-				} else {
-					echo TBS_Color::Yellow('Ignored');
-				}
-				echo " ({$error})";
+				echo TBS_Color::Red('Failed')." (unable to remove it)";
+				$ok = false;
 			}
-			echo "\n";
 		}
+		echo "\n";
 
 		return $ok;
 	}
@@ -275,6 +356,67 @@ abstract class Scaffold extends ShellTool {
 		$text = 'Generate files inside a module.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionModule, array('--module', '-m'), TBS_Option::TypeValue, $text, 'name'));
 	}
-	abstract protected function taskCreate($spacer = "");
-	abstract protected function taskRemove($spacer = "");
+	protected function taskCreate($spacer = "") {
+		//
+		// Default values.
+		$ok = true;
+		//
+		// Enforcing names generation.
+		$this->genNames();
+		//
+		// Enforcing files list structure.
+		$this->enforceFilesList();
+		//
+		// Directories
+		if($ok) {
+			$ok = $this->genRequiredDirectories($spacer);
+		}
+		//
+		// Files
+		if($ok) {
+			foreach($this->_files as $file) {
+				echo "{$spacer}\tCreating {$file['description']}: ";
+				if(!$this->genFile($file['path'], $file['template'], $file['generator'])) {
+					$ok = false;
+					break;
+				}
+			}
+		}
+		//
+		// Routes.
+		if($ok) {
+			$ok = $this->addAllRoutes("{$spacer}\t");
+		}
+
+		return $ok;
+	}
+	protected function taskRemove($spacer = "") {
+		//
+		// Default values.
+		$ok = true;
+		//
+		// Enforcing names generation.
+		$this->genNames();
+		//
+		// Enforcing files list structure.
+		$this->enforceFilesList();
+		//
+		// Files
+		if($ok) {
+			foreach($this->_files as $file) {
+				echo "{$spacer}\tRemoving {$file['description']}: ";
+				if(!$this->removeFile($file['path'])) {
+					$ok = false;
+					break;
+				}
+			}
+		}
+		//
+		// Routes.
+		if($ok) {
+			$ok = $this->removeAllRoutes("{$spacer}\t");
+		}
+
+		return $ok;
+	}
 }
