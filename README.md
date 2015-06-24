@@ -192,6 +192,10 @@ cache system to keep it fast.
 And in the future, if you think you need it, you can create a controller for that
 action and modify it as you please.
 
+## Even easier?!
+So, you're not satisfied and you want something more simple, well, visit [this
+link](docs/facilities.md) and you may find what you want.
+
 ## Suggestions
 After all we said you should visit these documentation pages:
 

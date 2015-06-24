@@ -164,13 +164,13 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Actions.
 			$this->_names['list-action'] = $this->_names['plural-name'];
 			$this->_names['list-action-controller'] = \TooBasic\classname($this->_names['list-action']).GC_CLASS_SUFFIX_CONTROLLER;
-			$this->_names['view-action'] = "{$this->_names['name']}_view";
+			$this->_names['view-action'] = "{$this->_names['singular-name']}";
 			$this->_names['view-action-controller'] = \TooBasic\classname($this->_names['view-action']).GC_CLASS_SUFFIX_CONTROLLER;
-			$this->_names['edit-action'] = "{$this->_names['name']}_edit";
+			$this->_names['edit-action'] = "{$this->_names['singular-name']}_edit";
 			$this->_names['edit-action-controller'] = \TooBasic\classname($this->_names['edit-action']).GC_CLASS_SUFFIX_CONTROLLER;
-			$this->_names['add-action'] = "{$this->_names['name']}_add";
+			$this->_names['add-action'] = "{$this->_names['singular-name']}_add";
 			$this->_names['add-action-controller'] = \TooBasic\classname($this->_names['add-action']).GC_CLASS_SUFFIX_CONTROLLER;
-			$this->_names['delete-action'] = "{$this->_names['name']}_delete";
+			$this->_names['delete-action'] = "{$this->_names['singular-name']}_delete";
 			$this->_names['delete-action-controller'] = \TooBasic\classname($this->_names['delete-action']).GC_CLASS_SUFFIX_CONTROLLER;
 			//
 			// Files
