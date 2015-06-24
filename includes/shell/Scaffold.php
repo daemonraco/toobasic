@@ -10,12 +10,14 @@ abstract class Scaffold extends ShellTool {
 	//
 	// Constants.
 	const OptionCreate = 'Create';
+	const OptionForced = 'Forced';
 	const OptionModule = 'Module';
 	const OptionRemove = 'Remove';
 	//
 	// Protected properties.
 	protected $_assignments = false;
 	protected $_files = array();
+	protected $_forced = null;
 	protected $_names = false;
 	protected $_render = false;
 	protected $_requiredDirectories = array();
@@ -133,12 +135,12 @@ abstract class Scaffold extends ShellTool {
 		// Default values.
 		$ok = true;
 
-		if(is_file($path)) {
+		if(!$this->isForced() && is_file($path)) {
 			echo TBS_Color::Yellow('Ignored').' (file already exist)';
 		} else {
 			$error = false;
 			if($this->{$callback}($path, $template, $error)) {
-				echo TBS_Color::Green('Ok')." ({$path})";
+				echo TBS_Color::Green('Ok');
 			} else {
 				echo TBS_Color::Red('Failed')." ({$error})";
 				$ok = false;
@@ -209,12 +211,24 @@ abstract class Scaffold extends ShellTool {
 	}
 	protected function genRequiredDirectories($spacer) {
 		$ok = true;
-
-		echo "{$spacer}\tCreating required directories:\n";
-
+		//
+		// Cleaning directories list.
 		$this->_requiredDirectories = array_unique($this->_requiredDirectories);
+		//
+		// Checking which directories have to be created.
+		$toGen = array();
 		foreach($this->_requiredDirectories as $dirPath) {
 			if(!is_dir($dirPath)) {
+				$toGen[] = $dirPath;
+			}
+		}
+		//
+		// Is there something to create.
+		if($toGen) {
+			echo "{$spacer}\tCreating required directories:\n";
+			//
+			// Creating each directory.
+			foreach($toGen as $dirPath) {
 				echo "{$spacer}\t\tCreating '{$dirPath}': ";
 				@mkdir($dirPath, 0777, true);
 
@@ -232,7 +246,16 @@ abstract class Scaffold extends ShellTool {
 		return $ok;
 	}
 	protected function genRoutes() {
-		$this->_routes = array();
+		if($this->_routes === false) {
+			$this->_routes = array();
+		}
+	}
+	protected function isForced() {
+		if($this->_forced === null) {
+			$this->_forced = $this->_options->option(self::OptionForced)->activated();
+		}
+
+		return $this->_forced;
 	}
 	protected function loadRender() {
 		if(!$this->_render) {
@@ -355,6 +378,9 @@ abstract class Scaffold extends ShellTool {
 
 		$text = 'Generate files inside a module.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionModule, array('--module', '-m'), TBS_Option::TypeValue, $text, 'name'));
+
+		$text = 'Overwrite files when they exist (routes are excluded).';
+		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionForced, array('--forced'), TBS_Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = "") {
 		//
@@ -378,6 +404,10 @@ abstract class Scaffold extends ShellTool {
 				echo "{$spacer}\tCreating {$file['description']}: ";
 				if(!$this->genFile($file['path'], $file['template'], $file['generator'])) {
 					$ok = false;
+				}
+				echo "{$spacer}\t\t- '{$file['path']}'\n\n";
+
+				if(!$ok) {
 					break;
 				}
 			}

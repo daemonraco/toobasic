@@ -187,6 +187,14 @@ $Defaults[GC_DEFAULTS_FORMATS]['basic'] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
 
 $auxParamsManager = TooBasic\Params::Instance();
 //
+// Debugs lister.
+if(isset($auxParamsManager->debugdebugs)) {
+	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
+	ksort($config['debugs']);
+	\TooBasic\debugThing($config['debugs']);
+	die;
+}
+//
 // Routes
 \TooBasic\RoutesManager::Instance()->load();
 if(isset($auxParamsManager->debugroutes)) {

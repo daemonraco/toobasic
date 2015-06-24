@@ -46,6 +46,21 @@ abstract class ItemsFactory {
 	}
 	//
 	// Public methods.
+	public function create() {
+		$out = false;
+
+		$query = "insert \n";
+		$query.= "        into {$this->_dbprefix}{$this->_CP_Table}() \n";
+		$query.= "        values() \n";
+
+		$stmt = $this->_db->prepare($query);
+
+		if($stmt->execute()) {
+			$out = $this->_db->lastInsertId();
+		}
+
+		return $out;
+	}
 	public function ids() {
 		$out = array();
 

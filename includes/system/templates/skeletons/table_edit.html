@@ -1,0 +1,48 @@
+<h4>Edit item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+
+<form id="<%$singularName%>_form" method="post" href="#" role="form">
+	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
+	<table>
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' %>
+		<tr>
+			<td>
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+			</td><td>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}"/>
+			</td>
+		</tr>
+<%/if%>
+<%if $field.type.type == 'text' %>
+		<tr>
+			<td>
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+			</td><td>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>">{$<%$singularName%>.<%$field.name%>}</textarea>
+			</td>
+		</tr>
+<%/if%>
+<%if $field.type.type == 'enum' %>
+		<tr>
+			<td>
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+			</td><td>
+				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>">
+<%foreach from=$field.type.values item=value%>
+					<option value="<%$value%>"{if $<%$singularName%>.<%$field.name%> == '<%$value%>'} selected="selected"{/if}><%$value%></option>
+<%/foreach%>
+				</select>
+			</td>
+		</tr>
+<%/if%>
+<%/if%><%/foreach%>
+		<tr>
+			<td colspan="2">
+				<input type="submit" value="Save"/>
+				<input type="reset" value="Restore fields"/>
+			</td>
+		</tr>
+	</table>
+</form>
+<br/>
+<a href="{$ctrl->link('?action=<%$listAction%>')}">Back to list</a>

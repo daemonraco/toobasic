@@ -43,6 +43,12 @@ class DBStructureManager extends Manager {
 		self::ColumnTypeTimestamp,
 		self::ColumnTypeVarchar
 	);
+	protected static $_ColumnTypesWithoutPrecisions = array(
+		self::ColumnTypeBlob,
+		self::ColumnTypeEnum,
+		self::ColumnTypeText,
+		self::ColumnTypeTimestamp,
+	);
 	// 
 	// Protected properties.
 	protected $_callbacks = array();
@@ -787,12 +793,12 @@ class DBStructureManager extends Manager {
 				}
 				//
 				//
-				/** @todo check this, why there's no else? */
-				if(!isset($auxField->type->precision)) {
+				/** @todo check this, why there's no 'else'? */
+				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
 					if($auxField->type->type == self::ColumnTypeEnum && !isset($auxField->type->values)) {
 						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value");
 						continue;
-					} elseif($auxField->type->type != self::ColumnTypeEnum) {
+					} elseif(!in_array($auxField->type->type, self::$_ColumnTypesWithoutPrecisions)) {
 						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision");
 						continue;
 					}

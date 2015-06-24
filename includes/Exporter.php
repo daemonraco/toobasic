@@ -178,9 +178,11 @@ abstract class Exporter {
 	}
 	protected function checkParams() {
 		foreach($this->_requiredParams as $method => $params) {
-			foreach($params as $param) {
-				if(!isset($this->params->{$method}->{$param})) {
-					$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).')');
+			if($method == 'GET' || $method == $_SERVER['REQUEST_METHOD']) {
+				foreach($params as $param) {
+					if(!isset($this->params->{$method}->{$param})) {
+						$this->setError(HTTPERROR_BAD_REQUEST, "Parameter '{$param}' is not set (".strtoupper($method).')');
+					}
 				}
 			}
 		}

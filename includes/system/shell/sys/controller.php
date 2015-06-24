@@ -97,9 +97,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	}
 	protected function genRoutes() {
 		if($this->_routes === false) {
-			//
-			// Routes list.
-			$this->_routes = array();
+			parent::genRoutes();
 			//
 			// Controller's route.
 			$route = new \stdClass();

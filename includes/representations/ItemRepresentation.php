@@ -150,6 +150,17 @@ abstract class ItemRepresentation {
 
 		return $persisted;
 	}
+	public function remove() {
+		$query = "delete from {$this->_dbprefix}{$this->_CP_Table} \n";
+		$query.= "where       {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} = :id \n";
+		$stmt = $this->_db->prepare($query);
+
+		$stmt->execute(array(":id" => $this->id));
+
+		$this->load($this->id);
+
+		return !$this->exists();
+	}
 	public function reset() {
 		$this->_dirty = false;
 		$this->_exists = false;
