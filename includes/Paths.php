@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Paths.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 class Paths extends Singleton {

@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * @file ModelsFactory.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ModelsFactory
+ * This class is the one int charge of constructing all model classes and
+ * returning as simple instances or managing them as simgletons.
+ */
 class ModelsFactory extends Singleton {
 	//
 	// Protected properties.
@@ -9,20 +19,52 @@ class ModelsFactory extends Singleton {
 	protected $_singletons = array();
 	//
 	// Magic methods.
+	/**
+	 * This magic method provides an easy way to get models.
+	 *
+	 * @param string $className Base class name. If your model is called
+	 * 'PagesModel', just say 'pages'.
+	 * @return \TooBasic\Model Returns the requested model or NULL when it
+	 * doesn't exist.
+	 */
 	public function __get($className) {
+		//
+		// Forwarding call and assuming no namespace.
 		return $this->get($className, false);
 	}
+	//
+	// Public methods.
+	/**
+	 * This method looks for and returns a model object on success.
+	 *
+	 * @param string $className Base class name. If your model is called
+	 * 'PagesModel', just say 'pages'.
+	 * @param string $namespace If the model is defined inside a namespace, it
+	 * can be specified with this parameter.
+	 * @return \TooBasic\Model Returns the requested model or NULL when it
+	 * doesn't exist.
+	 */
 	public function get($className, $namespace = false) {
+		//
+		// Default values.
 		$out = null;
-
+		//
+		// Cleaning name space.
 		$namespace = $namespace ? "\\{$namespace}\\" : "\\";
 		while(strpos($namespace, "\\\\") !== false) {
 			$namespace = str_replace("\\\\", "\\", $namespace);
 		}
-
+		//
+		// Cleaning and building the real class name for the model.
 		$classFileName = \TooBasic\classname($className);
 		$className = "{$namespace}{$classFileName}".GC_CLASS_SUFFIX_MODEL;
-
+		//
+		// If it's already stored as a singleton, that instance is
+		// returned.
+		// If it's not, but it's file is already loaded, it probably is
+		// not a singleton, so it is created as a new object and then
+		// returned.
+		// Otherwise, the real deal is executed.
 		if(isset($this->_singletons[$className])) {
 			$out = $this->_singletons[$className];
 		} elseif(in_array($className, $this->_loadedClasses)) {
@@ -30,34 +72,68 @@ class ModelsFactory extends Singleton {
 		} else {
 			$out = $this->loadAndGet($classFileName, $className);
 		}
-
+		//
+		// Returning what was found.
 		return $out;
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method holds the logic to find a class definition file for a
+	 * model, load it and create the requested model as a simple instances or
+	 * a singleton.
+	 *
+	 * @param string $classFileName Base name for the file to look for.
+	 * @param string $className Class name of the object to build including
+	 * its namespace.
+	 * @return \TooBasic\Model Return the requested model or NULL if it wasn't
+	 * found.
+	 */
 	protected function loadAndGet($classFileName, $className) {
+		//
+		// Default values.
 		$out = null;
 		//
-		// @todo There's something wrong here for multiple loadings.
+		// Loading the full path.
 		$filename = Paths::Instance()->modelPath($classFileName);
+		//
+		// Checking if it has its file.
 		if($filename) {
+			//
+			// Loading the class definition file.
 			require_once $filename;
-
+			//
+			// Checking if the class was actually defined.
 			if(class_exists($className)) {
+				//
+				// Setting class definition file as already
+				// loaded.
 				$this->_loadedClasses[] = $className;
-
+				//
+				// Creating an instance of the class.
 				$out = new $className();
-
+				//
+				// If the instance must act as a singleton, it's
+				// stored in the known singletons list.
 				if($out->isSingleton()) {
 					$this->_singletons[$className] = $out;
 				}
 			} else {
+				//
+				// If the requested class was not defined, it is
+				// considered a fatal exception.
+				/** @todo this should raise a TooBasicException */
 				trigger_error("Class '{$className}' is not defined.", E_USER_ERROR);
 			}
 		} else {
+			//
+			// If the requested class has no file, it is considered a
+			// fatal exception.
+			/** @todo this should raise a TooBasicException */
 			trigger_error("Cannot load model file '{$classFileName}'.", E_USER_ERROR);
 		}
-
+		//
+		// Retruning what was found.
 		return $out;
 	}
 }

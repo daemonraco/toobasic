@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Translate.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 class Translate extends Singleton {

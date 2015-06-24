@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Service.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 abstract class Service extends Exporter {

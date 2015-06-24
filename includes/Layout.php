@@ -1,6 +1,12 @@
 <?php
 
+/**
+ * @file Layout.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
+
 /**
  * @abstract
  * @class Layout

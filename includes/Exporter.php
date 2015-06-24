@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Exporter.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**

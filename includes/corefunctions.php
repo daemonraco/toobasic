@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file corefunctions.php
+ * @author Alejandro Dario Simi
+ */
 //
 // Defining function 'get_called_class()' in case the current PHP version doesn't
 // have it.

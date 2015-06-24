@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file ParamsStack.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 class ParamsStack {

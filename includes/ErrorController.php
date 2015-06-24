@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file ErrorController.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**

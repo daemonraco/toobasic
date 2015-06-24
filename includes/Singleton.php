@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Singleton.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file toobasicfunctions.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 const DebugThingTypeOk = 'ok';
