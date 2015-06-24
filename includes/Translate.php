@@ -13,6 +13,34 @@ class Translate extends Singleton {
 	public function __get($key) {
 		return $this->get($key);
 	}
+	/**
+	 * This method allows to use each key as a function.
+	 * 
+	 * @param string $key Key to translate
+	 * @param mixed[] $arguments List of parameters to use with a key.
+	 * @return string Returns the translated key.
+	 */
+	public function __call($key, $arguments) {
+		//
+		// Default values.
+		$params = array();
+		//
+		// If there's at least one argument they're analysed.
+		if(isset($arguments[0])) {
+			//
+			// If the first argument is an array, it is the list of
+			// params.
+			// Othere, all arguments are taken as params.
+			if(is_array($arguments[0])) {
+				$params = $arguments[0];
+			} else {
+				$params = $arguments;
+			}
+		}
+		//
+		// Attempting to translate the key.
+		return $this->get($key, $params);
+	}
 	//
 	// Public methods.
 	public function compileLangs() {
@@ -90,8 +118,8 @@ class Translate extends Singleton {
 	public function get($key, $params = array()) {
 		$out = "@{$key}";
 
-		$this->load();
 		if(!isset(Params::Instance()->debugnolang)) {
+			$this->load(true);
 			if(isset($this->_tr[$key])) {
 				$out = $this->_tr[$key];
 
@@ -110,9 +138,18 @@ class Translate extends Singleton {
 
 		$this->_currentLang = $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG];
 	}
-	protected function load() {
+	protected function load($required = false) {
 		if(!$this->_loaded) {
-			foreach(Paths::Instance()->langPaths($this->_currentLang) as $path) {
+			$langPaths = Paths::Instance()->langPaths($this->_currentLang);
+
+			if(!$langPaths && $required) {
+				$thing = "Unable to find translation files for language '{$this->_currentLang}'";
+				/** @todo maybe this should be an TooBasicExection */
+				\TooBasic\debugThing($thing, \TooBasic\DebugThingTypeError);
+				die;
+			}
+
+			foreach($langPaths as $path) {
 				$this->loadFile($path);
 			}
 
@@ -122,7 +159,7 @@ class Translate extends Singleton {
 				$thing.= "Current language: '{$this->_currentLang}'\n\n";
 
 				$thing.= "Translation files:\n";
-				foreach(Paths::Instance()->langPaths($this->_currentLang) as $path) {
+				foreach($langPaths as $path) {
 					$thing.= "\t- '{$path}'\n";
 				}
 

@@ -361,6 +361,11 @@ new action and they may look like these:
 
 Also, all required directories are created if they are not present.
 
+__Warning__: Every generated template is Smarty compatible, if you're using a
+different view adapter, this may give you a headache.
+There is a way in which you can solve this problem, but that is heavy stuff and
+this is not the right moment to talk about it -___-
+
 ### Database type
 Now if you look closely, the JSON file generated with your tables specification
 has a index for a primary key over an automatic field called `id`.
