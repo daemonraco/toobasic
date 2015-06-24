@@ -1,6 +1,5 @@
 <?php
 
-use TooBasic\Shell\Color as TBS_Color;
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
@@ -13,6 +12,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Protected properties.
 	protected $_render = false;
+	protected $_scaffoldName = 'controller';
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
@@ -85,12 +85,12 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			// Files.
 			$this->_files[] = array(
 				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php"),
-				'template' => 'skeletons/controller.html',
+				'template' => 'controller.html',
 				'description' => 'controller file'
 			);
 			$this->_files[] = array(
 				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html"),
-				'template' => 'skeletons/view.html',
+				'template' => 'view.html',
 				'description' => 'view file'
 			);
 		}

@@ -22,6 +22,7 @@ abstract class Scaffold extends ShellTool {
 	protected $_render = false;
 	protected $_requiredDirectories = array();
 	protected $_routes = false;
+	protected $_scaffoldName = '';
 	//
 	// Protected methods.
 	protected function addAllRoutes($spacer) {
@@ -138,8 +139,10 @@ abstract class Scaffold extends ShellTool {
 		if(!$this->isForced() && is_file($path)) {
 			echo TBS_Color::Yellow('Ignored').' (file already exist)';
 		} else {
+			$completeTemplate = TB_Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
+
 			$error = false;
-			if($this->{$callback}($path, $template, $error)) {
+			if($this->{$callback}($path, $completeTemplate , $error)) {
 				echo TBS_Color::Green('Ok');
 			} else {
 				echo TBS_Color::Red('Failed')." ({$error})";

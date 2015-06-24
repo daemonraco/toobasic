@@ -15,6 +15,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Protected properties.
 	protected $_raw = null;
+	protected $_scaffoldName = 'table';
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
@@ -182,63 +183,63 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			if(!$this->isRaw()) {
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
-					'template' => 'skeletons/table_representation.html',
+					'template' => 'representation.html',
 					'description' => 'representations file'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
-					'template' => 'skeletons/table_factory.html',
+					'template' => 'factory.html',
 					'description' => 'representations factory file'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
-					'template' => 'skeletons/table_list_controller.html',
+					'template' => 'list_controller.html',
 					'description' => 'controller file to list table items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
-					'template' => 'skeletons/table_list.html',
+					'template' => 'list.html',
 					'description' => 'view file to list table items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
-					'template' => 'skeletons/table_view_controller.html',
+					'template' => 'view_controller.html',
 					'description' => 'controller file to view items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
-					'template' => 'skeletons/table_view.html',
+					'template' => 'view.html',
 					'description' => 'view file to view items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
-					'template' => 'skeletons/table_edit_controller.html',
+					'template' => 'edit_controller.html',
 					'description' => 'controller file to edit items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
-					'template' => 'skeletons/table_edit.html',
+					'template' => 'edit.html',
 					'description' => 'view file to edit items'
 				);
 
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
-					'template' => 'skeletons/table_add_controller.html',
+					'template' => 'add_controller.html',
 					'description' => 'controller file to add items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
-					'template' => 'skeletons/table_add.html',
+					'template' => 'add.html',
 					'description' => 'view file to add items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
-					'template' => 'skeletons/table_delete_controller.html',
+					'template' => 'delete_controller.html',
 					'description' => 'controller file to delete items'
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
-					'template' => 'skeletons/table_delete.html',
+					'template' => 'delete.html',
 					'description' => 'view file to delete items'
 				);
 			}

@@ -18,6 +18,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Protected properties.
 	protected $_currentType = false;
+	protected $_scaffoldName = 'shell';
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
@@ -130,7 +131,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 			}
 			$this->_files[] = array(
 				'path' => $this->_names['tool-path'],
-				'template' => 'skeletons/tool.html',
+				'template' => 'tool.html',
 				'description' => 'tool file'
 			);
 		}
