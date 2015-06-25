@@ -1,0 +1,26 @@
+<div class="container">
+	<h4 class="text-center">Remove item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+
+	<div class="well well-sm">
+		<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('Are you sure you want to remove this <%$singularName%>?')">
+			<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
+			<div class="form-group">
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control" readonly="readonly"/>
+			</div>
+<%/if%>
+<%if $field.type.type == 'text' %>
+			<div class="form-group">
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
+			</div>
+<%/if%>
+<%/if%><%/foreach%>
+			<input type="submit" value="Delete <%$singularName%>" class="btn btn-danger"/>
+		</form>
+	</div>
+
+	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">Back to list</a>
+</div>

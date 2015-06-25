@@ -7,6 +7,7 @@ use TooBasic\Sanitizer as TB_Sanitizer;
 class TableSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
+	const OptionBootstrap = 'Bootstrap';
 	const OptionColumn = 'Column';
 	const OptionConnection = 'Connection';
 	const OptionPlural = 'Plural';
@@ -145,11 +146,18 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->_names['type'] = false;
 			$this->_names['singular-name'] = $this->_names['name'];
 			$this->_names['plural-name'] = "{$this->_names['name']}s";
+			$this->_names['templates-prefix'] = '';
 			//
 			// Checking plural name.
 			$opt = $this->_options->option(self::OptionPlural);
 			if($opt->activated()) {
 				$this->_names['plural-name'] = $opt->value();
+			}
+			//
+			// Checking bootstrap option.
+			$opt = $this->_options->option(self::OptionBootstrap);
+			if($opt->activated()) {
+				$this->_names['templates-prefix'] = 'bootstrap/';
 			}
 			//
 			// Checking type.
@@ -198,7 +206,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
-					'template' => 'list.html',
+					'template' => "{$this->_names['templates-prefix']}list.html",
 					'description' => 'view file to list table items'
 				);
 				$this->_files[] = array(
@@ -208,7 +216,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
-					'template' => 'view.html',
+					'template' => "{$this->_names['templates-prefix']}view.html",
 					'description' => 'view file to view items'
 				);
 				$this->_files[] = array(
@@ -218,7 +226,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
-					'template' => 'edit.html',
+					'template' => "{$this->_names['templates-prefix']}edit.html",
 					'description' => 'view file to edit items'
 				);
 
@@ -229,7 +237,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
-					'template' => 'add.html',
+					'template' => "{$this->_names['templates-prefix']}add.html",
 					'description' => 'view file to add items'
 				);
 				$this->_files[] = array(
@@ -239,7 +247,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				);
 				$this->_files[] = array(
 					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
-					'template' => 'delete.html',
+					'template' => "{$this->_names['templates-prefix']}delete.html",
 					'description' => 'view file to delete items'
 				);
 			}
@@ -425,6 +433,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text = "If you want to create a simple table without default columns and indexes, use this parameter.\n";
 		$text = "Note: This won't create controllers and ohter related stuff.";
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRaw, array('--raw', '-r'), TBS_Option::TypeNoValue, $text));
+
+		$text = "All generated view will have a bootstrap structure.";
+		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), TBS_Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = "") {
 		$this->genNames();

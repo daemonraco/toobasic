@@ -411,6 +411,11 @@ to be created.
 If your new table has to use a different connection configuration, you may specify
 its name using `--connection`.
 
+### Bootstrap
+If you the parameter `--bootstrap` all templates will be generated with a basic
+Twitter Bootstrap structure.
+Visit [this album](https://imgur.com/a/8rQA4) to take look at a few screenshots.
+
 ## Suggestions
 Here are some links you may like to read:
 

@@ -69,3 +69,27 @@ You can add columns, but you can't change them or modify them.
 
 If you want some more information, visit [SQL As Understood By
 SQLite](http://sqlite.org/lang_altertable.html).
+
+## Environment globals
+If you are developing a shell tool and for some reason you can use
+`\TooBasic\Params::Instance()->env->myprop`, even though you exported in your
+command line, you probably have an security issue in your __php.ini__ file.
+
+Open your __php.ini__ file and look for something like:
+```
+variables_order = "GPCSE"
+```
+The `E` in there means you have the super global `$_ENV` active, if not, add it,
+reload your configuration in your server and it should work.
+The super global `$_ENV` is the one that enables the use of
+`\TooBasic\Params::Instance()->env`.
+
+### Where is my _php.ini_ file?
+If you don't know where your __php.ini__ file is located, run something like this
+and it will give you a hint:
+```
+$ php --ini
+```
+
+Remember, the PHP configuration you use in a console may not be the same used by
+your PHP web server.
