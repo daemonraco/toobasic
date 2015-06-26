@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%$name%></title>
+
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->css('style')}"/>
+
+		<script type="text/javascript" src="{$ctrl->js('script')}"></script>
+	</head>
+	<body class="Action_{$action}">
+		<div id="MainContents">
+<!-- MAIN CONTENT @{ -->
+%TOO_BASIC_ACTION_CONTENT%
+<!-- @} /MAIN CONTENT -->
+		</div>
+	</body>
+</html>

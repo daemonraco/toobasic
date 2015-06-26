@@ -16,6 +16,7 @@
 		"debugdb": "Prompts used database connections' information.",
 		"debugpaths": "Prompts every searched path and how it was solved.",
 		"debugloader": "Show the location of each class loaded through a SuperLoader setting.",
+		"debugloader=heavy": "Also shows information when a file couldn't be found",
 		"debuglang": "Prompts current language, translation files used, and every key and its value. It works only if a translation gets used.",
 		"debugdebugs": "List all known debugs, including this one."
 	}

@@ -89,9 +89,9 @@ $SuperLoader['Smarty'] = array(
 spl_autoload_register(function($class) {
 	global $SuperLoader;
 
-	$path = false;
-
 	if(isset($SuperLoader[$class])) {
+		$path = false;
+
 		if(!is_array($SuperLoader[$class])) {
 			$SuperLoader[$class] = array($SuperLoader[$class]);
 		}
@@ -103,12 +103,16 @@ spl_autoload_register(function($class) {
 				break;
 			}
 		}
-	}
 
-	if($path) {
-		if(isset($_REQUEST['debugloader']) || isset($_ENV['debugloader'])) {
-			\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from '{$path}'.");
+		if($path) {
+			if(isset($_REQUEST['debugloader']) || isset($_ENV['debugloader'])) {
+				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from '{$path}'.");
+			}
+			require_once $path;
+		} else {
+			if((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || ( isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy')) {
+				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from: '".implode("', '", $SuperLoader[$class])."'.");
+			}
 		}
-		require_once $path;
 	}
 });

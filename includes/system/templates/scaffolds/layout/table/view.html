@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%$name%></title>
+
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->css('style')}"/>
+
+		<script type="text/javascript" src="{$ctrl->js('script')}"></script>
+	</head>
+	<body class="Action_{$action}">
+		<table id="MainTable">
+			<tr>
+				<td id="Titlebar" colspan="2">
+					<%$name%>
+				</td>
+			</tr><tr>
+				<td id="MainMenu">
+					<ul>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+						<li><a href="#">Menu Link</a></li>
+					</ul>
+				</td>
+				<td id="MainContents">
+<!-- MAIN CONTENT @{ -->
+%TOO_BASIC_ACTION_CONTENT%
+<!-- @} /MAIN CONTENT -->
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
