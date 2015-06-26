@@ -189,7 +189,7 @@ class DBStructureManager extends Manager {
 		return $this->_errors;
 	}
 	public function hasErrors() {
-		return boolval($this->_errors);
+		return \boolval($this->_errors);
 	}
 	public function specs() {
 		return $this->_specs;
@@ -477,7 +477,7 @@ class DBStructureManager extends Manager {
 			global $Connections;
 			//
 			// No database connections.
-			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB]) || !boolval($Connections[GC_CONNECTIONS_DB]))) {
+			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB]) || !\boolval($Connections[GC_CONNECTIONS_DB]))) {
 				$this->_installed = true;
 			}
 			//
