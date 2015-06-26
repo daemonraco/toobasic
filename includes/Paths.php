@@ -7,6 +7,12 @@
 
 namespace TooBasic;
 
+/**
+ * @class Paths
+ * This singleton provides a centralized administration of all known paths. For
+ * example, if you need to know here certain controller file is stored, this class
+ * knows the mechanism to find it.
+ */
 class Paths extends Singleton {
 	//
 	// Constants.
@@ -334,7 +340,7 @@ class Paths extends Singleton {
 			$this->_manifests = array();
 			foreach(glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {
 				$path = pathinfo($pathname);
-				if(!preg_match('/([\._])(.*)/', $path['filename'])) {
+				if(!preg_match('/^([\._])(.*)/', $path['filename'])) {
 					$this->_modules[] = $path['filename'];
 
 					$this->_manifests[$path['filename']] = false;

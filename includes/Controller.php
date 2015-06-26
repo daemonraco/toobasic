@@ -124,7 +124,7 @@ abstract class Controller extends Exporter {
 			//
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.
-			if($this->_cached) {
+			if($this->_cached && !isset($this->params->debugresetcache)) {
 				$this->_lastRun = $this->cache->get($prefixComputing, $key, $this->_cached);
 			} else {
 				$this->_lastRun = false;
@@ -132,7 +132,7 @@ abstract class Controller extends Exporter {
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if($this->_lastRun && !isset($this->params->debugresetcache)) {
+			if($this->_lastRun) {
 				//
 				// Loading data from the previous execution.
 				$this->_assignments = $this->_lastRun['assignments'];
@@ -169,7 +169,7 @@ abstract class Controller extends Exporter {
 			//
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.
-			if($this->_cached) {
+			if($this->_cached && !isset($this->params->debugresetcache)) {
 				$dataBlock = $this->cache->get($prefixRender, $key, $this->_cached);
 				$this->_lastRun['headers'] = $dataBlock['headers'];
 				$this->_lastRun['render'] = $dataBlock['render'];
@@ -180,7 +180,7 @@ abstract class Controller extends Exporter {
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if(!$this->_lastRun['render'] || isset($this->params->debugresetcache)) {
+			if(!$this->_lastRun['render']) {
 				//
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();

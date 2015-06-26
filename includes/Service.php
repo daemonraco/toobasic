@@ -45,11 +45,11 @@ abstract class Service extends Exporter {
 			$prefixComputing = $this->cachePrefix(Exporter::PrefixService);
 
 			$dataBlock = false;
-			if($this->_cached) {
+			if($this->_cached && !isset($this->params->debugresetcache)) {
 				$dataBlock = $this->cache->get($prefixComputing, $key);
 			}
-//
-			if($dataBlock && !isset($this->params->debugresetcache)) {
+
+			if($dataBlock) {
 				$this->_lastRun = $dataBlock;
 
 				$this->_status = $this->_lastRun["status"];
@@ -60,7 +60,7 @@ abstract class Service extends Exporter {
 			} else {
 				$this->autoAssigns();
 				$this->_status = $this->dryRun();
-//
+
 				if($this->_cached) {
 					$this->cache->save($prefixComputing, $key, $this->lastRun());
 				}

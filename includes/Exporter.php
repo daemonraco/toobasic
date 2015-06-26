@@ -425,8 +425,9 @@ abstract class Exporter {
 	 */
 	protected function init() {
 		//
-		// When theres a debug parameter in place, cache is disabled.
-		if($this->params->hasDebugs()) {
+		// When there's a debug parameter in place, cache is disabled
+		// unless it is 'debugresetcache.
+		if($this->params->hasDebugs() && !isset($this->params->debugresetcache)) {
 			$this->_cached = false;
 		}
 		//

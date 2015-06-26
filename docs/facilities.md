@@ -77,7 +77,7 @@ considerations:
 * These parameters are required, otherwise it should prompt a 400 HTTP error.
 * If cache is active, these parameters has to be use on its cache key.
 * If routes are active, this controller must insert a route pattern looking like
-*my_action/:id:/:username:*.
+`my_action/:id:/:username:`.
 
 You may define as many parameters as you need, but remember, you have to specify
 them in the order you want them.
@@ -414,7 +414,10 @@ its name using `--connection`.
 ### Bootstrap
 If you the parameter `--bootstrap` all templates will be generated with a basic
 Twitter Bootstrap structure.
-Visit [this album](https://imgur.com/a/8rQA4) to take look at a few screenshots.
+Visit the album [__TooBasic: Table Scaffold
+Screenshots__](https://imgur.com/a/8rQA4) to take look at a few screenshots, and
+here's one of those images:
+![scaffold_table_03_table_with_data](http://i.imgur.com/4osCZTT.png)
 
 ## Suggestions
 Here are some links you may like to read:

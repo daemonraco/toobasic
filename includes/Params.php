@@ -22,10 +22,20 @@ class Params extends Singleton {
 	const TypeSERVER = "server";
 	//
 	// Protected properties.
+	/**
+	 * @var string[] List of detected debug parameters.
+	 */
 	protected $_debugs = false;
+	/**
+	 * @var boolean This flag inidicates that a debug parameter has been
+	 * detected.
+	 */
 	protected $_hasDebugs = false;
-	protected $_paramsStacks = array(
-	);
+	/**
+	 * @var \TooBasic\ParamsStack[string] List of parameters stacks managed by this
+	 * singleton.
+	 */
+	protected $_paramsStacks = array();
 	//
 	// Magic methods.
 	/**

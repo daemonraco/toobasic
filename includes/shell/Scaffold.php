@@ -316,7 +316,7 @@ abstract class Scaffold extends ShellTool {
 		} else {
 			@unlink($path);
 			if(!is_file($path)) {
-				echo TBS_Color::Green('Ok')." ({$path})";
+				echo TBS_Color::Green('Ok');
 			} else {
 				echo TBS_Color::Red('Failed')." (unable to remove it)";
 				$ok = false;
@@ -440,6 +440,10 @@ abstract class Scaffold extends ShellTool {
 				echo "{$spacer}\tRemoving {$file['description']}: ";
 				if(!$this->removeFile($file['path'])) {
 					$ok = false;
+				}
+				echo "{$spacer}\t\t- '{$file['path']}'\n\n";
+
+				if(!$ok) {
 					break;
 				}
 			}

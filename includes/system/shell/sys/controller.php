@@ -11,7 +11,6 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	const OptionParam = 'Param';
 	//
 	// Protected properties.
-	protected $_render = false;
 	protected $_scaffoldName = 'controller';
 	protected $_version = TOOBASIC_VERSION;
 	//
