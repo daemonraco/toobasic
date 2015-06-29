@@ -142,7 +142,7 @@ abstract class Scaffold extends ShellTool {
 			$completeTemplate = TB_Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
 
 			$error = false;
-			if($this->{$callback}($path, $completeTemplate , $error)) {
+			if($this->{$callback}($path, $completeTemplate, $error)) {
 				echo TBS_Color::Green('Ok');
 			} else {
 				echo TBS_Color::Red('Failed')." ({$error})";
@@ -267,6 +267,7 @@ abstract class Scaffold extends ShellTool {
 			$engine = $this->_render->engine();
 			$engine->left_delimiter = '<%';
 			$engine->right_delimiter = '%>';
+			$engine->force_compile = true;
 		}
 	}
 	protected function removeAllRoutes($spacer) {

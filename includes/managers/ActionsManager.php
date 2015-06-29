@@ -41,7 +41,9 @@ class ActionsManager extends UrlManager {
 			foreach($headers as $name => $value) {
 				header("{$name}: {$value}");
 			}
-
+			//
+			// If there's a layout present, controller's result must
+			// be shown inside a layout's result.
 			if($layoutLastRun) {
 				echo str_replace('%TOO_BASIC_ACTION_CONTENT%', $actionLastRun['render'], $layoutLastRun['render']);
 			} else {
@@ -86,8 +88,14 @@ class ActionsManager extends UrlManager {
 		$controllerClass = self::FetchController($actionName);
 		if($controllerClass !== false) {
 			$layoutName = $controllerClass->layout();
-
+			//
+			// If there's a previous run, this must be the layout and
+			// the previous run comes from the controller, so
+			// assignments from that controller should be available
+			// for the layout for different reason like setting the
+			// page title.
 			if(is_array($previousActionRun)) {
+				/** @fixme There should be a way to change layout's cache key setting from the controller. */
 				$controllerClass->massiveAssign($previousActionRun['assignments']);
 			}
 
@@ -150,7 +158,13 @@ class ActionsManager extends UrlManager {
 			$controllerClassName = (is_numeric($actionName) ? 'N' : '').\TooBasic\classname($actionName).GC_CLASS_SUFFIX_CONTROLLER;
 			//
 			// Creating the controllers class.
-			$out = new $controllerClassName($actionName);
+			if(class_exists($controllerClassName)) {
+				$out = new $controllerClassName($actionName);
+			} else {
+				/** @todo this should be a TooBasicException. */
+				debugThing("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.", DebugThingTypeError);
+				die;
+			}
 		} elseif(!$recursive) {
 			//
 			// If there's no controller file, but there's a template,

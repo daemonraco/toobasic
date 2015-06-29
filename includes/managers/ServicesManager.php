@@ -62,10 +62,15 @@ class ServicesManager extends UrlManager {
 	//
 	// Protected methods.
 	protected function explainInterface($serviceName) {
+		$out = false;
+
 		$cachePrefix = "SERVICEINTERFACE";
 		$cacheKey = $serviceName;
 		$cache = MagicProp::Instance()->cache;
-		$out = $cache->get($cachePrefix, $cacheKey);
+		if(!isset(Params::Instance()->debugresetcache)) {
+			$out = $cache->get($cachePrefix, $cacheKey);
+		}
+
 		if(!$out) {
 			$out = array(
 				"status" => true,
@@ -110,7 +115,15 @@ class ServicesManager extends UrlManager {
 
 			if($service) {
 				require_once $service["path"];
-
+				//
+				// Checking class existence
+				if(!class_exists($service["class"])) {
+					/** @todo this should be a TooBasicException. */
+					debugThing("Class '{$service["class"]}' is not defined. File '{$service["path"]}' doesn't seem to load the right object.", DebugThingTypeError);
+					die;
+				}
+				//
+				// Creating the service class.
 				$object = new $service["class"]();
 				$reflectionObject = new \ReflectionClass($object);
 
@@ -142,10 +155,14 @@ class ServicesManager extends UrlManager {
 		return $out;
 	}
 	protected function explainInterfaces() {
+		$out = false;
+
 		$cachePrefix = "SERVICEINTERFACES";
 		$cacheKey = "FULL";
 		$cache = MagicProp::Instance()->cache;
-		$out = $cache->get($cachePrefix, $cacheKey);
+		if(!isset(Params::Instance()->debugresetcache)) {
+			$out = $cache->get($cachePrefix, $cacheKey);
+		}
 
 		if(!$out) {
 			$out = array(

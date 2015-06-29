@@ -289,6 +289,11 @@ class Paths extends Singleton {
 	}
 	protected function find(&$list, $skin, $folders, $name, $extension, $full = false, $asUri = false) {
 		$out = array();
+		//
+		// Checking if this name must be ignored. This provides a way to
+		// disable file without removing them, just adding a dot or an
+		// underscore to the beginning of it's name.
+		$ignored = preg_match('/^([\._])(.*)/', $name);
 
 		$debugPathsActive = isset(Params::Instance()->debugpaths);
 		$debugPaths = array();
@@ -301,12 +306,15 @@ class Paths extends Singleton {
 		if($extension) {
 			$filename = "{$filename}.{$extension}";
 		}
-
-		foreach($list as $path) {
-			$filepath = Sanitizer::DirPath("{$path}/{$filename}");
-			foreach(glob($filepath) as $subpath) {
-				if(is_readable($subpath)) {
-					$out[] = $subpath;
+		//
+		// Checking if this search must be ignored.
+		if(!$ignored) {
+			foreach($list as $path) {
+				$filepath = Sanitizer::DirPath("{$path}/{$filename}");
+				foreach(glob($filepath) as $subpath) {
+					if(is_readable($subpath)) {
+						$out[] = $subpath;
+					}
 				}
 			}
 		}
@@ -315,6 +323,7 @@ class Paths extends Singleton {
 			$debugPaths['name'] = $name;
 			$debugPaths['extension'] = $extension;
 			$debugPaths['skin'] = $skin;
+			$debugPaths['ignored'] = $ignored;
 			$debugPaths['subfolders'] = $folders;
 			$debugPaths['possibilities'] = $list;
 		}
@@ -335,12 +344,11 @@ class Paths extends Singleton {
 		if($this->_modules === false) {
 			global $Directories;
 
-
 			$this->_modules = array();
 			$this->_manifests = array();
 			foreach(glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {
 				$path = pathinfo($pathname);
-				if(!preg_match('/^([\._])(.*)/', $path['filename'])) {
+				if(!preg_match('/^([\._])(.*)/', $path['filename']) && !is_readable("{$path['filename']}/.inactive")) {
 					$this->_modules[] = $path['filename'];
 
 					$this->_manifests[$path['filename']] = false;

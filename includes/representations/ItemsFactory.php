@@ -17,11 +17,11 @@ abstract class ItemsFactory {
 	protected static $_LoadedClasses = array();
 	//
 	// Protected core properties.
-	protected $_CP_IDColumn = "";
-	protected $_CP_ColumnsPerfix = "";
+	protected $_CP_IDColumn = '';
+	protected $_CP_ColumnsPerfix = '';
 	protected $_CP_OrderBy = false;
-	protected $_CP_RepresentationClass = "";
-	protected $_CP_Table = "";
+	protected $_CP_RepresentationClass = '';
+	protected $_CP_Table = '';
 	//
 	// Protected properties.	
 	/**
@@ -29,7 +29,7 @@ abstract class ItemsFactory {
 	 */
 	protected $_db = false;
 	protected $_dbname = false;
-	protected $_dbprefix = "";
+	protected $_dbprefix = '';
 	//
 	// Magic methods.
 	/**
@@ -42,7 +42,7 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		trigger_error(get_called_class()."::".__FUNCTION__.": Clone is not allowed.", E_USER_ERROR);
+		trigger_error(get_called_class().'::'.__FUNCTION__.': Clone is not allowed.', E_USER_ERROR);
 	}
 	//
 	// Public methods.
@@ -75,7 +75,7 @@ abstract class ItemsFactory {
 		$stmt->execute();
 
 		foreach($stmt->fetchAll() as $row) {
-			$out[] = $row["id"];
+			$out[] = $row['id'];
 		}
 
 		return $out;

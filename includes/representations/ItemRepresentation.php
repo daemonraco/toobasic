@@ -16,18 +16,18 @@ abstract class ItemRepresentation {
 	// Protected class properties.
 	//
 	// Protected core properties.
-	protected $_CP_ColumnsPerfix = "";
-	protected $_CP_IDColumn = "";
-	protected $_CP_NameColumn = "name";
+	protected $_CP_ColumnsPerfix = '';
+	protected $_CP_IDColumn = '';
+	protected $_CP_NameColumn = 'name';
 	protected $_CP_ReadOnlyColumns = array();
-	protected $_CP_Table = "";
+	protected $_CP_Table = '';
 	//
 	// Protected properties.
 	/**
 	 * @var \TooBasic\DBAdapter
 	 */
 	protected $_db = false;
-	protected $_dbprefix = "";
+	protected $_dbprefix = '';
 	protected $_dirty = false;
 	protected $_exists = false;
 	protected $_extraProperties = array();
@@ -86,7 +86,7 @@ abstract class ItemRepresentation {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":id" => $id
+			':id' => $id
 		));
 
 		if($stmt->rowCount() > 0) {
@@ -108,9 +108,9 @@ abstract class ItemRepresentation {
 			$query.= "where   {$this->_CP_ColumnsPerfix}{$this->_CP_NameColumn} = :name \n";
 			$stmt = $this->_db->prepare($query);
 
-			if($stmt->execute(array(":name" => $name)) && $stmt->rowCount() > 0) {
+			if($stmt->execute(array(':name' => $name)) && $stmt->rowCount() > 0) {
 				$row = $stmt->fetch();
-				$this->load($row["id"]);
+				$this->load($row['id']);
 			}
 		}
 
@@ -122,7 +122,7 @@ abstract class ItemRepresentation {
 		if($this->dirty() && $this->prePersist()) {
 			$idName = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
 			$params = array(
-				":id" => $this->{$this->_CP_IDColumn}
+				':id' => $this->{$this->_CP_IDColumn}
 			);
 
 			$query = "update  {$this->_dbprefix}{$this->_CP_Table}\n";
@@ -136,7 +136,7 @@ abstract class ItemRepresentation {
 					$params[":{$key}"] = $value;
 				}
 			}
-			$query.= implode(", ", $assigns);
+			$query.= implode(', ', $assigns);
 			$query.= " \n";
 
 			$query.= "where   {$idName} = :id\n";
@@ -155,7 +155,7 @@ abstract class ItemRepresentation {
 		$query.= "where       {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} = :id \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(":id" => $this->id));
+		$stmt->execute(array(':id' => $this->id));
 
 		$this->load($this->id);
 
@@ -190,8 +190,4 @@ abstract class ItemRepresentation {
 	protected function postPersist() {
 		
 	}
-	//
-	// Public class methods.
-	//
-	// Protected class methods.
 }

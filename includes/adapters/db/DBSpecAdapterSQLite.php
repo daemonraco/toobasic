@@ -4,6 +4,9 @@ namespace TooBasic;
 
 class DBSpecAdapterSQLite extends DBSpecAdapter {
 	//
+	// Protected properties.
+	protected $_engine = 'SQLite';
+	//
 	// Public methods.
 	public function addTableEntry(\stdClass $table, \stdClass $entry) {
 		$keys = array();

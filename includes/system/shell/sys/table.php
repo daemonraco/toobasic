@@ -30,6 +30,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Assignments.
 			$this->_assignments['singularName'] = $this->_names['singular-name'];
 			$this->_assignments['pluralName'] = $this->_names['plural-name'];
+			$this->_assignments['isRaw'] = $this->isRaw();
 			//
 			// Generating a table prefix.
 			$this->_assignments['tablePrefix'] = substr(str_replace('_', '', $this->_names['plural-name']), 0, 3).'_';
@@ -42,71 +43,74 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Generating a table prefix.
 			$this->_assignments['tableFields'] = array();
-			foreach($this->_options->option(self::OptionColumn)->value() as $column) {
-				$columnParts = explode(':', $column);
-				$field = array();
-				$field['name'] = $columnParts[0];
+			$opt = $this->_options->option(self::OptionColumn);
+			if($opt->activated()) {
+				foreach($opt->value() as $column) {
+					$columnParts = explode(':', $column);
+					$field = array();
+					$field['name'] = $columnParts[0];
 
-				if(!isset($columnParts[1])) {
-					$columnParts = 'varchar';
+					if(!isset($columnParts[1])) {
+						$columnParts = 'varchar';
+					}
+					$columnParts[1] = strtolower($columnParts[1]);
+					$field['type'] = array();
+					switch($columnParts[1]) {
+						case 'int':
+							$field['type']['type'] = 'int';
+							$field['type']['precision'] = 11;
+							$field['default'] = 0;
+							$field['inForm'] = true;
+							break;
+						case 'blob':
+							$field['type']['type'] = 'blob';
+							$field['type']['precision'] = false;
+							$field['default'] = '';
+							$field['inForm'] = false;
+							break;
+						case 'float':
+							$field['type']['type'] = 'float';
+							$field['type']['precision'] = 11;
+							$field['default'] = '';
+							$field['inForm'] = true;
+							break;
+						case 'text':
+							$field['type']['type'] = 'text';
+							$field['type']['precision'] = false;
+							$field['default'] = '';
+							$field['inForm'] = true;
+							break;
+						case 'timestamp':
+							$field['type']['type'] = 'timestamp';
+							$field['type']['precision'] = false;
+							$field['default'] = 0;
+							$field['inForm'] = false;
+							break;
+						case 'enum':
+							$field['type']['type'] = 'enum';
+							$field['type']['precision'] = false;
+							$field['type']['values'] = $columnParts;
+							array_shift($field['type']['values']);
+							array_shift($field['type']['values']);
+							if($field['type']['values']) {
+								$field['type']['values'] = array_values($field['type']['values']);
+							} else {
+								$field['type']['values'][0] = 'Y';
+								$field['type']['values'][1] = 'N';
+							}
+							$field['default'] = "'{$field['type']['values'][0]}'";
+							$field['inForm'] = true;
+							break;
+						case 'varchar':
+						default:
+							$field['type']['type'] = 'varchar';
+							$field['type']['precision'] = 256;
+							$field['default'] = '';
+							$field['inForm'] = true;
+					}
+					$field['null'] = false;
+					$this->_assignments['tableFields'][] = $field;
 				}
-				$columnParts[1] = strtolower($columnParts[1]);
-				$field['type'] = array();
-				switch($columnParts[1]) {
-					case 'int':
-						$field['type']['type'] = 'int';
-						$field['type']['precision'] = 11;
-						$field['default'] = 0;
-						$field['inForm'] = true;
-						break;
-					case 'blob':
-						$field['type']['type'] = 'blob';
-						$field['type']['precision'] = false;
-						$field['default'] = '';
-						$field['inForm'] = false;
-						break;
-					case 'float':
-						$field['type']['type'] = 'float';
-						$field['type']['precision'] = 11;
-						$field['default'] = '';
-						$field['inForm'] = true;
-						break;
-					case 'text':
-						$field['type']['type'] = 'text';
-						$field['type']['precision'] = false;
-						$field['default'] = '';
-						$field['inForm'] = true;
-						break;
-					case 'timestamp':
-						$field['type']['type'] = 'timestamp';
-						$field['type']['precision'] = false;
-						$field['default'] = 0;
-						$field['inForm'] = false;
-						break;
-					case 'enum':
-						$field['type']['type'] = 'enum';
-						$field['type']['precision'] = false;
-						$field['type']['values'] = $columnParts;
-						array_shift($field['type']['values']);
-						array_shift($field['type']['values']);
-						if($field['type']['values']) {
-							$field['type']['values'] = array_values($field['type']['values']);
-						} else {
-							$field['type']['values'][0] = 'Y';
-							$field['type']['values'][1] = 'N';
-						}
-						$field['default'] = "'{$field['type']['values'][0]}'";
-						$field['inForm'] = true;
-						break;
-					case 'varchar':
-					default:
-						$field['type']['type'] = 'varchar';
-						$field['type']['precision'] = 256;
-						$field['default'] = '';
-						$field['inForm'] = true;
-				}
-				$field['null'] = false;
-				$this->_assignments['tableFields'][] = $field;
 			}
 			//
 			// Representations.
@@ -317,14 +321,16 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$table->fields = array();
 		//
 		// Adding an id column.
-		$field = new \stdClass();
-		$field->name = 'id';
-		$field->type = new \stdClass();
-		$field->type->type = 'int';
-		$field->type->precision = 11;
-		$field->null = false;
-		$field->autoincrement = true;
-		$table->fields[] = $field;
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->name = 'id';
+			$field->type = new \stdClass();
+			$field->type->type = 'int';
+			$field->type->precision = 11;
+			$field->null = false;
+			$field->autoincrement = true;
+			$table->fields[] = $field;
+		}
 		//
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
@@ -344,24 +350,28 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		}
 		//
 		// Adding a creation date column.
-		$field = new \stdClass();
-		$field->name = 'create_date';
-		$field->type = new \stdClass();
-		$field->type->type = 'timestamp';
-		$field->type->precision = false;
-		$field->null = false;
-		$field->default = 'CURRENT_TIMESTAMP';
-		$table->fields[] = $field;
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->name = 'create_date';
+			$field->type = new \stdClass();
+			$field->type->type = 'timestamp';
+			$field->type->precision = false;
+			$field->null = false;
+			$field->default = 'CURRENT_TIMESTAMP';
+			$table->fields[] = $field;
+		}
 		//
 		// Adding an indexation status column.
-		$field = new \stdClass();
-		$field->name = 'indexed';
-		$field->type = new \stdClass();
-		$field->type->type = 'varchar';
-		$field->type->precision = 1;
-		$field->null = false;
-		$field->default = 'N';
-		$table->fields[] = $field;
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->name = 'indexed';
+			$field->type = new \stdClass();
+			$field->type->type = 'varchar';
+			$field->type->precision = 1;
+			$field->null = false;
+			$field->default = 'N';
+			$table->fields[] = $field;
+		}
 		//
 		// Adding table.
 		$specs->tables[] = $table;

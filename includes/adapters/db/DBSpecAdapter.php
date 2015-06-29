@@ -11,6 +11,7 @@ abstract class DBSpecAdapter extends Adapter {
 	protected $_db = false;
 	protected $_debugUpgrade = false;
 	protected $_debugdbEmulation = false;
+	protected $_engine = 'UnknownEngine';
 	//
 	// Magic methods.
 	public function __construct(DBAdapter $db) {

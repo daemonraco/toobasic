@@ -4,6 +4,9 @@ namespace TooBasic;
 
 class DBSpecAdapterMySQL extends DBSpecAdapter {
 	//
+	// Protected properties.
+	protected $_engine = 'MySQL';
+	//
 	// Public methods.
 	public function addTableEntry(\stdClass $table, \stdClass $entry) {
 		$keys = array();

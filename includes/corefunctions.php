@@ -22,6 +22,13 @@ if(!function_exists("get_called_class")) {
 		return $matches[1];
 	}
 }
+//
+// Defining function 'boolval()' in case the current PHP version doesn't have it.
+if(!function_exists("boolval")) {
+	function boolval($var) {
+		return $var == true;
+	}
+}
 /**
  * Prompt an object in a pretty way and adding some useful info like where it is
  * being called from.
