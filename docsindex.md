@@ -11,78 +11,77 @@
 	* [Is that it?](README.md#is-that-it)
 	* [But?](README.md#but)
 * [Even more basic](README.md#even-more-basic)
-* [Even easier?!](README.md#even-easier!)
+* [Even easier?!](README.md#even-easier)
 * [Suggestions](README.md#suggestions)
 * [Thanks](README.md#thanks)
 	* [Smarty](README.md#smarty)
 	* [Twitter Bootstrap](README.md#twitter-bootstrap)
 	* [jQuery](README.md#jquery)
 
-##  Models (docs/models.md):
+##  Adapters (docs/adapters.md):
 
-* [What is a Model in __TooBasic__?](docs/models.md#what-is-a-model-in-toobasic)
-* [Example](docs/models.md#example)
-* [Model](docs/models.md#model)
-* [Using a Model](docs/models.md#using-a-model)
+* [What are _adapters_](docs/adapters.md#what-are-adapters)
+* [Cache adapters](docs/adapters.md#cache-adapters)
+* [Database structure maintainer adapters](docs/adapters.md#database-structure-maintainer-adapters)
+* [I want mine!](docs/adapters.md#i-want-mine)
+	* [Step 0: into a module](docs/adapters.md#step-0-into-a-module)
+	* [Step 1: new adapter](docs/adapters.md#step-1-new-adapter)
+	* [Step 2: using the adapter](docs/adapters.md#step-2-using-the-adapter)
+	* [Step 3: including the adapter](docs/adapters.md#step-3-including-the-adapter)
+* [I want my database structure maintainer adapter](docs/adapters.md#i-want-my-database-structure-maintainer-adapter)
+* [View adapters](docs/adapters.md#view-adapters)
+	* [Others](docs/adapters.md#others)
+* [Suggestions](docs/adapters.md#suggestions)
 
-##  Using Languages (docs/uselanguage.md):
+##  Author's Note (docs/authorsnote.md):
 
-* [Languages?](docs/uselanguage.md#languages)
+* [TooBasic?!](docs/authorsnote.md#toobasic)
+* [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
 
-##  Using Config Files (docs/useconfigs.md):
+##  Cache (docs/cache.md):
 
-* [Is it necessary an explanation?](docs/useconfigs.md#is-it-necessary-an-explanation)
-* [User defined configuration files](docs/useconfigs.md#user-defined-configuration-files)
-* [I want em all!](docs/useconfigs.md#i-want-em-all!)
-* [Automatic config files](docs/useconfigs.md#automatic-config-files)
-	* [_config.php_](docs/useconfigs.md#config.php)
-	* [_config_shell.php_](docs/useconfigs.md#configshell.php)
-	* [_config_http.php_](docs/useconfigs.md#confighttp.php)
-	* [Site config file](docs/useconfigs.md#site-config-file)
-	* [Summary](docs/useconfigs.md#summary)
-* [Suggestions](docs/useconfigs.md#suggestions)
-
-##  Routes (docs/routes.md):
-
-* [What are routes?](docs/routes.md#what-are-routes)
-* [Before we start](docs/routes.md#before-we-start)
-	* [mod_rewrite](docs/routes.md#modrewrite)
-	* [Allow Override](docs/routes.md#allow-override)
-	* [Permissions](docs/routes.md#permissions)
-	* [The right name](docs/routes.md#the-right-name)
-* [Activating routes](docs/routes.md#activating-routes)
-* [Our first route](docs/routes.md#our-first-route)
-* [Route Analysis](docs/routes.md#route-analysis)
-	* [Parameters types](docs/routes.md#parameters-types)
-	* [Let's write a few more](docs/routes.md#let's-write-a-few-more)
-* [Url issues](docs/routes.md#url-issues)
-	* [_$ctrl->css()_](docs/routes.md#$ctrl->css())
-	* [_$ctrl->js()_](docs/routes.md#$ctrl->js())
-	* [_$ctrl->img()_](docs/routes.md#$ctrl->img())
-	* [_$ctrl->lib()_](docs/routes.md#$ctrl->lib())
-	* [_$ctrl->link()_](docs/routes.md#$ctrl->link())
-	* [Final result](docs/routes.md#final-result)
-* [Modules?](docs/routes.md#modules)
-
-##  Representations (docs/representations.md):
-
-* [What it this?](docs/representations.md#what-it-this)
-* [A Table](docs/representations.md#a-table)
-* [Row Representation](docs/representations.md#row-representation)
-	* [CP?](docs/representations.md#cp)
-* [Table Representation](docs/representations.md#table-representation)
-* [Let's Use It](docs/representations.md#let's-use-it)
-* [Database](docs/representations.md#database)
-* [Suggestions](docs/representations.md#suggestions)
+* [We All Know What It Is](docs/cache.md#we-all-know-what-it-is)
+* [What is it cached?](docs/cache.md#what-is-it-cached)
+* [Adapters](docs/cache.md#adapters)
+	* [File Cache Adapter](docs/cache.md#file-cache-adapter)
+	* [Database Cache Adapter](docs/cache.md#database-cache-adapter)
+	* [Memcached Adapter](docs/cache.md#memcached-adapter)
+	* [Memcache Adapter](docs/cache.md#memcache-adapter)
+* [Setting Adapter](docs/cache.md#setting-adapter)
+* [Cached Controller](docs/cache.md#cached-controller)
+* [What if you don't want it?](docs/cache.md#what-if-you-dont-want-it)
+* [Duration](docs/cache.md#duration)
 
 ##  Databases (docs/databases.md):
 
 * [What is it, really?](docs/databases.md#what-is-it,-really)
 * [Configuration](docs/databases.md#configuration)
 	* [Where to Place It?](docs/databases.md#where-to-place-it)
-* [Let's Make a Query](docs/databases.md#let's-make-a-query)
+* [Let's Make a Query](docs/databases.md#lets-make-a-query)
 * [Defaults](docs/databases.md#defaults)
 * [Suggestions](docs/databases.md#suggestions)
+
+##  Database Structure Specifications (docs/databasespecs.md):
+
+* [What is this?](docs/databasespecs.md#what-is-this)
+* [Cross database basic configurations](docs/databasespecs.md#cross-database-basic-configurations)
+* [Tables structures](docs/databasespecs.md#tables-structures)
+	* [Fields](docs/databasespecs.md#fields)
+	* [Column type](docs/databasespecs.md#column-type)
+	* [Override policy](docs/databasespecs.md#override-policy)
+* [Indexes](docs/databasespecs.md#indexes)
+	* [Override policy](docs/databasespecs.md#override-policy)
+* [Initial table data](docs/databasespecs.md#initial-table-data)
+	* [Policies](docs/databasespecs.md#policies)
+* [Connections](docs/databasespecs.md#connections)
+	* [Default connection](docs/databasespecs.md#default-connection)
+* [Callbacks](docs/databasespecs.md#callbacks)
+	* [What else can I do?](docs/databasespecs.md#what-else-can-i-do)
+	* [Indexes](docs/databasespecs.md#indexes)
+	* [Why no drop callback?](docs/databasespecs.md#why-no-drop-callback)
+* [Unknowns](docs/databasespecs.md#unknowns)
+* [Performance](docs/databasespecs.md#performance)
+* [Suggestions](docs/databasespecs.md#suggestions)
 
 ##  Facilities (docs/facilities.md):
 
@@ -113,6 +112,80 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 * [Suggestions](docs/facilities.md#suggestions)
 
+##  MagicProp (docs/magicprop.md):
+
+* [MagicProp?](docs/magicprop.md#magicprop)
+* [How does it work?](docs/magicprop.md#how-does-it-work)
+* [Where can I use it?](docs/magicprop.md#where-can-i-use-it)
+* [Known properties](docs/magicprop.md#known-properties)
+* [My own](docs/magicprop.md#my-own)
+	* [MagicPropException](docs/magicprop.md#magicpropexception)
+* [Suggestions](docs/magicprop.md#suggestions)
+
+##  Models (docs/models.md):
+
+* [What is a Model in __TooBasic__?](docs/models.md#what-is-a-model-in-toobasic)
+* [Example](docs/models.md#example)
+* [Model](docs/models.md#model)
+* [Using a Model](docs/models.md#using-a-model)
+
+##  Representations (docs/representations.md):
+
+* [What it this?](docs/representations.md#what-it-this)
+* [A Table](docs/representations.md#a-table)
+* [Row Representation](docs/representations.md#row-representation)
+	* [CP?](docs/representations.md#cp)
+* [Table Representation](docs/representations.md#table-representation)
+* [Let's Use It](docs/representations.md#lets-use-it)
+* [Database](docs/representations.md#database)
+* [Suggestions](docs/representations.md#suggestions)
+
+##  Routes (docs/routes.md):
+
+* [What are routes?](docs/routes.md#what-are-routes)
+* [Before we start](docs/routes.md#before-we-start)
+	* [mod_rewrite](docs/routes.md#mod_rewrite)
+	* [Allow Override](docs/routes.md#allow-override)
+	* [Permissions](docs/routes.md#permissions)
+	* [The right name](docs/routes.md#the-right-name)
+* [Activating routes](docs/routes.md#activating-routes)
+* [Our first route](docs/routes.md#our-first-route)
+* [Route Analysis](docs/routes.md#route-analysis)
+	* [Parameters types](docs/routes.md#parameters-types)
+	* [Let's write a few more](docs/routes.md#lets-write-a-few-more)
+* [Url issues](docs/routes.md#url-issues)
+	* [_$ctrl->css()_](docs/routes.md#$ctrl->css())
+	* [_$ctrl->js()_](docs/routes.md#$ctrl->js())
+	* [_$ctrl->img()_](docs/routes.md#$ctrl->img())
+	* [_$ctrl->lib()_](docs/routes.md#$ctrl->lib())
+	* [_$ctrl->link()_](docs/routes.md#$ctrl->link())
+	* [Final result](docs/routes.md#final-result)
+* [Modules?](docs/routes.md#modules)
+
+##  Services (docs/services.md):
+
+* [Service?](docs/services.md#service)
+* [Let's use an example](docs/services.md#lets-use-an-example)
+* [Creating a service](docs/services.md#creating-a-service)
+* [Simpler](docs/services.md#simpler)
+	* [May I?](docs/services.md#may-i)
+* [Interfaces](docs/services.md#interfaces)
+
+##  Shell Tools and Crons
+ m h  dom mon dow   command
+ m h  dom mon dow   command (docs/shelltools.md):
+
+* [What's a Shell Tools?](docs/shelltools.md#whats-a-shell-tools)
+* [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)
+* [Let's Make Things Interesting](docs/shelltools.md#lets-make-things-interesting)
+* [Things We Didn't Explain](docs/shelltools.md#things-we-didnt-explain)
+* [Recommendation](docs/shelltools.md#recommendation)
+* [Cron Tools](docs/shelltools.md#cron-tools)
+* [Create a Cron Tool](docs/shelltools.md#create-a-cron-tool)
+* [How Does It Work?](docs/shelltools.md#how-does-it-work)
+* [Dead Flags](docs/shelltools.md#dead-flags)
+* [Profiles](docs/shelltools.md#profiles)
+
 ##  Skins (docs/skins.md):
 
 * [What are skins for __TooBasic__?](docs/skins.md#what-are-skins-for-toobasic)
@@ -125,35 +198,6 @@
 * [Debugging](docs/skins.md#debugging)
 * [Multiple sites](docs/skins.md#multiple-sites)
 
-##  Services (docs/services.md):
-
-* [Service?](docs/services.md#service)
-* [Let's use an example](docs/services.md#let's-use-an-example)
-* [Creating a service](docs/services.md#creating-a-service)
-* [Simpler](docs/services.md#simpler)
-	* [May I?](docs/services.md#may-i)
-* [Interfaces](docs/services.md#interfaces)
-
-##  Shell Tools and Crons
- m h  dom mon dow   command
- m h  dom mon dow   command (docs/shelltools.md):
-
-* [What's a Shell Tools?](docs/shelltools.md#what's-a-shell-tools)
-* [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)
-* [Let's Make Things Interesting](docs/shelltools.md#let's-make-things-interesting)
-* [Things We Didn't Explain](docs/shelltools.md#things-we-didn't-explain)
-* [Recommendation](docs/shelltools.md#recommendation)
-* [Cron Tools](docs/shelltools.md#cron-tools)
-* [Create a Cron Tool](docs/shelltools.md#create-a-cron-tool)
-* [How Does It Work?](docs/shelltools.md#how-does-it-work)
-* [Dead Flags](docs/shelltools.md#dead-flags)
-* [Profiles](docs/shelltools.md#profiles)
-
-##  Author's Note (docs/authorsnote.md):
-
-* [TooBasic?!](docs/authorsnote.md#toobasic!)
-* [One action one controller?!](docs/authorsnote.md#one-action-one-controller!)
-
 ##  Troubleshooting (docs/troubleshooting.md):
 
 * [What is this page?](docs/troubleshooting.md#what-is-this-page)
@@ -165,21 +209,25 @@
 	* [SQLite & autoincrements](docs/troubleshooting.md#sqlite-&-autoincrements)
 	* [SQLite & deprecated columns](docs/troubleshooting.md#sqlite-&-deprecated-columns)
 * [Environment globals](docs/troubleshooting.md#environment-globals)
-	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-php.ini-file)
+	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
 
-##  Using Snippets (docs/usesnippets.md):
+##  Using Config Files (docs/useconfigs.md):
 
-* [Snippets?](docs/usesnippets.md#snippets)
-* [Pager Snippet](docs/usesnippets.md#pager-snippet)
-* [Pager Snippet Mananger](docs/usesnippets.md#pager-snippet-mananger)
-* [Current Problem](docs/usesnippets.md#current-problem)
-	* [Note Here](docs/usesnippets.md#note-here)
-* [Adding Pages](docs/usesnippets.md#adding-pages)
-* [Explain It!](docs/usesnippets.md#explain-it!)
-	* [How to Invoke a Snippet.](docs/usesnippets.md#how-to-invoke-a-snippet.)
-	* [Separated Assignments](docs/usesnippets.md#separated-assignments)
-	* [Something Good](docs/usesnippets.md#something-good)
+* [Is it necessary an explanation?](docs/useconfigs.md#is-it-necessary-an-explanation)
+* [User defined configuration files](docs/useconfigs.md#user-defined-configuration-files)
+* [I want em all!](docs/useconfigs.md#i-want-em-all)
+* [Automatic config files](docs/useconfigs.md#automatic-config-files)
+	* [_config.php_](docs/useconfigs.md#configphp)
+	* [_config_shell.php_](docs/useconfigs.md#config_shellphp)
+	* [_config_http.php_](docs/useconfigs.md#config_httpphp)
+	* [Site config file](docs/useconfigs.md#site-config-file)
+	* [Summary](docs/useconfigs.md#summary)
+* [Suggestions](docs/useconfigs.md#suggestions)
+
+##  Using Languages (docs/uselanguage.md):
+
+* [Languages?](docs/uselanguage.md#languages)
 
 ##  Using Layouts (docs/uselayout.md):
 
@@ -195,64 +243,16 @@
 * [Wrong Layout?](docs/uselayout.md#wrong-layout)
 * [Suggestions](docs/uselayout.md#suggestions)
 
-##  Cache (docs/cache.md):
+##  Using Snippets (docs/usesnippets.md):
 
-* [We All Know What It Is](docs/cache.md#we-all-know-what-it-is)
-* [What is it cached?](docs/cache.md#what-is-it-cached)
-* [Adapters](docs/cache.md#adapters)
-	* [File Cache Adapter](docs/cache.md#file-cache-adapter)
-	* [Database Cache Adapter](docs/cache.md#database-cache-adapter)
-	* [Memcached Adapter](docs/cache.md#memcached-adapter)
-	* [Memcache Adapter](docs/cache.md#memcache-adapter)
-* [Setting Adapter](docs/cache.md#setting-adapter)
-* [Cached Controller](docs/cache.md#cached-controller)
-* [What if you don't want it?](docs/cache.md#what-if-you-don't-want-it)
-* [Duration](docs/cache.md#duration)
-
-##  MagicProp (docs/magicprop.md):
-
-* [MagicProp?](docs/magicprop.md#magicprop)
-* [How does it work?](docs/magicprop.md#how-does-it-work)
-* [Where can I use it?](docs/magicprop.md#where-can-i-use-it)
-* [Known properties](docs/magicprop.md#known-properties)
-* [My own](docs/magicprop.md#my-own)
-	* [MagicPropException](docs/magicprop.md#magicpropexception)
-* [Suggestions](docs/magicprop.md#suggestions)
-
-##  Adapters (docs/adapters.md):
-
-* [What are _adapters_](docs/adapters.md#what-are-adapters)
-* [Cache adapters](docs/adapters.md#cache-adapters)
-* [Database structure maintainer adapters](docs/adapters.md#database-structure-maintainer-adapters)
-* [I want mine!](docs/adapters.md#i-want-mine!)
-	* [Step 0: into a module](docs/adapters.md#step-0-into-a-module)
-	* [Step 1: new adapter](docs/adapters.md#step-1-new-adapter)
-	* [Step 2: using the adapter](docs/adapters.md#step-2-using-the-adapter)
-	* [Step 3: including the adapter](docs/adapters.md#step-3-including-the-adapter)
-* [I want my database structure maintainer adapter](docs/adapters.md#i-want-my-database-structure-maintainer-adapter)
-* [View adapters](docs/adapters.md#view-adapters)
-	* [Others](docs/adapters.md#others)
-* [Suggestions](docs/adapters.md#suggestions)
-
-##  Database Structure Specifications (docs/databasespecs.md):
-
-* [What is this?](docs/databasespecs.md#what-is-this)
-* [Cross database basic configurations](docs/databasespecs.md#cross-database-basic-configurations)
-* [Tables structures](docs/databasespecs.md#tables-structures)
-	* [Fields](docs/databasespecs.md#fields)
-	* [Column type](docs/databasespecs.md#column-type)
-	* [Override policy](docs/databasespecs.md#override-policy)
-* [Indexes](docs/databasespecs.md#indexes)
-	* [Override policy](docs/databasespecs.md#override-policy)
-* [Initial table data](docs/databasespecs.md#initial-table-data)
-	* [Policies](docs/databasespecs.md#policies)
-* [Connections](docs/databasespecs.md#connections)
-	* [Default connection](docs/databasespecs.md#default-connection)
-* [Callbacks](docs/databasespecs.md#callbacks)
-	* [What else can I do?](docs/databasespecs.md#what-else-can-i-do)
-	* [Indexes](docs/databasespecs.md#indexes)
-	* [Why no drop callback?](docs/databasespecs.md#why-no-drop-callback)
-* [Unknowns](docs/databasespecs.md#unknowns)
-* [Performance](docs/databasespecs.md#performance)
-* [Suggestions](docs/databasespecs.md#suggestions)
+* [Snippets?](docs/usesnippets.md#snippets)
+* [Pager Snippet](docs/usesnippets.md#pager-snippet)
+* [Pager Snippet Mananger](docs/usesnippets.md#pager-snippet-mananger)
+* [Current Problem](docs/usesnippets.md#current-problem)
+	* [Note Here](docs/usesnippets.md#note-here)
+* [Adding Pages](docs/usesnippets.md#adding-pages)
+* [Explain It!](docs/usesnippets.md#explain-it)
+	* [How to Invoke a Snippet.](docs/usesnippets.md#how-to-invoke-a-snippet)
+	* [Separated Assignments](docs/usesnippets.md#separated-assignments)
+	* [Something Good](docs/usesnippets.md#something-good)
 
