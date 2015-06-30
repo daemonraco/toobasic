@@ -90,6 +90,26 @@ database-name into
 `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE]`.
     * The default behavior is to use the default database.
 
+## SQLite connection
+A connection to an SQLite database should be transparent in most cases but its
+configuration is slightly different, take a look to this example:
+```php
+<?php
+$Connections[GC_CONNECTIONS_DB]["census"] = array(
+	GC_CONNECTIONS_DB_ENGINE => 'sqlite',
+	GC_CONNECTIONS_DB_SERVER => "{$Directories[GC_DIRECTORIES_CACHE]}/census.sqlite3",
+	GC_CONNECTIONS_DB_PORT => false,
+	GC_CONNECTIONS_DB_NAME => false,
+	GC_CONNECTIONS_DB_USERNAME => false,
+	GC_CONNECTIONS_DB_PASSWORD => false,
+	GC_CONNECTIONS_DB_PREFIX => "ss_"
+);
+```
+The main difference is we don't have a server providing our databases, we have a
+binary file instead, that why our server parameter has changed this way.
+In the example, our database is located in known writable directory, but you can
+store it wherever you need in your server.
+
 ## Suggestions
 If you want or need it, you may visit this documentation pages:
 

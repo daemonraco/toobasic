@@ -59,6 +59,7 @@
 	* [Where to Place It?](docs/databases.md#where-to-place-it)
 * [Let's Make a Query](docs/databases.md#lets-make-a-query)
 * [Defaults](docs/databases.md#defaults)
+* [SQLite connection](docs/databases.md#sqlite-connection)
 * [Suggestions](docs/databases.md#suggestions)
 
 ##  Database Structure Specifications (docs/databasespecs.md):

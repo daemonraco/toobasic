@@ -218,15 +218,30 @@ related)
 	* [Routes](docs/routes.md)
 	* [MagicProp](docs/magicprop.md)
 
-# Thanks
-## Smarty
-![Alt:smarty](http://www.smarty.net/images/icons/smarty-80x15.png)
+Also:
 
+* [The full index](docsindex.md) of document entries.
+
+## Thanks
+### Smarty
 Even though you can use other mechanisms, __TooBasic__ provides and adapter for
-templace using [Smarty](http://www.smarty.net/) as engine, and it's selected by
-default.
-Therefore, you should visit its documentation at
+template using _Smarty_ as engine, and it's selected by default.
+You should visit its documentation at
 [smarty.net Documentation](http://www.smarty.net/documentation).
 
 Of course, if you want to use a different template interpreter, you may visit the
 [Adapters Doc](docs/adapters.md) to find an alternative.
+Nonetheless, [_sys-tools_](docs/facilities.md) use _Smarty_ to generate scaffolds.
+
+__Home Page__: http://www.smarty.net/
+
+### Twitter Bootstrap
+Because it makes things pretty and saves the life of programmers with no designing
+skill like I am.
+
+__Home Page__: http://getbootstrap.com/
+
+### jQuery
+Who doesn't use jQuery?
+
+__Home Page__: https://jquery.com/

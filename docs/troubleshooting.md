@@ -93,3 +93,9 @@ $ php --ini
 
 Remember, the PHP configuration you use in a console may not be the same used by
 your PHP web server.
+
+## Smarty version
+Sometimes, when the submodule _Smarty_ is updated, you may experience some file
+permissions errors and to solve this, remove the folder located at
+__ROOTDIR/cache/smarty__ along with its contents, don't worry, __TooBasic__ will
+recreate it by automatically  when it's required.
