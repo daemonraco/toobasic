@@ -117,10 +117,13 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 	}
 }
 /**
- * 
- * @param type $path
- * @param type $keepFather
- * @return array
+ * This tool allows to remove a directory along with its contents. If a file path
+ * is given instead of a directory, it will be remove without problem.
+ *
+ * @param string $path Directory path to remove.
+ * @param string $keepFather Whether to keep the directory entry and only remove
+ * its contents, or remove it all.
+ * @return string[] Returns a list of errors found while removing the directory.
  */
 function recursive_unlink($path, $keepFather = false) {
 	//

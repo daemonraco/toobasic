@@ -69,9 +69,10 @@ function classname($simpleName) {
 /**
  * This method prints in a basic but standard way some message.
  *
- * @param type $thing
- * @param type $type
- * @param type $title
+ * @param mixed $thing Thing to be shown.
+ * @param string $type The way it should be shown.
+ * @param string $title If present, the shown message will present this parameter
+ * as a title.
  */
 function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 	//
