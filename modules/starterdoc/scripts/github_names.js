@@ -8,7 +8,7 @@ $(document).ready(function() {
 		name = name.replace(/([\?!'.:>\(\)\$])/g, '');
 		name = name.replace(/ /g, '-');
 
-		$('<a name="' + name + '"></a>').insertBefore(this);
+		$(this).attr('id', name);
 	});
 	$('.navbar').each(function() {
 		if (window.location.href.match(/(.*)#(.+)/)) {
