@@ -224,7 +224,7 @@ class ServicesManager extends UrlManager {
 			if(class_exists($serviceClassName)) {
 				$out = new $serviceClassName($serviceName);
 			} else {
-				trigger_error("Class '{$serviceClassName}' not found", E_USER_ERROR);
+				throw new Exception("Class '{$serviceClassName}' not found");
 			}
 		}
 

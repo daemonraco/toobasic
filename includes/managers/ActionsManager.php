@@ -66,13 +66,13 @@ class ActionsManager extends UrlManager {
 					$code = sprintf('%03d', $code);
 				}
 
-				trigger_error("[DB-{$code}] {$error['message']}", E_USER_WARNING);
+				throw new Exception("[DB-{$code}] {$error['message']}");
 			}
-			trigger_error('There are database errors specs', E_USER_ERROR);
+			throw new Exception('There are database errors specs');
 		} else {
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
-					trigger_error('Database couldn\'t be upgraded', E_USER_ERROR);
+					throw new Exception('Database couldn\'t be upgraded');
 				}
 			}
 		}

@@ -43,7 +43,7 @@ class DBAdapter extends Adapter {
 				//
 				// If there is a database connection exception, it is
 				// caught and a user exception is raised.
-				trigger_error(__CLASS__.": Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", E_USER_ERROR);
+				throw new Exception("Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", $e->getCode(), $e);
 			}
 			//
 			// Creating a shortcut for database tables prefix
@@ -98,9 +98,9 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
+				throw new Exception("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
+				throw new Exception('Not connected');
 			}
 		}
 		//
@@ -187,9 +187,9 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
+				throw new Exception("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
+				throw new Exception('Not connected');
 			}
 		}
 		//

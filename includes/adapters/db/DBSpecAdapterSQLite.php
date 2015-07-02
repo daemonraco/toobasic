@@ -184,7 +184,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		return $this->exec($query);
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
-		trigger_error('Operation not supported by SQLite (DROP COLUMN)', E_USER_ERROR);
+		throw new Exception('Operation not supported by SQLite (DROP COLUMN)');
 		$query = "alter table {$table->fullname} \n";
 		$query.= "        drop column {$columnName}";
 
@@ -233,7 +233,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		return $this->dropIndex($index->fullname) && $this->createIndex($index);
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
-		trigger_error('Operation not supported by SQLite (MODIFY COLUMN)', E_USER_ERROR);
+		throw new Exception('Operation not supported by SQLite (MODIFY COLUMN)');
 		$query = "alter table {$table->fullname} \n";
 
 		$field = $table->fields[$columnName];

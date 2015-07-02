@@ -288,7 +288,7 @@ class RoutesManager extends Manager {
 	protected function parseConfig($path) {
 		$json = json_decode(file_get_contents($path));
 		if(json_last_error() != JSON_ERROR_NONE) {
-			trigger_error("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg(), E_USER_ERROR);
+			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
 		}
 
 		if(isset($json->routes)) {

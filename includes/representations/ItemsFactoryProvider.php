@@ -37,10 +37,10 @@ class ItemsFactoryProvider extends Singleton {
 					$this->_loadedClases[$name] = $fullName;
 					$out = $fullName;
 				} else {
-					trigger_error("Class '{$fullName}' is not defined.", E_USER_ERROR);
+					throw new Exception("Class '{$fullName}' is not defined.");
 				}
 			} else {
-				trigger_error("Cannot load items representation factory '{$fullName}'.", E_USER_ERROR);
+				throw new Exception("Cannot load items representation factory '{$fullName}'.");
 			}
 		} else {
 			$out = $this->_loadedClases[$name];

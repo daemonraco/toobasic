@@ -26,7 +26,7 @@ class Color {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		trigger_error(get_called_class()."::".__FUNCTION__.": Clone is not allowed.", E_USER_ERROR);
+		throw new Exception('Clone is not allowed.');
 	}
 	//
 	// Public class methods.

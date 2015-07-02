@@ -544,7 +544,7 @@ class DBStructureManager extends Manager {
 
 		$json = json_decode(file_get_contents($path));
 		if(!$json) {
-			trigger_error("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg(), E_USER_ERROR);
+			throw new Exception("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg());
 		}
 
 		$this->parseSpecConfigs(isset($json->configs) ? $json->configs : new \stdClass());

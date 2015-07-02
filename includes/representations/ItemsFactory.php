@@ -42,7 +42,7 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		trigger_error(get_called_class().'::'.__FUNCTION__.': Clone is not allowed.', E_USER_ERROR);
+		throw new Exception('Clone is not allowed');
 	}
 	//
 	// Public methods.
@@ -150,10 +150,10 @@ abstract class ItemsFactory {
 				if(class_exists($name)) {
 					self::$_LoadedClasses[] = $name;
 				} else {
-					trigger_error("Class '{$name}' is not defined.", E_USER_ERROR);
+					throw new Exception("Class '{$name}' is not defined");
 				}
 			} else {
-				trigger_error("Cannot load item representation '{$name}'.", E_USER_ERROR);
+				throw new Exception("Cannot load item representation '{$name}'");
 			}
 		}
 
