@@ -6,6 +6,7 @@
  */
 
 namespace TooBasic;
+
 /**
  * @class Exception
  * @todo doc
@@ -24,7 +25,7 @@ class Exception extends \Exception {
 
 			$position = 0;
 			foreach($exception->getTrace() as $entry) {
-				echo "#{$position}  ".($entry['class'] ? "{$entry['class']}::" : '')."{$entry['function']}() called at [{$entry['file']}:{$entry['line']}]\n";
+				echo "#{$position}  ".(isset($entry['class']) ? "{$entry['class']}::" : '')."{$entry['function']}() called at [{$entry['file']}:{$entry['line']}]\n";
 				$position++;
 			}
 		};
