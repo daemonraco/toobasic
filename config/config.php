@@ -37,6 +37,7 @@ $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\TooBasic\CacheAdapterFile';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
 $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = 'en_us';
 $Defaults[GC_DEFAULTS_LAYOUT] = false;

@@ -143,8 +143,7 @@ class Params extends Singleton {
 			// Debugs may have changed.
 			$this->_debugs = false;
 		} else {
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+			throw new Exception("Unknown parameters stack called '{$type}'");
 		}
 	}
 	/**
@@ -165,8 +164,7 @@ class Params extends Singleton {
 			// Requesting all values from the stack,
 			$out = $this->_paramsStacks[$type]->all();
 		} else {
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+			throw new Exception("Unknown parameters stack called '{$type}'");
 		}
 		//
 		// Returning what was found.

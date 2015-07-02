@@ -161,9 +161,7 @@ class ActionsManager extends UrlManager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($actionName);
 			} else {
-				/** @todo this should be a TooBasicException. */
-				debugThing("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.", DebugThingTypeError);
-				die;
+				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
 			}
 		} elseif(!$recursive) {
 			//

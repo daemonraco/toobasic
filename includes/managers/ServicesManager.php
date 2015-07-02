@@ -116,11 +116,9 @@ class ServicesManager extends UrlManager {
 			if($service) {
 				require_once $service['path'];
 				//
-				// Checking class existence
+				// Checking class existence.
 				if(!class_exists($service['class'])) {
-					/** @todo this should be a TooBasicException. */
-					debugThing("Class '{$service['class']}' is not defined. File '{$service['path']}' doesn't seem to load the right object.", DebugThingTypeError);
-					die;
+					throw new Exception("Class '{$service['class']}' is not defined. File '{$service['path']}' doesn't seem to load the right object.");
 				}
 				//
 				// Creating the service class.

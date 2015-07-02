@@ -118,8 +118,7 @@ abstract class Exporter {
 		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
 			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
 		} else {
-			/** @todo replace with a TooBasicException */
-			trigger_error("There's no configuration for format '{$this->_format}'", E_USER_ERROR);
+			throw new Exception("There's no configuration for format '{$this->_format}'");
 		}
 		//
 		// Checking modes.

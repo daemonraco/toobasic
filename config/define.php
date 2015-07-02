@@ -23,6 +23,7 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_INSTALLED', 'installed');
 define('GC_DEFAULTS_LANGS_DEFAULTLANG', 'langs-defaultlang');
 define('GC_DEFAULTS_LAYOUT', 'layout');

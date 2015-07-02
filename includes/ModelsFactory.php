@@ -122,15 +122,13 @@ class ModelsFactory extends Singleton {
 				//
 				// If the requested class was not defined, it is
 				// considered a fatal exception.
-				/** @todo this should raise a TooBasicException */
-				trigger_error("Class '{$className}' is not defined.", E_USER_ERROR);
+				throw new Exception("Class '{$className}' is not defined.");
 			}
 		} else {
 			//
 			// If the requested class has no file, it is considered a
 			// fatal exception.
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Cannot load model file '{$classFileName}'.", E_USER_ERROR);
+			throw new Exception("Cannot load model file '{$classFileName}'.");
 		}
 		//
 		// Retruning what was found.
