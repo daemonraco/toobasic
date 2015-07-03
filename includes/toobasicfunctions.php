@@ -48,6 +48,7 @@ function checkBasicPermissions() {
 	}
 }
 /**
+ * @deprecated
  * This function normalize class names:
  *
  * @param string $simpleName Name to be normalized.

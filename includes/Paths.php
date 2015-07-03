@@ -48,6 +48,10 @@ class Paths extends Singleton {
 	 */
 	protected $_dbSpecPaths = false;
 	/**
+	 * @var string[] List of available emails controllers directories.
+	 */
+	protected $_emailControllerPaths = false;
+	/**
 	 * @var string[] List of available images directories.
 	 */
 	protected $_imagesPaths = false;
@@ -135,6 +139,21 @@ class Paths extends Singleton {
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
 		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This method provides a way to get one or all email controller files
+	 * matching certain name.
+	 *
+	 * @param string $emailName  Name of the file to look for (extension is
+	 * assumed 'php').
+	 * @param boolean $full Indicates if all found files has to be retunred or
+	 * only one.
+	 * @return mixed Returns an array with every path found or just one string
+	 * when it's not set as full. All paths are absolute.
+	 */
+	public function emailControllerPath($emailName, $full = false) {
+		global $Paths;
+		return $this->find($this->_emailControllerPaths, false, $Paths[GC_PATHS_EMAIL_CONTROLLERS], $emailName, self::ExtensionPHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all style files matching
