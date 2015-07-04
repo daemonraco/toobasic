@@ -17,11 +17,11 @@ abstract class ItemsFactory {
 	protected static $_LoadedClasses = array();
 	//
 	// Protected core properties.
-	protected $_CP_IDColumn = "";
-	protected $_CP_ColumnsPerfix = "";
+	protected $_CP_IDColumn = '';
+	protected $_CP_ColumnsPerfix = '';
 	protected $_CP_OrderBy = false;
-	protected $_CP_RepresentationClass = "";
-	protected $_CP_Table = "";
+	protected $_CP_RepresentationClass = '';
+	protected $_CP_Table = '';
 	//
 	// Protected properties.	
 	/**
@@ -29,7 +29,7 @@ abstract class ItemsFactory {
 	 */
 	protected $_db = false;
 	protected $_dbname = false;
-	protected $_dbprefix = "";
+	protected $_dbprefix = '';
 	//
 	// Magic methods.
 	/**
@@ -42,10 +42,25 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		trigger_error(get_called_class()."::".__FUNCTION__.": Clone is not allowed.", E_USER_ERROR);
+		trigger_error(get_called_class().'::'.__FUNCTION__.': Clone is not allowed.', E_USER_ERROR);
 	}
 	//
 	// Public methods.
+	public function create() {
+		$out = false;
+
+		$query = "insert \n";
+		$query.= "        into {$this->_dbprefix}{$this->_CP_Table}() \n";
+		$query.= "        values() \n";
+
+		$stmt = $this->_db->prepare($query);
+
+		if($stmt->execute()) {
+			$out = $this->_db->lastInsertId();
+		}
+
+		return $out;
+	}
 	public function ids() {
 		$out = array();
 
@@ -60,7 +75,7 @@ abstract class ItemsFactory {
 		$stmt->execute();
 
 		foreach($stmt->fetchAll() as $row) {
-			$out[] = $row["id"];
+			$out[] = $row['id'];
 		}
 
 		return $out;
@@ -125,7 +140,7 @@ abstract class ItemsFactory {
 	//
 	// Protected class methods.
 	protected static function GetClass($name, $dbname) {
-		$name = classname($name)."Representation";
+		$name = classname($name).GC_CLASS_SUFFIX_REPRESENTATION;
 
 		if(!in_array($name, self::$_LoadedClasses)) {
 			$filename = Paths::Instance()->representationPath($name);

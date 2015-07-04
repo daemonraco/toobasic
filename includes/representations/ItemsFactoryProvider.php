@@ -27,7 +27,7 @@ class ItemsFactoryProvider extends Singleton {
 		$out = false;
 
 		if(!isset($this->_loadedClases[$name])) {
-			$fullName = classname($name)."Factory";
+			$fullName = classname($name).GC_CLASS_SUFFIX_FACTORY;
 
 			$filename = Paths::Instance()->representationPath($fullName);
 			if($filename) {

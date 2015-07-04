@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @class <%$controller%>
+ *
+ * Accessible adding '&layout=<%$name%>'
+ */
+class <%$controller%> extends \TooBasic\Layout {
+	//
+	// Protected properties
+	protected $_cached = <%$cached%>;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		return true;
+	}
+	protected function init() {
+		parent::init();
+
+//		$this->_cacheParams["GET"][] = "someparam";
+	}
+}

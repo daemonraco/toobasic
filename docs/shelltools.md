@@ -34,7 +34,7 @@ class UsersTool extends \TooBasic\Shell\ShellTool {
 
 Now we can execute this tool directly in our server with a command like this one:
 ```html
-$ sudo -u www-data php /var/www/mysite/shell/main.php tool users
+$ sudo -u www-data php /var/www/mysite/shell.php tool users
 ```
 
 Assumptions:
@@ -79,7 +79,7 @@ class UsersTool extends \TooBasic\Shell\ShellTool {
 ```
 Now we can execute this command:
 ```html
-$ sudo -u www-data php /var/www/mysite/shell/main.php tool users -l
+$ sudo -u www-data php /var/www/mysite/shell.php tool users -l
 ```
 
 What's going on here?:
@@ -91,11 +91,11 @@ options.
 
 Now we can do this:
 ```html
-$ sudo -u www-data php /var/www/mysite/shell/main.php tool users -l
+$ sudo -u www-data php /var/www/mysite/shell.php tool users -l
 Invalids users:
 	- john42 (6532)
 	- daemonraco (666)
-$ sudo -u www-data php /var/www/mysite/shell/main.php tool users -h
+$ sudo -u www-data php /var/www/mysite/shell.php tool users -h
 This tool allows to perform certain tasks related with users.
 
 	--help, -h
@@ -184,7 +184,7 @@ class UsersCron extends \TooBasic\Shell\ShellCron {
 
 Now you can call it this way:
 ```html
-$ sudo -u www-data php /var/www/mysite/shell/main.php cron users -rm
+$ sudo -u www-data php /var/www/mysite/shell.php cron users -rm
 ```
 
 ## How Does It Work?
@@ -205,7 +205,7 @@ instance running_ when there's none.
 For those cases you can add the flag `-CF` and it will clear the flag (this
 doesn't execute the actual task), something like this:
 ```html
-$ sudo -u www-data php /var/www/mysite/shell/main.php cron users -rm -CF
+$ sudo -u www-data php /var/www/mysite/shell.php cron users -rm -CF
 ```
 
 ## Profiles
@@ -221,10 +221,10 @@ of parameters, something like this (crontab like):
 ```sh
 #
 # m h  dom mon dow   command
-00 00 * * * /usr/bin/php /www/mysite/shell/main.php cron users --clean-inactives
-15 00 * * * /usr/bin/php /www/mysite/shell/main.php cron users --remove-banned
-30 00 * * * /usr/bin/php /www/mysite/shell/main.php cron posts --remove-spam
-45 00 * * * /usr/bin/php /www/mysite/shell/main.php cron comments --kick-impolite severe
+00 00 * * * /usr/bin/php /www/mysite/shell.php cron users --clean-inactives
+15 00 * * * /usr/bin/php /www/mysite/shell.php cron users --remove-banned
+30 00 * * * /usr/bin/php /www/mysite/shell.php cron posts --remove-spam
+45 00 * * * /usr/bin/php /www/mysite/shell.php cron comments --kick-impolite severe
 ```
 In this case you only see four _crontab_ line, but in real life there may be even
 more.
@@ -256,11 +256,11 @@ $CronProfiles["mysite_cron"] = array(
 	)
 );
 ```
-Now, let's change out _crontab_ configuration into something like this:
+Now, let's change our _crontab_ configuration into something like this:
 ```sh
 #
 # m h  dom mon dow   command
-00 00 * * * /usr/bin/php /www/mysite/shell/main.php profile mysite_cron
+00 00 * * * /usr/bin/php /www/mysite/shell.php profile mysite_cron
 ```
 This way, your _crontab_ is cleaner and you know each task will start when the
 previous one ends.

@@ -1,0 +1,29 @@
+<h4>View item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+
+<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;">
+	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
+	<table>
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
+		<tr>
+			<td>
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+			</td><td>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" readonly="readonly"/>
+			</td>
+		</tr>
+<%/if%>
+<%if $field.type.type == 'text' %>
+		<tr>
+			<td>
+				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+			</td><td>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
+			</td>
+		</tr>
+<%/if%>
+<%/if%><%/foreach%>
+	</table>
+</form>
+<br/>
+<a href="{$ctrl->link('?action=<%$listAction%>')}">Back to list</a>

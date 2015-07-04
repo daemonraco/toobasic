@@ -14,23 +14,24 @@ class DBStructureManager extends Manager {
 	const ErrorUnknownTable = 2;
 	const ErrorUnknownType = 3;
 	const ErrorUnknownConnection = 4;
-	const ColumnTypeBlob = "blob";
-	const ColumnTypeEnum = "enum";
-	const ColumnTypeFloat = "float";
-	const ColumnTypeInt = "int";
-	const ColumnTypeText = "text";
-	const ColumnTypeTimestamp = "timestamp";
-	const ColumnTypeVarchar = "varchar";
-	const TaskTypeCreateColumn = "create-column";
-	const TaskTypeCreateIndex = "create-indexes";
-	const TaskTypeCreateTable = "create-tables";
-	const TaskTypeDropColumn = "drop-column";
-	const TaskTypeDropIndex = "drop-indexes";
-	const TaskTypeDropTable = "drop-tables";
-	const TaskTypeUpdateColumn = "update-column";
-	const TaskTypeUpdateData = "update-data";
-	const TaskTypeUpdateIndex = "update-index";
-	const TaskStatus = "status";
+	const ErrorUnknownCallback = 5;
+	const ColumnTypeBlob = 'blob';
+	const ColumnTypeEnum = 'enum';
+	const ColumnTypeFloat = 'float';
+	const ColumnTypeInt = 'int';
+	const ColumnTypeText = 'text';
+	const ColumnTypeTimestamp = 'timestamp';
+	const ColumnTypeVarchar = 'varchar';
+	const TaskTypeCreateColumn = 'create-column';
+	const TaskTypeCreateIndex = 'create-indexes';
+	const TaskTypeCreateTable = 'create-tables';
+	const TaskTypeDropColumn = 'drop-column';
+	const TaskTypeDropIndex = 'drop-indexes';
+	const TaskTypeDropTable = 'drop-tables';
+	const TaskTypeUpdateColumn = 'update-column';
+	const TaskTypeUpdateData = 'update-data';
+	const TaskTypeUpdateIndex = 'update-index';
+	const TaskStatus = 'status';
 	// 
 	// Protected class properties.
 	protected static $_AllowedColumnTypes = array(
@@ -42,8 +43,15 @@ class DBStructureManager extends Manager {
 		self::ColumnTypeTimestamp,
 		self::ColumnTypeVarchar
 	);
+	protected static $_ColumnTypesWithoutPrecisions = array(
+		self::ColumnTypeBlob,
+		self::ColumnTypeEnum,
+		self::ColumnTypeText,
+		self::ColumnTypeTimestamp,
+	);
 	// 
 	// Protected properties.
+	protected $_callbacks = array();
 	/**
 	 * @var \TooBasic\DBAdapter[string] 
 	 */
@@ -149,19 +157,19 @@ class DBStructureManager extends Manager {
 					foreach($this->_perConnection as $connName => $connection) {
 						$adapter = $this->getAdapter($connName);
 						foreach($adapter->getIndexes() as $dbIndex) {
-							if(!in_array($dbIndex, $connection["indexes"])) {
+							if(!in_array($dbIndex, $connection['indexes'])) {
 								$this->_tasks[self::TaskTypeDropIndex][] = array(
-									"connection" => $connName,
-									"name" => $dbIndex
+									'connection' => $connName,
+									'name' => $dbIndex
 								);
 								$ok = false;
 							}
 						}
 						foreach($adapter->getTables() as $dbTable) {
-							if(!in_array($dbTable, $connection["tables"])) {
+							if(!in_array($dbTable, $connection['tables'])) {
 								$this->_tasks[self::TaskTypeDropTable][] = array(
-									"connection" => $connName,
-									"name" => $dbTable
+									'connection' => $connName,
+									'name' => $dbTable
 								);
 								$ok = false;
 							}
@@ -181,7 +189,7 @@ class DBStructureManager extends Manager {
 		return $this->_errors;
 	}
 	public function hasErrors() {
-		return boolval($this->_errors);
+		return \boolval($this->_errors);
 	}
 	public function specs() {
 		return $this->_specs;
@@ -207,7 +215,8 @@ class DBStructureManager extends Manager {
 			$this->dropTables();
 
 			if(isset(Params::Instance()->debugdbemulation)) {
-				debugit("Database upgrade emulation", true);
+				\TooBasic\debugThing('Database upgrade emulation');
+				die;
 			}
 
 			$this->_tasks = false;
@@ -218,6 +227,43 @@ class DBStructureManager extends Manager {
 	}
 	//
 	// Protected methods.
+	protected function checkCallbacks() {
+		foreach($this->_callbacks as &$subCallbacks) {
+			foreach($subCallbacks as &$data) {
+				$data['path'] = Paths::Instance()->dbSpecCallbackPaths($data['name']);
+				if(!$data['path']) {
+					$this->setError(self::ErrorUnknownCallback, "Unable to find database spec callback '{$data['name']}'");
+				}
+			}
+		}
+		//
+		// Cleaning table callbacks.
+		foreach($this->_specs->tables as &$table) {
+			$table->realCallbacks = new \stdClass();
+			foreach($table->callbacks as $callbackType => $keys) {
+				$table->realCallbacks->{$callbackType} = $keys ? $keys[0] : false;
+			}
+			unset($table->callbacks);
+			//
+			// Cleaning table column callbacks.
+			foreach($table->fields as &$field) {
+				$field->realCallbacks = new \stdClass();
+				foreach($field->callbacks as $callbackType => $keys) {
+					$field->realCallbacks->{$callbackType} = $keys ? $keys[0] : false;
+				}
+				unset($field->callbacks);
+			}
+		}
+		//
+		// Cleaning index callbacks.
+		foreach($this->_specs->indexes as &$index) {
+			$index->realCallbacks = new \stdClass();
+			foreach($index->callbacks as $callbackType => $keys) {
+				$index->realCallbacks->{$callbackType} = $keys ? $keys[0] : false;
+			}
+			unset($index->callbacks);
+		}
+	}
 	protected function checkSpecs() {
 		//
 		// Checking indexes.
@@ -264,7 +310,20 @@ class DBStructureManager extends Manager {
 			$table = $this->_specs->tables[$tKey];
 			$adapter = $this->getAdapter($table->connection);
 			foreach($columns as $column) {
+				$callbackKeyBefore = "F_before_create_{$tKey}_{$column}";
+				$callbackKeyAfter = "F_after_create_{$tKey}_{$column}";
+
+				if(isset($this->_callbacks[$callbackKeyBefore])) {
+					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 				$adapter->createTableColumn($table, $column);
+				if(isset($this->_callbacks[$callbackKeyAfter])) {
+					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 			}
 		}
 	}
@@ -272,35 +331,103 @@ class DBStructureManager extends Manager {
 		foreach($this->_tasks[self::TaskTypeCreateIndex] as $iKey) {
 			$index = $this->_specs->indexes[$iKey];
 			$adapter = $this->getAdapter($index->connection);
+
+			$callbackKeyBefore = "I_before_create_{$iKey}";
+			$callbackKeyAfter = "I_after_create_{$iKey}";
+
+			if(isset($this->_callbacks[$callbackKeyBefore])) {
+				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 			$adapter->createIndex($index);
+			if(isset($this->_callbacks[$callbackKeyAfter])) {
+				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 		}
 	}
 	protected function createTables() {
 		foreach($this->_tasks[self::TaskTypeCreateTable] as $tKey) {
 			$table = $this->_specs->tables[$tKey];
 			$adapter = $this->getAdapter($table->connection);
+
+			$callbackKeyBefore = "T_before_create_{$tKey}";
+			$callbackKeyAfter = "T_after_create_{$tKey}";
+
+			if(isset($this->_callbacks[$callbackKeyBefore])) {
+				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 			$adapter->createTable($table);
+			if(isset($this->_callbacks[$callbackKeyAfter])) {
+				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 		}
 	}
 	protected function dropColumns() {
 		foreach($this->_tasks[self::TaskTypeDropColumn] as $tKey => $columns) {
 			$table = $this->_specs->tables[$tKey];
 			$adapter = $this->getAdapter($table->connection);
+
 			foreach($columns as $column) {
+				$callbackKeyBefore = "F_before_drop_{$tKey}_{$column}";
+				$callbackKeyAfter = "F_after_drop_{$tKey}_{$column}";
+
+				if(isset($this->_callbacks[$callbackKeyBefore])) {
+					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 				$adapter->dropTableColumn($table, $column);
+				if(isset($this->_callbacks[$callbackKeyAfter])) {
+					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 			}
 		}
 	}
 	protected function dropIndexes() {
 		foreach($this->_tasks[self::TaskTypeDropIndex] as $data) {
-			$adapter = $this->getAdapter($data["connection"]);
-			$adapter->dropIndex($data["name"]);
+			$adapter = $this->getAdapter($data['connection']);
+			$callbackKeyBefore = "I_before_drop_{$data['name']}";
+			$callbackKeyAfter = "I_after_drop_{$data['name']}";
+
+			if(isset($this->_callbacks[$callbackKeyBefore])) {
+				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
+			$adapter->dropIndex($data['name']);
+			if(isset($this->_callbacks[$callbackKeyAfter])) {
+				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 		}
 	}
 	protected function dropTables() {
 		foreach($this->_tasks[self::TaskTypeDropTable] as $data) {
-			$adapter = $this->getAdapter($data["connection"]);
-			$adapter->dropTable($data["name"]);
+			$callbackKeyBefore = "T_before_drop_{$data['name']}";
+			$callbackKeyAfter = "T_after_drop_{$data['name']}";
+			$adapter = $this->getAdapter($data['connection']);
+
+			if(isset($this->_callbacks[$callbackKeyBefore])) {
+				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
+			$adapter->dropTable($data['name']);
+			if(isset($this->_callbacks[$callbackKeyAfter])) {
+				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+					$adapter->executeCallback($call);
+				}
+			}
 		}
 	}
 	protected function getAdapter($connectionName) {
@@ -350,7 +477,7 @@ class DBStructureManager extends Manager {
 			global $Connections;
 			//
 			// No database connections.
-			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB]) || !boolval($Connections[GC_CONNECTIONS_DB]))) {
+			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB]) || !\boolval($Connections[GC_CONNECTIONS_DB]))) {
 				$this->_installed = true;
 			}
 			//
@@ -367,7 +494,7 @@ class DBStructureManager extends Manager {
 		//
 		// There's a way to force installation checks and upgrades, but
 		// only from shell tools.
-		if(defined("__SHELL__") && isset(Params::Instance()->debugforcedbinstall)) {
+		if(defined('__SHELL__') && isset(Params::Instance()->debugforcedbinstall)) {
 			$this->_installed = false;
 		}
 		//
@@ -378,13 +505,15 @@ class DBStructureManager extends Manager {
 
 			$this->loadSpecs();
 			$this->parseSpecs();
+			$this->checkCallbacks();
 			$this->checkSpecs();
 
 			if(isset(Params::Instance()->debugdbstructure)) {
-				debugit(array(
-					"errors" => $this->_errors,
-					"files" => $this->_specFiles,
-					"specs" => $this->_specs
+				\TooBasic\debugThing(array(
+					'errors' => $this->_errors,
+					'files' => $this->_specFiles,
+					'specs' => $this->_specs,
+					'callbacks' => $this->_callbacks
 				));
 			}
 		}
@@ -415,7 +544,7 @@ class DBStructureManager extends Manager {
 
 		$json = json_decode(file_get_contents($path));
 		if(!$json) {
-			trigger_error("JSON spec at '{$path}' is broken. [".json_last_error()."] ".json_last_error_msg(), E_USER_ERROR);
+			trigger_error("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg(), E_USER_ERROR);
 		}
 
 		$this->parseSpecConfigs(isset($json->configs) ? $json->configs : new \stdClass());
@@ -437,14 +566,14 @@ class DBStructureManager extends Manager {
 		}
 		//
 		// Required configs' fileds.
-		foreach(array("prefixes") as $field) {
+		foreach(array('prefixes') as $field) {
 			if(!isset($this->_specs->configs->{$field})) {
 				$this->_specs->configs->{$field} = new \stdClass();
 			}
 		}
 		//
 		// Loading prefixes.
-		$this->_specs->configs->prefixes = self::CopyAndEnforce(array("index", "key", "primary"), $configs->prefixes, $this->_specs->configs->prefixes);
+		$this->_specs->configs->prefixes = \TooBasic\objectCopyAndEnforce(array('index', 'key', 'primary'), $configs->prefixes, $this->_specs->configs->prefixes);
 	}
 	protected function parseSpecData($data) {
 		//
@@ -452,9 +581,11 @@ class DBStructureManager extends Manager {
 		if(!isset($this->_specs->data)) {
 			$this->_specs->data = array();
 		}
+
 		global $Connections;
+
 		foreach($data as $datum) {
-			$aux = self::CopyAndEnforce(array("table", "connection", "checkfields", "entries"), $datum, new \stdClass());
+			$aux = \TooBasic\objectCopyAndEnforce(array('table', 'connection', 'checkfields', 'entries'), $datum, new \stdClass());
 
 			if(!$aux->table || !$aux->checkfields || !$aux->entries) {
 				continue;
@@ -477,7 +608,7 @@ class DBStructureManager extends Manager {
 				$auxEntry->check = $aux->checkfields;
 				$auxEntry->entry = $entry;
 
-				$dKey = "";
+				$dKey = '';
 				foreach($aux->checkfields as $fName) {
 					$dKey.= "|{$fName}={$entry->$fName}|";
 				}
@@ -492,39 +623,86 @@ class DBStructureManager extends Manager {
 		if(!isset($this->_specs->indexes)) {
 			$this->_specs->indexes = array();
 		}
-
+		//
+		// Global dependencies.
 		global $Connections;
-
+		//
+		// Basic callback entries:
+		$callbackEntries = array(
+			'before_create' => array(),
+			'after_create' => array(),
+			'before_drop' => array(),
+			'after_drop' => array()
+		);
+		//
+		// Checking each index
 		foreach($indexes as $index) {
-			$aux = self::CopyAndEnforce(array("name", "table", "type", "connection", "fields"), $index, new \stdClass(), array("fields" => array()));
+			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'table', 'type', 'connection', 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
 
 			if(!$aux->fields) {
 				continue;
 			}
-
+			//
+			// Checking specification connection against
+			// configuration.
 			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
+				// 
+				// If there was a connection specified, an error
+				// is shown.
 				if($aux->connection) {
 					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
 				}
+				//
+				// Using default instalation connection.
 				$aux->connection = $this->_dbManager->getInstallName();
 			}
-
-			$prefix = "";
+			//
+			// Obtainig current connection table prefix.
+			$prefix = '';
 			if(isset($this->_specs->configs->prefixes->{$aux->type})) {
 				$prefix = $this->_specs->configs->prefixes->{$aux->type};
 			}
+			//
+			// Generating table's full name.
 			$aux->fullname = "{$prefix}{$aux->name}";
 			//
-			// Accepting index spec.
+			// Generating a key to internally identify current index.
 			$key = sha1("{$aux->connection}-{$aux->fullname}");
+			//
+			// Index callbacks.
+			$aux->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $aux->callbacks instanceof \stdClass ? $aux->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+			foreach(array_keys($callbackEntries) as $callbackType) {
+				if(!isset($aux->callbacks->{$callbackType})) {
+					$aux->callbacks->{$callbackType} = array();
+				} elseif(!is_array($aux->callbacks->{$callbackType})) {
+					$aux->callbacks->{$callbackType} = array(
+						$aux->callbacks->{$callbackType}
+					);
+				}
+
+				foreach($aux->callbacks->{$callbackType} as &$call) {
+					$callbackKey = "I_{$callbackType}_{$key}";
+					if(!isset($this->_callbacks[$callbackKey])) {
+						$this->_callbacks[$callbackKey] = array();
+					}
+
+					$this->_callbacks[$callbackKey][] = array(
+						'name' => $call
+					);
+
+					$call = $callbackKey;
+				}
+			}
+			//
+			// Accepting index spec.
 			$this->_specs->indexes[$key] = $aux;
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
-			if(!isset($this->_perConnection[$aux->connection]["indexes"])) {
-				$this->_perConnection[$aux->connection]["indexes"] = array();
+			if(!isset($this->_perConnection[$aux->connection]['indexes'])) {
+				$this->_perConnection[$aux->connection]['indexes'] = array();
 			}
-			$this->_perConnection[$aux->connection]["indexes"][] = $aux->fullname;
+			$this->_perConnection[$aux->connection]['indexes'][] = $aux->fullname;
 		}
 	}
 	protected function parseSpecs() {
@@ -543,21 +721,69 @@ class DBStructureManager extends Manager {
 		if(!isset($this->_specs->tables)) {
 			$this->_specs->tables = array();
 		}
-
+		//
+		// Global dependencies.
 		global $Connections;
+		//
+		// Basic callback entries:
+		$callbackEntries = array(
+			'before_create' => array(),
+			'after_create' => array(),
+			'before_drop' => array(),
+			'after_drop' => array(),
+			'before_update' => array(),
+			'after_update' => array()
+		);
 
 		foreach($tables as $table) {
+			//
+			// Of there are not fields, this specification is ignored.
 			if(!$table->fields) {
 				continue;
 			}
-
-			$aux = self::CopyAndEnforce(array("name", "connection", "prefix", "engine"), $table, new \stdClass());
-
+			//
+			// Copying basic fields.
+			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'connection', 'prefix', 'engine', 'callbacks'), $table, new \stdClass());
+			//
+			// Checking specification connection against
+			// configuration.
+			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
+				// 
+				// If there was a connection specified, an error
+				// is shown.
+				if($aux->connection) {
+					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
+				}
+				//
+				// Using default instalation connection.
+				$aux->connection = $this->_dbManager->getInstallName();
+			}
+			//
+			// Obtainig current connection table prefix.
+			$prefix = '';
+			if(isset($Connections[GC_CONNECTIONS_DB][$aux->connection][GC_CONNECTIONS_DB_PREFIX])) {
+				$prefix = $Connections[GC_CONNECTIONS_DB][$aux->connection][GC_CONNECTIONS_DB_PREFIX];
+			}
+			//
+			// Generating table's full name.
+			$aux->fullname = "{$prefix}{$aux->name}";
+			//
+			// Generating a key to internally identify current table.
+			$key = sha1("{$aux->connection}-{$aux->name}");
+			//
+			// Loading table fields @{
 			$aux->fields = array();
 			foreach($table->fields as $field) {
-				$auxField = self::CopyAndEnforce(array("name", "type", "autoincrement", "null", "comment"), $field, new \stdClass(), array("autoincrement" => false, "null" => false));
+				//
+				// Copying basic fields.
+				$auxField = \TooBasic\objectCopyAndEnforce(array('name', 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
+				//
+				// Generating fullname.
 				$auxField->fullname = "{$aux->prefix}{$auxField->name}";
-
+				//
+				// If theres no type's type for this field and
+				// error is set and it's ignored.
+				// Also if the type's type is unknown.
 				if(!isset($auxField->type->type)) {
 					$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no type");
 					continue;
@@ -565,11 +791,14 @@ class DBStructureManager extends Manager {
 					$this->setError(self::ErrorUnknownType, "Unknown field type '{$auxField->type->type}' for field '{$auxField->fullname}' on table '{$aux->name}'");
 					continue;
 				}
-				if(!isset($auxField->type->precision)) {
+				//
+				//
+				/** @todo check this, why there's no 'else'? */
+				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
 					if($auxField->type->type == self::ColumnTypeEnum && !isset($auxField->type->values)) {
 						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value");
 						continue;
-					} elseif($auxField->type->type != self::ColumnTypeEnum) {
+					} elseif(!in_array($auxField->type->type, self::$_ColumnTypesWithoutPrecisions)) {
 						$this->setError(self::ErrorDefault, "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision");
 						continue;
 					}
@@ -580,28 +809,65 @@ class DBStructureManager extends Manager {
 				} else {
 					$auxField->hasDefault = false;
 				}
+				//
+				// Field callbacks.
+				$auxField->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $auxField->callbacks instanceof \stdClass ? $auxField->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+				foreach(array_keys($callbackEntries) as $callbackType) {
+					if(!isset($auxField->callbacks->{$callbackType})) {
+						$auxField->callbacks->{$callbackType} = array();
+					} elseif(!is_array($auxField->callbacks->{$callbackType})) {
+						$auxField->callbacks->{$callbackType} = array(
+							$auxField->callbacks->{$callbackType}
+						);
+					}
+					foreach($auxField->callbacks->{$callbackType} as &$call) {
+						$callbackKey = "F_{$callbackType}_{$key}_{$auxField->fullname}";
+						if(!isset($this->_callbacks[$callbackKey])) {
+							$this->_callbacks[$callbackKey] = array();
+						}
+						$this->_callbacks[$callbackKey][] = array(
+							'name' => $call
+						);
 
+						$call = $callbackKey;
+					}
+				}
+				//
+				// Accepting field specs.
 				$aux->fields[$auxField->fullname] = $auxField;
 			}
-
+			//
+			// If there are no fields for this table it is ignored.
 			if(!$aux->fields) {
 				continue;
 			}
-			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
-				if($aux->connection) {
-					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
+			// @}
+			//
+			// Table callbacks.
+			$aux->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $aux->callbacks instanceof \stdClass ? $aux->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+			foreach(array_keys($callbackEntries) as $callbackType) {
+				if(!isset($aux->callbacks->{$callbackType})) {
+					$aux->callbacks->{$callbackType} = array();
+				} elseif(!is_array($aux->callbacks->{$callbackType})) {
+					$aux->callbacks->{$callbackType} = array(
+						$aux->callbacks->{$callbackType}
+					);
 				}
-				$aux->connection = $this->_dbManager->getInstallName();
-			}
 
-			$prefix = "";
-			if(isset($Connections[GC_CONNECTIONS_DB][$aux->connection][GC_CONNECTIONS_DB_PREFIX])) {
-				$prefix = $Connections[GC_CONNECTIONS_DB][$aux->connection][GC_CONNECTIONS_DB_PREFIX];
+				foreach($aux->callbacks->{$callbackType} as &$call) {
+					$callbackKey = "T_{$callbackType}_{$key}";
+					if(!isset($this->_callbacks[$callbackKey])) {
+						$this->_callbacks[$callbackKey] = array();
+					}
+					$this->_callbacks[$callbackKey][] = array(
+						'name' => $call
+					);
+
+					$call = $callbackKey;
+				}
 			}
-			$aux->fullname = "{$prefix}{$aux->name}";
 			//
 			// Acception table specs.
-			$key = sha1("{$aux->connection}-{$aux->name}");
 			if(!isset($this->_specs->tables[$key])) {
 				$this->_specs->tables[$key] = $aux;
 			} else {
@@ -614,16 +880,16 @@ class DBStructureManager extends Manager {
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
-			if(!isset($this->_perConnection[$aux->connection]["tables"])) {
-				$this->_perConnection[$aux->connection]["tables"] = array();
+			if(!isset($this->_perConnection[$aux->connection]['tables'])) {
+				$this->_perConnection[$aux->connection]['tables'] = array();
 			}
-			$this->_perConnection[$aux->connection]["tables"][] = $aux->fullname;
+			$this->_perConnection[$aux->connection]['tables'][] = $aux->fullname;
 		}
 	}
 	protected function setError($code, $message) {
 		$this->_errors[] = array(
-			"code" => $code,
-			"message" => $message
+			'code' => $code,
+			'message' => $message
 		);
 	}
 	protected function updateColumns() {
@@ -631,7 +897,20 @@ class DBStructureManager extends Manager {
 			$table = $this->_specs->tables[$tKey];
 			$adapter = $this->getAdapter($table->connection);
 			foreach($columns as $column) {
+				$callbackKeyBefore = "F_before_update_{$tKey}_{$column}";
+				$callbackKeyAfter = "F_after_update_{$tKey}_{$column}";
+
+				if(isset($this->_callbacks[$callbackKeyBefore])) {
+					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 				$adapter->updateTableColumn($table, $column);
+				if(isset($this->_callbacks[$callbackKeyAfter])) {
+					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
+						$adapter->executeCallback($call);
+					}
+				}
 			}
 		}
 	}
@@ -641,22 +920,5 @@ class DBStructureManager extends Manager {
 			$adapter = $this->getAdapter($index->connection);
 			$adapter->updateIndex($index);
 		}
-	}
-	//
-	// Protected class methods.
-	protected static function CopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = array()) {
-		if(!is_array($defualt)) {
-			$defualt = array();
-		}
-
-		foreach($fields as $field) {
-			if(isset($origin->{$field})) {
-				$destination->{$field} = $origin->{$field};
-			} elseif(!isset($destination->{$field})) {
-				$destination->{$field} = isset($defualt[$field]) ? $defualt[$field] : "";
-			}
-		}
-
-		return $destination;
 	}
 }

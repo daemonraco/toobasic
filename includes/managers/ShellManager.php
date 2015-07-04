@@ -12,9 +12,10 @@ class ShellManager extends Manager {
 	const ErrorUnknownTool = 5;
 	const ErrorNoProfileName = 6;
 	const ErrorUnknownProfile = 7;
-	const ModeCron = "cron";
-	const ModeProfile = "profile";
-	const ModeTool = "tool";
+	const ModeCron = 'cron';
+	const ModeProfile = 'profile';
+	const ModeTool = 'tool';
+	const ModeSys= 'sys';
 	//
 	// Protected properties.
 	protected $_errors = array();
@@ -31,7 +32,7 @@ class ShellManager extends Manager {
 	public function hasErrors() {
 		return count($this->errors()) > 0;
 	}
-	public function run($spacer = "") {
+	public function run($spacer = '') {
 		//
 		// Checking for start errors.
 		if(!$this->hasErrors()) {
@@ -54,11 +55,14 @@ class ShellManager extends Manager {
 				case self::ModeCron:
 					$this->runCron($spacer);
 					break;
+				case self::ModeSys:
+					$this->runSys($spacer);
+					break;
 				default:
 					if($this->_mode) {
 						$this->setError(self::ErrorNotValidMode, "Mode '{$this->_mode}' is not valid");
 					} else {
-						$this->setError(self::ErrorNoMode, "No mode specified");
+						$this->setError(self::ErrorNoMode, 'No mode specified');
 					}
 
 					echo "{$spacer}Available modes are:\n";
@@ -79,12 +83,12 @@ class ShellManager extends Manager {
 		$dbStructureManager = DBStructureManager::Instance();
 		if($dbStructureManager->hasErrors()) {
 			foreach($dbStructureManager->errors() as $error) {
-				$code = $error["code"];
+				$code = $error['code'];
 				if(is_numeric($code)) {
-					$code = sprintf("%03d", $code);
+					$code = sprintf('%03d', $code);
 				}
 
-				$this->setError("DB-{$code}", $error["message"]);
+				$this->setError("DB-{$code}", $error['message']);
 			}
 		} else {
 			if(!$dbStructureManager->check()) {
@@ -94,7 +98,7 @@ class ShellManager extends Manager {
 	}
 	protected function promptErrors($spacer) {
 		foreach($this->errors() as $error) {
-			echo "{$spacer}Error: [{$error["code"]}] {$error["message"]}.\n";
+			echo "{$spacer}Error: [{$error['code']}] {$error['message']}.\n";
 		}
 	}
 	protected function runCron($spacer, $params = null) {
@@ -116,12 +120,12 @@ class ShellManager extends Manager {
 				$this->setError(self::ErrorUnknownTool, "Unkown cron tool called '{$this->_tool}'");
 			}
 		} else {
-			$this->setError(self::ErrorNoToolName, "No tool name specified");
+			$this->setError(self::ErrorNoToolName, 'No tool name specified');
 
 			echo "{$spacer}Available crons:\n";
-			foreach($this->paths->shellCron("*", true) as $path) {
+			foreach($this->paths->shellCron('*', true) as $path) {
 				$pathinfo = pathinfo($path);
-				echo "{$spacer}\t- {$pathinfo["filename"]}\n";
+				echo "{$spacer}\t- {$pathinfo['filename']}\n";
 			}
 			echo "\n";
 		}
@@ -147,7 +151,7 @@ class ShellManager extends Manager {
 				$this->setError(self::ErrorUnknownProfile, "Unkown profile called '{$this->_profile}'");
 			}
 		} else {
-			$this->setError(self::ErrorNoProfileName, "No profile name specified");
+			$this->setError(self::ErrorNoProfileName, 'No profile name specified');
 
 			echo "{$spacer}Available profiles:\n";
 			if(count($CronProfiles)) {
@@ -156,7 +160,7 @@ class ShellManager extends Manager {
 					foreach($tools as $config) {
 						echo "{$spacer}\t\t- {$config[GC_CRONPROFILES_TOOL]}";
 						if(count($config[GC_CRONPROFILES_PARAMS])) {
-							echo " (".implode(" ", $config[GC_CRONPROFILES_PARAMS]).")";
+							echo ' ('.implode(' ', $config[GC_CRONPROFILES_PARAMS]).')';
 						}
 						echo "\n";
 					}
@@ -165,6 +169,35 @@ class ShellManager extends Manager {
 				echo "{$spacer}\tNo profile available\n";
 			}
 
+			echo "\n";
+		}
+	}
+	protected function runSys($spacer, $params = null) {
+		if($this->_tool) {
+			$path = $this->paths->shellSys($this->_tool);
+			if($path) {
+				require_once $path;
+
+				$className = classname($this->_tool).GC_CLASS_SUFFIX_SYSTOOL;
+
+				if(class_exists($className)) {
+					$this->_toolClass = new $className();
+					$this->_toolClass->run($spacer, $params);
+					$this->_errors = array_merge($this->_errors, $this->_toolClass->errors());
+				} else {
+					$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
+				}
+			} else {
+				$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
+			}
+		} else {
+			$this->setError(self::ErrorNoToolName, 'No tool name specified');
+
+			echo "{$spacer}Available tools:\n";
+			foreach($this->paths->shellSys('*', true) as $path) {
+				$pathinfo = pathinfo($path);
+				echo "{$spacer}\t- {$pathinfo['filename']}\n";
+			}
 			echo "\n";
 		}
 	}
@@ -187,19 +220,19 @@ class ShellManager extends Manager {
 				$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
 			}
 		} else {
-			$this->setError(self::ErrorNoToolName, "No tool name specified");
+			$this->setError(self::ErrorNoToolName, 'No tool name specified');
 
 			echo "{$spacer}Available tools:\n";
-			foreach($this->paths->shellTool("*", true) as $path) {
+			foreach($this->paths->shellTool('*', true) as $path) {
 				$pathinfo = pathinfo($path);
-				echo "{$spacer}\t- {$pathinfo["filename"]}\n";
+				echo "{$spacer}\t- {$pathinfo['filename']}\n";
 			}
 			echo "\n";
 		}
 	}
 	protected function setError($code, $message) {
 		if(is_numeric($code)) {
-			$code = sprintf("%03d", $code);
+			$code = sprintf('%03d', $code);
 		}
 
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -208,12 +241,12 @@ class ShellManager extends Manager {
 		$callerLine = array_shift($trace);
 
 		$error = array(
-			"code" => "SM-{$code}",
-			"message" => $message,
-			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
-			"method" => $callerLine["function"],
-			"file" => $callingLine["file"],
-			"line" => $callingLine["line"]
+			'code' => "SM-{$code}",
+			'message' => $message,
+			'class' => isset($callerLine['class']) ? $callerLine['class'] : false,
+			'method' => $callerLine['function'],
+			'file' => $callingLine['file'],
+			'line' => $callingLine['line']
 		);
 
 		$this->_errors[] = $error;
@@ -221,9 +254,9 @@ class ShellManager extends Manager {
 	protected function starterOptions() {
 		$options = Shell\Options::Instance();
 
-		$options->addMainOption("script");
-		$options->addMainOption("mode");
-		$options->addMainOption("tool");
+		$options->addMainOption('script');
+		$options->addMainOption('mode');
+		$options->addMainOption('tool');
 
 		return $options;
 	}

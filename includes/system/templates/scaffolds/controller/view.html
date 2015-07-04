@@ -1,0 +1,10 @@
+<h1>Action '<%$name%>' for controller '<%$controller%>'</h1>
+<h4>Accessible at '?action=<%$name%>'</h4>
+<%if count($required_params) > 0%>
+<p>Remember to always use <%if count($required_params) > 1%>these parameters<%else%>this parameter<%/if%> on your url's query section:</p>
+<ul>
+<%foreach from=$required_params item=param%>
+	<li><%$param%></li>
+<%/foreach%>
+</ul>
+<%/if%>

@@ -1,0 +1,34 @@
+<?php
+
+use TooBasic\Shell\Option as TBS_Option;
+
+class <%$tool%> extends TooBasic\Shell\<%$toolParent%> {
+<%if count($options) > 0%>
+	//
+	// Constants.
+<%foreach from=$options item=option%>
+	const Option<%$option.name%> = '<%$option.name%>';
+<%/foreach%>
+<%/if%>
+	//
+	// Protected methods.
+	protected function setOptions() {
+		$this->_options->setHelpText("TODO tool summary");
+<%if count($options) > 0%>
+<%foreach from=$options item=option%>
+
+                $text = "TODO help text for: '<%"', '"|implode:$option.triggers%>'.";
+		$this->_options->addOption(TBS_Option::EasyFactory(self::Option<%$option.name%>, array('<%"', '"|implode:$option.triggers%>'), TBS_Option::<%$option.type%>, $text, 'value'));
+<%/foreach%>
+<%/if%>
+	}
+<%if count($masterOptions) > 0%>
+<%foreach from=$masterOptions item=option%>
+	protected function task<%$option.name%>($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+<%/foreach%>
+<%/if%>
+	protected function taskInfo($spacer = "") {
+	}
+}

@@ -8,7 +8,8 @@
 namespace TooBasic;
 
 /**
- * @class Timer This singleton class holds the logic to manage timers and impact
+ * @class Timer
+ * This singleton class holds the logic to manage timers and impact
  * them into a database table.
  */
 class Timer extends Singleton {

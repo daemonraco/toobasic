@@ -279,10 +279,82 @@ operations, if that's the case, you may use the configuration field `connection`
 or simple set its name in
 `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL]`.
 
+## Callbacks
+Callbacks is rather an easy topic that allows allows you to execute one or more
+SQL queries before and after a _DML_ operation is run.
+
+Let's say you're releasing version 2.0 of your site and from the database point of
+view, it is the same expect for a new table called __user_history__ where you now
+register your users' transactions.
+The first thing you may want to do is to create this table and insert every user
+registration date as the first entry in their history.
+For that you've created a SQL file with the proper query and now you need a way to
+execute it right after the table is created and only then.
+
+Here is where a callback comes in handy.
+Let's consider changing your specification to something like this:
+```json
+{
+	"tables" : [{
+		"name": "user_history",
+		"prefix": "uhy_",
+		"callbacks": {
+			"after_create": "uhy_first_entries"
+		},
+		"fields": [{
+	. . . 
+```
+
+Now, what the heck is that thing there?
+This specification adds a callback to be executed right after the table is
+created in the database.
+__uhy_first_entries__ would be the name for a file store along side with other
+JSON database specs (for example at __ROOTDIR/site/db/uhy_first_entries.sql__).
+
+You may also do something like this:
+```json
+{
+	"tables" : [{
+		"name": "user_history",
+		"prefix": "uhy_",
+		"callbacks": {
+			"after_create": [
+				"uhy_first_entries",
+				"uhy_second_entries"
+			]
+		},
+		"fields": [{
+	. . . 
+```
+
+### What else can I do?
+Well you can also use this field called _callbacks_ inside a table column
+specification.
+And as you may be supposing, `after_create` is not the only spec you can give.
+This is the complete list:
+
+* `before_create`: Before creating a table or table column.
+* `after_create`: After creating a table or table column.
+* `before_update`: Before altering the structure of a table or table column.
+* `after_update`: After altering the structure of a table or table column.
+
+### Indexes
+You can use callback for index specs too, but in this case you'll less possible
+callback types:
+
+* `before_create`: Before creating an index.
+* `after_create`: After creating an index.
+
+### Why no drop callback?
+That's an interesting question and the answer comes from the way these specs work.
+When you want to remove a table, column or index, you just remove its
+specification and it will get remove by the system, this means there's no place to
+write _drop callback_ specs.
+
 ## Unknowns
 This database maintenance mechanism is rather violent and it might destroy unknown
-tables, columns and indexes (data is always ketp as it is) and only let live those
-inside the _database structure specification_.
+tables, columns and indexes (data is always kept as it is) and only lets live
+those inside the _database structure specification_.
 To avoid such trouble, you may set
 `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS]` to
 _true_ and no drop will be run.

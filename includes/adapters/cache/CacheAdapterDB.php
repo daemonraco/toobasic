@@ -6,8 +6,6 @@ use \TooBasic\DBManager as TB_DBManager;
 
 abstract class CacheAdapterDB extends CacheAdapter {
 	//
-	// Constants.
-	//
 	// Protected properties.
 	protected $_compressionRate = 3;
 	/**
@@ -42,7 +40,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 			":key" => $this->fullKey($prefix, $key)
 		));
 	}
-	public function get($prefix, $key) {
+	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
 		$data = null;
 
 		$this->cleanOld($prefix, $key);
@@ -63,7 +61,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 
 		return $data;
 	}
-	public function save($prefix, $key, $data) {
+	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
 		$this->delete($prefix, $key);
 
 		$query = "insert \n";

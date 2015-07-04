@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @class <%$addActionController%>
+ *
+ * Accessible at '?action=<%$addAction%>'
+ */
+class <%$addActionController%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = false;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		return true;
+	}
+	protected function init() {
+		parent::init();
+
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+		$this->_requiredParams['POST'][] = '<%$field.name%>';
+<%/if%><%/foreach%>
+	}
+	protected function runPOST() {
+		$ok = true;
+
+		$factory = $this->representation-><%$pluralName%>;
+		$newId = $factory->create();
+		if($newId) {
+			$item = $factory->item($newId);
+
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+			$item-><%$field.name%> = $this->params->post-><%$field.name%>;
+<%/if%><%/foreach%>
+
+			$item->persist();
+		} else {
+			$ok = false;
+		}
+
+		if($ok) {
+			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
+		}
+
+		return $ok;
+	}
+}

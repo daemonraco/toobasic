@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @class <%$listActionController%>
+ *
+ * Accessible at '?action=<%$listAction%>'
+ */
+class <%$listActionController%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = false; # \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		$factory = $this->representation-><%$pluralName%>;
+
+		$items = array();
+		foreach($factory->items() as $item) {
+			$items[] = $item->toArray();
+		}
+		$this->assign("items", $items);
+
+		return true;
+	}
+}

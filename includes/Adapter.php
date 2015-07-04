@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Adapter.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**
@@ -22,6 +27,11 @@ abstract class Adapter {
 		
 	}
 	//
+	// Protected mehtods.
+	protected function init() {
+		
+	}
+	//
 	// Public class mehtods.
 	/**
 	 * Returns an adapter based on its name.
@@ -31,14 +41,18 @@ abstract class Adapter {
 	 */
 	public static function Factory($adapterName) {
 		$out = false;
-
+		//
+		// Cheking if this adapter has already been loaded. If not, it is.
+		// Adapters work as singletons.
 		if(!isset(self::$_Adapters[$adapterName])) {
 			self::$_Adapters[$adapterName] = new $adapterName();
+			self::$_Adapters[$adapterName]->init();
 			$out = self::$_Adapters[$adapterName];
 		} else {
 			$out = self::$_Adapters[$adapterName];
 		}
-
+		//
+		// Returning found adapter.
 		return $out;
 	}
 }

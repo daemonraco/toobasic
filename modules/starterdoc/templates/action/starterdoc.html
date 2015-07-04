@@ -1,0 +1,67 @@
+![](docs/images/TooBasic-logo-128px.png)
+# Basics
+## What is this page?
+Well, you've just downloaded this framework and to give you some hints we
+provided you with a starter module. If you check the folder __ROOTDIR/modules__
+you'll find a subfolder called __starterdoc__, just delete it or rename it to
+**_starterdoc** and you'll have a complete empty site ot play with.
+
+### Other way to disable it
+The other way to disable this module, but keep it for further reading, is to
+create a file at __ROOTDIR/site/config.php__ and inside it add something like
+this:
+```php
+<?php
+starterdoc_disable();
+```
+Throughout this documentation you'll other uses of this file and you may want
+to use a different configuration.
+
+After you do this, your site may look broken, in other words, empty.
+This means it is time to start adding some controllers (Visist this
+[link](README.md)).
+
+If you'd used this disabling mechanism, you may still access this module at:
+>http://www.yourhost.com/yoursite/?action=starterdoc
+
+## Documentation
+Where can you find documentation? well, if you didn't removed it, you already
+have some documentation and you can access pressing this [link](README.md).
+
+## Basic Directory Structure
+__TooBasic__ has a main list of directories that _must_ remain there:
+
+* `cache`: Every dynamic content ends up here, things like pre-compiled PHPs,
+temporary thumbnails, etc.
+* `config`: Main system configurations and definitions.
+* `includes`: __TooBasic__ core logics are stored inside this folder.
+* `libraries`: Here you can drop every library you project may require.
+* `modules`: This folder is where plugins/modules are installed.
+* `shell`: Shell tool's core logics are stored here.
+* `site`: Site's customized controllers, views, scripts, etc.
+ 
+## Site/Module Directories Structure
+Inside your site folder or any module may contain these folder:
+
+* `configs`: Site's configuration files.
+* `controllers`: Every controller class goes here.
+* `db`: Database specifications (visit the document page
+[Database Structure Specifications](docs/databasespecs.md)).
+* `langs`: Multilanguage translations (visit the document page
+[Using Languages](docs/uselanguage.md)).
+* `models`: Site's central logics. Press this [link](?example=hellomodel) to use
+example model.
+* `scripts`: Site's javascript files.
+* `services`: Every service class goes here (visit the document page
+[Services](docs/services.md)).
+* `skins`: Site's skins (visit the document [Skins](docs/skins.md)).
+* `snippets`: Pieces of codes useful for many controllers (visit the document
+page [Using Snippets](docs/usesnippets.md))
+* `styles` Site's CSS files.
+* `templates`
+    * `action`: Every default look (template) for actions and layout goes here.
+    * `modal`: If you want a different look, for example, for modals, place a
+    template here.
+____
+# Appendix
+{$ctrl->insert('known_debugs')}

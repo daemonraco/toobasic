@@ -131,7 +131,6 @@ class UserinfoController extends \TooBasic\Controller {
 ```
 
 All together will look like this:
-
 ```php
 <?php
 class UserinfoController extends \TooBasic\Controller {
@@ -168,3 +167,37 @@ Well, there's an adapter called __CacheAdapterNoCache__ that acts as a dummy
 providing you with the solution.
 It will interact as any other cache adapter but it won't do a thing and you'll
 be working without cache.
+
+## Duration
+Before version 0.3.0, every cache entry had a duration of 3600 seconds (one hour)
+and it couldn't be changed, but now it is possible adding something like this in
+your sites configuration file:
+```php
+<?php
+$Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 86400; // 1 day
+```
+You can also change your controllers and use something like this:
+```php
+<?php
+class MyactionController extends \TooBasic\Controller {
+	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	public function basicRun() {
+		. . .
+```
+This constant will tell __TooBasic__ to use an expiration time as long as it's
+configured.
+
+Available constants are:
+
+* `\TooBasic\CacheAdapter::ExpirationSizeDouble`: Double of
+`$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
+* `\TooBasic\CacheAdapter::ExpirationSizeLarge`: Same size as
+`$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
+* `\TooBasic\CacheAdapter::ExpirationSizeMedium`: A half of
+`$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
+* `\TooBasic\CacheAdapter::ExpirationSizeSmall`: A quarter of
+`$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
+
+Any other value will be considered as
+`\TooBasic\CacheAdapter::ExpirationSizeLarge`, including the boolean `true` used
+in versions before 0.3.0.

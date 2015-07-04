@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html>
-	<title>{$title}</title>
-	<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
+	<head>
+		<title>{$title}</title>
 
-	<xmp theme="united" style="display:none;">
+		<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->css('starterdoc')}"/>
+
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+		<link href="{$ctrl->css('jquery.cssemoticons')}" media="screen" rel="stylesheet" type="text/css"/>
+		<script src="{$ctrl->js('jquery.cssemoticons.min')}" type="text/javascript"></script>
+	</head>
+	<body class="container">
+{$ctrl->snippet('xmp_opentag')}
 %TOO_BASIC_ACTION_CONTENT%
-	</xmp>
+		</xmp>
 
-	<script type="text/javascript">
-		var MD_DOC_URI = "{$mdDocUri}";
-	</script>
+{$ctrl->insert('mdfooter')}
+{$ctrl->insert('gitlink')}
 
-	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-	<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-	<script type="text/javascript" src="{$ctrl->js('starterdoc_mdfix')}"></script>
+		<script type="text/javascript" src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+		<script src="{$ctrl->js('github_names')}" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			var MD_DOC_URI = "{$mdDocUri}";
+			$(document).ready(function() {
+				$('p').emoticonize();
+			});
+		</script>
+
+		<script type="text/javascript" src="{$ctrl->js('starterdoc_mdfix')}"></script>
+	</body>
 </html>

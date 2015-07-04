@@ -1,0 +1,36 @@
+{
+	"keys": [
+		{
+			"key": "HTTPERROR_400",
+			"value": "400 - Bad Request"
+		},
+		{
+			"key": "HTTPERROR_401",
+			"value": "401 - Unauthorized"
+		},
+		{
+			"key": "HTTPERROR_403",
+			"value": "403 - Access Denided"
+		},
+		{
+			"key": "HTTPERROR_404",
+			"value": "404 - Not found"
+		},
+		{
+			"key": "HTTPERROR_500",
+			"value": "500 - Internal Server Error"
+		},
+		{
+			"key": "HTTPERROR_501",
+			"value": "501 - Not Implemented"
+		},
+		{
+			"key": "last_error_message",
+			"value": "Last error message"
+		},
+		{
+			"key": "message",
+			"value": "Message"
+		}
+	]
+}

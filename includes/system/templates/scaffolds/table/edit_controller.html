@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @class <%$editActionController%>
+ *
+ * Accessible at '?action=<%$editAction%>'
+ */
+class <%$editActionController%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = false;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		$ok = true;
+
+		$factory = $this->representation-><%$pluralName%>;
+		$item = $factory->item($this->params->get->id);
+		if($item) {
+			$this->assign('<%$singularName%>', $item->toArray());
+		} else {
+			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
+			$ok = false;
+		}
+
+		return $ok;
+	}
+	protected function init() {
+		parent::init();
+
+		$this->_requiredParams['GET'][] = 'id';
+		$this->_requiredParams['POST'][] = 'id';
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+		$this->_requiredParams['POST'][] = '<%$field.name%>';
+<%/if%><%/foreach%>
+	}
+	protected function runPOST() {
+		$ok = true;
+
+		$factory = $this->representation-><%$pluralName%>;
+		$item = $factory->item($this->params->get->id);
+		if($item) {
+<%foreach from=$tableFields item=field%><%if $field.inForm %>
+			$item-><%$field.name%> = $this->params->post-><%$field.name%>;
+<%/if%><%/foreach%>
+
+			$item->persist();
+		} else {
+			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
+			$ok = false;
+		}
+
+		if($ok) {
+			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
+		}
+
+		return $ok;
+	}
+}

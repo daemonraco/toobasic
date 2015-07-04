@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @class <%$viewActionController%>
+ *
+ * Accessible at '?action=<%$viewAction%>'
+ */
+class <%$viewActionController%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = false;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		$ok = true;
+
+		$factory = $this->representation-><%$pluralName%>;
+		$item = $factory->item($this->params->get->id);
+		if($item) {
+			$this->assign('<%$singularName%>', $item->toArray());
+		} else {
+			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
+			$ok = false;
+		}
+
+		return $ok;
+	}
+	protected function init() {
+		parent::init();
+		$this->_requiredParams['GET'][] = 'id';
+	}
+}

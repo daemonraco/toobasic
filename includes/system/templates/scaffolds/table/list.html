@@ -1,0 +1,31 @@
+<h4>This are the elements in your table '<%$pluralName%>'</h4>
+
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+<%foreach from=$tableFields item=field%>
+			<th><%$field.name%></th>
+<%/foreach%>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+{foreach from=$items item=item}
+		<tr>
+			<td>{$item.id}</td>
+<%foreach from=$tableFields item=field%>
+			<td>{$item.<%$field.name%>}</td>
+<%/foreach%>
+			<td>
+				<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}">View</a>
+				<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}">Edit</a>
+				<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}">Remove</a>
+			</td>
+		</tr>
+{/foreach}
+	</tbody>
+</table>
+	
+<br/>
+<a href="{$ctrl->link('?action=<%$addAction%>')}">Add new item</a>

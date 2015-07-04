@@ -4,6 +4,9 @@ namespace TooBasic;
 
 class DBSpecAdapterMySQL extends DBSpecAdapter {
 	//
+	// Protected properties.
+	protected $_engine = 'MySQL';
+	//
 	// Public methods.
 	public function addTableEntry(\stdClass $table, \stdClass $entry) {
 		$keys = array();
@@ -115,7 +118,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		//
 		// Different columns.
 		foreach($cmp as $fullname => $data) {
-			if($data["db"]["column_type"] != $data["spec"]->builtType) {
+			if(trim($data["db"]["column_type"]) != trim($data["spec"]->builtType)) {
 				$updates[] = $fullname;
 				continue;
 			}
@@ -128,7 +131,12 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 				continue;
 			}
 			if($data["spec"]->hasDefault) {
-				if(($data["spec"]->default === null && $data["db"]["column_default"] != "NULL") || $data["spec"]->default != $data["db"]["column_default"]) {
+				$auxDefaultValue = $data["spec"]->default;
+				if($data["spec"]->type->type == DBStructureManager::ColumnTypeEnum) {
+					$auxDefaultValue = substr($auxDefaultValue, 1, strlen($auxDefaultValue) - 2);
+				}
+
+				if(($auxDefaultValue === null && $data["db"]["column_default"] != "NULL") || $auxDefaultValue != $data["db"]["column_default"]) {
 					$updates[] = $fullname;
 					continue;
 				}
@@ -178,7 +186,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$query.= implode(", \n", $lines)." \n";
 
 		$query.= ") ";
-		if(isset($table->engine)) {
+		if(isset($table->engine) && $table->engine) {
 			$query.= "engine={$table->engine} ";
 		}
 		$query.= " default charset=utf8 collate=utf8_bin auto_increment=1 ";
@@ -360,6 +368,23 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
 		} else {
 			$out.= "comment '' ";
+		}
+
+		return $out;
+	}
+	protected function specificExecuteCallback($data) {
+		$out = true;
+
+		foreach(explode(';', $data) as $query) {
+			$query = trim($query);
+			if(!$query) {
+				continue;
+			}
+
+			$out = $this->exec($query);
+			if(!$out) {
+				break;
+			}
 		}
 
 		return $out;

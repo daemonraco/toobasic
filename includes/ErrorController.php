@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file ErrorController.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**
@@ -20,9 +25,13 @@ abstract class ErrorController extends Controller {
 	 * @var \TooBasic\Controller Pointer to the controller that actually
 	 * failed, if any.
 	 */
+	protected $_errorMessage = false;
 	protected $_failingController = null;
 	//
 	// Public methods.
+	public function setErrorMessage($message) {
+		$this->_errorMessage = $message;
+	}
 	/**
 	 * This method sets the controller that had problems and it's the reason
 	 * for this controller/page.
@@ -43,22 +52,48 @@ abstract class ErrorController extends Controller {
 	protected function basicRun() {
 		$out = true;
 		//
+		// Disabling error information.
+		$this->assign('errorinfo', false);
+		$this->assign('currenterror', null);
+		$this->assign('errormessage', null);
+		//
+		// Checking for global errors.
+		if(!$this->_failingController && !$this->_errorMessage) {
+			//
+			// Global dependencies.
+			global $Defaults;
+			//
+			// Checking for routing errors.
+			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+				$routesError = RoutesManager::Instance()->lastErrorMessage();
+				if($routesError) {
+					$this->_errorMessage = $routesError;
+				}
+			}
+		}
+		//
 		// Checking if there's a controller reporting problems.
-		if($this->_failingController !== null) {
-			$this->assign("errorinfo", true);
-
-			$this->assign("errors", $this->_failingController->errors());
-			$this->assign("lasterror", $this->_failingController->lastError());
-
-			$this->assign("currenterror", null);
+		if($this->_failingController) {
+			//
+			// Setting error information to be shown.
+			$this->assign('errorinfo', true);
+			//
+			// Setting error messages and codes.
+			$this->assign('errors', $this->_failingController->errors());
+			$this->assign('lasterror', $this->_failingController->lastError());
+			//
+			// Adding extra information about the current error.
+			$this->assign('currenterror', null);
 			foreach($this->_failingController->errors() as $error) {
-				if($error["code"] == $this->_name) {
-					$this->assign("currenterror", $error);
+				if($error['code'] == $this->_name) {
+					$this->assign('currenterror', $error);
 					break;
 				}
 			}
-		} else {
-			$this->assign("errorinfo", false);
+		} elseif($this->_errorMessage) {
+			//
+			// Assigning a simple error message.
+			$this->assign('errormessage', $this->_errorMessage);
 		}
 
 		return $out;

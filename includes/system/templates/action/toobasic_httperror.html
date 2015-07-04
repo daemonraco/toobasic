@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TooBasic-{$toobasic_version}: {$title}</title>
+		<link rel="shortcut icon" type="image/png" href="{$ctrl->img('TooBasic-icon-24px')}"/>
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap.min.css')}"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap-theme.min.css')}"/>
+		<script type="text/javascript" src="{$ctrl->lib('bootstrap/js/bootstrap.min.js')}"></script>
+	</head>
+	<body class="container">
+		<div class="jumbotron">
+			<div class="row text-center">
+				<img src="{$ctrl->img('TooBasic-logo-128px')}"/>
+			</div>
+			<div class="row text-center">
+				<h1>{$title}</h1>
+{if $currenterror}
+				<h4>{$tr->last_error_message}:</h4>
+				<p>{$lasterror.message}</p>
+{/if}
+
+{if $errormessage}
+				<h2>{$tr->message}:</h2>
+				<p>{$errormessage}</p>
+{/if}
+			</div>
+		</div>
+	</body>
+</html>

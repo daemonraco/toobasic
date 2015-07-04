@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @class <%$controller%>
+ *
+ * Accessible at '?action=<%$name%>'
+ */
+class <%$controller%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = <%$cached%>;
+<%if $layout%>
+	protected $_layout = <%$layout%>;
+<%/if%>
+	//
+	// Protected methods.
+	protected function basicRun() {
+		return true;
+	}
+<%if $init%>
+	protected function init() {
+		parent::init();
+<%if !$nocache%>
+<%foreach from=$cache_params item=param%>
+		$this->_cacheParams['<%$method%>'][] = '<%$param%>';
+<%/foreach%>
+<%/if%>
+<%foreach from=$required_params item=param%>
+		$this->_requiredParams['<%$method%>'][] = '<%$param%>';
+<%/foreach%>
+	}
+<%/if%>
+}
