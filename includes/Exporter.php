@@ -79,27 +79,11 @@ abstract class Exporter extends AbstractExporter {
 	 * action/service being represented.
 	 */
 	public function __construct($actionName = false) {
+		parent::__construct($actionName);
 		//
 		// Global dependencies.
 		global $Defaults;
 		global $ActionName;
-		//
-		// Checking requested format.
-		if(isset($this->params->get->format) && in_array($this->params->get->format, array_keys($Defaults[GC_DEFAULTS_FORMATS]))) {
-			$this->_format = $this->params->get->format;
-		} else {
-			//
-			// In case no format was requested or the requested one
-			// is wrong, 'basic' is used.
-			$this->_format = GC_VIEW_FORMAT_BASIC;
-		}
-		//
-		// Checking the current format.
-		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
-			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
-		} else {
-			throw new Exception("There's no configuration for format '{$this->_format}'");
-		}
 		//
 		// Checking modes.
 		if(isset($this->params->get->mode) && in_array($this->params->get->mode, $Defaults[GC_DEFAULTS_MODES])) {

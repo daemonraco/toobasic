@@ -122,7 +122,8 @@ class ActionsManager extends UrlManager {
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {
-				$errorControllerClass->setErrorMessage("Unable to find action '{$actionName}'");
+				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
+				$errorControllerClass->setErrorMessage("Unable to find {$whatIsIt} '{$actionName}'");
 			}
 			$layoutName = $errorControllerClass->layout();
 			$errorControllerClass->run();

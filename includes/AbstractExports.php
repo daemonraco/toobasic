@@ -1,19 +1,36 @@
 <?php
 
 /**
- * @file ControllerExports.php
+ * @file AbstractExports.php
  * @author Alejandro Dario Simi
  */
 
 namespace TooBasic;
 
 /**
- * @class ControllerExports
+ * @abstract
+ * @class AbstractExports
  *
  * Because giving access to a controller's methods inside a view is a security
  * issue, this proxy class export only the required methods.
  */
-class ControllerExports extends AbstractExports {
+abstract class AbstractExports {
+	//
+	// Protected properties.
+	/**
+	 * @var \TooBasic\AbstractExporter Exported controller pointer.
+	 */
+	protected $_controller = false;
+	//
+	// Magic methods.
+	/**
+	 * Class constructor.
+	 * 
+	 * @param \TooBasic\AbstractExporter $ctrl Controller to represent.
+	 */
+	public function __construct($ctrl) {
+		$this->_controller = $ctrl;
+	}
 	//
 	// Public methods.
 	/**
@@ -23,9 +40,7 @@ class ControllerExports extends AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	public function css($styleName) {
-		return Paths::Path2Uri(Paths::Instance()->cssPath($styleName));
-	}
+	abstract public function css($styleName);
 	/**
 	 * Exports a way to get an image URI.
 	 * 
@@ -34,18 +49,14 @@ class ControllerExports extends AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	public function img($imageName, $imageExtension = "png") {
-		return Paths::Path2Uri(Paths::Instance()->imagePath($imageName, $imageExtension));
-	}
+	abstract public function img($imageName, $imageExtension = "png");
 	/**
 	 * It takes an action name an returns its rendered result.
 	 * 
 	 * @param string $actionName Action to be rendered.
 	 * @return string Rendered result.
 	 */
-	public function insert($actionName) {
-		return $this->_controller->insert($actionName);
-	}
+	abstract public function insert($actionName);
 	/**
 	 * Exports a way to get a javascript file URI.
 	 * 
@@ -53,9 +64,7 @@ class ControllerExports extends AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	public function js($scriptName) {
-		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
-	}
+	abstract public function js($scriptName);
 	/**
 	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
 	 * full uri path.
@@ -63,15 +72,7 @@ class ControllerExports extends AbstractExports {
 	 * @param string $libPath Library elemet to be rendered.
 	 * @return string Rendered result.
 	 */
-	public function lib($libPath) {
-		global $Directories;
-		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
-		if(!is_file($path) || !is_readable($path)) {
-			$path = "";
-		}
-
-		return Paths::Path2Uri($path);
-	}
+	abstract function lib($libPath);
 	/**
 	 * Takes a link url from, for example, an anchor and change it into
 	 * something cleaner, adding an absolute prefix and, if possible,
@@ -80,22 +81,7 @@ class ControllerExports extends AbstractExports {
 	 * @param string $link Link to check and transform.
 	 * @return string Returns a well formated url.
 	 */
-	public function link($link = '') {
-		$out = $link;
-		//
-		// If the parameter is empty the site's root URI has to be
-		// returned.
-		if($link == '') {
-			$out = ROOTURI;
-		} elseif(preg_match('/^\?/', $link)) {
-			$out = ROOTURI.$link;
-		}
-		//
-		// Cleaning url applying routes.
-		$out = RoutesManager::Instance()->enroute($out);
-
-		return $out;
-	}
+	abstract public function link($link = '');
 	/**
 	 * It takes an snippet name an returns its rendered result.
 	 * 
@@ -104,7 +90,5 @@ class ControllerExports extends AbstractExports {
 	 * rendering.
 	 * @return string Result of rendering the snippet.
 	 */
-	public function snippet($snippetName, $snippetDataSet = false) {
-		return $this->_controller->snippet($snippetName, $snippetDataSet);
-	}
+	abstract public function snippet($snippetName, $snippetDataSet = false);
 }

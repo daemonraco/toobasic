@@ -27,6 +27,7 @@
 
 				<h2>Message:</h2>
 				<p><?php echo $exception->getMessage() ?></p>
+				<p><?php echo $exception->getFile().':'.$exception->getLine() ?></p>
 			</div>
 <?php if($exceptionTrace) { ?>
 			<div class="row">

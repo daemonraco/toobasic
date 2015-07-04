@@ -2,7 +2,7 @@
 
 namespace TooBasic;
 
-class Names extends TooBasic\FactoryClass {
+class Names extends FactoryClass {
 	//
 	// Public class methods.
 	public static function ControllerClass($seed) {

@@ -12,7 +12,7 @@ class ViewAdapterXML extends ViewAdapterBasic {
 	//
 	// Public methods.
 	public function render($assignments, $template) {
-		$out = xmlrpc_encode($this->cleanRendering($assignments));
+		$out = \xmlrpc_encode($this->cleanRendering($assignments));
 
 		return $out;
 	}

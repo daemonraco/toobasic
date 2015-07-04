@@ -9,7 +9,15 @@ namespace TooBasic;
 
 abstract class Email extends AbstractExporter {
 	//
-	// Protected properties.	
+	// Protected properties.
+	/**
+	 * @var \TooBasic\EmailPayload @todo doc
+	 */
+	protected $_payload = false;
+	/**
+	 * @var boolean @todo doc
+	 */
+	protected $_isSimulation = false;
 	/**
 	 * @var string Name of the layout current controller uses. 'false' means
 	 * no layout and 'null' means default layout.
@@ -24,17 +32,19 @@ abstract class Email extends AbstractExporter {
 	/**
 	 * Class constructor
 	 * 
-	 * @param string $emailName An indentifier name for this controller, by
-	 * default it's currect action's name.
+	 * @param string[string] $emailPayload 
 	 */
-	public function __construct($emailName) {
+	public function __construct($emailPayload) {
+		parent::__construct($emailPayload->name());
+
+		$this->_payload = $emailPayload;
 		//
 		// Global requirements.
 		global $Defaults;
 		//
 		// Picking a name for this controller's view. It could be
 		// overriden by a controller allowing flex views.
-		$this->_viewName = $emailName;
+		$this->_viewName = $this->_payload->name();
 		//
 		// It doesn't matter what it's set for the current class, there
 		// are rules first.
@@ -58,6 +68,9 @@ abstract class Email extends AbstractExporter {
 	}
 	//
 	// Public methods.
+	public function isSimulation() {
+		return $this->_isSimulation;
+	}
 	/**
 	 * Allows to know which layout is to be used when this controller is
 	 * render.
@@ -68,8 +81,53 @@ abstract class Email extends AbstractExporter {
 	public function layout() {
 		return $this->_layout;
 	}
+	public function payload() {
+		return $this->_payload;
+	}
 	public function run() {
-		debugit('@todo', 1);
+		//
+		// When this method starts, 'status' is considered to be ok.
+		$this->_status = true;
+
+		if(!$this->isSimulation() && !$this->_payload->isValid()) {
+			$this->setError(HTTPERROR_INTERNAL_SERVER_ERROR, 'Email payload strucutre is not valid');
+		}
+		//
+		// Computing.
+		if($this->_status) {
+			$this->autoAssigns();
+
+			if(!$this->isSimulation()) {
+				//
+				// Triggering the real execution.
+				$this->_status = $this->basicRun();
+			} else {
+				$this->_status = $this->simulation();
+			}
+			//
+			// Genering the last execution structure.
+			$this->_lastRun = array(
+				'status' => $this->_status,
+				'assignments' => $this->_assignments,
+				'errors' => $this->_errors,
+				'lasterror' => $this->_lastError
+			);
+		}
+		//
+		// Rendering.
+		if($this->_status) {
+			$this->_lastRun['render'] = false;
+			//
+			// Rendering and obtaining results @{
+			$this->_viewAdapter->autoAssigns();
+			$this->_lastRun['render'] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("email/{$this->_viewName}.".Paths::ExtensionTemplate));
+			// @}
+		}
+
+		return $this->status();
+	}
+	public function setSimulation($isSimulation) {
+		$this->_isSimulation = $isSimulation;
 	}
 	/**
 	 * Allows to set view name for this controller.
@@ -89,7 +147,29 @@ abstract class Email extends AbstractExporter {
 	}
 	//
 	// Protected methods.
-	public function dryRun() {
-		debugit('@todo', 1);
+	/**
+	 * This method adds some default values to any controller assignments.
+	 */
+	protected function autoAssigns() {
+		//
+		// Adding parent's default assignments.
+		parent::autoAssigns();
+		//
+		// Current format.
+		$this->assign('format', $this->_format);
+		//
+		// Current view name.
+		$this->assign('view', $this->_viewName);
+		//
+		// Translation object
+		$this->assign('tr', $this->translate);
+		//
+		// Controllers exported methods.
+		$this->assign('ctrl', new EmailExports($this));
 	}
+	abstract protected function basicRun();
+	protected function genericBasicRun() {
+		$this->massiveAssign($this->_payload->data());
+	}
+	abstract protected function simulation();
 }

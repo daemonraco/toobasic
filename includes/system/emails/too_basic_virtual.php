@@ -6,4 +6,7 @@ class TooBasicVirtualEmail extends \TooBasic\Email {
 	protected function basicRun() {
 		return true;
 	}
+	protected function simulation() {
+		return true;
+	}
 }

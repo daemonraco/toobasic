@@ -1,19 +1,31 @@
 <?php
 
 /**
- * @file ControllerExports.php
+ * @file EmailExports.php
  * @author Alejandro Dario Simi
  */
 
 namespace TooBasic;
 
 /**
- * @class ControllerExports
+ * @class EmailExports
  *
- * Because giving access to a controller's methods inside a view is a security
- * issue, this proxy class export only the required methods.
+ * Because giving access to a email controller's methods inside a view is a
+ * security issue, this proxy class export only the required methods.
  */
-class ControllerExports extends AbstractExports {
+class EmailExports extends AbstractExports {
+	//
+	// Protected properties.
+	protected $_payload = false;
+	/**
+	 * Class constructor.
+	 * 
+	 * @param \TooBasic\Email $ctrl Controller to represent.
+	 */
+	public function __construct(\TooBasic\Email $ctrl) {
+		parent::__construct($ctrl);
+		$this->_payload = $ctrl->payload();
+	}
 	//
 	// Public methods.
 	/**
@@ -24,6 +36,7 @@ class ControllerExports extends AbstractExports {
 	 * returns false.
 	 */
 	public function css($styleName) {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		return Paths::Path2Uri(Paths::Instance()->cssPath($styleName));
 	}
 	/**
@@ -35,6 +48,7 @@ class ControllerExports extends AbstractExports {
 	 * returns false.
 	 */
 	public function img($imageName, $imageExtension = "png") {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		return Paths::Path2Uri(Paths::Instance()->imagePath($imageName, $imageExtension));
 	}
 	/**
@@ -44,6 +58,7 @@ class ControllerExports extends AbstractExports {
 	 * @return string Rendered result.
 	 */
 	public function insert($actionName) {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		return $this->_controller->insert($actionName);
 	}
 	/**
@@ -54,6 +69,7 @@ class ControllerExports extends AbstractExports {
 	 * returns false.
 	 */
 	public function js($scriptName) {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
 	}
 	/**
@@ -64,6 +80,7 @@ class ControllerExports extends AbstractExports {
 	 * @return string Rendered result.
 	 */
 	public function lib($libPath) {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		global $Directories;
 		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
 		if(!is_file($path) || !is_readable($path)) {
@@ -94,7 +111,7 @@ class ControllerExports extends AbstractExports {
 		// Cleaning url applying routes.
 		$out = RoutesManager::Instance()->enroute($out);
 
-		return $out;
+		return "{$this->_payload->server()}{$out}";
 	}
 	/**
 	 * It takes an snippet name an returns its rendered result.
@@ -105,6 +122,7 @@ class ControllerExports extends AbstractExports {
 	 * @return string Result of rendering the snippet.
 	 */
 	public function snippet($snippetName, $snippetDataSet = false) {
+		debugit('@todo NOT IMPLEMENTED', 1);
 		return $this->_controller->snippet($snippetName, $snippetDataSet);
 	}
 }

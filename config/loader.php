@@ -5,14 +5,19 @@
 $SuperLoader = array();
 //
 // Basics @{
+$SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
+$SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
 $SuperLoader['TooBasic\\Email'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Email.php";
+$SuperLoader['TooBasic\\EmailExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailExports.php";
 $SuperLoader['TooBasic\\EmailLayout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailLayout.php";
+$SuperLoader['TooBasic\\EmailPayload'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailPayload.php";
 $SuperLoader['TooBasic\\ErrorController'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ErrorController.php";
 $SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Exporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exporter.php";
+$SuperLoader['TooBasic\\FactoryClass'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/FactoryClass.php";
 $SuperLoader['TooBasic\\Layout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Layout.php";
 $SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 $SuperLoader['TooBasic\\Model'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Model.php";

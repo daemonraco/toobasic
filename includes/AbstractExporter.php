@@ -28,6 +28,34 @@ abstract class AbstractExporter {
 	//
 	// Magic methods.
 	/**
+	 * Class constructor.
+	 *
+	 * @param string $actionName internal identifier for the current
+	 * action/service being represented.
+	 */
+	public function __construct($actionName = false) {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Checking requested format.
+		if(isset($this->params->get->format) && in_array($this->params->get->format, array_keys($Defaults[GC_DEFAULTS_FORMATS]))) {
+			$this->_format = $this->params->get->format;
+		} else {
+			//
+			// In case no format was requested or the requested one
+			// is wrong, 'basic' is used.
+			$this->_format = GC_VIEW_FORMAT_BASIC;
+		}
+		//
+		// Checking the current format.
+		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
+			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
+		} else {
+			throw new Exception("There's no configuration for format '{$this->_format}'");
+		}
+	}
+	/**
 	 * This magic methods enables the use of MagicProp and also to obtain
 	 * assign values when the first one fails.
 	 *
@@ -150,14 +178,6 @@ abstract class AbstractExporter {
 	protected function autoAssigns() {
 		
 	}
-	/**
-	 * @abstract
-	 * This method is the one in charge of starting the processing of a
-	 * request without any cache interference.
-	 *
-	 * @return boolean Returns true if the execution had no errors.
-	 */
-	abstract protected function dryRun();
 	/**
 	 * This method allows to set an internal error.
 	 *
