@@ -36,8 +36,8 @@ class EmailExports extends AbstractExports {
 	 * returns false.
 	 */
 	public function css($styleName) {
-		debugit('@todo NOT IMPLEMENTED', 1);
-		return Paths::Path2Uri(Paths::Instance()->cssPath($styleName));
+		$out = parent::css($styleName);
+		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
 	 * Exports a way to get an image URI.
@@ -47,19 +47,9 @@ class EmailExports extends AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	public function img($imageName, $imageExtension = "png") {
-		debugit('@todo NOT IMPLEMENTED', 1);
-		return Paths::Path2Uri(Paths::Instance()->imagePath($imageName, $imageExtension));
-	}
-	/**
-	 * It takes an action name an returns its rendered result.
-	 * 
-	 * @param string $actionName Action to be rendered.
-	 * @return string Rendered result.
-	 */
-	public function insert($actionName) {
-		debugit('@todo NOT IMPLEMENTED', 1);
-		return $this->_controller->insert($actionName);
+	public function img($imageName, $imageExtension = 'png') {
+		$out = parent::img($imageName, $imageExtension);
+		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
 	 * Exports a way to get a javascript file URI.
@@ -69,8 +59,8 @@ class EmailExports extends AbstractExports {
 	 * returns false.
 	 */
 	public function js($scriptName) {
-		debugit('@todo NOT IMPLEMENTED', 1);
-		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
+		$out = parent::js($scriptName);
+		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
 	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
@@ -80,14 +70,8 @@ class EmailExports extends AbstractExports {
 	 * @return string Rendered result.
 	 */
 	public function lib($libPath) {
-		debugit('@todo NOT IMPLEMENTED', 1);
-		global $Directories;
-		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
-		if(!is_file($path) || !is_readable($path)) {
-			$path = "";
-		}
-
-		return Paths::Path2Uri($path);
+		$out = parent::lib($libPath);
+		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
 	 * Takes a link url from, for example, an anchor and change it into
@@ -98,20 +82,8 @@ class EmailExports extends AbstractExports {
 	 * @return string Returns a well formated url.
 	 */
 	public function link($link = '') {
-		$out = $link;
-		//
-		// If the parameter is empty the site's root URI has to be
-		// returned.
-		if($link == '') {
-			$out = ROOTURI;
-		} elseif(preg_match('/^\?/', $link)) {
-			$out = ROOTURI.$link;
-		}
-		//
-		// Cleaning url applying routes.
-		$out = RoutesManager::Instance()->enroute($out);
-
-		return "{$this->_payload->server()}{$out}";
+		$out = parent::link($link);
+		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
 	 * It takes an snippet name an returns its rendered result.
@@ -122,7 +94,6 @@ class EmailExports extends AbstractExports {
 	 * @return string Result of rendering the snippet.
 	 */
 	public function snippet($snippetName, $snippetDataSet = false) {
-		debugit('@todo NOT IMPLEMENTED', 1);
 		return $this->_controller->snippet($snippetName, $snippetDataSet);
 	}
 }

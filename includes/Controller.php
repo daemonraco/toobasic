@@ -10,7 +10,7 @@ namespace TooBasic;
 /**
  * @abstract
  * @class Controller
- * 
+ *
  * This class represents a general controller with all its logic for checks,
  * execution and display
  */
@@ -34,7 +34,7 @@ abstract class Controller extends Exporter {
 	// Magic methods.
 	/**
 	 * Class constructor
-	 * 
+	 *
 	 * @param string $actionName An indentifier name for this controller, by
 	 * default it's currect action's name.
 	 */
@@ -76,7 +76,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * This is an exported method that can be used inside templates. It
 	 * takes an action name an returns its rendered result.
-	 * 
+	 *
 	 * @param string $actionName Action to be rendered.
 	 * @return string Rendered result.
 	 */
@@ -87,7 +87,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * Allows to know which layout is to be used when this controller is
 	 * render.
-	 * 
+	 *
 	 * @return string Layout name. 'false' when no layout and null when it
 	 * must be default.
 	 */
@@ -101,7 +101,7 @@ abstract class Controller extends Exporter {
 	 * 	* Loads and save cache.
 	 * 	* Controls errors.
 	 * 	* Renders.
-	 * 
+	 *
 	 * @return boolean Returns true if the execution had no errors.
 	 */
 	public function run() {
@@ -202,7 +202,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to set a list of assignment to use when a snippet is called.
-	 * 
+	 *
 	 * @param string $key List of assignments' name.
 	 * @param mixed[string] $value Assignments. When null, it removes the
 	 * entry.
@@ -216,7 +216,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to set view name for this controller.
-	 * 
+	 *
 	 * @param string $viewName Name to be set.
 	 */
 	public function setViewName($viewName) {
@@ -225,7 +225,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * This is an exported method that can be used inside templates. It
 	 * takes an snippet name an returns its rendered result.
-	 * 
+	 *
 	 * @param string $snippetName Name of the snippet to render.
 	 * @param string $snippetDataSet List of assignments' name to use when
 	 * rendering.
@@ -260,7 +260,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to access the view name of this controller.
-	 * 
+	 *
 	 * @return string Name of current view.
 	 */
 	public function viewName() {
@@ -294,7 +294,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * Controllers has a specific method to generate cache prefixes in order
 	 * to include skins.
-	 * 
+	 *
 	 * @global string $SkinName
 	 * @param string $extra
 	 * @return string

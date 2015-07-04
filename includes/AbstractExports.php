@@ -40,7 +40,9 @@ abstract class AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	abstract public function css($styleName);
+	public function css($styleName) {
+		return Paths::Path2Uri(Paths::Instance()->cssPath($styleName));
+	}
 	/**
 	 * Exports a way to get an image URI.
 	 * 
@@ -49,14 +51,9 @@ abstract class AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	abstract public function img($imageName, $imageExtension = "png");
-	/**
-	 * It takes an action name an returns its rendered result.
-	 * 
-	 * @param string $actionName Action to be rendered.
-	 * @return string Rendered result.
-	 */
-	abstract public function insert($actionName);
+	public function img($imageName, $imageExtension = 'png') {
+		return Paths::Path2Uri(Paths::Instance()->imagePath($imageName, $imageExtension));
+	}
 	/**
 	 * Exports a way to get a javascript file URI.
 	 * 
@@ -64,7 +61,9 @@ abstract class AbstractExports {
 	 * @return string If found it returns an absolute URI, otherwise it
 	 * returns false.
 	 */
-	abstract public function js($scriptName);
+	public function js($scriptName) {
+		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
+	}
 	/**
 	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
 	 * full uri path.
@@ -72,7 +71,15 @@ abstract class AbstractExports {
 	 * @param string $libPath Library elemet to be rendered.
 	 * @return string Rendered result.
 	 */
-	abstract function lib($libPath);
+	public function lib($libPath) {
+		global $Directories;
+		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
+		if(!is_file($path) || !is_readable($path)) {
+			$path = "";
+		}
+
+		return Paths::Path2Uri($path);
+	}
 	/**
 	 * Takes a link url from, for example, an anchor and change it into
 	 * something cleaner, adding an absolute prefix and, if possible,
@@ -81,7 +88,22 @@ abstract class AbstractExports {
 	 * @param string $link Link to check and transform.
 	 * @return string Returns a well formated url.
 	 */
-	abstract public function link($link = '');
+	public function link($link = '') {
+		$out = $link;
+		//
+		// If the parameter is empty the site's root URI has to be
+		// returned.
+		if($link == '') {
+			$out = ROOTURI;
+		} elseif(preg_match('/^\?/', $link)) {
+			$out = ROOTURI.$link;
+		}
+		//
+		// Cleaning url applying routes.
+		$out = RoutesManager::Instance()->enroute($out);
+
+		return $out;
+	}
 	/**
 	 * It takes an snippet name an returns its rendered result.
 	 * 
