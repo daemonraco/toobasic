@@ -10,7 +10,7 @@ namespace TooBasic\Shell;
 /**
  * @class Color
  */
-class Color extends FactoryClass {
+class Color extends \TooBasic\FactoryClass {
 	//
 	// Public class properties.
 	public static $nocolor = false;

@@ -20,6 +20,7 @@
 		"debuglang": "Prompts current language, translation files used, and every key and its value. It works only if a translation gets used.",
 		"debugdebugs": "List all known debugs, including this one.",
 		"debugemail": "Allows to view a mock of an e@mail.",
-		"debugnoemaillayout": "Disables current layout if any for emails."
+		"debugnoemaillayout": "Disables current layout if any for emails.",
+		"debugemailstriptags": "This activates the tags stripping when debugging emails."
 	}
 }

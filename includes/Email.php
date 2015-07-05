@@ -36,7 +36,7 @@ abstract class Email extends AbstractExporter {
 	/**
 	 * Class constructor
 	 *
-	 * @param string[string] $emailPayload 
+	 * @param \TooBasic\EmailPayload $emailPayload @todo doc
 	 */
 	public function __construct($emailPayload) {
 		parent::__construct($emailPayload->name());

@@ -12,9 +12,10 @@ class EmailPayload {
 	// Protected properties.
 	protected $_data = array();
 	protected $_emails = false;
+	protected $_layout = null;
 	protected $_name = false;
 	protected $_server = false;
-	protected $_stripTags = true;
+	protected $_stripTags = false;
 	protected $_subject = false;
 	//
 	// Magic methods.
@@ -46,6 +47,9 @@ class EmailPayload {
 	public function emails() {
 		return $this->_emails;
 	}
+	public function layout() {
+		return $this->_layout;
+	}
 	public function name() {
 		return $this->_name;
 	}
@@ -55,13 +59,16 @@ class EmailPayload {
 	public function setEmails($emails) {
 		$this->_emails = $emails;
 	}
+	public function setLayout($layout) {
+		$this->_layout = $layout;
+	}
 	public function setName($name) {
 		$this->_name = $name;
 	}
 	public function setServer($server) {
 		$this->_server = $server;
 	}
-	public function setStripTags($stripTags) {
+	public function setStripTags($stripTags = true) {
 		$this->_stripTags = $stripTags;
 	}
 	public function setSubject($subject) {
@@ -71,7 +78,7 @@ class EmailPayload {
 		return $this->_server;
 	}
 	public function stripTags() {
-		return $this->_stripTags;
+		return $this->_stripTags || isset(Params::Instance()->debugemailstriptags);
 	}
 	public function subject() {
 		return $this->_subject;

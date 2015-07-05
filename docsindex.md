@@ -84,6 +84,21 @@
 * [Performance](docs/databasespecs.md#performance)
 * [Suggestions](docs/databasespecs.md#suggestions)
 
+##  Emails (docs/emails.md):
+
+* [Huh?!](docs/emails.md#huh)
+* [Layout](docs/emails.md#layout)
+	* [_%TOO_BASIC_EMAIL_CONTENT%_](docs/emails.md#%too_basic_email_content%)
+	* [Default layout](docs/emails.md#default-layout)
+* [Hello email](docs/emails.md#hello-email)
+* [Is it right?](docs/emails.md#is-it-right)
+* [How do I send it?](docs/emails.md#how-do-i-send-it)
+	* [Let's explain things](docs/emails.md#lets-explain-things)
+* [Exports](docs/emails.md#exports)
+* [Strip tags](docs/emails.md#strip-tags)
+* [Origin](docs/emails.md#origin)
+* [Suggestions](docs/emails.md#suggestions)
+
 ##  Facilities (docs/facilities.md):
 
 * [What is this?](docs/facilities.md#what-is-this)

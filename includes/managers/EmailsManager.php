@@ -45,6 +45,7 @@ class EmailsManager extends \TooBasic\Manager {
 		//
 		// Running layout's controller.
 		if($layoutName) {
+			$this->_emailPayload->setLayout($layoutName);
 			$layoutLastRun = self::ExecuteAction($layoutName, $this->_emailPayload, $isSimulation, $emailLastRun);
 		}
 		//

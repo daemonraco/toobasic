@@ -14,6 +14,20 @@ namespace TooBasic;
  */
 abstract class EmailLayout extends Email {
 	//
+	// Magic methods.
+	/**
+	 * Class constructor
+	 *
+	 * @param \TooBasic\EmailPayload $emailPayload 
+	 */
+	public function __construct($emailPayload) {
+		parent::__construct($emailPayload);
+		//
+		// Picking a name for this controller's view. It could be
+		// overriden by a controller allowing flex views.
+		$this->_viewName = $this->_payload->layout();
+	}
+	//
 	// Public methods.
 	/**
 	 * This dummy method prevent any other object to think this layout has
