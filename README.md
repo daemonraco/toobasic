@@ -1,4 +1,4 @@
-# TooBasic 0.3.0
+# TooBasic 0.3.1
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 
