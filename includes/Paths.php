@@ -688,7 +688,7 @@ class Paths extends Singleton {
 				//	- starts with an underscore.
 				//	- starts with a dot.
 				//	- has a file called '.inactive'.
-				if(!preg_match('/^([\._])(.*)/', $path['filename']) && !is_readable("{$path['filename']}/.inactive")) {
+				if(!preg_match('/^([\._])(.*)/', $path['filename']) && !is_readable("{$pathname}/.inactive")) {
 					//
 					// Adding path as a known module.
 					$this->_modules[] = $path['filename'];
