@@ -2,7 +2,7 @@
 
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '0.3.0');
+define('TOOBASIC_VERSION', '0.3.1');
 // @}
 //
 // HTTP errors @{
