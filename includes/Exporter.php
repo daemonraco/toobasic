@@ -225,7 +225,7 @@ abstract class Exporter extends AbstractExporter {
 	}
 	/**
 	 * This metod generates a simple cache key prefix to prepend to every
-	 * cache key, It may allow quick identification of keys and possible
+	 * cache key, It may allow quick identification of keys and avoid possible
 	 * collitions between cache entry types.
 	 * 
 	 * @param string $extra
