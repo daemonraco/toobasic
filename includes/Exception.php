@@ -45,3 +45,10 @@ class Exception extends \Exception {
 		include $Defaults[GC_DEFAULTS_EXCEPTION_PAGE];
 	}
 }
+
+/**
+ * @class DBException
+ */
+class DBException extends Exception {
+	
+}
