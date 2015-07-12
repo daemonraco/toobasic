@@ -12,18 +12,15 @@ class <%$deleteActionController%> extends \TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		$ok = true;
-
 		$factory = $this->representation-><%$pluralName%>;
 		$item = $factory->item($this->params->get->id);
 		if($item) {
 			$this->assign('<%$singularName%>', $item->toArray());
 		} else {
 			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
-			$ok = false;
 		}
 
-		return $ok;
+		return $this->status();
 	}
 	protected function init() {
 		parent::init();

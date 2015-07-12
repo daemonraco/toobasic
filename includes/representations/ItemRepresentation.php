@@ -9,12 +9,6 @@ namespace TooBasic;
 
 abstract class ItemRepresentation {
 	//
-	// Constants.
-	//
-	// Public class properties.
-	//
-	// Protected class properties.
-	//
 	// Protected core properties.
 	protected $_CP_ColumnsPerfix = '';
 	protected $_CP_IDColumn = '';

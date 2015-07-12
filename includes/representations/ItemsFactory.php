@@ -140,23 +140,23 @@ abstract class ItemsFactory {
 	//
 	// Protected class methods.
 	protected static function GetClass($name, $dbname) {
-		$name = classname($name).GC_CLASS_SUFFIX_REPRESENTATION;
+		$className = Names::ItemRepresentationClass($name);
 
-		if(!in_array($name, self::$_LoadedClasses)) {
-			$filename = Paths::Instance()->representationPath($name);
+		if(!in_array($className, self::$_LoadedClasses)) {
+			$filename = Paths::Instance()->representationPath(Names::ItemRepresentationFilename($name));
 			if($filename) {
 				require_once $filename;
 
-				if(class_exists($name)) {
-					self::$_LoadedClasses[] = $name;
+				if(class_exists($className)) {
+					self::$_LoadedClasses[] = $className;
 				} else {
-					throw new Exception("Class '{$name}' is not defined");
+					throw new Exception("Class '{$className}' is not defined");
 				}
 			} else {
-				throw new Exception("Cannot load item representation '{$name}'");
+				throw new Exception("Cannot load item representation '{$className}'");
 			}
 		}
 
-		return new $name($dbname);
+		return new $className($dbname);
 	}
 }

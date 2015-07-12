@@ -11,11 +11,13 @@ abstract class Email extends AbstractExporter {
 	//
 	// Protected properties.
 	/**
-	 * @var \TooBasic\EmailPayload @todo doc
+	 * @var \TooBasic\EmailPayload Configuration provided by the emails
+	 * manager.
 	 */
 	protected $_payload = false;
 	/**
-	 * @var boolean @todo doc
+	 * @var boolean This flag indicates if it's set to be a simulation or the
+	 * real deal.
 	 */
 	protected $_isSimulation = false;
 	/**
@@ -36,11 +38,13 @@ abstract class Email extends AbstractExporter {
 	/**
 	 * Class constructor
 	 *
-	 * @param \TooBasic\EmailPayload $emailPayload @todo doc
+	 * @param \TooBasic\EmailPayload $emailPayload Payload to use when
+	 * running.
 	 */
 	public function __construct($emailPayload) {
 		parent::__construct($emailPayload->name());
-
+		//
+		// Saving a pointer to the given payload.
 		$this->_payload = $emailPayload;
 		//
 		// Global requirements.
@@ -72,6 +76,11 @@ abstract class Email extends AbstractExporter {
 	}
 	//
 	// Public methods.
+	/**
+	 * Allows to now if this emails is runing as a simulation.
+	 *
+	 * @return bool Rreturns when it is.
+	 */
 	public function isSimulation() {
 		return $this->_isSimulation;
 	}
@@ -92,7 +101,8 @@ abstract class Email extends AbstractExporter {
 		//
 		// When this method starts, 'status' is considered to be ok.
 		$this->_status = true;
-
+		//
+		// Non simulated executions require a valid payload.
 		if(!$this->isSimulation() && !$this->_payload->isValid()) {
 			$this->setError(HTTPERROR_INTERNAL_SERVER_ERROR, 'Email payload strucutre is not valid');
 		}
@@ -148,7 +158,7 @@ abstract class Email extends AbstractExporter {
 		}
 	}
 	/**
-	 * Allows to set view name for this controller.
+	 * Allows to set a view name for this controller.
 	 *
 	 * @param string $viewName Name to be set.
 	 */

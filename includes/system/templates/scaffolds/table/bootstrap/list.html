@@ -5,21 +5,21 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>ID</th>
+					<th class="text-center">ID</th>
 <%foreach from=$tableFields item=field%>
-					<th><%$field.name%></th>
+					<th class="text-center"><%$field.name%></th>
 <%/foreach%>
-					<th>Actions</th>
+					<th class="text-center">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 {foreach from=$items item=item}
 				<tr>
-					<td>{$item.id}</td>
+					<td class="text-center">{$item.id}</td>
 <%foreach from=$tableFields item=field%>
 					<td>{$item.<%$field.name%>}</td>
 <%/foreach%>
-					<td>
+					<td class="text-center">
 						<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">View</a>
 						<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">Edit</a>
 						<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">Remove</a>

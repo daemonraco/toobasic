@@ -29,34 +29,31 @@ class EmailExports extends AbstractExports {
 	//
 	// Public methods.
 	/**
-	 * Exports a way to get a stylesheet URI.
+	 * Exports a way to get a stylesheet URL.
 	 * 
 	 * @param string $styleName Name of the stylesheet to look for.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
+	 * @return string If found it returns an URL, otherwise it returns false.
 	 */
 	public function css($styleName) {
 		$out = parent::css($styleName);
 		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
-	 * Exports a way to get an image URI.
+	 * Exports a way to get an image URL.
 	 * 
 	 * @param string $imageName Name of the image to look for.
 	 * @param string $imageExtension Image's extension.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
+	 * @return string If found it returns an URL, otherwise it returns false.
 	 */
 	public function img($imageName, $imageExtension = 'png') {
 		$out = parent::img($imageName, $imageExtension);
 		return $out ? $this->_payload->server().$out : '';
 	}
 	/**
-	 * Exports a way to get a javascript file URI.
+	 * Exports a way to get a javascript file URL.
 	 * 
 	 * @param string $scriptName Name of the script to look for.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
+	 * @return string If found it returns an URL, otherwise it returns false.
 	 */
 	public function js($scriptName) {
 		$out = parent::js($scriptName);
@@ -64,9 +61,9 @@ class EmailExports extends AbstractExports {
 	}
 	/**
 	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
-	 * full uri path.
+	 * URL.
 	 * 
-	 * @param string $libPath Library elemet to be rendered.
+	 * @param string $libPath Library element to be rendered.
 	 * @return string Rendered result.
 	 */
 	public function lib($libPath) {
@@ -75,7 +72,7 @@ class EmailExports extends AbstractExports {
 	}
 	/**
 	 * Takes a link url from, for example, an anchor and change it into
-	 * something cleaner, adding an absolute prefix and, if possible,
+	 * something cleaner, adding an absolute prefix and server, if possible,
 	 * converting it into a format for routes analysis.
 	 * 
 	 * @param string $link Link to check and transform.

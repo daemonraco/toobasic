@@ -68,7 +68,7 @@ abstract class AbstractExports {
 	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
 	 * full uri path.
 	 * 
-	 * @param string $libPath Library elemet to be rendered.
+	 * @param string $libPath Library element to be rendered.
 	 * @return string Rendered result.
 	 */
 	public function lib($libPath) {
