@@ -443,13 +443,13 @@ class DBStructureManager extends Manager {
 			} else {
 				throw new DBStructureManagerExeption("Unable to obtain connection '{$connectionName}' configuration");
 			}
-			if(!isset($Database[GC_DATABASE_DB_ADAPTERS][$engine])) {
+			if(!isset($Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine])) {
 				throw new DBStructureManagerExeption("There's no adapter for engine '{$engine}'");
 			}
 
 			$db = DBManager::Instance()->{$connectionName};
 			if($db) {
-				$adapterName = $Database[GC_DATABASE_DB_ADAPTERS][$engine];
+				$adapterName = $Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine];
 				$this->_dbAdapters[$connectionName] = new $adapterName($db);
 				$out = $this->_dbAdapters[$connectionName];
 			} else {

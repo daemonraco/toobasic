@@ -77,7 +77,8 @@ define('GC_CONNECTIONS_DEFAUTLS_CACHE', 'cache');
 //
 // Database structure @{
 define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
-define('GC_DATABASE_DB_ADAPTERS', 'db-adapters');
+define('GC_DATABASE_DB_QUERY_ADAPTERS', 'db-query-adapters');
+define('GC_DATABASE_DB_SPEC_ADAPTERS', 'db-spec-adapters');
 // @}
 //
 // URIs @{

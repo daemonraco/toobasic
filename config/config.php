@@ -34,7 +34,7 @@ require_once ROOTDIR.'/includes/Sanitizer.php';
 $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = 'home';
 $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\TooBasic\CacheAdapterFile';
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterFile';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
@@ -46,14 +46,14 @@ $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = 'en_us';
 $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
 $Defaults[GC_DEFAULTS_SERVICE] = '';
-$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\TooBasic\ViewAdapterSmarty';
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\ViewAdapterSmarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
-	GC_VIEW_FORMAT_DUMP => '\TooBasic\ViewAdapterDump',
-	GC_VIEW_FORMAT_JSON => '\TooBasic\ViewAdapterJSON',
-	GC_VIEW_FORMAT_PRINT => '\TooBasic\ViewAdapterPrint',
-	GC_VIEW_FORMAT_SERIALIZE => '\TooBasic\ViewAdapterSerialize',
-	GC_VIEW_FORMAT_XML => '\TooBasic\ViewAdapterXML'
+	GC_VIEW_FORMAT_DUMP => '\\TooBasic\\ViewAdapterDump',
+	GC_VIEW_FORMAT_JSON => '\\TooBasic\\ViewAdapterJSON',
+	GC_VIEW_FORMAT_PRINT => '\\TooBasic\\ViewAdapterPrint',
+	GC_VIEW_FORMAT_SERIALIZE => '\\TooBasic\\ViewAdapterSerialize',
+	GC_VIEW_FORMAT_XML => '\\TooBasic\\ViewAdapterXML'
 );
 $Defaults[GC_DEFAULTS_MODES] = array(
 	GC_VIEW_MODE_ACTION,
@@ -105,9 +105,13 @@ $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = fa
 // Database structure configurations.
 $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
-$Database[GC_DATABASE_DB_ADAPTERS] = array(
-	'mysql' => '\TooBasic\DBSpecAdapterMySQL',
-	'sqlite' => '\TooBasic\DBSpecAdapterSQLite'
+$Database[GC_DATABASE_DB_QUERY_ADAPTERS] = array(
+	'mysql' => '\\TooBasic\\DBQueryAdapterMySQL',
+	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite'
+);
+$Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
+	'mysql' => '\\TooBasic\\DBSpecAdapterMySQL',
+	'sqlite' => '\\TooBasic\\DBSpecAdapterSQLite'
 );
 //
 // Directory configurations.
@@ -190,7 +194,7 @@ if(is_readable($localConfig)) {
 // Final touches.
 $Defaults[GC_DEFAULTS_FORMATS]['basic'] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
 
-$auxParamsManager = TooBasic\Params::Instance();
+$auxParamsManager = \TooBasic\Params::Instance();
 //
 // Debugs lister.
 if(isset($auxParamsManager->debugdebugs)) {

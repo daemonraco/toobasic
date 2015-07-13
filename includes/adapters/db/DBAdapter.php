@@ -197,6 +197,29 @@ class DBAdapter extends Adapter {
 		return $result;
 	}
 	/**
+	 * @todo doc
+	 *
+	 * @return \TooBasic\DBQueryAdapter @todo doc
+	 * @throws \TooBasic\DBException @todo doc
+	 */
+	public function queryAdapter() {
+		$out = false;
+		//
+		// Global dependencies.
+		global $Database;
+		//
+		// Checking that there's an adapter for current engine.
+		if(isset($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()])) {
+			//
+			// Obtaining the right adapter.
+			$out = \TooBasic\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
+		} else {
+			throw new \TooBasic\DBException("There's no define adapter for a '{$this->engine()}' connection");
+		}
+
+		return $out;
+	}
+	/**
 	 * Similar to query() but it always returns an array of rows.
 	 *
 	 * @param string $query SQL query to be executed.
