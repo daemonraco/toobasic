@@ -35,6 +35,30 @@ class Names extends FactoryClass {
 	public static function ModelFilename($seed) {
 		return self::Filename($seed);
 	}
+	public static function ServiceClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_SERVICE);
+	}
+	public static function ServiceFilename($seed) {
+		return self::SnakeFilename($seed);
+	}
+	public static function ShellCronClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_CRON);
+	}
+	public static function ShellCronFilename($seed) {
+		return self::SnakeFilename($seed);
+	}
+	public static function ShellSystoolClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_SYSTOOL);
+	}
+	public static function ShellSysFilename($seed) {
+		return self::SnakeFilename($seed);
+	}
+	public static function ShellToolClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_TOOL);
+	}
+	public static function ShellToolFilename($seed) {
+		return self::SnakeFilename($seed);
+	}
 	//
 	// Protected class methods.
 	/**

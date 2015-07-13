@@ -15,7 +15,7 @@ class ShellManager extends Manager {
 	const ModeCron = 'cron';
 	const ModeProfile = 'profile';
 	const ModeTool = 'tool';
-	const ModeSys= 'sys';
+	const ModeSys = 'sys';
 	//
 	// Protected properties.
 	protected $_errors = array();
@@ -107,7 +107,7 @@ class ShellManager extends Manager {
 			if($path) {
 				require_once $path;
 
-				$className = classname($this->_tool).GC_CLASS_SUFFIX_CRON;
+				$className = \TooBasic\Names::ShellCronClass($this->_tool);
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
@@ -178,7 +178,7 @@ class ShellManager extends Manager {
 			if($path) {
 				require_once $path;
 
-				$className = classname($this->_tool).GC_CLASS_SUFFIX_SYSTOOL;
+				$className = \TooBasic\Names::ShellSystoolClass($this->_tool);
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();
@@ -207,7 +207,7 @@ class ShellManager extends Manager {
 			if($path) {
 				require_once $path;
 
-				$className = classname($this->_tool).GC_CLASS_SUFFIX_TOOL;
+				$className = \TooBasic\Names::ShellToolClass($this->_tool);
 
 				if(class_exists($className)) {
 					$this->_toolClass = new $className();

@@ -94,7 +94,7 @@ class ServicesManager extends UrlManager {
 				$service = array(
 					'path' => $serviceFile,
 					'name' => $pathinfo['filename'],
-					'class' => classname($pathinfo['filename']).GC_CLASS_SUFFIX_SERVICE
+					'class' => \TooBasic\Names::ServiceClass($pathinfo['filename'])
 				);
 			} else {
 				$error = array(
@@ -215,11 +215,11 @@ class ServicesManager extends UrlManager {
 	public static function FetchService($serviceName) {
 		$out = false;
 
-		$servicePath = Paths::Instance()->servicePath($serviceName);
+		$servicePath = Paths::Instance()->servicePath(\TooBasic\Names::ServiceFilename($serviceName));
 		if(is_readable($servicePath)) {
 			require_once $servicePath;
 
-			$serviceClassName = (is_numeric($serviceName) ? 'N' : '').\TooBasic\classname($serviceName).GC_CLASS_SUFFIX_SERVICE;
+			$serviceClassName = \TooBasic\Names::ServiceClass($serviceName);
 
 			if(class_exists($serviceClassName)) {
 				$out = new $serviceClassName($serviceName);

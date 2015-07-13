@@ -114,17 +114,17 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 			$this->_names['tool-name'] = \TooBasic\classname($this->_names['name']);
 			switch($this->_currentType) {
 				case self::TypeCron:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_CRON;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellCronClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellCron';
 					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names['name']}.php");
 					break;
 				case self::TypeSys:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_SYSTOOL;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellSystoolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
 					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names['name']}.php");
 					break;
 				case self::TypeTool:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_TOOL;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellToolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
 					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names['name']}.php");
 					break;
