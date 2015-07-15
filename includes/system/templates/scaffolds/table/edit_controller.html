@@ -32,8 +32,6 @@ class <%$editActionController%> extends \TooBasic\Controller {
 <%/if%><%/foreach%>
 	}
 	protected function runPOST() {
-		$ok = true;
-
 		$factory = $this->representation-><%$pluralName%>;
 		$item = $factory->item($this->params->get->id);
 		if($item) {
@@ -44,13 +42,12 @@ class <%$editActionController%> extends \TooBasic\Controller {
 			$item->persist();
 		} else {
 			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
-			$ok = false;
 		}
 
-		if($ok) {
+		if($this->status()) {
 			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
 		}
 
-		return $ok;
+		return $this->status();
 	}
 }

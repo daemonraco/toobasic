@@ -27,6 +27,7 @@ abstract class ItemsFactory {
 	protected $_db = false;
 	protected $_dbname = false;
 	protected $_dbprefix = '';
+	protected $_lastDBError = false;
 	protected $_queryAdapterPrefixes = false;
 	//
 	// Magic methods.
@@ -54,6 +55,8 @@ abstract class ItemsFactory {
 		$stmt = $this->_db->prepare($query['query']);
 		if($stmt->execute($query['params'])) {
 			$out = $this->_db->lastInsertId();
+		} else {
+			$this->_lastDBError = $stmt->errorInfo();
 		}
 
 		return $out;
@@ -71,6 +74,8 @@ abstract class ItemsFactory {
 			foreach($stmt->fetchAll() as $row) {
 				$out[] = $row[$idKey];
 			}
+		} else {
+			$this->_lastDBError = $stmt->errorInfo();
 		}
 
 		return $out;
@@ -104,6 +109,9 @@ abstract class ItemsFactory {
 
 		return $out;
 	}
+	public function lastDBError() {
+		return $this->_lastDBError;
+	}
 	//
 	// Protected methods.
 	protected function init() {
@@ -111,7 +119,7 @@ abstract class ItemsFactory {
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	protected function queryAdapterPrefixes() {
-		if(!$this->_queryAdapterPrefixes === false) {
+		if($this->_queryAdapterPrefixes === false) {
 			$this->_queryAdapterPrefixes = array(
 				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix

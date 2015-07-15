@@ -38,12 +38,11 @@ class DBQueryAdapterSQLite extends DBQueryAdapter {
 		$values = array();
 		foreach($fields as $key) {
 			$columns[] = $prefixes[GC_DBQUERY_PREFIX_COLUMN].$key;
-			$values = ":{$key}";
+			$values[] = ":{$key}";
 		}
 
 		$query = "insert \n";
-		$query.= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}( \n";
-		$query.= '                '.implode(', ', $columns).") \n";
+		$query.= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}(".implode(', ', $columns).") \n";
 		$query.= '        values ('.implode(', ', $values).") \n";
 
 		return $query;

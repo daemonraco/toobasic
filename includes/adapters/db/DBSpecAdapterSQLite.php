@@ -209,6 +209,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		$query = "select  distinct name \n";
 		$query.= "from    sqlite_master \n";
 		$query.= "where   type = 'table' \n";
+		$query.= "where   name not like 'sqlite_%' \n";
 
 		foreach($this->_db->queryData($query, false) as $row) {
 			$out[] = $row["name"];
@@ -243,33 +244,42 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 	}
 	//
 	// Protected methods.
-	protected function buildColumnType($type) {
+	protected function buildColumnType($type, $isAutoincremente = false) {
 		$out = "";
 
-		switch($type->type) {
-			case DBStructureManager::ColumnTypeBlob:
-				$out = "blob";
-				break;
-			case DBStructureManager::ColumnTypeEnum:
-				$out = "enum('".implode("','", $type->values)."')";
-				break;
-			case DBStructureManager::ColumnTypeFloat:
-				$out = "float({$type->precision}) ";
-				break;
-			case DBStructureManager::ColumnTypeText:
-				$out = "text ";
-				break;
-			case DBStructureManager::ColumnTypeVarchar:
-				$out = "varchar({$type->precision})";
-				break;
-			case DBStructureManager::ColumnTypeTimestamp:
-				$out = "timestamp";
-				break;
-			case DBStructureManager::ColumnTypeInt:
-				$out = "int({$type->precision})";
-				break;
-			default:
-				break;
+		if($isAutoincremente) {
+			$out = "integer";
+		} else {
+			switch($type->type) {
+				case DBStructureManager::ColumnTypeBlob:
+					$out = "blob";
+					break;
+				case DBStructureManager::ColumnTypeEnum:
+					$length = 0;
+					foreach($type->values as $val) {
+						$len = strlen($val);
+						$length = $len > $length ? $len : $length;
+					}
+					$out = "varchar({$length})";
+					break;
+				case DBStructureManager::ColumnTypeFloat:
+					$out = "float({$type->precision}) ";
+					break;
+				case DBStructureManager::ColumnTypeText:
+					$out = "text ";
+					break;
+				case DBStructureManager::ColumnTypeVarchar:
+					$out = "varchar({$type->precision})";
+					break;
+				case DBStructureManager::ColumnTypeTimestamp:
+					$out = "timestamp";
+					break;
+				case DBStructureManager::ColumnTypeInt:
+					$out = "int({$type->precision})";
+					break;
+				default:
+					break;
+			}
 		}
 
 		return $out;
@@ -278,9 +288,9 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		$out = "";
 
 		if($includeName) {
-			$out = "{$spec->fullname} {$this->buildColumnType($spec->type)} ";
+			$out = "{$spec->fullname} {$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		} else {
-			$out = "{$this->buildColumnType($spec->type)} ";
+			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		}
 #		if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeVarchar))) {
 #			$out.= "collate utf8_bin ";

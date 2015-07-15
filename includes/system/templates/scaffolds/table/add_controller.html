@@ -22,8 +22,6 @@ class <%$addActionController%> extends \TooBasic\Controller {
 <%/if%><%/foreach%>
 	}
 	protected function runPOST() {
-		$ok = true;
-
 		$factory = $this->representation-><%$pluralName%>;
 		$newId = $factory->create();
 		if($newId) {
@@ -35,13 +33,18 @@ class <%$addActionController%> extends \TooBasic\Controller {
 
 			$item->persist();
 		} else {
-			$ok = false;
+			$message = 'Unable to create a new item.';
+			$dberror = $factory->lastDBError();
+			if($dberror) {
+				$message.= " [{$dberror[0]}-{$dberror[1]}] {$dberror[2]}.";
+			}
+			$this->setError(HTTPERROR_INTERNAL_SERVER_ERROR, $message);
 		}
 
-		if($ok) {
+		if($this->status()) {
 			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
 		}
 
-		return $ok;
+		return $this->status();
 	}
 }

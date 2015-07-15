@@ -29,8 +29,6 @@ class <%$deleteActionController%> extends \TooBasic\Controller {
 		$this->_requiredParams['POST'][] = 'id';
 	}
 	protected function runPOST() {
-		$ok = true;
-
 		$factory = $this->representation-><%$pluralName%>;
 		$item = $factory->item($this->params->post->id);
 		if($item) {
@@ -40,13 +38,12 @@ class <%$deleteActionController%> extends \TooBasic\Controller {
 			}
 		} else {
 			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->post->id}'");
-			$ok = false;
 		}
 
-		if($ok) {
+		if($this->status()) {
 			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
 		}
 
-		return $ok;
+		return $this->status();
 	}
 }

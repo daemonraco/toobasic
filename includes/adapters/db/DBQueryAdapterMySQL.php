@@ -42,8 +42,7 @@ class DBQueryAdapterMySQL extends DBQueryAdapter {
 		}
 
 		$query = "insert \n";
-		$query.= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}( \n";
-		$query.= '                '.implode(', ', $columns).") \n";
+		$query.= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}(".implode(', ', $columns).") \n";
 		$query.= '        values ('.implode(', ', $values).") \n";
 
 		return $query;
