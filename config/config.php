@@ -146,32 +146,35 @@ $CronProfiles = array();
 // Loading lazy requires.
 require_once __DIR__.'/loader.php';
 //
-// Modules' configurations files.
+// Modules, site and system configuration files.
 {
 	$pathsProvider = TB_Paths::Instance();
+	//
+	// Full list of cofiguration files to load.
+	$auxConfigsList = array();
 	//
 	// Loading specific configurations for shell or web accesses.
 	if(defined('__SHELL__')) {
 		//
-		// Requiring each extension and site sub-config file named
+		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		foreach($pathsProvider->configPath('config_shell', TB_Paths::ExtensionPHP, true) as $subConfig) {
-			require_once $subConfig;
-		}
+		$auxConfigsList = array_reverse($pathsProvider->configPath('config_shell', TB_Paths::ExtensionPHP, true));
 	} else {
 		//
-		// Requiring each extension and site sub-config file named
+		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		foreach($pathsProvider->configPath('config_http', TB_Paths::ExtensionPHP, true) as $subConfig) {
-			require_once $subConfig;
-		}
+		$auxConfigsList = array_reverse($pathsProvider->configPath('config_http', TB_Paths::ExtensionPHP, true));
 	}
 	//
-	// Requiring each extension and site sub-config file named 'config.php'.
-	foreach($pathsProvider->configPath('config', TB_Paths::ExtensionPHP, true) as $subConfig) {
+	// Loading each extension and site sub-config file named 'config.php'.
+	$auxConfigsList = array_merge(array_reverse($pathsProvider->configPath('config', TB_Paths::ExtensionPHP, true)), $auxConfigsList);
+	//
+	// Requiring each extension and site sub-config file.
+	foreach($auxConfigsList as $subConfig) {
 		require_once $subConfig;
 	}
 
+	unset($auxConfigsList);
 	unset($pathsProvider);
 	unset($subConfig);
 }
