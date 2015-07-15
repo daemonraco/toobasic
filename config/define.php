@@ -164,4 +164,10 @@ define('GC_DEFAULTS_MEMCACHE_PORT', 'port');
 define('GC_DEFAULTS_MEMCACHE_PREFIX', 'prefix');
 define('GC_DEFAULTS_MEMCACHE_COMPRESSED', 'compressed');
 // @}
+// Database query adapters prefixes @{
+define('GC_DBQUERY_NAMES_COLUMN_ID', 'column-id');
+define('GC_DBQUERY_NAMES_COLUMN_NAME', 'column-name');
+define('GC_DBQUERY_PREFIX_COLUMN', 'column');
+define('GC_DBQUERY_PREFIX_TABLE', 'table');
+// @}
 // @}

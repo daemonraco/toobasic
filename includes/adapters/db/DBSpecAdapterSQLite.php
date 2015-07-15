@@ -57,8 +57,8 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 	}
 	public function compareTable(\stdClass $table, &$creates, &$drops, &$updates) {
 		$query = "pragma table_info({$table->fullname}) ";
-
-		$tableSpecs = $this->_db->query($query)->fetchAll();
+		$tableSpecs = $this->_db->queryData($query);
+		$autoIncrement = count($this->_db->queryData("select * from sqlite_master where type = 'table' and name = '{$table->fullname}' and sql like '%autoincrement%'")) > 0;
 		//
 		// New columns.
 		$cmp = array();
@@ -97,10 +97,10 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data["spec"]->autoincrement != ($data["db"]["extra"] == "auto_increment")) {
-#				$updates[] = $fullname;
-#				continue;
-#			}
+			if($data["spec"]->autoincrement != $autoIncrement) {
+				$updates[] = $fullname;
+				continue;
+			}
 			if($data["spec"]->null == $data["db"]["notnull"]) {
 				$updates[] = $fullname;
 				continue;
@@ -301,15 +301,15 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 				}
 			}
 		}
-#		if($spec->autoincrement) {
-#			/** @fixme this is some kind impolite @{ */
-#			if($includeName) {
-#				$out.= "primary key auto_increment ";
-#			} else {
-#				$out.= "auto_increment ";
-#			}
-#			/** @} */
-#		}
+		if($spec->autoincrement) {
+			/** @fixme this is somehow impolite @{ */
+			if($includeName) {
+				$out.= "primary key autoincrement ";
+			} else {
+				$out.= "autoincrement ";
+			}
+			/** @} */
+		}
 #		if($spec->comment) {
 #			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
 #		} else {

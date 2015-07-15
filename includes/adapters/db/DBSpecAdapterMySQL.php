@@ -356,7 +356,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 			}
 		}
 		if($spec->autoincrement) {
-			/** @fixme this is some kind impolite @{ */
+			/** @fixme this is somehow impolite @{ */
 			if($includeName) {
 				$out.= "primary key auto_increment ";
 			} else {

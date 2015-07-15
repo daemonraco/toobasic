@@ -9,16 +9,13 @@ namespace TooBasic;
 
 abstract class ItemsFactory {
 	//
-	// Constants.
-	//
-	// Public class properties.
-	//
 	// Protected class properties.
 	protected static $_LoadedClasses = array();
 	//
 	// Protected core properties.
 	protected $_CP_IDColumn = '';
 	protected $_CP_ColumnsPerfix = '';
+	protected $_CP_NameColumn = 'name';
 	protected $_CP_OrderBy = false;
 	protected $_CP_RepresentationClass = '';
 	protected $_CP_Table = '';
@@ -30,6 +27,7 @@ abstract class ItemsFactory {
 	protected $_db = false;
 	protected $_dbname = false;
 	protected $_dbprefix = '';
+	protected $_queryAdapterPrefixes = false;
 	//
 	// Magic methods.
 	/**
@@ -49,13 +47,12 @@ abstract class ItemsFactory {
 	public function create() {
 		$out = false;
 
-		$query = "insert \n";
-		$query.= "        into {$this->_dbprefix}{$this->_CP_Table}() \n";
-		$query.= "        values() \n";
-
-		$stmt = $this->_db->prepare($query);
-
-		if($stmt->execute()) {
+		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
+			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
+			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
+			), $this->queryAdapterPrefixes());
+		$stmt = $this->_db->prepare($query['query']);
+		if($stmt->execute($query['params'])) {
 			$out = $this->_db->lastInsertId();
 		}
 
@@ -64,18 +61,16 @@ abstract class ItemsFactory {
 	public function ids() {
 		$out = array();
 
-		$query = "select  {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} as id \n";
-		$query.= "from    {$this->_dbprefix}{$this->_CP_Table} \n";
-		if($this->_CP_OrderBy != false) {
-			$query.= "order by $this->_CP_OrderBy \n";
+		if(!is_array($this->_CP_OrderBy)) {
+			$this->_CP_OrderBy = array();
 		}
-
-		$stmt = $this->_db->prepare($query);
-
-		$stmt->execute();
-
-		foreach($stmt->fetchAll() as $row) {
-			$out[] = $row['id'];
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
+		$stmt = $this->_db->prepare($query['query']);
+		if($stmt->execute($query['params'])) {
+			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+			foreach($stmt->fetchAll() as $row) {
+				$out[] = $row[$idKey];
+			}
 		}
 
 		return $out;
@@ -114,6 +109,15 @@ abstract class ItemsFactory {
 	protected function init() {
 		$this->_db = DBManager::Instance()->{$this->_dbname};
 		$this->_dbprefix = $this->_db->prefix();
+	}
+	protected function queryAdapterPrefixes() {
+		if(!$this->_queryAdapterPrefixes === false) {
+			$this->_queryAdapterPrefixes = array(
+				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
+				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix
+			);
+		}
+		return $this->_queryAdapterPrefixes;
 	}
 	//
 	// Public class methods.

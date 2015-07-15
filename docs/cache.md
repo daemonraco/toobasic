@@ -26,8 +26,9 @@ called __\TooBasic\CacheAdapterFile__ and it stores data inside a files. When
 active, you'll find files coming and going inside __ROOTDIR/cache/filecache__.
 
 ### Database Cache Adapter
-A not very polite way of caching data is store it inside a database, but in some
-cases it could be useful.
+A not very polite way of caching data is to store it inside a database, but in
+some cases it could be useful (I hope _Mr.Potato_ won't kill for suggesting this
+mechanism).
 For those cases, __TooBasic__ provides an abstract adapter class called
 __\TooBasic\CacheAdapterDB__ and a specification for __MySQL__ called
 __\TooBasic\CacheAdapterDBMySQL__.

@@ -18,7 +18,7 @@ class CacheAdapterDBMySQL extends CacheAdapterDB {
 	protected function cleanOld($prefix, $key) {
 		$query = "delete from {$this->_dbprefix}cache \n";
 		$query.= "where       cch_key  = :key \n";
-		$query.= " and        cch_date = date_sub(now(), interval :limit second)\n";
+		$query.= " and        cch_date < date_sub(now(), interval :limit second)\n";
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
