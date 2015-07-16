@@ -41,7 +41,8 @@ abstract class DBQueryAdapter extends Adapter {
 		$out = array(
 			'adapter' => $this->_className,
 			'query' => $this->insertPrepare($table, array_keys($data), $prefixes),
-			'params' => array()
+			'params' => array(),
+			'seqname' => null
 		);
 
 		foreach($data as $key => $value) {

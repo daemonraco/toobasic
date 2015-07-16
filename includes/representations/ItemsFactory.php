@@ -54,7 +54,7 @@ abstract class ItemsFactory {
 			), $this->queryAdapterPrefixes());
 		$stmt = $this->_db->prepare($query['query']);
 		if($stmt->execute($query['params'])) {
-			$out = $this->_db->lastInsertId();
+			$out = $this->_db->lastInsertId($query['seqname']);
 		} else {
 			$this->_lastDBError = $stmt->errorInfo();
 		}

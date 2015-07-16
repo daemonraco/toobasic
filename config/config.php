@@ -107,11 +107,13 @@ $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
 $Database[GC_DATABASE_DB_QUERY_ADAPTERS] = array(
 	'mysql' => '\\TooBasic\\DBQueryAdapterMySQL',
-	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite'
+	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite',
+	'pgsql' => '\\TooBasic\\DBQueryAdapterPostgreSQL'
 );
 $Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
 	'mysql' => '\\TooBasic\\DBSpecAdapterMySQL',
-	'sqlite' => '\\TooBasic\\DBSpecAdapterSQLite'
+	'sqlite' => '\\TooBasic\\DBSpecAdapterSQLite',
+	'pgsql' => '\\TooBasic\\DBSpecAdapterPostgreSQL'
 );
 //
 // Directory configurations.

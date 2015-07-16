@@ -49,6 +49,7 @@ $SuperLoader['TooBasic\\UrlManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/
 $SuperLoader['TooBasic\\CacheAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapter.php";
 $SuperLoader['TooBasic\\CacheAdapterDB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDB.php";
 $SuperLoader['TooBasic\\CacheAdapterDBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBMySQL.php";
+$SuperLoader['TooBasic\\CacheAdapterDBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBPostgreSQL.php";
 $SuperLoader['TooBasic\\CacheAdapterDBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBSQLite.php";
 $SuperLoader['TooBasic\\CacheAdapterFile'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterFile.php";
 $SuperLoader['TooBasic\\CacheAdapterMemcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
@@ -60,9 +61,11 @@ $SuperLoader['TooBasic\\CacheAdapterNoCache'] = "{$Directories[GC_DIRECTORIES_AD
 $SuperLoader['TooBasic\\DBAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBAdapter.php";
 $SuperLoader['TooBasic\\DBQueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapter.php";
 $SuperLoader['TooBasic\\DBQueryAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterMySQL.php";
+$SuperLoader['TooBasic\\DBQueryAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterPostgreSQL.php";
 $SuperLoader['TooBasic\\DBQueryAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterSQLite.php";
 $SuperLoader['TooBasic\\DBSpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapter.php";
 $SuperLoader['TooBasic\\DBSpecAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterMySQL.php";
+$SuperLoader['TooBasic\\DBSpecAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterPostgreSQL.php";
 $SuperLoader['TooBasic\\DBSpecAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterSQLite.php";
 // @}
 //

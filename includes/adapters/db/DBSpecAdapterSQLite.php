@@ -86,7 +86,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 				$drops[] = $dbColumn["name"];
 			} else {
 				$spec = $table->fields[$dbColumn["name"]];
-				$spec->builtType = $this->buildColumnType($spec->type);
+				$spec->builtType = $this->buildColumnType($spec->type, $spec->autoincrement);
 				$cmp[$dbColumn["name"]]["spec"] = $spec;
 			}
 		}
@@ -161,10 +161,6 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		$query.= implode(", \n", $lines)." \n";
 
 		$query.= ") ";
-#		if(isset($table->engine)) {
-#			$query.= "engine={$table->engine} ";
-#		}
-#		$query.= " default charset=utf8 collate=utf8_bin auto_increment=1 ";
 
 		return $this->exec($query);
 	}
@@ -244,7 +240,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 	}
 	//
 	// Protected methods.
-	protected function buildColumnType($type, $isAutoincremente = false) {
+	protected function buildColumnType($type, $isAutoincremente) {
 		$out = "";
 
 		if($isAutoincremente) {

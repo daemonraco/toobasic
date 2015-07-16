@@ -696,12 +696,15 @@ class DBStructureManager extends Manager {
 			//
 			// Accepting index spec.
 			$this->_specs->indexes[$key] = $aux;
+			//
+			// Enforcing structure @{
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
 			if(!isset($this->_perConnection[$aux->connection]['indexes'])) {
 				$this->_perConnection[$aux->connection]['indexes'] = array();
 			}
+			// @}
 			$this->_perConnection[$aux->connection]['indexes'][] = $aux->fullname;
 		}
 	}
@@ -710,6 +713,16 @@ class DBStructureManager extends Manager {
 			$this->parseSpec($path);
 		}
 		foreach($this->_perConnection as &$connection) {
+			//
+			// Enforcing structure @{
+			if(!isset($connection['tables'])) {
+				$connection['tables'] = array();
+			}
+			if(!isset($connection['indexes'])) {
+				$connection['indexes'] = array();
+			}
+			// @}
+
 			foreach($connection as &$type) {
 				$type = array_unique($type);
 			}
@@ -877,12 +890,15 @@ class DBStructureManager extends Manager {
 					}
 				}
 			}
+			//
+			// Enforcing structure @{
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
 			if(!isset($this->_perConnection[$aux->connection]['tables'])) {
 				$this->_perConnection[$aux->connection]['tables'] = array();
 			}
+			// @}
 			$this->_perConnection[$aux->connection]['tables'][] = $aux->fullname;
 		}
 	}
