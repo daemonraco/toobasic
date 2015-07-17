@@ -47,6 +47,7 @@
 	* [Database Cache Adapter](docs/cache.md#database-cache-adapter)
 	* [Memcached Adapter](docs/cache.md#memcached-adapter)
 	* [Memcache Adapter](docs/cache.md#memcache-adapter)
+	* [Redis Adapter](docs/cache.md#redis-adapter)
 * [Setting Adapter](docs/cache.md#setting-adapter)
 * [Cached Controller](docs/cache.md#cached-controller)
 * [What if you don't want it?](docs/cache.md#what-if-you-dont-want-it)
