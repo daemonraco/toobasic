@@ -8,6 +8,7 @@ $SuperLoader = array();
 $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
+$SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
 $SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
@@ -55,6 +56,7 @@ $SuperLoader['TooBasic\\CacheAdapterFile'] = "{$Directories[GC_DIRECTORIES_ADAPT
 $SuperLoader['TooBasic\\CacheAdapterMemcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
 $SuperLoader['TooBasic\\CacheAdapterMemcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcached.php";
 $SuperLoader['TooBasic\\CacheAdapterNoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterNoCache.php";
+$SuperLoader['TooBasic\\CacheAdapterRedis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterRedis.php";
 // @}
 //
 // Database adapters @{
@@ -99,6 +101,11 @@ $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
+);
+$SuperLoader['Predis\\Client'] = array(
+//$SuperLoader['\\Predis\\Autoloader'] = array(
+	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis/autoload.php",
+	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis.git/autoload.php"
 );
 // @}
 //

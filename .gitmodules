@@ -1,3 +1,6 @@
 [submodule "libraries/smarty.git"]
 	path = libraries/smarty.git
 	url = https://github.com/smarty-php/smarty.git
+[submodule "libraries/predis.git"]
+	path = libraries/predis.git
+	url = https://github.com/nrk/predis.git

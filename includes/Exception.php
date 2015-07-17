@@ -47,6 +47,13 @@ class Exception extends \Exception {
 }
 
 /**
+ * @class CacheException
+ */
+class CacheException extends Exception {
+	
+}
+
+/**
  * @class DBException
  */
 class DBException extends Exception {
