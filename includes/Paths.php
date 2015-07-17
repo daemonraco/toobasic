@@ -394,9 +394,9 @@ class Paths extends Singleton {
 	 *
 	 * @return string Returns a list of absolute paths.
 	 */
-	public function routesPaths() {
+	public function routesPaths($fileName = 'routes') {
 		global $Paths;
-		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], 'routes', self::ExtensionJSON, true);
+		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], $fileName, self::ExtensionJSON, true);
 	}
 	/**
 	 * This method provides a way to get one or all service files matching
@@ -652,12 +652,12 @@ class Paths extends Singleton {
 		//
 		// Generating information for debug reports.
 		if($debugPathsActive) {
-			$debugPaths['name'] = $name;
-			$debugPaths['extension'] = $extension;
-			$debugPaths['skin'] = $skin;
-			$debugPaths['ignored'] = $ignored;
-			$debugPaths['subfolders'] = $folders;
-			$debugPaths['possibilities'] = $list;
+			$debugPaths[GC_AFIELD_NAME] = $name;
+			$debugPaths[GC_AFIELD_EXTENSION] = $extension;
+			$debugPaths[GC_AFIELD_SKIN] = $skin;
+			$debugPaths[GC_AFIELD_IGNORED] = $ignored;
+			$debugPaths[GC_AFIELD_SUBFOLDERS] = $folders;
+			$debugPaths[GC_AFIELD_POSSIBILITIES] = $list;
 		}
 		//
 		// Transforming paths into URI if requested.
@@ -674,7 +674,7 @@ class Paths extends Singleton {
 		//
 		// Displaying debug report.
 		if($debugPathsActive) {
-			$debugPaths['result'] = $out;
+			$debugPaths[GC_AFIELD_RESULT] = $out;
 
 			\TooBasic\debugThing($debugPaths);
 		}

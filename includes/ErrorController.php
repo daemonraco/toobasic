@@ -85,7 +85,7 @@ abstract class ErrorController extends Controller {
 			// Adding extra information about the current error.
 			$this->assign('currenterror', null);
 			foreach($this->_failingController->errors() as $error) {
-				if($error['code'] == $this->_name) {
+				if($error[GC_AFIELD_CODE] == $this->_name) {
 					$this->assign('currenterror', $error);
 					break;
 				}

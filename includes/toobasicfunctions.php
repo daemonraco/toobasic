@@ -108,7 +108,7 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 	ob_end_clean();
 	//
 	// Shell and non shell should look different.
-	if(defined("__SHELL__")) {
+	if(defined('__SHELL__')) {
 		$out = explode("\n", $out);
 		array_walk($out, function(& $item) {
 			$item = "| {$item}";

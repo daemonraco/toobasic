@@ -85,13 +85,13 @@ class Translate extends Singleton {
 		//
 		// Default values.
 		$results = array(
-			'counts' => array(
-				'keys' => 0,
-				'keys-by-lang' => array()
+			GC_AFIELD_COUNTS => array(
+				GC_AFIELD_KEYS => 0,
+				GC_AFIELD_KEYS_BY_LANG => array()
 			),
-			'langs' => array(),
-			'files' => array(),
-			'compilations' => array()
+			GC_AFIELD_LANGS => array(),
+			GC_AFIELD_FILES => array(),
+			GC_AFIELD_COMPILATIONS => array()
 		);
 		$filePaths = array();
 		$files = array();
@@ -133,10 +133,10 @@ class Translate extends Singleton {
 		}
 		//
 		// Taking the list of languages for the results report.
-		$results['langs'] = array_keys($files);
+		$results[GC_AFIELD_LANGS] = array_keys($files);
 		//
 		// Also the grouped list of files.
-		$results['files'] = $files;
+		$results[GC_AFIELD_FILES] = $files;
 		//
 		// Compiling each language.
 		foreach($files as $lang => $paths) {
@@ -172,8 +172,8 @@ class Translate extends Singleton {
 			//
 			// Storing the count of keys on the report (by language
 			// and overall).
-			$results['counts']['keys-by-lang'][$lang] = count($keys);
-			$results['counts']['keys'] += $results['counts']['keys-by-lang'][$lang];
+			$results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS_BY_LANG][$lang] = count($keys);
+			$results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS] += $results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS_BY_LANG][$lang];
 			//
 			// Converting keys into objects (compilation).
 			$keysObj = array();
@@ -192,7 +192,7 @@ class Translate extends Singleton {
 			file_put_contents($compFile, json_encode($compStructure));
 			//
 			// Adding compiled file path to the report.
-			$results['compilations'][] = $compFile;
+			$results[GC_AFIELD_COMPILATIONS][] = $compFile;
 		}
 		//
 		// Returning a results report.

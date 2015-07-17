@@ -15,11 +15,11 @@ namespace TooBasic;
 class Params extends Singleton {
 	//
 	// Constants.
-	const TypeCOOKIE = "cookie";
-	const TypeENV = "env";
-	const TypeGET = "get";
-	const TypePOST = "post";
-	const TypeSERVER = "server";
+	const TypeCOOKIE = 'cookie';
+	const TypeENV = 'env';
+	const TypeGET = 'get';
+	const TypePOST = 'post';
+	const TypeSERVER = 'server';
 	//
 	// Protected properties.
 	/**

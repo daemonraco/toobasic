@@ -42,7 +42,7 @@ class Timer extends Singleton {
 	protected function __construct() {
 		//
 		// Is it a shell execution?
-		$this->_onShell = defined("__SHELL__");
+		$this->_onShell = defined('__SHELL__');
 	}
 	//
 	// Public methods.

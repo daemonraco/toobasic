@@ -14,8 +14,8 @@ if(!function_exists('get_called_class')) {
 		$matches = false;
 		do {
 			$l++;
-			$lines = file($bt[$l]["file"]);
-			$callerLine = $lines[$bt[$l]["line"] - 1];
+			$lines = file($bt[$l]['file']);
+			$callerLine = $lines[$bt[$l]['line'] - 1];
 			preg_match("/([a-zA-Z0-9\_]+)::{$bt[$l]['function']}/", $callerLine, $matches);
 		} while($matches[1] === 'parent' && $matches[1]);
 

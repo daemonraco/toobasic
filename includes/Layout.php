@@ -33,7 +33,7 @@ abstract class Layout extends Controller {
 		parent::init();
 		//
 		// Adding basic parametres for cache keys.
-		$this->_cacheParams["GET"][] = "action";
-		$this->_cacheParams["GET"][] = "mode";
+		$this->_cacheParams['GET'][] = 'action';
+		$this->_cacheParams['GET'][] = 'mode';
 	}
 }

@@ -75,7 +75,7 @@ abstract class AbstractExports {
 		global $Directories;
 		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
 		if(!is_file($path) || !is_readable($path)) {
-			$path = "";
+			$path = '';
 		}
 
 		return Paths::Path2Uri($path);
