@@ -7,6 +7,9 @@
 
 namespace TooBasic;
 
+/**
+ * @class DBSpecAdapterPostgreSQL
+ */
 class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 	//
 	// Protected properties.

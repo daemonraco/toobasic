@@ -8,8 +8,8 @@
 namespace TooBasic;
 
 /**
- * @abstract
  * @class Controller
+ * @abstract
  *
  * This class represents a general controller with all its logic for checks,
  * execution and display

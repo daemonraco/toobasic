@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file CacheAdapterDBSQLite.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class CacheAdapterDBSQLite
+ */
 class CacheAdapterDBSQLite extends CacheAdapterDB {
 	//
 	// Protected Properties.
@@ -11,12 +19,12 @@ class CacheAdapterDBSQLite extends CacheAdapterDB {
 	protected function doesTableExist() {
 		if($this->_doesTableExist === null) {
 			$pragma = $this->_db->queryData("pragma table_info({$this->_dbprefix}cache)");
-			$this->_doesTableExist = count($pragma) == 0;
+			$this->_doesTableExist = count($pragma) > 0;
 		}
 		return $this->_doesTableExist;
 	}
 	protected function checkTables() {
-		if(!$this->doesTableExist) {
+		if(!$this->doesTableExist()) {
 			$query = "create table {$this->_dbprefix}cache ( \n";
 			$query.= "        cch_key  varchar(256) not null primary key, \n";
 			$query.= "        cch_data blob not null, \n";

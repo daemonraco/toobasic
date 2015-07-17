@@ -50,13 +50,11 @@ abstract class CacheAdapterDB extends CacheAdapter {
 		$query.= "where	  cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key)
-		));
-
-		if($stmt->rowCount() > 0) {
+		if($stmt->execute(array(":key" => $this->fullKey($prefix, $key)))) {
 			$row = $stmt->fetch();
-			$data = unserialize(gzuncompress($row["cch_data"]));
+			if($row) {
+				$data = unserialize(gzuncompress($row["cch_data"]));
+			}
 		}
 
 		return $data;
@@ -70,10 +68,10 @@ abstract class CacheAdapterDB extends CacheAdapter {
 		$query.= "        values (:key, :data) \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key),
-			":data" => gzcompress(serialize($data), $this->_compressionRate)
-		));
+		$stmt->bindParam(":key", $this->fullKey($prefix, $key), \PDO::PARAM_STR);
+		$stmt->bindParam(":data", gzcompress(serialize($data), $this->_compressionRate), \PDO::PARAM_LOB);
+
+		$stmt->execute();
 	}
 	//
 	// Protected methods.

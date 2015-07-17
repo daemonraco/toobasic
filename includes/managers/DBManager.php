@@ -49,7 +49,13 @@ class DBManager extends Manager {
 			// Checking if there's a configuration for the given name,
 			// otherwise, and exception is thrown.
 			if(isset($Connections[GC_CONNECTIONS_DB][$dbname])) {
-				$this->_connections[$dbname] = new DBAdapter($dbname);
+				global $Database;
+				$engine = $Connections[GC_CONNECTIONS_DB][$dbname][GC_CONNECTIONS_DB_ENGINE];
+				if(isset($Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine])) {
+					$this->_connections[$dbname] = new $Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine]($dbname);
+				} else {
+					$this->_connections[$dbname] = new DBAdapter($dbname);
+				}
 			} else {
 				throw new \TooBasic\DBException("There's no database connection configuration named '{$dbname}'");
 			}

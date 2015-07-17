@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * @file AbstractExporter.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class AbstractExporter
+ * @abstract
+ */
 abstract class AbstractExporter {
 	//
 	// Protected properties.

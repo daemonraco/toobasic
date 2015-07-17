@@ -1,10 +1,15 @@
 <?php
 
-namespace TooBasic;
+/**
+ * @file DBAdapter.php
+ * @author Alejandro Dario Simi
+ */
 
+namespace TooBasic;
+/**
+ * @class DBAdapter
+ */
 class DBAdapter extends Adapter {
-	//
-	// Constants.
 	//
 	// Protected properties.
 	protected $_engine = false;

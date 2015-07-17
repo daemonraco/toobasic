@@ -1,10 +1,21 @@
 <?php
 
+/**
+ * @file CacheAdapterDBMySQL.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class CacheAdapterDBMySQL
+ */
 class CacheAdapterDBMySQL extends CacheAdapterDB {
 	//
 	// Protected methods.
+	/**
+	 * This method ensures the cache table existence.
+	 */
 	protected function checkTables() {
 		$query = "create table if not exists {$this->_dbprefix}cache ( \n";
 		$query.= "        cch_key  varchar(256) collate utf8_bin not null, \n";
@@ -15,6 +26,12 @@ class CacheAdapterDBMySQL extends CacheAdapterDB {
 
 		$this->_db->query($query);
 	}
+	/**
+	 * This method removes expired cache entries.
+	 *
+	 * @param type $prefix Cache entry key prefix.
+	 * @param type $key Cache entry key (without the prefix).
+	 */
 	protected function cleanOld($prefix, $key) {
 		$query = "delete from {$this->_dbprefix}cache \n";
 		$query.= "where       cch_key  = :key \n";

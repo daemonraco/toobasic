@@ -106,6 +106,7 @@ $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = fa
 // Database structure configurations.
 $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
+$Database[GC_DATABASE_DB_CONNECTION_ADAPTERS] = array();
 $Database[GC_DATABASE_DB_QUERY_ADAPTERS] = array(
 	'mysql' => '\\TooBasic\\DBQueryAdapterMySQL',
 	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite',
