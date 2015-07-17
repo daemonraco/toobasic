@@ -34,9 +34,9 @@ class ActionsManager extends UrlManager {
 		if($autoDisplay) {
 			$headers = array();
 			if($layoutLastRun) {
-				$headers = array_merge($headers, $layoutLastRun['headers']);
+				$headers = array_merge($headers, $layoutLastRun[GC_AFIELD_HEADERS]);
 			}
-			$headers = array_merge($headers, $actionLastRun['headers']);
+			$headers = array_merge($headers, $actionLastRun[GC_AFIELD_HEADERS]);
 
 			foreach($headers as $name => $value) {
 				header("{$name}: {$value}");
@@ -45,9 +45,9 @@ class ActionsManager extends UrlManager {
 			// If there's a layout present, controller's result must
 			// be shown inside a layout's result.
 			if($layoutLastRun) {
-				echo str_replace('%TOO_BASIC_ACTION_CONTENT%', $actionLastRun['render'], $layoutLastRun['render']);
+				echo str_replace('%TOO_BASIC_ACTION_CONTENT%', $actionLastRun[GC_AFIELD_RENDER], $layoutLastRun[GC_AFIELD_RENDER]);
 			} else {
-				echo $actionLastRun['render'];
+				echo $actionLastRun[GC_AFIELD_RENDER];
 			}
 		}
 
@@ -61,12 +61,12 @@ class ActionsManager extends UrlManager {
 		$dbStructureManager = DBStructureManager::Instance();
 		if($dbStructureManager->hasErrors()) {
 			foreach($dbStructureManager->errors() as $error) {
-				$code = $error['code'];
+				$code = $error[GC_AFIELD_CODE];
 				if(is_numeric($code)) {
 					$code = sprintf('%03d', $code);
 				}
 
-				throw new Exception("[DB-{$code}] {$error['message']}");
+				throw new Exception("[DB-{$code}] {$error[GC_AFIELD_MESSAGE]}");
 			}
 			throw new Exception('There are database errors specs');
 		} else {
@@ -96,7 +96,7 @@ class ActionsManager extends UrlManager {
 			// page title.
 			if(is_array($previousActionRun)) {
 				/** @fixme There should be a way to change layout's cache key setting from the controller. */
-				$controllerClass->massiveAssign($previousActionRun['assignments']);
+				$controllerClass->massiveAssign($previousActionRun[GC_AFIELD_ASSIGNMENTS]);
 			}
 
 			$status = $controllerClass->run();
@@ -112,7 +112,7 @@ class ActionsManager extends UrlManager {
 			if($controllerClass instanceof Exporter) {
 				$lastError = $controllerClass->lastError();
 				if($lastError) {
-					$errorActionName = $lastError['code'];
+					$errorActionName = $lastError[GC_AFIELD_CODE];
 				} else {
 					$errorActionName = HTTPERROR_INTERNAL_SERVER_ERROR;
 				}

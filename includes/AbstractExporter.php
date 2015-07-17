@@ -206,12 +206,12 @@ abstract class AbstractExporter {
 		//
 		// Current error structure and data.
 		$error = array(
-			'code' => $code,
-			'message' => $message,
-			'location' => array(
-				'method' => (isset($callerLine['class']) ? "{$callerLine['class']}::" : '')."{$callerLine['function']}()",
-				'file' => $callingLine['file'],
-				'line' => $callingLine['line']
+			GC_AFIELD_CODE => $code,
+			GC_AFIELD_MESSAGE => $message,
+			GC_AFIELD_LOCATION => array(
+				GC_AFIELD_METHOD => (isset($callerLine['class']) ? "{$callerLine['class']}::" : '')."{$callerLine['function']}()",
+				GC_AFIELD_FILE => $callingLine['file'],
+				GC_AFIELD_LINE => $callingLine['line']
 			)
 		);
 		//

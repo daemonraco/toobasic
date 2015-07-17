@@ -31,11 +31,11 @@ abstract class Service extends Exporter {
 		// If there's no results yet it is generated.
 		if($this->_lastRun === false) {
 			$this->_lastRun = array(
-				'status' => $this->_status,
-				'data' => $this->_assignments,
-				'headers' => $this->_headers,
-				'error' => $this->lastError(),
-				'errors' => $this->errors()
+				GC_AFIELD_STATUS => $this->_status,
+				GC_AFIELD_DATA => $this->_assignments,
+				GC_AFIELD_HEADERS => $this->_headers,
+				GC_AFIELD_ERROR => $this->lastError(),
+				GC_AFIELD_ERRORS => $this->errors()
 			);
 		}
 		//
@@ -85,11 +85,11 @@ abstract class Service extends Exporter {
 				//
 				// Obtaining specific service properties from the
 				// cache data block.
-				$this->_status = $this->_lastRun["status"];
-				$this->_assignments = $this->_lastRun["data"];
-				$this->_headers = $this->_lastRun["headers"];
-				$this->_lastError = $this->_lastRun["error"];
-				$this->_errors = $this->_lastRun["errors"];
+				$this->_status = $this->_lastRun[GC_AFIELD_STATUS];
+				$this->_assignments = $this->_lastRun[GC_AFIELD_DATA];
+				$this->_headers = $this->_lastRun[GC_AFIELD_HEADERS];
+				$this->_lastError = $this->_lastRun[GC_AFIELD_ERROR];
+				$this->_errors = $this->_lastRun[GC_AFIELD_ERRORS];
 			} else {
 				//
 				// At this point, there was no cached data block.

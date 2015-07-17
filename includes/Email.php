@@ -121,20 +121,20 @@ abstract class Email extends AbstractExporter {
 			//
 			// Genering the last execution structure.
 			$this->_lastRun = array(
-				'status' => $this->_status,
-				'assignments' => $this->_assignments,
-				'errors' => $this->_errors,
-				'lasterror' => $this->_lastError
+				GC_AFIELD_STATUS => $this->_status,
+				GC_AFIELD_ASSIGNMENTS => $this->_assignments,
+				GC_AFIELD_ERRORS => $this->_errors,
+				GC_AFIELD_LASTERROR => $this->_lastError
 			);
 		}
 		//
 		// Rendering.
 		if($this->_status) {
-			$this->_lastRun['render'] = false;
+			$this->_lastRun[GC_AFIELD_RENDER] = false;
 			//
 			// Rendering and obtaining results @{
 			$this->_viewAdapter->autoAssigns();
-			$this->_lastRun['render'] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("email/{$this->_viewName}.".Paths::ExtensionTemplate));
+			$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("email/{$this->_viewName}.".Paths::ExtensionTemplate));
 			// @}
 		}
 

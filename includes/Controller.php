@@ -82,7 +82,7 @@ abstract class Controller extends Exporter {
 	 */
 	public function insert($actionName) {
 		$lastRun = ActionsManager::ExecuteAction($actionName);
-		return $lastRun['render'];
+		return $lastRun[GC_AFIELD_RENDER];
 	}
 	/**
 	 * Allows to know which layout is to be used when this controller is
@@ -135,10 +135,10 @@ abstract class Controller extends Exporter {
 			if($this->_lastRun) {
 				//
 				// Loading data from the previous execution.
-				$this->_assignments = $this->_lastRun['assignments'];
-				$this->_status = $this->_lastRun['status'];
-				$this->_errors = $this->_lastRun['errors'];
-				$this->_lastError = $this->_lastRun['lasterror'];
+				$this->_assignments = $this->_lastRun[GC_AFIELD_ASSIGNMENTS];
+				$this->_status = $this->_lastRun[GC_AFIELD_STATUS];
+				$this->_errors = $this->_lastRun[GC_AFIELD_ERRORS];
+				$this->_lastError = $this->_lastRun[GC_AFIELD_LASTERROR];
 			} else {
 				$this->autoAssigns();
 				//
@@ -147,10 +147,10 @@ abstract class Controller extends Exporter {
 				//
 				// Genering the last execution structure.
 				$this->_lastRun = array(
-					'status' => $this->_status,
-					'assignments' => $this->_assignments,
-					'errors' => $this->_errors,
-					'lasterror' => $this->_lastError
+					GC_AFIELD_STATUS => $this->_status,
+					GC_AFIELD_ASSIGNMENTS => $this->_assignments,
+					GC_AFIELD_ERRORS => $this->_errors,
+					GC_AFIELD_LASTERROR => $this->_lastError
 				);
 				//
 				// Storing a cache entry if it's active.
@@ -171,28 +171,28 @@ abstract class Controller extends Exporter {
 			// previous execution.
 			if($this->_cached && !isset($this->params->debugresetcache)) {
 				$dataBlock = $this->cache->get($prefixRender, $key, $this->_cached);
-				$this->_lastRun['headers'] = $dataBlock['headers'];
-				$this->_lastRun['render'] = $dataBlock['render'];
+				$this->_lastRun[GC_AFIELD_HEADERS] = $dataBlock[GC_AFIELD_HEADERS];
+				$this->_lastRun[GC_AFIELD_RENDER] = $dataBlock[GC_AFIELD_RENDER];
 			} else {
-				$this->_lastRun['headers'] = array();
-				$this->_lastRun['render'] = false;
+				$this->_lastRun[GC_AFIELD_HEADERS] = array();
+				$this->_lastRun[GC_AFIELD_RENDER] = false;
 			}
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if(!$this->_lastRun['render']) {
+			if(!$this->_lastRun[GC_AFIELD_RENDER]) {
 				//
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();
-				$this->_lastRun['headers'] = $this->_viewAdapter->headers();
-				$this->_lastRun['render'] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
+				$this->_lastRun[GC_AFIELD_HEADERS] = $this->_viewAdapter->headers();
+				$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
 				// @}
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
 					$this->cache->save($prefixRender, $key, array(
-						'headers' => $this->_lastRun['headers'],
-						'render' => $this->_lastRun['render']
+						GC_AFIELD_HEADERS => $this->_lastRun[GC_AFIELD_HEADERS],
+						GC_AFIELD_RENDER => $this->_lastRun[GC_AFIELD_RENDER]
 						), $this->_cached);
 				}
 			}

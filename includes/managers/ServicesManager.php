@@ -38,19 +38,19 @@ class ServicesManager extends UrlManager {
 		if($autoDisplay) {
 			header('Content-Type: application/json');
 
-			foreach($serviceLastRun['headers'] as $name => $value) {
+			foreach($serviceLastRun[GC_AFIELD_HEADERS] as $name => $value) {
 				header("{$name}: {$value}");
 			}
-			unset($serviceLastRun['headers']);
+			unset($serviceLastRun[GC_AFIELD_HEADERS]);
 
 			$out = json_encode($serviceLastRun);
 			if(json_last_error() != JSON_ERROR_NONE) {
 				$out = json_encode(array(
-					'error' => array(
-						'code' => self::ErrorJSONEncode,
-						'message' => 'Unable to encode output'
+					GC_AFIELD_ERROR => array(
+						GC_AFIELD_CODE => self::ErrorJSONEncode,
+						GC_AFIELD_MESSAGE => 'Unable to encode output'
 					),
-					'data' => null
+					GC_AFIELD_DATA => null
 				));
 			}
 
@@ -73,17 +73,17 @@ class ServicesManager extends UrlManager {
 
 		if(!$out) {
 			$out = array(
-				'status' => true,
-				'interface' => null,
-				'headers' => array(),
-				'error' => false,
-				'errors' => array()
+				GC_AFIELD_STATUS => true,
+				GC_AFIELD_INTERFACE => null,
+				GC_AFIELD_HEADERS => array(),
+				GC_AFIELD_ERROR => false,
+				GC_AFIELD_ERRORS => array()
 			);
 
-			$out['interface'] = array(
-				'name' => $serviceName,
-				'cached' => false,
-				'methods' => array()
+			$out[GC_AFIELD_INTERFACE] = array(
+				GC_AFIELD_NAME => $serviceName,
+				GC_AFIELD_CACHED => false,
+				GC_AFIELD_METHODS => array()
 			);
 
 			$serviceFile = $this->paths->servicePath($serviceName);
@@ -92,57 +92,57 @@ class ServicesManager extends UrlManager {
 				$pathinfo = pathinfo($serviceFile);
 
 				$service = array(
-					'path' => $serviceFile,
-					'name' => $pathinfo['filename'],
-					'class' => \TooBasic\Names::ServiceClass($pathinfo['filename'])
+					GC_AFIELD_PATH => $serviceFile,
+					GC_AFIELD_NAME => $pathinfo['filename'],
+					GC_AFIELD_CLASS => \TooBasic\Names::ServiceClass($pathinfo['filename'])
 				);
 			} else {
 				$error = array(
-					'code' => self::ErrorUnknownService,
-					'message' => "Service '{$serviceName}' not found",
-					'location' => array(
-						'method' => __CLASS__.'::'.__FUNCTION__.'()',
-						'file' => __FILE__,
-						'line' => __LINE__
+					GC_AFIELD_CODE => self::ErrorUnknownService,
+					GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found",
+					GC_AFIELD_LOCATION => array(
+						GC_AFIELD_METHOD => __CLASS__.'::'.__FUNCTION__.'()',
+						GC_AFIELD_FILE => __FILE__,
+						GC_AFIELD_LINE => __LINE__
 					)
 				);
 
-				$out['status'] = false;
-				$out['interface'] = false;
-				$out['error'] = $error;
-				$out['errors'][] = $error;
+				$out[GC_AFIELD_STATUS] = false;
+				$out[GC_AFIELD_INTERFACE] = false;
+				$out[GC_AFIELD_ERROR] = $error;
+				$out[GC_AFIELD_ERRORS][] = $error;
 			}
 
 			if($service) {
-				require_once $service['path'];
+				require_once $service[GC_AFIELD_PATH];
 				//
 				// Checking class existence.
-				if(!class_exists($service['class'])) {
-					throw new Exception("Class '{$service['class']}' is not defined. File '{$service['path']}' doesn't seem to load the right object.");
+				if(!class_exists($service[GC_AFIELD_CLASS])) {
+					throw new Exception("Class '{$service[GC_AFIELD_CLASS]}' is not defined. File '{$service[GC_AFIELD_PATH]}' doesn't seem to load the right object.");
 				}
 				//
 				// Creating the service class.
-				$object = new $service['class']();
+				$object = new $service[GC_AFIELD_CLASS]();
 				$reflectionObject = new \ReflectionClass($object);
 
-				$out['interface']['required_params'] = $object->requiredParams();
-				$out['interface']['cached'] = $object->cached();
-				$out['interface']['cache_params'] = $object->cacheParams();
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_REQUIRED_PARAMS] = $object->requiredParams();
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_CACHED] = $object->cached();
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_CACHE_PARAMS] = $object->cacheParams();
 
 				$matches = false;
 				foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
 					if(preg_match('/^run(?<method>[A-Z]+)$/', $reflection->name, $matches)) {
-						$matches['method'] = $matches['method'];
-						$out['interface']['methods'][] = $matches['method'];
+						$matches[GC_AFIELD_METHOD] = $matches['method'];
+						$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS][] = $matches['method'];
 					} elseif($reflection->name == 'basicRun') {
-						$out['interface']['methods'][] = 'GET';
+						$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS][] = 'GET';
 					}
 				}
-				$out['interface']['methods'] = array_unique($out['interface']['methods']);
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS] = array_unique($out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS]);
 
-				foreach($out['interface']['required_params'] as $method => $value) {
+				foreach($out[GC_AFIELD_INTERFACE][GC_AFIELD_REQUIRED_PARAMS] as $method => $value) {
 					if(!$value) {
-						unset($out['interface']['required_params'][$method]);
+						unset($out[GC_AFIELD_INTERFACE][GC_AFIELD_REQUIRED_PARAMS][$method]);
 					}
 				}
 			}
@@ -164,18 +164,18 @@ class ServicesManager extends UrlManager {
 
 		if(!$out) {
 			$out = array(
-				'status' => true,
-				'services' => array(),
-				'headers' => array(),
-				'error' => false,
-				'errors' => array()
+				GC_AFIELD_STATUS => true,
+				GC_AFIELD_SERVICES => array(),
+				GC_AFIELD_HEADERS => array(),
+				GC_AFIELD_ERROR => false,
+				GC_AFIELD_ERRORS => array()
 			);
 
 			foreach($this->paths->servicePath('*', true) as $serviceFile) {
 				$pathinfo = pathinfo($serviceFile);
 
 				$service = $this->explainInterface($pathinfo['filename']);
-				$out['services'][] = $service['interface'];
+				$out[GC_AFIELD_SERVICES][] = $service[GC_AFIELD_INTERFACE];
 			}
 
 			$cache->save($cachePrefix, $cacheKey, $out);
@@ -189,12 +189,12 @@ class ServicesManager extends UrlManager {
 		$status = true;
 
 		$lastRun = array(
-			'error' => array(
-				'code' => self::ErrorUnknown,
-				'message' => 'Unknown error'
+			GC_AFIELD_ERROR => array(
+				GC_AFIELD_CODE => self::ErrorUnknown,
+				GC_AFIELD_MESSAGE => 'Unknown error'
 			),
-			'headers' => array(),
-			'data' => null
+			GC_AFIELD_HEADERS => array(),
+			GC_AFIELD_DATA => null
 		);
 
 		$serviceClass = self::FetchService($serviceName);
@@ -204,10 +204,10 @@ class ServicesManager extends UrlManager {
 		} else {
 			$status = false;
 
-			$lastRun['error']['code'] = self::ErrorUnknownService;
-			$lastRun['error']['message'] = "Service '{$serviceName}' not found";
-			$lastRun['headers'] = array();
-			$lastRun['data'] = null;
+			$lastRun[GC_AFIELD_ERROR][GC_AFIELD_CODE] = self::ErrorUnknownService;
+			$lastRun[GC_AFIELD_ERROR][GC_AFIELD_MESSAGE] = "Service '{$serviceName}' not found";
+			$lastRun[GC_AFIELD_HEADERS] = array();
+			$lastRun[GC_AFIELD_DATA] = null;
 		}
 
 		return $lastRun;

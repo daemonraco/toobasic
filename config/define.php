@@ -39,6 +39,33 @@ define('GC_DEFAULTS_SKIN', 'skin');
 define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
 // @}
 //
+// Last run strucutre constants @{
+define('GC_AFIELD_ASSIGNMENTS', 'assignments');
+define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
+define('GC_AFIELD_CACHED', 'cached');
+define('GC_AFIELD_CLASS', 'class');
+define('GC_AFIELD_CODE', 'code');
+define('GC_AFIELD_DATA', 'data');
+define('GC_AFIELD_ERROR', 'error');
+define('GC_AFIELD_ERRORS', 'errors');
+define('GC_AFIELD_FILE', 'file');
+define('GC_AFIELD_FULL_RENDER', 'full-render');
+define('GC_AFIELD_HEADERS', 'headers');
+define('GC_AFIELD_INTERFACE', 'interface');
+define('GC_AFIELD_LASTERROR', 'lasterror');
+define('GC_AFIELD_LINE', 'line');
+define('GC_AFIELD_LOCATION', 'location');
+define('GC_AFIELD_MESSAGE', 'message');
+define('GC_AFIELD_METHOD', 'method');
+define('GC_AFIELD_METHODS', 'methods');
+define('GC_AFIELD_NAME', 'name');
+define('GC_AFIELD_PATH', 'path');
+define('GC_AFIELD_RENDER', 'render');
+define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
+define('GC_AFIELD_SERVICES', 'services');
+define('GC_AFIELD_STATUS', 'status');
+// @}
+//
 // Directories @{
 define('GC_DIRECTORIES_CACHE', 'cache');
 define('GC_DIRECTORIES_CONFIGS', 'configs');

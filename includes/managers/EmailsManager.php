@@ -52,22 +52,22 @@ class EmailsManager extends \TooBasic\Manager {
 		// If there's a layout present, controller's result must
 		// be shown inside a layout's result.
 		if($layoutLastRun) {
-			$emailLastRun['full-render'] = str_replace('%TOO_BASIC_EMAIL_CONTENT%', $emailLastRun['render'], $layoutLastRun['render']);
+			$emailLastRun[GC_AFIELD_FULL_RENDER] = str_replace('%TOO_BASIC_EMAIL_CONTENT%', $emailLastRun[GC_AFIELD_RENDER], $layoutLastRun[GC_AFIELD_RENDER]);
 		} else {
-			$emailLastRun['full-render'] = $emailLastRun['render'];
+			$emailLastRun[GC_AFIELD_FULL_RENDER] = $emailLastRun[GC_AFIELD_RENDER];
 		}
 		//
 		// Stripping tags that may be a problem for some email clients.
 		if($this->_emailPayload->stripTags()) {
-			self::StripContentTags($emailLastRun['full-render']);
+			self::StripContentTags($emailLastRun[GC_AFIELD_FULL_RENDER]);
 		}
 		//
 		// Autodisplay works only on simulations.
 		if($autoDisplay && $isSimulation) {
-			echo $emailLastRun['full-render'];
+			echo $emailLastRun[GC_AFIELD_FULL_RENDER];
 		}
 
-		$this->_lastRender = $emailLastRun['full-render'];
+		$this->_lastRender = $emailLastRun[GC_AFIELD_FULL_RENDER];
 
 		return $emailLastRun;
 	}
@@ -139,8 +139,8 @@ class EmailsManager extends \TooBasic\Manager {
 			if($controllerClass instanceof \TooBasic\Email) {
 				$lastError = $controllerClass->lastError();
 				if($lastError) {
-					$errorCode = $lastError['code'];
-					$errorMessage = $lastError['message'];
+					$errorCode = $lastError[GC_AFIELD_CODE];
+					$errorMessage = $lastError[GC_AFIELD_MESSAGE];
 				} else {
 					$errorCode = HTTPERROR_INTERNAL_SERVER_ERROR;
 					$errorMessage = "Something went wrong with email '{$emailName}'";
