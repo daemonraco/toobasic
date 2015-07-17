@@ -61,12 +61,11 @@ class CacheAdapterDBPostgreSQL extends CacheAdapterDB {
 	protected function cleanOld($prefix, $key) {
 		$query = "delete from {$this->_dbprefix}cache \n";
 		$query.= "where       cch_key  = :key \n";
-		$query.= " and        cch_date < datetime('now', :limit) \n";
+		$query.= " and        cch_date < now() - interval '{$this->_expirationLength} second' \n";
 		$stmt = $this->_db->prepare($query);
 
-//		$stmt->execute(array(
-//			":key" => $this->fullKey($prefix, $key),
-//			":limit" => "-{$this->_expirationLength} second"
-//		));
+		$stmt->execute(array(
+			":key" => $this->fullKey($prefix, $key)
+		));
 	}
 }
