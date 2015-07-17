@@ -60,6 +60,7 @@
 * [Let's Make a Query](docs/databases.md#lets-make-a-query)
 * [Defaults](docs/databases.md#defaults)
 * [SQLite connection](docs/databases.md#sqlite-connection)
+* [PostgreSQL connection](docs/databases.md#postgresql-connection)
 * [Suggestions](docs/databases.md#suggestions)
 
 ##  Database Structure Specifications (docs/databasespecs.md):

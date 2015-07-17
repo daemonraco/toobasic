@@ -43,7 +43,7 @@ class DBAdapter extends Adapter {
 				//
 				// If there is a database connection exception, it is
 				// caught and a user exception is raised.
-				throw new Exception("Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", $e->getCode(), $e);
+				throw new \TooBasic\DBException("Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", $e->getCode(), $e);
 			}
 			//
 			// Creating a shortcut for database tables prefix
@@ -98,9 +98,9 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				throw new Exception("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				throw new Exception('Not connected');
+				throw new \TooBasic\DBException('Not connected');
 			}
 		}
 		//
@@ -135,13 +135,18 @@ class DBAdapter extends Adapter {
 	 * @param string $query SQL query to use for the statement creation.
 	 * @return \PDOStatement Returns a pointer to the new statement.
 	 */
-	public function & prepare($query) {
+	public function & prepare($query, $dieOnError = true) {
 		//
 		// Preparing the new statement.
 		$out = $this->_dblink->prepare($query);
 		//
 		// Setting the statement to return results as associative arrays.
-		$out->setFetchMode(\PDO::FETCH_ASSOC);
+		if($out) {
+			$out->setFetchMode(\PDO::FETCH_ASSOC);
+		} elseif($dieOnError) {
+			$info = $this->_dblink->errorInfo();
+			throw new \TooBasic\DBException("Unable to prepate query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+		}
 		//
 		// Returning requested statement.
 		return $out;
@@ -187,9 +192,9 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				throw new Exception("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				throw new Exception('Not connected');
+				throw new \TooBasic\DBException('Not connected');
 			}
 		}
 		//
