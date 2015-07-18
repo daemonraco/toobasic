@@ -596,7 +596,7 @@ class DBStructureManager extends Manager {
 		global $Connections;
 
 		foreach($data as $datum) {
-			$aux = \TooBasic\objectCopyAndEnforce(array('table', GC_AFIELD_CONNECTION, 'checkfields', 'entries'), $datum, new \stdClass());
+			$aux = \TooBasic\objectCopyAndEnforce(array('table', 'connection', 'checkfields', 'entries'), $datum, new \stdClass());
 
 			if(!$aux->table || !$aux->checkfields || !$aux->entries) {
 				continue;
@@ -648,7 +648,7 @@ class DBStructureManager extends Manager {
 		//
 		// Checking each index
 		foreach($indexes as $index) {
-			$aux = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, 'table', 'type', GC_AFIELD_CONNECTION, 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
+			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'table', 'type', 'connection', 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
 
 			if(!$aux->fields) {
 				continue;
@@ -767,7 +767,7 @@ class DBStructureManager extends Manager {
 			}
 			//
 			// Copying basic fields.
-			$aux = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, GC_AFIELD_CONNECTION, 'prefix', 'engine', 'callbacks'), $table, new \stdClass());
+			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'connection', 'prefix', 'engine', 'callbacks'), $table, new \stdClass());
 			//
 			// Checking specification connection against
 			// configuration.
@@ -800,7 +800,7 @@ class DBStructureManager extends Manager {
 			foreach($table->fields as $field) {
 				//
 				// Copying basic fields.
-				$auxField = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
+				$auxField = \TooBasic\objectCopyAndEnforce(array('name', 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
 				//
 				// Generating fullname.
 				$auxField->fullname = "{$aux->prefix}{$auxField->name}";

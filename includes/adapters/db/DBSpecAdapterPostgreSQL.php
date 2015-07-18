@@ -126,10 +126,6 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 				continue;
 			}
 			if($data[GC_AFIELD_SPEC]->hasDefault) {
-				/**
-				 * @todo check:
-				 * 	- 1.1
-				 */
 				$dbDefaultValue = explode('::', $data[GC_AFIELD_DB]['column_default']);
 				$dbDefaultValue = str_replace("'", '', array_shift($dbDefaultValue));
 				$specDefaultValue = str_replace("'", '', $data[GC_AFIELD_SPEC]->default);
