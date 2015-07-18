@@ -1,9 +1,18 @@
 <?php
 
+/**
+ * @file CacheAdapterDB.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 use \TooBasic\DBManager as TB_DBManager;
 
+/**
+ * @class CacheAdapterDB
+ * @abstract
+ */
 abstract class CacheAdapterDB extends CacheAdapter {
 	//
 	// Protected properties.
@@ -15,7 +24,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 	/**
 	 * @var string
 	 */
-	protected $_dbprefix = "";
+	protected $_dbprefix = '';
 	// 
 	// Magic methods.
 	public function __construct() {
@@ -37,7 +46,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key)
+			':key' => $this->fullKey($prefix, $key)
 		));
 	}
 	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
@@ -50,10 +59,10 @@ abstract class CacheAdapterDB extends CacheAdapter {
 		$query.= "where	  cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
 
-		if($stmt->execute(array(":key" => $this->fullKey($prefix, $key)))) {
+		if($stmt->execute(array(':key' => $this->fullKey($prefix, $key)))) {
 			$row = $stmt->fetch();
 			if($row) {
-				$data = unserialize(gzuncompress($row["cch_data"]));
+				$data = unserialize(gzuncompress($row['cch_data']));
 			}
 		}
 
@@ -68,8 +77,8 @@ abstract class CacheAdapterDB extends CacheAdapter {
 		$query.= "        values (:key, :data) \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->bindParam(":key", $this->fullKey($prefix, $key), \PDO::PARAM_STR);
-		$stmt->bindParam(":data", gzcompress(serialize($data), $this->_compressionRate), \PDO::PARAM_LOB);
+		$stmt->bindParam(':key', $this->fullKey($prefix, $key), \PDO::PARAM_STR);
+		$stmt->bindParam(':data', gzcompress(serialize($data), $this->_compressionRate), \PDO::PARAM_LOB);
 
 		$stmt->execute();
 	}
@@ -79,7 +88,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 	abstract protected function cleanOld($prefix, $key);
 	protected function fullKey($prefix, $key) {
 		$key = sha1($key);
-		$prefix.= ($prefix ? "_" : "");
+		$prefix.= ($prefix ? '_' : '');
 
 		return "{$prefix}{$key}";
 	}

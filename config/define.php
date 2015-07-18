@@ -40,21 +40,34 @@ define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
 // @}
 //
 // Last run strucutre constants @{
+define('GC_AFIELD_ADAPTER', 'adapter');
+define('GC_AFIELD_AFTER_CREATE', 'after_create');
+define('GC_AFIELD_AFTER_DROP', 'after_drop');
+define('GC_AFIELD_AFTER_UDPATE', 'after_update');
 define('GC_AFIELD_ASSIGNMENTS', 'assignments');
+define('GC_AFIELD_BEFORE_CREATE', 'before_create');
+define('GC_AFIELD_BEFORE_DROP', 'before_drop');
+define('GC_AFIELD_BEFORE_UPDATE', 'before_update');
 define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
 define('GC_AFIELD_CACHED', 'cached');
+define('GC_AFIELD_CALLBACKS', 'callbacks');
 define('GC_AFIELD_CLASS', 'class');
 define('GC_AFIELD_CODE', 'code');
 define('GC_AFIELD_COMPILATIONS', 'compilations');
+define('GC_AFIELD_CONNECTION', 'connection');
 define('GC_AFIELD_COUNTS', 'counts');
 define('GC_AFIELD_DATA', 'data');
+define('GC_AFIELD_DB', 'db');
+define('GC_AFIELD_DESCRIPTION', 'description');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
+define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HEADERS', 'headers');
+define('GC_AFIELD_INDEXES', 'indexes');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
 define('GC_AFIELD_KEYS', 'keys');
@@ -66,16 +79,27 @@ define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
 define('GC_AFIELD_METHOD', 'method');
 define('GC_AFIELD_METHODS', 'methods');
+define('GC_AFIELD_MODULE_NAME', 'module-name');
 define('GC_AFIELD_NAME', 'name');
+define('GC_AFIELD_PARAMS', 'params');
+define('GC_AFIELD_PARENT_DIRECTORY', 'parent-directory');
 define('GC_AFIELD_PATH', 'path');
 define('GC_AFIELD_POSSIBILITIES', 'possibilities');
+define('GC_AFIELD_QUERY', 'query');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
 define('GC_AFIELD_RESULT', 'result');
+define('GC_AFIELD_ROUTES_PATH', 'routes-path');
+define('GC_AFIELD_SEQNAME', 'seqname');
 define('GC_AFIELD_SERVICES', 'services');
 define('GC_AFIELD_SKIN', 'skin');
+define('GC_AFIELD_SPEC', 'spec');
+define('GC_AFIELD_SPECS', 'specs');
 define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
+define('GC_AFIELD_TABLES', 'tables');
+define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TYPE', 'type');
 // @}
 //
 // Directories @{

@@ -26,7 +26,7 @@ class CacheAdapterDBPostgreSQL extends CacheAdapterDB {
 		$query.= "where	  cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
 
-		if($stmt->execute(array(":key" => $this->fullKey($prefix, $key)))) {
+		if($stmt->execute(array(':key' => $this->fullKey($prefix, $key)))) {
 			$row = $stmt->fetch();
 			if($row) {
 				$fdata = '';
@@ -65,7 +65,7 @@ class CacheAdapterDBPostgreSQL extends CacheAdapterDB {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key)
+			':key' => $this->fullKey($prefix, $key)
 		));
 	}
 }

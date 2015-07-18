@@ -7,6 +7,9 @@
 
 namespace TooBasic\Managers;
 
+/**
+ * @class EmailsManager
+ */
 class EmailsManager extends \TooBasic\Manager {
 	//
 	// Protected properties.

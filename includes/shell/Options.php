@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * @file Options.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Shell;
 
+/**
+ * @class Options
+ */
 class Options extends \TooBasic\Singleton {
-	//
-	// Constants.
 	// 
 	// Protected properties.
 	protected $_activeOptions = false;
@@ -82,8 +88,8 @@ class Options extends \TooBasic\Singleton {
 
 		return $ok;
 	}
-	public function helpText($spacer = "") {
-		$out = "";
+	public function helpText($spacer = '') {
+		$out = '';
 
 		if($this->_helpText) {
 			$out.="{$this->_helpText}\n\n";

@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file ActionsManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ActionsManager
+ */
 class ActionsManager extends UrlManager {
 	//
 	// Public methods.

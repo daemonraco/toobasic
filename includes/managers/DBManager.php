@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file DBManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**

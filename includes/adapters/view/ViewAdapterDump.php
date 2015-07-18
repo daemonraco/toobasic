@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file ViewAdapterDump.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ViewAdapterDump
+ */
 class ViewAdapterDump extends ViewAdapterBasic {
 	//
 	// Public methods.

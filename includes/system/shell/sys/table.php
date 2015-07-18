@@ -1,9 +1,15 @@
 <?php
 
-use TooBasic\Shell\Color as TBS_Color;
+/**
+ * @file table.php
+ * @author Alejandro Dario Simi
+ */
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
+/**
+ * @class TableSystool
+ */
 class TableSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
@@ -54,57 +60,57 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						$columnParts = 'varchar';
 					}
 					$columnParts[1] = strtolower($columnParts[1]);
-					$field['type'] = array();
+					$field[GC_AFIELD_TYPE] = array();
 					switch($columnParts[1]) {
 						case 'int':
-							$field['type']['type'] = 'int';
-							$field['type']['precision'] = 11;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'int';
+							$field[GC_AFIELD_TYPE]['precision'] = 11;
 							$field['default'] = 0;
 							$field['inForm'] = true;
 							break;
 						case 'blob':
-							$field['type']['type'] = 'blob';
-							$field['type']['precision'] = false;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'blob';
+							$field[GC_AFIELD_TYPE]['precision'] = false;
 							$field['default'] = '';
 							$field['inForm'] = false;
 							break;
 						case 'float':
-							$field['type']['type'] = 'float';
-							$field['type']['precision'] = 11;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
+							$field[GC_AFIELD_TYPE]['precision'] = 11;
 							$field['default'] = '';
 							$field['inForm'] = true;
 							break;
 						case 'text':
-							$field['type']['type'] = 'text';
-							$field['type']['precision'] = false;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'text';
+							$field[GC_AFIELD_TYPE]['precision'] = false;
 							$field['default'] = '';
 							$field['inForm'] = true;
 							break;
 						case 'timestamp':
-							$field['type']['type'] = 'timestamp';
-							$field['type']['precision'] = false;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'timestamp';
+							$field[GC_AFIELD_TYPE]['precision'] = false;
 							$field['default'] = 0;
 							$field['inForm'] = false;
 							break;
 						case 'enum':
-							$field['type']['type'] = 'enum';
-							$field['type']['precision'] = false;
-							$field['type']['values'] = $columnParts;
-							array_shift($field['type']['values']);
-							array_shift($field['type']['values']);
-							if($field['type']['values']) {
-								$field['type']['values'] = array_values($field['type']['values']);
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
+							$field[GC_AFIELD_TYPE]['precision'] = false;
+							$field[GC_AFIELD_TYPE]['values'] = $columnParts;
+							array_shift($field[GC_AFIELD_TYPE]['values']);
+							array_shift($field[GC_AFIELD_TYPE]['values']);
+							if($field[GC_AFIELD_TYPE]['values']) {
+								$field[GC_AFIELD_TYPE]['values'] = array_values($field[GC_AFIELD_TYPE]['values']);
 							} else {
-								$field['type']['values'][0] = 'Y';
-								$field['type']['values'][1] = 'N';
+								$field[GC_AFIELD_TYPE]['values'][0] = 'Y';
+								$field[GC_AFIELD_TYPE]['values'][1] = 'N';
 							}
-							$field['default'] = "'{$field['type']['values'][0]}'";
+							$field['default'] = "'{$field[GC_AFIELD_TYPE]['values'][0]}'";
 							$field['inForm'] = true;
 							break;
 						case 'varchar':
 						default:
-							$field['type']['type'] = 'varchar';
-							$field['type']['precision'] = 256;
+							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
+							$field[GC_AFIELD_TYPE]['precision'] = 256;
 							$field['default'] = '';
 							$field['inForm'] = true;
 					}
@@ -147,9 +153,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['type'] = false;
-			$this->_names['singular-name'] = $this->_names['name'];
-			$this->_names['plural-name'] = "{$this->_names['name']}s";
+			$this->_names[GC_AFIELD_TYPE] = false;
+			$this->_names['singular-name'] = $this->_names[GC_AFIELD_NAME];
+			$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
 			$this->_names['templates-prefix'] = '';
 			//
 			// Checking plural name.
@@ -167,7 +173,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Checking type.
 			$opt = $this->_options->option(self::OptionSystem);
 			if($opt->activated()) {
-				$this->_names['type'] = strtolower($opt->value());
+				$this->_names[GC_AFIELD_TYPE] = strtolower($opt->value());
 			}
 			//
 			// Representations.
@@ -188,71 +194,71 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Files
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
 				'generator' => 'genSpecsFile',
-				'description' => 'specifications file'
+				GC_AFIELD_DESCRIPTION => 'specifications file'
 			);
 			if(!$this->isRaw()) {
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
-					'template' => 'representation.html',
-					'description' => 'representations file'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
+					GC_AFIELD_TEMPLATE => 'representation.html',
+					GC_AFIELD_DESCRIPTION => 'representations file'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
-					'template' => 'factory.html',
-					'description' => 'representations factory file'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
+					GC_AFIELD_TEMPLATE => 'factory.html',
+					GC_AFIELD_DESCRIPTION => 'representations factory file'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
-					'template' => 'list_controller.html',
-					'description' => 'controller file to list table items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
+					GC_AFIELD_TEMPLATE => 'list_controller.html',
+					GC_AFIELD_DESCRIPTION => 'controller file to list table items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
-					'template' => "{$this->_names['templates-prefix']}list.html",
-					'description' => 'view file to list table items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}list.html",
+					GC_AFIELD_DESCRIPTION => 'view file to list table items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
-					'template' => 'view_controller.html',
-					'description' => 'controller file to view items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
+					GC_AFIELD_TEMPLATE => 'view_controller.html',
+					GC_AFIELD_DESCRIPTION => 'controller file to view items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
-					'template' => "{$this->_names['templates-prefix']}view.html",
-					'description' => 'view file to view items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
+					GC_AFIELD_DESCRIPTION => 'view file to view items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
-					'template' => 'edit_controller.html',
-					'description' => 'controller file to edit items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
+					GC_AFIELD_TEMPLATE => 'edit_controller.html',
+					GC_AFIELD_DESCRIPTION => 'controller file to edit items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
-					'template' => "{$this->_names['templates-prefix']}edit.html",
-					'description' => 'view file to edit items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}edit.html",
+					GC_AFIELD_DESCRIPTION => 'view file to edit items'
 				);
 
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
-					'template' => 'add_controller.html',
-					'description' => 'controller file to add items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
+					GC_AFIELD_TEMPLATE => 'add_controller.html',
+					GC_AFIELD_DESCRIPTION => 'controller file to add items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
-					'template' => "{$this->_names['templates-prefix']}add.html",
-					'description' => 'view file to add items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}add.html",
+					GC_AFIELD_DESCRIPTION => 'view file to add items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
-					'template' => 'delete_controller.html',
-					'description' => 'controller file to delete items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
+					GC_AFIELD_TEMPLATE => 'delete_controller.html',
+					GC_AFIELD_DESCRIPTION => 'controller file to delete items'
 				);
 				$this->_files[] = array(
-					'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
-					'template' => "{$this->_names['templates-prefix']}delete.html",
-					'description' => 'view file to delete items'
+					GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}delete.html",
+					GC_AFIELD_DESCRIPTION => 'view file to delete items'
 				);
 			}
 		}
@@ -312,7 +318,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$table = new \stdClass();
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
-		if($this->_names['type'] == 'mysql') {
+		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
 			$table->engine = 'myisam';
 		}
 		if(isset($this->_assignments['connection'])) {
@@ -337,11 +343,11 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$field = new \stdClass();
 			$field->name = $column['name'];
 			$field->type = new \stdClass();
-			$field->type->type = $column['type']['type'];
-			if(isset($column['type']['values'])) {
-				$field->type->values = $column['type']['values'];
+			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			if(isset($column[GC_AFIELD_TYPE]['values'])) {
+				$field->type->values = $column[GC_AFIELD_TYPE]['values'];
 			} else {
-				$field->type->precision = $column['type']['precision'];
+				$field->type->precision = $column[GC_AFIELD_TYPE]['precision'];
 			}
 			$field->default = $column['default'];
 			$field->null = $column['null'];
@@ -377,7 +383,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$specs->tables[] = $table;
 		//
 		// Adding a primary key for column 'id'.
-		if($this->_names['type'] != 'mysql') {
+		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
 			$index = new \stdClass();
 			$index->name = "{$this->_assignments['tablePrefix']}id";
 			$index->table = $this->_assignments['pluralName'];
@@ -444,23 +450,23 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text = "Note: This won't create controllers and ohter related stuff.";
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRaw, array('--raw', '-r'), TBS_Option::TypeNoValue, $text));
 
-		$text = "All generated view will have a bootstrap structure.";
+		$text = 'All generated view will have a bootstrap structure.';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), TBS_Option::TypeNoValue, $text));
 	}
-	protected function taskCreate($spacer = "") {
+	protected function taskCreate($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Creating scaffold for '{$this->_names['name']}':\n";
+		echo "{$spacer}Creating scaffold for '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskCreate($spacer);
 	}
-	protected function taskInfo($spacer = "") {
+	protected function taskInfo($spacer = '') {
 		
 	}
-	protected function taskRemove($spacer = "") {
+	protected function taskRemove($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Removing scaffold for '{$this->_names['name']}':\n";
+		echo "{$spacer}Removing scaffold for '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskRemove($spacer);
 	}

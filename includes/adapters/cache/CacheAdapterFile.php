@@ -5,8 +5,8 @@ namespace TooBasic;
 class CacheAdapterFile extends CacheAdapter {
 	//
 	// Constants.
-	const SubFolder = "filecache";
-	const CacheExtension = "data";
+	const SubFolder = 'filecache';
+	const CacheExtension = 'data';
 	//
 	// Public methods.
 	public function delete($prefix, $key) {
@@ -38,8 +38,8 @@ class CacheAdapterFile extends CacheAdapter {
 		global $Directories;
 
 		$key = sha1($key);
-		$prefix.= ($prefix ? "_" : "");
-		$path = Sanitizer::DirPath("{$Directories["cache"]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
+		$prefix.= ($prefix ? '_' : '');
+		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
 
 		return $path;
 	}

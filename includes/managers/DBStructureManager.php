@@ -1,11 +1,22 @@
 <?php
 
+/**
+ * @file DBStructureManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
-class DBStructureManagerExeption extends \Exception {
+/**
+ * @class DBStructureManagerExeption
+ */
+class DBStructureManagerExeption extends \TooBasic\DBException {
 	
 }
 
+/**
+ * @class DBStructureManager
+ */
 class DBStructureManager extends Manager {
 	//
 	// Constants.
@@ -157,19 +168,19 @@ class DBStructureManager extends Manager {
 					foreach($this->_perConnection as $connName => $connection) {
 						$adapter = $this->getAdapter($connName);
 						foreach($adapter->getIndexes() as $dbIndex) {
-							if(!in_array($dbIndex, $connection['indexes'])) {
+							if(!in_array($dbIndex, $connection[GC_AFIELD_INDEXES])) {
 								$this->_tasks[self::TaskTypeDropIndex][] = array(
-									'connection' => $connName,
-									'name' => $dbIndex
+									GC_AFIELD_CONNECTION => $connName,
+									GC_AFIELD_NAME => $dbIndex
 								);
 								$ok = false;
 							}
 						}
 						foreach($adapter->getTables() as $dbTable) {
-							if(!in_array($dbTable, $connection['tables'])) {
+							if(!in_array($dbTable, $connection[GC_AFIELD_TABLES])) {
 								$this->_tasks[self::TaskTypeDropTable][] = array(
-									'connection' => $connName,
-									'name' => $dbTable
+									GC_AFIELD_CONNECTION => $connName,
+									GC_AFIELD_NAME => $dbTable
 								);
 								$ok = false;
 							}
@@ -230,9 +241,9 @@ class DBStructureManager extends Manager {
 	protected function checkCallbacks() {
 		foreach($this->_callbacks as &$subCallbacks) {
 			foreach($subCallbacks as &$data) {
-				$data['path'] = Paths::Instance()->dbSpecCallbackPaths($data['name']);
-				if(!$data['path']) {
-					$this->setError(self::ErrorUnknownCallback, "Unable to find database spec callback '{$data['name']}'");
+				$data[GC_AFIELD_PATH] = Paths::Instance()->dbSpecCallbackPaths($data[GC_AFIELD_NAME]);
+				if(!$data[GC_AFIELD_PATH]) {
+					$this->setError(self::ErrorUnknownCallback, "Unable to find database spec callback '{$data[GC_AFIELD_NAME]}'");
 				}
 			}
 		}
@@ -394,16 +405,16 @@ class DBStructureManager extends Manager {
 	}
 	protected function dropIndexes() {
 		foreach($this->_tasks[self::TaskTypeDropIndex] as $data) {
-			$adapter = $this->getAdapter($data['connection']);
-			$callbackKeyBefore = "I_before_drop_{$data['name']}";
-			$callbackKeyAfter = "I_after_drop_{$data['name']}";
+			$adapter = $this->getAdapter($data[GC_AFIELD_CONNECTION]);
+			$callbackKeyBefore = "I_before_drop_{$data[GC_AFIELD_NAME]}";
+			$callbackKeyAfter = "I_after_drop_{$data[GC_AFIELD_NAME]}";
 
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
-			$adapter->dropIndex($data['name']);
+			$adapter->dropIndex($data[GC_AFIELD_NAME]);
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -413,16 +424,16 @@ class DBStructureManager extends Manager {
 	}
 	protected function dropTables() {
 		foreach($this->_tasks[self::TaskTypeDropTable] as $data) {
-			$callbackKeyBefore = "T_before_drop_{$data['name']}";
-			$callbackKeyAfter = "T_after_drop_{$data['name']}";
-			$adapter = $this->getAdapter($data['connection']);
+			$callbackKeyBefore = "T_before_drop_{$data[GC_AFIELD_NAME]}";
+			$callbackKeyAfter = "T_after_drop_{$data[GC_AFIELD_NAME]}";
+			$adapter = $this->getAdapter($data[GC_AFIELD_CONNECTION]);
 
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
-			$adapter->dropTable($data['name']);
+			$adapter->dropTable($data[GC_AFIELD_NAME]);
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -510,10 +521,10 @@ class DBStructureManager extends Manager {
 
 			if(isset(Params::Instance()->debugdbstructure)) {
 				\TooBasic\debugThing(array(
-					'errors' => $this->_errors,
-					'files' => $this->_specFiles,
-					'specs' => $this->_specs,
-					'callbacks' => $this->_callbacks
+					GC_AFIELD_ERRORS => $this->_errors,
+					GC_AFIELD_FILES => $this->_specFiles,
+					GC_AFIELD_SPECS => $this->_specs,
+					GC_AFIELD_CALLBACKS => $this->_callbacks
 				));
 			}
 		}
@@ -585,7 +596,7 @@ class DBStructureManager extends Manager {
 		global $Connections;
 
 		foreach($data as $datum) {
-			$aux = \TooBasic\objectCopyAndEnforce(array('table', 'connection', 'checkfields', 'entries'), $datum, new \stdClass());
+			$aux = \TooBasic\objectCopyAndEnforce(array('table', GC_AFIELD_CONNECTION, 'checkfields', 'entries'), $datum, new \stdClass());
 
 			if(!$aux->table || !$aux->checkfields || !$aux->entries) {
 				continue;
@@ -629,15 +640,15 @@ class DBStructureManager extends Manager {
 		//
 		// Basic callback entries:
 		$callbackEntries = array(
-			'before_create' => array(),
-			'after_create' => array(),
-			'before_drop' => array(),
-			'after_drop' => array()
+			GC_AFIELD_BEFORE_CREATE => array(),
+			GC_AFIELD_AFTER_CREATE => array(),
+			GC_AFIELD_BEFORE_DROP => array(),
+			GC_AFIELD_AFTER_DROP => array()
 		);
 		//
 		// Checking each index
 		foreach($indexes as $index) {
-			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'table', 'type', 'connection', 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
+			$aux = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, 'table', 'type', GC_AFIELD_CONNECTION, 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
 
 			if(!$aux->fields) {
 				continue;
@@ -687,7 +698,7 @@ class DBStructureManager extends Manager {
 					}
 
 					$this->_callbacks[$callbackKey][] = array(
-						'name' => $call
+						GC_AFIELD_NAME => $call
 					);
 
 					$call = $callbackKey;
@@ -701,11 +712,11 @@ class DBStructureManager extends Manager {
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
-			if(!isset($this->_perConnection[$aux->connection]['indexes'])) {
-				$this->_perConnection[$aux->connection]['indexes'] = array();
+			if(!isset($this->_perConnection[$aux->connection][GC_AFIELD_INDEXES])) {
+				$this->_perConnection[$aux->connection][GC_AFIELD_INDEXES] = array();
 			}
 			// @}
-			$this->_perConnection[$aux->connection]['indexes'][] = $aux->fullname;
+			$this->_perConnection[$aux->connection][GC_AFIELD_INDEXES][] = $aux->fullname;
 		}
 	}
 	protected function parseSpecs() {
@@ -715,11 +726,11 @@ class DBStructureManager extends Manager {
 		foreach($this->_perConnection as &$connection) {
 			//
 			// Enforcing structure @{
-			if(!isset($connection['tables'])) {
-				$connection['tables'] = array();
+			if(!isset($connection[GC_AFIELD_TABLES])) {
+				$connection[GC_AFIELD_TABLES] = array();
 			}
-			if(!isset($connection['indexes'])) {
-				$connection['indexes'] = array();
+			if(!isset($connection[GC_AFIELD_INDEXES])) {
+				$connection[GC_AFIELD_INDEXES] = array();
 			}
 			// @}
 
@@ -740,12 +751,12 @@ class DBStructureManager extends Manager {
 		//
 		// Basic callback entries:
 		$callbackEntries = array(
-			'before_create' => array(),
-			'after_create' => array(),
-			'before_drop' => array(),
-			'after_drop' => array(),
-			'before_update' => array(),
-			'after_update' => array()
+			GC_AFIELD_BEFORE_CREATE => array(),
+			GC_AFIELD_AFTER_CREATE => array(),
+			GC_AFIELD_BEFORE_DROP => array(),
+			GC_AFIELD_AFTER_DROP => array(),
+			GC_AFIELD_BEFORE_UPDATE => array(),
+			GC_AFIELD_AFTER_UDPATE => array()
 		);
 
 		foreach($tables as $table) {
@@ -756,7 +767,7 @@ class DBStructureManager extends Manager {
 			}
 			//
 			// Copying basic fields.
-			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'connection', 'prefix', 'engine', 'callbacks'), $table, new \stdClass());
+			$aux = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, GC_AFIELD_CONNECTION, 'prefix', 'engine', 'callbacks'), $table, new \stdClass());
 			//
 			// Checking specification connection against
 			// configuration.
@@ -789,7 +800,7 @@ class DBStructureManager extends Manager {
 			foreach($table->fields as $field) {
 				//
 				// Copying basic fields.
-				$auxField = \TooBasic\objectCopyAndEnforce(array('name', 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
+				$auxField = \TooBasic\objectCopyAndEnforce(array(GC_AFIELD_NAME, 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
 				//
 				// Generating fullname.
 				$auxField->fullname = "{$aux->prefix}{$auxField->name}";
@@ -839,7 +850,7 @@ class DBStructureManager extends Manager {
 							$this->_callbacks[$callbackKey] = array();
 						}
 						$this->_callbacks[$callbackKey][] = array(
-							'name' => $call
+							GC_AFIELD_NAME => $call
 						);
 
 						$call = $callbackKey;
@@ -873,7 +884,7 @@ class DBStructureManager extends Manager {
 						$this->_callbacks[$callbackKey] = array();
 					}
 					$this->_callbacks[$callbackKey][] = array(
-						'name' => $call
+						GC_AFIELD_NAME => $call
 					);
 
 					$call = $callbackKey;
@@ -895,17 +906,17 @@ class DBStructureManager extends Manager {
 			if(!isset($this->_perConnection[$aux->connection])) {
 				$this->_perConnection[$aux->connection] = array();
 			}
-			if(!isset($this->_perConnection[$aux->connection]['tables'])) {
-				$this->_perConnection[$aux->connection]['tables'] = array();
+			if(!isset($this->_perConnection[$aux->connection][GC_AFIELD_TABLES])) {
+				$this->_perConnection[$aux->connection][GC_AFIELD_TABLES] = array();
 			}
 			// @}
-			$this->_perConnection[$aux->connection]['tables'][] = $aux->fullname;
+			$this->_perConnection[$aux->connection][GC_AFIELD_TABLES][] = $aux->fullname;
 		}
 	}
 	protected function setError($code, $message) {
 		$this->_errors[] = array(
-			'code' => $code,
-			'message' => $message
+			GC_AFIELD_CODE => $code,
+			GC_AFIELD_MESSAGE => $message
 		);
 	}
 	protected function updateColumns() {

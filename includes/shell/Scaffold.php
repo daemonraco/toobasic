@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * @file Scaffold.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Shell;
 
 use TooBasic\Shell\Color as TBS_Color;
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
+/**
+ * @class Scaffold
+ * @abstract
+ */
 abstract class Scaffold extends ShellTool {
 	//
 	// Constants.
@@ -69,20 +78,20 @@ abstract class Scaffold extends ShellTool {
 		$fatal = false;
 		$error = '';
 
-		if(!is_file($this->_names['routes-path'])) {
-			if(!file_put_contents($this->_names['routes-path'], '{"routes":[]}')) {
+		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], '{"routes":[]}')) {
 				$ok = false;
-				$error = "unable to create file '{$this->_names['routes-path']}'";
+				$error = "unable to create file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 				$fatal = true;
 			}
 		}
 		$config = false;
 		if($ok) {
-			$backup = file_get_contents($this->_names['routes-path']);
+			$backup = file_get_contents($this->_names[GC_AFIELD_ROUTES_PATH]);
 			$config = json_decode($backup);
 			if(!$config) {
 				$ok = false;
-				$error = "unable to use routes file";
+				$error = 'unable to use routes file';
 				$fatal = true;
 			}
 		}
@@ -98,11 +107,11 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$config->routes[] = $newRoute;
 
-			if(!file_put_contents($this->_names['routes-path'], json_encode($config, JSON_PRETTY_PRINT))) {
+			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 				$ok = false;
-				$error = "something went wrong writing back routes file";
+				$error = 'something went wrong writing back routes file';
 				$fatal = true;
-				file_put_contents($this->_names['routes-path'], $backup);
+				file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
 			}
 		}
 
@@ -110,17 +119,17 @@ abstract class Scaffold extends ShellTool {
 	}
 	protected function enforceFilesList() {
 		foreach($this->_files as &$file) {
-			if(!isset($file['description'])) {
-				$file['description'] = "file '".basename($file['path'])."'";
+			if(!isset($file[GC_AFIELD_DESCRIPTION])) {
+				$file[GC_AFIELD_DESCRIPTION] = "file '".basename($file[GC_AFIELD_PATH])."'";
 			}
-			if(!isset($file['generator'])) {
-				$file['generator'] = 'genFileByTemplate';
+			if(!isset($file[GC_AFIELD_GENERATOR])) {
+				$file[GC_AFIELD_GENERATOR] = 'genFileByTemplate';
 			}
-			if(!isset($file['template'])) {
-				$file['template'] = false;
+			if(!isset($file[GC_AFIELD_TEMPLATE])) {
+				$file[GC_AFIELD_TEMPLATE] = false;
 			}
 
-			$this->_requiredDirectories[] = dirname($file['path']);
+			$this->_requiredDirectories[] = dirname($file[GC_AFIELD_PATH]);
 		}
 	}
 	protected function genAssignments() {
@@ -195,21 +204,21 @@ abstract class Scaffold extends ShellTool {
 			global $Directories;
 			global $Paths;
 
-			$this->_names['name'] = $baseName;
-			$this->_names['module-name'] = false;
-			$this->_names['parent-directory'] = false;
+			$this->_names[GC_AFIELD_NAME] = $baseName;
+			$this->_names[GC_AFIELD_MODULE_NAME] = false;
+			$this->_names[GC_AFIELD_PARENT_DIRECTORY] = false;
 			//
 			// Checking module and parent directory.
 			$opt = $this->_options->option(self::OptionModule);
 			if($opt->activated()) {
-				$this->_names['module-name'] = $opt->value();
-				$this->_names['parent-directory'] = "{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_names['module-name']}";
+				$this->_names[GC_AFIELD_MODULE_NAME] = $opt->value();
+				$this->_names[GC_AFIELD_PARENT_DIRECTORY] = "{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_names[GC_AFIELD_MODULE_NAME]}";
 			} else {
-				$this->_names['parent-directory'] = $Directories[GC_DIRECTORIES_SITE];
+				$this->_names[GC_AFIELD_PARENT_DIRECTORY] = $Directories[GC_DIRECTORIES_SITE];
 			}
 
-			$this->_names['routes-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
-			$this->_requiredDirectories[] = dirname($this->_names['routes-path']);
+			$this->_names[GC_AFIELD_ROUTES_PATH] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
+			$this->_requiredDirectories[] = dirname($this->_names[GC_AFIELD_ROUTES_PATH]);
 		}
 	}
 	protected function genRequiredDirectories($spacer) {
@@ -319,7 +328,7 @@ abstract class Scaffold extends ShellTool {
 			if(!is_file($path)) {
 				echo TBS_Color::Green('Ok');
 			} else {
-				echo TBS_Color::Red('Failed')." (unable to remove it)";
+				echo TBS_Color::Red('Failed').' (unable to remove it)';
 				$ok = false;
 			}
 		}
@@ -334,18 +343,18 @@ abstract class Scaffold extends ShellTool {
 		$fatal = false;
 		$error = '';
 
-		if(!is_file($this->_names['routes-path'])) {
+		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			$ok = false;
-			$error = "unable to find file '{$this->_names['routes-path']}'";
+			$error = "unable to find file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 			$fatal = true;
 		}
 		$config = false;
 		if($ok) {
-			$backup = file_get_contents($this->_names['routes-path']);
+			$backup = file_get_contents($this->_names[GC_AFIELD_ROUTES_PATH]);
 			$config = json_decode($backup);
 			if(!$config) {
 				$ok = false;
-				$error = "unable to use routes file";
+				$error = 'unable to use routes file';
 				$fatal = true;
 			}
 		}
@@ -359,15 +368,15 @@ abstract class Scaffold extends ShellTool {
 			}
 			if($found) {
 				$config->routes = array_values($config->routes);
-				if(!file_put_contents($this->_names['routes-path'], json_encode($config, JSON_PRETTY_PRINT))) {
+				if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 					$ok = false;
-					$error = "something went wrong writing back routes file";
+					$error = 'something went wrong writing back routes file';
 					$fatal = true;
-					file_put_contents($this->_names['routes-path'], $backup);
+					file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
 				}
 			} else {
 				$ok = false;
-				$error = "no routes found";
+				$error = 'no routes found';
 			}
 		}
 
@@ -386,7 +395,7 @@ abstract class Scaffold extends ShellTool {
 		$text = 'Overwrite files when they exist (routes are excluded).';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionForced, array('--forced'), TBS_Option::TypeNoValue, $text));
 	}
-	protected function taskCreate($spacer = "") {
+	protected function taskCreate($spacer = '') {
 		//
 		// Default values.
 		$ok = true;
@@ -405,11 +414,11 @@ abstract class Scaffold extends ShellTool {
 		// Files
 		if($ok) {
 			foreach($this->_files as $file) {
-				echo "{$spacer}\tCreating {$file['description']}: ";
-				if(!$this->genFile($file['path'], $file['template'], $file['generator'])) {
+				echo "{$spacer}\tCreating {$file[GC_AFIELD_DESCRIPTION]}: ";
+				if(!$this->genFile($file[GC_AFIELD_PATH], $file[GC_AFIELD_TEMPLATE], $file[GC_AFIELD_GENERATOR])) {
 					$ok = false;
 				}
-				echo "{$spacer}\t\t- '{$file['path']}'\n\n";
+				echo "{$spacer}\t\t- '{$file[GC_AFIELD_PATH]}'\n\n";
 
 				if(!$ok) {
 					break;
@@ -424,7 +433,7 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
-	protected function taskRemove($spacer = "") {
+	protected function taskRemove($spacer = '') {
 		//
 		// Default values.
 		$ok = true;
@@ -438,11 +447,11 @@ abstract class Scaffold extends ShellTool {
 		// Files
 		if($ok) {
 			foreach($this->_files as $file) {
-				echo "{$spacer}\tRemoving {$file['description']}: ";
-				if(!$this->removeFile($file['path'])) {
+				echo "{$spacer}\tRemoving {$file[GC_AFIELD_DESCRIPTION]}: ";
+				if(!$this->removeFile($file[GC_AFIELD_PATH])) {
 					$ok = false;
 				}
-				echo "{$spacer}\t\t- '{$file['path']}'\n\n";
+				echo "{$spacer}\t\t- '{$file[GC_AFIELD_PATH]}'\n\n";
 
 				if(!$ok) {
 					break;

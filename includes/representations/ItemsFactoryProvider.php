@@ -1,12 +1,15 @@
 <?php
 
 /**
- * @file ItemsFactory.php
+ * @file ItemsFactoryProvider.php
  * @author Alejandro Dario Simi
  */
 
 namespace TooBasic;
 
+/**
+ * @class ItemsFactoryProvider
+ */
 class ItemsFactoryProvider extends Singleton {
 	//
 	// Protected properties.

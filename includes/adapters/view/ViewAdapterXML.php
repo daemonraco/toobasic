@@ -7,7 +7,7 @@ class ViewAdapterXML extends ViewAdapterBasic {
 	// Magic methods.
 	public function __construct() {
 		parent::__construct();
-		$this->_headers["Content-Type"] = "application/xml";
+		$this->_headers["Content-Type"] = 'application/xml';
 	}
 	//
 	// Public methods.

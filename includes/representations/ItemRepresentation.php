@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+/**
+ * @abstract
+ * @class ItemRepresentation
+ */
 abstract class ItemRepresentation {
 	//
 	// Protected core properties.
@@ -35,7 +39,7 @@ abstract class ItemRepresentation {
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	public function __toString() {
-		return $this->exists() ? get_called_class()."()[(".$this->{$this->_CP_IDColumn}.")]" : "NULL";
+		return $this->exists() ? get_called_class().'()[('.$this->{$this->_CP_IDColumn}.')]' : 'NULL';
 	}
 	public function __get($name) {
 		$out = null;
@@ -80,10 +84,10 @@ abstract class ItemRepresentation {
 		$this->preLoad($id);
 
 		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $this->queryAdapterPrefixes());
-		$stmt = $this->_db->prepare($query['query']);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 
 		$data = false;
-		if(!$stmt->execute($query['params'])) {
+		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$this->_lastDBError = $stmt->errorInfo();
 		} else {
 			$data = $stmt->fetch();
@@ -104,8 +108,8 @@ abstract class ItemRepresentation {
 
 		if($this->_CP_NameColumn) {
 			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $this->queryAdapterPrefixes());
-			$stmt = $this->_db->prepare($query['query']);
-			if($stmt->execute($query['params'])) {
+			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 				$row = $stmt->fetch();
 				//
 				// Checking if something was actually found.
@@ -137,9 +141,9 @@ abstract class ItemRepresentation {
 			}
 
 			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
-			$stmt = $this->_db->prepare($query['query']);
+			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 
-			if($stmt->execute($query['params'])) {
+			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 				$persisted = true;
 				$this->_dirty = false;
 			} else {
@@ -151,8 +155,8 @@ abstract class ItemRepresentation {
 	}
 	public function remove() {
 		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
-		$stmt = $this->_db->prepare($query['query']);
-		if(!$stmt->execute($query['params'])) {
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$this->_lastDBError = $stmt->errorInfo();
 		}
 

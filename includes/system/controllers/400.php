@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file 400.php
+ * @author Alejandro Dario Simi
+ */
+
+/**
+ * @class N400Controller
+ */
 class N400Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties.
@@ -8,8 +16,8 @@ class N400Controller extends TooBasic\ErrorController {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		$this->assign("title", $this->tr->HTTPERROR_400);
-		$this->assign("toobasic_version", TOOBASIC_VERSION);
+		$this->assign('title', $this->tr->HTTPERROR_400);
+		$this->assign('toobasic_version', TOOBASIC_VERSION);
 		return parent::basicRun();
 	}
 	protected function init() {

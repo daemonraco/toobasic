@@ -38,6 +38,7 @@ $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/T
 $SuperLoader['TooBasic\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
 $SuperLoader['TooBasic\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
 $SuperLoader['TooBasic\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
 $SuperLoader['TooBasic\\Managers\\EmailsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/EmailsManager.php";
 $SuperLoader['TooBasic\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
 $SuperLoader['TooBasic\\RoutesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/RoutesManager.php";

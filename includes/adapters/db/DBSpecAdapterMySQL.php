@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file DBSpecAdapterMySQL.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class DBSpecAdapterMySQL
+ */
 class DBSpecAdapterMySQL extends DBSpecAdapter {
 	//
 	// Protected properties.
@@ -81,7 +89,7 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 		$query.= "from    information_schema.columns \n";
 		$query.= "where   table_catalog = 'def' \n";
 		$query.= " and    table_schema  = database() \n";
-		$query.= " and    table_name    = '{$table->fullname}'";
+		$query.= " and    table_name    = '{$table->fullname}' \n";
 
 		$tableSpecs = $this->_db->query($query)->fetchAll();
 		//
@@ -99,8 +107,8 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 				$creates[] = $fullname;
 			} else {
 				$cmp[$fullname] = array(
-					'db' => $found,
-					'spec' => null
+					GC_AFIELD_DB => $found,
+					GC_AFIELD_SPEC => null
 				);
 			}
 		}
@@ -112,39 +120,39 @@ class DBSpecAdapterMySQL extends DBSpecAdapter {
 			} else {
 				$spec = $table->fields[$dbColumn['column_name']];
 				$spec->builtType = $this->buildColumnType($spec->type);
-				$cmp[$dbColumn['column_name']]['spec'] = $spec;
+				$cmp[$dbColumn['column_name']][GC_AFIELD_SPEC] = $spec;
 			}
 		}
 		//
 		// Different columns.
 		foreach($cmp as $fullname => $data) {
-			if(trim($data['db']['column_type']) != trim($data['spec']->builtType)) {
+			if(trim($data[GC_AFIELD_DB]['column_type']) != trim($data[GC_AFIELD_SPEC]->builtType)) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->autoincrement != ($data['db']['extra'] == 'auto_increment')) {
+			if($data[GC_AFIELD_SPEC]->autoincrement != ($data[GC_AFIELD_DB]['extra'] == 'auto_increment')) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->null != ($data['db']['is_nullable'] == 'YES')) {
+			if($data[GC_AFIELD_SPEC]->null != ($data[GC_AFIELD_DB]['is_nullable'] == 'YES')) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->hasDefault) {
-				$auxDefaultValue = $data['spec']->default;
-				if($data['spec']->type->type == DBStructureManager::ColumnTypeEnum) {
+			if($data[GC_AFIELD_SPEC]->hasDefault) {
+				$auxDefaultValue = $data[GC_AFIELD_SPEC]->default;
+				if($data[GC_AFIELD_SPEC]->type->type == DBStructureManager::ColumnTypeEnum) {
 					$auxDefaultValue = substr($auxDefaultValue, 1, strlen($auxDefaultValue) - 2);
 				}
 
-				if(($auxDefaultValue === null && $data['db']['column_default'] != 'NULL') || $auxDefaultValue != $data['db']['column_default']) {
+				if(($auxDefaultValue === null && $data[GC_AFIELD_DB]['column_default'] != 'NULL') || $auxDefaultValue != $data[GC_AFIELD_DB]['column_default']) {
 					$updates[] = $fullname;
 					continue;
 				}
-			} elseif($data['db']['column_default']) {
+			} elseif($data[GC_AFIELD_DB]['column_default']) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['db']['column_comment'] != $data['spec']->comment) {
+			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
 				$updates[] = $fullname;
 				continue;
 			}

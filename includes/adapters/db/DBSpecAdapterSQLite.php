@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file DBSpecAdapterSQLite.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class DBSpecAdapterSQLite
+ */
 class DBSpecAdapterSQLite extends DBSpecAdapter {
 	//
 	// Protected properties.
@@ -74,8 +82,8 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 				$creates[] = $fullname;
 			} else {
 				$cmp[$fullname] = array(
-					'db' => $found,
-					'spec' => null
+					GC_AFIELD_DB => $found,
+					GC_AFIELD_SPEC => null
 				);
 			}
 		}
@@ -87,34 +95,34 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 			} else {
 				$spec = $table->fields[$dbColumn['name']];
 				$spec->builtType = $this->buildColumnType($spec->type, $spec->autoincrement);
-				$cmp[$dbColumn['name']]['spec'] = $spec;
+				$cmp[$dbColumn['name']][GC_AFIELD_SPEC] = $spec;
 			}
 		}
 		//
 		// Different columns.
 		foreach($cmp as $fullname => $data) {
-			if($data['db']['type'] != $data['spec']->builtType) {
+			if($data[GC_AFIELD_DB]['type'] != $data[GC_AFIELD_SPEC]->builtType) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->autoincrement != $autoIncrement) {
+			if($data[GC_AFIELD_SPEC]->autoincrement != $autoIncrement) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->null == $data['db']['notnull']) {
+			if($data[GC_AFIELD_SPEC]->null == $data[GC_AFIELD_DB]['notnull']) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->hasDefault) {
-				if(($data['spec']->default === null && $data['db']['dflt_value'] != 'null') || $data['spec']->default != $data['db']['dflt_value']) {
+			if($data[GC_AFIELD_SPEC]->hasDefault) {
+				if(($data[GC_AFIELD_SPEC]->default === null && $data[GC_AFIELD_DB]['dflt_value'] != 'null') || $data[GC_AFIELD_SPEC]->default != $data[GC_AFIELD_DB]['dflt_value']) {
 					$updates[] = $fullname;
 					continue;
 				}
-			} elseif($data['db']['dflt_value']) {
+			} elseif($data[GC_AFIELD_DB]['dflt_value']) {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data['db']['column_comment'] != $data['spec']->comment) {
+#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
 #				$updates[] = $fullname;
 #				continue;
 #			}

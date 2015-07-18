@@ -41,8 +41,8 @@ class CacheAdapterDBSQLite extends CacheAdapterDB {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key),
-			":limit" => "-{$this->_expirationLength} second"
+			':key' => $this->fullKey($prefix, $key),
+			':limit' => "-{$this->_expirationLength} second"
 		));
 	}
 }

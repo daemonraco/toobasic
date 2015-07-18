@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file RoutesManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**
@@ -315,7 +320,7 @@ class RoutesManager extends Manager {
 				}
 			} else {
 				if(isset($this->_params->debugroutes)) {
-					debugit("Routes are disabled", true);
+					debugit('Routes are disabled', true);
 				}
 			}
 		}

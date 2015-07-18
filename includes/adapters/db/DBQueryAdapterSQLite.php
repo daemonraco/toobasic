@@ -7,6 +7,9 @@
 
 namespace TooBasic;
 
+/**
+ * @class DBQueryAdapterSQLite
+ */
 class DBQueryAdapterSQLite extends DBQueryAdapter {
 	//
 	// Public methods.

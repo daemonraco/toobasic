@@ -7,26 +7,29 @@
 
 namespace TooBasic;
 
+/**
+ * @class DBQueryAdapterPostgreSQL
+ */
 class DBQueryAdapterPostgreSQL extends DBQueryAdapter {
 	//
 	// Public methods.
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
-			throw new \TooBasic\DBException("No name set for id column");
+			throw new \TooBasic\DBException('No name set for id column');
 		}
 
 		$this->cleanPrefixes($prefixes);
 
 
 		$out = array(
-			'adapter' => $this->_className,
-			'query' => '',
-			'params' => array(),
-			'seqname' => "{$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}_{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}_seq"
+			GC_AFIELD_ADAPTER => $this->_className,
+			GC_AFIELD_QUERY => '',
+			GC_AFIELD_PARAMS => array(),
+			GC_AFIELD_SEQNAME => "{$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}_{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}_seq"
 		);
-		$out['query'] = "insert \n";
-		$out['query'].= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}({$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}) \n";
-		$out['query'].= "        values (default) \n";
+		$out[GC_AFIELD_QUERY] = "insert \n";
+		$out[GC_AFIELD_QUERY].= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}({$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}) \n";
+		$out[GC_AFIELD_QUERY].= "        values (default) \n";
 
 		return $out;
 	}

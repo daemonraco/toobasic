@@ -7,7 +7,7 @@ class ViewAdapterJSON extends ViewAdapterBasic {
 	// Magic methods.
 	public function __construct() {
 		parent::__construct();
-		$this->_headers["Content-Type"] = "application/json";
+		$this->_headers['Content-Type'] = 'application/json';
 	}
 	//
 	// Public methods.

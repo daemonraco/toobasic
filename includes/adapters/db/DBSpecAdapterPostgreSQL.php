@@ -94,8 +94,8 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 				$creates[] = $fullname;
 			} else {
 				$cmp[$fullname] = array(
-					'db' => $found,
-					'spec' => null
+					GC_AFIELD_DB => $found,
+					GC_AFIELD_SPEC => null
 				);
 			}
 		}
@@ -107,13 +107,13 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 			} else {
 				$spec = $table->fields[$dbColumn['column_name']];
 				$spec->builtType = $this->buildColumnType($spec->type, $spec->autoincrement);
-				$cmp[$dbColumn['column_name']]['spec'] = $spec;
+				$cmp[$dbColumn['column_name']][GC_AFIELD_SPEC] = $spec;
 			}
 		}
 		//
 		// Different columns.
 		foreach($cmp as $fullname => $data) {
-			if($data['spec']->autoincrement && !$autoIncrement) {
+			if($data[GC_AFIELD_SPEC]->autoincrement && !$autoIncrement) {
 				$updates[] = $fullname;
 				continue;
 			}
@@ -121,18 +121,18 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->null != ($data['db']['is_nullable'] != 'NO')) {
+			if($data[GC_AFIELD_SPEC]->null != ($data[GC_AFIELD_DB]['is_nullable'] != 'NO')) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data['spec']->hasDefault) {
+			if($data[GC_AFIELD_SPEC]->hasDefault) {
 				/**
 				 * @todo check:
 				 * 	- 1.1
 				 */
-				$dbDefaultValue = explode('::', $data['db']['column_default']);
+				$dbDefaultValue = explode('::', $data[GC_AFIELD_DB]['column_default']);
 				$dbDefaultValue = str_replace("'", '', array_shift($dbDefaultValue));
-				$specDefaultValue = str_replace("'", '', $data['spec']->default);
+				$specDefaultValue = str_replace("'", '', $data[GC_AFIELD_SPEC]->default);
 
 				switch($specDefaultValue) {
 					case 'CURRENT_TIMESTAMP':
@@ -140,15 +140,15 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 						break;
 				}
 
-				if(($data['spec']->default === null && $dbDefaultValue != 'null') || $specDefaultValue != $dbDefaultValue) {
+				if(($data[GC_AFIELD_SPEC]->default === null && $dbDefaultValue != 'null') || $specDefaultValue != $dbDefaultValue) {
 					$updates[] = $fullname;
 					continue;
 				}
-			} elseif(!$data['spec']->autoincrement && $data['db']['column_default']) {
+			} elseif(!$data[GC_AFIELD_SPEC]->autoincrement && $data[GC_AFIELD_DB]['column_default']) {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data['db']['column_comment'] != $data['spec']->comment) {
+#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
 #				$updates[] = $fullname;
 #				continue;
 #			}
@@ -396,37 +396,37 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 	protected function compareColumnType($data) {
 		$same = true;
 
-		if($data['spec']->autoincrement) {
-			if($data['db']['data_type'] != 'integer') {
+		if($data[GC_AFIELD_SPEC]->autoincrement) {
+			if($data[GC_AFIELD_DB]['data_type'] != 'integer') {
 				$same = false;
-			} elseif($data['db']['column_default'] != "nextval('{$data['db']['table_name']}_{$data['db']['column_name']}_seq'::regclass)") {
+			} elseif($data[GC_AFIELD_DB]['column_default'] != "nextval('{$data[GC_AFIELD_DB]['table_name']}_{$data[GC_AFIELD_DB]['column_name']}_seq'::regclass)") {
 				$same = false;
 			}
 		} else {
-			switch($data['spec']->type->type) {
+			switch($data[GC_AFIELD_SPEC]->type->type) {
 				case DBStructureManager::ColumnTypeInt:
-					if($data['db']['udt_name'] != 'numeric') {
+					if($data[GC_AFIELD_DB]['udt_name'] != 'numeric') {
 						$same = false;
-					} elseif($data['db']['numeric_precision'] != $data['spec']->type->precision) {
+					} elseif($data[GC_AFIELD_DB]['numeric_precision'] != $data[GC_AFIELD_SPEC]->type->precision) {
 						$same = false;
 					}
 					break;
 				case DBStructureManager::ColumnTypeEnum:
-					if($data['db']['udt_name'] != 'varchar') {
+					if($data[GC_AFIELD_DB]['udt_name'] != 'varchar') {
 						$same = false;
 					} else {
 						$length = 0;
-						foreach($data['spec']->type->values as $val) {
+						foreach($data[GC_AFIELD_SPEC]->type->values as $val) {
 							$len = strlen($val);
 							$length = $len > $length ? $len : $length;
 						}
-						if($data['db']['character_maximum_length'] != $length) {
+						if($data[GC_AFIELD_DB]['character_maximum_length'] != $length) {
 							$same = false;
 						}
 					}
 					break;
 				case DBStructureManager::ColumnTypeFloat:
-					if($data['db']['udt_name'] != 'float8' && $data['db']['udt_name'] != 'float4') {
+					if($data[GC_AFIELD_DB]['udt_name'] != 'float8' && $data[GC_AFIELD_DB]['udt_name'] != 'float4') {
 						$same = false;
 					}
 					break;
@@ -435,32 +435,24 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 				case DBStructureManager::ColumnTypeTimestamp:
 					//
 					// Non-precision types.
-					if($data['db']['udt_name'] != $data['spec']->type->type) {
+					if($data[GC_AFIELD_DB]['udt_name'] != $data[GC_AFIELD_SPEC]->type->type) {
 						$same = false;
 					}
 					break;
 				default:
 					//
 					// Basic types.
-					if($data['db']['udt_name'] != $data['spec']->type->type) {
+					if($data[GC_AFIELD_DB]['udt_name'] != $data[GC_AFIELD_SPEC]->type->type) {
 						$same = false;
-					} elseif($data['db']['character_maximum_length'] != $data['spec']->type->precision) {
+					} elseif($data[GC_AFIELD_DB]['character_maximum_length'] != $data[GC_AFIELD_SPEC]->type->precision) {
 						$same = false;
 					}
 			}
 		}
-//DEBUG
-		if(!$same) {
-			debugit([
-				'$data' => $data
-				], 1);
-		}
-//DEBUG
 
 		return $same;
 	}
 	protected function specificExecuteCallback($data) {
-		debugit('NOT IMPLEMENTED', true);
 		$out = true;
 
 		foreach(explode(';', $data) as $query) {

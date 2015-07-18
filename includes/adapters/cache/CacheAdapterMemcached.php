@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file CacheAdapterMemcached.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class CacheAdapterMemcached
+ */
 class CacheAdapterMemcached extends CacheAdapter {
 	//
 	// Protected properties.
@@ -65,7 +73,7 @@ class CacheAdapterMemcached extends CacheAdapter {
 		global $Defaults;
 
 		$key = sha1($key);
-		$prefix.= ($prefix ? "_" : "");
+		$prefix.= ($prefix ? '_' : '');
 		$out = "{$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX]}_{$prefix}{$key}";
 
 		return $out;

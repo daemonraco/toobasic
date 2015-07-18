@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * @file CacheAdapter.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class CacheAdapter
+ * @abstract
+ */
 abstract class CacheAdapter extends Adapter {
 	//
 	// Constants.

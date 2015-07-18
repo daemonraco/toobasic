@@ -11,7 +11,7 @@ namespace TooBasic;
  * @class MagicPropException
  * This exeption is thrown whenever 'MagicProp' founds a halting error.
  */
-class MagicPropException extends \Exception {
+class MagicPropException extends Exception {
 	
 }
 

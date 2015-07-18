@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file ShellManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ShellManager
+ */
 class ShellManager extends Manager {
 	//
 	// Constants.
@@ -83,12 +91,12 @@ class ShellManager extends Manager {
 		$dbStructureManager = DBStructureManager::Instance();
 		if($dbStructureManager->hasErrors()) {
 			foreach($dbStructureManager->errors() as $error) {
-				$code = $error['code'];
+				$code = $error[GC_AFIELD_CODE];
 				if(is_numeric($code)) {
 					$code = sprintf('%03d', $code);
 				}
 
-				$this->setError("DB-{$code}", $error['message']);
+				$this->setError("DB-{$code}", $error[GC_AFIELD_MESSAGE]);
 			}
 		} else {
 			if(!$dbStructureManager->check()) {
@@ -98,7 +106,7 @@ class ShellManager extends Manager {
 	}
 	protected function promptErrors($spacer) {
 		foreach($this->errors() as $error) {
-			echo "{$spacer}Error: [{$error['code']}] {$error['message']}.\n";
+			echo "{$spacer}Error: [{$error[GC_AFIELD_CODE]}] {$error[GC_AFIELD_MESSAGE]}.\n";
 		}
 	}
 	protected function runCron($spacer, $params = null) {
@@ -241,12 +249,12 @@ class ShellManager extends Manager {
 		$callerLine = array_shift($trace);
 
 		$error = array(
-			'code' => "SM-{$code}",
-			'message' => $message,
-			'class' => isset($callerLine['class']) ? $callerLine['class'] : false,
-			'method' => $callerLine['function'],
-			'file' => $callingLine['file'],
-			'line' => $callingLine['line']
+			GC_AFIELD_CODE => "SM-{$code}",
+			GC_AFIELD_MESSAGE => $message,
+			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
+			GC_AFIELD_METHOD => $callerLine['function'],
+			GC_AFIELD_FILE => $callingLine['file'],
+			GC_AFIELD_LINE => $callingLine['line']
 		);
 
 		$this->_errors[] = $error;

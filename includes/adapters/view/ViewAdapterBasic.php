@@ -1,19 +1,28 @@
 <?php
 
+/**
+ * @file ViewAdapterBasic.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ViewAdapterBasic
+ * @abstract
+ */
 abstract class ViewAdapterBasic extends ViewAdapter {
 	//
 	// Protected properties.
 	protected $_noise = array(
-		"tr",
-		"ctrl"
+		'tr',
+		'ctrl'
 	);
 	//
 	// Magic methods.
 	public function __construct() {
 		parent::__construct();
-		$this->_headers["Content-Type"] = "text/plain ";
+		$this->_headers['Content-Type'] = 'text/plain';
 	}
 	//
 	// Public methods.
@@ -26,7 +35,7 @@ abstract class ViewAdapterBasic extends ViewAdapter {
 		$merge = array_merge($this->_autoAssigns, $assignments);
 		foreach($this->noise() as $key) {
 			if(isset($merge[$key])) {
-				$merge[$key] = "--REMOVED--";
+				$merge[$key] = '--REMOVED--';
 			}
 		}
 

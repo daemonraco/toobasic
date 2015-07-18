@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+/**
+ * @class ItemsFactory
+ * @abstract
+ */
 abstract class ItemsFactory {
 	//
 	// Protected class properties.
@@ -52,9 +56,9 @@ abstract class ItemsFactory {
 			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
 			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
 			), $this->queryAdapterPrefixes());
-		$stmt = $this->_db->prepare($query['query']);
-		if($stmt->execute($query['params'])) {
-			$out = $this->_db->lastInsertId($query['seqname']);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$out = $this->_db->lastInsertId($query[GC_AFIELD_SEQNAME]);
 		} else {
 			$this->_lastDBError = $stmt->errorInfo();
 		}
@@ -68,8 +72,8 @@ abstract class ItemsFactory {
 			$this->_CP_OrderBy = array();
 		}
 		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
-		$stmt = $this->_db->prepare($query['query']);
-		if($stmt->execute($query['params'])) {
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
 			foreach($stmt->fetchAll() as $row) {
 				$out[] = $row[$idKey];

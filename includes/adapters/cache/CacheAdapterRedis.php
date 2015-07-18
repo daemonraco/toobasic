@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file CacheAdapterRedis.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class CacheAdapterRedis
+ */
 class CacheAdapterRedis extends CacheAdapter {
 	//
 	// Protected properties.

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file ServicesManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**

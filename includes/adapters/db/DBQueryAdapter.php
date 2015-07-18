@@ -21,13 +21,13 @@ abstract class DBQueryAdapter extends Adapter {
 	abstract public function createEmptyEntry($table, $data = array(), &$prefixes = array());
 	public function delete($table, $where, &$prefixes = array()) {
 		$out = array(
-			'adapter' => $this->_className,
-			'query' => $this->deletePrepare($table, array_keys($where), $prefixes),
-			'params' => array()
+			GC_AFIELD_ADAPTER => $this->_className,
+			GC_AFIELD_QUERY => $this->deletePrepare($table, array_keys($where), $prefixes),
+			GC_AFIELD_PARAMS => array()
 		);
 
 		foreach($where as $key => $value) {
-			$out['params'][":{$key}"] = $value;
+			$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
 		}
 
 		if($this->_debugQueries) {
@@ -39,14 +39,14 @@ abstract class DBQueryAdapter extends Adapter {
 	abstract public function deletePrepare($table, $whereFields, &$prefixes = array());
 	public function insert($table, $data, &$prefixes = array()) {
 		$out = array(
-			'adapter' => $this->_className,
-			'query' => $this->insertPrepare($table, array_keys($data), $prefixes),
-			'params' => array(),
-			'seqname' => null
+			GC_AFIELD_ADAPTER => $this->_className,
+			GC_AFIELD_QUERY => $this->insertPrepare($table, array_keys($data), $prefixes),
+			GC_AFIELD_PARAMS => array(),
+			GC_AFIELD_SEQNAME => null
 		);
 
 		foreach($data as $key => $value) {
-			$out['params'][":{$key}"] = $value;
+			$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
 		}
 
 		if($this->_debugQueries) {
@@ -58,13 +58,13 @@ abstract class DBQueryAdapter extends Adapter {
 	abstract public function insertPrepare($table, $fields, &$prefixes = array());
 	public function select($table, $where, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false) {
 		$out = array(
-			'adapter' => $this->_className,
-			'query' => $this->selectPrepare($table, array_keys($where), $prefixes, $orderBy, $limit, $offset),
-			'params' => array()
+			GC_AFIELD_ADAPTER => $this->_className,
+			GC_AFIELD_QUERY => $this->selectPrepare($table, array_keys($where), $prefixes, $orderBy, $limit, $offset),
+			GC_AFIELD_PARAMS => array()
 		);
 
 		foreach($where as $key => $value) {
-			$out['params'][":{$key}"] = $value;
+			$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
 		}
 
 		if($this->_debugQueries) {
@@ -80,16 +80,16 @@ abstract class DBQueryAdapter extends Adapter {
 		}
 
 		$out = array(
-			'adapter' => $this->_className,
-			'query' => $this->updatePrepare($table, array_keys($data), array_keys($where), $prefixes),
-			'params' => array()
+			GC_AFIELD_ADAPTER => $this->_className,
+			GC_AFIELD_QUERY => $this->updatePrepare($table, array_keys($data), array_keys($where), $prefixes),
+			GC_AFIELD_PARAMS => array()
 		);
 
 		foreach($data as $key => $value) {
-			$out['params'][":d_{$key}"] = $value;
+			$out[GC_AFIELD_PARAMS][":d_{$key}"] = $value;
 		}
 		foreach($where as $key => $value) {
-			$out['params'][":w_{$key}"] = $value;
+			$out[GC_AFIELD_PARAMS][":w_{$key}"] = $value;
 		}
 
 		if($this->_debugQueries) {
