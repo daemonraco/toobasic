@@ -16,6 +16,16 @@ abstract class Layout extends Controller {
 	//
 	// Public methods.
 	/**
+	 * A layout never redirects, that's something only a controller does.
+	 *
+	 * @return boolean It always returns false.
+	 */
+	public final function checkRedirectors() {
+		//
+		// A layout never redirects.
+		return false;
+	}
+	/**
 	 * This dummy method prevent any other object to think this layout has
 	 * another layout in which it is injected.
 	 *

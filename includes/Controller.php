@@ -74,6 +74,17 @@ abstract class Controller extends Exporter {
 	//
 	// Public methods.
 	/**
+	 * Checks for conditions that may require this controller to stop and
+	 * redirect to another.
+	 *
+	 * @return string Returns the name of a redirection configuration.
+	 */
+	public function checkRedirectors() {
+		//
+		// By default, a controller never redirects.
+		return false;
+	}
+	/**
 	 * This is an exported method that can be used inside templates. It
 	 * takes an action name an returns its rendered result.
 	 *

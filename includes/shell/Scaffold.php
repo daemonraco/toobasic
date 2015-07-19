@@ -245,13 +245,12 @@ abstract class Scaffold extends ShellTool {
 				@mkdir($dirPath, 0777, true);
 
 				if(is_dir($dirPath)) {
-					echo TBS_Color::Green('Ok');
+					echo TBS_Color::Green('Ok')."\n";
 				} else {
-					echo TBS_Color::Red('Failed');
+					echo TBS_Color::Red('Failed')."\n";
 					$ok = false;
 					break;
 				}
-				echo "\n";
 			}
 		}
 

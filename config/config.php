@@ -59,6 +59,7 @@ $Defaults[GC_DEFAULTS_MODES] = array(
 	GC_VIEW_MODE_ACTION,
 	GC_VIEW_MODE_MODAL
 );
+$Defaults[GC_DEFAULTS_REDIRECTIONS] = array();
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 $Defaults[GC_DEFAULTS_MEMCACHE] = array();
 $Defaults[GC_DEFAULTS_REDIS] = array();

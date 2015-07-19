@@ -27,23 +27,26 @@ define('GC_DEFAULTS_EMAIL_FROM', 'email-from');
 define('GC_DEFAULTS_EMAIL_LAYOUT', 'email-layout');
 define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
+define('GC_DEFAULTS_FORMATS', 'formats');
 define('GC_DEFAULTS_INSTALLED', 'installed');
+define('GC_DEFAULTS_LANGS_BUILT', 'langs-built');
 define('GC_DEFAULTS_LANGS_DEFAULTLANG', 'langs-defaultlang');
 define('GC_DEFAULTS_LAYOUT', 'layout');
-define('GC_DEFAULTS_LANGS_BUILT', 'langs-built');
-define('GC_DEFAULTS_SERVICE', 'service');
-define('GC_DEFAULTS_VIEW_ADAPTER', 'view-adapter');
-define('GC_DEFAULTS_FORMATS', 'formats');
 define('GC_DEFAULTS_MODES', 'modes');
+define('GC_DEFAULTS_REDIRECTIONS', 'redirections');
+define('GC_DEFAULTS_SERVICE', 'service');
 define('GC_DEFAULTS_SKIN', 'skin');
 define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
+define('GC_DEFAULTS_VIEW_ADAPTER', 'view-adapter');
 // @}
 //
 // Last run strucutre constants @{
+define('GC_AFIELD_ACTION', 'action');
 define('GC_AFIELD_ADAPTER', 'adapter');
 define('GC_AFIELD_AFTER_CREATE', 'after_create');
 define('GC_AFIELD_AFTER_DROP', 'after_drop');
 define('GC_AFIELD_AFTER_UDPATE', 'after_update');
+define('GC_AFIELD_ALIAS', 'alias');
 define('GC_AFIELD_ASSIGNMENTS', 'assignments');
 define('GC_AFIELD_BEFORE_CREATE', 'before_create');
 define('GC_AFIELD_BEFORE_DROP', 'before_drop');
@@ -67,6 +70,8 @@ define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HEADERS', 'headers');
+define('GC_AFIELD_HOST', 'host');
+define('GC_AFIELD_HOSTS', 'hosts');
 define('GC_AFIELD_INDEXES', 'indexes');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
@@ -74,6 +79,7 @@ define('GC_AFIELD_KEYS', 'keys');
 define('GC_AFIELD_KEYS_BY_LANG', 'keys-by-lang');
 define('GC_AFIELD_LANGS', 'langs');
 define('GC_AFIELD_LASTERROR', 'lasterror');
+define('GC_AFIELD_LAYOUT', 'layout');
 define('GC_AFIELD_LINE', 'line');
 define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
@@ -86,6 +92,7 @@ define('GC_AFIELD_PARENT_DIRECTORY', 'parent-directory');
 define('GC_AFIELD_PATH', 'path');
 define('GC_AFIELD_POSSIBILITIES', 'possibilities');
 define('GC_AFIELD_QUERY', 'query');
+define('GC_AFIELD_REDIRECTOR', 'redirector');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
 define('GC_AFIELD_RESULT', 'result');
@@ -183,8 +190,10 @@ define('GC_SESSION_SKIN', 'toobasic-skin');
 //
 // Request parameters @{
 define('GC_REQUEST_ACTION', 'action');
+define('GC_REQUEST_LANGUAGE', 'lang');
 define('GC_REQUEST_LAYOUT', 'layout');
 define('GC_REQUEST_MODE', 'mode');
+define('GC_REQUEST_REDIRECTOR', 'redirectedfrom');
 define('GC_REQUEST_SERVICE', 'service');
 define('GC_REQUEST_SKIN', 'skin');
 // @}

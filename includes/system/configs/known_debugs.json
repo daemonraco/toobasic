@@ -22,6 +22,7 @@
 		"debugemail": "Allows to view a mock of an e@mail.",
 		"debugnoemaillayout": "Disables current layout if any for emails.",
 		"debugemailstriptags": "This activates the tags stripping when debugging emails.",
-		"debugdbquery": "Displays queries used by database query adapters."
+		"debugdbquery": "Displays queries used by database query adapters.",
+		"debugredirection": "Disables redirect conditions and prompt what it's going to happen."
 	}
 }
