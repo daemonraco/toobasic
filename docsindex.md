@@ -53,6 +53,19 @@
 * [What if you don't want it?](docs/cache.md#what-if-you-dont-want-it)
 * [Duration](docs/cache.md#duration)
 
+##  Using Config Files (docs/configs.md):
+
+* [Is it necessary an explanation?](docs/configs.md#is-it-necessary-an-explanation)
+* [User defined configuration files](docs/configs.md#user-defined-configuration-files)
+* [I want em all!](docs/configs.md#i-want-em-all)
+* [Automatic config files](docs/configs.md#automatic-config-files)
+	* [_config.php_](docs/configs.md#configphp)
+	* [_config_shell.php_](docs/configs.md#config_shellphp)
+	* [_config_http.php_](docs/configs.md#config_httpphp)
+	* [Site config file](docs/configs.md#site-config-file)
+	* [Summary](docs/configs.md#summary)
+* [Suggestions](docs/configs.md#suggestions)
+
 ##  Databases (docs/databases.md):
 
 * [What is it, really?](docs/databases.md#what-is-it,-really)
@@ -130,6 +143,24 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 * [Suggestions](docs/facilities.md#suggestions)
 
+##  Using Languages (docs/language.md):
+
+* [Languages?](docs/language.md#languages)
+
+##  Using Layouts (docs/layout.md):
+
+* [What is a Layout?](docs/layout.md#what-is-a-layout)
+* [Create a Site with Layout](docs/layout.md#create-a-site-with-layout)
+	* [Main Content](docs/layout.md#main-content)
+	* [Nav Bar](docs/layout.md#nav-bar)
+	* [Layout](docs/layout.md#layout)
+	* [Config](docs/layout.md#config)
+* [Doubts](docs/layout.md#doubts)
+	* [What the Heck is That?](docs/layout.md#what-the-heck-is-that)
+	* [Insert?](docs/layout.md#insert)
+* [Wrong Layout?](docs/layout.md#wrong-layout)
+* [Suggestions](docs/layout.md#suggestions)
+
 ##  MagicProp (docs/magicprop.md):
 
 * [MagicProp?](docs/magicprop.md#magicprop)
@@ -146,6 +177,15 @@
 * [Example](docs/models.md#example)
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
+
+##  Using Redirections (docs/redirections.md):
+
+* [What is a redirection?](docs/redirections.md#what-is-a-redirection)
+* [Configuration](docs/redirections.md#configuration)
+* [Checking conditions](docs/redirections.md#checking-conditions)
+* [Complex redirectors](docs/redirections.md#complex-redirectors)
+	* [Parameters](docs/redirections.md#parameters)
+	* [Layout](docs/redirections.md#layout)
 
 ##  Representations (docs/representations.md):
 
@@ -216,6 +256,19 @@
 * [Debugging](docs/skins.md#debugging)
 * [Multiple sites](docs/skins.md#multiple-sites)
 
+##  Using Snippets (docs/snippets.md):
+
+* [Snippets?](docs/snippets.md#snippets)
+* [Pager Snippet](docs/snippets.md#pager-snippet)
+* [Pager Snippet Mananger](docs/snippets.md#pager-snippet-mananger)
+* [Current Problem](docs/snippets.md#current-problem)
+	* [Note Here](docs/snippets.md#note-here)
+* [Adding Pages](docs/snippets.md#adding-pages)
+* [Explain It!](docs/snippets.md#explain-it)
+	* [How to Invoke a Snippet.](docs/snippets.md#how-to-invoke-a-snippet)
+	* [Separated Assignments](docs/snippets.md#separated-assignments)
+	* [Something Good](docs/snippets.md#something-good)
+
 ##  Troubleshooting (docs/troubleshooting.md):
 
 * [What is this page?](docs/troubleshooting.md#what-is-this-page)
@@ -229,48 +282,4 @@
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
-
-##  Using Config Files (docs/useconfigs.md):
-
-* [Is it necessary an explanation?](docs/useconfigs.md#is-it-necessary-an-explanation)
-* [User defined configuration files](docs/useconfigs.md#user-defined-configuration-files)
-* [I want em all!](docs/useconfigs.md#i-want-em-all)
-* [Automatic config files](docs/useconfigs.md#automatic-config-files)
-	* [_config.php_](docs/useconfigs.md#configphp)
-	* [_config_shell.php_](docs/useconfigs.md#config_shellphp)
-	* [_config_http.php_](docs/useconfigs.md#config_httpphp)
-	* [Site config file](docs/useconfigs.md#site-config-file)
-	* [Summary](docs/useconfigs.md#summary)
-* [Suggestions](docs/useconfigs.md#suggestions)
-
-##  Using Languages (docs/uselanguage.md):
-
-* [Languages?](docs/uselanguage.md#languages)
-
-##  Using Layouts (docs/uselayout.md):
-
-* [What is a Layout?](docs/uselayout.md#what-is-a-layout)
-* [Create a Site with Layout](docs/uselayout.md#create-a-site-with-layout)
-	* [Main Content](docs/uselayout.md#main-content)
-	* [Nav Bar](docs/uselayout.md#nav-bar)
-	* [Layout](docs/uselayout.md#layout)
-	* [Config](docs/uselayout.md#config)
-* [Doubts](docs/uselayout.md#doubts)
-	* [What the Heck is That?](docs/uselayout.md#what-the-heck-is-that)
-	* [Insert?](docs/uselayout.md#insert)
-* [Wrong Layout?](docs/uselayout.md#wrong-layout)
-* [Suggestions](docs/uselayout.md#suggestions)
-
-##  Using Snippets (docs/usesnippets.md):
-
-* [Snippets?](docs/usesnippets.md#snippets)
-* [Pager Snippet](docs/usesnippets.md#pager-snippet)
-* [Pager Snippet Mananger](docs/usesnippets.md#pager-snippet-mananger)
-* [Current Problem](docs/usesnippets.md#current-problem)
-	* [Note Here](docs/usesnippets.md#note-here)
-* [Adding Pages](docs/usesnippets.md#adding-pages)
-* [Explain It!](docs/usesnippets.md#explain-it)
-	* [How to Invoke a Snippet.](docs/usesnippets.md#how-to-invoke-a-snippet)
-	* [Separated Assignments](docs/usesnippets.md#separated-assignments)
-	* [Something Good](docs/usesnippets.md#something-good)
 

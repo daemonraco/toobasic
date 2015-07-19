@@ -130,4 +130,6 @@ class MyactionController extends \TooBasic\Controller {
 ## Suggestions
 If you want you may visit this documentation pages:
 
-* [Using Snippets](usesnippets.md)
+* [Snippets](snippets.md)
+* [Redirections](redirections.md)
+

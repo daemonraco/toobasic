@@ -278,5 +278,5 @@ $Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'no-replay@mysite.com';
 ## Suggestions
 If you want, you may visit these links:
 
-* [Basic Controllers Layouts](uselayout.md)
+* [Basic Controllers Layouts](layout.md)
 * [Models](models.md)

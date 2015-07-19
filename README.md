@@ -204,10 +204,10 @@ After all we said you should visit these documentation pages:
 	* [Author's Note](docs/authorsnote.md) (yes, it's somehow problems
 related)
 * If you want to know more:
-	* [Using Layouts](docs/uselayout.md)
-	* [Using Languages](docs/uselanguage.md)
+	* [Using Layouts](docs/layout.md)
+	* [Using Languages](docs/language.md)
 	* [Models](docs/models.md)
-	* [Using Configs](docs/useconfigs.md)
+	* [Using Configs](docs/configs.md)
 	* [Services](docs/services.md)
 	* [Cache](docs/cache.md)
 * If you want the heavy stuff:
