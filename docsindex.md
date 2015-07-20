@@ -143,9 +143,17 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 * [Suggestions](docs/facilities.md#suggestions)
 
-##  Using Languages (docs/language.md):
+##  Languages (docs/language.md):
 
 * [Languages?](docs/language.md#languages)
+* [How to configure it](docs/language.md#how-to-configure-it)
+* [Adding translations](docs/language.md#adding-translations)
+* [Using translations](docs/language.md#using-translations)
+* [Advanced](docs/language.md#advanced)
+* [Precompiled translations](docs/language.md#precompiled-translations)
+	* [Compilation](docs/language.md#compilation)
+	* [Configuration](docs/language.md#configuration)
+* [Suggestions](docs/language.md#suggestions)
 
 ##  Using Layouts (docs/layout.md):
 

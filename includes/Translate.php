@@ -62,7 +62,14 @@ class Translate extends Singleton {
 			if(is_array($arguments[0])) {
 				$params = $arguments[0];
 			} else {
-				$params = $arguments;
+				if(count($arguments) % 2 != 0) {
+					throw new Exception("The amount of parameters given for key '{$key}' is not pair");
+				}
+				while($arguments) {
+					$pKey = array_shift($arguments);
+					$pValue = array_shift($arguments);
+					$params[$pKey] = $pValue;
+				}
 			}
 		}
 		//
@@ -231,7 +238,7 @@ class Translate extends Singleton {
 				//
 				// Replacing each parameter.
 				foreach($params as $name => $value) {
-					$out = str_replace("%{$name}%", (string) $value);
+					$out = str_replace("%{$name}%", (string) $value, $out);
 				}
 			}
 		}
