@@ -25,6 +25,9 @@
 			"key": "message",
 			"value": "Message"
 		}, {
+			"key": "message_remove_table_item_confirm",
+			"value": "Are you sure you want to remove this %name%?"
+		}, {
 			"key": "btn_back_to_list",
 			"value": "Back to List"
 		}, {
@@ -63,6 +66,21 @@
 		}, {
 			"key": "select_option_NOOPTION",
 			"value": "Select an option"
+		}, {
+			"key": "title_new_item_on_table",
+			"value": "New item for table '%tablename%'"
+		}, {
+			"key": "title_table_items",
+			"value": "These are elements of table '%tablename%'"
+		}, {
+			"key": "title_view_item_of_table",
+			"value": "Displaying item with id '%id%' from table '%tablename%'"
+		}, {
+			"key": "title_edit_item_of_table",
+			"value": "Editing item with id '%id%' from table '%tablename%'"
+		}, {
+			"key": "title_delete_item_of_table",
+			"value": "Removing item with id '%id%' from table '%tablename%'"
 		}
 	]
 }

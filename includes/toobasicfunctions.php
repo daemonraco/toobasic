@@ -187,12 +187,20 @@ function guessLanguage() {
 	//
 	// Skin debugs.
 	if(isset($auxParamsManager->debuglang)) {
-		$out = "Current Language: '{$LanguageName}'\n\n";
-		$out.= 'Default Language: '.($Defaults[GC_DEFAULTS_LANG] ? "'{$Defaults[GC_DEFAULTS_LANG]}'" : 'Not set')."\n";
-		$out.= 'Session Language: '.(isset($_SESSION[$sessionKey]) ? "'{$_SESSION[$sessionKey]}'" : 'Not set')."\n";
-		$out.= 'URL Language:     '.(isset($auxParamsManager->{GC_REQUEST_LANGUAGE}) ? "'".$auxParamsManager->{GC_REQUEST_LANGUAGE}."'" : 'Not set')."\n";
+		\TooBasic\debugThing(function() use ($sessionKey, $auxParamsManager) {
+			//
+			// Global dependencies.
+			global $Defaults;
+			global $LanguageName;
 
-		\TooBasic\debugThing($out);
+			echo "Current Language: '{$LanguageName}'\n\n";
+			echo 'Default Language: '.($Defaults[GC_DEFAULTS_LANG] ? "'{$Defaults[GC_DEFAULTS_LANG]}'" : 'Not set')."\n";
+			echo 'Session Language: '.(isset($_SESSION[$sessionKey]) ? "'{$_SESSION[$sessionKey]}'" : 'Not set')."\n";
+			echo 'URL Language:     '.(isset($auxParamsManager->{GC_REQUEST_LANGUAGE}) ? "'".$auxParamsManager->{GC_REQUEST_LANGUAGE}."'" : 'Not set')."\n";
+		});
+		//
+		// Triggering the next debug message.
+		\TooBasic\Translate::Instance()->get('');
 	}
 	//
 	// Returtning found skin name.

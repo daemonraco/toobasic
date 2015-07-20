@@ -1,4 +1,4 @@
-<h4>Edit item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+<h4>{$tr->title_edit_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 <form id="<%$singularName%>_form" method="post" href="#" role="form">
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>

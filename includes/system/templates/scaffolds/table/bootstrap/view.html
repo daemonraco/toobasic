@@ -1,5 +1,5 @@
 <div class="container">
-	<h4 class="text-center">View item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+	<h4 class="text-center">{$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
 		<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;">

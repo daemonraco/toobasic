@@ -291,10 +291,7 @@ class Translate extends Singleton {
 			// If there are no files and their are required, it
 			// aborts and displayes a error message.
 			if(!$langPaths && $required) {
-				$thing = "Unable to find translation files for language '{$this->_currentLang}'";
-				/** @todo maybe this should be an TooBasicExection */
-				\TooBasic\debugThing($thing, \TooBasic\DebugThingTypeError);
-				die;
+				throw new \TooBasic\Exception("Unable to find translation files for language '{$this->_currentLang}'");
 			}
 			//
 			// Loading each file.
@@ -304,22 +301,20 @@ class Translate extends Singleton {
 			//
 			// Language debug.
 			if(isset(Params::Instance()->debuglang)) {
-				$thing = '';
+				\TooBasic\debugThing(function() use ($langPaths) {
+					echo "Current language: '{$this->_currentLang}'\n\n";
 
-				$thing.= "Current language: '{$this->_currentLang}'\n\n";
+					echo "Translation files:\n";
+					foreach($langPaths as $path) {
+						echo "\t- '{$path}'\n";
+					}
 
-				$thing.= "Translation files:\n";
-				foreach($langPaths as $path) {
-					$thing.= "\t- '{$path}'\n";
-				}
-
-				$thing.= "\nTranslation keys:\n";
-				ksort($this->_tr);
-				foreach($this->_tr as $key => $value) {
-					$thing.= "\t- '{$key}': '{$value}'\n";
-				}
-
-				\TooBasic\debugThing($thing);
+					echo "\nTranslation keys:\n";
+					ksort($this->_tr);
+					foreach($this->_tr as $key => $value) {
+						echo "\t- '{$key}': '{$value}'\n";
+					}
+				});
 				die;
 			}
 			//
