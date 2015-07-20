@@ -32,6 +32,7 @@ abstract class Scaffold extends ShellTool {
 	protected $_requiredDirectories = array();
 	protected $_routes = false;
 	protected $_scaffoldName = '';
+	protected $_translations = false;
 	//
 	// Protected methods.
 	protected function addAllRoutes($spacer) {
@@ -66,6 +67,41 @@ abstract class Scaffold extends ShellTool {
 					}
 					echo "\n";
 				}
+			}
+		}
+
+		return $ok;
+	}
+	protected function addAllTranslations($spacer) {
+		//
+		// Default values-
+		$ok = true;
+		//
+		// Global dependencies.
+		global $LanguageName;
+
+		$this->genTranslations();
+
+		if(count($this->_translations)) {
+			echo "{$spacer}Adding translation ({$LanguageName}):\n";
+			foreach($this->_translations as $tr) {
+				echo "{$spacer}\t- '{$tr->key}': ";
+
+				$error = '';
+				$fatal = false;
+				if($this->addTranslation($tr, $error, $fatal)) {
+					echo TBS_Color::Green('Ok');
+				} else {
+					if($fatal) {
+						echo TBS_Color::Red('Failed');
+						$ok = false;
+						break;
+					} else {
+						echo TBS_Color::Yellow('Ignored');
+					}
+					echo " ({$error})";
+				}
+				echo "\n";
 			}
 		}
 
@@ -112,6 +148,52 @@ abstract class Scaffold extends ShellTool {
 				$error = 'something went wrong writing back routes file';
 				$fatal = true;
 				file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
+			}
+		}
+
+		return $ok;
+	}
+	protected function addTranslation($newTr, &$error, &$fatal) {
+		$ok = true;
+
+		$backup = false;
+		$fatal = false;
+		$error = '';
+
+		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+			if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], '{"keys":[]}')) {
+				$ok = false;
+				$error = "unable to create file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
+				$fatal = true;
+			}
+		}
+		$config = false;
+		if($ok) {
+			$backup = file_get_contents($this->_names[GC_AFIELD_LANGS_PATH]);
+			$config = json_decode($backup);
+			if(!$config) {
+				$ok = false;
+				$error = 'unable to use language file';
+				$fatal = true;
+			}
+		}
+		if($ok) {
+			foreach($config->keys as $tr) {
+				if($tr->key == $newTr->key) {
+					$ok = false;
+					$error = 'key already present';
+					break;
+				}
+			}
+		}
+		if($ok) {
+			$config->keys[] = $newTr;
+
+			if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
+				$ok = false;
+				$error = 'something went wrong writing back language file';
+				$fatal = true;
+				file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], $backup);
 			}
 		}
 
@@ -187,6 +269,9 @@ abstract class Scaffold extends ShellTool {
 	protected function genNames() {
 		if($this->_names === false) {
 			//
+			// Global dependecies.
+			global $LanguageName;
+			//
 			// Default values.
 			$this->_names = array();
 			//
@@ -219,6 +304,8 @@ abstract class Scaffold extends ShellTool {
 
 			$this->_names[GC_AFIELD_ROUTES_PATH] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
 			$this->_requiredDirectories[] = dirname($this->_names[GC_AFIELD_ROUTES_PATH]);
+			$this->_names[GC_AFIELD_LANGS_PATH] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_LANGS]}/{$LanguageName}.json");
+			$this->_requiredDirectories[] = dirname($this->_names[GC_AFIELD_LANGS_PATH]);
 		}
 	}
 	protected function genRequiredDirectories($spacer) {
@@ -259,6 +346,14 @@ abstract class Scaffold extends ShellTool {
 	protected function genRoutes() {
 		if($this->_routes === false) {
 			$this->_routes = array();
+		}
+	}
+	protected function genTranslations() {
+		$this->genNames();
+		if($this->_translations === false) {
+			//
+			// Default values.
+			$this->_translations = array();
 		}
 	}
 	protected function isForced() {
@@ -310,6 +405,41 @@ abstract class Scaffold extends ShellTool {
 					}
 					echo "\n";
 				}
+			}
+		}
+
+		return $ok;
+	}
+	protected function removeAllTranslations($spacer) {
+		//
+		// Default values.
+		$ok = true;
+		//
+		// Global dependencies.
+		global $LanguageName;
+
+		$this->genTranslations();
+
+		if(count($this->_translations)) {
+			echo "{$spacer}Removing translations ({$LanguageName}):\n";
+			foreach($this->_translations as $tr) {
+				echo "{$spacer}\t- '{$tr->key}': ";
+
+				$error = '';
+				$fatal = false;
+				if($this->removeTranslation($tr, $error, $fatal)) {
+					echo TBS_Color::Green('Ok');
+				} else {
+					if($fatal) {
+						echo TBS_Color::Red('Failed');
+						$ok = false;
+						break;
+					} else {
+						echo TBS_Color::Yellow('Ignored');
+					}
+					echo " ({$error})";
+				}
+				echo "\n";
 			}
 		}
 
@@ -381,6 +511,52 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	protected function removeTranslation(\stdClass $badTr, &$error, &$fatal) {
+		$ok = true;
+
+		$backup = false;
+		$fatal = false;
+		$error = '';
+
+		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+			$ok = false;
+			$error = "unable to find file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
+			$fatal = true;
+		}
+		$config = false;
+		if($ok) {
+			$backup = file_get_contents($this->_names[GC_AFIELD_LANGS_PATH]);
+			$config = json_decode($backup);
+			if(!$config) {
+				$ok = false;
+				$error = 'unable to use language file';
+				$fatal = true;
+			}
+		}
+		if($ok) {
+			$found = false;
+			foreach($config->keys as $trPos => $tr) {
+				if($tr->key == $badTr->key) {
+					unset($config->keys[$trPos]);
+					$found = true;
+				}
+			}
+			if($found) {
+				$config->keys = array_values($config->keys);
+				if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
+					$ok = false;
+					$error = 'something went wrong writing back laguage file';
+					$fatal = true;
+					file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], $backup);
+				}
+			} else {
+				$ok = false;
+				$error = 'no translations found';
+			}
+		}
+
+		return $ok;
+	}
 	protected function setOptions() {
 		$text = 'Use: $this->_options->option(self::OptionCreate)->setHelpText(\'text\', \'valueName\');';
 		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'name'));
@@ -429,6 +605,11 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$ok = $this->addAllRoutes("{$spacer}\t");
 		}
+		//
+		// Translations.
+		if($ok) {
+			$ok = $this->addAllTranslations("{$spacer}\t");
+		}
 
 		return $ok;
 	}
@@ -462,6 +643,11 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$ok = $this->removeAllRoutes("{$spacer}\t");
 		}
+#		//
+#		// Translations.
+#		if($ok) {
+#			$ok = $this->removeAllTranslations("{$spacer}\t");
+#		}
 
 		return $ok;
 	}

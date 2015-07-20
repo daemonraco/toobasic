@@ -5,11 +5,11 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th class="text-center">ID</th>
+					<th class="text-center">{$tr->label_id}</th>
 <%foreach from=$tableFields item=field%>
-					<th class="text-center"><%$field.name%></th>
+					<th class="text-center">{$tr->table_column_<%$field.name%>}</th>
 <%/foreach%>
-					<th class="text-center">Actions</th>
+					<th class="text-center">{$tr->label_actions}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,9 +20,9 @@
 					<td>{$item.<%$field.name%>}</td>
 <%/foreach%>
 					<td class="text-center">
-						<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">View</a>
-						<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">Edit</a>
-						<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">Remove</a>
+						<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_view}</a>
+						<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_edit}</a>
+						<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_remove}</a>
 					</td>
 				</tr>
 {/foreach}
@@ -30,5 +30,5 @@
 		</table>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$addAction%>')}" class="btn btn-success pull-left">Add new item</a>
+	<a href="{$ctrl->link('?action=<%$addAction%>')}" class="btn btn-success pull-left">{$tr->btn_add_new_item}</a>
 </div>

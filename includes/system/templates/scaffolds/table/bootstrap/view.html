@@ -7,13 +7,13 @@
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control" readonly="readonly"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</div>
 <%/if%>
@@ -21,5 +21,5 @@
 		</form>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">Back to list</a>
+	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">{$tr->btn_back_to_list}</a>
 </div>

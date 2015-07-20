@@ -406,6 +406,29 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 
 		return $out;
 	}
+	protected function genTranslations() {
+		parent::genTranslations();
+
+		if(!$this->isRaw()) {
+			$this->genAssignments();
+
+			foreach($this->_assignments['tableFields'] as $column) {
+				$auxTr = new \stdClass();
+				$auxTr->key = "table_column_{$column['name']}";
+				$auxTr->value = ucwords(str_replace('_', ' ', $column['name']));
+				$this->_translations[] = $auxTr;
+
+				if(isset($column[GC_AFIELD_TYPE]['values'])) {
+					foreach($column[GC_AFIELD_TYPE]['values'] as $option) {
+						$auxTr = new \stdClass();
+						$auxTr->key = "select_option_{$option}";
+						$auxTr->value = ucwords(str_replace('_', ' ', $option));
+						$this->_translations[] = $auxTr;
+					}
+				}
+			}
+		}
+	}
 	protected function isRaw() {
 		if($this->_raw === null) {
 			$this->_raw = $this->_options->option(self::OptionRaw)->activated();

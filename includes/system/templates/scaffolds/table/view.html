@@ -7,7 +7,7 @@
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" readonly="readonly"/>
 			</td>
@@ -16,7 +16,7 @@
 <%if $field.type.type == 'text' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</td>
@@ -26,4 +26,4 @@
 	</table>
 </form>
 <br/>
-<a href="{$ctrl->link('?action=<%$listAction%>')}">Back to list</a>
+<a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

@@ -79,6 +79,7 @@ define('GC_AFIELD_IGNORED', 'ignored');
 define('GC_AFIELD_KEYS', 'keys');
 define('GC_AFIELD_KEYS_BY_LANG', 'keys-by-lang');
 define('GC_AFIELD_LANGS', 'langs');
+define('GC_AFIELD_LANGS_PATH', 'langs-path');
 define('GC_AFIELD_LASTERROR', 'lasterror');
 define('GC_AFIELD_LAYOUT', 'layout');
 define('GC_AFIELD_LINE', 'line');

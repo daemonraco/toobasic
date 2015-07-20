@@ -12,11 +12,11 @@ class <%$controller%> extends \TooBasic\Layout {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	protected function init() {
 		parent::init();
 
-//		$this->_cacheParams["GET"][] = "someparam";
+//		$this->_cacheParams['GET'][] = 'someparam';
 	}
 }

@@ -83,7 +83,7 @@ class MagicProp extends Singleton {
 			$out = $this->modelsFactory();
 		} elseif($prop == 'representation') {
 			$out = $this->representations();
-		} elseif($prop == 'translate') {
+		} elseif($prop == 'tr' || $prop == 'translate') {
 			$out = $this->translate();
 		} elseif($prop == 'params') {
 			$out = $this->params();

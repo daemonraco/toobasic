@@ -209,7 +209,7 @@ class Translate extends Singleton {
 	 * This method gets the translation on the current language for a certain
 	 * key.
 	 *
-	 * @param string $key Key to translate
+	 * @param string $key Key to translate.
 	 * @param string[string] $params List of replacements to use on
 	 * translation.
 	 * @return string Returns a translation result.
@@ -245,6 +245,21 @@ class Translate extends Singleton {
 		//
 		// Retruning translation.
 		return $out;
+	}
+	/**
+	 * This method checks if a translation key is present on the current
+	 * language.
+	 *
+	 * @param string $key Key to check.
+	 * @return bool Returns true when it's present.
+	 */
+	public function has($key) {
+		//
+		// Enforcing translations loading.
+		$this->load(true);
+		//
+		// Checking if it's a known key.
+		return isset($this->_tr[$key]);
 	}
 	//
 	// Protected methods.
