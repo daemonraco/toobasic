@@ -42,9 +42,10 @@ $Defaults[GC_DEFAULTS_EMAIL_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'noreplay@example.com';
 $Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
-$Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = 'en_us';
+$Defaults[GC_DEFAULTS_LANG] = 'en_us';
 $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
+$Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] = '';
 $Defaults[GC_DEFAULTS_SERVICE] = '';
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\ViewAdapterSmarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
@@ -227,11 +228,12 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 	\TooBasic\checkBasicPermissions();
 }
 //
-//
+// Necessary globals.
 $ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
 $ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->{GC_REQUEST_SERVICE} : false;
 $ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
-\TooBasic\guessSkin();
+$SkinName = \TooBasic\guessSkin();
+$LanguageName = \TooBasic\guessLanguage();
 
 unset($auxParamsManager);

@@ -150,10 +150,11 @@ abstract class Exporter extends AbstractExporter {
 		parent::autoAssigns();
 		//
 		// Global dependencies.
-		global $Defaults;
 		global $ActionName;
 		global $ServiceName;
 		global $LayoutName;
+		global $LanguageName;
+		global $SkinName;
 		//
 		// Current action name (if any).
 		$this->assign('action', $ActionName);
@@ -168,7 +169,10 @@ abstract class Exporter extends AbstractExporter {
 		$this->assign('name', $this->_name);
 		//
 		// Current language (if any).
-		$this->assign('lang', $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG]);
+		$this->assign('lang', $LanguageName);
+		//
+		// Current skin (if any).
+		$this->assign('skin', $SkinName);
 	}
 	/**
 	 * This method builds a cache key based on current parameters.

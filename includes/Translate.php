@@ -247,11 +247,10 @@ class Translate extends Singleton {
 	protected function init() {
 		//
 		// Global dependencies.
-		global $Defaults;
+		global $LanguageName;
 		//
 		// Catching current language.
-		/** @fixme this must be similar to '\TooBasic\guessSkin()' */
-		$this->_currentLang = $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG];
+		$this->_currentLang = $LanguageName;
 	}
 	/**
 	 * This method loads configurated translation for the current language.

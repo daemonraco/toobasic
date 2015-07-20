@@ -30,7 +30,8 @@ define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
 define('GC_DEFAULTS_INSTALLED', 'installed');
 define('GC_DEFAULTS_LANGS_BUILT', 'langs-built');
-define('GC_DEFAULTS_LANGS_DEFAULTLANG', 'langs-defaultlang');
+define('GC_DEFAULTS_LANG', 'lang');
+define('GC_DEFAULTS_LANGS_SESSIONSUFFIX', 'langs-suffix');
 define('GC_DEFAULTS_LAYOUT', 'layout');
 define('GC_DEFAULTS_MODES', 'modes');
 define('GC_DEFAULTS_REDIRECTIONS', 'redirections');
@@ -186,6 +187,7 @@ define('GC_CRONPROFILES_PARAMS', 'params');
 //
 // Session parameters @{
 define('GC_SESSION_SKIN', 'toobasic-skin');
+define('GC_SESSION_LANGUAGE', 'toobasic-lang');
 // @}
 //
 // Request parameters @{

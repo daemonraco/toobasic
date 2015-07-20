@@ -114,7 +114,7 @@ class Names extends FactoryClass {
 		$out = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $out));
 		//
 		// Cleaning special charaters.
-		$out = preg_replace('/([ ]*)/', '-', $out);
+		$out = preg_replace('/([ ]+)/', '-', $out);
 
 		return $out;
 	}
