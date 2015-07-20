@@ -89,9 +89,9 @@ Here you have some properties you already know, so let's explain those you don't
 the previous step and it will be used to obtain row representations. For examples,
 the proper name is "person" and it will translate into "PersonRepresentation" as a
 class name.
-* `$_CP_OrderBy`: It's a piece of SQL code you may write to sort your results when
-their are fetched for database. In our example, it may by
-`protected $_CP_OrderBy = "ppl_fullname asc,ppl_username asc";`.
+* `$_CP_OrderBy`: It's a list of fields to use as sorting condition associated to
+a sorting direction. In our example, it may by
+`protected $_CP_OrderBy = array('fullname'=>'asc','username'=>'asc');`.
 
 ## Let's Use It
 Now, for the sake of our example, we'll create a model that updates the amount of
