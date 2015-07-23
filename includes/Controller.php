@@ -18,6 +18,13 @@ abstract class Controller extends Exporter {
 	//
 	// Protected properties.
 	/**
+	 * @var string[] List of assignment keys that cannot be stored in cache.
+	 */
+	protected $_cacheNoise = array(
+		'tr',
+		'ctrl'
+	);
+	/**
 	 * @var string Name of the layout current controller uses. 'false' means
 	 * no layout and 'null' means default layout.
 	 */
@@ -150,8 +157,11 @@ abstract class Controller extends Exporter {
 				$this->_status = $this->_lastRun[GC_AFIELD_STATUS];
 				$this->_errors = $this->_lastRun[GC_AFIELD_ERRORS];
 				$this->_lastError = $this->_lastRun[GC_AFIELD_LASTERROR];
-			} else {
+				//
+				// Because there are some auto-assignments not
+				// present in cache, they are reinforced.
 				$this->autoAssigns();
+			} else {
 				//
 				// Triggering the real execution.
 				$this->_status = $this->dryRun();
@@ -164,10 +174,21 @@ abstract class Controller extends Exporter {
 					GC_AFIELD_LASTERROR => $this->_lastError
 				);
 				//
+				// Removing cache noise.
+				foreach($this->_cacheNoise as $noise) {
+					if(isset($this->_lastRun[GC_AFIELD_ASSIGNMENTS][$noise])) {
+						unset($this->_lastRun[GC_AFIELD_ASSIGNMENTS][$noise]);
+					}
+				}
+				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
 					$this->cache->save($prefixComputing, $key, $this->_lastRun, $this->_cached);
 				}
+				//
+				// Because there are some auto-assignments not
+				// present in cache, they are reinforced.
+				$this->autoAssigns();
 			}
 		}
 		//

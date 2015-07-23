@@ -4,6 +4,9 @@
 		<title>TooBasic-<?php echo TOOBASIC_VERSION ?>: <?php echo $exceptionType ?></title>
 		<link rel="shortcut icon" type="image/png" href="<?php echo ROOTURI ?>/includes/system/images/TooBasic-icon-24px.png"/>
 
+		<!-- jQuery -->
+		<script type="text/javascript" src="<?php echo ROOTURI ?>/libraries/jquery/jquery-2.1.3.min.js"></script>
+
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="<?php echo ROOTURI ?>/libraries/bootstrap/css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="<?php echo ROOTURI ?>/libraries/bootstrap/css/bootstrap-theme.min.css"/>

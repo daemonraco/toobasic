@@ -69,6 +69,9 @@ class Names extends FactoryClass {
 	 */
 	public static function ClassName($seed) {
 		//
+		// Cleaning unneeded prefixes.
+		$seed = ltrim($seed, '\\');
+		//
 		// Namespace extraction.
 		$parts = explode('\\', $seed);
 		$class = array_pop($parts);
