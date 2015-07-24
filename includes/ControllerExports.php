@@ -19,7 +19,7 @@ class ControllerExports extends AbstractExports {
 	protected $_htmlAssets = false;
 	//
 	// Public methods.
-	public function ajaxInsert($actionName, $params = array()) {
+	public function ajaxInsert($actionName, $params = array(), $attrs = array()) {
 		//
 		// Generation action uri.
 		$actionUri = '?'.GC_REQUEST_ACTION."={$actionName}";
@@ -30,8 +30,14 @@ class ControllerExports extends AbstractExports {
 		// Enrouting uri.
 		$actionUri = \TooBasic\RoutesManager::Instance()->enroute($actionUri);
 		//
+		// Generating attributes.
+		$builtAttrs = '';
+		foreach($attrs as $k => $v) {
+			$builtAttrs .=" {$k}=\"{$v}\"";
+		}
+		//
 		// Creating a HTML snippet.
-		$code = "<div data-toobasic-insert=\"{$actionUri}\"></div>\n";
+		$code = "<div{$builtAttrs} data-toobasic-insert=\"{$actionUri}\"></div>\n";
 		//
 		// Returning the generated code.
 		return $code;
