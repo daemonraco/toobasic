@@ -217,6 +217,7 @@ related)
 	* [Shell Tools](docs/shelltools.md)
 	* [Routes](docs/routes.md)
 	* [MagicProp](docs/magicprop.md)
+	* [Conditional Redirections](docs/redirections.md)
 
 Also:
 
