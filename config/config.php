@@ -53,6 +53,11 @@ $Defaults[GC_DEFAULTS_ERROR_PAGES] = array(
 	HTTPERROR_UNAUTHORIZED => HTTPERROR_UNAUTHORIZED
 );
 $Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
+$Defaults[GC_DEFAULTS_HTMLASSETS] = array(
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(),
+	GC_DEFAULTS_HTMLASSETS_STYLES => array()
+);
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS] = array();
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
 $Defaults[GC_DEFAULTS_LANG] = 'en_us';
 $Defaults[GC_DEFAULTS_LAYOUT] = false;

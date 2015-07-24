@@ -19,6 +19,22 @@ $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_BAD_REQUEST] = 'starterdoc_'.HTTPER
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_FORBIDDEN] = 'starterdoc_'.HTTPERROR_FORBIDDEN;
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_INTERNAL_SERVER_ERROR] = 'starterdoc_'.HTTPERROR_INTERNAL_SERVER_ERROR;
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_NOT_FOUND] = 'starterdoc_'.HTTPERROR_NOT_FOUND;
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['starterdoc_top'] = array(
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(
+		'lib:jquery/jquery-2.1.3.min.js',
+		'jquery.cssemoticons.min'
+	),
+	GC_DEFAULTS_HTMLASSETS_STYLES => array(
+		'starterdoc',
+		'jquery.cssemoticons'
+	)
+);
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['starterdoc_bottom'] = array(
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(
+		'github_names',
+		'starterdoc_mdfix'
+	)
+);
 $Defaults['starterdoc-allow-skins'] = true;
 // @}
 /**

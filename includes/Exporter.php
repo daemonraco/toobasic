@@ -127,6 +127,14 @@ abstract class Exporter extends AbstractExporter {
 		return $this->_cacheParams;
 	}
 	/**
+	 * Provides access to this controller's name.
+	 *
+	 * @return string Returns this controllers name.
+	 */
+	public function name() {
+		return $this->_name;
+	}
+	/**
 	 * Provides access to the list of required parameters.
 	 *
 	 * @return string[string][] List of parameters grouped by request method.

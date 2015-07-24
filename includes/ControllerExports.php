@@ -15,6 +15,9 @@ namespace TooBasic;
  */
 class ControllerExports extends AbstractExports {
 	//
+	// Protected methods.
+	protected $_htmlAssets = false;
+	//
 	// Public methods.
 	/**
 	 * It takes an action name an returns its rendered result.
@@ -26,6 +29,112 @@ class ControllerExports extends AbstractExports {
 		return $this->_controller->insert($actionName);
 	}
 	/**
+	 * This method insert a list of configured javascipts as 'script' tags.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @param string $spacer String to prepend on each code-line generated.
+	 * @return string Returns a generated code to insert.
+	 */
+	public function htmlAllScripts($specific = false, $spacer = '') {
+		//
+		// Default values.
+		$code = '';
+		$nothing = true;
+		//
+		// Loading HTML assets confgurations.
+		$htmlAssets = $this->getHtmlConfigs($specific);
+		//
+		// Opening a comment to identify assets insertion.
+		if($specific) {
+			$code .="{$spacer}<!-- Scripts for '{$htmlAssets[GC_AFIELD_NAME]}' @{ -->\n";
+		} else {
+			$code .="{$spacer}<!-- Scripts @{ -->\n";
+		}
+		//
+		// Creating a HTML snippet with all configured paths.
+		foreach($htmlAssets[GC_DEFAULTS_HTMLASSETS_SCRIPTS] as $assetName) {
+			$matches = false;
+			//
+			// When a asset starts with 'lib:' it must be looked for
+			// in 'ROOTDIR/libraries/', otherwise it would be in
+			// '.../scripts/'.
+			if(preg_match('/lib:(?<path>.*)/', $assetName, $matches)) {
+				$assetUri = $this->lib($matches['path']);
+			} else {
+				$assetUri = $this->js($assetName);
+			}
+			//
+			// Generating the inclution piece of code.
+			if($assetUri) {
+				$code .="{$spacer}<script type=\"text/javascript\" src=\"{$assetUri}\" data-toobasic=\"true\"></script>\n";
+				$nothing = false;
+			}
+		}
+		//
+		// Closing comment.
+		$code .="{$spacer}<!-- @} -->";
+		//
+		// Returning the generated code only if there's something to
+		// include.
+		return $nothing ? '' : $code;
+	}
+	/**
+	 * This method insert a list of configured stylesheets as 'link' tags.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @param string $spacer String to prepend on each code-line generated.
+	 * @return string Returns a generated code to insert.
+	 */
+	public function htmlAllStyles($specific = false, $spacer = '') {
+		//
+		// Default values.
+		$code = '';
+		$nothing = true;
+		//
+		// Loading HTML assets confgurations.
+		$htmlAssets = $this->getHtmlConfigs($specific);
+		//
+		// Opening a comment to identify assets insertion.
+		if($specific) {
+			$code .="{$spacer}<!-- Styles for '{$htmlAssets[GC_AFIELD_NAME]}' @{ -->\n";
+		} else {
+			$code .="{$spacer}<!-- Styles @{ -->\n";
+		}
+		//
+		// Creating a HTML snippet with all configured paths.
+		foreach($htmlAssets[GC_DEFAULTS_HTMLASSETS_STYLES] as $assetName) {
+			$matches = false;
+			//
+			// When a asset starts with 'lib:' it must be looked for
+			// in 'ROOTDIR/libraries/', otherwise it would be in
+			// '.../styles/'.
+			if(preg_match('/lib:(?<path>.*)/', $assetName, $matches)) {
+				$assetUri = $this->lib($matches['path']);
+			} else {
+				$assetUri = $this->css($assetName);
+			}
+			//
+			// Generating the inclution piece of code.
+			if($assetUri) {
+				$code .="{$spacer}<link type=\"text/css\" rel=\"stylesheet\" href=\"{$assetUri}\" data-toobasic=\"true\"/>\n";
+				$nothing = false;
+			}
+		}
+		//
+		// Closing comment.
+		$code .="{$spacer}<!-- @} -->";
+		//
+		// Returning the generated code only if there's something to
+		// include.
+		return $nothing ? '' : $code;
+	}
+	/**
 	 * It takes an snippet name an returns its rendered result.
 	 * 
 	 * @param string $snippetName Name of the snippet to render.
@@ -35,5 +144,62 @@ class ControllerExports extends AbstractExports {
 	 */
 	public function snippet($snippetName, $snippetDataSet = false) {
 		return $this->_controller->snippet($snippetName, $snippetDataSet);
+	}
+	//
+	// Protected methods.
+	/**
+	 * This method gets the right configuration to use on some insertion.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @return mixed[string] Rerturns a proper configuration of assets.
+	 */
+	protected function getHtmlConfigs($specific) {
+		//
+		// Default values.
+		$htmlAssets = false;
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Guessing the specific name.
+		$specificName = false;
+		if($specific === true) {
+			//
+			// Based on the controller.
+			$specificName = $this->_controller->name();
+		} elseif($specific) {
+			//
+			// As given.
+			$specificName = $specific;
+		}
+		//
+		// Attepting to load the specific configuration of assets,
+		// otherwise it uses the default one.
+		if($specificName && isset($Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS][$specificName])) {
+			$htmlAssets = $Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS][$specificName];
+		} else {
+			$htmlAssets = $Defaults[GC_DEFAULTS_HTMLASSETS];
+		}
+		//
+		// Required fields.
+		$enforce = array(
+			GC_DEFAULTS_HTMLASSETS_SCRIPTS,
+			GC_DEFAULTS_HTMLASSETS_STYLES
+		);
+		//
+		// Enforcing fields.
+		foreach($enforce as $e) {
+			if(!isset($htmlAssets[$e])) {
+				$htmlAssets[$e] = array();
+			}
+		}
+		//
+		// Adding the specific name used.
+		$htmlAssets[GC_AFIELD_NAME] = $specificName;
+
+		return $htmlAssets;
 	}
 }
