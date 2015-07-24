@@ -4,6 +4,7 @@ class Starterdoc403Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties
 	protected $_cached = false;
+	protected $_errorCode = HTTPERROR_FORBIDDEN;
 	protected $_layout = "mdlayout";
 	//
 	// Protected methods.

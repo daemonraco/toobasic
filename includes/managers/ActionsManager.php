@@ -234,6 +234,10 @@ class ActionsManager extends UrlManager {
 				GC_AFIELD_REDIRECTOR => $redirector
 			);
 		} else {
+			//
+			// Global dependencies.
+			global $Defaults;
+
 			$errorActionName = HTTPERROR_NOT_FOUND;
 			if($controllerClass instanceof Exporter) {
 				$lastError = $controllerClass->lastError();
@@ -243,8 +247,13 @@ class ActionsManager extends UrlManager {
 					$errorActionName = HTTPERROR_INTERNAL_SERVER_ERROR;
 				}
 			}
+			//
+			// Checking error page handlers.
+			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
+				throw new \TooBasic\Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
+			}
 
-			$errorControllerClass = self::FetchController($errorActionName);
+			$errorControllerClass = self::FetchController($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName]);
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {

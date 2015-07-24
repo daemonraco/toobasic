@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file define.php
+ * @author Alejandro Dario Simi
+ */
 //
 // TooBasic generic constants @{
 define('TOOBASIC_VERSION', '0.4.0');
@@ -8,11 +12,11 @@ define('TOOBASIC_VERSION', '0.4.0');
 // HTTP errors @{
 define('HTTPERROR_OK', '200');
 define('HTTPERROR_BAD_REQUEST', '400');
-define('HTTPERROR_UNAUTHORIZED', '401');
 define('HTTPERROR_FORBIDDEN', '403');
-define('HTTPERROR_NOT_FOUND', '404');
 define('HTTPERROR_INTERNAL_SERVER_ERROR', '500');
+define('HTTPERROR_NOT_FOUND', '404');
 define('HTTPERROR_NOT_IMPLEMENTED', '501');
+define('HTTPERROR_UNAUTHORIZED', '401');
 // @}
 //
 // Global's constants @{
@@ -26,6 +30,7 @@ define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
 define('GC_DEFAULTS_EMAIL_FROM', 'email-from');
 define('GC_DEFAULTS_EMAIL_LAYOUT', 'email-layout');
 define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
+define('GC_DEFAULTS_ERROR_PAGES', 'error-pages');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
 define('GC_DEFAULTS_INSTALLED', 'installed');

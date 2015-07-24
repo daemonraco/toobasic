@@ -12,6 +12,7 @@ class N400Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties.
 	protected $_cached = false;
+	protected $_errorCode = HTTPERROR_BAD_REQUEST;
 	protected $_layout = false;
 	//
 	// Protected methods.

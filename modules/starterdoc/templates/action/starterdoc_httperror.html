@@ -1,4 +1,10 @@
 # {$title}
 {if $currenterror}
-### {$lasterror.message}
+### {$tr->message}
+{$currenterror.message}
+{/if}
+
+{if $errormessage}
+## {$tr->message}
+{$errormessage}
 {/if}

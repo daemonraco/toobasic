@@ -22,6 +22,10 @@ abstract class ErrorController extends Controller {
 	 */
 	protected $_cached = false;
 	/**
+	 * @var string Identifing HTTP error code for this controller. 
+	 */
+	protected $_errorCode = HTTPERROR_OK;
+	/**
 	 * @var \TooBasic\Controller Pointer to the controller that actually
 	 * failed, if any.
 	 */
@@ -83,12 +87,15 @@ abstract class ErrorController extends Controller {
 			$this->assign('lasterror', $this->_failingController->lastError());
 			//
 			// Adding extra information about the current error.
-			$this->assign('currenterror', null);
-			foreach($this->_failingController->errors() as $error) {
-				if($error[GC_AFIELD_CODE] == $this->_name) {
-					$this->assign('currenterror', $error);
-					break;
+			if($this->_errorCode != HTTPERROR_OK) {
+				foreach($this->_failingController->errors() as $error) {
+					if($error[GC_AFIELD_CODE] == $this->_errorCode) {
+						$this->assign('currenterror', $error);
+						break;
+					}
 				}
+			} else {
+				$this->assign('currenterror', $this->lasterror);
 			}
 		} elseif($this->_errorMessage) {
 			//

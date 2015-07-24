@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file config.php
+ * @author Alejandro Dario Simi
+ */
 //
 // First thing to do is to start a PHP session.
 session_start();
@@ -40,6 +44,14 @@ $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
 $Defaults[GC_DEFAULTS_EMAIL_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'noreplay@example.com';
+$Defaults[GC_DEFAULTS_ERROR_PAGES] = array(
+	HTTPERROR_BAD_REQUEST => HTTPERROR_BAD_REQUEST,
+	HTTPERROR_FORBIDDEN => HTTPERROR_FORBIDDEN,
+	HTTPERROR_INTERNAL_SERVER_ERROR => HTTPERROR_INTERNAL_SERVER_ERROR,
+	HTTPERROR_NOT_FOUND => HTTPERROR_NOT_FOUND,
+	HTTPERROR_NOT_IMPLEMENTED => HTTPERROR_NOT_IMPLEMENTED,
+	HTTPERROR_UNAUTHORIZED => HTTPERROR_UNAUTHORIZED
+);
 $Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
 $Defaults[GC_DEFAULTS_LANG] = 'en_us';

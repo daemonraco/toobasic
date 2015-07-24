@@ -4,6 +4,7 @@ class Starterdoc404Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties
 	protected $_cached = false;
+	protected $_errorCode = HTTPERROR_NOT_FOUND;
 	protected $_layout = "mdlayout";
 	//
 	// Protected methods.

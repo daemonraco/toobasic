@@ -12,6 +12,7 @@ class N500Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties.
 	protected $_cached = false;
+	protected $_errorCode = HTTPERROR_INTERNAL_SERVER_ERROR;
 	protected $_layout = false;
 	//
 	// Protected methods.

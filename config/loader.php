@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file loader.php
+ * @author Alejandro Dario Simi
+ */
 //
 // SuperLoader main list.
 $SuperLoader = array();

@@ -12,6 +12,7 @@ class N401Controller extends TooBasic\ErrorController {
 	//
 	// Protected properties.
 	protected $_cached = false;
+	protected $_errorCode = HTTPERROR_UNAUTHORIZED;
 	protected $_layout = false;
 	//
 	// Protected methods.

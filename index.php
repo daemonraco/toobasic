@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file index.php
+ * @author Alejandro Dario Simi
+ */
 include __DIR__.'/config/config.php';
 
 try {

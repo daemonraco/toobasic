@@ -20,12 +20,12 @@
 			<div class="row text-center">
 				<h1>{$title}</h1>
 {if $currenterror}
-				<h4>{$tr->last_error_message}:</h4>
-				<p>{$lasterror.message}</p>
+				<h4>{$tr->message}:</h4>
+				<p>{$currenterror.message}</p>
 {/if}
 
 {if $errormessage}
-				<h2>{$tr->message}:</h2>
+				<h4>{$tr->message}:</h4>
 				<p>{$errormessage}</p>
 {/if}
 			</div>
