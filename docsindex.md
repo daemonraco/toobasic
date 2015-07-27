@@ -66,6 +66,27 @@
 	* [Summary](docs/configs.md#summary)
 * [Suggestions](docs/configs.md#suggestions)
 
+##  Controller Exports (docs/controllerexports.md):
+
+* [What are these?](docs/controllerexports.md#what-are-these)
+	* [Warning](docs/controllerexports.md#warning)
+* [How to call an exported function](docs/controllerexports.md#how-to-call-an-exported-function)
+* [Basic path expansion](docs/controllerexports.md#basic-path-expansion)
+	* [_$ctrl->css()_](docs/controllerexports.md#ctrl-css)
+	* [_$ctrl->js()_](docs/controllerexports.md#ctrl-js)
+	* [_$ctrl->img()_](docs/controllerexports.md#ctrl-img)
+	* [_$ctrl->lib()_](docs/controllerexports.md#ctrl-lib)
+	* [_$ctrl->link()_](docs/controllerexports.md#ctrl-link)
+* [Controller insertion](docs/controllerexports.md#controller-insertion)
+* [Snippets](docs/controllerexports.md#snippets)
+* [HTML assets](docs/controllerexports.md#html-assets)
+	* [HTML assets configuration](docs/controllerexports.md#html-assets-configuration)
+	* [Specifics](docs/controllerexports.md#specifics)
+	* [Libraries](docs/controllerexports.md#libraries)
+* [Ajax insert](docs/controllerexports.md#ajax-insert)
+	* [Autoloading](docs/controllerexports.md#autoloading)
+* [Suggestions](docs/controllerexports.md#suggestions)
+
 ##  Databases (docs/databases.md):
 
 * [What is it, really?](docs/databases.md#what-is-it,-really)
@@ -220,11 +241,6 @@
 	* [Parameters types](docs/routes.md#parameters-types)
 	* [Let's write a few more](docs/routes.md#lets-write-a-few-more)
 * [Url issues](docs/routes.md#url-issues)
-	* [_$ctrl->css()_](docs/routes.md#ctrl-css)
-	* [_$ctrl->js()_](docs/routes.md#ctrl-js)
-	* [_$ctrl->img()_](docs/routes.md#ctrl-img)
-	* [_$ctrl->lib()_](docs/routes.md#ctrl-lib)
-	* [_$ctrl->link()_](docs/routes.md#ctrl-link)
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
 

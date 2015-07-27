@@ -195,7 +195,7 @@ Here is a bunch of valid url for these routes:
 ## Url issues
 All this may look interesting, clean and fun, but there are a few aspects that can
 give you a headache.
-Let's you have a layout looking like this (in Smarty):
+Let's say you have a layout looking like this (in Smarty):
 ```html
 <!DOCTYPE html>
 <html>
@@ -215,8 +215,8 @@ Let's you have a layout looking like this (in Smarty):
 	</body>
 </html>
 ```
-When you use route you may end up HTTP-404 errors every where looking for things
-like:
+When you use route you may end up having HTTP-404 errors every where looking for
+things like:
 
 >http://www.myhost.com/mysite/product/cleaned/204578/site/images/favicon.ico
 
@@ -255,58 +255,8 @@ Let's rewrite this layout in this way:
 In this way, we are letting __TooBasic__ take care of many of our url trusting
 that it will add the write prefix to avoid problems.
 
-### _$ctrl->css()_
-This exporting method takes a stylesheet name, assumes its extension is _.css_ and
-looks for it inside folder __styles__ on each module and then the site, and the
-first one found is returned as an absolute URI.
-If it's not found it will return an empty string.
-
-### _$ctrl->js()_
-Idem for JavaScript files and they be looked for inside a folder called
-__scripts__.
-
-### _$ctrl->img()_
-Idem for images files and they be looked for inside a folders called
-__images__ and __img__.
-
-By default, this method assumes the _.png_ extension, but it may be change using a
-second parameter:
-```html
-{$ctrl->img('imagename','jpeg')}
-```
-
-### _$ctrl->lib()_
-This method is a little more simple, it takes a path and checks if it is inside
-__ROOTDIR/libraries__, when it is, it returns it's path as an absolute URI,
-otherwise it returns an empty string.
-
-### _$ctrl->link()_
-This method is a little more complex.
-First of all, if it takes a full URL containing hostname, it won't touch it and
-return it as it is.
-When the url starts with a slash (`/`), it won't touch it either.
-When there's no parameter given or when it is an empty string it will return the
-sites _root uri_.
-
-In other cases, it will prepend the sites _root uri_ and attempt to transform it
-using routes specs.
-For example, when write this:
-```html
-<a class="HelpButton" href="{$ctrl->link('?action=product&id=204578&view_mode=clean&expand=description')}" target="_blank">Help Me Please!</a>
-```
-Your browser may end up receiving something like this:
-```html
-<a class="HelpButton" href="/mysite/product/204578?view_mode=clean&expand=description" target="_blank">Help Me Please!</a>
-```
-... Supposing you have this route too:
-```json
-{
-    "routes": [{
-        "route": "product/:id:int",
-        "action": "product"
-    }]
-}
-```
+If you want to know more about controller exports, you may visit
+[this link](controllerexports.md).
 
 ### Final result
 After rendering, our layout may look like this:

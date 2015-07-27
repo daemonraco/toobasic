@@ -132,4 +132,3 @@ If you want you may visit this documentation pages:
 
 * [Snippets](snippets.md)
 * [Redirections](redirections.md)
-

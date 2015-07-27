@@ -205,6 +205,7 @@ After all we said you should visit these documentation pages:
 related)
 * If you want to know more:
 	* [Using Layouts](docs/layout.md)
+	* [Controller Exports](docs/controllerexports.md)
 	* [Using Languages](docs/language.md)
 	* [Models](docs/models.md)
 	* [Using Configs](docs/configs.md)
