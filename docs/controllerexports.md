@@ -264,6 +264,12 @@ And it will generate something like this:
 		<div data-toobasic-insert="?action=ads"></div>
 	</div>
 ```
+Or something like this if there's a route configuration supporting it:
+```html
+	<div class="AdsSection">
+		<div data-toobasic-insert="/mysite/ads"></div>
+	</div>
+```
 
 ### Autoloading
 Yes, you made the change and nothing happens, it doesn't "asynchronously load" a
@@ -281,6 +287,56 @@ Or something like this to your layout:
 ```
 Among other functionalities, this JavaScript file provides a way to asynchronously
 load `<div>` tags created by `$ctrl->ajaxInsert()`.
+
+### Parameters
+If you take a closer look to `$ctrl->insert()` you'll notice that it uses
+parameters from the current URL, but when you use a asynchronous load, such URL is
+not accessible. Now, how do we solve this problem?
+
+Let's suppose our add section requires a parameter called `pattern` what will
+allow targeted ads in future implementations.
+Let's also suppose our layout makes this assignment:
+```php
+$this->assign('adsparams', array('pattern' => 'vodka'));
+```
+Then you change your layout's template to something like this:
+```html
+{$ctrl->ajaxInsert('ads',$adsparams)}
+```
+... and you'll get this:
+```html
+<div data-toobasic-insert="?action=ads&pattern=vodka"></div>
+```
+
+### Attributes
+Something else you may want is to add some attributes to these `<div>` tags.
+Again let's say our layout makes this assignment:
+```php
+$this->assign('adsattrs', array(
+	'id' => 'mainAds',
+	'class' => 'AdsSection'
+));
+```
+Then you change your template:
+```html
+{$ctrl->ajaxInsert('ads',$adsparams,$adsattrs)}
+```
+... you'll end up with something like this:
+```html
+<div data-toobasic-insert="?action=ads&pattern=vodka" id="mainAds" class="AdsSection"></div>
+```
+
+Yes, you can also call it this way:
+```html
+{$ctrl->ajaxInsert('ads',false,$adsattrs)}
+```
+
+### Reloading
+Following the example and supposing your using the `toobasic_asset.js` file, at
+anytime you may execute something like this to reload one of this ajax insertions:
+```js
+$('#mainAds').tooBasicReload();
+```
 
 ## Suggestions
 You may also want to visit this pages:

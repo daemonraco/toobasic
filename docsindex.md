@@ -85,6 +85,9 @@
 	* [Libraries](docs/controllerexports.md#libraries)
 * [Ajax insert](docs/controllerexports.md#ajax-insert)
 	* [Autoloading](docs/controllerexports.md#autoloading)
+	* [Parameters](docs/controllerexports.md#parameters)
+	* [Attributes](docs/controllerexports.md#attributes)
+	* [Reloading](docs/controllerexports.md#reloading)
 * [Suggestions](docs/controllerexports.md#suggestions)
 
 ##  Databases (docs/databases.md):

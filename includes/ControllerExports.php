@@ -21,6 +21,14 @@ class ControllerExports extends AbstractExports {
 	// Public methods.
 	public function ajaxInsert($actionName, $params = array(), $attrs = array()) {
 		//
+		// Enforcing parameters.
+		if(!is_array($params)) {
+			$params = array();
+		}
+		if(!is_array($attrs)) {
+			$attrs = array();
+		}
+		//
 		// Generation action uri.
 		$actionUri = '?'.GC_REQUEST_ACTION."={$actionName}";
 		foreach($params as $k => $v) {
