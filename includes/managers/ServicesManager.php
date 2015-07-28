@@ -127,23 +127,13 @@ class ServicesManager extends UrlManager {
 				}
 				//
 				// Creating the service class.
-				$object = new $service[GC_AFIELD_CLASS]();
-				$reflectionObject = new \ReflectionClass($object);
+				$object = new $service[GC_AFIELD_CLASS]($service[GC_AFIELD_NAME]);
 
 				$out[GC_AFIELD_INTERFACE][GC_AFIELD_REQUIRED_PARAMS] = $object->requiredParams();
 				$out[GC_AFIELD_INTERFACE][GC_AFIELD_CACHED] = $object->cached();
 				$out[GC_AFIELD_INTERFACE][GC_AFIELD_CACHE_PARAMS] = $object->cacheParams();
-
-				$matches = false;
-				foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
-					if(preg_match('/^run(?<method>[A-Z]+)$/', $reflection->name, $matches)) {
-						$matches[GC_AFIELD_METHOD] = $matches['method'];
-						$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS][] = $matches['method'];
-					} elseif($reflection->name == 'basicRun') {
-						$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS][] = 'GET';
-					}
-				}
-				$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS] = array_unique($out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS]);
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_CORS] = $object->corsSpecs();
+				$out[GC_AFIELD_INTERFACE][GC_AFIELD_METHODS] = $object->methods();
 
 				foreach($out[GC_AFIELD_INTERFACE][GC_AFIELD_REQUIRED_PARAMS] as $method => $value) {
 					if(!$value) {

@@ -54,10 +54,6 @@ abstract class Exporter extends AbstractExporter {
 	 */
 	protected $_mode = false;
 	/**
-	 * @var string Current controller/service name.
-	 */
-	protected $_name = false;
-	/**
 	 * @var string[string][] List of required parameters grouped by request
 	 * method.
 	 */
@@ -125,14 +121,6 @@ abstract class Exporter extends AbstractExporter {
 	 */
 	public function cacheParams() {
 		return $this->_cacheParams;
-	}
-	/**
-	 * Provides access to this controller's name.
-	 *
-	 * @return string Returns this controllers name.
-	 */
-	public function name() {
-		return $this->_name;
 	}
 	/**
 	 * Provides access to the list of required parameters.

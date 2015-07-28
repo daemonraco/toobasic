@@ -255,10 +255,12 @@
 * [Simpler](docs/services.md#simpler)
 	* [May I?](docs/services.md#may-i)
 * [Interfaces](docs/services.md#interfaces)
+* [CORS](docs/services.md#cors)
+	* [Allowing sites](docs/services.md#allowing-sites)
+	* [Methods](docs/services.md#methods)
+	* [Headers](docs/services.md#headers)
 
-##  Shell Tools and Crons
- m h  dom mon dow   command
- m h  dom mon dow   command (docs/shelltools.md):
+##  Shell Tools and Crons (docs/shelltools.md):
 
 * [What's a Shell Tools?](docs/shelltools.md#whats-a-shell-tools)
 * [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)

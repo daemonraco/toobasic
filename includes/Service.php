@@ -16,11 +16,84 @@ abstract class Service extends Exporter {
 	//
 	// Protected properties.
 	/**
+	 * @var string[] Allowed headers by CORS policies of this service.
+	 */
+	protected $_corsAllowHeaders = array(
+		'Accept',
+		'Content-Type'
+	);
+	/**
+	 * @var string[] Allowed request by CORS policies of this service.
+	 */
+	protected $_corsAllowMethods = array();
+	/**
+	 * @var string[] Allowed sites by CORS policies of this service.
+	 */
+	protected $_corsAllowOrigin = array();
+	/**
+	 * @var string[string] CORS specifications.
+	 */
+	protected $_corsSpecs = false;
+	/**
 	 * @var string[string] List of to be set on a response.
 	 */
 	protected $_headers = array();
+	/**
+	 * @var string[] List of attended methods.
+	 */
+	protected $_methods = false;
 	//
 	// Public methods.
+	/**
+	 * This method returns a full specification of CORS configurations useful
+	 * for checks an interface explanation.
+	 *
+	 * @return mixed[string] Returns a specification.
+	 */
+	public function corsSpecs() {
+		//
+		// Is it already analyzed?
+		if($this->_corsSpecs === false) {
+			//
+			// Global dependencies.
+			global $Defaults;
+			//
+			// If the service didn't configure a specific list of
+			// methods, it uses its list of allowed methods.
+			if(!$this->_corsAllowMethods) {
+				$this->_corsAllowMethods = $this->methods();
+			}
+			//
+			// Options is always a method.
+			$this->_corsAllowMethods[] = 'OPTIONS';
+			//
+			// Merging the list of allowed sites configured for all
+			// services and sites internally confgured by the service.
+			$this->_corsAllowOrigin = array_merge($Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES], $this->_corsAllowOrigin);
+			//
+			// Adding specific sites for this service.
+			if(isset($Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV][$this->name()])) {
+				$this->_corsAllowOrigin = array_merge($Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV][$this->name()], $this->_corsAllowOrigin);
+			}
+			//
+			// Cleaning values.
+			$this->_corsAllowHeaders = array_values(array_unique($this->_corsAllowHeaders));
+			sort($this->_corsAllowHeaders);
+			$this->_corsAllowMethods = array_values(array_unique($this->_corsAllowMethods));
+			sort($this->_corsAllowMethods);
+			$this->_corsAllowOrigin = array_values(array_unique($this->_corsAllowOrigin));
+			sort($this->_corsAllowOrigin);
+			//
+			// Building the specification structure.
+			$this->_corsSpecs = array(
+				GC_AFIELD_HEADERS => $this->_corsAllowHeaders,
+				GC_AFIELD_METHODS => $this->_corsAllowMethods,
+				GC_AFIELD_ORIGINS => $this->_corsAllowOrigin
+			);
+		}
+
+		return $this->_corsSpecs;
+	}
 	/**
 	 * Provides access to the last processing results.
 	 *
@@ -41,6 +114,34 @@ abstract class Service extends Exporter {
 		//
 		// Returning las run results
 		return $this->_lastRun;
+	}
+	public function methods() {
+		//
+		// Is it already analyzed?
+		if($this->_methods === false) {
+			//
+			// Default values.
+			$this->_methods = array();
+			//
+			// Creating a reflexion object to analyse a this service.
+			$reflectionObject = new \ReflectionClass($this);
+			//
+			// Looking for method that attend requests.
+			$matches = false;
+			foreach($reflectionObject->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $reflection) {
+				if(preg_match('/^run(?<method>[A-Z]+)$/', $reflection->name, $matches)) {
+					$this->_methods[] = $matches['method'];
+				} elseif($reflection->name == 'basicRun') {
+					$this->_methods[] = 'GET';
+				}
+			}
+			//
+			// Cleaning values.
+			$this->_methods = array_unique($this->_methods);
+			sort($this->_methods);
+		}
+
+		return $this->_methods;
 	}
 	/**
 	 * This is the point of entry to execute a service class. It is in charge
@@ -100,6 +201,9 @@ abstract class Service extends Exporter {
 				// Running service's logic.
 				$this->_status = $this->dryRun();
 				//
+				// Generating CORS flags.
+				$this->addCorsHeaders();
+				//
 				// At this point we suppose the last run property
 				// is outdated and needs to be regenerated.
 				$this->_lastRun = false;
@@ -118,6 +222,25 @@ abstract class Service extends Exporter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method adds CORS headers to every response.
+	 */
+	protected function addCorsHeaders() {
+		$specs = $this->corsSpecs();
+
+		$this->_headers['Access-Control-Allow-Origin'] = implode(',', $specs[GC_AFIELD_ORIGINS]);
+		$this->_headers['Access-Control-Allow-Headers'] = implode(',', $specs[GC_AFIELD_HEADERS]);
+		$this->_headers['Access-Control-Allow-Methods'] = implode(',', $specs[GC_AFIELD_METHODS]);
+	}
+	/**
+	 * This method is always present because it is used by CORS policies.
+	 *
+	 * @return boolean Unless there was a prior error, this always returns
+	 * true.
+	 */
+	protected function runOPTIONS() {
+		return $this->status();
+	}
 	/**
 	 * Sets a header value to be send on responses.
 	 *

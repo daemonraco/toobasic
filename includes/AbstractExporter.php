@@ -31,6 +31,10 @@ abstract class AbstractExporter {
 	 */
 	protected $_lastRun = false;
 	/**
+	 * @var string Current controller/service name.
+	 */
+	protected $_name = false;
+	/**
 	 * @var boolean Current status for this controller/service.
 	 */
 	protected $_status = true;
@@ -42,7 +46,8 @@ abstract class AbstractExporter {
 	 * @param string $actionName internal identifier for the current
 	 * action/service being represented.
 	 */
-	public function __construct($actionName = false) {
+	public function __construct($name = false) {
+		$this->_name = $name;
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -161,6 +166,14 @@ abstract class AbstractExporter {
 	public function massiveAssign($list) {
 		$this->_assignments = array_merge($this->assignments(), $list);
 		return $this->assignments();
+	}
+	/**
+	 * Provides access to this controller's name.
+	 *
+	 * @return string Returns this controllers name.
+	 */
+	public function name() {
+		return $this->_name;
 	}
 	/**
 	 * @abstract
