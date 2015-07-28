@@ -18,6 +18,7 @@ class Params extends Singleton {
 	const TypeCOOKIE = 'cookie';
 	const TypeENV = 'env';
 	const TypeGET = 'get';
+	const TypeHEADERS = 'headers';
 	const TypePOST = 'post';
 	const TypeSERVER = 'server';
 	//
@@ -231,5 +232,6 @@ class Params extends Singleton {
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
 		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
+		$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(getallheaders());
 	}
 }

@@ -226,9 +226,22 @@ abstract class Service extends Exporter {
 	 * This method adds CORS headers to every response.
 	 */
 	protected function addCorsHeaders() {
+		//
+		// Obtaining proper specifications.
 		$specs = $this->corsSpecs();
-
-		$this->_headers['Access-Control-Allow-Origin'] = implode(',', $specs[GC_AFIELD_ORIGINS]);
+		//
+		// Checking origin allowance.
+		$origin = $this->params->headers->Origin;
+		$allowOrigin = '';
+		foreach($specs[GC_AFIELD_ORIGINS] as $or) {
+			if(preg_match('~^'.str_replace('*', '(.*)', $or).'$~', $origin)) {
+				$allowOrigin = $origin;
+				break;
+			}
+		}
+		//
+		// Adding headers to be send.
+		$this->_headers['Access-Control-Allow-Origin'] = $allowOrigin;
 		$this->_headers['Access-Control-Allow-Headers'] = implode(',', $specs[GC_AFIELD_HEADERS]);
 		$this->_headers['Access-Control-Allow-Methods'] = implode(',', $specs[GC_AFIELD_METHODS]);
 	}
