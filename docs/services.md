@@ -190,8 +190,8 @@ Also you may call this URL to obtain a full list of services and their interface
 ## CORS
 When you are developing services and trying to provide them as API, one of the
 first problems you'll find is _CORS_.
-If you want to really understand it you may follow [this
-link](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), but to make it
+If you want to really understand it you may follow
+[this link](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), but to make it
 simple, let's make an example.
 
 Let's say you created a service at http://example.com and then a page at
@@ -204,17 +204,16 @@ The reason is that you can only use JavaScript to access remote servers when the
 page your are visiting has the same server name than the remote one (and schema
 and port) or when the remote server allows you to do so.
 
-This seems somehow problematic but it's a security policy enforced by browser and
+This seems somehow problematic but it's a security policy enforced by browsers and
 there's not much to do except working in compliance with such policy.
-Is there a work around? well yes, you can always create a proxy and access trough
-it, but __TooBasic__ provides a more polite way to do this.
+_Is there a work around?_ well yes, you can always create a proxy and access
+trough it, but __TooBasic__ provides a more polite way to do this.
 
 ### Allowing sites
 The first thing you'll want to configure is which sites are allowed to access your
-services and there are three way to achieve this.
+services and there are three way to achieve it.
 
-The first one is to allowing sites inside each service writing something like
-this:
+The first one is to allow sites inside each service writing something like this:
 ```php
 <?php
 class LoginService extends \TooBasic\Service {
@@ -244,6 +243,7 @@ If you take a closer look, the first way implies code modification every time yo
 need to add/remove/update a site, while the second one affects all services at
 once.
 For this reason there's a third way that is in the middle of the other two.
+
 If you want to make only your __login__ service available at any page in
 http://otherexample.com without changing the code, you may add this configuration:
 ```php
@@ -254,7 +254,7 @@ $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV]['login'] = array(
 
 ### Methods
 By default, __TooBasic__ tries to guess what methods your are allowing, but if you
-what to provide some of them, you can add this to you service:
+what to provide some in particular, you can add this to your service:
 ```php
 <?php
 class LoginService extends \TooBasic\Service {
