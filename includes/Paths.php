@@ -24,6 +24,12 @@ class Paths extends Singleton {
 	const ExtensionSQL = 'sql';
 	const ExtensionTemplate = 'html';
 	//
+	// Protected class properties.
+	/**
+	 * @var int Size of the document root string.
+	 */
+	protected static $_DocumentRootLength = false;
+	//
 	// Protected properties.
 	/**
 	 * @var string[] List of available configuration directories.
@@ -736,6 +742,11 @@ class Paths extends Singleton {
 	 * @return string Returns an absolute URI.
 	 */
 	public static function Path2Uri($path) {
-		return Sanitizer::UriPath(substr($path, strlen(Params::Instance()->server->DOCUMENT_ROOT)));
+		//
+		// Saving this size to improve length analysis.
+		if(self::$_DocumentRootLength === false) {
+			self::$_DocumentRootLength = strlen(Params::Instance()->server->DOCUMENT_ROOT);
+		}
+		return Sanitizer::UriPath(substr($path, self::$_DocumentRootLength));
 	}
 }
