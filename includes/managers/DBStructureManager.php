@@ -64,7 +64,7 @@ class DBStructureManager extends Manager {
 	// Protected properties.
 	protected $_callbacks = array();
 	/**
-	 * @var \TooBasic\DBAdapter[string] 
+	 * @var \TooBasic\Adapters\DB\Adapter[string] 
 	 */
 	protected $_dbAdapters = array();
 	/**

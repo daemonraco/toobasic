@@ -5,9 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
-class DBQueryAdapterMySQL extends DBQueryAdapter {
+/**
+ * @class QueryMySQL
+ */
+class QueryMySQL extends QueryAdapter {
 	//
 	// Public methods
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {

@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterDBPostgreSQL
+ * @class DBPostgreSQL
  */
-class CacheAdapterDBPostgreSQL extends CacheAdapterDB {
+class DBPostgreSQL extends DB {
 	//
 	// Protected Properties.
 	protected $_doesTableExist = null;

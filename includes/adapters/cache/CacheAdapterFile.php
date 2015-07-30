@@ -1,8 +1,8 @@
 <?php
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
-class CacheAdapterFile extends CacheAdapter {
+class File extends Adapter {
 	//
 	// Constants.
 	const SubFolder = 'filecache';
@@ -39,7 +39,7 @@ class CacheAdapterFile extends CacheAdapter {
 
 		$key = sha1($key);
 		$prefix.= ($prefix ? '_' : '');
-		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
+		$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
 
 		return $path;
 	}

@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
 /**
- * @class DBSpecAdapterPostgreSQL
+ * @class SpecPostgreSQL
  */
-class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
+class SpecPostgreSQL extends SpecAdapter {
 	//
 	// Protected properties.
 	protected $_engine = 'PostgreSQL';

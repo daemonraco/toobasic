@@ -1,8 +1,8 @@
 <?php
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
 
-class ViewAdapterXML extends ViewAdapterBasic {
+class XML extends BasicAdapter {
 	//
 	// Magic methods.
 	public function __construct() {

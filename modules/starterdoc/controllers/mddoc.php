@@ -5,7 +5,7 @@ use \TooBasic\Sanitizer as TB_Sanitizer;
 class MddocController extends TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
 	protected $_layout = 'mdlayout';
 	//
 	// Protected methods.

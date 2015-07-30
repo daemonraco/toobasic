@@ -34,7 +34,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$this->_assignments['name'] = $this->_names[GC_AFIELD_NAME];
 			$this->_assignments['controller'] = $this->_names['layout-name'];
 			$this->_assignments['nocache'] = false;
-			$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
+			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 			//
 			// Is it fluid?.
 			$opt = $this->_options->option(self::OptionFluid);
@@ -45,16 +45,16 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			if($opt->activated()) {
 				switch($opt->value()) {
 					case 'double':
-						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeDouble';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeDouble';
 						break;
 					case 'large':
-						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 						break;
 					case 'medium':
-						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeMedium';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeMedium';
 						break;
 					case 'small':
-						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeSmall';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeSmall';
 						break;
 					case 'NOCACHE':
 						$this->_assignments['cached'] = 'false';
@@ -62,7 +62,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 						break;
 					case 'large':
 					default:
-						$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 				}
 			}
 		}

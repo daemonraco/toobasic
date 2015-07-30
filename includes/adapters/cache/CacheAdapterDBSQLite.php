@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterDBSQLite
+ * @class DBSQLite
  */
-class CacheAdapterDBSQLite extends CacheAdapterDB {
+class DBSQLite extends DB {
 	//
 	// Protected Properties.
 	protected $_doesTableExist = null;

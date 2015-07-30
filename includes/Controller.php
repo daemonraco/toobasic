@@ -280,7 +280,7 @@ abstract class Controller extends Exporter {
 				//
 				// Generating a view adapter to render the
 				// snippet.
-				$viewAdapter = \TooBasic\Adapter::Factory($Defaults[GC_DEFAULTS_VIEW_ADAPTER]);
+				$viewAdapter = \TooBasic\Adapters\Adapter::Factory($Defaults[GC_DEFAULTS_VIEW_ADAPTER]);
 				//
 				// Rendering using the specified list of
 				// assignments.

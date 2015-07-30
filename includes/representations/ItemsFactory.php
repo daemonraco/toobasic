@@ -26,7 +26,7 @@ abstract class ItemsFactory {
 	//
 	// Protected properties.	
 	/**
-	 * @var \TooBasic\DBAdapter
+	 * @var \TooBasic\Adapters\DB\Adapter
 	 */
 	protected $_db = false;
 	protected $_dbname = false;

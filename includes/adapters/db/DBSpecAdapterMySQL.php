@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
 /**
- * @class DBSpecAdapterMySQL
+ * @class SpecMySQL
  */
-class DBSpecAdapterMySQL extends DBSpecAdapter {
+class SpecMySQL extends SpecAdapter {
 	//
 	// Protected properties.
 	protected $_engine = 'MySQL';

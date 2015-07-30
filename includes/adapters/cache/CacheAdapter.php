@@ -5,16 +5,16 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapter
+ * @class Adapter
  * @abstract
  * This class represent a basic adapter for cache connection. Each of its
  * specifications must provide the necessary code to add, remove and retrieve
  * entries from a cache engine.
  */
-abstract class CacheAdapter extends Adapter {
+abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Constants.
 	const ExpirationSizeDouble = 'double';
@@ -64,7 +64,7 @@ abstract class CacheAdapter extends Adapter {
 	 * expiration time based on the general expiration time and a multiplier.
 	 *
 	 * @param string $delay Name of the multiplier to use. If unknwon it will
-	 * always be considered as CacheAdapter::ExpirationSizeLarge.
+	 * always be considered as Adapter::ExpirationSizeLarge.
 	 * @return int Returns an amount of seconds.
 	 */
 	protected function expirationLength($delay) {

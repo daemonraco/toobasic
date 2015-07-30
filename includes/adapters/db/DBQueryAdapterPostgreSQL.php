@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
 /**
- * @class DBQueryAdapterPostgreSQL
+ * @class QueryPostgreSQL
  */
-class DBQueryAdapterPostgreSQL extends DBQueryAdapter {
+class QueryPostgreSQL extends QueryAdapter {
 	//
 	// Public methods.
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {

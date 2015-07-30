@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterMemcached
+ * @class Memcached
  */
-class CacheAdapterMemcached extends CacheAdapter {
+class Memcached extends Adapter {
 	//
 	// Protected properties.
 	protected $_conn = false;

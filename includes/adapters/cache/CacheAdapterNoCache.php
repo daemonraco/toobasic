@@ -5,14 +5,14 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterNoCache
+ * @class NoCache
  * This class represent a cache adapter that acts as a dummy and stores nothing.
  * It provides a way to safely disable cache.
  */
-class CacheAdapterNoCache extends CacheAdapter {
+class NoCache extends Adapter {
 	//
 	// Public methods.
 	/**

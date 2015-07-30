@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
 
 /**
- * @class ViewAdapterPrint
+ * @class Printr
  */
-class ViewAdapterPrint extends ViewAdapterBasic {
+class Printr extends BasicAdapter {
 	//
 	// Public methods.
 	public function render($assignments, $template) {

@@ -5,20 +5,20 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 //
 // Class aliases.
 use \TooBasic\DBManager as TB_DBManager;
 
 /**
- * @class CacheAdapterDB
+ * @class DB
  * @abstract
  * This class represent a intermediate adapter for cache connection with entries
  * stored in database. Each of its specifications must provide the necessary code
  * to add, remove and retrieve entries from a database.
  */
-abstract class CacheAdapterDB extends CacheAdapter {
+abstract class DB extends Adapter {
 	//
 	// Protected properties.
 	/**
@@ -26,7 +26,7 @@ abstract class CacheAdapterDB extends CacheAdapter {
 	 */
 	protected $_compressionRate = 3;
 	/**
-	 * @var \TooBasic\DBAdapter Data base adapter pointer.
+	 * @var \TooBasic\Adapters\DB\Adapter Data base adapter pointer.
 	 */
 	protected $_db = false;
 	/**

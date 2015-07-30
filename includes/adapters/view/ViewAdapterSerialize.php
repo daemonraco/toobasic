@@ -1,8 +1,8 @@
 <?php
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
 
-class ViewAdapterSerialize extends ViewAdapterBasic {
+class Serialize extends BasicAdapter {
 	//
 	// Public methods.
 	public function render($assignments, $template) {

@@ -5,11 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
+
 /**
- * @class DBAdapter
+ * @class Adapter
  */
-class DBAdapter extends Adapter {
+class Adapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Protected properties.
 	protected $_engine = false;
@@ -209,7 +210,7 @@ class DBAdapter extends Adapter {
 	/**
 	 * @todo doc
 	 *
-	 * @return \TooBasic\DBQueryAdapter @todo doc
+	 * @return \TooBasic\Adapters\DB\QueryAdapter @todo doc
 	 * @throws \TooBasic\DBException @todo doc
 	 */
 	public function queryAdapter() {

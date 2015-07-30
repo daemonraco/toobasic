@@ -5,12 +5,14 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
+
+use \TooBasic\Sanitizer;
 
 /**
- * @class ViewAdapterSmarty
+ * @class Smarty
  */
-class ViewAdapterSmarty extends ViewAdapter {
+class Smarty extends Adapter {
 	//
 	// Constants.
 //	const SmartyTemplatesDirectory = "/smarty/";

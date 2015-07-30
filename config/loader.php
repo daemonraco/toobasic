@@ -11,7 +11,7 @@ $SuperLoader = array();
 // Basics @{
 $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
-$SuperLoader['TooBasic\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
+$SuperLoader['TooBasic\\Adapters\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
@@ -52,39 +52,39 @@ $SuperLoader['TooBasic\\UrlManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/
 // @}
 //
 // Cache adapters @{
-$SuperLoader['TooBasic\\CacheAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapter.php";
-$SuperLoader['TooBasic\\CacheAdapterDB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDB.php";
-$SuperLoader['TooBasic\\CacheAdapterDBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBMySQL.php";
-$SuperLoader['TooBasic\\CacheAdapterDBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBPostgreSQL.php";
-$SuperLoader['TooBasic\\CacheAdapterDBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBSQLite.php";
-$SuperLoader['TooBasic\\CacheAdapterFile'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterFile.php";
-$SuperLoader['TooBasic\\CacheAdapterMemcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
-$SuperLoader['TooBasic\\CacheAdapterMemcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcached.php";
-$SuperLoader['TooBasic\\CacheAdapterNoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterNoCache.php";
-$SuperLoader['TooBasic\\CacheAdapterRedis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterRedis.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDB.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\File'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterFile.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Memcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Memcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcached.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\NoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterNoCache.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterRedis.php";
 // @}
 //
 // Database adapters @{
-$SuperLoader['TooBasic\\DBAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBAdapter.php";
-$SuperLoader['TooBasic\\DBQueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapter.php";
-$SuperLoader['TooBasic\\DBQueryAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterMySQL.php";
-$SuperLoader['TooBasic\\DBQueryAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterPostgreSQL.php";
-$SuperLoader['TooBasic\\DBQueryAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterSQLite.php";
-$SuperLoader['TooBasic\\DBSpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapter.php";
-$SuperLoader['TooBasic\\DBSpecAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterMySQL.php";
-$SuperLoader['TooBasic\\DBSpecAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterPostgreSQL.php";
-$SuperLoader['TooBasic\\DBSpecAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QuerySQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterSQLite.php";
 // @}
 //
 // View adapters @{
-$SuperLoader['TooBasic\\ViewAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapter.php";
-$SuperLoader['TooBasic\\ViewAdapterBasic'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterBasic.php";
-$SuperLoader['TooBasic\\ViewAdapterDump'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterDump.php";
-$SuperLoader['TooBasic\\ViewAdapterJSON'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterJSON.php";
-$SuperLoader['TooBasic\\ViewAdapterPrint'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterPrint.php";
-$SuperLoader['TooBasic\\ViewAdapterSerialize'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSerialize.php";
-$SuperLoader['TooBasic\\ViewAdapterSmarty'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSmarty.php";
-$SuperLoader['TooBasic\\ViewAdapterXML'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterXML.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\View\\BasicAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterBasic.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Dump'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterDump.php";
+$SuperLoader['TooBasic\\Adapters\\View\\JSON'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterJSON.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Printr'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterPrint.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Serialize'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSerialize.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Smarty'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSmarty.php";
+$SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterXML.php";
 // @}
 //
 // Representations @{

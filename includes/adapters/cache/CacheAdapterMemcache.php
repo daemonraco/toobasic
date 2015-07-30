@@ -1,8 +1,8 @@
 <?php
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
-class CacheAdapterMemcache extends CacheAdapter {
+class Memcache extends Adapter {
 	//
 	// Protected properties.
 	protected $_conn = false;

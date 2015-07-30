@@ -5,13 +5,13 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
 
 /**
- * @class ViewAdapterBasic
+ * @class BasicAdapter
  * @abstract
  */
-abstract class ViewAdapterBasic extends ViewAdapter {
+abstract class BasicAdapter extends Adapter {
 	//
 	// Protected properties.
 	protected $_noise = array(

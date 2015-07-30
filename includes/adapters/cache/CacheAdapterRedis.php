@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterRedis
+ * @class Redis
  */
-class CacheAdapterRedis extends CacheAdapter {
+class Redis extends Adapter {
 	//
 	// Protected properties.
 	protected $_conn = false;

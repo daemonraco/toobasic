@@ -15,7 +15,7 @@ class DBManager extends Manager {
 	//
 	// Protected properties.
 	/**
-	 * @var \TooBasic\DBAdapter[string] List of known database connections.
+	 * @var \TooBasic\Adapters\DB\Adapter[string] List of known database connections.
 	 */
 	protected $_connections = array();
 	//
@@ -25,7 +25,7 @@ class DBManager extends Manager {
 	 *
 	 * @param string $dbname Name for the database connection configuration to
 	 * look for.
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 */
 	public function __get($dbname) {
 		//
@@ -40,7 +40,7 @@ class DBManager extends Manager {
 	 *
 	 * @param string $dbname Name for the database connection configuration to
 	 * look for.
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 * @throws \TooBasic\DBException
 	 */
 	public function get($dbname) {
@@ -59,7 +59,7 @@ class DBManager extends Manager {
 				if(isset($Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine])) {
 					$this->_connections[$dbname] = new $Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine]($dbname);
 				} else {
-					$this->_connections[$dbname] = new DBAdapter($dbname);
+					$this->_connections[$dbname] = new \TooBasic\Adapters\DB\Adapter($dbname);
 				}
 			} else {
 				throw new \TooBasic\DBException("There's no database connection configuration named '{$dbname}'");
@@ -72,7 +72,7 @@ class DBManager extends Manager {
 	/**
 	 * Returns a database connection suitable for cache-in-database entries.
 	 *
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 */
 	public function getCache() {
 		return $this->get($this->getCacheName());

@@ -5,12 +5,12 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterDBMySQL
+ * @class DBMySQL
  */
-class CacheAdapterDBMySQL extends CacheAdapterDB {
+class DBMySQL extends DB {
 	//
 	// Protected methods.
 	/**

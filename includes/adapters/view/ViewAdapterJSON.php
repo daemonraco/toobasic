@@ -1,8 +1,8 @@
 <?php
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
 
-class ViewAdapterJSON extends ViewAdapterBasic {
+class JSON extends BasicAdapter {
 	//
 	// Magic methods.
 	public function __construct() {
