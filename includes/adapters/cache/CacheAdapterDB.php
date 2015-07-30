@@ -7,33 +7,49 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
 use \TooBasic\DBManager as TB_DBManager;
 
 /**
  * @class CacheAdapterDB
  * @abstract
+ * This class represent a intermediate adapter for cache connection with entries
+ * stored in database. Each of its specifications must provide the necessary code
+ * to add, remove and retrieve entries from a database.
  */
 abstract class CacheAdapterDB extends CacheAdapter {
 	//
 	// Protected properties.
+	/**
+	 * @var int Level of compression for GZip compressed data.
+	 */
 	protected $_compressionRate = 3;
 	/**
-	 * @var \TooBasic\DBAdapter
+	 * @var \TooBasic\DBAdapter Data base adapter pointer.
 	 */
 	protected $_db = false;
 	/**
-	 * @var string
+	 * @var string Tables prefix.
 	 */
 	protected $_dbprefix = '';
 	// 
 	// Magic methods.
+	/**
+	 * Class constructor.
+	 */
 	public function __construct() {
 		parent::__construct();
+		//
+		// Global dependencies.
 		global $Defaults;
-
+		//
+		// Loading database shortcuts.
 		$this->_db = TB_DBManager::Instance()->getCache();
 		$this->_dbprefix = $this->_db->prefix();
-
+		//
+		// If the system is not flagged as installed, the cache table
+		// existence must be enforced.
 		if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 			$this->checkTables();
 		}
