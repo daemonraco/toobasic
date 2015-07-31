@@ -39,16 +39,16 @@ $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/T
 // @}
 //
 // Managers @{
-$SuperLoader['TooBasic\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
-$SuperLoader['TooBasic\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
-$SuperLoader['TooBasic\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
-$SuperLoader['TooBasic\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\Managers\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
+$SuperLoader['TooBasic\\Managers\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
+$SuperLoader['TooBasic\\Managers\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\Managers\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
 $SuperLoader['TooBasic\\Managers\\EmailsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/EmailsManager.php";
-$SuperLoader['TooBasic\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
-$SuperLoader['TooBasic\\RoutesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/RoutesManager.php";
-$SuperLoader['TooBasic\\ServicesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ServicesManager.php";
-$SuperLoader['TooBasic\\ShellManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ShellManager.php";
-$SuperLoader['TooBasic\\UrlManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/UrlManager.php";
+$SuperLoader['TooBasic\\Managers\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
+$SuperLoader['TooBasic\\Managers\\RoutesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/RoutesManager.php";
+$SuperLoader['TooBasic\\Managers\\ServicesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ServicesManager.php";
+$SuperLoader['TooBasic\\Managers\\ShellManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ShellManager.php";
+$SuperLoader['TooBasic\\Managers\\UrlManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/UrlManager.php";
 // @}
 //
 // Cache adapters @{

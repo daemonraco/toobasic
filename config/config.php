@@ -233,11 +233,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 }
 //
 // Routes
-\TooBasic\RoutesManager::Instance()->load();
+\TooBasic\Managers\RoutesManager::Instance()->load();
 if(isset($auxParamsManager->debugroutes)) {
 	//
 	// This is here to avoid wrong debug prompting.
-	\TooBasic\RoutesManager::Instance()->routes();
+	\TooBasic\Managers\RoutesManager::Instance()->routes();
 }
 //
 // Mandatory permissions

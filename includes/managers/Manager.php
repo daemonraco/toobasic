@@ -5,13 +5,16 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+use TooBasic\MagicProp;
+use TooBasic\MagicPropException;
 
 /**
  * @class Manager
  * @abstract
  */
-abstract class Manager extends Singleton {
+abstract class Manager extends \TooBasic\Singleton {
 	//
 	// Magic methods.
 	/**

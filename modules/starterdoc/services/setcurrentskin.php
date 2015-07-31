@@ -4,14 +4,10 @@ class SetcurrentskinService extends \TooBasic\Service {
 	//
 	// Public methods.
 	protected function runPOST() {
-		$out = true;
-
-		global $SkinName;
 		\TooBasic\setSessionSkin($this->params->post->setskin);
+		$this->assign("skin", \TooBasic\guessSkin());
 
-		$this->assign("skin", $_SESSION[GC_SESSION_SKIN]);
-
-		return $out;
+		return $this->status();
 	}
 	protected function init() {
 		parent::init();

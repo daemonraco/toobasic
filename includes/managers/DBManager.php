@@ -5,7 +5,7 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
 
 /**
  * @class DBManager

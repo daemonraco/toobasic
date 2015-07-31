@@ -7,6 +7,8 @@
 
 namespace TooBasic\Adapters\DB;
 
+use TooBasic\Managers\DBStructureManager;
+
 /**
  * @class SpecPostgreSQL
  */
@@ -366,7 +368,7 @@ class SpecPostgreSQL extends SpecAdapter {
 						$out.= 'default null ';
 					}
 				} else {
-					if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
+					if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
 						$out.= "default '{$spec->default}' ";
 					} else {
 						$out.= "default {$spec->default} ";

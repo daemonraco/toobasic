@@ -7,6 +7,8 @@
 
 namespace TooBasic\Adapters\DB;
 
+use TooBasic\Params;
+
 /**
  * @class SpecAdapter
  * @abstract

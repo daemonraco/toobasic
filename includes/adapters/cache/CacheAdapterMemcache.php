@@ -2,6 +2,8 @@
 
 namespace TooBasic\Adapters\Cache;
 
+use TooBasic\Params;
+
 class Memcache extends Adapter {
 	//
 	// Protected properties.

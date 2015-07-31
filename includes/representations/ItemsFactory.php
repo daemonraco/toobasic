@@ -7,6 +7,8 @@
 
 namespace TooBasic;
 
+use TooBasic\Managers\DBManager;
+
 /**
  * @class ItemsFactory
  * @abstract

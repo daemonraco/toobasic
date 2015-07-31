@@ -365,7 +365,7 @@ abstract class Scaffold extends ShellTool {
 	}
 	protected function loadRender() {
 		if(!$this->_render) {
-			$this->_render = \TooBasic\Adapter::Factory('\\TooBasic\\Adapters\\View\\Smarty');
+			$this->_render = \TooBasic\Adapters\Adapter::Factory('\\TooBasic\\Adapters\\View\\Smarty');
 
 			$engine = $this->_render->engine();
 			$engine->left_delimiter = '<%';

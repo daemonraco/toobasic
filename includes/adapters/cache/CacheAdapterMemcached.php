@@ -7,6 +7,8 @@
 
 namespace TooBasic\Adapters\Cache;
 
+use TooBasic\Params;
+
 /**
  * @class Memcached
  */

@@ -5,7 +5,9 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+use TooBasic\Params;
 
 /**
  * @class RoutesManager

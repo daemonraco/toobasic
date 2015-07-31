@@ -5,7 +5,10 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+use TooBasic\Params;
+use TooBasic\Paths;
 
 /**
  * @class DBStructureManagerExeption

@@ -5,7 +5,9 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+use TooBasic\Shell\Options;
 
 /**
  * @class ShellManager
@@ -260,7 +262,7 @@ class ShellManager extends Manager {
 		$this->_errors[] = $error;
 	}
 	protected function starterOptions() {
-		$options = Shell\Options::Instance();
+		$options = Options::Instance();
 
 		$options->addMainOption('script');
 		$options->addMainOption('mode');

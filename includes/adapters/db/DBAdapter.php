@@ -7,6 +7,8 @@
 
 namespace TooBasic\Adapters\DB;
 
+use TooBasic\Params;
+
 /**
  * @class Adapter
  */
@@ -223,7 +225,7 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 		if(isset($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()])) {
 			//
 			// Obtaining the right adapter.
-			$out = \TooBasic\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
+			$out = \TooBasic\Adapters\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
 		} else {
 			throw new \TooBasic\DBException("There's no define adapter for a '{$this->engine()}' connection");
 		}

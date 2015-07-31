@@ -5,7 +5,10 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+use TooBasic\Paths;
+use TooBasic\Params;
 
 /**
  * @class ServicesManager

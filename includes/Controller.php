@@ -7,6 +7,8 @@
 
 namespace TooBasic;
 
+use TooBasic\Managers\ActionsManager as ActionsManager;
+
 /**
  * @class Controller
  * @abstract
