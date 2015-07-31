@@ -232,6 +232,10 @@ class Params extends Singleton {
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
 		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
-		$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(getallheaders());
+		if(!defined('__SHELL__')) {
+			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(getallheaders());
+		} else {
+			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(array());
+		}
 	}
 }

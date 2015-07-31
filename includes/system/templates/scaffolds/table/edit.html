@@ -4,7 +4,7 @@
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 		<tr>
 			<td>
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
