@@ -137,7 +137,7 @@ class ActionsManager extends UrlManager {
 				$url.= '&'.GC_REQUEST_REDIRECTOR.'='.urlencode($this->params->server->REQUEST_URI);
 				//
 				// Cleaning and replacing routes.
-				$url = \TooBasic\RoutesManager::Instance()->enroute($url);
+				$url = \TooBasic\Managers\RoutesManager::Instance()->enroute($url);
 				//
 				// Is it a debug or the real deal?
 				if(isset($this->params->debugredirection)) {
