@@ -127,7 +127,7 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 			}
 			if($data[GC_AFIELD_SPEC]->hasDefault) {
 				$dbDefaultValue = explode('::', $data[GC_AFIELD_DB]['column_default']);
-				$dbDefaultValue = str_replace("'", '', array_shift($dbDefaultValue));
+				$dbDefaultValue = pg_unescape_bytea(trim(array_shift($dbDefaultValue), "'"));
 				$specDefaultValue = str_replace("'", '', $data[GC_AFIELD_SPEC]->default);
 
 				switch($specDefaultValue) {
@@ -149,13 +149,6 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 #				continue;
 #			}
 		}
-//DEBUG
-//			if($same) {
-//				debugit([
-//					'$updates' => $updates
-//					], 1);
-//			}
-//DEBUG
 	}
 	public function createIndex(\stdClass $index) {
 		$query = 'create ';
@@ -426,8 +419,15 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 						$same = false;
 					}
 					break;
-				case DBStructureManager::ColumnTypeText:
 				case DBStructureManager::ColumnTypeBlob:
+					//
+					// Non-precision types.
+					if($data[GC_AFIELD_DB]['udt_name'] != 'bytea') {
+						debugit($data[GC_AFIELD_DB]['udt_name'] ,1);
+						$same = false;
+					}
+					break;
+				case DBStructureManager::ColumnTypeText:
 				case DBStructureManager::ColumnTypeTimestamp:
 					//
 					// Non-precision types.
