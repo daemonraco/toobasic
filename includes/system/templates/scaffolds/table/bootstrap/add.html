@@ -4,7 +4,7 @@
 	<div class="well well-sm">
 		<form id="<%$singularName%>_form" method="post" href="#" role="form">
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="" class="form-control"/>

@@ -5,7 +5,7 @@
 		<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;">
 			<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control" readonly="readonly"/>

@@ -77,7 +77,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						case 'float':
 							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
 							$field[GC_AFIELD_TYPE]['precision'] = 11;
-							$field['default'] = '';
+							$field['default'] = .0;
 							$field['inForm'] = true;
 							break;
 						case 'text':
