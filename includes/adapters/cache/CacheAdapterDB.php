@@ -9,7 +9,7 @@ namespace TooBasic\Adapters\Cache;
 
 //
 // Class aliases.
-use \TooBasic\DBManager as TB_DBManager;
+use TooBasic\Managers\DBManager;
 
 /**
  * @class DB
@@ -45,7 +45,7 @@ abstract class DB extends Adapter {
 		global $Defaults;
 		//
 		// Loading database shortcuts.
-		$this->_db = TB_DBManager::Instance()->getCache();
+		$this->_db = DBManager::Instance()->getCache();
 		$this->_dbprefix = $this->_db->prefix();
 		//
 		// If the system is not flagged as installed, the cache table
