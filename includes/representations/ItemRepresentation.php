@@ -7,13 +7,11 @@
 
 namespace TooBasic;
 
+/**
+ * @abstract
+ * @class ItemRepresentation
+ */
 abstract class ItemRepresentation {
-	//
-	// Constants.
-	//
-	// Public class properties.
-	//
-	// Protected class properties.
 	//
 	// Protected core properties.
 	protected $_CP_ColumnsPerfix = '';
@@ -31,7 +29,9 @@ abstract class ItemRepresentation {
 	protected $_dirty = false;
 	protected $_exists = false;
 	protected $_extraProperties = array();
+	protected $_lastDBError = false;
 	protected $_properties = array();
+	protected $_queryAdapterPrefixes = false;
 	//
 	// Magic methods.
 	public function __construct($dbname) {
@@ -39,7 +39,7 @@ abstract class ItemRepresentation {
 		$this->_dbprefix = $this->_db->prefix();
 	}
 	public function __toString() {
-		return $this->exists() ? get_called_class()."()[(".$this->{$this->_CP_IDColumn}.")]" : "NULL";
+		return $this->exists() ? get_called_class().'()[('.$this->{$this->_CP_IDColumn}.')]' : 'NULL';
 	}
 	public function __get($name) {
 		$out = null;
@@ -76,21 +76,25 @@ abstract class ItemRepresentation {
 	public function exists() {
 		return $this->_exists;
 	}
+	public function lastDBError() {
+		return $this->_lastDBError;
+	}
 	public function load($id) {
 		$this->reset();
 		$this->preLoad($id);
 
-		$query = "select  * \n";
-		$query.= "from    {$this->_dbprefix}{$this->_CP_Table} \n";
-		$query.= "where   {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} = :id \n";
-		$stmt = $this->_db->prepare($query);
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $this->queryAdapterPrefixes());
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 
-		$stmt->execute(array(
-			':id' => $id
-		));
+		$data = false;
+		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$this->_lastDBError = $stmt->errorInfo();
+		} else {
+			$data = $stmt->fetch();
+		}
 
-		if($stmt->rowCount() > 0) {
-			$this->_properties = $stmt->fetch();
+		if($data) {
+			$this->_properties = $data;
 			$this->_exists = true;
 			$this->postLoad();
 		} else {
@@ -103,15 +107,21 @@ abstract class ItemRepresentation {
 		$this->reset();
 
 		if($this->_CP_NameColumn) {
-			$query = "select  {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} as id \n";
-			$query.= "from    {$this->_dbprefix}{$this->_CP_Table} \n";
-			$query.= "where   {$this->_CP_ColumnsPerfix}{$this->_CP_NameColumn} = :name \n";
-			$stmt = $this->_db->prepare($query);
-
-			if($stmt->execute(array(':name' => $name)) && $stmt->rowCount() > 0) {
+			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $this->queryAdapterPrefixes());
+			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 				$row = $stmt->fetch();
-				$this->load($row['id']);
+				//
+				// Checking if something was actually found.
+				if($row) {
+					$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+					$this->load($row[$idKey]);
+				}
+			} else {
+				$this->_lastDBError = $stmt->errorInfo();
 			}
+		} else {
+			throw new \TooBasic\DBException("No name column set for table '{$this->_CP_Table}'");
 		}
 
 		return $this->exists();
@@ -121,41 +131,34 @@ abstract class ItemRepresentation {
 
 		if($this->dirty() && $this->prePersist()) {
 			$idName = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
-			$params = array(
-				':id' => $this->{$this->_CP_IDColumn}
-			);
+			$data = array();
 
-			$query = "update  {$this->_dbprefix}{$this->_CP_Table}\n";
-			$query.= "set     ";
-
-			$assigns = array();
 			foreach($this->_properties as $key => $value) {
 				$shortKey = substr($key, strlen($this->_CP_ColumnsPerfix));
 				if($idName != $key && !in_array($shortKey, $this->_CP_ReadOnlyColumns)) {
-					$assigns[] = "{$key} = :{$key}";
-					$params[":{$key}"] = $value;
+					$data[$shortKey] = $value;
 				}
 			}
-			$query.= implode(', ', $assigns);
-			$query.= " \n";
 
-			$query.= "where   {$idName} = :id\n";
-			$stmt = $this->_db->prepare($query);
+			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
+			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 
-			if($stmt->execute($params)) {
+			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 				$persisted = true;
 				$this->_dirty = false;
+			} else {
+				$this->_lastDBError = $stmt->errorInfo();
 			}
 		}
 
 		return $persisted;
 	}
 	public function remove() {
-		$query = "delete from {$this->_dbprefix}{$this->_CP_Table} \n";
-		$query.= "where       {$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn} = :id \n";
-		$stmt = $this->_db->prepare($query);
-
-		$stmt->execute(array(':id' => $this->id));
+		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$this->_lastDBError = $stmt->errorInfo();
+		}
 
 		$this->load($this->id);
 
@@ -189,5 +192,14 @@ abstract class ItemRepresentation {
 	}
 	protected function postPersist() {
 		
+	}
+	protected function queryAdapterPrefixes() {
+		if($this->_queryAdapterPrefixes === false) {
+			$this->_queryAdapterPrefixes = array(
+				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
+				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix
+			);
+		}
+		return $this->_queryAdapterPrefixes;
 	}
 }

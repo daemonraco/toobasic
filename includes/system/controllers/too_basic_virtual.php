@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file TooBasicVirtualController.php
+ * @author Alejandro Dario Simi
+ */
+
+/**
+ * @class TooBasicVirtualController
+ */
 class TooBasicVirtualController extends \TooBasic\Controller {
 	//
 	// Protected properties.	

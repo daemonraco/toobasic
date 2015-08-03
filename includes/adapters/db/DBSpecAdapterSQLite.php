@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * @file DBSpecAdapterSQLite.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class DBSpecAdapterSQLite
+ */
 class DBSpecAdapterSQLite extends DBSpecAdapter {
 	//
 	// Protected properties.
@@ -44,7 +52,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 
 		if($dbColumnCount == $spectColumnCount) {
 			for($position = 0; $position < $dbColumnCount; $position++) {
-				if($indexSpecs[$position]["name"] != $index->fields[$position]) {
+				if($indexSpecs[$position]['name'] != $index->fields[$position]) {
 					$ok = false;
 					break;
 				}
@@ -57,15 +65,15 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 	}
 	public function compareTable(\stdClass $table, &$creates, &$drops, &$updates) {
 		$query = "pragma table_info({$table->fullname}) ";
-
-		$tableSpecs = $this->_db->query($query)->fetchAll();
+		$tableSpecs = $this->_db->queryData($query);
+		$autoIncrement = count($this->_db->queryData("select * from sqlite_master where type = 'table' and name = '{$table->fullname}' and sql like '%autoincrement%'")) > 0;
 		//
 		// New columns.
 		$cmp = array();
 		foreach($table->fields as $fullname => $field) {
 			$found = false;
 			foreach($tableSpecs as $dbColumn) {
-				if($fullname == $dbColumn["name"]) {
+				if($fullname == $dbColumn['name']) {
 					$found = $dbColumn;
 					continue;
 				}
@@ -74,47 +82,47 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 				$creates[] = $fullname;
 			} else {
 				$cmp[$fullname] = array(
-					"db" => $found,
-					"spec" => null
+					GC_AFIELD_DB => $found,
+					GC_AFIELD_SPEC => null
 				);
 			}
 		}
 		//
 		// Old columns.
 		foreach($tableSpecs as $dbColumn) {
-			if(!isset($table->fields[$dbColumn["name"]])) {
-				$drops[] = $dbColumn["name"];
+			if(!isset($table->fields[$dbColumn['name']])) {
+				$drops[] = $dbColumn['name'];
 			} else {
-				$spec = $table->fields[$dbColumn["name"]];
-				$spec->builtType = $this->buildColumnType($spec->type);
-				$cmp[$dbColumn["name"]]["spec"] = $spec;
+				$spec = $table->fields[$dbColumn['name']];
+				$spec->builtType = $this->buildColumnType($spec->type, $spec->autoincrement);
+				$cmp[$dbColumn['name']][GC_AFIELD_SPEC] = $spec;
 			}
 		}
 		//
 		// Different columns.
 		foreach($cmp as $fullname => $data) {
-			if($data["db"]["type"] != $data["spec"]->builtType) {
+			if($data[GC_AFIELD_DB]['type'] != $data[GC_AFIELD_SPEC]->builtType) {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data["spec"]->autoincrement != ($data["db"]["extra"] == "auto_increment")) {
-#				$updates[] = $fullname;
-#				continue;
-#			}
-			if($data["spec"]->null == $data["db"]["notnull"]) {
+			if($data[GC_AFIELD_SPEC]->autoincrement != $autoIncrement) {
 				$updates[] = $fullname;
 				continue;
 			}
-			if($data["spec"]->hasDefault) {
-				if(($data["spec"]->default === null && $data["db"]["dflt_value"] != "null") || $data["spec"]->default != $data["db"]["dflt_value"]) {
+			if($data[GC_AFIELD_SPEC]->null == $data[GC_AFIELD_DB]['notnull']) {
+				$updates[] = $fullname;
+				continue;
+			}
+			if($data[GC_AFIELD_SPEC]->hasDefault) {
+				if(($data[GC_AFIELD_SPEC]->default === null && $data[GC_AFIELD_DB]['dflt_value'] != 'null') || $data[GC_AFIELD_SPEC]->default != $data[GC_AFIELD_DB]['dflt_value']) {
 					$updates[] = $fullname;
 					continue;
 				}
-			} elseif($data["db"]["dflt_value"]) {
+			} elseif($data[GC_AFIELD_DB]['dflt_value']) {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data["db"]["column_comment"] != $data["spec"]->comment) {
+#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
 #				$updates[] = $fullname;
 #				continue;
 #			}
@@ -126,14 +134,14 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		// @}
 	}
 	public function createIndex(\stdClass $index) {
-		$query = "create ";
+		$query = 'create ';
 		switch($index->type) {
-			case "index":
-				$query.= "index ";
+			case 'index':
+				$query.= 'index ';
 				break;
-			case "key":
-			case "primary":
-				$query.= "unique index ";
+			case 'key':
+			case 'primary':
+				$query.= 'unique index ';
 				break;
 		}
 		$query.= "{$index->fullname} \n";
@@ -160,11 +168,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 
 		$query.= implode(", \n", $lines)." \n";
 
-		$query.= ") ";
-#		if(isset($table->engine)) {
-#			$query.= "engine={$table->engine} ";
-#		}
-#		$query.= " default charset=utf8 collate=utf8_bin auto_increment=1 ";
+		$query.= ') ';
 
 		return $this->exec($query);
 	}
@@ -184,7 +188,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		return $this->exec($query);
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
-		trigger_error('Operation not supported by SQLite (DROP COLUMN)', E_USER_ERROR);
+		throw new Exception('Operation not supported by SQLite (DROP COLUMN)');
 		$query = "alter table {$table->fullname} \n";
 		$query.= "        drop column {$columnName}";
 
@@ -198,7 +202,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		$query.= "where   type = 'index' \n";
 
 		foreach($this->_db->queryData($query, false) as $row) {
-			$out[] = $row["name"];
+			$out[] = $row['name'];
 		}
 
 		return $out;
@@ -209,9 +213,10 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		$query = "select  distinct name \n";
 		$query.= "from    sqlite_master \n";
 		$query.= "where   type = 'table' \n";
+		$query.= "where   name not like 'sqlite_%' \n";
 
 		foreach($this->_db->queryData($query, false) as $row) {
-			$out[] = $row["name"];
+			$out[] = $row['name'];
 		}
 
 		return $out;
@@ -233,7 +238,7 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 		return $this->dropIndex($index->fullname) && $this->createIndex($index);
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
-		trigger_error('Operation not supported by SQLite (MODIFY COLUMN)', E_USER_ERROR);
+		throw new Exception('Operation not supported by SQLite (MODIFY COLUMN)');
 		$query = "alter table {$table->fullname} \n";
 
 		$field = $table->fields[$columnName];
@@ -243,73 +248,82 @@ class DBSpecAdapterSQLite extends DBSpecAdapter {
 	}
 	//
 	// Protected methods.
-	protected function buildColumnType($type) {
-		$out = "";
+	protected function buildColumnType($type, $isAutoincremente) {
+		$out = '';
 
-		switch($type->type) {
-			case DBStructureManager::ColumnTypeBlob:
-				$out = "blob";
-				break;
-			case DBStructureManager::ColumnTypeEnum:
-				$out = "enum('".implode("','", $type->values)."')";
-				break;
-			case DBStructureManager::ColumnTypeFloat:
-				$out = "float({$type->precision}) ";
-				break;
-			case DBStructureManager::ColumnTypeText:
-				$out = "text ";
-				break;
-			case DBStructureManager::ColumnTypeVarchar:
-				$out = "varchar({$type->precision})";
-				break;
-			case DBStructureManager::ColumnTypeTimestamp:
-				$out = "timestamp";
-				break;
-			case DBStructureManager::ColumnTypeInt:
-				$out = "int({$type->precision})";
-				break;
-			default:
-				break;
+		if($isAutoincremente) {
+			$out = 'integer';
+		} else {
+			switch($type->type) {
+				case DBStructureManager::ColumnTypeBlob:
+					$out = 'blob';
+					break;
+				case DBStructureManager::ColumnTypeEnum:
+					$length = 0;
+					foreach($type->values as $val) {
+						$len = strlen($val);
+						$length = $len > $length ? $len : $length;
+					}
+					$out = "varchar({$length})";
+					break;
+				case DBStructureManager::ColumnTypeFloat:
+					$out = "float({$type->precision})";
+					break;
+				case DBStructureManager::ColumnTypeText:
+					$out = 'text';
+					break;
+				case DBStructureManager::ColumnTypeVarchar:
+					$out = "varchar({$type->precision})";
+					break;
+				case DBStructureManager::ColumnTypeTimestamp:
+					$out = 'timestamp';
+					break;
+				case DBStructureManager::ColumnTypeInt:
+					$out = "int({$type->precision})";
+					break;
+				default:
+					break;
+			}
 		}
 
 		return $out;
 	}
 	protected function buildFullColumnType($spec, $includeName = true) {
-		$out = "";
+		$out = '';
 
 		if($includeName) {
-			$out = "{$spec->fullname} {$this->buildColumnType($spec->type)} ";
+			$out = "{$spec->fullname} {$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		} else {
-			$out = "{$this->buildColumnType($spec->type)} ";
+			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		}
 #		if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeVarchar))) {
-#			$out.= "collate utf8_bin ";
+#			$out.= 'collate utf8_bin ';
 #		}
 		if(!$spec->null) {
-			$out.= "not null ";
+			$out.= 'not null ';
 		}
 		if($spec->hasDefault) {
 			if($spec->default === null) {
 				if($spec->null) {
-					$out.= "default null ";
+					$out.= 'default null ';
 				}
 			} else {
-				if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
+				if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
 					$out.= "default '{$spec->default}' ";
 				} else {
 					$out.= "default {$spec->default} ";
 				}
 			}
 		}
-#		if($spec->autoincrement) {
-#			/** @fixme this is some kind impolite @{ */
-#			if($includeName) {
-#				$out.= "primary key auto_increment ";
-#			} else {
-#				$out.= "auto_increment ";
-#			}
-#			/** @} */
-#		}
+		if($spec->autoincrement) {
+			/** @fixme this is somehow impolite @{ */
+			if($includeName) {
+				$out.= 'primary key autoincrement ';
+			} else {
+				$out.= 'autoincrement ';
+			}
+			/** @} */
+		}
 #		if($spec->comment) {
 #			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
 #		} else {

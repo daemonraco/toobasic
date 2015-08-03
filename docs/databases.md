@@ -110,6 +110,23 @@ binary file instead, that why our server parameter has changed this way.
 In the example, our database is located in known writable directory, but you can
 store it wherever you need in your server.
 
+## PostgreSQL connection
+A connection to an PostgreSQLite database would have a similar configuration to
+MySQL databases, and it may look like this example:
+```php
+<?php
+$Connections[GC_CONNECTIONS_DB]["census"] = array(
+	GC_CONNECTIONS_DB_ENGINE => "pgsql",
+	GC_CONNECTIONS_DB_SERVER => "localhost",
+	GC_CONNECTIONS_DB_PORT => false,
+	GC_CONNECTIONS_DB_NAME => "census",
+	GC_CONNECTIONS_DB_USERNAME => "censususr",
+	GC_CONNECTIONS_DB_PASSWORD => "censususr",
+	GC_CONNECTIONS_DB_PREFIX => "ss_"
+);
+```
+As you can see, the main difference is the engine/driver to use.
+
 ## Suggestions
 If you want or need it, you may visit this documentation pages:
 

@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * @file Manager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class Manager
+ * @abstract
+ */
 abstract class Manager extends Singleton {
 	//
 	// Magic methods.

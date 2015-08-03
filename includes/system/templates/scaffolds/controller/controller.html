@@ -15,7 +15,7 @@ class <%$controller%> extends \TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 <%if $init%>
 	protected function init() {

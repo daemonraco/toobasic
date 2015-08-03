@@ -18,6 +18,11 @@
 		"debugloader": "Show the location of each class loaded through a SuperLoader setting.",
 		"debugloader=heavy": "Also shows information when a file couldn't be found",
 		"debuglang": "Prompts current language, translation files used, and every key and its value. It works only if a translation gets used.",
-		"debugdebugs": "List all known debugs, including this one."
+		"debugdebugs": "List all known debugs, including this one.",
+		"debugemail": "Allows to view a mock of an e@mail.",
+		"debugnoemaillayout": "Disables current layout if any for emails.",
+		"debugemailstriptags": "This activates the tags stripping when debugging emails.",
+		"debugdbquery": "Displays queries used by database query adapters.",
+		"debugredirection": "Disables redirect conditions and prompt what it's going to happen."
 	}
 }

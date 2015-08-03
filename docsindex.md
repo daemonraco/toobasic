@@ -47,10 +47,48 @@
 	* [Database Cache Adapter](docs/cache.md#database-cache-adapter)
 	* [Memcached Adapter](docs/cache.md#memcached-adapter)
 	* [Memcache Adapter](docs/cache.md#memcache-adapter)
+	* [Redis Adapter](docs/cache.md#redis-adapter)
 * [Setting Adapter](docs/cache.md#setting-adapter)
 * [Cached Controller](docs/cache.md#cached-controller)
 * [What if you don't want it?](docs/cache.md#what-if-you-dont-want-it)
 * [Duration](docs/cache.md#duration)
+
+##  Using Config Files (docs/configs.md):
+
+* [Is it necessary an explanation?](docs/configs.md#is-it-necessary-an-explanation)
+* [User defined configuration files](docs/configs.md#user-defined-configuration-files)
+* [I want em all!](docs/configs.md#i-want-em-all)
+* [Automatic config files](docs/configs.md#automatic-config-files)
+	* [_config.php_](docs/configs.md#configphp)
+	* [_config_shell.php_](docs/configs.md#config_shellphp)
+	* [_config_http.php_](docs/configs.md#config_httpphp)
+	* [Site config file](docs/configs.md#site-config-file)
+	* [Summary](docs/configs.md#summary)
+* [Suggestions](docs/configs.md#suggestions)
+
+##  Controller Exports (docs/controllerexports.md):
+
+* [What are these?](docs/controllerexports.md#what-are-these)
+	* [Warning](docs/controllerexports.md#warning)
+* [How to call an exported function](docs/controllerexports.md#how-to-call-an-exported-function)
+* [Basic path expansion](docs/controllerexports.md#basic-path-expansion)
+	* [_$ctrl->css()_](docs/controllerexports.md#ctrl-css)
+	* [_$ctrl->js()_](docs/controllerexports.md#ctrl-js)
+	* [_$ctrl->img()_](docs/controllerexports.md#ctrl-img)
+	* [_$ctrl->lib()_](docs/controllerexports.md#ctrl-lib)
+	* [_$ctrl->link()_](docs/controllerexports.md#ctrl-link)
+* [Controller insertion](docs/controllerexports.md#controller-insertion)
+* [Snippets](docs/controllerexports.md#snippets)
+* [HTML assets](docs/controllerexports.md#html-assets)
+	* [HTML assets configuration](docs/controllerexports.md#html-assets-configuration)
+	* [Specifics](docs/controllerexports.md#specifics)
+	* [Libraries](docs/controllerexports.md#libraries)
+* [Ajax insert](docs/controllerexports.md#ajax-insert)
+	* [Autoloading](docs/controllerexports.md#autoloading)
+	* [Parameters](docs/controllerexports.md#parameters)
+	* [Attributes](docs/controllerexports.md#attributes)
+	* [Reloading](docs/controllerexports.md#reloading)
+* [Suggestions](docs/controllerexports.md#suggestions)
 
 ##  Databases (docs/databases.md):
 
@@ -60,6 +98,7 @@
 * [Let's Make a Query](docs/databases.md#lets-make-a-query)
 * [Defaults](docs/databases.md#defaults)
 * [SQLite connection](docs/databases.md#sqlite-connection)
+* [PostgreSQL connection](docs/databases.md#postgresql-connection)
 * [Suggestions](docs/databases.md#suggestions)
 
 ##  Database Structure Specifications (docs/databasespecs.md):
@@ -83,6 +122,21 @@
 * [Unknowns](docs/databasespecs.md#unknowns)
 * [Performance](docs/databasespecs.md#performance)
 * [Suggestions](docs/databasespecs.md#suggestions)
+
+##  Emails (docs/emails.md):
+
+* [Huh?!](docs/emails.md#huh)
+* [Layout](docs/emails.md#layout)
+	* [_%TOO_BASIC_EMAIL_CONTENT%_](docs/emails.md#%too_basic_email_content%)
+	* [Default layout](docs/emails.md#default-layout)
+* [Hello email](docs/emails.md#hello-email)
+* [Is it right?](docs/emails.md#is-it-right)
+* [How do I send it?](docs/emails.md#how-do-i-send-it)
+	* [Let's explain things](docs/emails.md#lets-explain-things)
+* [Exports](docs/emails.md#exports)
+* [Strip tags](docs/emails.md#strip-tags)
+* [Origin](docs/emails.md#origin)
+* [Suggestions](docs/emails.md#suggestions)
 
 ##  Facilities (docs/facilities.md):
 
@@ -113,6 +167,32 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 * [Suggestions](docs/facilities.md#suggestions)
 
+##  Languages (docs/language.md):
+
+* [Languages?](docs/language.md#languages)
+* [How to configure it](docs/language.md#how-to-configure-it)
+* [Adding translations](docs/language.md#adding-translations)
+* [Using translations](docs/language.md#using-translations)
+* [Advanced](docs/language.md#advanced)
+* [Precompiled translations](docs/language.md#precompiled-translations)
+	* [Compilation](docs/language.md#compilation)
+	* [Configuration](docs/language.md#configuration)
+* [Suggestions](docs/language.md#suggestions)
+
+##  Using Layouts (docs/layout.md):
+
+* [What is a Layout?](docs/layout.md#what-is-a-layout)
+* [Create a Site with Layout](docs/layout.md#create-a-site-with-layout)
+	* [Main Content](docs/layout.md#main-content)
+	* [Nav Bar](docs/layout.md#nav-bar)
+	* [Layout](docs/layout.md#layout)
+	* [Config](docs/layout.md#config)
+* [Doubts](docs/layout.md#doubts)
+	* [What the Heck is That?](docs/layout.md#what-the-heck-is-that)
+	* [Insert?](docs/layout.md#insert)
+* [Wrong Layout?](docs/layout.md#wrong-layout)
+* [Suggestions](docs/layout.md#suggestions)
+
 ##  MagicProp (docs/magicprop.md):
 
 * [MagicProp?](docs/magicprop.md#magicprop)
@@ -129,6 +209,15 @@
 * [Example](docs/models.md#example)
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
+
+##  Using Redirections (docs/redirections.md):
+
+* [What is a redirection?](docs/redirections.md#what-is-a-redirection)
+* [Configuration](docs/redirections.md#configuration)
+* [Checking conditions](docs/redirections.md#checking-conditions)
+* [Complex redirectors](docs/redirections.md#complex-redirectors)
+	* [Parameters](docs/redirections.md#parameters)
+	* [Layout](docs/redirections.md#layout)
 
 ##  Representations (docs/representations.md):
 
@@ -155,11 +244,6 @@
 	* [Parameters types](docs/routes.md#parameters-types)
 	* [Let's write a few more](docs/routes.md#lets-write-a-few-more)
 * [Url issues](docs/routes.md#url-issues)
-	* [_$ctrl->css()_](docs/routes.md#ctrl-css)
-	* [_$ctrl->js()_](docs/routes.md#ctrl-js)
-	* [_$ctrl->img()_](docs/routes.md#ctrl-img)
-	* [_$ctrl->lib()_](docs/routes.md#ctrl-lib)
-	* [_$ctrl->link()_](docs/routes.md#ctrl-link)
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
 
@@ -171,10 +255,12 @@
 * [Simpler](docs/services.md#simpler)
 	* [May I?](docs/services.md#may-i)
 * [Interfaces](docs/services.md#interfaces)
+* [CORS](docs/services.md#cors)
+	* [Allowing sites](docs/services.md#allowing-sites)
+	* [Methods](docs/services.md#methods)
+	* [Headers](docs/services.md#headers)
 
-##  Shell Tools and Crons
- m h  dom mon dow   command
- m h  dom mon dow   command (docs/shelltools.md):
+##  Shell Tools and Crons (docs/shelltools.md):
 
 * [What's a Shell Tools?](docs/shelltools.md#whats-a-shell-tools)
 * [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)
@@ -199,6 +285,19 @@
 * [Debugging](docs/skins.md#debugging)
 * [Multiple sites](docs/skins.md#multiple-sites)
 
+##  Using Snippets (docs/snippets.md):
+
+* [Snippets?](docs/snippets.md#snippets)
+* [Pager Snippet](docs/snippets.md#pager-snippet)
+* [Pager Snippet Mananger](docs/snippets.md#pager-snippet-mananger)
+* [Current Problem](docs/snippets.md#current-problem)
+	* [Note Here](docs/snippets.md#note-here)
+* [Adding Pages](docs/snippets.md#adding-pages)
+* [Explain It!](docs/snippets.md#explain-it)
+	* [How to Invoke a Snippet.](docs/snippets.md#how-to-invoke-a-snippet)
+	* [Separated Assignments](docs/snippets.md#separated-assignments)
+	* [Something Good](docs/snippets.md#something-good)
+
 ##  Troubleshooting (docs/troubleshooting.md):
 
 * [What is this page?](docs/troubleshooting.md#what-is-this-page)
@@ -212,48 +311,4 @@
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
-
-##  Using Config Files (docs/useconfigs.md):
-
-* [Is it necessary an explanation?](docs/useconfigs.md#is-it-necessary-an-explanation)
-* [User defined configuration files](docs/useconfigs.md#user-defined-configuration-files)
-* [I want em all!](docs/useconfigs.md#i-want-em-all)
-* [Automatic config files](docs/useconfigs.md#automatic-config-files)
-	* [_config.php_](docs/useconfigs.md#configphp)
-	* [_config_shell.php_](docs/useconfigs.md#config_shellphp)
-	* [_config_http.php_](docs/useconfigs.md#config_httpphp)
-	* [Site config file](docs/useconfigs.md#site-config-file)
-	* [Summary](docs/useconfigs.md#summary)
-* [Suggestions](docs/useconfigs.md#suggestions)
-
-##  Using Languages (docs/uselanguage.md):
-
-* [Languages?](docs/uselanguage.md#languages)
-
-##  Using Layouts (docs/uselayout.md):
-
-* [What is a Layout?](docs/uselayout.md#what-is-a-layout)
-* [Create a Site with Layout](docs/uselayout.md#create-a-site-with-layout)
-	* [Main Content](docs/uselayout.md#main-content)
-	* [Nav Bar](docs/uselayout.md#nav-bar)
-	* [Layout](docs/uselayout.md#layout)
-	* [Config](docs/uselayout.md#config)
-* [Doubts](docs/uselayout.md#doubts)
-	* [What the Heck is That?](docs/uselayout.md#what-the-heck-is-that)
-	* [Insert?](docs/uselayout.md#insert)
-* [Wrong Layout?](docs/uselayout.md#wrong-layout)
-* [Suggestions](docs/uselayout.md#suggestions)
-
-##  Using Snippets (docs/usesnippets.md):
-
-* [Snippets?](docs/usesnippets.md#snippets)
-* [Pager Snippet](docs/usesnippets.md#pager-snippet)
-* [Pager Snippet Mananger](docs/usesnippets.md#pager-snippet-mananger)
-* [Current Problem](docs/usesnippets.md#current-problem)
-	* [Note Here](docs/usesnippets.md#note-here)
-* [Adding Pages](docs/usesnippets.md#adding-pages)
-* [Explain It!](docs/usesnippets.md#explain-it)
-	* [How to Invoke a Snippet.](docs/usesnippets.md#how-to-invoke-a-snippet)
-	* [Separated Assignments](docs/usesnippets.md#separated-assignments)
-	* [Something Good](docs/usesnippets.md#something-good)
 

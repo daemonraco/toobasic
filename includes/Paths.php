@@ -24,6 +24,12 @@ class Paths extends Singleton {
 	const ExtensionSQL = 'sql';
 	const ExtensionTemplate = 'html';
 	//
+	// Protected class properties.
+	/**
+	 * @var int Size of the document root string.
+	 */
+	protected static $_DocumentRootLength = false;
+	//
 	// Protected properties.
 	/**
 	 * @var string[] List of available configuration directories.
@@ -47,6 +53,10 @@ class Paths extends Singleton {
 	 * specifications.
 	 */
 	protected $_dbSpecPaths = false;
+	/**
+	 * @var string[] List of available emails controllers directories.
+	 */
+	protected $_emailControllerPaths = false;
 	/**
 	 * @var string[] List of available images directories.
 	 */
@@ -135,6 +145,21 @@ class Paths extends Singleton {
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
 		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This method provides a way to get one or all email controller files
+	 * matching certain name.
+	 *
+	 * @param string $emailName  Name of the file to look for (extension is
+	 * assumed 'php').
+	 * @param boolean $full Indicates if all found files has to be retunred or
+	 * only one.
+	 * @return mixed Returns an array with every path found or just one string
+	 * when it's not set as full. All paths are absolute.
+	 */
+	public function emailControllerPath($emailName, $full = false) {
+		global $Paths;
+		return $this->find($this->_emailControllerPaths, false, $Paths[GC_PATHS_EMAIL_CONTROLLERS], $emailName, self::ExtensionPHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all style files matching
@@ -375,9 +400,9 @@ class Paths extends Singleton {
 	 *
 	 * @return string Returns a list of absolute paths.
 	 */
-	public function routesPaths() {
+	public function routesPaths($fileName = 'routes') {
 		global $Paths;
-		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], 'routes', self::ExtensionJSON, true);
+		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], $fileName, self::ExtensionJSON, true);
 	}
 	/**
 	 * This method provides a way to get one or all service files matching
@@ -633,12 +658,12 @@ class Paths extends Singleton {
 		//
 		// Generating information for debug reports.
 		if($debugPathsActive) {
-			$debugPaths['name'] = $name;
-			$debugPaths['extension'] = $extension;
-			$debugPaths['skin'] = $skin;
-			$debugPaths['ignored'] = $ignored;
-			$debugPaths['subfolders'] = $folders;
-			$debugPaths['possibilities'] = $list;
+			$debugPaths[GC_AFIELD_NAME] = $name;
+			$debugPaths[GC_AFIELD_EXTENSION] = $extension;
+			$debugPaths[GC_AFIELD_SKIN] = $skin;
+			$debugPaths[GC_AFIELD_IGNORED] = $ignored;
+			$debugPaths[GC_AFIELD_SUBFOLDERS] = $folders;
+			$debugPaths[GC_AFIELD_POSSIBILITIES] = $list;
 		}
 		//
 		// Transforming paths into URI if requested.
@@ -655,7 +680,7 @@ class Paths extends Singleton {
 		//
 		// Displaying debug report.
 		if($debugPathsActive) {
-			$debugPaths['result'] = $out;
+			$debugPaths[GC_AFIELD_RESULT] = $out;
 
 			\TooBasic\debugThing($debugPaths);
 		}
@@ -717,6 +742,11 @@ class Paths extends Singleton {
 	 * @return string Returns an absolute URI.
 	 */
 	public static function Path2Uri($path) {
-		return Sanitizer::UriPath(substr($path, strlen(Params::Instance()->server->DOCUMENT_ROOT)));
+		//
+		// Saving this size to improve length analysis.
+		if(self::$_DocumentRootLength === false) {
+			self::$_DocumentRootLength = strlen(Params::Instance()->server->DOCUMENT_ROOT);
+		}
+		return Sanitizer::UriPath(substr($path, self::$_DocumentRootLength));
 	}
 }

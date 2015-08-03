@@ -62,7 +62,14 @@ class Translate extends Singleton {
 			if(is_array($arguments[0])) {
 				$params = $arguments[0];
 			} else {
-				$params = $arguments;
+				if(count($arguments) % 2 != 0) {
+					throw new Exception("The amount of parameters given for key '{$key}' is not pair");
+				}
+				while($arguments) {
+					$pKey = array_shift($arguments);
+					$pValue = array_shift($arguments);
+					$params[$pKey] = $pValue;
+				}
 			}
 		}
 		//
@@ -85,13 +92,13 @@ class Translate extends Singleton {
 		//
 		// Default values.
 		$results = array(
-			'counts' => array(
-				'keys' => 0,
-				'keys-by-lang' => array()
+			GC_AFIELD_COUNTS => array(
+				GC_AFIELD_KEYS => 0,
+				GC_AFIELD_KEYS_BY_LANG => array()
 			),
-			'langs' => array(),
-			'files' => array(),
-			'compilations' => array()
+			GC_AFIELD_LANGS => array(),
+			GC_AFIELD_FILES => array(),
+			GC_AFIELD_COMPILATIONS => array()
 		);
 		$filePaths = array();
 		$files = array();
@@ -133,10 +140,10 @@ class Translate extends Singleton {
 		}
 		//
 		// Taking the list of languages for the results report.
-		$results['langs'] = array_keys($files);
+		$results[GC_AFIELD_LANGS] = array_keys($files);
 		//
 		// Also the grouped list of files.
-		$results['files'] = $files;
+		$results[GC_AFIELD_FILES] = $files;
 		//
 		// Compiling each language.
 		foreach($files as $lang => $paths) {
@@ -172,8 +179,8 @@ class Translate extends Singleton {
 			//
 			// Storing the count of keys on the report (by language
 			// and overall).
-			$results['counts']['keys-by-lang'][$lang] = count($keys);
-			$results['counts']['keys'] += $results['counts']['keys-by-lang'][$lang];
+			$results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS_BY_LANG][$lang] = count($keys);
+			$results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS] += $results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS_BY_LANG][$lang];
 			//
 			// Converting keys into objects (compilation).
 			$keysObj = array();
@@ -192,7 +199,7 @@ class Translate extends Singleton {
 			file_put_contents($compFile, json_encode($compStructure));
 			//
 			// Adding compiled file path to the report.
-			$results['compilations'][] = $compFile;
+			$results[GC_AFIELD_COMPILATIONS][] = $compFile;
 		}
 		//
 		// Returning a results report.
@@ -202,7 +209,7 @@ class Translate extends Singleton {
 	 * This method gets the translation on the current language for a certain
 	 * key.
 	 *
-	 * @param string $key Key to translate
+	 * @param string $key Key to translate.
 	 * @param string[string] $params List of replacements to use on
 	 * translation.
 	 * @return string Returns a translation result.
@@ -231,13 +238,28 @@ class Translate extends Singleton {
 				//
 				// Replacing each parameter.
 				foreach($params as $name => $value) {
-					$out = str_replace("%{$name}%", (string) $value);
+					$out = str_replace("%{$name}%", (string) $value, $out);
 				}
 			}
 		}
 		//
 		// Retruning translation.
 		return $out;
+	}
+	/**
+	 * This method checks if a translation key is present on the current
+	 * language.
+	 *
+	 * @param string $key Key to check.
+	 * @return bool Returns true when it's present.
+	 */
+	public function has($key) {
+		//
+		// Enforcing translations loading.
+		$this->load(true);
+		//
+		// Checking if it's a known key.
+		return isset($this->_tr[$key]);
 	}
 	//
 	// Protected methods.
@@ -247,11 +269,10 @@ class Translate extends Singleton {
 	protected function init() {
 		//
 		// Global dependencies.
-		global $Defaults;
+		global $LanguageName;
 		//
 		// Catching current language.
-		/** @fixme this must be similar to '\TooBasic\guessSkin()' */
-		$this->_currentLang = $Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG];
+		$this->_currentLang = $LanguageName;
 	}
 	/**
 	 * This method loads configurated translation for the current language.
@@ -270,10 +291,7 @@ class Translate extends Singleton {
 			// If there are no files and their are required, it
 			// aborts and displayes a error message.
 			if(!$langPaths && $required) {
-				$thing = "Unable to find translation files for language '{$this->_currentLang}'";
-				/** @todo maybe this should be an TooBasicExection */
-				\TooBasic\debugThing($thing, \TooBasic\DebugThingTypeError);
-				die;
+				throw new \TooBasic\Exception("Unable to find translation files for language '{$this->_currentLang}'");
 			}
 			//
 			// Loading each file.
@@ -283,22 +301,20 @@ class Translate extends Singleton {
 			//
 			// Language debug.
 			if(isset(Params::Instance()->debuglang)) {
-				$thing = '';
+				\TooBasic\debugThing(function() use ($langPaths) {
+					echo "Current language: '{$this->_currentLang}'\n\n";
 
-				$thing.= "Current language: '{$this->_currentLang}'\n\n";
+					echo "Translation files:\n";
+					foreach($langPaths as $path) {
+						echo "\t- '{$path}'\n";
+					}
 
-				$thing.= "Translation files:\n";
-				foreach($langPaths as $path) {
-					$thing.= "\t- '{$path}'\n";
-				}
-
-				$thing.= "\nTranslation keys:\n";
-				ksort($this->_tr);
-				foreach($this->_tr as $key => $value) {
-					$thing.= "\t- '{$key}': '{$value}'\n";
-				}
-
-				\TooBasic\debugThing($thing);
+					echo "\nTranslation keys:\n";
+					ksort($this->_tr);
+					foreach($this->_tr as $key => $value) {
+						echo "\t- '{$key}': '{$value}'\n";
+					}
+				});
 				die;
 			}
 			//

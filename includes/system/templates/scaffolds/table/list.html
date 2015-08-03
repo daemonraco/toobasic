@@ -1,13 +1,13 @@
-<h4>This are the elements in your table '<%$pluralName%>'</h4>
+<h4>{$tr->title_table_items('tablename', '<%$pluralName%>')}</h4>
 
 <table>
 	<thead>
 		<tr>
-			<th>ID</th>
+			<th>{$tr->label_id}</th>
 <%foreach from=$tableFields item=field%>
-			<th><%$field.name%></th>
+			<th>{$tr->table_column_<%$field.name%>}</th>
 <%/foreach%>
-			<th>Actions</th>
+			<th>{$tr->label_actions}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,9 +18,9 @@
 			<td>{$item.<%$field.name%>}</td>
 <%/foreach%>
 			<td>
-				<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}">View</a>
-				<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}">Edit</a>
-				<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}">Remove</a>
+				<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}">{$tr->btn_view}</a>
+				<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}">{$tr->btn_edit}</a>
+				<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}">{$tr->btn_remove}</a>
 			</td>
 		</tr>
 {/foreach}
@@ -28,4 +28,4 @@
 </table>
 	
 <br/>
-<a href="{$ctrl->link('?action=<%$addAction%>')}">Add new item</a>
+<a href="{$ctrl->link('?action=<%$addAction%>')}">{$tr->btn_add_new_item}</a>

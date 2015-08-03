@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * @file layout.php
+ * @author Alejandro Dario Simi
+ */
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
+/**
+ * @class LayoutSystool
+ */
 class LayoutSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
@@ -24,7 +31,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			parent::genAssignments();
 			//
 			// Assignments.
-			$this->_assignments['name'] = $this->_names['name'];
+			$this->_assignments['name'] = $this->_names[GC_AFIELD_NAME];
 			$this->_assignments['controller'] = $this->_names['layout-name'];
 			$this->_assignments['nocache'] = false;
 			$this->_assignments['cached'] = '\TooBasic\CacheAdapter::ExpirationSizeLarge';
@@ -67,7 +74,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['layout-name'] = \TooBasic\classname($this->_names['name']).GC_CLASS_SUFFIX_CONTROLLER;
+			$this->_names['layout-name'] = \TooBasic\classname($this->_names[GC_AFIELD_NAME]).GC_CLASS_SUFFIX_CONTROLLER;
 			$this->_names['templates-prefix'] = '';
 			//
 			// Checking bootstrap option.
@@ -88,24 +95,24 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Files.
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php"),
-				'template' => 'controller.html',
-				'description' => 'controller file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
+				GC_AFIELD_TEMPLATE => 'controller.html',
+				GC_AFIELD_DESCRIPTION => 'controller file'
 			);
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html"),
-				'template' => "{$this->_names['templates-prefix']}view.html",
-				'description' => 'view file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
+				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
+				GC_AFIELD_DESCRIPTION => 'view file'
 			);
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_JS]}/script.js"),
-				'template' => 'script.html',
-				'description' => 'basic JS script file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/script.js"),
+				GC_AFIELD_TEMPLATE => 'script.html',
+				GC_AFIELD_DESCRIPTION => 'basic JS script file'
 			);
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CSS]}/style.css"),
-				'template' => "{$this->_names['templates-prefix']}style.html",
-				'description' => 'basic CSS file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CSS]}/style.css"),
+				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}style.html",
+				GC_AFIELD_DESCRIPTION => 'basic CSS file'
 			);
 		}
 	}
@@ -114,10 +121,10 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 
 		parent::setOptions();
 
-		$text = "Allows you to create a new layout and deploy it in your site.";
+		$text = 'Allows you to create a new layout and deploy it in your site.';
 		$this->_options->option(self::OptionCreate)->setHelpText($text, 'layout-name');
 
-		$text = "Allows you to eliminate a layout and its artifacts from your site.";
+		$text = 'Allows you to eliminate a layout and its artifacts from your site.';
 		$this->_options->option(self::OptionRemove)->setHelpText($text, 'layout-name');
 
 		$text = "TODO help text for: '--name', '-n'.";
@@ -140,17 +147,17 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Creating layout '{$this->_names['name']}':\n";
+		echo "{$spacer}Creating layout '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskCreate($spacer);
 	}
-	protected function taskInfo($spacer = "") {
+	protected function taskInfo($spacer = '') {
 		
 	}
 	protected function taskRemove($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Removing layout '{$this->_names['name']}':\n";
+		echo "{$spacer}Removing layout '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskRemove($spacer);
 	}

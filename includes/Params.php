@@ -15,11 +15,12 @@ namespace TooBasic;
 class Params extends Singleton {
 	//
 	// Constants.
-	const TypeCOOKIE = "cookie";
-	const TypeENV = "env";
-	const TypeGET = "get";
-	const TypePOST = "post";
-	const TypeSERVER = "server";
+	const TypeCOOKIE = 'cookie';
+	const TypeENV = 'env';
+	const TypeGET = 'get';
+	const TypeHEADERS = 'headers';
+	const TypePOST = 'post';
+	const TypeSERVER = 'server';
 	//
 	// Protected properties.
 	/**
@@ -143,8 +144,7 @@ class Params extends Singleton {
 			// Debugs may have changed.
 			$this->_debugs = false;
 		} else {
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+			throw new Exception("Unknown parameters stack called '{$type}'");
 		}
 	}
 	/**
@@ -165,8 +165,7 @@ class Params extends Singleton {
 			// Requesting all values from the stack,
 			$out = $this->_paramsStacks[$type]->all();
 		} else {
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Unknown parameters stack called '{$type}'", E_USER_ERROR);
+			throw new Exception("Unknown parameters stack called '{$type}'");
 		}
 		//
 		// Returning what was found.
@@ -233,5 +232,10 @@ class Params extends Singleton {
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
 		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
+		if(!defined('__SHELL__')) {
+			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(\getallheaders());
+		} else {
+			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(array());
+		}
 	}
 }

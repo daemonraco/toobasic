@@ -42,7 +42,7 @@ class Timer extends Singleton {
 	protected function __construct() {
 		//
 		// Is it a shell execution?
-		$this->_onShell = defined("__SHELL__");
+		$this->_onShell = defined('__SHELL__');
 	}
 	//
 	// Public methods.
@@ -72,7 +72,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Global timer was never used", E_USER_ERROR);
+			throw new Exception('Global timer was never used');
 		}
 		//
 		// Returning current position.
@@ -99,7 +99,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Timer '{$id}' in already running", E_USER_ERROR);
+			throw new Exception("Timer '{$id}' in already running");
 		}
 	}
 	/**
@@ -121,7 +121,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Global timer already started", E_USER_ERROR);
+			throw new Exception('Global timer already started');
 		}
 	}
 	/**
@@ -146,11 +146,11 @@ class Timer extends Singleton {
 		} elseif(!isset($this->_timersRunning[$id])) {
 			//
 			// Triggering exception if it doesn't exists.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Timer '{$id}' was never started", E_USER_ERROR);
+			throw new Exception("Timer '{$id}' was never started");
 		} else {
 			//
 			// Triggering exception if it's not running.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Timer '{$id}' in not running", E_USER_ERROR);
+			throw new Exception("Timer '{$id}' in not running");
 		}
 		//
 		// Returning final count.
@@ -176,7 +176,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			trigger_error(__CLASS__."::".__FUNCTION__."(): Global timer is not started", E_USER_ERROR);
+			throw new Exception('Global timer is not started');
 		}
 		//
 		// Returning final count.

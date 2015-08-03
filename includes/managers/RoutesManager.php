@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file RoutesManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
 /**
@@ -20,90 +25,149 @@ class RoutesManager extends Manager {
 	protected $_routes = false;
 	//
 	// Public methods.
+	/**
+	 * This method cleans a url and returns it as a friendly url capable of
+	 * going through routes analysis.
+	 *
+	 * @param string $path Url to clean.
+	 * @return string Cleaned url-
+	 */
 	public function enroute($path) {
+		//
+		// Default values.
 		$out = $path;
-
+		//
+		// Global dependencies.
 		global $Defaults;
-
+		//
+		// This method makes sence only when routes are active.
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			//
+			// Loading routes configurations.
 			$this->parseConfigs();
-
+			//
+			// Variable to store the path pieces.
 			$newPath = array();
-			$url = parse_url($path);
-
-			$url['query'] = isset($url['query']) ? explode('&', $url['query']) : array();
-			foreach($url['query'] as $key => $value) {
-				unset($url['query'][$key]);
+			//
+			// Loading required information of the URL
+			$url = array(
+				GC_AFIELD_QUERY => explode('&', parse_url($path, PHP_URL_QUERY)),
+				GC_AFIELD_HOST => parse_url($path, PHP_URL_HOST),
+				GC_AFIELD_PATH => parse_url($path, PHP_URL_PATH)
+			);
+			//
+			// Exploding each query parameter.
+			foreach($url[GC_AFIELD_QUERY] as $key => $value) {
+				unset($url[GC_AFIELD_QUERY][$key]);
 
 				$aux = explode('=', $value);
 				if(isset($aux[1])) {
-					$url['query'][$aux[0]] = $aux[1];
+					$url[GC_AFIELD_QUERY][$aux[0]] = $aux[1];
 				} else {
-					$url['query'][$aux[0]] = "true";
+					$url[GC_AFIELD_QUERY][$aux[0]] = "true";
 				}
 			}
-
-			$matchingRoute = false;
-			if(!isset($url["host"]) && isset($url['query']['action'])) {
+			//
+			// Tring to match a suitable route.
+			$matchingRoutes = array();
+			//
+			// This works if there's not host set and if there's an
+			// action name given in the parameters.
+			if(!isset($url[GC_AFIELD_HOST]) && isset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION])) {
+				//
+				// Checking each route.
 				foreach($this->routes() as $route) {
-					if($route->action == $url['query']['action']) {
-						$matchingRoute = $route;
-						break;
+					//
+					// If the action matches is a route to
+					// consider.
+					if($route->action == $url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]) {
+						$matchingRoutes[] = $route;
 					}
 				}
 			}
-
-			if($matchingRoute) {
-				unset($url['query']['action']);
-
-				$wrong = false;
-				foreach($matchingRoute->pattern as $piece) {
-					if($piece->type == self::PatternTypeLiteral) {
-						$newPath[] = $piece->name;
-					} elseif($piece->type == self::PatternTypeParameter) {
-						if(isset($url['query'][$piece->name])) {
-							$newPath[] = $url['query'][$piece->name];
-
-							switch($piece->valueType) {
-								case self::ValueTypeInteger:
-									$wrong = !is_numeric($url['query'][$piece->name]);
-									break;
-								case self::ValueTypeString:
-									$wrong = !is_string($url['query'][$piece->name]);
-									break;
-								case self::ValueTypeEnumerative:
-									$wrong = !in_array($url['query'][$piece->name], $piece->values);
-									break;
+			//
+			// Checking matching routes for the right one.
+			$matchingRoute = false;
+			if($matchingRoutes) {
+				//
+				// Action is no longer needed at this point.
+				unset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]);
+				//
+				// Checking each matching route.
+				foreach($matchingRoutes as $matchingRoute) {
+					$wrong = false;
+					$newPath = array();
+					//
+					// Checking routes pattern.
+					foreach($matchingRoute->pattern as $piece) {
+						//
+						// Checking what type of
+						// parameters is the current
+						// piece.
+						if($piece->type == self::PatternTypeLiteral) {
+							$newPath[] = $piece->name;
+						} elseif($piece->type == self::PatternTypeParameter) {
+							//
+							// Is there a parameter
+							// with the same name of
+							// this piece.
+							if(isset($url[GC_AFIELD_QUERY][$piece->name])) {
+								$newPath[] = $url[GC_AFIELD_QUERY][$piece->name];
+								//
+								// Checking found piece type.
+								switch($piece->valueType) {
+									case self::ValueTypeInteger:
+										$wrong = !is_numeric($url[GC_AFIELD_QUERY][$piece->name]);
+										break;
+									case self::ValueTypeString:
+										$wrong = !is_string($url[GC_AFIELD_QUERY][$piece->name]);
+										break;
+									case self::ValueTypeEnumerative:
+										$wrong = !in_array($url[GC_AFIELD_QUERY][$piece->name], $piece->values);
+										break;
+								}
+								//
+								// The parameter is no longer needed.
+								unset($url[GC_AFIELD_QUERY][$piece->name]);
+							} else {
+								$wrong = true;
 							}
-
-							unset($url['query'][$piece->name]);
-						} else {
-							$wrong = true;
+						}
+						//
+						// If something went wrong, this
+						// route doesn't really match.
+						if($wrong) {
+							break;
 						}
 					}
-
-					if($wrong) {
+					//
+					// If there were no problems, it is the
+					// right route.
+					if(!$wrong) {
 						break;
 					}
 				}
-
-				if($wrong) {
-					$matchingRoute = false;
-				}
 			}
-
+			//
+			// Did we find a route?
 			if($matchingRoute) {
-				$out = "{$url['path']}/".implode('/', $newPath);
-				if($url['query']) {
+				//
+				// Build the basic part of the new URL.
+				$out = \TooBasic\Sanitizer::UriPath("{$url[GC_AFIELD_PATH]}/".implode('/', $newPath));
+				//
+				// If there are some unkwon parameters, they are
+				// given as query parameters.
+				if($url[GC_AFIELD_QUERY]) {
 					$aux = array();
-					foreach($url['query'] as $key => $value) {
+					foreach($url[GC_AFIELD_QUERY] as $key => $value) {
 						$aux[] = "{$key}={$value}";
 					}
 					$out.= '?'.implode('&', $aux);
 				}
 			}
 		}
-
+		//
+		// Returning a processed and cleaned url.
 		return $out;
 	}
 	public function lastErrorMessage() {
@@ -179,10 +243,10 @@ class RoutesManager extends Manager {
 					$this->_params->addValues(Params::TypeGET, array('_route' => $extraRoute));
 				}
 
-				$this->_params->addValues(Params::TypeGET, array('action' => $matchingRoute->action));
+				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
 				$this->_params->addValues(Params::TypeSERVER, array('TOOBASIC_ROUTE' => $matchingRoute->route));
 			} else {
-				$this->_params->addValues(Params::TypeGET, array('action' => HTTPERROR_NOT_FOUND));
+				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND));
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		}
@@ -288,7 +352,7 @@ class RoutesManager extends Manager {
 	protected function parseConfig($path) {
 		$json = json_decode(file_get_contents($path));
 		if(json_last_error() != JSON_ERROR_NONE) {
-			trigger_error("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg(), E_USER_ERROR);
+			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
 		}
 
 		if(isset($json->routes)) {
@@ -315,7 +379,7 @@ class RoutesManager extends Manager {
 				}
 			} else {
 				if(isset($this->_params->debugroutes)) {
-					debugit("Routes are disabled", true);
+					debugit('Routes are disabled', true);
 				}
 			}
 		}

@@ -46,7 +46,6 @@ Or this when there's an error:
 }
 ```
 
-
 ## Let's use an example
 Let's think you have a site that handles users and it must provide a way to log-in
 from anywhere without using a web page, say a cell phone application or another
@@ -104,7 +103,9 @@ Let's explain how this works:
 	* Otherwise, we trigger an error.
 * If it's `POST` we validate the user and generate a token for it.
 * We also set a header called `Access-Control-Allow-Origin` to avoid
-[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing). This may not be polite, but it's ok for our examples.
+[CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing). This may not
+be polite, but it's ok for our examples. Nonetheless, if you want the polite what,
+you can read more about it in the section [CORS](services.md#cors).
 
 ## Simpler
 There is a way to make this more simpler and avoid one of our controls
@@ -164,6 +165,17 @@ You may obtain something like this:
 				"mode"
 			],
 			"POST": []
+		},
+		"CORS": {
+			"headers": [
+				"Accept",
+				"Content-Type"
+			],
+			methods: [
+				"POST",
+				"OPTIONS"
+			],
+			origins: []
 		}
 	},
 	"error": false,
@@ -174,3 +186,109 @@ Here you may find the right request method and all the require parameters.
 
 Also you may call this URL to obtain a full list of services and their interfaces.
 > http://www.example.com/?explaininterface
+
+## CORS
+When you are developing services and trying to provide them as API, one of the
+first problems you'll find is _CORS_.
+If you want to really understand it you may follow
+[this link](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), but to make it
+simple, let's make an example.
+
+Let's say you created a service at http://example.com and then a page at
+http://otherexample.com.
+In this last one you have a JavaScript that wants to use the service from the
+first page.
+Everything seem nice, but your browser will fail and won't let you access it due
+to CORS issues.
+The reason is that you can only use JavaScript to access remote servers when the
+page your are visiting has the same server name than the remote one (and schema
+and port) or when the remote server allows you to do so.
+
+This seems somehow problematic but it's a security policy enforced by browsers and
+there's not much to do except working in compliance with such policy.
+_Is there a work around?_ well yes, you can always create a proxy and access
+trough it, but __TooBasic__ provides a more polite way to do this.
+
+### Allowing sites
+The first thing you'll want to configure is which sites are allowed to access your
+services and there are three way to achieve it.
+
+The first one is to allow sites inside each service writing something like this:
+```php
+<?php
+class LoginService extends \TooBasic\Service {
+
+	. . .
+
+	protected function init() {
+		parent::init();
+
+		. . .
+
+		$this->_corsAllowOrigin[] = 'http://otherexample.com';
+	}
+}
+```
+This setting will allow any page in http://otherexample.com to access your login
+service using JavaScript.
+
+The second way and the most generic is to add a configuration like this one:
+```php
+$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES][] = 'http://otherexample.com';
+```
+This mechanism allows any page in http://otherexample.com to access _any_ service
+in your site.
+
+If you take a closer look, the first way implies code modification every time you
+need to add/remove/update a site, while the second one affects all services at
+once.
+For this reason there's a third way that is in the middle of the other two.
+
+If you want to make only your __login__ service available at any page in
+http://otherexample.com without changing the code, you may add this configuration:
+```php
+$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV]['login'] = array(
+	'http://otherexample.com'
+);
+```
+
+### Methods
+By default, __TooBasic__ tries to guess what methods your are allowing, but if you
+what to provide some in particular, you can add this to your service:
+```php
+<?php
+class LoginService extends \TooBasic\Service {
+
+	. . .
+
+	protected function init() {
+		parent::init();
+
+		. . .
+
+		$this->_corsAllowMethods[] = 'PUT';
+		$this->_corsAllowMethods[] = 'POST';
+	}
+}
+```
+
+__Note__: Method _OPTIONS_ is always present.
+
+### Headers
+If you need to make use of some specific headers you may specify them as allowed
+headers writing something like this:
+```php
+<?php
+class LoginService extends \TooBasic\Service {
+
+	. . .
+
+	protected function init() {
+		parent::init();
+
+		. . .
+
+		$this->_corsAllowHeaders[] = 'Authorization';
+	}
+}
+```

@@ -1,37 +1,37 @@
 <div class="container">
-	<h4 class="text-center">Edit item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+	<h4 class="text-center">{$tr->title_edit_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
 		<form id="<%$singularName%>_form" method="post" href="#" role="form">
 			<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</div>
 <%/if%>
 <%if $field.type.type == 'enum' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control">
 <%foreach from=$field.type.values item=value%>
-					<option value="<%$value%>"{if $<%$singularName%>.<%$field.name%> == '<%$value%>'} selected="selected"{/if}><%$value%></option>
+					<option value="<%$value%>"{if $<%$singularName%>.<%$field.name%> == '<%$value%>'} selected="selected"{/if}>{$tr->select_option_<%$value%>}</option>
 <%/foreach%>
 				</select>
 			</div>
 <%/if%>
 <%/if%><%/foreach%>
-			<input type="submit" value="Save" class="btn btn-success"/>
-			<input type="reset" value="Restore fields" class="btn btn-default"/>
+                        <input type="submit" value="{$tr->btn_save}" class="btn btn-success"/>
+                        <input type="reset" value="{$tr->btn_restore_fields}" class="btn btn-default"/>
 		</form>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">Back to list</a>
+	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">{$tr->btn_back_to_list}</a>
 </div>

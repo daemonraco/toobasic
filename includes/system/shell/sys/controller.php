@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * @file controller.php
+ * @author Alejandro Dario Simi
+ */
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
+/**
+ * @class ControllerSystool
+ */
 class ControllerSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
@@ -20,7 +27,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			parent::genAssignments();
 			//
 			// Assignments.
-			$this->_assignments['name'] = $this->_names['name'];
+			$this->_assignments['name'] = $this->_names[GC_AFIELD_NAME];
 			$this->_assignments['method'] = 'GET';
 			$this->_assignments['controller'] = $this->_names['controller-name'];
 			$this->_assignments['init'] = true;
@@ -79,18 +86,18 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['controller-name'] = \TooBasic\classname($this->_names['name']).GC_CLASS_SUFFIX_CONTROLLER;
+			$this->_names['controller-name'] = \TooBasic\classname($this->_names[GC_AFIELD_NAME]).GC_CLASS_SUFFIX_CONTROLLER;
 			//
 			// Files.
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name']}.php"),
-				'template' => 'controller.html',
-				'description' => 'controller file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
+				GC_AFIELD_TEMPLATE => 'controller.html',
+				GC_AFIELD_DESCRIPTION => 'controller file'
 			);
 			$this->_files[] = array(
-				'path' => TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name']}.html"),
-				'template' => 'view.html',
-				'description' => 'view file'
+				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
+				GC_AFIELD_TEMPLATE => 'view.html',
+				GC_AFIELD_DESCRIPTION => 'view file'
 			);
 		}
 	}
@@ -100,14 +107,14 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Controller's route.
 			$route = new \stdClass();
-			$route->route = $this->_names['name'];
+			$route->route = $this->_names[GC_AFIELD_NAME];
 			$opt = $this->_options->option(self::OptionParam);
 			if($opt->activated()) {
 				foreach($opt->value() as $param) {
 					$route->route .= "/:{$param}:";
 				}
 			}
-			$route->action = $this->_names['name'];
+			$route->action = $this->_names[GC_AFIELD_NAME];
 			$this->_routes[] = $route;
 		}
 	}
@@ -136,7 +143,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Creating controller '{$this->_names['name']}':\n";
+		echo "{$spacer}Creating controller '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskCreate($spacer);
 	}
@@ -146,7 +153,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	protected function taskRemove($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Removing controller '{$this->_names['name']}':\n";
+		echo "{$spacer}Removing controller '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskRemove($spacer);
 	}

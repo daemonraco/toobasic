@@ -1,8 +1,19 @@
 <?php
 
+/**
+ * @file ActionsManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class ActionsManager
+ */
 class ActionsManager extends UrlManager {
+	//
+	// Protected methods.
+	protected $_currentRedirector = false;
 	//
 	// Public methods.
 	/**
@@ -22,32 +33,38 @@ class ActionsManager extends UrlManager {
 		// Current action execution.
 		$actionLastRun = self::ExecuteAction($ActionName, null, $layoutName);
 		//
-		// Layout execution (if any).
-		$layoutLastRun = false;
-		//
-		// Running layout's controller.
-		if($layoutName) {
-			$layoutLastRun = self::ExecuteAction($layoutName, $actionLastRun);
-		}
-		//
-		// Displaying if required.
-		if($autoDisplay) {
-			$headers = array();
-			if($layoutLastRun) {
-				$headers = array_merge($headers, $layoutLastRun['headers']);
-			}
-			$headers = array_merge($headers, $actionLastRun['headers']);
-
-			foreach($headers as $name => $value) {
-				header("{$name}: {$value}");
+		// Checking if there's a redirector set.
+		if(isset($actionLastRun[GC_AFIELD_REDIRECTOR])) {
+			$this->executeRedirector($actionLastRun[GC_AFIELD_REDIRECTOR]);
+		} else {
+			//
+			// Layout execution (if any).
+			$layoutLastRun = false;
+			//
+			// Running layout's controller.
+			if($layoutName) {
+				$layoutLastRun = self::ExecuteAction($layoutName, $actionLastRun);
 			}
 			//
-			// If there's a layout present, controller's result must
-			// be shown inside a layout's result.
-			if($layoutLastRun) {
-				echo str_replace('%TOO_BASIC_ACTION_CONTENT%', $actionLastRun['render'], $layoutLastRun['render']);
-			} else {
-				echo $actionLastRun['render'];
+			// Displaying if required.
+			if($autoDisplay) {
+				$headers = array();
+				if($layoutLastRun) {
+					$headers = array_merge($headers, $layoutLastRun[GC_AFIELD_HEADERS]);
+				}
+				$headers = array_merge($headers, $actionLastRun[GC_AFIELD_HEADERS]);
+
+				foreach($headers as $name => $value) {
+					header("{$name}: {$value}");
+				}
+				//
+				// If there's a layout present, controller's result must
+				// be shown inside a layout's result.
+				if($layoutLastRun) {
+					echo str_replace('%TOO_BASIC_ACTION_CONTENT%', $actionLastRun[GC_AFIELD_RENDER], $layoutLastRun[GC_AFIELD_RENDER]);
+				} else {
+					echo $actionLastRun[GC_AFIELD_RENDER];
+				}
 			}
 		}
 
@@ -55,24 +72,123 @@ class ActionsManager extends UrlManager {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method stops the process of an action and performs a redirection
+	 * to another url.
+	 *
+	 * @param string $redirector Redirector configuration name.
+	 */
+	protected function executeRedirector($redirector) {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Checking redirection configuration.
+		if(isset($Defaults[GC_DEFAULTS_REDIRECTIONS][$redirector])) {
+			//
+			// Configuration shortcut.
+			$redirConf = $Defaults[GC_DEFAULTS_REDIRECTIONS][$redirector];
+			//
+			// If current redirector is an alias, it must be
+			// forwarded.
+			if(isset($redirConf[GC_AFIELD_ALIAS])) {
+				$this->executeRedirector($redirConf[GC_AFIELD_ALIAS]);
+			} else {
+				//
+				// Checking configuration for parameter 'action'.
+				if(!isset($redirConf[GC_AFIELD_ACTION])) {
+					throw new Exception("Wrong redirection configuration '{$redirector}'. No configuration found for parameter '".GC_AFIELD_ACTION."'");
+				}
+				//
+				// Checking configuration for parameter 'params'.
+				if(!isset($redirConf[GC_AFIELD_PARAMS])) {
+					$redirConf[GC_AFIELD_PARAMS] = array();
+				} elseif(!is_array($redirConf[GC_AFIELD_PARAMS])) {
+					throw new Exception("Wrong redirection configuration '{$redirector}'. Parameter '".GC_AFIELD_PARAMS."' is not an array");
+				}
+				//
+				// Checking configuration for parameter 'layout'.
+				if(!isset($redirConf[GC_AFIELD_LAYOUT])) {
+					$redirConf[GC_AFIELD_LAYOUT] = false;
+				}
+				//
+				// Basic url
+				$url = ROOTURI."/?action={$redirConf[GC_AFIELD_ACTION]}";
+				//
+				// Adding the layout parameter.
+				if($redirConf[GC_AFIELD_LAYOUT]) {
+					$url.= "&".GC_REQUEST_LAYOUT."={$redirConf[GC_AFIELD_LAYOUT]}";
+				}
+				//
+				// Adding params.
+				foreach($redirConf[GC_AFIELD_PARAMS] as $key => $value) {
+					if(is_numeric($key)) {
+						$url.= "&{$value}";
+					} elseif($value === null) {
+						$url.= "&{$key}";
+					} else {
+						$url.= "&{$key}={$value}";
+					}
+				}
+				//
+				// Adding the old url.
+				$url.= '&'.GC_REQUEST_REDIRECTOR.'='.urlencode($this->params->server->REQUEST_URI);
+				//
+				// Cleaning and replacing routes.
+				$url = \TooBasic\RoutesManager::Instance()->enroute($url);
+				//
+				// Is it a debug or the real deal?
+				if(isset($this->params->debugredirection)) {
+					\TooBasic\debugThing(function() use ($redirector, $redirConf, $url) {
+						$spacer = "    ";
+						echo "Redirect condition reached:\n";
+						echo "{$spacer}- url:           '{$url}'\n";
+						echo "{$spacer}- redirector:    '{$redirector}'\n";
+
+						echo "{$spacer}- configuration:\n";
+						echo "{$spacer}{$spacer}- action: '{$redirConf[GC_AFIELD_ACTION]}'\n";
+						echo "{$spacer}{$spacer}- parameters:\n";
+						ksort($redirConf[GC_AFIELD_PARAMS]);
+						foreach($redirConf[GC_AFIELD_PARAMS] as $key => $value) {
+							if(is_numeric($key)) {
+								echo "{$spacer}{$spacer}{$spacer}- '{$value}'\n";
+							} else {
+								echo "{$spacer}{$spacer}{$spacer}- '{$key}' [value: '{$value}']\n";
+							}
+						}
+					});
+				} else {
+					header("Location: {$url}");
+				}
+				//
+				// A redirect contition always stops here.
+				die;
+			}
+		} else {
+			throw new Exception("Redirection code '{$redirector}' is not configured");
+		}
+	}
+	/**
+	 * Manager initialization.
+	 */
 	protected function init() {
 		parent::init();
 
 		$dbStructureManager = DBStructureManager::Instance();
 		if($dbStructureManager->hasErrors()) {
 			foreach($dbStructureManager->errors() as $error) {
-				$code = $error['code'];
+				$code = $error[GC_AFIELD_CODE];
 				if(is_numeric($code)) {
 					$code = sprintf('%03d', $code);
 				}
 
-				trigger_error("[DB-{$code}] {$error['message']}", E_USER_WARNING);
+				throw new Exception("[DB-{$code}] {$error[GC_AFIELD_MESSAGE]}");
 			}
-			trigger_error('There are database errors specs', E_USER_ERROR);
+			throw new Exception('There are database errors specs');
 		} else {
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
-					trigger_error('Database couldn\'t be upgraded', E_USER_ERROR);
+					throw new Exception('Database couldn\'t be upgraded');
 				}
 			}
 		}
@@ -82,6 +198,7 @@ class ActionsManager extends UrlManager {
 	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
 		//
 		// Default values.
+		$redirector = false;
 		$status = true;
 		//
 		// Loading controller based on current action name.
@@ -96,10 +213,15 @@ class ActionsManager extends UrlManager {
 			// page title.
 			if(is_array($previousActionRun)) {
 				/** @fixme There should be a way to change layout's cache key setting from the controller. */
-				$controllerClass->massiveAssign($previousActionRun['assignments']);
+				$controllerClass->massiveAssign($previousActionRun[GC_AFIELD_ASSIGNMENTS]);
 			}
 
-			$status = $controllerClass->run();
+			$redirector = $controllerClass->checkRedirectors();
+			if(!$redirector) {
+				$status = $controllerClass->run();
+			} else {
+				$status = false;
+			}
 		} else {
 			$status = false;
 		}
@@ -107,22 +229,36 @@ class ActionsManager extends UrlManager {
 		$lastRun = false;
 		if($status) {
 			$lastRun = $controllerClass->lastRun();
+		} elseif($redirector) {
+			$lastRun = array(
+				GC_AFIELD_REDIRECTOR => $redirector
+			);
 		} else {
+			//
+			// Global dependencies.
+			global $Defaults;
+
 			$errorActionName = HTTPERROR_NOT_FOUND;
 			if($controllerClass instanceof Exporter) {
 				$lastError = $controllerClass->lastError();
 				if($lastError) {
-					$errorActionName = $lastError['code'];
+					$errorActionName = $lastError[GC_AFIELD_CODE];
 				} else {
 					$errorActionName = HTTPERROR_INTERNAL_SERVER_ERROR;
 				}
 			}
+			//
+			// Checking error page handlers.
+			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
+				throw new \TooBasic\Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
+			}
 
-			$errorControllerClass = self::FetchController($errorActionName);
+			$errorControllerClass = self::FetchController($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName]);
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {
-				$errorControllerClass->setErrorMessage("Unable to find action '{$actionName}'");
+				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
+				$errorControllerClass->setErrorMessage("Unable to find {$whatIsIt} '{$actionName}'");
 			}
 			$layoutName = $errorControllerClass->layout();
 			$errorControllerClass->run();
@@ -161,9 +297,7 @@ class ActionsManager extends UrlManager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($actionName);
 			} else {
-				/** @todo this should be a TooBasicException. */
-				debugThing("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.", DebugThingTypeError);
-				die;
+				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
 			}
 		} elseif(!$recursive) {
 			//

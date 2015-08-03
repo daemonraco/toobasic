@@ -32,32 +32,38 @@ class ModelsFactory extends Singleton {
 		// Forwarding call and assuming no namespace.
 		return $this->get($className, false);
 	}
+	public function __call($className, $params) {
+		$namespace = isset($params[0]) ? $params[0] : false;
+		//
+		// Forwarding call.
+		return $this->get($className, $namespace);
+	}
 	//
 	// Public methods.
 	/**
 	 * This method looks for and returns a model object on success.
 	 *
-	 * @param string $className Base class name. If your model is called
+	 * @param string $basicClassName Base class name. If your model is called
 	 * 'PagesModel', just say 'pages'.
 	 * @param string $namespace If the model is defined inside a namespace, it
 	 * can be specified with this parameter.
 	 * @return \TooBasic\Model Returns the requested model or NULL when it
 	 * doesn't exist.
 	 */
-	public function get($className, $namespace = false) {
+	public function get($basicClassName, $namespace = false) {
 		//
 		// Default values.
 		$out = null;
 		//
 		// Cleaning name space.
-		$namespace = $namespace ? "\\{$namespace}\\" : "\\";
-		while(strpos($namespace, "\\\\") !== false) {
-			$namespace = str_replace("\\\\", "\\", $namespace);
+		$namespace = $namespace ? "\\{$namespace}\\" : '\\';
+		while(strpos($namespace, '\\\\') !== false) {
+			$namespace = str_replace('\\\\', '\\', $namespace);
 		}
 		//
 		// Cleaning and building the real class name for the model.
-		$classFileName = \TooBasic\classname($className);
-		$className = "{$namespace}{$classFileName}".GC_CLASS_SUFFIX_MODEL;
+		$className = Names::ModelClass($namespace.$basicClassName);
+		$classFileName = Names::ModelFilename($basicClassName);
 		//
 		// If it's already stored as a singleton, that instance is
 		// returned.
@@ -122,15 +128,13 @@ class ModelsFactory extends Singleton {
 				//
 				// If the requested class was not defined, it is
 				// considered a fatal exception.
-				/** @todo this should raise a TooBasicException */
-				trigger_error("Class '{$className}' is not defined.", E_USER_ERROR);
+				throw new Exception("Class '{$className}' is not defined.");
 			}
 		} else {
 			//
 			// If the requested class has no file, it is considered a
 			// fatal exception.
-			/** @todo this should raise a TooBasicException */
-			trigger_error("Cannot load model file '{$classFileName}'.", E_USER_ERROR);
+			throw new Exception("Cannot load model file '{$classFileName}'.");
 		}
 		//
 		// Retruning what was found.

@@ -1,19 +1,34 @@
 <?php
 
+/**
+ * @file loader.php
+ * @author Alejandro Dario Simi
+ */
 //
 // SuperLoader main list.
 $SuperLoader = array();
 //
 // Basics @{
+$SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
+$SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
+$SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
+$SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
+$SuperLoader['TooBasic\\Email'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Email.php";
+$SuperLoader['TooBasic\\EmailExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailExports.php";
+$SuperLoader['TooBasic\\EmailLayout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailLayout.php";
+$SuperLoader['TooBasic\\EmailPayload'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailPayload.php";
 $SuperLoader['TooBasic\\ErrorController'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ErrorController.php";
+$SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Exporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exporter.php";
+$SuperLoader['TooBasic\\FactoryClass'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/FactoryClass.php";
 $SuperLoader['TooBasic\\Layout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Layout.php";
 $SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 $SuperLoader['TooBasic\\Model'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Model.php";
 $SuperLoader['TooBasic\\ModelsFactory'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ModelsFactory.php";
+$SuperLoader['TooBasic\\Names'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Names.php";
 $SuperLoader['TooBasic\\Params'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Params.php";
 $SuperLoader['TooBasic\\ParamsStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ParamsStack.php";
 $SuperLoader['TooBasic\\Paths'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Paths.php";
@@ -27,6 +42,8 @@ $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/T
 $SuperLoader['TooBasic\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
 $SuperLoader['TooBasic\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
 $SuperLoader['TooBasic\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\Managers\\EmailsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/EmailsManager.php";
 $SuperLoader['TooBasic\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
 $SuperLoader['TooBasic\\RoutesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/RoutesManager.php";
 $SuperLoader['TooBasic\\ServicesManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ServicesManager.php";
@@ -38,16 +55,24 @@ $SuperLoader['TooBasic\\UrlManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/
 $SuperLoader['TooBasic\\CacheAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapter.php";
 $SuperLoader['TooBasic\\CacheAdapterDB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDB.php";
 $SuperLoader['TooBasic\\CacheAdapterDBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBMySQL.php";
+$SuperLoader['TooBasic\\CacheAdapterDBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBPostgreSQL.php";
+$SuperLoader['TooBasic\\CacheAdapterDBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBSQLite.php";
 $SuperLoader['TooBasic\\CacheAdapterFile'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterFile.php";
 $SuperLoader['TooBasic\\CacheAdapterMemcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
 $SuperLoader['TooBasic\\CacheAdapterMemcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcached.php";
 $SuperLoader['TooBasic\\CacheAdapterNoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterNoCache.php";
+$SuperLoader['TooBasic\\CacheAdapterRedis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterRedis.php";
 // @}
 //
 // Database adapters @{
 $SuperLoader['TooBasic\\DBAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBAdapter.php";
+$SuperLoader['TooBasic\\DBQueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapter.php";
+$SuperLoader['TooBasic\\DBQueryAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterMySQL.php";
+$SuperLoader['TooBasic\\DBQueryAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterPostgreSQL.php";
+$SuperLoader['TooBasic\\DBQueryAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterSQLite.php";
 $SuperLoader['TooBasic\\DBSpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapter.php";
 $SuperLoader['TooBasic\\DBSpecAdapterMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterMySQL.php";
+$SuperLoader['TooBasic\\DBSpecAdapterPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterPostgreSQL.php";
 $SuperLoader['TooBasic\\DBSpecAdapterSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterSQLite.php";
 // @}
 //
@@ -81,6 +106,11 @@ $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
+);
+$SuperLoader['Predis\\Client'] = array(
+//$SuperLoader['\\Predis\\Autoloader'] = array(
+	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis/autoload.php",
+	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis.git/autoload.php"
 );
 // @}
 //

@@ -14,7 +14,7 @@ class CacheAdapterMemcache extends CacheAdapter {
 		global $Defaults;
 
 		if(!isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT]) || !isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX])) {
-			trigger_error("Memcache is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX].", E_USER_ERROR);
+			throw new \TooBasic\CacheException("Memcache is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX].");
 		}
 
 		if(!isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_COMPRESSED])) {

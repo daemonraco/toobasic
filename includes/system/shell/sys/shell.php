@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * @file shell.php
+ * @author Alejandro Dario Simi
+ */
 use TooBasic\Shell\Option as TBS_Option;
 use TooBasic\Sanitizer as TB_Sanitizer;
 
+/**
+ * @class ShellSystool
+ */
 class ShellSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
@@ -84,14 +91,14 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 				);
 				switch($paramType) {
 					case 'M':
-						$aux['type'] = 'TypeMultiValue';
+						$aux[GC_AFIELD_TYPE] = 'TypeMultiValue';
 						break;
 					case 'V':
-						$aux['type'] = 'TypeValue';
+						$aux[GC_AFIELD_TYPE] = 'TypeValue';
 						break;
 					case 'N':
 					default:
-						$aux['type'] = 'TypeNoValue';
+						$aux[GC_AFIELD_TYPE] = 'TypeNoValue';
 						break;
 				}
 
@@ -109,30 +116,30 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['type'] = $this->_currentType;
+			$this->_names[GC_AFIELD_TYPE] = $this->_currentType;
 
-			$this->_names['tool-name'] = \TooBasic\classname($this->_names['name']);
+			$this->_names['tool-name'] = \TooBasic\classname($this->_names[GC_AFIELD_NAME]);
 			switch($this->_currentType) {
 				case self::TypeCron:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_CRON;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellCronClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellCron';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names['name']}.php");
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 				case self::TypeSys:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_SYSTOOL;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellSystoolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names['name']}.php");
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 				case self::TypeTool:
-					$this->_names['tool-name'].= GC_CLASS_SUFFIX_TOOL;
+					$this->_names['tool-name'] = \TooBasic\Names::ShellToolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names['parent-directory']}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names['name']}.php");
+					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 			}
 			$this->_files[] = array(
-				'path' => $this->_names['tool-path'],
-				'template' => 'tool.html',
-				'description' => 'tool file'
+				GC_AFIELD_PATH => $this->_names['tool-path'],
+				GC_AFIELD_TEMPLATE => 'tool.html',
+				GC_AFIELD_DESCRIPTION => 'tool file'
 			);
 		}
 	}
@@ -150,7 +157,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 					$this->setError(self::ErrorType, "Unknown type called '{$type}'");
 			}
 		} else {
-			$this->setError(self::ErrorType, "No type specified");
+			$this->setError(self::ErrorType, 'No type specified');
 		}
 	}
 	protected function setOptions() {
@@ -187,7 +194,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		if(!$this->hasErrors()) {
 			$this->genNames();
 
-			echo "{$spacer}Creating shell tool '{$this->_names['name']}' (type: {$this->_currentType}):\n";
+			echo "{$spacer}Creating shell tool '{$this->_names[GC_AFIELD_NAME]}' (type: {$this->_currentType}):\n";
 
 			$ok = parent::taskCreate($spacer);
 		}
@@ -205,7 +212,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		if(!$this->hasErrors()) {
 			$this->genNames();
 
-			echo "{$spacer}Removing tool '{$this->_names['name']}' (type: {$this->_currentType}):\n";
+			echo "{$spacer}Removing tool '{$this->_names[GC_AFIELD_NAME]}' (type: {$this->_currentType}):\n";
 
 			$ok = parent::taskRemove($spacer);
 		}

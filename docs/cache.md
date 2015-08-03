@@ -26,8 +26,9 @@ called __\TooBasic\CacheAdapterFile__ and it stores data inside a files. When
 active, you'll find files coming and going inside __ROOTDIR/cache/filecache__.
 
 ### Database Cache Adapter
-A not very polite way of caching data is store it inside a database, but in some
-cases it could be useful.
+A not very polite way of caching data is to store it inside a database, but in
+some cases it could be useful (I hope _Mr.Potato_ won't kill for suggesting this
+mechanism).
 For those cases, __TooBasic__ provides an abstract adapter class called
 __\TooBasic\CacheAdapterDB__ and a specification for __MySQL__ called
 __\TooBasic\CacheAdapterDBMySQL__.
@@ -56,9 +57,9 @@ For this, __TooBasic__ provides a cache adapter class called
 __\TooBasic\CacheAdapterMemcached__ and it requires settings like these:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER] = "localhost";
+$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER] = 'localhost';
 $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] = 11211;
-$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX] = "";
+$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX] = '';
 ```
 If you are wondering about
 `$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX]`, well when you
@@ -70,10 +71,22 @@ key with a prefix depending on your site.
 If you are using _memcache_ libraries (not _memcached_), try this:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "\TooBasic\CacheAdapterMemcache";
-$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER] = "localhost";
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterMemcache';
+$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER] = 'localhost';
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] = 11211;
-$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = "";
+$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = '';
+```
+
+### Redis Adapter
+An alternative to __Memcached__ is [__Redis__
+](https://en.wikipedia.org/wiki/Redis) and you can make use of it by using a cache
+adapter called __\TooBasic\CacheAdapterRedis__ and settings these values:
+```php
+<?php
+$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_SCHEME] = 'tcp';
+$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_HOST] = 'localhost';
+$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PORT] = 6379;
+$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PREFIX] = '';
 ```
 
 ## Setting Adapter
@@ -82,7 +95,7 @@ them, well, that's the easy part, you just need to set something like the next
 piece of code and that's all:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "\TooBasic\CacheAdapterMemcached";
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterMemcached';
 ```
 
 ## Cached Controller
@@ -94,13 +107,13 @@ suppose we have a controller that shows a user information... something like thi
 class UserinfoController extends \TooBasic\Controller {
     protected function basicRun() {
         $user = $this->representations->users->item($this->params->get->userid);
-        $this->assign("info", $user->toArray());
-        $this->assign("bgcolor", isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : "red");
+        $this->assign('info', $user->toArray());
+        $this->assign('bgcolor', isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : 'red');
         return true;
     }
     protected function init() {
         parent::init();
-        $this->_requiredParams["GET"][] = "userid";
+        $this->_requiredParams['GET'][] = 'userid';
     }
 }
 ```
@@ -123,8 +136,8 @@ class UserinfoController extends \TooBasic\Controller {
     . . .
     protected function init() {
         . . . 
-        $this->_cacheParams["GET"][] = "userid";
-        $this->_cacheParams["GET"][] = "bgcolor";
+        $this->_cacheParams['GET'][] = 'userid';
+        $this->_cacheParams['GET'][] = 'bgcolor';
         . . . 
     }
 }
@@ -137,15 +150,15 @@ class UserinfoController extends \TooBasic\Controller {
     protected $_cache = true;
     protected function basicRun() {
         $user = $this->representations->users->item($this->params->get->userid);
-        $this->assign("info", $user->toArray());
-        $this->assign("bgcolor", isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : "red");
+        $this->assign('info', $user->toArray());
+        $this->assign('bgcolor', isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : 'red');
         return true;
     }
     protected function init() {
         parent::init();
-        $this->_cacheParams["GET"][] = "userid";
-        $this->_cacheParams["GET"][] = "bgcolor";
-        $this->_requiredParams["GET"][] = "userid";
+        $this->_cacheParams['GET'][] = 'userid';
+        $this->_cacheParams['GET'][] = 'bgcolor';
+        $this->_requiredParams['GET'][] = 'userid';
     }
 }
 ```

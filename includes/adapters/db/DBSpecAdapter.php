@@ -35,7 +35,7 @@ abstract class DBSpecAdapter extends Adapter {
 	abstract public function dropTable($tableName);
 	abstract public function dropTableColumn(\stdClass $table, $columnName);
 	public function executeCallback($callback) {
-		$data = file_get_contents($callback['path']);
+		$data = file_get_contents($callback[GC_AFIELD_PATH]);
 		$replacements = array(
 			':tb_table_prefix:' => $this->_db->prefix()
 		);

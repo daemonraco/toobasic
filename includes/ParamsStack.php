@@ -112,7 +112,7 @@ class ParamsStack {
 			//
 			// Detecting debug parameters
 			foreach($this->_params as $param => $value) {
-				if(preg_match("/^debug([a-z0-9]*)$/", $param)) {
+				if(preg_match('/^debug([a-z0-9]*)$/', $param)) {
 					//
 					// At this point, we do have debugs.
 					$this->_hasDebugs = true;

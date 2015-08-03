@@ -16,6 +16,16 @@ abstract class Layout extends Controller {
 	//
 	// Public methods.
 	/**
+	 * A layout never redirects, that's something only a controller does.
+	 *
+	 * @return boolean It always returns false.
+	 */
+	public final function checkRedirectors() {
+		//
+		// A layout never redirects.
+		return false;
+	}
+	/**
 	 * This dummy method prevent any other object to think this layout has
 	 * another layout in which it is injected.
 	 *
@@ -33,7 +43,7 @@ abstract class Layout extends Controller {
 		parent::init();
 		//
 		// Adding basic parametres for cache keys.
-		$this->_cacheParams["GET"][] = "action";
-		$this->_cacheParams["GET"][] = "mode";
+		$this->_cacheParams['GET'][] = 'action';
+		$this->_cacheParams['GET'][] = 'mode';
 	}
 }

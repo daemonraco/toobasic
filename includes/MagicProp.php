@@ -11,7 +11,7 @@ namespace TooBasic;
  * @class MagicPropException
  * This exeption is thrown whenever 'MagicProp' founds a halting error.
  */
-class MagicPropException extends \Exception {
+class MagicPropException extends Exception {
 	
 }
 
@@ -79,17 +79,17 @@ class MagicProp extends Singleton {
 		$out = null;
 		//
 		// Looking for the requested property.
-		if($prop == "model") {
+		if($prop == 'model') {
 			$out = $this->modelsFactory();
-		} elseif($prop == "representation") {
+		} elseif($prop == 'representation') {
 			$out = $this->representations();
-		} elseif($prop == "translate") {
+		} elseif($prop == 'tr' || $prop == 'translate') {
 			$out = $this->translate();
-		} elseif($prop == "params") {
+		} elseif($prop == 'params') {
 			$out = $this->params();
-		} elseif($prop == "cache") {
+		} elseif($prop == 'cache') {
 			$out = $this->cache();
-		} elseif($prop == "paths") {
+		} elseif($prop == 'paths') {
 			$out = $this->paths();
 		} else {
 			//

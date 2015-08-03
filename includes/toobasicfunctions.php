@@ -48,6 +48,7 @@ function checkBasicPermissions() {
 	}
 }
 /**
+ * @deprecated
  * This function normalize class names:
  *
  * @param string $simpleName Name to be normalized.
@@ -107,7 +108,7 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 	ob_end_clean();
 	//
 	// Shell and non shell should look different.
-	if(defined("__SHELL__")) {
+	if(defined('__SHELL__')) {
 		$out = explode("\n", $out);
 		array_walk($out, function(& $item) {
 			$item = "| {$item}";
@@ -162,7 +163,51 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 	}
 }
 /**
- * This function centralize the logic to obtain the current set skin.
+ * This function centralize the logic to obtain the current language.
+ *
+ * @return string Returns a skin name.
+ */
+function guessLanguage() {
+	//
+	// Global dependencies.
+	global $Defaults;
+	global $LanguageName;
+	//
+	// Obtaing the params manager.
+	$auxParamsManager = Params::Instance();
+	//
+	// Generating the key with which a language name is stored in the session.
+	$sessionKey = GC_SESSION_LANGUAGE.($Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] ? "-{$Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX]}" : '');
+	//
+	// Obtaining current language from:
+	//	- 1st: url parameter.
+	//	- 2nd: session variables.
+	//	- 3rd: defualts.
+	$LanguageName = isset($auxParamsManager->{GC_REQUEST_LANGUAGE}) ? $auxParamsManager->{GC_REQUEST_LANGUAGE} : (isset($_SESSION[$sessionKey]) ? $_SESSION[$sessionKey] : $Defaults[GC_DEFAULTS_LANG]);
+	//
+	// Skin debugs.
+	if(isset($auxParamsManager->debuglang)) {
+		\TooBasic\debugThing(function() use ($sessionKey, $auxParamsManager) {
+			//
+			// Global dependencies.
+			global $Defaults;
+			global $LanguageName;
+
+			echo "Current Language: '{$LanguageName}'\n\n";
+			echo 'Default Language: '.($Defaults[GC_DEFAULTS_LANG] ? "'{$Defaults[GC_DEFAULTS_LANG]}'" : 'Not set')."\n";
+			echo 'Session Language: '.(isset($_SESSION[$sessionKey]) ? "'{$_SESSION[$sessionKey]}'" : 'Not set')."\n";
+			echo 'URL Language:     '.(isset($auxParamsManager->{GC_REQUEST_LANGUAGE}) ? "'".$auxParamsManager->{GC_REQUEST_LANGUAGE}."'" : 'Not set')."\n";
+		});
+		//
+		// Triggering the next debug message.
+		\TooBasic\Translate::Instance()->get('');
+	}
+	//
+	// Returtning found skin name.
+	return $LanguageName;
+}
+/**
+ * This function centralize the logic to obtain the current skin.
  *
  * @return string Returns a skin name.
  */
@@ -236,6 +281,27 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 	//
 	// Returning the destination object with fields copied and enforced.
 	return $destination;
+}
+/**
+ * This function allows to properly set a current language name into session.
+ *
+ * @param string $name Language name to set.
+ */
+function setSessionLanguage($name = false) {
+	//
+	// Global dependencies.
+	global $Defaults;
+	//
+	// Generating the key with which a language name is stored in the session.
+	$sessionKey = GC_SESSION_SKIN.($Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] ? "-{$Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX]}" : '');
+	//
+	// If a name was given, it is set. Otherwise, the previous setting is
+	// removed.
+	if($name) {
+		$_SESSION[$sessionKey] = "{$name}";
+	} elseif(isset($_SESSION[$sessionKey])) {
+		unset($_SESSION[$sessionKey]);
+	}
 }
 /**
  * This function allows to properly set a current skin name into session.

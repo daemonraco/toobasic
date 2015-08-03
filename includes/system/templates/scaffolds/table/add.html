@@ -1,12 +1,12 @@
-<h4>New item for table '<%$pluralName%>'</h4>
+<h4>{$tr->title_new_item_on_table('tablename', '<%$pluralName%>')}</h4>
 
 <form id="<%$singularName%>_form" method="post" href="#" role="form">
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value=""/>
 			</td>
@@ -15,7 +15,7 @@
 <%if $field.type.type == 'text' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>"></textarea>
 			</td>
@@ -24,12 +24,12 @@
 <%if $field.type.type == 'enum' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>">
-					<option value="">Select an option</option>
+					<option value="">{$tr->select_option_NOOPTION}</option>
 <%foreach from=$field.type.values item=value%>
-					<option value="<%$value%>"><%$value%></option>
+					<option value="<%$value%>">{$tr->select_option_<%$value%>}</option>
 <%/foreach%>
 				</select>
 			</td>
@@ -38,11 +38,11 @@
 <%/if%><%/foreach%>
 		<tr>
 			<td colspan="2">
-				<input type="submit" value="Add"/>
-				<input type="reset" value="Clear fields"/>
+				<input type="submit" value="{$tr->btn_add}"/>
+				<input type="reset" value="{$tr->btn_clear_fields}"/>
 			</td>
 		</tr>
 	</table>
 </form>
 <br/>
-<a href="{$ctrl->link('?action=<%$listAction%>')}">Back to list</a>
+<a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

@@ -1,10 +1,15 @@
 <?php
 
-namespace TooBasic;
+/**
+ * @file DBAdapter.php
+ * @author Alejandro Dario Simi
+ */
 
+namespace TooBasic;
+/**
+ * @class DBAdapter
+ */
 class DBAdapter extends Adapter {
-	//
-	// Constants.
 	//
 	// Protected properties.
 	protected $_engine = false;
@@ -43,7 +48,7 @@ class DBAdapter extends Adapter {
 				//
 				// If there is a database connection exception, it is
 				// caught and a user exception is raised.
-				trigger_error(__CLASS__.": Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", E_USER_ERROR);
+				throw new \TooBasic\DBException("Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", $e->getCode(), $e);
 			}
 			//
 			// Creating a shortcut for database tables prefix
@@ -98,9 +103,9 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
+				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
+				throw new \TooBasic\DBException('Not connected');
 			}
 		}
 		//
@@ -135,13 +140,18 @@ class DBAdapter extends Adapter {
 	 * @param string $query SQL query to use for the statement creation.
 	 * @return \PDOStatement Returns a pointer to the new statement.
 	 */
-	public function & prepare($query) {
+	public function & prepare($query, $dieOnError = true) {
 		//
 		// Preparing the new statement.
 		$out = $this->_dblink->prepare($query);
 		//
 		// Setting the statement to return results as associative arrays.
-		$out->setFetchMode(\PDO::FETCH_ASSOC);
+		if($out) {
+			$out->setFetchMode(\PDO::FETCH_ASSOC);
+		} elseif($dieOnError) {
+			$info = $this->_dblink->errorInfo();
+			throw new \TooBasic\DBException("Unable to prepate query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+		}
 		//
 		// Returning requested statement.
 		return $out;
@@ -187,14 +197,37 @@ class DBAdapter extends Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				trigger_error(__CLASS__.": Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", E_USER_ERROR);
+				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
 			} else {
-				trigger_error(__CLASS__.': Not connected', E_USER_ERROR);
+				throw new \TooBasic\DBException('Not connected');
 			}
 		}
 		//
 		// Returning the resulting statement.
 		return $result;
+	}
+	/**
+	 * @todo doc
+	 *
+	 * @return \TooBasic\DBQueryAdapter @todo doc
+	 * @throws \TooBasic\DBException @todo doc
+	 */
+	public function queryAdapter() {
+		$out = false;
+		//
+		// Global dependencies.
+		global $Database;
+		//
+		// Checking that there's an adapter for current engine.
+		if(isset($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()])) {
+			//
+			// Obtaining the right adapter.
+			$out = \TooBasic\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
+		} else {
+			throw new \TooBasic\DBException("There's no define adapter for a '{$this->engine()}' connection");
+		}
+
+		return $out;
 	}
 	/**
 	 * Similar to query() but it always returns an array of rows.
@@ -238,7 +271,13 @@ class DBAdapter extends Adapter {
 				default:
 					$out = $connData[GC_CONNECTIONS_DB_ENGINE];
 					$out.= ":host={$connData[GC_CONNECTIONS_DB_SERVER]}";
+					if($connData[GC_CONNECTIONS_DB_PORT]) {
+						$out.= ";port={$connData[GC_CONNECTIONS_DB_PORT]}";
+					}
 					$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
+					//$out.= ";user={$connData[GC_CONNECTIONS_DB_USERNAME]}";
+					//$out.= ";password={$connData[GC_CONNECTIONS_DB_PASSWORD]}";
+					break;
 			}
 		} else {
 			$this->_engine = false;

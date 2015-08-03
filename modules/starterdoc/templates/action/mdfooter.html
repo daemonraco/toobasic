@@ -6,7 +6,7 @@
 					Current skin:
 					<select id="SelectSkin" class="form-control input-sm">
 	{foreach from=$skins item=skin}
-						<option value="{$skin.value}"{if $skin.current} selected="selected"{/if}>{$skin.value}</option>
+						<option value="{$skin.value}"{if $skin.current} selected="selected"{/if}>{$skin.title}</option>
 	{/foreach}
 					</select>
 				</label>

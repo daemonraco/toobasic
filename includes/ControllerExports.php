@@ -13,45 +13,42 @@ namespace TooBasic;
  * Because giving access to a controller's methods inside a view is a security
  * issue, this proxy class export only the required methods.
  */
-class ControllerExports {
+class ControllerExports extends AbstractExports {
 	//
-	// Protected properties.
-	/**
-	 * @var \TooBasic\Controller Exported controller pointer.
-	 */
-	protected $_controller = false;
-	//
-	// Magic methods.
-	/**
-	 * Class constructor.
-	 * 
-	 * @param \TooBasic\Controller $ctrl Controller to represent.
-	 */
-	public function __construct($ctrl) {
-		$this->_controller = $ctrl;
-	}
+	// Protected methods.
+	protected $_htmlAssets = false;
 	//
 	// Public methods.
-	/**
-	 * Exports a way to get a stylesheet URI.
-	 * 
-	 * @param string $styleName Name of the stylesheet to look for.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
-	 */
-	public function css($styleName) {
-		return Paths::Path2Uri(Paths::Instance()->cssPath($styleName));
-	}
-	/**
-	 * Exports a way to get an image URI.
-	 * 
-	 * @param string $imageName Name of the image to look for.
-	 * @param string $imageExtension Image's extension.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
-	 */
-	public function img($imageName, $imageExtension = "png") {
-		return Paths::Path2Uri(Paths::Instance()->imagePath($imageName, $imageExtension));
+	public function ajaxInsert($actionName, $params = array(), $attrs = array()) {
+		//
+		// Enforcing parameters.
+		if(!is_array($params)) {
+			$params = array();
+		}
+		if(!is_array($attrs)) {
+			$attrs = array();
+		}
+		//
+		// Generation action uri.
+		$actionUri = '?'.GC_REQUEST_ACTION."={$actionName}";
+		foreach($params as $k => $v) {
+			$actionUri.= "&{$k}={$v}";
+		}
+		//
+		// Enrouting uri.
+		$actionUri = \TooBasic\RoutesManager::Instance()->enroute($actionUri);
+		//
+		// Generating attributes.
+		$builtAttrs = '';
+		foreach($attrs as $k => $v) {
+			$builtAttrs .=" {$k}=\"{$v}\"";
+		}
+		//
+		// Creating a HTML snippet.
+		$code = "<div{$builtAttrs} data-toobasic-insert=\"{$actionUri}\"></div>\n";
+		//
+		// Returning the generated code.
+		return $code;
 	}
 	/**
 	 * It takes an action name an returns its rendered result.
@@ -63,54 +60,110 @@ class ControllerExports {
 		return $this->_controller->insert($actionName);
 	}
 	/**
-	 * Exports a way to get a javascript file URI.
-	 * 
-	 * @param string $scriptName Name of the script to look for.
-	 * @return string If found it returns an absolute URI, otherwise it
-	 * returns false.
+	 * This method insert a list of configured javascipts as 'script' tags.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @param string $spacer String to prepend on each code-line generated.
+	 * @return string Returns a generated code to insert.
 	 */
-	public function js($scriptName) {
-		return Paths::Path2Uri(Paths::Instance()->jsPath($scriptName));
-	}
-	/**
-	 * It takes a relative path inside ROOTDIR/libraries and returns it as a
-	 * full uri path.
-	 * 
-	 * @param string $libPath Library elemet to be rendered.
-	 * @return string Rendered result.
-	 */
-	public function lib($libPath) {
-		global $Directories;
-		$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$libPath}");
-		if(!is_file($path) || !is_readable($path)) {
-			$path = "";
-		}
-
-		return Paths::Path2Uri($path);
-	}
-	/**
-	 * Takes a link url from, for example, an anchor and change it into
-	 * something cleaner, adding an absolute prefix and, if possible,
-	 * converting it into a format for routes analysis.
-	 * 
-	 * @param string $link Link to check and transform.
-	 * @return string Returns a well formated url.
-	 */
-	public function link($link = '') {
-		$out = $link;
+	public function htmlAllScripts($specific = false, $spacer = '') {
 		//
-		// If the parameter is empty the site's root URI has to be
-		// returned.
-		if($link == '') {
-			$out = ROOTURI;
-		} elseif(preg_match('/^\?/', $link)) {
-			$out = ROOTURI.$link;
+		// Default values.
+		$code = '';
+		$nothing = true;
+		//
+		// Loading HTML assets confgurations.
+		$htmlAssets = $this->getHtmlConfigs($specific);
+		//
+		// Opening a comment to identify assets insertion.
+		if($specific) {
+			$code .="{$spacer}<!-- Scripts for '{$htmlAssets[GC_AFIELD_NAME]}' @{ -->\n";
+		} else {
+			$code .="{$spacer}<!-- Scripts @{ -->\n";
 		}
 		//
-		// Cleaning url applying routes.
-		$out = RoutesManager::Instance()->enroute($out);
-
-		return $out;
+		// Creating a HTML snippet with all configured paths.
+		foreach($htmlAssets[GC_DEFAULTS_HTMLASSETS_SCRIPTS] as $assetName) {
+			$matches = false;
+			//
+			// When a asset starts with 'lib:' it must be looked for
+			// in 'ROOTDIR/libraries/', otherwise it would be in
+			// '.../scripts/'.
+			if(preg_match('/lib:(?<path>.*)/', $assetName, $matches)) {
+				$assetUri = $this->lib($matches['path']);
+			} else {
+				$assetUri = $this->js($assetName);
+			}
+			//
+			// Generating the inclution piece of code.
+			if($assetUri) {
+				$code .="{$spacer}<script type=\"text/javascript\" src=\"{$assetUri}\" data-toobasic=\"true\"></script>\n";
+				$nothing = false;
+			}
+		}
+		//
+		// Closing comment.
+		$code .="{$spacer}<!-- @} -->";
+		//
+		// Returning the generated code only if there's something to
+		// include.
+		return $nothing ? '' : $code;
+	}
+	/**
+	 * This method insert a list of configured stylesheets as 'link' tags.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @param string $spacer String to prepend on each code-line generated.
+	 * @return string Returns a generated code to insert.
+	 */
+	public function htmlAllStyles($specific = false, $spacer = '') {
+		//
+		// Default values.
+		$code = '';
+		$nothing = true;
+		//
+		// Loading HTML assets confgurations.
+		$htmlAssets = $this->getHtmlConfigs($specific);
+		//
+		// Opening a comment to identify assets insertion.
+		if($specific) {
+			$code .="{$spacer}<!-- Styles for '{$htmlAssets[GC_AFIELD_NAME]}' @{ -->\n";
+		} else {
+			$code .="{$spacer}<!-- Styles @{ -->\n";
+		}
+		//
+		// Creating a HTML snippet with all configured paths.
+		foreach($htmlAssets[GC_DEFAULTS_HTMLASSETS_STYLES] as $assetName) {
+			$matches = false;
+			//
+			// When a asset starts with 'lib:' it must be looked for
+			// in 'ROOTDIR/libraries/', otherwise it would be in
+			// '.../styles/'.
+			if(preg_match('/lib:(?<path>.*)/', $assetName, $matches)) {
+				$assetUri = $this->lib($matches['path']);
+			} else {
+				$assetUri = $this->css($assetName);
+			}
+			//
+			// Generating the inclution piece of code.
+			if($assetUri) {
+				$code .="{$spacer}<link type=\"text/css\" rel=\"stylesheet\" href=\"{$assetUri}\" data-toobasic=\"true\"/>\n";
+				$nothing = false;
+			}
+		}
+		//
+		// Closing comment.
+		$code .="{$spacer}<!-- @} -->";
+		//
+		// Returning the generated code only if there's something to
+		// include.
+		return $nothing ? '' : $code;
 	}
 	/**
 	 * It takes an snippet name an returns its rendered result.
@@ -122,5 +175,62 @@ class ControllerExports {
 	 */
 	public function snippet($snippetName, $snippetDataSet = false) {
 		return $this->_controller->snippet($snippetName, $snippetDataSet);
+	}
+	//
+	// Protected methods.
+	/**
+	 * This method gets the right configuration to use on some insertion.
+	 *
+	 * @param string $specific Name of the specific configuration of assets.
+	 * When TRUE uses the controllers names. When FALSE or if the specific
+	 * configuration is not present, it uses the default configuration of
+	 * assets.
+	 * @return mixed[string] Rerturns a proper configuration of assets.
+	 */
+	protected function getHtmlConfigs($specific) {
+		//
+		// Default values.
+		$htmlAssets = false;
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Guessing the specific name.
+		$specificName = false;
+		if($specific === true) {
+			//
+			// Based on the controller.
+			$specificName = $this->_controller->name();
+		} elseif($specific) {
+			//
+			// As given.
+			$specificName = $specific;
+		}
+		//
+		// Attepting to load the specific configuration of assets,
+		// otherwise it uses the default one.
+		if($specificName && isset($Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS][$specificName])) {
+			$htmlAssets = $Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS][$specificName];
+		} else {
+			$htmlAssets = $Defaults[GC_DEFAULTS_HTMLASSETS];
+		}
+		//
+		// Required fields.
+		$enforce = array(
+			GC_DEFAULTS_HTMLASSETS_SCRIPTS,
+			GC_DEFAULTS_HTMLASSETS_STYLES
+		);
+		//
+		// Enforcing fields.
+		foreach($enforce as $e) {
+			if(!isset($htmlAssets[$e])) {
+				$htmlAssets[$e] = array();
+			}
+		}
+		//
+		// Adding the specific name used.
+		$htmlAssets[GC_AFIELD_NAME] = $specificName;
+
+		return $htmlAssets;
 	}
 }

@@ -10,18 +10,15 @@ class MddocController extends TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		$out = true;
-
 		$filepath = TB_Sanitizer::DirPath(ROOTDIR."/{$this->params->get->doc}");
 		if(is_readable($filepath)) {
 			$this->assign('title', "Doc: {$this->params->get->doc}");
 			$this->assign('content', "\n".file_get_contents($filepath));
 		} else {
 			$this->setError(HTTPERROR_BAD_REQUEST, "File '{$this->params->get->doc}' does not exist");
-			$out = false;
 		}
 
-		return $out;
+		return $this->status();
 	}
 	protected function init() {
 		parent::init();

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file config.php
+ * @author Alejandro Dario Simi
+ */
 //
 // First thing to do is to start a PHP session.
 session_start();
@@ -34,29 +38,51 @@ require_once ROOTDIR.'/includes/Sanitizer.php';
 $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = 'home';
 $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\TooBasic\CacheAdapterFile';
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterFile';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
+$Defaults[GC_DEFAULTS_EMAIL_LAYOUT] = false;
+$Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'noreplay@example.com';
+$Defaults[GC_DEFAULTS_ERROR_PAGES] = array(
+	HTTPERROR_BAD_REQUEST => HTTPERROR_BAD_REQUEST,
+	HTTPERROR_FORBIDDEN => HTTPERROR_FORBIDDEN,
+	HTTPERROR_INTERNAL_SERVER_ERROR => HTTPERROR_INTERNAL_SERVER_ERROR,
+	HTTPERROR_NOT_FOUND => HTTPERROR_NOT_FOUND,
+	HTTPERROR_NOT_IMPLEMENTED => HTTPERROR_NOT_IMPLEMENTED,
+	HTTPERROR_UNAUTHORIZED => HTTPERROR_UNAUTHORIZED
+);
+$Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
+$Defaults[GC_DEFAULTS_HTMLASSETS] = array(
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(),
+	GC_DEFAULTS_HTMLASSETS_STYLES => array()
+);
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS] = array();
 $Defaults[GC_DEFAULTS_INSTALLED] = false;
-$Defaults[GC_DEFAULTS_LANGS_DEFAULTLANG] = 'en_us';
+$Defaults[GC_DEFAULTS_LANG] = 'en_us';
 $Defaults[GC_DEFAULTS_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = false;
+$Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] = '';
 $Defaults[GC_DEFAULTS_SERVICE] = '';
-$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\TooBasic\ViewAdapterSmarty';
+$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV] = array();
+$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES] = array();
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\ViewAdapterSmarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
-	GC_VIEW_FORMAT_DUMP => '\TooBasic\ViewAdapterDump',
-	GC_VIEW_FORMAT_JSON => '\TooBasic\ViewAdapterJSON',
-	GC_VIEW_FORMAT_PRINT => '\TooBasic\ViewAdapterPrint',
-	GC_VIEW_FORMAT_SERIALIZE => '\TooBasic\ViewAdapterSerialize',
-	GC_VIEW_FORMAT_XML => '\TooBasic\ViewAdapterXML'
+	GC_VIEW_FORMAT_DUMP => '\\TooBasic\\ViewAdapterDump',
+	GC_VIEW_FORMAT_JSON => '\\TooBasic\\ViewAdapterJSON',
+	GC_VIEW_FORMAT_PRINT => '\\TooBasic\\ViewAdapterPrint',
+	GC_VIEW_FORMAT_SERIALIZE => '\\TooBasic\\ViewAdapterSerialize',
+	GC_VIEW_FORMAT_XML => '\\TooBasic\\ViewAdapterXML'
 );
 $Defaults[GC_DEFAULTS_MODES] = array(
 	GC_VIEW_MODE_ACTION,
 	GC_VIEW_MODE_MODAL
 );
+$Defaults[GC_DEFAULTS_REDIRECTIONS] = array();
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 $Defaults[GC_DEFAULTS_MEMCACHE] = array();
+$Defaults[GC_DEFAULTS_REDIS] = array();
 $Defaults[GC_DEFAULTS_SKIN] = false;
 $Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] = '';
 //
@@ -101,9 +127,16 @@ $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = fa
 // Database structure configurations.
 $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
-$Database[GC_DATABASE_DB_ADAPTERS] = array(
-	'mysql' => '\TooBasic\DBSpecAdapterMySQL',
-	'sqlite' => '\TooBasic\DBSpecAdapterSQLite'
+$Database[GC_DATABASE_DB_CONNECTION_ADAPTERS] = array();
+$Database[GC_DATABASE_DB_QUERY_ADAPTERS] = array(
+	'mysql' => '\\TooBasic\\DBQueryAdapterMySQL',
+	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite',
+	'pgsql' => '\\TooBasic\\DBQueryAdapterPostgreSQL'
+);
+$Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
+	'mysql' => '\\TooBasic\\DBSpecAdapterMySQL',
+	'sqlite' => '\\TooBasic\\DBSpecAdapterSQLite',
+	'pgsql' => '\\TooBasic\\DBSpecAdapterPostgreSQL'
 );
 //
 // Directory configurations.
@@ -114,16 +147,17 @@ $Uris[GC_URIS_INCLUDES] = TB_Sanitizer::UriPath(ROOTURI.'/includes');
 $Paths = array();
 $Paths[GC_PATHS_CONFIGS] = '/configs';
 $Paths[GC_PATHS_CONTROLLERS] = '/controllers';
-$Paths[GC_PATHS_SERVICES] = '/services';
 $Paths[GC_PATHS_CSS] = '/styles';
 $Paths[GC_PATHS_DBSPECS] = '/db';
 $Paths[GC_PATHS_DBSPECSCALLBACK] = '/db';
+$Paths[GC_PATHS_EMAIL_CONTROLLERS] = '/emails';
 $Paths[GC_PATHS_IMAGES] = '/images';
 $Paths[GC_PATHS_JS] = '/scripts';
 $Paths[GC_PATHS_LANGS] = '/langs';
 $Paths[GC_PATHS_LAYOUTS] = '/layouts';
 $Paths[GC_PATHS_MODELS] = '/models';
 $Paths[GC_PATHS_REPRESENTATIONS] = '/models/representations';
+$Paths[GC_PATHS_SERVICES] = '/services';
 $Paths[GC_PATHS_SHELL] = '/shell';
 $Paths[GC_PATHS_SHELL_CRONS] = '/shell/crons';
 $Paths[GC_PATHS_SHELL_SYSTOOLS] = '/shell/sys';
@@ -188,7 +222,7 @@ if(is_readable($localConfig)) {
 // Final touches.
 $Defaults[GC_DEFAULTS_FORMATS]['basic'] = $Defaults[GC_DEFAULTS_VIEW_ADAPTER];
 
-$auxParamsManager = TooBasic\Params::Instance();
+$auxParamsManager = \TooBasic\Params::Instance();
 //
 // Debugs lister.
 if(isset($auxParamsManager->debugdebugs)) {
@@ -213,11 +247,12 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 	\TooBasic\checkBasicPermissions();
 }
 //
-//
+// Necessary globals.
 $ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
 $ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->{GC_REQUEST_SERVICE} : false;
 $ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
-\TooBasic\guessSkin();
+$SkinName = \TooBasic\guessSkin();
+$LanguageName = \TooBasic\guessLanguage();
 
 unset($auxParamsManager);

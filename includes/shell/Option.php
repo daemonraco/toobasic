@@ -1,19 +1,27 @@
 <?php
 
+/**
+ * @file Option.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Shell;
 
+/**
+ * @class Option
+ */
 class Option {
 	//
 	// Constants.
-	const TypeNoValue = "novalue";
-	const TypeValue = "value";
-	const TypeMultiValue = "multivalue";
+	const TypeNoValue = 'novalue';
+	const TypeValue = 'value';
+	const TypeMultiValue = 'multivalue';
 	// 
 	// Protected properties.
 	protected $_activated = false;
 	protected $_helpText = false;
 	protected $_helpTextFull = false;
-	protected $_helpValueName = "value";
+	protected $_helpValueName = 'value';
 	protected $_lastValue = false;
 	protected $_name = false;
 	protected $_needsMore = false;
@@ -62,20 +70,20 @@ class Option {
 
 		return $matched;
 	}
-	public function helpText($spacer = "") {
-		$out = "";
+	public function helpText($spacer = '') {
+		$out = '';
 
 		if($this->_helpTextFull === false) {
-			$subSpacer = "        ";
+			$subSpacer = '        ';
 
-			$values = "";
+			$values = '';
 			if(in_array($this->_type, array(self::TypeMultiValue, self::TypeValue))) {
 				$values = " <{$this->_helpValueName}>";
 			}
 
 			foreach($this->_triggers as $trigger) {
 				if($out) {
-					$out.=", ";
+					$out.=', ';
 				} else {
 					$out = $subSpacer;
 				}
@@ -113,9 +121,9 @@ class Option {
 		$this->_values = array();
 		$this->_helpText = false;
 		$this->_helpTextFull = false;
-		$this->_helpValueName = "value";
+		$this->_helpValueName = 'value';
 	}
-	public function setHelpText($text, $valueName = "value") {
+	public function setHelpText($text, $valueName = 'value') {
 		$this->_helpValueName = $valueName;
 		return $this->_helpText = $text;
 	}
@@ -146,7 +154,7 @@ class Option {
 	}
 	//
 	// Public class methods
-	public static function EasyFactory($name, $triggers, $type = self::TypeNoValue, $helpText = false, $helpTextValue = "value") {
+	public static function EasyFactory($name, $triggers, $type = self::TypeNoValue, $helpText = false, $helpTextValue = 'value') {
 		$out = new self($name, $type);
 
 		foreach($triggers as $trigger) {

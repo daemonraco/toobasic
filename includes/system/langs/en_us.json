@@ -3,34 +3,84 @@
 		{
 			"key": "HTTPERROR_400",
 			"value": "400 - Bad Request"
-		},
-		{
+		}, {
 			"key": "HTTPERROR_401",
 			"value": "401 - Unauthorized"
-		},
-		{
+		}, {
 			"key": "HTTPERROR_403",
 			"value": "403 - Access Denided"
-		},
-		{
+		}, {
 			"key": "HTTPERROR_404",
 			"value": "404 - Not found"
-		},
-		{
+		}, {
 			"key": "HTTPERROR_500",
 			"value": "500 - Internal Server Error"
-		},
-		{
+		}, {
 			"key": "HTTPERROR_501",
 			"value": "501 - Not Implemented"
-		},
-		{
+		}, {
 			"key": "last_error_message",
 			"value": "Last error message"
-		},
-		{
+		}, {
 			"key": "message",
 			"value": "Message"
+		}, {
+			"key": "message_remove_table_item_confirm",
+			"value": "Are you sure you want to remove this %name%?"
+		}, {
+			"key": "btn_back_to_list",
+			"value": "Back to List"
+		}, {
+			"key": "btn_view",
+			"value": "View"
+		}, {
+			"key": "btn_edit",
+			"value": "Edit"
+		}, {
+			"key": "btn_remove",
+			"value": "Remove"
+		}, {
+			"key": "btn_add_new_item",
+			"value": "Add New Item"
+		}, {
+			"key": "btn_add",
+			"value": "Add"
+		}, {
+			"key": "btn_clear_fields",
+			"value": "Clear fields"
+		}, {
+			"key": "btn_restore_fields",
+			"value": "Restore fields"
+		}, {
+			"key": "btn_save",
+			"value": "Save"
+		}, {
+			"key": "btn_delete_TYPE",
+			"value": "Delete %type%"
+		}, {
+			"key": "label_id",
+			"value": "Id"
+		}, {
+			"key": "label_actions",
+			"value": "Actions"
+		}, {
+			"key": "select_option_NOOPTION",
+			"value": "Select an option"
+		}, {
+			"key": "title_new_item_on_table",
+			"value": "New item for table '%tablename%'"
+		}, {
+			"key": "title_table_items",
+			"value": "These are elements of table '%tablename%'"
+		}, {
+			"key": "title_view_item_of_table",
+			"value": "Displaying item with id '%id%' from table '%tablename%'"
+		}, {
+			"key": "title_edit_item_of_table",
+			"value": "Editing item with id '%id%' from table '%tablename%'"
+		}, {
+			"key": "title_delete_item_of_table",
+			"value": "Removing item with id '%id%' from table '%tablename%'"
 		}
 	]
 }

@@ -1,13 +1,13 @@
-<h4>Remove item with id '{$<%$singularName%>.id}' on table '<%$pluralName%>'</h4>
+<h4>{$tr->title_delete_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
-<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('Are you sure you want to remove this <%$singularName%>?')">
+<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('{$tr->message_remove_table_item_confirm('name','<%$singularName%>')}')">
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
-<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' %>
+<%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' || $field.type.type == 'float' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" readonly="readonly"/>
 			</td>
@@ -16,7 +16,7 @@
 <%if $field.type.type == 'text' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>"><%$field.name%></label>
+				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
 			</td><td>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</td>
@@ -25,10 +25,10 @@
 <%/if%><%/foreach%>
 		<tr>
 			<td colspan="2">
-				<input type="submit" value="Delete <%$singularName%>"/>
+				<input type="submit" value="{$tr->btn_delete_TYPE('type','<%$singularName%>')}"/>
 			</td>
 		</tr>
 	</table>
 </form>
 <br/>
-<a href="{$ctrl->link('?action=<%$listAction%>')}">Back to list</a>
+<a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

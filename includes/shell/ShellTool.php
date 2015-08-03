@@ -1,19 +1,24 @@
 <?php
 
+/**
+ * @file ShellTool.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Shell;
 
+/**
+ * @class ShellTool
+ * @abstract
+ */
 abstract class ShellTool {
 	//
 	// Constants.
 	const ErrorWrongParameters = 1;
 	const ErrorNoTask = 2;
-	const OptionNameHelp = "Help";
-	const OptionNameInfo = "Info";
-	const OptionNameVersion = "Version";
-	//
-	// Public class properties.
-	//
-	// Protected class properties.
+	const OptionNameHelp = 'Help';
+	const OptionNameInfo = 'Info';
+	const OptionNameVersion = 'Version';
 	//
 	// Protected properties.
 	protected $_coreTasks = array();
@@ -25,7 +30,7 @@ abstract class ShellTool {
 	/**
 	 * @var string
 	 */
-	protected $_version = "0.1";
+	protected $_version = '0.1';
 	//
 	// Magic methods.
 	public function __construct() {
@@ -61,7 +66,7 @@ abstract class ShellTool {
 	public function hasErrors() {
 		return count($this->errors()) > 0;
 	}
-	public function run($spacer = "", $params = null) {
+	public function run($spacer = '', $params = null) {
 		if($this->_options->check($params)) {
 			$taskName = $this->guessTask();
 			//
@@ -104,18 +109,18 @@ abstract class ShellTool {
 		//
 		// If there's no task, main task must be run.
 		if(!$taskName) {
-			$taskName = "mainTask";
+			$taskName = 'mainTask';
 		}
 
 		return $taskName;
 	}
-	protected function mainTask($spacer = "") {
-		$this->setCoreError(self::ErrorNoTask, "No task specified");
+	protected function mainTask($spacer = '') {
+		$this->setCoreError(self::ErrorNoTask, 'No task specified');
 		$this->taskHelp($spacer);
 	}
 	protected function setError($code, $message) {
 		if(is_numeric($code)) {
-			$code = sprintf("%03d", $code);
+			$code = sprintf('%03d', $code);
 		}
 
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -124,12 +129,12 @@ abstract class ShellTool {
 		$callerLine = array_shift($trace);
 
 		$error = array(
-			"code" => "T-{$code}",
-			"message" => $message,
-			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
-			"method" => $callerLine["function"],
-			"file" => $callingLine["file"],
-			"line" => $callingLine["line"]
+			GC_AFIELD_CODE => "T-{$code}",
+			GC_AFIELD_MESSAGE => $message,
+			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
+			GC_AFIELD_METHOD => $callerLine['function'],
+			GC_AFIELD_FILE => $callingLine['file'],
+			GC_AFIELD_LINE => $callingLine['line']
 		);
 		$this->_errors[] = $error;
 	}
@@ -138,40 +143,40 @@ abstract class ShellTool {
 		$this->_options = Options::Instance();
 		$this->_options->reset();
 
-		$this->_options->addMainOption("ignored_script");
-		$this->_options->addMainOption("ignored_mode");
-		$this->_options->addMainOption("ignored_tool");
+		$this->_options->addMainOption('ignored_script');
+		$this->_options->addMainOption('ignored_mode');
+		$this->_options->addMainOption('ignored_tool');
 
 		$auxOption = new Option(self::OptionNameHelp);
-		$auxOption->addTrigger("--help");
-		$auxOption->addTrigger("-h");
-		$auxOption->setHelpText("Shows this help text.");
+		$auxOption->addTrigger('--help');
+		$auxOption->addTrigger('-h');
+		$auxOption->setHelpText('Shows this help text.');
 		$this->_options->addOption($auxOption);
 
 		$auxOption = new Option(self::OptionNameVersion);
-		$auxOption->addTrigger("--version");
-		$auxOption->addTrigger("-V");
+		$auxOption->addTrigger('--version');
+		$auxOption->addTrigger('-V');
 		$auxOption->setHelpText("Shows this tool's version number.");
 		$this->_options->addOption($auxOption);
 
 		$auxOption = new Option(self::OptionNameInfo);
-		$auxOption->addTrigger("--info");
-		$auxOption->addTrigger("-I");
+		$auxOption->addTrigger('--info');
+		$auxOption->addTrigger('-I');
 		$auxOption->setHelpText("Shows this tool's information.");
 		$this->_options->addOption($auxOption);
 	}
-	protected function taskHelp($spacer = "") {
+	protected function taskHelp($spacer = '') {
 		echo $this->_options->helpText();
 	}
-	abstract protected function taskInfo($spacer = "");
-	protected function taskVersion($spacer = "") {
+	abstract protected function taskInfo($spacer = '');
+	protected function taskVersion($spacer = '') {
 		echo "{$spacer}Version: {$this->_version}\n";
 	}
 	//
 	// Private methods.
 	private function setCoreError($code, $message) {
 		if(is_numeric($code)) {
-			$code = sprintf("%03d", $code);
+			$code = sprintf('%03d', $code);
 		}
 
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -180,17 +185,13 @@ abstract class ShellTool {
 		$callerLine = array_shift($trace);
 
 		$error = array(
-			"code" => "ST-{$code}",
-			"message" => $message,
-			"class" => isset($callerLine["class"]) ? $callerLine["class"] : false,
-			"method" => $callerLine["function"],
-			"file" => $callingLine["file"],
-			"line" => $callingLine["line"]
+			GC_AFIELD_CODE => "ST-{$code}",
+			GC_AFIELD_MESSAGE => $message,
+			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
+			GC_AFIELD_METHOD => $callerLine['function'],
+			GC_AFIELD_FILE => $callingLine['file'],
+			GC_AFIELD_LINE => $callingLine['line']
 		);
 		$this->_errors[] = $error;
 	}
-	//
-	// Public class methods.
-	//
-	// Protected class methods.
 }

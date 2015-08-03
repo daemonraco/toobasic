@@ -1,12 +1,15 @@
 <?php
 
 /**
- * @file ItemsFactory.php
+ * @file ItemsFactoryProvider.php
  * @author Alejandro Dario Simi
  */
 
 namespace TooBasic;
 
+/**
+ * @class ItemsFactoryProvider
+ */
 class ItemsFactoryProvider extends Singleton {
 	//
 	// Protected properties.
@@ -14,36 +17,47 @@ class ItemsFactoryProvider extends Singleton {
 	//
 	// Magic methods.
 	public function __get($name) {
-		$fullName = $this->loadClass($name);
-		return $fullName ? $fullName ::Instance() : null;
+		return $this->get($name);
 	}
 	public function __call($name, $args) {
+		//
+		// Is there a namespace specified.
+		if(isset($args[1])) {
+			$namespace = "{$args[1]}\\";
+			while(strpos($namespace, '\\\\') !== false) {
+				$namespace = str_replace('\\\\', '\\', $namespace);
+			}
+			$name = $namespace.$name;
+		}
+		return $this->get($name, isset($args[0]) ? $args[0] : false);
+	}
+	public function get($name, $dbname = false) {
 		$fullName = $this->loadClass($name);
-		return $fullName ? $fullName ::Instance(isset($args[0]) ? $args[0] : false) : null;
+		return $fullName ? $fullName ::Instance($dbname) : null;
 	}
 	//
 	// Protected methods.
 	protected function loadClass($name) {
 		$out = false;
 
-		if(!isset($this->_loadedClases[$name])) {
-			$fullName = classname($name).GC_CLASS_SUFFIX_FACTORY;
+		$className = Names::ItemsFactoryClass($name);
 
-			$filename = Paths::Instance()->representationPath($fullName);
+		if(!isset($this->_loadedClases[$className])) {
+			$filename = Paths::Instance()->representationPath(Names::ItemsFactoryFilename($name));
 			if($filename) {
 				require_once $filename;
 
-				if(class_exists($fullName)) {
-					$this->_loadedClases[$name] = $fullName;
-					$out = $fullName;
+				if(class_exists($className)) {
+					$this->_loadedClases[$name] = $className;
+					$out = $className;
 				} else {
-					trigger_error("Class '{$fullName}' is not defined.", E_USER_ERROR);
+					throw new Exception("Class '{$className}' is not defined.");
 				}
 			} else {
-				trigger_error("Cannot load items representation factory '{$fullName}'.", E_USER_ERROR);
+				throw new Exception("Cannot load items representation factory '{$className}'.");
 			}
 		} else {
-			$out = $this->_loadedClases[$name];
+			$out = $this->_loadedClases[$className];
 		}
 
 		return $out;

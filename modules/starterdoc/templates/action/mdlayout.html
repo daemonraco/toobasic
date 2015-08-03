@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8"/>
 		<title>{$title}</title>
 
 		<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
-		<link rel="stylesheet" type="text/css" href="{$ctrl->css('starterdoc')}"/>
-
-		<script type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-		<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
-		<link href="{$ctrl->css('jquery.cssemoticons')}" media="screen" rel="stylesheet" type="text/css"/>
-		<script src="{$ctrl->js('jquery.cssemoticons.min')}" type="text/javascript"></script>
+{$ctrl->htmlAllScripts(false, '                ')}
+{$ctrl->htmlAllScripts('starterdoc_top', '                ')}
+{$ctrl->htmlAllStyles('starterdoc_top', '                ')}
 	</head>
 	<body class="container">
-{$ctrl->snippet('xmp_opentag')}
+		{$ctrl->snippet('xmp_opentag')}
 %TOO_BASIC_ACTION_CONTENT%
 		</xmp>
 
 {$ctrl->insert('mdfooter')}
 {$ctrl->insert('gitlink')}
 
-		<script type="text/javascript" src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
-		<script src="{$ctrl->js('github_names')}" type="text/javascript"></script>
-
+		<script type="text/javascript" src="{$ctrl->js('strapdown')}"></script>
 		<script type="text/javascript">
 			var MD_DOC_URI = "{$mdDocUri}";
 			$(document).ready(function() {
 				$('p').emoticonize();
 			});
 		</script>
-
-		<script type="text/javascript" src="{$ctrl->js('starterdoc_mdfix')}"></script>
+{$ctrl->htmlAllScripts('starterdoc_bottom', '                ')}
 	</body>
 </html>

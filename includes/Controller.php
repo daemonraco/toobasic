@@ -8,15 +8,22 @@
 namespace TooBasic;
 
 /**
- * @abstract
  * @class Controller
- * 
+ * @abstract
+ *
  * This class represents a general controller with all its logic for checks,
  * execution and display
  */
 abstract class Controller extends Exporter {
 	//
 	// Protected properties.
+	/**
+	 * @var string[] List of assignment keys that cannot be stored in cache.
+	 */
+	protected $_cacheNoise = array(
+		'tr',
+		'ctrl'
+	);
 	/**
 	 * @var string Name of the layout current controller uses. 'false' means
 	 * no layout and 'null' means default layout.
@@ -34,7 +41,7 @@ abstract class Controller extends Exporter {
 	// Magic methods.
 	/**
 	 * Class constructor
-	 * 
+	 *
 	 * @param string $actionName An indentifier name for this controller, by
 	 * default it's currect action's name.
 	 */
@@ -74,20 +81,31 @@ abstract class Controller extends Exporter {
 	//
 	// Public methods.
 	/**
+	 * Checks for conditions that may require this controller to stop and
+	 * redirect to another.
+	 *
+	 * @return string Returns the name of a redirection configuration.
+	 */
+	public function checkRedirectors() {
+		//
+		// By default, a controller never redirects.
+		return false;
+	}
+	/**
 	 * This is an exported method that can be used inside templates. It
 	 * takes an action name an returns its rendered result.
-	 * 
+	 *
 	 * @param string $actionName Action to be rendered.
 	 * @return string Rendered result.
 	 */
 	public function insert($actionName) {
 		$lastRun = ActionsManager::ExecuteAction($actionName);
-		return $lastRun['render'];
+		return $lastRun[GC_AFIELD_RENDER];
 	}
 	/**
 	 * Allows to know which layout is to be used when this controller is
 	 * render.
-	 * 
+	 *
 	 * @return string Layout name. 'false' when no layout and null when it
 	 * must be default.
 	 */
@@ -101,7 +119,7 @@ abstract class Controller extends Exporter {
 	 * 	* Loads and save cache.
 	 * 	* Controls errors.
 	 * 	* Renders.
-	 * 
+	 *
 	 * @return boolean Returns true if the execution had no errors.
 	 */
 	public function run() {
@@ -135,28 +153,42 @@ abstract class Controller extends Exporter {
 			if($this->_lastRun) {
 				//
 				// Loading data from the previous execution.
-				$this->_assignments = $this->_lastRun['assignments'];
-				$this->_status = $this->_lastRun['status'];
-				$this->_errors = $this->_lastRun['errors'];
-				$this->_lastError = $this->_lastRun['lasterror'];
-			} else {
+				$this->_assignments = $this->_lastRun[GC_AFIELD_ASSIGNMENTS];
+				$this->_status = $this->_lastRun[GC_AFIELD_STATUS];
+				$this->_errors = $this->_lastRun[GC_AFIELD_ERRORS];
+				$this->_lastError = $this->_lastRun[GC_AFIELD_LASTERROR];
+				//
+				// Because there are some auto-assignments not
+				// present in cache, they are reinforced.
 				$this->autoAssigns();
+			} else {
 				//
 				// Triggering the real execution.
 				$this->_status = $this->dryRun();
 				//
 				// Genering the last execution structure.
 				$this->_lastRun = array(
-					'status' => $this->_status,
-					'assignments' => $this->_assignments,
-					'errors' => $this->_errors,
-					'lasterror' => $this->_lastError
+					GC_AFIELD_STATUS => $this->_status,
+					GC_AFIELD_ASSIGNMENTS => $this->_assignments,
+					GC_AFIELD_ERRORS => $this->_errors,
+					GC_AFIELD_LASTERROR => $this->_lastError
 				);
+				//
+				// Removing cache noise.
+				foreach($this->_cacheNoise as $noise) {
+					if(isset($this->_lastRun[GC_AFIELD_ASSIGNMENTS][$noise])) {
+						unset($this->_lastRun[GC_AFIELD_ASSIGNMENTS][$noise]);
+					}
+				}
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
 					$this->cache->save($prefixComputing, $key, $this->_lastRun, $this->_cached);
 				}
+				//
+				// Because there are some auto-assignments not
+				// present in cache, they are reinforced.
+				$this->autoAssigns();
 			}
 		}
 		//
@@ -171,28 +203,28 @@ abstract class Controller extends Exporter {
 			// previous execution.
 			if($this->_cached && !isset($this->params->debugresetcache)) {
 				$dataBlock = $this->cache->get($prefixRender, $key, $this->_cached);
-				$this->_lastRun['headers'] = $dataBlock['headers'];
-				$this->_lastRun['render'] = $dataBlock['render'];
+				$this->_lastRun[GC_AFIELD_HEADERS] = $dataBlock[GC_AFIELD_HEADERS];
+				$this->_lastRun[GC_AFIELD_RENDER] = $dataBlock[GC_AFIELD_RENDER];
 			} else {
-				$this->_lastRun['headers'] = array();
-				$this->_lastRun['render'] = false;
+				$this->_lastRun[GC_AFIELD_HEADERS] = array();
+				$this->_lastRun[GC_AFIELD_RENDER] = false;
 			}
 			//
 			// Checking if there were a previous execution or a
 			// debug parameter resetting the cache.
-			if(!$this->_lastRun['render']) {
+			if(!$this->_lastRun[GC_AFIELD_RENDER]) {
 				//
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();
-				$this->_lastRun['headers'] = $this->_viewAdapter->headers();
-				$this->_lastRun['render'] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
+				$this->_lastRun[GC_AFIELD_HEADERS] = $this->_viewAdapter->headers();
+				$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
 				// @}
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
 					$this->cache->save($prefixRender, $key, array(
-						'headers' => $this->_lastRun['headers'],
-						'render' => $this->_lastRun['render']
+						GC_AFIELD_HEADERS => $this->_lastRun[GC_AFIELD_HEADERS],
+						GC_AFIELD_RENDER => $this->_lastRun[GC_AFIELD_RENDER]
 						), $this->_cached);
 				}
 			}
@@ -202,7 +234,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to set a list of assignment to use when a snippet is called.
-	 * 
+	 *
 	 * @param string $key List of assignments' name.
 	 * @param mixed[string] $value Assignments. When null, it removes the
 	 * entry.
@@ -216,7 +248,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to set view name for this controller.
-	 * 
+	 *
 	 * @param string $viewName Name to be set.
 	 */
 	public function setViewName($viewName) {
@@ -225,7 +257,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * This is an exported method that can be used inside templates. It
 	 * takes an snippet name an returns its rendered result.
-	 * 
+	 *
 	 * @param string $snippetName Name of the snippet to render.
 	 * @param string $snippetDataSet List of assignments' name to use when
 	 * rendering.
@@ -260,7 +292,7 @@ abstract class Controller extends Exporter {
 	}
 	/**
 	 * Allows to access the view name of this controller.
-	 * 
+	 *
 	 * @return string Name of current view.
 	 */
 	public function viewName() {
@@ -294,7 +326,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * Controllers has a specific method to generate cache prefixes in order
 	 * to include skins.
-	 * 
+	 *
 	 * @global string $SkinName
 	 * @param string $extra
 	 * @return string
