@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file ViewAdapter.php
+ * @file Adapter.php
  * @author Alejandro Dario Simi
  */
 

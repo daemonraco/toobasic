@@ -77,14 +77,14 @@ $SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORI
 // @}
 //
 // View adapters @{
-$SuperLoader['TooBasic\\Adapters\\View\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapter.php";
-$SuperLoader['TooBasic\\Adapters\\View\\BasicAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterBasic.php";
-$SuperLoader['TooBasic\\Adapters\\View\\Dump'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterDump.php";
-$SuperLoader['TooBasic\\Adapters\\View\\JSON'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterJSON.php";
-$SuperLoader['TooBasic\\Adapters\\View\\Printr'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterPrint.php";
-$SuperLoader['TooBasic\\Adapters\\View\\Serialize'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSerialize.php";
-$SuperLoader['TooBasic\\Adapters\\View\\Smarty'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterSmarty.php";
-$SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/ViewAdapterXML.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/Adapter.php";
+$SuperLoader['TooBasic\\Adapters\\View\\BasicAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/BasicAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Dump'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/Dump.php";
+$SuperLoader['TooBasic\\Adapters\\View\\JSON'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/JSON.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Printr'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/Printr.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Serialize'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/Serialize.php";
+$SuperLoader['TooBasic\\Adapters\\View\\Smarty'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/Smarty.php";
+$SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_VIEW]}/XML.php";
 // @}
 //
 // Representations @{

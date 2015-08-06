@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file ViewAdapterSmarty.php
+ * @file Smarty.php
  * @author Alejandro Dario Simi
  */
 

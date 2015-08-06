@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Serialize.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Adapters\View;
 
 class Serialize extends BasicAdapter {

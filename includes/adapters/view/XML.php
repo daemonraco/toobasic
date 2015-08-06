@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file XML.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Adapters\View;
 
 class XML extends BasicAdapter {

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file JSON.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Adapters\View;
 
 class JSON extends BasicAdapter {
