@@ -65,15 +65,15 @@ $SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES
 // @}
 //
 // Database adapters @{
-$SuperLoader['TooBasic\\Adapters\\DB\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBAdapter.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\QueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapter.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\QueryMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterMySQL.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\QueryPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterPostgreSQL.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\QuerySQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBQueryAdapterSQLite.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\SpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapter.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\SpecMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterMySQL.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\SpecPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterPostgreSQL.php";
-$SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/DBSpecAdapterSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/Adapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/QueryAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/QueryMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QueryPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/QueryPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\QuerySQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/QuerySQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecAdapter.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecSQLite.php";
 // @}
 //
 // View adapters @{

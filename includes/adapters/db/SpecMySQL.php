@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file DBSpecAdapterMySQL.php
+ * @file SpecMySQL.php
  * @author Alejandro Dario Simi
  */
 

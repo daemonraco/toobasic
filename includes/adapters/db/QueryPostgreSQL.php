@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file DBQueryAdapterPostgreSQL.php
+ * @file QueryPostgreSQL.php
  * @author Alejandro Dario Simi
  */
 

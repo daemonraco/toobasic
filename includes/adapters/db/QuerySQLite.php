@@ -1,18 +1,18 @@
 <?php
 
 /**
- * @file DBQueryAdapterMySQL.php
+ * @file QuerySQLite.php
  * @author Alejandro Dario Simi
  */
 
 namespace TooBasic\Adapters\DB;
 
 /**
- * @class QueryMySQL
+ * @class QuerySQLite
  */
-class QueryMySQL extends QueryAdapter {
+class QuerySQLite extends QueryAdapter {
 	//
-	// Public methods
+	// Public methods.
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
 			throw new \TooBasic\DBException("No name set for id column");

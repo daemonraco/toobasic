@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file DBAdapter.php
+ * @file Adapter.php
  * @author Alejandro Dario Simi
  */
 

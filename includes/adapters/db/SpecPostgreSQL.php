@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file DBSpecAdapterPostgreSQL.php
+ * @file SpecPostgreSQL.php
  * @author Alejandro Dario Simi
  */
 
@@ -425,7 +425,7 @@ class SpecPostgreSQL extends SpecAdapter {
 					//
 					// Non-precision types.
 					if($data[GC_AFIELD_DB]['udt_name'] != 'bytea') {
-						debugit($data[GC_AFIELD_DB]['udt_name'] ,1);
+						debugit($data[GC_AFIELD_DB]['udt_name'], 1);
 						$same = false;
 					}
 					break;
