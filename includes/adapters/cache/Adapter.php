@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapter.php
+ * @file Adapter.php
  * @author Alejandro Dario Simi
  */
 

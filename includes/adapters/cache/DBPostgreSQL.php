@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapterDBPostgreSQL.php
+ * @file DBPostgreSQL.php
  * @author Alejandro Dario Simi
  */
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapterRedis.php
+ * @file Redis.php
  * @author Alejandro Dario Simi
  */
 

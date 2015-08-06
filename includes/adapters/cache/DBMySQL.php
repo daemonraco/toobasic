@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapterDBMySQL.php
+ * @file DBMySQL.php
  * @author Alejandro Dario Simi
  */
 

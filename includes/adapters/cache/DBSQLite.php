@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapterDBSQLite.php
+ * @file DBSQLite.php
  * @author Alejandro Dario Simi
  */
 

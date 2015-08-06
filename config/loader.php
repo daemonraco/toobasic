@@ -52,16 +52,16 @@ $SuperLoader['TooBasic\\Managers\\UrlManager'] = "{$Directories[GC_DIRECTORIES_M
 // @}
 //
 // Cache adapters @{
-$SuperLoader['TooBasic\\Adapters\\Cache\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapter.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\DB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDB.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\DBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBMySQL.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\DBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBPostgreSQL.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\DBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterDBSQLite.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\File'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterFile.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\Memcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcache.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\Memcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterMemcached.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\NoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterNoCache.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/CacheAdapterRedis.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Adapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Adapter.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DB'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/DB.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/DBMySQL.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/DBPostgreSQL.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\DBSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/DBSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\File'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/File.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Memcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcache.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Memcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcached.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\NoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/NoCache.php";
+$SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Redis.php";
 // @}
 //
 // Database adapters @{

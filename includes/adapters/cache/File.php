@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file File.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Adapters\Cache;
 
 class File extends Adapter {

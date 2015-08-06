@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Memcache.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Adapters\Cache;
 
 use TooBasic\Params;

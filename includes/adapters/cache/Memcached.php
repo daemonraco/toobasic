@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file CacheAdapterMemcached.php
+ * @file Memcached.php
  * @author Alejandro Dario Simi
  */
 
