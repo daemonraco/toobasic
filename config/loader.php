@@ -88,9 +88,9 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 // @}
 //
 // Representations @{
-$SuperLoader['TooBasic\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
-$SuperLoader['TooBasic\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
-$SuperLoader['TooBasic\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
+$SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
+$SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
+$SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
 // @}
 //
 // Shell includes @{

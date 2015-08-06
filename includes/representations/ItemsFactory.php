@@ -5,9 +5,11 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Representations;
 
 use TooBasic\Managers\DBManager;
+use TooBasic\Names;
+use TooBasic\Paths;
 
 /**
  * @class ItemsFactory

@@ -5,7 +5,7 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Representations;
 
 use TooBasic\Managers\DBManager;
 

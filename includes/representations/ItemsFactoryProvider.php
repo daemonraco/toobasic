@@ -5,12 +5,15 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Representations;
+
+use TooBasic\Names;
+use TooBasic\Paths;
 
 /**
  * @class ItemsFactoryProvider
  */
-class ItemsFactoryProvider extends Singleton {
+class ItemsFactoryProvider extends \TooBasic\Singleton {
 	//
 	// Protected properties.
 	protected $_loadedClases = array();
