@@ -7,6 +7,8 @@
 
 namespace TooBasic;
 
+use TooBasic\Managers\RoutesManager;
+
 /**
  * @class ErrorController
  * @abstract

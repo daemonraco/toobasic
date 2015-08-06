@@ -8,6 +8,8 @@
 namespace TooBasic\Managers;
 
 use TooBasic\Params;
+use TooBasic\Paths;
+use TooBasic\Sanitizer;
 
 /**
  * @class RoutesManager
@@ -155,7 +157,7 @@ class RoutesManager extends Manager {
 			if($matchingRoute) {
 				//
 				// Build the basic part of the new URL.
-				$out = \TooBasic\Sanitizer::UriPath("{$url[GC_AFIELD_PATH]}/".implode('/', $newPath));
+				$out = Sanitizer::UriPath("{$url[GC_AFIELD_PATH]}/".implode('/', $newPath));
 				//
 				// If there are some unkwon parameters, they are
 				// given as query parameters.
