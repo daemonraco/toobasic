@@ -7,6 +7,7 @@
 
 namespace TooBasic\Managers;
 
+use TooBasic\MagicProp;
 use TooBasic\Paths;
 use TooBasic\Params;
 

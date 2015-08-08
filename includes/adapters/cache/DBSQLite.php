@@ -16,13 +16,9 @@ class DBSQLite extends DB {
 	protected $_doesTableExist = null;
 	//
 	// Protected methods.
-	protected function doesTableExist() {
-		if($this->_doesTableExist === null) {
-			$pragma = $this->_db->queryData("pragma table_info({$this->_dbprefix}cache)");
-			$this->_doesTableExist = count($pragma) > 0;
-		}
-		return $this->_doesTableExist;
-	}
+	/**
+	 * This method ensures the cache table existence.
+	 */
 	protected function checkTables() {
 		if(!$this->doesTableExist()) {
 			$query = "create table {$this->_dbprefix}cache ( \n";
@@ -44,5 +40,12 @@ class DBSQLite extends DB {
 			':key' => $this->fullKey($prefix, $key),
 			':limit' => "-{$this->_expirationLength} second"
 		));
+	}
+	protected function doesTableExist() {
+		if($this->_doesTableExist === null) {
+			$pragma = $this->_db->queryData("pragma table_info({$this->_dbprefix}cache)");
+			$this->_doesTableExist = count($pragma) > 0;
+		}
+		return $this->_doesTableExist;
 	}
 }

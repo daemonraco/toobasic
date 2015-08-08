@@ -16,23 +16,41 @@ class DBPostgreSQL extends DB {
 	protected $_doesTableExist = null;
 	//
 	// Public methods.
+	/**
+	 * This method retieves a cache entry data.
+	 *
+	 * @param string $prefix Key prefix of the entry to retieve.
+	 * @param string $key Key of the entry to retieve.
+	 * @param int $delay Amount of seconds the entry lasts.
+	 * @return mixed Return the infomation stored in the request cache entry
+	 * or NULL if none found.
+	 */
 	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
+		//
+		// Default values.
 		$data = null;
-
+		//
+		// Cleaning the entry in case it is too old.
 		$this->cleanOld($prefix, $key);
-
+		//
+		// Preparing the query to obtain an entry.
 		$query = "select  * \n";
 		$query.= "from    {$this->_dbprefix}cache \n";
 		$query.= "where	  cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
-
+		//
+		// Requesting a specific entry.
 		if($stmt->execute(array(':key' => $this->fullKey($prefix, $key)))) {
 			$row = $stmt->fetch();
 			if($row) {
 				$fdata = '';
+				//
+				// Actual value reading.
 				while(!feof($row['cch_data'])) {
 					$fdata.= fgets($row['cch_data']);
 				}
+				//
+				// Decoding.
 				$data = unserialize(gzuncompress($fdata));
 			}
 		}
@@ -41,12 +59,9 @@ class DBPostgreSQL extends DB {
 	}
 	//
 	// Protected methods.
-	protected function doesTableExist() {
-		if($this->_doesTableExist === null) {
-			$this->_doesTableExist = count($this->_db->queryData("select * from pg_class where relname = '{$this->_dbprefix}cache'")) > 0;
-		}
-		return $this->_doesTableExist;
-	}
+	/**
+	 * This method ensures the cache table existence.
+	 */
 	protected function checkTables() {
 		if(!$this->doesTableExist()) {
 			$query = "create table {$this->_dbprefix}cache ( \n";
@@ -67,5 +82,11 @@ class DBPostgreSQL extends DB {
 		$stmt->execute(array(
 			':key' => $this->fullKey($prefix, $key)
 		));
+	}
+	protected function doesTableExist() {
+		if($this->_doesTableExist === null) {
+			$this->_doesTableExist = count($this->_db->queryData("select * from pg_class where relname = '{$this->_dbprefix}cache'")) > 0;
+		}
+		return $this->_doesTableExist;
 	}
 }
