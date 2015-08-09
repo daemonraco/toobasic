@@ -36,7 +36,10 @@ class ControllerExports extends AbstractExports {
 		}
 		//
 		// Enrouting uri.
-		$actionUri = \TooBasic\Managers\RoutesManager::Instance()->enroute($actionUri);
+		$auxActionUri = \TooBasic\Managers\RoutesManager::Instance()->enroute($actionUri);
+		if($auxActionUri != $actionUri) {
+			$actionUri = ROOTURI.$auxActionUri;
+		}
 		//
 		// Generating attributes.
 		$builtAttrs = '';
