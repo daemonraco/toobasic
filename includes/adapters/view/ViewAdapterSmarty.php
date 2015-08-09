@@ -49,7 +49,9 @@ class ViewAdapterSmarty extends ViewAdapter {
 		return $this->_smarty;
 	}
 	public function render($assignments, $template) {
-		foreach($assignments as $key => $value) {
+		$merge = array_merge($this->_autoAssigns, $assignments);
+
+		foreach($merge as $key => $value) {
 			$this->_smarty->assign($key, $value);
 		}
 
