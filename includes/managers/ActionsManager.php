@@ -7,8 +7,9 @@
 
 namespace TooBasic\Managers;
 
-use TooBasic\Paths;
+use TooBasic\Exception;
 use TooBasic\Exporter;
+use TooBasic\Paths;
 
 /**
  * @class ActionsManager

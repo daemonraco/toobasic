@@ -9,10 +9,16 @@ namespace TooBasic\Adapters\Cache;
 
 /**
  * @class DBPostgreSQL
+ * This class provides and cache adaptation for entries stored on PostgreSQL
+ * databeses.
  */
 class DBPostgreSQL extends DB {
 	//
 	// Protected Properties.
+	/**
+	 * @var bool Indicates if the table for cache entries storage exists. NULL
+	 * means it was not checked yet.
+	 */
 	protected $_doesTableExist = null;
 	//
 	// Public methods.
@@ -73,6 +79,12 @@ class DBPostgreSQL extends DB {
 			$this->_db->query($query);
 		}
 	}
+	/**
+	 * This method removes expired cache entries.
+	 *
+	 * @param type $prefix Cache entry key prefix.
+	 * @param type $key Cache entry key (without the prefix).
+	 */
 	protected function cleanOld($prefix, $key) {
 		$query = "delete from {$this->_dbprefix}cache \n";
 		$query.= "where       cch_key  = :key \n";
@@ -83,6 +95,11 @@ class DBPostgreSQL extends DB {
 			':key' => $this->fullKey($prefix, $key)
 		));
 	}
+	/**
+	 * Checks if the table for cache entries storage exists.
+	 *
+	 * @return bool TRUE when the table exists.
+	 */
 	protected function doesTableExist() {
 		if($this->_doesTableExist === null) {
 			$this->_doesTableExist = count($this->_db->queryData("select * from pg_class where relname = '{$this->_dbprefix}cache'")) > 0;

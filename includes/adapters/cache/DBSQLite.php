@@ -9,10 +9,16 @@ namespace TooBasic\Adapters\Cache;
 
 /**
  * @class DBSQLite
+ * This class provides and cache adaptation for entries stored on SQLite
+ * databeses.
  */
 class DBSQLite extends DB {
 	//
 	// Protected Properties.
+	/**
+	 * @var bool Indicates if the table for cache entries storage exists. NULL
+	 * means it was not checked yet.
+	 */
 	protected $_doesTableExist = null;
 	//
 	// Protected methods.
@@ -30,6 +36,12 @@ class DBSQLite extends DB {
 			$this->_db->query($query);
 		}
 	}
+	/**
+	 * This method removes expired cache entries.
+	 *
+	 * @param type $prefix Cache entry key prefix.
+	 * @param type $key Cache entry key (without the prefix).
+	 */
 	protected function cleanOld($prefix, $key) {
 		$query = "delete from {$this->_dbprefix}cache \n";
 		$query.= "where       cch_key  = :key \n";
@@ -41,6 +53,11 @@ class DBSQLite extends DB {
 			':limit' => "-{$this->_expirationLength} second"
 		));
 	}
+	/**
+	 * Checks if the table for cache entries storage exists.
+	 *
+	 * @return bool TRUE when the table exists.
+	 */
 	protected function doesTableExist() {
 		if($this->_doesTableExist === null) {
 			$pragma = $this->_db->queryData("pragma table_info({$this->_dbprefix}cache)");

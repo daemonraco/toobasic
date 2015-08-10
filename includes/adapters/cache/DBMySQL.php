@@ -9,6 +9,7 @@ namespace TooBasic\Adapters\Cache;
 
 /**
  * @class DBMySQL
+ * This class provides and cache adaptation for entries stored on MySQL databeses.
  */
 class DBMySQL extends DB {
 	//
@@ -39,8 +40,8 @@ class DBMySQL extends DB {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key),
-			":limit" => $this->_expirationLength
+			':key' => $this->fullKey($prefix, $key),
+			':limit' => $this->_expirationLength
 		));
 	}
 }

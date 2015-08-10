@@ -116,6 +116,9 @@ abstract class DB extends Adapter {
 	 * @param int $delay Amount of seconds the entry lasts.
 	 */
 	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
+		//
+		// Removing the previous value to avoid problems with the
+		// insertion.
 		$this->delete($prefix, $key);
 
 		$query = "insert \n";
@@ -123,7 +126,9 @@ abstract class DB extends Adapter {
 		$query.= "                cch_key, cch_data) \n";
 		$query.= "        values (:key, :data) \n";
 		$stmt = $this->_db->prepare($query);
-
+		//
+		// Binding parameters. This msut be done in this way and not with
+		// a simple array to avoid problems with BLOB fields.
 		$stmt->bindParam(':key', $this->fullKey($prefix, $key), \PDO::PARAM_STR);
 		$stmt->bindParam(':data', gzcompress(serialize($data), $this->_compressionRate), \PDO::PARAM_LOB);
 
@@ -131,8 +136,24 @@ abstract class DB extends Adapter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method ensures the cache table existence.
+	 */
 	abstract protected function checkTables();
+	/**
+	 * This method removes expired cache entries.
+	 *
+	 * @param type $prefix Cache entry key prefix.
+	 * @param type $key Cache entry key (without the prefix).
+	 */
 	abstract protected function cleanOld($prefix, $key);
+	/**
+	 * This method creates a proper cache entry key.
+	 *
+	 * @param string $prefix Key prefix of the entry to store.
+	 * @param string $key Key of the entry to store.
+	 * @return string Returns a normalize key.
+	 */
 	protected function fullKey($prefix, $key) {
 		$key = sha1($key);
 		$prefix.= ($prefix ? '_' : '');

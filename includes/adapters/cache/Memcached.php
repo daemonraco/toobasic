@@ -7,25 +7,40 @@
 
 namespace TooBasic\Adapters\Cache;
 
+//
+// Class aliases.
 use TooBasic\Params;
 
 /**
  * @class Memcached
+ * This class provides and cache adaptation for Memcached.
  */
 class Memcached extends Adapter {
 	//
 	// Protected properties.
+	/**
+	 * @var \Memcached Memcached server connection pointer.
+	 */
 	protected $_conn = false;
 	// 
 	// Magic methods.
+	/**
+	 * Class constructor.
+	 *
+	 * @throws \TooBasic\CacheException
+	 */
 	public function __construct() {
 		parent::__construct();
+		//
+		// Global dependencies.
 		global $Defaults;
-
+		//
+		// Checking configuration.
 		if(!isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX])) {
 			throw new \TooBasic\CacheException("Memcached is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX].");
 		}
-
+		//
+		// Connection to 'Memcached' server.
 		$this->_conn = new \Memcached();
 		$this->_conn->addServer($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT]);
 	}
@@ -95,11 +110,26 @@ class Memcached extends Adapter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method creates a proper cache entry key.
+	 *
+	 * @param string $prefix Key prefix of the entry to store.
+	 * @param string $key Key of the entry to store.
+	 * @return string Returns a normalize key.
+	 */
 	protected function fullKey($prefix, $key) {
+		//
+		// Global dependencies.
 		global $Defaults;
-
+		//
+		// Encoding key.
 		$key = sha1($key);
+		//
+		// Adding the prefix.
 		$prefix.= ($prefix ? '_' : '');
+		//
+		// Adding a specific prefix for this Memcached connection to avoid
+		// collisions.
 		$out = "{$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX]}_{$prefix}{$key}";
 
 		return $out;

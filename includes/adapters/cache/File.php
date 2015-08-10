@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\Cache;
 
+/**
+ * @class File
+ * This class provides and cache adaptation for entries stored in files.
+ */
 class File extends Adapter {
 	//
 	// Constants.
@@ -59,11 +63,27 @@ class File extends Adapter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This methods removes a file containing an expired cache entry.
+	 *
+	 * @param string $path Path where a cache entry is stored.
+	 * @param int $delay Amount of seconds the entry lasts.
+	 * @param bool $forced Remove the path regardless of its expiration
+	 * status.
+	 */
 	protected function cleanPath($path, $delay, $forced = false) {
 		if(is_readable($path) && ($forced || (time() - filemtime($path)) >= $this->expirationLength($delay))) {
 			unlink($path);
 		}
 	}
+	/**
+	 * This method creates a proper cache entry key.
+	 *
+	 * @param string $prefix Key prefix of the entry to store.
+	 * @param string $key Key of the entry to store.
+	 * @param bool $genDir not used
+	 * @return string Returns a normalize key.
+	 */
 	protected function path($prefix, $key, $genDir = false) {
 		global $Directories;
 
