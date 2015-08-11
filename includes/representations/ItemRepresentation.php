@@ -16,10 +16,22 @@ use TooBasic\Managers\DBManager;
 abstract class ItemRepresentation {
 	//
 	// Protected core properties.
+	/**
+	 * @var string Generic prefix for all columns on the represented table.
+	 */
 	protected $_CP_ColumnsPerfix = '';
+	/**
+	 * @var string Name of a field containing IDs (without prefix).
+	 */
 	protected $_CP_IDColumn = '';
+	/**
+	 * @var string Name of a field containing names (without prefix).
+	 */
 	protected $_CP_NameColumn = 'name';
 	protected $_CP_ReadOnlyColumns = array();
+	/**
+	 * @var string Represented table's name (without prefix).
+	 */
 	protected $_CP_Table = '';
 	//
 	// Protected properties.

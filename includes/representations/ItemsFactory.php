@@ -16,6 +16,9 @@ use TooBasic\Paths;
 /**
  * @class ItemsFactory
  * @abstract
+ * This is an abstract representation of a database item representation factory.
+ * In a completely abstract point of view, this is the representation of a
+ * database table and all its entries.
  */
 abstract class ItemsFactory {
 	//
@@ -26,11 +29,31 @@ abstract class ItemsFactory {
 	protected static $_LoadedClasses = array();
 	//
 	// Protected core properties.
-	protected $_CP_IDColumn = '';
+	/**
+	 * @var string Generic prefix for all columns on the represented table.
+	 */
 	protected $_CP_ColumnsPerfix = '';
+	/**
+	 * @var string Name of a field containing IDs (without prefix).
+	 */
+	protected $_CP_IDColumn = '';
+	/**
+	 * @var string Name of a field containing names (without prefix).
+	 */
 	protected $_CP_NameColumn = 'name';
+	/**
+	 * @var string[string] List of fields (without prefix) associated to a
+	 * sorting direction.
+	 */
 	protected $_CP_OrderBy = false;
+	/**
+	 * @var string Name of a \TooBasic\Representations\ItemRepresentation
+	 * class.
+	 */
 	protected $_CP_RepresentationClass = '';
+	/**
+	 * @var string Represented table's name (without prefix).
+	 */
 	protected $_CP_Table = '';
 	//
 	// Protected properties.	
@@ -179,7 +202,7 @@ abstract class ItemsFactory {
 	 * This method allows to obtain a representation for certain item based on
 	 * its name.
 	 *
-	 * @param type $name
+	 * @param type $name Name to look for.
 	 * @return \TooBasic\Representations\ItemRepresentation Returns a
 	 * representation when found or NULL if not.
 	 * @throws \TooBasic\Exception
@@ -235,10 +258,21 @@ abstract class ItemsFactory {
 	}
 	//
 	// Protected methods.
+	/**
+	 * Singleton initializer
+	 */
 	protected function init() {
+		//
+		// Creating a shortcuts.
 		$this->_db = DBManager::Instance()->{$this->_dbname};
 		$this->_dbprefix = $this->_db->prefix();
 	}
+	/**
+	 * This method generates and returns a list of prefixes required by query
+	 * adapetrs.
+	 *
+	 * @return string[string] List of prefixes.
+	 */
 	protected function queryAdapterPrefixes() {
 		if($this->_queryAdapterPrefixes === false) {
 			$this->_queryAdapterPrefixes = array(
@@ -250,24 +284,44 @@ abstract class ItemsFactory {
 	}
 	//
 	// Public class methods.
+	/**
+	 * This method provides access to singleton instances of representation
+	 * factories.
+	 *
+	 * @param string $dbname Database connection name associated with the
+	 * requested singleton instance.
+	 * @return \TooBasic\Representations\ItemsFactory Returns a representation
+	 * factory instance.
+	 */
 	final public static function &Instance($dbname = false) {
+		//
+		// List of loaded singleton instances.
 		static $Instances = array();
-
+		//
+		// When no database name is specified, the defualt must be used.
 		if($dbname === false) {
-			global $Connections;
-			$dbname = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+			$dbname = DBManager::Instance()->getDefaultName();
 		}
 
 		$classname = get_called_class();
+		//
+		// If there's not an instance created for the requested factory
+		// and database name it must be created.
 		if(!isset($Instances[$classname][$dbname])) {
+			//
+			// Generaring a list for each factory in which store
+			// instances associated to their database connection name.
 			if(!isset($Instances[$classname])) {
 				$Instances[$classname] = array();
 			}
+			//
+			// Generating and initializing the instance.
 			$Instances[$classname][$dbname] = new $classname();
 			$Instances[$classname][$dbname]->_dbname = $dbname;
 			$Instances[$classname][$dbname]->init();
 		}
-
+		//
+		// Returning the requeste instance.
 		return $Instances[$classname][$dbname];
 	}
 	//
