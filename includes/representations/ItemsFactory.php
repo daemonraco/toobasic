@@ -7,6 +7,8 @@
 
 namespace TooBasic\Representations;
 
+//
+// Class aliases.
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
@@ -18,6 +20,9 @@ use TooBasic\Paths;
 abstract class ItemsFactory {
 	//
 	// Protected class properties.
+	/**
+	 * @var string[string] List of loaded representation classes.
+	 */
 	protected static $_LoadedClasses = array();
 	//
 	// Protected core properties.
@@ -30,93 +35,201 @@ abstract class ItemsFactory {
 	//
 	// Protected properties.	
 	/**
-	 * @var \TooBasic\Adapters\DB\Adapter
+	 * @var \TooBasic\Adapters\DB\Adapter Database connection shortcut.
 	 */
 	protected $_db = false;
+	/**
+	 * @var string Database connection name shortcut.
+	 */
 	protected $_dbname = false;
+	/**
+	 * @var string Tables' prefix shortcut.
+	 */
 	protected $_dbprefix = '';
+	/**
+	 * @var string[] Last database error detected.
+	 */
 	protected $_lastDBError = false;
+	/**
+	 * @var string[string] List of prefixes used by query adapters.
+	 */
 	protected $_queryAdapterPrefixes = false;
 	//
 	// Magic methods.
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	protected function __constructor() {
+	final protected function __constructor() {
 		
 	}
 	/**
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		throw new Exception('Clone is not allowed');
+		throw new \TooBasic\Exception('Clone is not allowed');
 	}
 	//
 	// Public methods.
+	/**
+	 * This method allows to create an empty entry for the represented table.
+	 *
+	 * @warning If any field on a represented table has no defualt value this
+	 * method may cause errors.
+	 *
+	 * @return int Returns the ID of the new entry or false when it wasn't 
+	 * @throws \TooBasic\Exception
+	 */
 	public function create() {
+		//
+		// Default values.
 		$out = false;
-
-		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
-			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
-			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
-			), $this->queryAdapterPrefixes());
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$out = $this->_db->lastInsertId($query[GC_AFIELD_SEQNAME]);
+		//
+		// Checking if there's an ID field configured, if not it means
+		// this representation doesn't support empty entries creation.
+		if($this->_CP_IDColumn) {
+			//
+			// Generating a proper query to insert an empty entry.
+			$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
+				GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
+				GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
+				), $this->queryAdapterPrefixes());
+			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+			//
+			// Attepting to create an entry.
+			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+				//
+				// Fetching the ID.
+				$out = $this->_db->lastInsertId($query[GC_AFIELD_SEQNAME]);
+			} else {
+				//
+				// Catching the last error for further analysis.
+				$this->_lastDBError = $stmt->errorInfo();
+			}
 		} else {
-			$this->_lastDBError = $stmt->errorInfo();
+			throw new \TooBasic\Exception('This representation has no ID field defined meaning it does not support empty entry creation');
 		}
 
 		return $out;
 	}
+	/**
+	 * This method retrieves a list of ID of all available entries in the
+	 * represented table.
+	 *
+	 * @return int[] Returns a list of IDs.
+	 */
 	public function ids() {
+		//
+		// Default values.
 		$out = array();
-
+		//
+		// Enforcing order configuration.
 		if(!is_array($this->_CP_OrderBy)) {
 			$this->_CP_OrderBy = array();
 		}
+		//
+		// Generating a proper query to obtain a full list of IDs.
 		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
 		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
 			foreach($stmt->fetchAll() as $row) {
 				$out[] = $row[$idKey];
 			}
 		} else {
+			//
+			// Catching the last error for further analysis.
 			$this->_lastDBError = $stmt->errorInfo();
 		}
 
 		return $out;
 	}
+	/**
+	 * This method allows to obtain a representation for certain item based on
+	 * its ID.
+	 *
+	 * @param int $id Id to look for.
+	 * @return \TooBasic\Representations\ItemRepresentation Returns a
+	 * representation when found or NULL if not.
+	 * @throws \TooBasic\Exception
+	 */
 	public function item($id) {
+		//
+		// Checking if there's an ID field configured, if not it means
+		// this representation doesn't support this method.
+		if(!$this->_CP_IDColumn) {
+			throw new \TooBasic\Exception('This representation has no ID field defined meaning it does not support this method');
+		}
+		//
+		// Obtaining an object to hold the represented entry.
 		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
+		//
+		// Attempting to load the information based on the id.
 		$item->load($id);
-
+		//
+		// Was it found?
 		if(!$item->exists()) {
 			$item = null;
 		}
 
 		return $item;
 	}
+	/**
+	 * This method allows to obtain a representation for certain item based on
+	 * its name.
+	 *
+	 * @param type $name
+	 * @return \TooBasic\Representations\ItemRepresentation Returns a
+	 * representation when found or NULL if not.
+	 * @throws \TooBasic\Exception
+	 */
 	public function itemByName($name) {
+		//
+		// Checking if there's an name field configured, if not it means
+		// this representation doesn't support this method.
+		if(!$this->_CP_NameColumn) {
+			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+		}
+		//
+		// Obtaining an object to hold the represented entry.
 		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
+		//
+		// Attempting to load the information based on the id.
 		$item->loadByName($name);
-
+		//
+		// Was it found?
 		if(!$item->exists()) {
 			$item = null;
 		}
 
 		return $item;
 	}
+	/**
+	 * This method retrieves a list of representations of all available
+	 * entries in the represented table.
+	 *
+	 * @return \TooBasic\Representations\ItemRepresentation[] Returns a list
+	 * of representations.
+	 */
 	public function items() {
+		//
+		// Default values.
 		$out = array();
-
+		//
+		// Fetching all available dis and creating a representation for
+		// each one of them.
 		foreach($this->ids() as $id) {
 			$out[$id] = $this->item($id);
 		}
 
 		return $out;
 	}
+	/**
+	 * This method provids access to the last database error found.
+	 *
+	 * @return string[] Returns a database error information.
+	 */
 	public function lastDBError() {
 		return $this->_lastDBError;
 	}
@@ -159,24 +272,59 @@ abstract class ItemsFactory {
 	}
 	//
 	// Protected class methods.
+	/**
+	 * This method is the one in charge of searching, loading and keeping
+	 * track of all requested representation classes.
+	 *
+	 * @param string $name Name to use as search pattern for a representaion.
+	 * It may be prefixed with a namespace.
+	 * @param string $dbname Database connection name to use on the returned
+	 * representation.
+	 * @return string Returns the requested representation's class.
+	 * @throws \TooBasic\Exception
+	 */
 	protected static function GetClass($name, $dbname) {
+		//
+		// Guessing class name.
 		$className = Names::ItemRepresentationClass($name);
-
+		//
+		// If it was never loaded, it should give it a try, otherwise, an
+		// internal list is used.
 		if(!in_array($className, self::$_LoadedClasses)) {
-			$filename = Paths::Instance()->representationPath(Names::ItemRepresentationFilename($name));
-			if($filename) {
-				require_once $filename;
-
-				if(class_exists($className)) {
-					self::$_LoadedClasses[] = $className;
-				} else {
-					throw new Exception("Class '{$className}' is not defined");
-				}
+			//
+			// Checking if the class was loaded by an external
+			// mechanism.
+			if(class_exists($className)) {
+				//
+				// Setting class as loaded.
+				self::$_LoadedClasses[] = $className;
 			} else {
-				throw new Exception("Cannot load item representation '{$className}'");
+				//
+				// Guessing class name.
+				$filename = Paths::Instance()->representationPath(Names::ItemRepresentationFilename($name));
+				//
+				// Checking the file path existence.
+				if($filename) {
+					//
+					// Loading the file
+					require_once $filename;
+					//
+					// Checking if the class was successfully
+					// loaded.
+					if(class_exists($className)) {
+						//
+						// Setting class as loaded.
+						self::$_LoadedClasses[] = $className;
+					} else {
+						throw new \TooBasic\Exception("Class '{$className}' is not defined");
+					}
+				} else {
+					throw new \TooBasic\Exception("Cannot load item representation '{$className}'");
+				}
 			}
 		}
-
+		//
+		// Returning the found class for the right database connection.
 		return new $className($dbname);
 	}
 }
