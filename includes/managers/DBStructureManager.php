@@ -615,7 +615,9 @@ class DBStructureManager extends Manager {
 			// Guessing table identifier and creating a pull for its
 			// entries.
 			$tKey = sha1("{$aux->connection}-{$aux->table}");
-			$this->_specs->data[$tKey] = array();
+			if(!isset($this->_specs->data[$tKey])) {
+				$this->_specs->data[$tKey] = array();
+			}
 
 			foreach($aux->entries as $entry) {
 				$auxEntry = new \stdClass();
