@@ -21,6 +21,7 @@ class Params extends Singleton {
 	const TypeHEADERS = 'headers';
 	const TypePOST = 'post';
 	const TypeSERVER = 'server';
+	const TypeINTERNAL = 'internal';
 	//
 	// Protected properties.
 	/**
@@ -237,5 +238,8 @@ class Params extends Singleton {
 		} else {
 			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(array());
 		}
+		//
+		// Internal stack for custom purposes.
+		$this->_paramsStacks[self::TypeINTERNAL] = new ParamsStack(array());
 	}
 }
