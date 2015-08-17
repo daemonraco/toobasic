@@ -2,7 +2,7 @@
 	<h4 class="text-center">{$tr->title_new_item_on_table('tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
-		<form id="<%$singularName%>_form" method="post" href="#" role="form">
+		<form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
@@ -28,10 +28,10 @@
 			</div>
 <%/if%>
 <%/if%><%/foreach%>
-			<input type="submit" value="{$tr->btn_add}" class="btn btn-success"/>
-			<input type="reset" value="{$tr->btn_clear_fields}" class="btn btn-default"/>
+			<input type="submit" value="{$tr->btn_add}" class="btn btn-sm btn-success"/>
+			<input type="reset" value="{$tr->btn_clear_fields}" class="btn btn-sm btn-default"/>
 		</form>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-default pull-right">{$tr->btn_back_to_list}</a>
+	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-sm btn-default pull-right">{$tr->btn_back_to_list}</a>
 </div>

@@ -1,6 +1,6 @@
 <h4>{$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
-<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;">
+<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;" ng-non-bindable>
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
