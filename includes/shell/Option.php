@@ -9,6 +9,8 @@ namespace TooBasic\Shell;
 
 /**
  * @class Option
+ * This class represents a simgle option given on a command like and provides
+ * management and controlles over it.
  */
 class Option {
 	//
