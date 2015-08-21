@@ -163,6 +163,8 @@ abstract class ShellTool {
 		// Guessing the method based on selected options
 		foreach($activeOptions as $optionName) {
 			$taskName = "task{$optionName}";
+			//
+			// Checking if there's actualy a method with such name.
 			if(method_exists($this, $taskName)) {
 				break;
 			} else {
@@ -177,39 +179,83 @@ abstract class ShellTool {
 
 		return $taskName;
 	}
+	/**
+	 * This is the default task used when running a tool and it will be called
+	 * when no other method can be guest from command line parameters.
+	 * By default it prompts an error and the help text.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 */
 	protected function mainTask($spacer = '') {
 		$this->setCoreError(self::ErrorNoTask, 'No task specified');
 		$this->taskHelp($spacer);
 	}
-	protected function setError($code, $message) {
+	/**
+	 * This method adds a simple error in it's interal list.
+	 *
+	 * @param int $code Code to be associated with this error.
+	 * @param string $message Text to be associated with this error.
+	 * @param string $prefix Short text to use as prefix for an error code.
+	 * @param type $forwarded When TRUE, it means this method is being called
+	 * from another error setting method.
+	 */
+	protected function setError($code, $message, $prefix = 'T', $forwarded = false) {
+		//
+		// Formating all numerica error codes.
 		if(is_numeric($code)) {
 			$code = sprintf('%03d', $code);
 		}
-
+		//
+		// Obtaining the error's backtrace for further information.
 		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
+		//
+		// When this is TRUE, it means this method is being called from
+		// another error setting method and the top entry on a debug trace
+		// is just garbage.
+		if($forwarded) {
+			array_shift($trace);
+		}
+		//
+		// Creating shortcuts for caller and calling position from inside
+		// the backtrace.
 		$callingLine = array_shift($trace);
 		$callerLine = array_shift($trace);
-
+		//
+		// Generating a error entry.
 		$error = array(
-			GC_AFIELD_CODE => "T-{$code}",
+			GC_AFIELD_CODE => "{$prefix}-{$code}",
 			GC_AFIELD_MESSAGE => $message,
 			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
 			GC_AFIELD_METHOD => $callerLine['function'],
 			GC_AFIELD_FILE => $callingLine['file'],
 			GC_AFIELD_LINE => $callingLine['line']
 		);
+		//
+		// Adding error to and internal list.
 		$this->_errors[] = $error;
 	}
+	/**
+	 * @abstract
+	 * This methods sets all non-core options handle by this tool.
+	 */
 	abstract protected function setOptions();
+	/**
+	 * This method initialize the list of options and set all core options.
+	 */
 	protected function starterOptions() {
+		//
+		// Starting the options manager.
 		$this->_options = Options::Instance();
 		$this->_options->reset();
-
+		//
+		// Setting ain option, in other words, options that are always at
+		// the begining of a command line in the same order.
 		$this->_options->addMainOption('ignored_script');
 		$this->_options->addMainOption('ignored_mode');
 		$this->_options->addMainOption('ignored_tool');
-
+		//
+		// Adding core options @{
 		$auxOption = new Option(self::OptionNameHelp);
 		$auxOption->addTrigger('--help');
 		$auxOption->addTrigger('-h');
@@ -227,36 +273,46 @@ abstract class ShellTool {
 		$auxOption->addTrigger('-I');
 		$auxOption->setHelpText("Shows this tool's information.");
 		$this->_options->addOption($auxOption);
+		// @}
 	}
+	/**
+	 * This method show the full formated help text obtained from its options
+	 * manager.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 */
 	protected function taskHelp($spacer = '') {
 		echo $this->_options->helpText();
 	}
+	/**
+	 * This mehtod show information about current tool.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 */
 	protected function taskInfo($spacer = '') {
 		$this->taskVersion($spacer);
 	}
+	/**
+	 * This method prompts a short text with current tool's version number.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 */
 	protected function taskVersion($spacer = '') {
 		echo "{$spacer}Version: {$this->_version}\n";
 	}
 	//
 	// Private methods.
+	/**
+	 * This method adds an error in it's interal list and considers it as a
+	 * core error.
+	 *
+	 * @param int $code Code to be associated with this error.
+	 * @param string $message Text to be associated with this error.
+	 */
 	private function setCoreError($code, $message) {
-		if(is_numeric($code)) {
-			$code = sprintf('%03d', $code);
-		}
-
-		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-
-		$callingLine = array_shift($trace);
-		$callerLine = array_shift($trace);
-
-		$error = array(
-			GC_AFIELD_CODE => "ST-{$code}",
-			GC_AFIELD_MESSAGE => $message,
-			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
-			GC_AFIELD_METHOD => $callerLine['function'],
-			GC_AFIELD_FILE => $callingLine['file'],
-			GC_AFIELD_LINE => $callingLine['line']
-		);
-		$this->_errors[] = $error;
+		$this->setError($code, $message, 'ST', true);
 	}
 }
