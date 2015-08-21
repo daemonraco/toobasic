@@ -7,6 +7,8 @@
 
 namespace TooBasic\Shell;
 
+//
+// Class aliases.
 use TooBasic\Sanitizer as TB_Sanitizer;
 use \TooBasic\Shell\Option as TBS_Option;
 

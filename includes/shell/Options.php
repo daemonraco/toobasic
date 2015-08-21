@@ -9,12 +9,17 @@ namespace TooBasic\Shell;
 
 /**
  * @class Options
+ * This class has he ability to analyse values from a command line.
  */
 class Options extends \TooBasic\Singleton {
 	// 
 	// Protected properties.
 	protected $_activeOptions = false;
 	protected $_helpText = false;
+	/**
+	 * @var string[] List of parameters that are always present at the
+	 * begining of a command line.
+	 */
 	protected $_mainOptions = array();
 	protected $_options = array();
 	protected $_unknownParams = array();

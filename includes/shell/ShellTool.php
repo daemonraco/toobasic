@@ -7,9 +7,16 @@
 
 namespace TooBasic\Shell;
 
+//
+// Class aliases.
+use \TooBasic\MagicProp;
+use \TooBasic\MagicPropException;
+
 /**
  * @class ShellTool
  * @abstract
+ * This class is the basic representation of TooBasic's shell tool. In other
+ * words, a tool that can be invoked by 'shell.php' from command line.
  */
 abstract class ShellTool {
 	//
@@ -21,83 +28,139 @@ abstract class ShellTool {
 	const OptionNameVersion = 'Version';
 	//
 	// Protected properties.
+	/**
+	 * @var string[] List of options considered core to any tool.
+	 */
 	protected $_coreTasks = array();
+	/**
+	 * @var mixed[] List of errors found.
+	 */
 	protected $_errors = array();
 	/**
-	 * @var \TooBasic\Shell\Options
+	 * @var \TooBasic\Shell\Options Options manager shortcut.
 	 */
 	protected $_options = false;
 	/**
-	 * @var string
+	 * @var string Tool's version number.
 	 */
 	protected $_version = '0.1';
 	//
 	// Magic methods.
+	/**
+	 * Class constructor.
+	 */
 	public function __construct() {
+		//
+		// Setting core option names.
 		$this->_coreTasks[] = self::OptionNameHelp;
 		$this->_coreTasks[] = self::OptionNameVersion;
 		$this->_coreTasks[] = self::OptionNameInfo;
-
+		//
+		// Starting options settings.
 		$this->starterOptions();
 		$this->setOptions();
 	}
 	/**
-	 * @todo doc
+	 * This magic method provides access to all 'magic properties'.
 	 *
-	 * @param type $prop @todo doc
-	 * @return mixed @todo doc
+	 * @param string $prop Name of the property retrieve.
+	 * @return mixed A magic property or FALSE when it's not found.
 	 */
 	public function __get($prop) {
+		//
+		// Defualt values.
 		$out = false;
-
+		//
+		// Looking for the right property.
 		try {
-			$out = \TooBasic\MagicProp::Instance()->{$prop};
-		} catch(\TooBasic\MagicPropException $ex) {
-			
+			$out = MagicProp::Instance()->{$prop};
+		} catch(MagicPropException $ex) {
+			//
+			// Ignoring the error when it's not found.
 		}
 
 		return $out;
 	}
 	//
 	// Public methods.
+	/**
+	 * This method provides access to the list of found errors.
+	 *
+	 * @return mixed[] Return a list of errors.
+	 */
 	public function errors() {
 		return $this->_errors;
 	}
+	/**
+	 * This method indicates if this tool has registerd errors.
+	 *
+	 * @return boolean Returns TRUE where there's at least one error
+	 * registered.
+	 */
 	public function hasErrors() {
 		return count($this->errors()) > 0;
 	}
+	/**
+	 * This is the main method to start this tool's complete analysis.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @param string[] $params List of parameters given in command line
+	 * required to analyze options.
+	 */
 	public function run($spacer = '', $params = null) {
+		//
+		// Reading and checking command line arguments.
 		if($this->_options->check($params)) {
-			$taskName = $this->guessTask();
 			//
 			// Running the appropiate task.
+			$taskName = $this->guessTask();
 			$this->{$taskName}($spacer);
 		} else {
+			//
+			// If there's an error on the command line parametrs, it's
+			// informed and a help text is shown.
 			$this->setCoreError(self::ErrorWrongParameters, "There's something wrong with your parameters");
 			$this->taskHelp($spacer);
 		}
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method tries to guess the proper method to be executed based on
+	 * parameters given through command line.
+	 *
+	 * @param boolean $isCore
+	 * @param boolean $avoidCores
+	 * @return string Returns a method name.
+	 */
 	protected function guessTask(&$isCore = false, $avoidCores = false) {
+		//
+		// Default values.
 		$taskName = false;
 		$isCore = false;
-
+		//
+		// Obtaining the list of options activated through command line.
 		$activeOptions = $this->_options->activeOptions();
-
+		//
+		// Checking if core options like '--help' and others have to be
+		// ignored.
 		if($avoidCores) {
 			$activeOptions = array_diff($activeOptions, $this->_coreTasks);
 		} else {
+			//
+			// Checking if there's a core option activated.
 			$coreActiveOptions = array_intersect($this->_coreTasks, $activeOptions);
 			if(count($coreActiveOptions) > 0) {
 				//
-				// If there's a core option active, the rest doesn't
-				// matter.
+				// If there's a core option active, the rest
+				// doesn't matter.
 				$activeOptions = $coreActiveOptions;
 				$isCore = true;
 			}
 		}
-
+		//
+		// Guessing the method based on selected options
 		foreach($activeOptions as $optionName) {
 			$taskName = "task{$optionName}";
 			if(method_exists($this, $taskName)) {
@@ -168,7 +231,9 @@ abstract class ShellTool {
 	protected function taskHelp($spacer = '') {
 		echo $this->_options->helpText();
 	}
-	abstract protected function taskInfo($spacer = '');
+	protected function taskInfo($spacer = '') {
+		$this->taskVersion($spacer);
+	}
 	protected function taskVersion($spacer = '') {
 		echo "{$spacer}Version: {$this->_version}\n";
 	}
