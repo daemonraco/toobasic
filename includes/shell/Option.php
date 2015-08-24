@@ -232,9 +232,6 @@ class Option {
 		$this->_lastValue = false;
 		$this->_needsMore = false;
 		$this->_values = array();
-		$this->_helpText = false;
-		$this->_helpTextFull = false;
-		$this->_helpValueName = 'value';
 	}
 	/**
 	 * This method allows to set a help text for this option that explains its
