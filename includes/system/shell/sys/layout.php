@@ -4,8 +4,11 @@
  * @file layout.php
  * @author Alejandro Dario Simi
  */
-use TooBasic\Shell\Option as TBS_Option;
-use TooBasic\Sanitizer as TB_Sanitizer;
+//
+// Class aliases.
+use TooBasic\Names;
+use TooBasic\Sanitizer;
+use TooBasic\Shell\Option;
 
 /**
  * @class LayoutSystool
@@ -74,7 +77,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['layout-name'] = \TooBasic\classname($this->_names[GC_AFIELD_NAME]).GC_CLASS_SUFFIX_CONTROLLER;
+			$this->_names['layout-name'] = Names::ControllerClass($this->_names[GC_AFIELD_NAME]);
 			$this->_names['templates-prefix'] = '';
 			//
 			// Checking bootstrap option.
@@ -95,22 +98,22 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Files.
 			$this->_files[] = array(
-				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
+				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
 				GC_AFIELD_TEMPLATE => 'controller.html',
 				GC_AFIELD_DESCRIPTION => 'controller file'
 			);
 			$this->_files[] = array(
-				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
+				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
 				GC_AFIELD_DESCRIPTION => 'view file'
 			);
 			$this->_files[] = array(
-				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/script.js"),
+				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/script.js"),
 				GC_AFIELD_TEMPLATE => 'script.html',
 				GC_AFIELD_DESCRIPTION => 'basic JS script file'
 			);
 			$this->_files[] = array(
-				GC_AFIELD_PATH => TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CSS]}/style.css"),
+				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CSS]}/style.css"),
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}style.html",
 				GC_AFIELD_DESCRIPTION => 'basic CSS file'
 			);
@@ -128,21 +131,21 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		$this->_options->option(self::OptionRemove)->setHelpText($text, 'layout-name');
 
 		$text = "TODO help text for: '--name', '-n'.";
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionName, array('--name', '-n'), TBS_Option::TypeValue, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionName, array('--name', '-n'), Option::TypeValue, $text, 'value'));
 
 		$text = "This options allows you to choose a initial structure for your new layout. Options are:\n";
 		$text.= "\t- 'basic' (the default)\n";
 		$text.= "\t- 'bootstrap'\n";
 		$text.= "\t- 'table'\n";
 		$text.= "\t- other values are considered 'basic'.\n";
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionType, array('--type', '-t'), TBS_Option::TypeValue, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'value'));
 
 		$text = 'When using Twitter Bootstrap, main containers are fluid.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionFluid, array('--fluid', '-f'), TBS_Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionFluid, array('--fluid', '-f'), Option::TypeNoValue, $text));
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCached, array('--cached', '-c'), TBS_Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCached, array('--cached', '-c'), Option::TypeValue, $text, 'delay-size'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
@@ -150,9 +153,6 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		echo "{$spacer}Creating layout '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskCreate($spacer);
-	}
-	protected function taskInfo($spacer = '') {
-		
 	}
 	protected function taskRemove($spacer = '') {
 		$this->genNames();

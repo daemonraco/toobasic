@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file controller.php
+ * @file service.php
  * @author Alejandro Dario Simi
  */
 //
@@ -11,17 +11,16 @@ use TooBasic\Sanitizer;
 use TooBasic\Shell\Option;
 
 /**
- * @class ControllerSystool
+ * @class ServiceSystool
  */
-class ControllerSystool extends TooBasic\Shell\Scaffold {
+class ServiceSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
 	const OptionCached = 'Cached';
-	const OptionLayout = 'Layout';
 	const OptionParam = 'Param';
 	//
 	// Protected properties.
-	protected $_scaffoldName = 'controller';
+	protected $_scaffoldName = 'service';
 	protected $_version = TOOBASIC_VERSION;
 	//
 	// Protected methods.
@@ -32,7 +31,7 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			// Assignments.
 			$this->_assignments['name'] = $this->_names[GC_AFIELD_NAME];
 			$this->_assignments['method'] = 'GET';
-			$this->_assignments['controller'] = $this->_names['controller-name'];
+			$this->_assignments['service'] = $this->_names['service-name'];
 			$this->_assignments['init'] = true;
 			$this->_assignments['nocache'] = false;
 			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
@@ -62,16 +61,6 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 				}
 			}
 
-			$this->_assignments['layout'] = false;
-			$opt = $this->_options->option(self::OptionLayout);
-			if($opt->activated()) {
-				if($opt->value() == 'NOLAYOUT') {
-					$this->_assignments['layout'] = 'false';
-				} else {
-					$this->_assignments['layout'] = "'{$opt->value()}'";
-				}
-			}
-
 			$opt = $this->_options->option(self::OptionParam);
 			if($opt->activated()) {
 				$this->_assignments['cache_params'] = $opt->value();
@@ -89,56 +78,30 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 			// Global dependencies.
 			global $Paths;
 
-			$this->_names['controller-name'] = Names::ControllerClass($this->_names[GC_AFIELD_NAME]);
+			$this->_names['service-name'] = Names::ServiceClass($this->_names[GC_AFIELD_NAME]);
 			//
 			// Files.
 			$this->_files[] = array(
-				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
-				GC_AFIELD_TEMPLATE => 'controller.html',
-				GC_AFIELD_DESCRIPTION => 'controller file'
+				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SERVICES]}/{$this->_names[GC_AFIELD_NAME]}.php"),
+				GC_AFIELD_TEMPLATE => 'service.html',
+				GC_AFIELD_DESCRIPTION => 'service file'
 			);
-			$this->_files[] = array(
-				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
-				GC_AFIELD_TEMPLATE => 'view.html',
-				GC_AFIELD_DESCRIPTION => 'view file'
-			);
-		}
-	}
-	protected function genRoutes() {
-		if($this->_routes === false) {
-			parent::genRoutes();
-			//
-			// Controller's route.
-			$route = new \stdClass();
-			$route->route = $this->_names[GC_AFIELD_NAME];
-			$opt = $this->_options->option(self::OptionParam);
-			if($opt->activated()) {
-				foreach($opt->value() as $param) {
-					$route->route .= "/:{$param}:";
-				}
-			}
-			$route->action = $this->_names[GC_AFIELD_NAME];
-			$this->_routes[] = $route;
 		}
 	}
 	protected function setOptions() {
-		$this->_options->setHelpText('This tool allows you to manage your controllers.');
+		$this->_options->setHelpText('This tool allows you to manage your services.');
 
 		parent::setOptions();
 
-		$text = 'Allows you to create a new controller and deploy it in your site.';
-		$this->_options->option(self::OptionCreate)->setHelpText($text, 'controller-name');
+		$text = 'Allows you to create a new service and deploy it in your site.';
+		$this->_options->option(self::OptionCreate)->setHelpText($text, 'service-name');
 
-		$text = 'Allows you to eliminate a controller and its view from your site.';
-		$this->_options->option(self::OptionRemove)->setHelpText($text, 'controller-name');
+		$text = 'Allows you to eliminate a service from your site.';
+		$this->_options->option(self::OptionRemove)->setHelpText($text, 'service-name');
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
 		$this->_options->addOption(Option::EasyFactory(self::OptionCached, array('--cached', '-c'), Option::TypeValue, $text, 'delay-size'));
-
-		$text = 'This options allows to set a specific layout for your controller. ';
-		$text.= 'NOLAYOUT means force the controller to work without layout.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionLayout, array('--layout', '-l'), Option::TypeValue, $text, 'layout-name'));
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionParam, array('--param', '-p'), Option::TypeMultiValue, $text, 'param-name'));
@@ -146,14 +109,14 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Creating controller '{$this->_names[GC_AFIELD_NAME]}':\n";
+		echo "{$spacer}Creating service '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskCreate($spacer);
 	}
 	protected function taskRemove($spacer = '') {
 		$this->genNames();
 
-		echo "{$spacer}Removing controller '{$this->_names[GC_AFIELD_NAME]}':\n";
+		echo "{$spacer}Removing service '{$this->_names[GC_AFIELD_NAME]}':\n";
 
 		return parent::taskRemove($spacer);
 	}
