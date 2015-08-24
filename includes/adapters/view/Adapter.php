@@ -7,6 +7,8 @@
 
 namespace TooBasic\Adapters\View;
 
+//
+// Class aliases.
 use \TooBasic\Params;
 use \TooBasic\Paths;
 
