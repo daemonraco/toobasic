@@ -32,9 +32,9 @@ class ServicesManager extends UrlManager {
 	/**
 	 * This is the main method to call in order to execute a service.
 	 *
-	 * @param boolean $autoDisplay This flag tells to actualice prompt the
+	 * @param boolean $autoDisplay This flag tells to actually prompt the
 	 * generated output.
-	 * @return mixed[string] Returns the executions result.
+	 * @return mixed[string] Returns the execution's result.
 	 */
 	public function run($autoDisplay = true) {
 		//
