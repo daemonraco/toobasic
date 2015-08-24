@@ -9,7 +9,7 @@ namespace TooBasic\Shell;
 
 //
 // Class aliases.
-use TooBasic\Sanitizer;
+use \TooBasic\Sanitizer;
 use \TooBasic\Shell\Option;
 
 /**

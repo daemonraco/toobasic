@@ -7,9 +7,10 @@
 
 namespace TooBasic\Managers;
 
-use TooBasic\Exception;
-use TooBasic\Exporter;
-use TooBasic\Paths;
+use \TooBasic\Exception;
+use \TooBasic\Exporter;
+use \TooBasic\Managers\DBStructureManager;
+use \TooBasic\Paths;
 
 /**
  * @class ActionsManager
@@ -177,9 +178,16 @@ class ActionsManager extends UrlManager {
 	 */
 	protected function init() {
 		parent::init();
-
+		//
+		// Checking database structure @{
+		//
+		// Loading database structure manager.
 		$dbStructureManager = DBStructureManager::Instance();
+		//
+		// Checking for loading errors.
 		if($dbStructureManager->hasErrors()) {
+			//
+			// Adding found errors int this manager.
 			foreach($dbStructureManager->errors() as $error) {
 				$code = $error[GC_AFIELD_CODE];
 				if(is_numeric($code)) {
@@ -190,12 +198,16 @@ class ActionsManager extends UrlManager {
 			}
 			throw new Exception('There are database errors specs');
 		} else {
+			//
+			// Checing if the structure is correct. Otherwise, an
+			// upgrade is attempted.
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
 					throw new Exception('Database couldn\'t be upgraded');
 				}
 			}
 		}
+		// @}
 	}
 	//
 	// Public class methods.

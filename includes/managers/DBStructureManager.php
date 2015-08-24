@@ -194,7 +194,7 @@ class DBStructureManager extends Manager {
 				$this->_tasks[self::TaskStatus] = $ok;
 			}
 		} else {
-			$ok = true;
+			$ok = !$this->hasErrors();
 		}
 
 		return $ok;
@@ -477,7 +477,8 @@ class DBStructureManager extends Manager {
 	}
 	protected function init() {
 		parent::init();
-
+		//
+		// Global dependencies.
 		global $Defaults;
 		$this->_installed = $Defaults[GC_DEFAULTS_INSTALLED];
 		//
@@ -488,6 +489,8 @@ class DBStructureManager extends Manager {
 		//	- no default database connection.
 		//	- wrong default database connection.
 		if(!$this->_installed) {
+			//
+			// Global dependencies.
 			global $Connections;
 			//
 			// No database connections.

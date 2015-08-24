@@ -9,11 +9,11 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use TooBasic\Exception;
-use TooBasic\MagicProp;
-use TooBasic\Names;
-use TooBasic\Params;
-use TooBasic\Paths;
+use \TooBasic\Exception;
+use \TooBasic\MagicProp;
+use \TooBasic\Names;
+use \TooBasic\Params;
+use \TooBasic\Paths;
 
 /**
  * @class ServicesManager
