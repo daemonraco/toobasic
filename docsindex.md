@@ -165,6 +165,9 @@
 	* [Module](docs/facilities.md#module)
 	* [Connection?](docs/facilities.md#connection)
 	* [Bootstrap](docs/facilities.md#bootstrap)
+* [Sys-tool _service_](docs/facilities.md#sys-tool-service)
+	* [Features](docs/facilities.md#features)
+	* [Removing a service](docs/facilities.md#removing-a-service)
 * [Suggestions](docs/facilities.md#suggestions)
 
 ##  Languages (docs/language.md):

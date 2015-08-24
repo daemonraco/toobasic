@@ -18,7 +18,7 @@ For example:
 $ php shell.php sys controller create my_action
 ```
 In the example we are trying to create an action called __my_action__ and this
-operation will generate this artefacts:
+operation will generate these artefacts:
 
 * A new file at __ROOTDIR/site/controllers/my_action.php__
 	* This file will contain the definition of class __MyActionController__.
@@ -418,6 +418,49 @@ Visit the album [__TooBasic: Table Scaffold
 Screenshots__](https://imgur.com/a/8rQA4) to take look at a few screenshots, and
 here's one of those images:
 ![scaffold_table_03_table_with_data](http://i.imgur.com/4osCZTT.png)
+
+## Sys-tool _service_
+This _sys-tool_ is very similar to _sys-tool_ _controller_ because it also creates
+a controller, but in this case it will be accessible at `something like
+`?service=<service-name>`.
+Again the functionality generated will be very simple and will give a place to
+start your new service.
+For example:
+```plain
+$ php shell.php sys service create request_info
+```
+In the example we are trying to create a service called __request_info__ and this
+operation will generate these artefacts:
+
+* A new file at __ROOTDIR/site/services/request_info.php__
+	* This file will contain the definition of class __RequestInfoService__.
+
+Once you've run this command, you can access this service at, for example:
+> http://www.example.com/mysite/?service=request_info
+
+### Features
+In the same way you do with controllers, you may specify:
+
+* Cache
+```plain
+$ php shell.php sys service create request_info --cached small
+```
+* Parameters
+```plain
+$ php shell.php sys service create request_info --param id --param username
+```
+* Module
+```plain
+$ php shell.php sys service create request_info --module MyPlugin
+```
+
+Layout would make no sense because services don't have such concept.
+
+### Removing a service
+If you find yourself in the need to destroy a service, you may use this command:
+```plain
+$ php shell.php sys controller remove request_info
+```
 
 ## Suggestions
 Here are some links you may like to read:
