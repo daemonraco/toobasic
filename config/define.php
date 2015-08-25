@@ -207,12 +207,18 @@ define('GC_SESSION_LANGUAGE', 'toobasic-lang');
 //
 // Request parameters @{
 define('GC_REQUEST_ACTION', 'action');
+define('GC_REQUEST_EXTRA_ROUTE', '_route');
 define('GC_REQUEST_LANGUAGE', 'lang');
 define('GC_REQUEST_LAYOUT', 'layout');
 define('GC_REQUEST_MODE', 'mode');
 define('GC_REQUEST_REDIRECTOR', 'redirectedfrom');
+define('GC_REQUEST_ROUTE', 'route');
 define('GC_REQUEST_SERVICE', 'service');
 define('GC_REQUEST_SKIN', 'skin');
+// @}
+//
+// Server parameters @{
+define('GC_SERVER_TOOBASIC_ROUTE', 'TOOBASIC_ROUTE');
 // @}
 //
 // Class Suffixes @{
