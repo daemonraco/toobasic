@@ -16,7 +16,7 @@ use \TooBasic\Paths;
 
 /**
  * @class ActionsManager
- * This manager is the one in charge of interpreting a action/controller request}
+ * This manager is the one in charge of interpreting a action/controller request
  * and executing it.
  */
 class ActionsManager extends UrlManager {
