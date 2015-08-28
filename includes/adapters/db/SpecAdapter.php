@@ -74,7 +74,7 @@ abstract class SpecAdapter extends \TooBasic\Adapters\Adapter {
 	}
 	protected function exec($query) {
 		$this->debugUpgradeQuery($query);
-		$out = $this->_debugdbEmulation ? 'true' : $this->_db->exec($query, false) !== false;
+		$out = $this->_debugdbEmulation ? true : $this->_db->exec($query, false) !== false;
 
 		if(!$out) {
 			$info = $this->_db->errorInfo();

@@ -7,6 +7,10 @@
 
 namespace TooBasic\Managers;
 
+//
+// Class aliases
+use \TooBasic\DBException;
+
 /**
  * @class DBManager
  * This class centralizes access to databases connections.
@@ -62,7 +66,7 @@ class DBManager extends Manager {
 					$this->_connections[$dbname] = new \TooBasic\Adapters\DB\Adapter($dbname);
 				}
 			} else {
-				throw new \TooBasic\DBException("There's no database connection configuration named '{$dbname}'");
+				throw new DBException("There's no database connection configuration named '{$dbname}'");
 			}
 		}
 		//
@@ -99,26 +103,60 @@ class DBManager extends Manager {
 
 		return $name;
 	}
+	/**
+	 * This method provides access to current default database connection
+	 * adapter.
+	 *
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
+	 */
 	public function getDefault() {
 		return $this->get($this->getDefaultName());
 	}
+	/**
+	 * This method provides access to current default database connection
+	 * name.
+	 *
+	 * @return string Returns a connection name.
+	 */
 	public function getDefaultName() {
 		global $Connections;
 		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
 	}
+	/**
+	 * This method provides access to current installacion database connection
+	 * adapter.
+	 *
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
+	 */
 	public function getInstall() {
 		return $this->get($this->getInstallName());
 	}
+	/**
+	 * This method provides access to current installation database connection
+	 * name.
+	 *
+	 * @return string Returns a connection name.
+	 */
 	public function getInstallName() {
+		//
+		// Global dependencies.
 		global $Connections;
-
-		$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+		//
+		// Checking if there's a specific connection for installations,
+		// otherwise, the default is used.
+		$name = $this->getDefaultName();
 		if(isset($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL])) {
 			$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL];
 		}
 
 		return $name;
 	}
+	/**
+	 * This method allows to know if unknown object inside a database should
+	 * be kept or not.
+	 *
+	 * @return boolean Returns TRUE when unknown objects has to be kept.
+	 */
 	public function keepUnknowns() {
 		global $Connections;
 		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];

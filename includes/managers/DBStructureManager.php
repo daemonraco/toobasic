@@ -7,11 +7,15 @@
 
 namespace TooBasic\Managers;
 
-use TooBasic\Params;
-use TooBasic\Paths;
+//
+// Class aliases.
+use \TooBasic\Params;
+use \TooBasic\Paths;
 
 /**
  * @class DBStructureManagerExeption
+ * This is a specific exception class for fatal errors found on a database
+ * structure check and update.
  */
 class DBStructureManagerExeption extends \TooBasic\DBException {
 	
@@ -48,6 +52,9 @@ class DBStructureManager extends Manager {
 	const TaskStatus = 'status';
 	// 
 	// Protected class properties.
+	/**
+	 * @var string[] List of known and allowed column types.
+	 */
 	protected static $_AllowedColumnTypes = array(
 		self::ColumnTypeBlob,
 		self::ColumnTypeEnum,
@@ -57,6 +64,10 @@ class DBStructureManager extends Manager {
 		self::ColumnTypeTimestamp,
 		self::ColumnTypeVarchar
 	);
+	/**
+	 * @var string[] List of known column types that doesn't require a size
+	 * specification.
+	 */
 	protected static $_ColumnTypesWithoutPrecisions = array(
 		self::ColumnTypeBlob,
 		self::ColumnTypeEnum,
@@ -65,32 +76,77 @@ class DBStructureManager extends Manager {
 	);
 	// 
 	// Protected properties.
+	/**
+	 * @var mixed[string] List of SQL files that can be executed in some key
+	 * points during an upgrade. They are grouped by type and each leaf is a
+	 * simple structure that describes the callback.
+	 */
 	protected $_callbacks = array();
 	/**
-	 * @var \TooBasic\Adapters\DB\Adapter[string] 
+	 * @var \TooBasic\Adapters\DB\Adapter[string] List of database connection
+	 * adapters already loaded and associated with their names.
 	 */
 	protected $_dbAdapters = array();
 	/**
-	 * @var \TooBasic\DBManager
+	 * @var \TooBasic\Managers\DBManager Shortcut to a database connections
+	 * manager.
 	 */
 	protected $_dbManager = false;
+	/**
+	 * @var mixed[] List of errors found while analysing or even upgrading.
+	 */
 	protected $_errors = array();
+	/**
+	 * @var boolean This flag is TRUE when the site is flagged as installed.
+	 */
 	protected $_installed = false;
+	/**
+	 * @var mixed[string] This property contains lists of all loaded names
+	 * associated with their database connection names.
+	 */
 	protected $_perConnection = array();
+	/**
+	 * @var string[] List of known specification files.
+	 */
 	protected $_specFiles = array();
+	/**
+	 * @var \stdClass Full specifications object.
+	 */
 	protected $_specs = false;
+	/**
+	 * @var mixed[] List of operations to be performed during an upgrade.
+	 */
 	protected $_tasks = false;
 	//
 	// Public methods.
+	/**
+	 * This method holds the logic to trigger all necessary checks to
+	 * guarantee a healthy and up to date database strucutre. It does not
+	 * modifies the database, it just checks it and builds an internal list of
+	 * tasks required to solve any found problems.
+	 *
+	 * @return boolean Returns TRUE when no problem was found in the
+	 * structure.
+	 */
 	public function check() {
+		//
+		// Default values.
 		$ok = false;
-
+		//
+		// Checking if there was a loading error. Also, the site must not
+		// be flagged as installed.
 		if(!$this->_installed && !$this->hasErrors()) {
+			//
+			// Avoiding multiple checks.
 			if($this->_tasks !== false) {
 				$ok = $this->_tasks[self::TaskStatus];
 			} else {
+				//
+				// Default values.
 				$ok = true;
-
+				//
+				// List of tasks required to remove structure
+				// issues grouped by type.
 				$this->_tasks = array(
 					self::TaskTypeCreateIndex => array(),
 					self::TaskTypeCreateColumn => array(),
@@ -105,9 +161,17 @@ class DBStructureManager extends Manager {
 				//
 				// Checking tables existence.
 				foreach($this->_specs->tables as $tKey => $table) {
+					//
+					// Fetching the right database structure
+					// adapter.
 					$adapter = $this->getAdapter($table->connection);
-
+					//
+					// Checking current table existence.
 					if(!$adapter->tableExists($table->fullname)) {
+						//
+						// At this point, the table is
+						// added as a required task and
+						// the out status is set as FALSE.
 						$this->_tasks[self::TaskTypeCreateTable][] = $tKey;
 						$ok = false;
 					} else {
@@ -117,14 +181,26 @@ class DBStructureManager extends Manager {
 						$drops = array();
 						$updates = array();
 						$adapter->compareTable($table, $creates, $drops, $updates);
+						//
+						// Checking if there's a missing
+						// column.
 						if($creates) {
 							$this->_tasks[self::TaskTypeCreateColumn][$tKey] = $creates;
 							$ok = false;
 						}
+						//
+						// Checking if there's a not
+						// specified column. This will be
+						// added as task unless the site
+						// is flagged to keep unknowns.
 						if(!$adapter->keepUnknowns() && $drops) {
 							$this->_tasks[self::TaskTypeDropColumn][$tKey] = $drops;
 							$ok = false;
 						}
+						//
+						// Checking if there's a column
+						// that does not match with it's
+						// definition.
 						if($updates) {
 							$this->_tasks[self::TaskTypeUpdateColumn][$tKey] = $updates;
 							$ok = false;
@@ -134,12 +210,22 @@ class DBStructureManager extends Manager {
 				//
 				// Checking indexes existence and structure.
 				foreach($this->_specs->indexes as $iKey => $index) {
+					//
+					// Fetching the right database structure
+					// adapter.
 					$adapter = $this->getAdapter($index->connection);
-
+					//
+					// Checking current index existence.
 					if(!$adapter->indexExists($index->fullname)) {
+						//
+						// At this point, the index is
+						// added as a required task and
+						// the out status is set as FALSE.
 						$this->_tasks[self::TaskTypeCreateIndex][] = $iKey;
 						$ok = false;
 					} else {
+						//
+						// Checking index definition.
 						if(!$adapter->compareIndex($index)) {
 							$this->_tasks[self::TaskTypeUpdateIndex][] = $iKey;
 							$ok = false;
@@ -149,28 +235,57 @@ class DBStructureManager extends Manager {
 				//
 				// Checking data existence.
 				foreach($this->_specs->data as $tKey => $entries) {
+					//
+					// Fetching the table to be checked.
 					$table = $this->_specs->tables[$tKey];
+					//
+					// Fetching the right database structure
+					// adapter.
 					$adapter = $this->getAdapter($table->connection);
-
+					//
+					// Creating a sub list of tasks.
 					$this->_tasks[self::TaskTypeUpdateData][$tKey] = array();
+					//
+					// Checking each required entry.
 					foreach($entries as $eKey => $entry) {
 						if(!$adapter->checkTableEntry($table, $entry)) {
+							//
+							// At this point, current
+							// entry is not present
+							// and should be
+							// reinserted.
 							$this->_tasks[self::TaskTypeUpdateData][$tKey][] = $eKey;
 							$ok = false;
 						}
 					}
 				}
+				//
+				// Removing empty task's sub-lists to improve
+				// further operations.
 				foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
 					if(!$eKeys) {
 						unset($this->_tasks[self::TaskTypeUpdateData][$tKey]);
 					}
 				}
 				//
-				//
+				// Checking if this control has to be more strict
+				// or not.
 				if(!$this->_dbManager->keepUnknowns()) {
+					//
+					// Checking on each used connection.
 					foreach($this->_perConnection as $connName => $connection) {
+						//
+						// Fetching the right database
+						// structure adapter.
 						$adapter = $this->getAdapter($connName);
+						//
+						// Loading all indexes.
 						foreach($adapter->getIndexes() as $dbIndex) {
+							//
+							// If it's not an
+							// specified index, it is
+							// added as a task for
+							// further removal.
 							if(!in_array($dbIndex, $connection[GC_AFIELD_INDEXES])) {
 								$this->_tasks[self::TaskTypeDropIndex][] = array(
 									GC_AFIELD_CONNECTION => $connName,
@@ -179,7 +294,14 @@ class DBStructureManager extends Manager {
 								$ok = false;
 							}
 						}
+						//
+						// Loading all table.
 						foreach($adapter->getTables() as $dbTable) {
+							//
+							// If it's not an
+							// specified table, it is
+							// added as a task for
+							// further removal.
 							if(!in_array($dbTable, $connection[GC_AFIELD_TABLES])) {
 								$this->_tasks[self::TaskTypeDropTable][] = array(
 									GC_AFIELD_CONNECTION => $connName,
@@ -190,50 +312,105 @@ class DBStructureManager extends Manager {
 						}
 					}
 				}
-
+				//
+				// Saving current status for further checks.
 				$this->_tasks[self::TaskStatus] = $ok;
 			}
 		} else {
+			//
+			// At this point, only initialization errors has to be
+			// considered.
 			$ok = !$this->hasErrors();
 		}
 
 		return $ok;
 	}
+	/**
+	 * This method provides access to an internal list of errors.
+	 *
+	 * @return mixed[] Returns a list of errors.
+	 */
 	public function errors() {
 		return $this->_errors;
 	}
+	/**
+	 * This method allows to know if an error was found during intialization
+	 * and checks, or even on upgrade operations.
+	 *
+	 * @return type
+	 */
 	public function hasErrors() {
 		return \boolval($this->_errors);
 	}
+	/**
+	 * This method provides access to the expanded internal specifications
+	 * object.
+	 *
+	 * @return \stdClass Returns a specification object.
+	 */
 	public function specs() {
 		return $this->_specs;
 	}
+	/**
+	 * This method returns the current list of tasks required to keep the
+	 * database structure up to date.
+	 *
+	 * @warning It forced the call to 'check()'.
+	 *
+	 * @return string[string] Returns a list of required tasks on an upgrade.
+	 */
 	public function tasks() {
 		$this->check();
 		return $this->_tasks;
 	}
+	/**
+	 * This method holds the logic to trigger all required tasks to update the
+	 * database structure and leave it as it's specified. Also each operation
+	 * is executed in the write order.
+	 *
+	 * @return boolean Returns TRUE if after upgrading, a call to 'check()'
+	 * returns TRUE.
+	 */
 	public function upgrade() {
+		//
+		// Default values.
 		$out = true;
-
+		//
+		// Checking if it's actually required an upgrade.
 		if(!$this->check()) {
+			//
+			// Creating non existent tables and columns.
 			$this->createTables();
 			$this->createColumns();
+			//
+			// Updating column structures.
 			$this->updateColumns();
-
+			//
+			// Reinserting required table entries.
 			$this->insertData();
+			//
+			// Creating non existent indexes.
 			$this->createIndexes();
+			//
+			// Updating index structures.
 			$this->updateIndexes();
-
+			//
+			// Dropping not specified columns, indexes and tables.
 			$this->dropColumns();
 			$this->dropIndexes();
 			$this->dropTables();
-
+			//
+			// If it is in emulation mode, it aborts right after
+			// upgrading.
 			if(isset(Params::Instance()->debugdbemulation)) {
 				\TooBasic\debugThing('Database upgrade emulation');
 				die;
 			}
-
+			//
+			// At this point, the list of task is outdated.
 			$this->_tasks = false;
+			//
+			// Rechecking database structure sstatus.
 			$out = $this->check();
 		}
 
@@ -241,7 +418,14 @@ class DBStructureManager extends Manager {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method checks the list of loaded callbacks looking for wrong
+	 * specifications, unreadable files etc.
+	 */
 	protected function checkCallbacks() {
+		//
+		// Checking each callback's file to make sure it exists and can
+		// be read, otherwise it is considered an internal error.
 		foreach($this->_callbacks as &$subCallbacks) {
 			foreach($subCallbacks as &$data) {
 				$data[GC_AFIELD_PATH] = Paths::Instance()->dbSpecCallbackPaths($data[GC_AFIELD_NAME]);
@@ -278,18 +462,33 @@ class DBStructureManager extends Manager {
 			unset($index->callbacks);
 		}
 	}
+	/**
+	 * This method checks loaded specifications and looks for error or
+	 * inconsistencies.
+	 */
 	protected function checkSpecs() {
 		//
-		// Checking indexes.
+		// Checking index specifications.
 		foreach($this->_specs->indexes as $iKey => &$index) {
+			//
+			// Guessing the table key associated with the current
+			// index.
 			$tKey = sha1("{$index->connection}-{$index->table}");
+			//
+			// Checking if current index belongs to a knwon table, if
+			// not, an error is set and it gets remove from specs.
 			if(!isset($this->_specs->tables[$tKey])) {
 				$this->setError(self::ErrorUnknownTable, "Index '{$index->fullname}' uses an unknown table called '{$index->table}'");
 				unset($this->_specs->indexes[$iKey]);
 			} else {
+				//
+				// Fetching table specs.
 				$table = $this->_specs->tables[$tKey];
+				//
+				// Saving the full table name.
 				$index->table = $table->fullname;
-
+				//
+				// Loading table prefix and updating fields list.
 				$prefix = $table->prefix;
 				foreach($index->fields as &$field) {
 					$field = "{$prefix}{$field}";
@@ -297,12 +496,19 @@ class DBStructureManager extends Manager {
 			}
 		}
 		//
-		// Checking data.
+		// Checking data specifications.
 		foreach($this->_specs->data as $tKey => &$entries) {
+			//
+			// Checking if current spec belongs to a knwon table, if
+			// not, it gets remove from specs.
 			if(!isset($this->_specs->tables[$tKey])) {
 				unset($this->_specs->data[$tKey]);
 			} else {
+				//
+				// Fetching table specs.
 				$table = $this->_specs->tables[$tKey];
+				//
+				// Loading table prefix and updating fields list.
 				$prefix = $table->prefix;
 				foreach($entries as &$entry) {
 					foreach($entry->check as &$cfield) {
@@ -319,20 +525,41 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required column tasks and
+	 * trigger their creation.
+	 */
 	protected function createColumns() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeCreateColumn] as $tKey => $columns) {
+			//
+			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($table->connection);
+			//
+			// Checking each required column.
 			foreach($columns as $column) {
+				//
+				// Guessing callback keys.
 				$callbackKeyBefore = "F_before_create_{$tKey}_{$column}";
 				$callbackKeyAfter = "F_after_create_{$tKey}_{$column}";
-
+				//
+				// Running callback required before creating the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyBefore])) {
 					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 						$adapter->executeCallback($call);
 					}
 				}
+				//
+				// Triggering the column creation.
 				$adapter->createTableColumn($table, $column);
+				//
+				// Running callback required before creating the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyAfter])) {
 					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 						$adapter->executeCallback($call);
@@ -341,20 +568,36 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required index tasks and trigger
+	 * their creation.
+	 */
 	protected function createIndexes() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeCreateIndex] as $iKey) {
 			$index = $this->_specs->indexes[$iKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($index->connection);
-
+			//
+			// Guessing callback keys.
 			$callbackKeyBefore = "I_before_create_{$iKey}";
 			$callbackKeyAfter = "I_after_create_{$iKey}";
-
+			//
+			// Running callback required before creating the current
+			// index.
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
+			//
+			// Triggering the index creation.
 			$adapter->createIndex($index);
+			//
+			// Running callback required after creating the current
+			// index.
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -362,20 +605,36 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required table tasks and trigger
+	 * their creation.
+	 */
 	protected function createTables() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeCreateTable] as $tKey) {
 			$table = $this->_specs->tables[$tKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($table->connection);
-
+			//
+			// Guessing callback keys.
 			$callbackKeyBefore = "T_before_create_{$tKey}";
 			$callbackKeyAfter = "T_after_create_{$tKey}";
-
+			//
+			// Running callback required before creating the current
+			// table.
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
+			//
+			// Triggering the table creation.
 			$adapter->createTable($table);
+			//
+			// Running callback required after creating the current
+			// table.
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -383,21 +642,39 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required column tasks and
+	 * trigger their removal.
+	 */
 	protected function dropColumns() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeDropColumn] as $tKey => $columns) {
 			$table = $this->_specs->tables[$tKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($table->connection);
-
+			//
+			// Checking each column.
 			foreach($columns as $column) {
+				//
+				// Guessing callback keys.
 				$callbackKeyBefore = "F_before_drop_{$tKey}_{$column}";
 				$callbackKeyAfter = "F_after_drop_{$tKey}_{$column}";
-
+				//
+				// Running callback required before removing the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyBefore])) {
 					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 						$adapter->executeCallback($call);
 					}
 				}
+				//
+				// Triggering the column removal.
 				$adapter->dropTableColumn($table, $column);
+				//
+				// Running callback required after removing the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyAfter])) {
 					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 						$adapter->executeCallback($call);
@@ -406,18 +683,35 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required idnex tasks and trigger
+	 * their removal.
+	 */
 	protected function dropIndexes() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeDropIndex] as $data) {
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($data[GC_AFIELD_CONNECTION]);
+			//
+			// Guessing callback keys.
 			$callbackKeyBefore = "I_before_drop_{$data[GC_AFIELD_NAME]}";
 			$callbackKeyAfter = "I_after_drop_{$data[GC_AFIELD_NAME]}";
-
+			//
+			// Running callback required before removing the current
+			// index.
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
+			//
+			// Triggering the index removal.
 			$adapter->dropIndex($data[GC_AFIELD_NAME]);
+			//
+			// Running callback required after removing the current
+			// index.
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -425,18 +719,35 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required table tasks and trigger
+	 * their removal.
+	 */
 	protected function dropTables() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeDropTable] as $data) {
+			//
+			// Guessing callback keys.
 			$callbackKeyBefore = "T_before_drop_{$data[GC_AFIELD_NAME]}";
 			$callbackKeyAfter = "T_after_drop_{$data[GC_AFIELD_NAME]}";
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($data[GC_AFIELD_CONNECTION]);
-
+			//
+			// Running callback required before removing the current
+			// table.
 			if(isset($this->_callbacks[$callbackKeyBefore])) {
 				foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 					$adapter->executeCallback($call);
 				}
 			}
+			//
+			// Triggering the table removal.
 			$adapter->dropTable($data[GC_AFIELD_NAME]);
+			//
+			// Running callback required after removing the current
+			// table.
 			if(isset($this->_callbacks[$callbackKeyAfter])) {
 				foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 					$adapter->executeCallback($call);
@@ -444,25 +755,50 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method loads and provides access to a database structure adapter,
+	 * and also keeps a shortcut to it further requests.
+	 *
+	 * @param string $connectionName Name of the connection adapter to
+	 * retrive. Also the database connection name.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database structure
+	 * adapter.
+	 * @throws \TooBasic\Managers\DBStructureManagerExeption
+	 */
 	protected function getAdapter($connectionName) {
+		//
+		// Default values.
 		$out = false;
-
+		//
+		// Checking if it's a known adapter (loaded before).
 		if(!isset($this->_dbAdapters[$connectionName])) {
+			//
+			// Global dependencies.
 			global $Connections;
 			global $Database;
-
+			//
+			// Checking connection existence.
 			$engine = false;
 			if(isset($Connections[GC_CONNECTIONS_DB][$connectionName]) && isset($Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE]) && isset($Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE])) {
 				$engine = $Connections[GC_CONNECTIONS_DB][$connectionName][GC_CONNECTIONS_DB_ENGINE];
 			} else {
+				//
+				// If it's an unknown connection it's a fatal
+				// configuration error.
 				throw new DBStructureManagerExeption("Unable to obtain connection '{$connectionName}' configuration");
 			}
+			//
+			// Checking if there's a proper database structure adapter
+			// configured.
 			if(!isset($Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine])) {
 				throw new DBStructureManagerExeption("There's no adapter for engine '{$engine}'");
 			}
-
+			//
+			// Loading a proper database connection adapter.
 			$db = DBManager::Instance()->{$connectionName};
 			if($db) {
+				//
+				// Creating the right adapter.
 				$adapterName = $Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine];
 				$this->_dbAdapters[$connectionName] = new $adapterName($db);
 				$out = $this->_dbAdapters[$connectionName];
@@ -470,11 +806,16 @@ class DBStructureManager extends Manager {
 				throw new DBStructureManagerExeption("Unable to obtaing a connetion to '{$connectionName}'");
 			}
 		} else {
+			//
+			// Returning a previously loaded adapter.
 			$out = $this->_dbAdapters[$connectionName];
 		}
 
 		return $out;
 	}
+	/**
+	 * Manager initializer.
+	 */
 	protected function init() {
 		parent::init();
 		//
@@ -518,13 +859,17 @@ class DBStructureManager extends Manager {
 		// If the system is not flagged as installed, it must load the
 		// database specification and check it.
 		if(!$this->_installed) {
+			//
+			// Creating a shortcut the database connections manager.
 			$this->_dbManager = DBManager::Instance();
-
+			//
+			// Loading, parsing and checking specifications.
 			$this->loadSpecs();
 			$this->parseSpecs();
 			$this->checkCallbacks();
 			$this->checkSpecs();
-
+			//
+			// If required, showing debug information.
 			if(isset(Params::Instance()->debugdbstructure)) {
 				\TooBasic\debugThing(array(
 					GC_AFIELD_ERRORS => $this->_errors,
@@ -535,40 +880,73 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required data insertion tasks
+	 * and trigger their insertion.
+	 */
 	protected function insertData() {
+		//
+		// Checking tasks
 		foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
+			//
+			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($table->connection);
+			//
+			// Adding each entry.
 			foreach($eKeys as $eKey) {
 				$entry = $this->_specs->data[$tKey][$eKey];
 				$adapter->addTableEntry($table, $entry);
 			}
 		}
 	}
+	/**
+	 * This method is the one in charge of loading the full list of database
+	 * structure specification files.
+	 */
 	protected function loadSpecs() {
 		//
 		// Adding configuration.
 		$this->_specFiles = Paths::Instance()->dbSpecPaths();
 		//
-		// Adding default configuration.
+		// Adding default configuration. It allways is the first one.
 		global $Database;
 		array_unshift($this->_specFiles, $Database[GC_DATABASE_DEFAULT_SPECS]);
+		/** @fixme this should be automatically solve placing the file on 'ROOTDIR/includes/system'. */
 	}
+	/**
+	 * This method takes a specification file, loads its data and triggers all
+	 *
+	 * @param string $path Absolute specification file path.
+	 * @throws \TooBasic\Managers\DBStructureManagerExeption
+	 */
 	protected function parseSpec($path) {
+		//
+		// If not yet created, an object to holds specifications is
+		// created.
 		if(!$this->_specs) {
 			$this->_specs = new \stdClass();
 		}
-
+		//
+		// Loading and checking file.
 		$json = json_decode(file_get_contents($path));
 		if(!$json) {
-			throw new Exception("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg());
+			throw new DBStructureManagerExeption("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg());
 		}
-
+		//
+		// Triggering parsings.
 		$this->parseSpecConfigs(isset($json->configs) ? $json->configs : new \stdClass());
 		$this->parseSpecTables(isset($json->tables) ? $json->tables : array());
 		$this->parseSpecIndexes(isset($json->indexes) ? $json->indexes : array());
 		$this->parseSpecData(isset($json->data) ? $json->data : array());
 	}
+	/**
+	 * This method parses configurations specifications.
+	 *
+	 * @param \stdClass $configs Specifications to parse.
+	 */
 	protected function parseSpecConfigs($configs) {
 		//
 		// Enforcing given config @{
@@ -592,22 +970,35 @@ class DBStructureManager extends Manager {
 		// Loading prefixes.
 		$this->_specs->configs->prefixes = \TooBasic\objectCopyAndEnforce(array('index', 'key', 'primary'), $configs->prefixes, $this->_specs->configs->prefixes);
 	}
+	/**
+	 * This method parses data insertion specifications.
+	 *
+	 * @param \stdClass $data Specifications to parse.
+	 */
 	protected function parseSpecData($data) {
 		//
 		// Creating main object when it's not there.
 		if(!isset($this->_specs->data)) {
 			$this->_specs->data = array();
 		}
-
+		//
+		// Global dependencies.
 		global $Connections;
-
+		//
+		// Analyzing each data spec.
 		foreach($data as $datum) {
+			//
+			// Copying required specification fields into an temporary
+			// object.
 			$aux = \TooBasic\objectCopyAndEnforce(array('table', 'connection', 'checkfields', 'entries'), $datum, new \stdClass());
-
+			//
+			// If some of the required fields is not right, this list
+			// of entries is ignored.
 			if(!$aux->table || !$aux->checkfields || !$aux->entries) {
 				continue;
 			}
-
+			//
+			// Checking connection.
 			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
 				if($aux->connection) {
 					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
@@ -621,7 +1012,8 @@ class DBStructureManager extends Manager {
 			if(!isset($this->_specs->data[$tKey])) {
 				$this->_specs->data[$tKey] = array();
 			}
-
+			//
+			// Checking and expanding each entry.
 			foreach($aux->entries as $entry) {
 				$auxEntry = new \stdClass();
 				$auxEntry->check = $aux->checkfields;
@@ -636,6 +1028,11 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method parses index specifications.
+	 *
+	 * @param \stdClass $indexes Specifications to parse.
+	 */
 	protected function parseSpecIndexes($indexes) {
 		//
 		// Creating main object when it's not there.
@@ -654,7 +1051,7 @@ class DBStructureManager extends Manager {
 			GC_AFIELD_AFTER_DROP => array()
 		);
 		//
-		// Checking each index
+		// Checking each index.
 		foreach($indexes as $index) {
 			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'table', 'type', 'connection', 'fields', 'callbacks'), $index, new \stdClass(), array('fields' => array()));
 
@@ -690,6 +1087,8 @@ class DBStructureManager extends Manager {
 			//
 			// Index callbacks.
 			$aux->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $aux->callbacks instanceof \stdClass ? $aux->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+			//
+			// Parsing and expanding callbacks list.
 			foreach(array_keys($callbackEntries) as $callbackType) {
 				if(!isset($aux->callbacks->{$callbackType})) {
 					$aux->callbacks->{$callbackType} = array();
@@ -727,10 +1126,18 @@ class DBStructureManager extends Manager {
 			$this->_perConnection[$aux->connection][GC_AFIELD_INDEXES][] = $aux->fullname;
 		}
 	}
+	/**
+	 * This method triggers the analysis of all specification files and some
+	 * basic checks on their contents.
+	 */
 	protected function parseSpecs() {
+		//
+		// Parsing each specification file.
 		foreach($this->_specFiles as $path) {
 			$this->parseSpec($path);
 		}
+		//
+		// Enforcing and cleaning full lists of index and table names.
 		foreach($this->_perConnection as &$connection) {
 			//
 			// Enforcing structure @{
@@ -747,6 +1154,11 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method parses table specifications.
+	 *
+	 * @param \stdClass $tables Specifications to parse.
+	 */
 	protected function parseSpecTables($tables) {
 		//
 		// Creating main object when it's not there.
@@ -766,7 +1178,8 @@ class DBStructureManager extends Manager {
 			GC_AFIELD_BEFORE_UPDATE => array(),
 			GC_AFIELD_AFTER_UDPATE => array()
 		);
-
+		//
+		// Checking each table.
 		foreach($tables as $table) {
 			//
 			// Of there are not fields, this specification is ignored.
@@ -824,7 +1237,7 @@ class DBStructureManager extends Manager {
 					continue;
 				}
 				//
-				//
+				// Analysing column's precision.
 				/** @todo check this, why there's no 'else'? */
 				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
 					if($auxField->type->type == self::ColumnTypeEnum && !isset($auxField->type->values)) {
@@ -835,6 +1248,8 @@ class DBStructureManager extends Manager {
 						continue;
 					}
 				}
+				//
+				// Analysing default value settings.
 				if(isset($field->default)) {
 					$auxField->default = $field->default;
 					$auxField->hasDefault = true;
@@ -844,6 +1259,8 @@ class DBStructureManager extends Manager {
 				//
 				// Field callbacks.
 				$auxField->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $auxField->callbacks instanceof \stdClass ? $auxField->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+				//
+				// Parsing and expanding column callbacks list.
 				foreach(array_keys($callbackEntries) as $callbackType) {
 					if(!isset($auxField->callbacks->{$callbackType})) {
 						$auxField->callbacks->{$callbackType} = array();
@@ -877,6 +1294,8 @@ class DBStructureManager extends Manager {
 			//
 			// Table callbacks.
 			$aux->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $aux->callbacks instanceof \stdClass ? $aux->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
+			//
+			// Parsing and expanding table callbacks list.
 			foreach(array_keys($callbackEntries) as $callbackType) {
 				if(!isset($aux->callbacks->{$callbackType})) {
 					$aux->callbacks->{$callbackType} = array();
@@ -899,7 +1318,7 @@ class DBStructureManager extends Manager {
 				}
 			}
 			//
-			// Acception table specs.
+			// Accepting table specs.
 			if(!isset($this->_specs->tables[$key])) {
 				$this->_specs->tables[$key] = $aux;
 			} else {
@@ -921,26 +1340,53 @@ class DBStructureManager extends Manager {
 			$this->_perConnection[$aux->connection][GC_AFIELD_TABLES][] = $aux->fullname;
 		}
 	}
+	/**
+	 * This method adds an error to an internal list for furter analysis.
+	 *
+	 * @param int $code Error identifier.
+	 * @param message $message Error's explanation.
+	 */
 	protected function setError($code, $message) {
 		$this->_errors[] = array(
 			GC_AFIELD_CODE => $code,
 			GC_AFIELD_MESSAGE => $message
 		);
 	}
+	/**
+	 * This method holds the logic to work on required column tasks and
+	 * trigger their structure update.
+	 */
 	protected function updateColumns() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeUpdateColumn] as $tKey => $columns) {
+			//
+			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($table->connection);
+			//
+			// Checking each required column.
 			foreach($columns as $column) {
+				//
+				// Guessing callback keys.
 				$callbackKeyBefore = "F_before_update_{$tKey}_{$column}";
 				$callbackKeyAfter = "F_after_update_{$tKey}_{$column}";
-
+				//
+				// Running callback required before creating the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyBefore])) {
 					foreach($this->_callbacks[$callbackKeyBefore] as $call) {
 						$adapter->executeCallback($call);
 					}
 				}
+				//
+				// Triggering the column updte.
 				$adapter->updateTableColumn($table, $column);
+				//
+				// Running callback required before creating the
+				// current column.
 				if(isset($this->_callbacks[$callbackKeyAfter])) {
 					foreach($this->_callbacks[$callbackKeyAfter] as $call) {
 						$adapter->executeCallback($call);
@@ -949,10 +1395,22 @@ class DBStructureManager extends Manager {
 			}
 		}
 	}
+	/**
+	 * This method holds the logic to work on required index tasks and trigger
+	 * their structure update.
+	 */
 	protected function updateIndexes() {
+		//
+		// Checking tasks.
 		foreach($this->_tasks[self::TaskTypeUpdateIndex] as $iKey) {
+			//
+			// Fetching index specs.
 			$index = $this->_specs->indexes[$iKey];
+			//
+			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($index->connection);
+			//
+			// Triggering the index update.
 			$adapter->updateIndex($index);
 		}
 	}
