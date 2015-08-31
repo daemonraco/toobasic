@@ -1,16 +1,18 @@
 <?php
 
 /**
- * @file DBSpecAdapterPostgreSQL.php
+ * @file SpecPostgreSQL.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
+
+use TooBasic\Managers\DBStructureManager;
 
 /**
- * @class DBSpecAdapterPostgreSQL
+ * @class SpecPostgreSQL
  */
-class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
+class SpecPostgreSQL extends SpecAdapter {
 	//
 	// Protected properties.
 	protected $_engine = 'PostgreSQL';
@@ -423,7 +425,7 @@ class DBSpecAdapterPostgreSQL extends DBSpecAdapter {
 					//
 					// Non-precision types.
 					if($data[GC_AFIELD_DB]['udt_name'] != 'bytea') {
-						debugit($data[GC_AFIELD_DB]['udt_name'] ,1);
+						debugit($data[GC_AFIELD_DB]['udt_name'], 1);
 						$same = false;
 					}
 					break;

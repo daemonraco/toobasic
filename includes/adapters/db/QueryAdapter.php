@@ -1,20 +1,20 @@
 <?php
 
 /**
- * @file DBQueryAdapter.php
+ * @file QueryAdapter.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
 /**
- * @class DBQueryAdapter
+ * @class QueryAdapter
  * @abstract
  */
-abstract class DBQueryAdapter extends Adapter {
+abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Protected properties.
-	protected $_className = 'DBQueryAdapter';
+	protected $_className = __CLASS__;
 	protected $_debugQueries = false;
 	//
 	// Public methods.

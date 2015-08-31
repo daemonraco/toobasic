@@ -38,7 +38,7 @@ require_once ROOTDIR.'/includes/Sanitizer.php';
 $Defaults = array();
 $Defaults[GC_DEFAULTS_ACTION] = 'home';
 $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterFile';
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
@@ -66,14 +66,14 @@ $Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] = '';
 $Defaults[GC_DEFAULTS_SERVICE] = '';
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV] = array();
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES] = array();
-$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\ViewAdapterSmarty';
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\Adapters\\View\\Smarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
-	GC_VIEW_FORMAT_DUMP => '\\TooBasic\\ViewAdapterDump',
-	GC_VIEW_FORMAT_JSON => '\\TooBasic\\ViewAdapterJSON',
-	GC_VIEW_FORMAT_PRINT => '\\TooBasic\\ViewAdapterPrint',
-	GC_VIEW_FORMAT_SERIALIZE => '\\TooBasic\\ViewAdapterSerialize',
-	GC_VIEW_FORMAT_XML => '\\TooBasic\\ViewAdapterXML'
+	GC_VIEW_FORMAT_DUMP => '\\TooBasic\\Adapters\\View\\Dump',
+	GC_VIEW_FORMAT_JSON => '\\TooBasic\\Adapters\\View\\JSON',
+	GC_VIEW_FORMAT_PRINT => '\\TooBasic\\Adapters\\View\\Printr',
+	GC_VIEW_FORMAT_SERIALIZE => '\\TooBasic\\Adapters\\View\\Serialize',
+	GC_VIEW_FORMAT_XML => '\\TooBasic\\Adapters\\View\\XML'
 );
 $Defaults[GC_DEFAULTS_MODES] = array(
 	GC_VIEW_MODE_ACTION,
@@ -129,14 +129,14 @@ $Database = array();
 $Database[GC_DATABASE_DEFAULT_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/config/dbspecs.json');
 $Database[GC_DATABASE_DB_CONNECTION_ADAPTERS] = array();
 $Database[GC_DATABASE_DB_QUERY_ADAPTERS] = array(
-	'mysql' => '\\TooBasic\\DBQueryAdapterMySQL',
-	'sqlite' => '\\TooBasic\\DBQueryAdapterSQLite',
-	'pgsql' => '\\TooBasic\\DBQueryAdapterPostgreSQL'
+	'mysql' => '\\TooBasic\\Adapters\\DB\\QueryMySQL',
+	'sqlite' => '\\TooBasic\\Adapters\\DB\\QuerySQLite',
+	'pgsql' => '\\TooBasic\\Adapters\\DB\\QueryPostgreSQL'
 );
 $Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
-	'mysql' => '\\TooBasic\\DBSpecAdapterMySQL',
-	'sqlite' => '\\TooBasic\\DBSpecAdapterSQLite',
-	'pgsql' => '\\TooBasic\\DBSpecAdapterPostgreSQL'
+	'mysql' => '\\TooBasic\\Adapters\\DB\\SpecMySQL',
+	'sqlite' => '\\TooBasic\\Adapters\\DB\\SpecSQLite',
+	'pgsql' => '\\TooBasic\\Adapters\\DB\\SpecPostgreSQL'
 );
 //
 // Directory configurations.
@@ -233,11 +233,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 }
 //
 // Routes
-\TooBasic\RoutesManager::Instance()->load();
+\TooBasic\Managers\RoutesManager::Instance()->load();
 if(isset($auxParamsManager->debugroutes)) {
 	//
 	// This is here to avoid wrong debug prompting.
-	\TooBasic\RoutesManager::Instance()->routes();
+	\TooBasic\Managers\RoutesManager::Instance()->routes();
 }
 //
 // Mandatory permissions

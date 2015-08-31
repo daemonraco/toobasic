@@ -8,7 +8,7 @@
 class <%$deleteActionController%> extends \TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = false; # \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	protected $_cached = false; # \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
 	//
 	// Protected methods.
 	protected function basicRun() {
@@ -41,7 +41,7 @@ class <%$deleteActionController%> extends \TooBasic\Controller {
 		}
 
 		if($this->status()) {
-			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
+			header('Location: '.\TooBasic\Managers\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
 		}
 
 		return $this->status();

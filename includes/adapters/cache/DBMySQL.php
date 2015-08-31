@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @file CacheAdapterDBMySQL.php
+ * @file DBMySQL.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\Cache;
 
 /**
- * @class CacheAdapterDBMySQL
+ * @class DBMySQL
+ * This class provides and cache adaptation for entries stored on MySQL databeses.
  */
-class CacheAdapterDBMySQL extends CacheAdapterDB {
+class DBMySQL extends DB {
 	//
 	// Protected methods.
 	/**
@@ -39,8 +40,8 @@ class CacheAdapterDBMySQL extends CacheAdapterDB {
 		$stmt = $this->_db->prepare($query);
 
 		$stmt->execute(array(
-			":key" => $this->fullKey($prefix, $key),
-			":limit" => $this->_expirationLength
+			':key' => $this->fullKey($prefix, $key),
+			':limit' => $this->_expirationLength
 		));
 	}
 }

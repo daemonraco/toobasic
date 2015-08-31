@@ -1,37 +1,23 @@
 <?php
 
 /**
- * @file DBQueryAdapterPostgreSQL.php
+ * @file QuerySQLite.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
 
 /**
- * @class DBQueryAdapterPostgreSQL
+ * @class QuerySQLite
  */
-class DBQueryAdapterPostgreSQL extends DBQueryAdapter {
+class QuerySQLite extends QueryAdapter {
 	//
 	// Public methods.
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
-			throw new \TooBasic\DBException('No name set for id column');
+			throw new \TooBasic\DBException("No name set for id column");
 		}
-
-		$this->cleanPrefixes($prefixes);
-
-
-		$out = array(
-			GC_AFIELD_ADAPTER => $this->_className,
-			GC_AFIELD_QUERY => '',
-			GC_AFIELD_PARAMS => array(),
-			GC_AFIELD_SEQNAME => "{$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}_{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}_seq"
-		);
-		$out[GC_AFIELD_QUERY] = "insert \n";
-		$out[GC_AFIELD_QUERY].= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}({$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}) \n";
-		$out[GC_AFIELD_QUERY].= "        values (default) \n";
-
-		return $out;
+		return $this->insert($table, array($data[GC_DBQUERY_NAMES_COLUMN_ID] => null), $prefixes);
 	}
 	public function deletePrepare($table, $whereFields, &$prefixes = array()) {
 		$this->cleanPrefixes($prefixes);

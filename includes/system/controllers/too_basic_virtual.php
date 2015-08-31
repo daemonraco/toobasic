@@ -4,6 +4,7 @@
  * @file TooBasicVirtualController.php
  * @author Alejandro Dario Simi
  */
+use \TooBasic\Adapters\Cache\Adapter as TB_CacheAdapter;
 
 /**
  * @class TooBasicVirtualController
@@ -11,7 +12,7 @@
 class TooBasicVirtualController extends \TooBasic\Controller {
 	//
 	// Protected properties.	
-	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeDouble;
+	protected $_cached = TB_CacheAdapter::ExpirationSizeDouble;
 	//
 	// Protected methods.
 	protected function basicRun() {

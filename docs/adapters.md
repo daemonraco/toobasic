@@ -29,11 +29,11 @@ they provide a way to store temporary data through several mechanisms.
 
 Cache adapters provided by __TooBasic__ are:
 
-* `TooBasic\CacheAdapterFile`
-* `TooBasic\CacheAdapterDBMySQL`
-* `TooBasic\CacheAdapterMemcached`
-* `TooBasic\CacheAdapterMemcache`
-* `TooBasic\CacheAdapterNoCache`
+* `TooBasic\Adapters\Cache\File`
+* `TooBasic\Adapters\Cache\DBMySQL`
+* `TooBasic\Adapters\Cache\Memcached`
+* `TooBasic\Adapters\Cache\Memcache`
+* `TooBasic\Adapters\Cache\NoCache`
 
 If you want you can read more about them in the [Cache Documentation](cache.md).
 
@@ -58,8 +58,9 @@ And Oracle would be another story.
 This kind of differences beg for adapters and that's the reason why __TooBasic__
 provides these adapters:
 
-* `TooBasic\DBSpecAdapterMySQL`
-* `TooBasic\DBSpecAdapterSQLite`
+* `TooBasic\Adapters\DB\SpecMySQL`
+* `TooBasic\Adapters\DB\SpecSQLite`
+* `TooBasic\Adapters\DB\SpecPosgreSQL`
 
 For you this may be transparent, if you use a connection to a SQLite database you
 won't need to do a thing, __TooBasic__ will choose the right adapter based on the
@@ -68,8 +69,8 @@ engine of your connection configuration.
 ## I want mine!
 Let's say you want to use [CouchBase](http://www.couchbase.com/) instead of
 _Memcached_ because it's what you need and because you already paid the license :)
-You may try using `TooBasic\CacheAdapterMemcached` because _CouchBase_ provides an
-access with the same interface, but that's not what you need.
+You may try using `TooBasic\Adapters\Cache\Memcached` because _CouchBase_ provides
+an access with the same interface, but that's not what you need.
 In other words, you need a cache adapter for _CouchBase_.
 
 To achieve this you have to go through the next 3 steps:
@@ -88,7 +89,7 @@ Let's write the next code at
 __ROOTDIR/modules/CouchBasePlugin/includes/cacheadapter.php__:
 ```php
 <?php
-class CacheAdapterCouchBase extends CacheAdapter {
+class CacheAdapterCouchBase extends \TooBasic\Adapters\Cache\Adapter {
 	public function delete($prefix, $key) {
 
 		. . .
@@ -116,7 +117,7 @@ If you visit [this link](cache.md), you'll find how to do this, but to save you
 same time, add this line at __ROOTDIR/site/config.php__:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = "\CacheAdapterCouchBase";
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\CacheAdapterCouchBase';
 ```
 
 ### Step 3: including the adapter
@@ -134,11 +135,12 @@ right file.
 
 ## I want my database structure maintainer adapter
 We told you how to add a cache adapter, but if you created your own database
-structure maintainer adapter for Oracle inherited from `\TooBasic\DBSpecAdapter`,
-you'll have to do something a little different in the step 2:
+structure maintainer adapter for Oracle inherited from
+`\TooBasic\Adapters\DB\SpecAdapter`, you'll have to do something a little
+different in the step 2:
 ```php
 <?php
-$Database[GC_DATABASE_DB_ADAPTERS]['oci'] = "\MyDBSpecAdapterOracle";
+$Database[GC_DATABASE_DB_ADAPTERS]['oci'] = '\\MyDBSpecAdapterOracle';
 ```
 
 ## View adapters
@@ -146,20 +148,20 @@ All around this documentation we talk about Smarty as the engine to render HTML
 templates as if it were the corner stone of __TooBasic__, but even though it saves
 us a lot of headaches, it is just a library used through a view adapter.
 This means you can create your own view adapter writing a class inherited from
-`\TooBasic\ViewAdapter`.
+`\TooBasic\Adapters\View\Adapter`.
 
 Once you have your own adapter, you can change the default view adapter by adding
 this line to your site's configuration:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\TooBasic\ViewAdapterMyEngine';
+$Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\Adapters\\View\\MyEngine';
 ```
 
 Also, if you are not sure if it works or not, you can add it just as a format
 interpreter by doing this:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_FORMATS]['myformat'] = '\TooBasic\ViewAdapterMyEngine';
+$Defaults[GC_DEFAULTS_FORMATS]['myformat'] = '\\TooBasic\\Adapters\\View\\MyEngine';
 ```
 And then accessing your URLs like this:
 
@@ -168,15 +170,17 @@ And then accessing your URLs like this:
 ### Others
 Other view adapters are:
 
-* `\TooBasic\ViewAdapterSmarty`: The not-so-corner-stone :)
-* `\TooBasic\ViewAdapterDump`: Display your controllers as `var_dump()` results
+* `\TooBasic\Adapters\View\Smarty`: The not-so-corner-stone :)
+* `\TooBasic\Adapters\View\Dump`: Display your controllers as `var_dump()` results
 (`?format=dump`).
-* `\TooBasic\ViewAdapterJSON`: Display your controllers in JSON fromat (`?format=json`).
-* `\TooBasic\ViewAdapterPrint`: Display your controllers as `print_r()` results
+* `\TooBasic\Adapters\View\JSON`: Display your controllers in JSON fromat
+(`?format=json`).
+* `\TooBasic\Adapters\View\Print`: Display your controllers as `print_r()` results
 (`?format=print`).
-* `\TooBasic\ViewAdapterSerialize`: Display your controllers as `serialize()`
+* `\TooBasic\Adapters\View\Serialize`: Display your controllers as `serialize()`
 results (`?format=serialize`).
-* `\TooBasic\ViewAdapterXML`: Display your controllers in XML fromat (`?format=xml`).
+* `\TooBasic\Adapters\View\XML`: Display your controllers in XML fromat
+(`?format=xml`).
 
 ## Suggestions
 We suggest you visit these links:

@@ -4,8 +4,11 @@
  * @file shell.php
  * @author Alejandro Dario Simi
  */
-use TooBasic\Shell\Option as TBS_Option;
-use TooBasic\Sanitizer as TB_Sanitizer;
+//
+// Class aliases.
+use TooBasic\Names;
+use TooBasic\Sanitizer;
+use TooBasic\Shell\Option;
 
 /**
  * @class ShellSystool
@@ -118,22 +121,22 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 
 			$this->_names[GC_AFIELD_TYPE] = $this->_currentType;
 
-			$this->_names['tool-name'] = \TooBasic\classname($this->_names[GC_AFIELD_NAME]);
+			$this->_names['tool-name'] = Names::ClassName($this->_names[GC_AFIELD_NAME]);
 			switch($this->_currentType) {
 				case self::TypeCron:
-					$this->_names['tool-name'] = \TooBasic\Names::ShellCronClass($this->_names['tool-name']);
+					$this->_names['tool-name'] = Names::ShellCronClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellCron';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names[GC_AFIELD_NAME]}.php");
+					$this->_names['tool-path'] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_CRONS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 				case self::TypeSys:
-					$this->_names['tool-name'] = \TooBasic\Names::ShellSystoolClass($this->_names['tool-name']);
+					$this->_names['tool-name'] = Names::ShellSystoolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
+					$this->_names['tool-path'] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 				case self::TypeTool:
-					$this->_names['tool-name'] = \TooBasic\Names::ShellToolClass($this->_names['tool-name']);
+					$this->_names['tool-name'] = Names::ShellToolClass($this->_names['tool-name']);
 					$this->_names['tool-parent'] = 'ShellTool';
-					$this->_names['tool-path'] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
+					$this->_names['tool-path'] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 			}
 			$this->_files[] = array(
@@ -173,7 +176,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 
 		$text = 'This option allows you to select which type of tool you want to create. ';
 		$text.= 'Options are: cron or tool';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionType, array('--type', '-t'), TBS_Option::TypeValue, $text, 'tool-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'tool-type'));
 
 		$text = 'Adds a param to be use in command line. ';
 		$text.= 'You can specify a type by writing something like \'--param name:V\'. ';
@@ -181,10 +184,10 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- 'N' for simple parameters (default).\n";
 		$text.= "\t- 'V' for options with one value.\n";
 		$text.= "\t- 'M' for options with multiple values.\n";
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionParam, array('--param', '-p'), TBS_Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionParam, array('--param', '-p'), Option::TypeMultiValue, $text, 'param-name'));
 
 		$text = 'Adds a param that triggers a method.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionMasterParam, array('--master-param', '-mp'), TBS_Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionMasterParam, array('--master-param', '-mp'), Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$ok = true;
@@ -200,9 +203,6 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		}
 
 		return $ok;
-	}
-	protected function taskInfo($spacer = '') {
-		
 	}
 	protected function taskRemove($spacer = '') {
 		$ok = true;

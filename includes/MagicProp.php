@@ -7,6 +7,8 @@
 
 namespace TooBasic;
 
+use TooBasic\Representations\ItemsFactoryProvider;
+
 /**
  * @class MagicPropException
  * This exeption is thrown whenever 'MagicProp' founds a halting error.
@@ -23,7 +25,7 @@ class MagicPropException extends Exception {
  * 	- \TooBasic\ModelsFactory
  * 	- \TooBasic\Params
  * 	- \TooBasic\Paths
- * 	- \TooBasic\ItemsFactoryProvider
+ * 	- \TooBasic\Representations\ItemsFactoryProvider
  * 	- \TooBasic\Translate
  * This can also be integrated inside a magic method '__get()' to provide access
  * to these singletons in a pretty and easy way.
@@ -48,8 +50,8 @@ class MagicProp extends Singleton {
 	 */
 	protected $_paths = false;
 	/**
-	 * @var \TooBasic\ItemsFactoryProvider Item representations factory
-	 * singleton.
+	 * @var \TooBasic\Representations\ItemsFactoryProvider Item
+	 * representations factory singleton.
 	 */
 	protected $_representations = false;
 	/**
@@ -61,7 +63,7 @@ class MagicProp extends Singleton {
 	/**
 	 * This method provides a easy way to access each singleton:
 	 * 	- 'model' for \TooBasic\ModelsFactory
-	 * 	- 'representation' for \TooBasic\ItemsFactoryProvider
+	 * 	- 'representation' for \TooBasic\Representations\ItemsFactoryProvider
 	 * 	- 'translate' for \TooBasic\Translate
 	 * 	- 'params' for \TooBasic\Params
 	 * 	- 'cache' for \TooBasic\CacheAdatper
@@ -111,7 +113,7 @@ class MagicProp extends Singleton {
 	protected function cache() {
 		if($this->_cache === false) {
 			global $Defaults;
-			$this->_cache = Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
+			$this->_cache = \TooBasic\Adapters\Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
 		}
 
 		return $this->_cache;

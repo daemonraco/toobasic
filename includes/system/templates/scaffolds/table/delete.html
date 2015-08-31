@@ -1,6 +1,6 @@
 <h4>{$tr->title_delete_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
-<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('{$tr->message_remove_table_item_confirm('name','<%$singularName%>')}')">
+<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('{$tr->message_remove_table_item_confirm('name','<%$singularName%>')}')" ng-non-bindable>
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>

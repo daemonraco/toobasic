@@ -62,7 +62,7 @@ abstract class Exporter extends AbstractExporter {
 		'POST' => array()
 	);
 	/**
-	 * @var \TooBasic\ViewAdapter Pointer to the current view rendering
+	 * @var \TooBasic\Adapters\View Pointer to the current view rendering
 	 * adapter.
 	 */
 	protected $_viewAdapter = false;

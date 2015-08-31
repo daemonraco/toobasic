@@ -7,6 +7,8 @@
 
 namespace TooBasic;
 
+use TooBasic\Managers\RoutesManager as RoutesManager;
+
 /**
  * @abstract
  * @class AbstractExports

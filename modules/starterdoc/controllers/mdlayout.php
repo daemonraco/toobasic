@@ -5,7 +5,7 @@ use TooBasic\Sanitizer as TB_Sanitizer;
 class MdlayoutController extends TooBasic\Layout {
 	//
 	// Protected properties
-	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
 	//
 	// Protected methods.
 	protected function basicRun() {

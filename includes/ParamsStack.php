@@ -67,8 +67,35 @@ class ParamsStack {
 	public function __isset($name) {
 		return isset($this->_params[$name]);
 	}
+	/**
+	 * This magic method provides a easy way to set values.
+	 *
+	 * @param string $key Name to associate with the new value.
+	 * @param string $value Value to add/set.
+	 * @return string Found value or null when it's not present.
+	 */
+	public function __set($key, $value) {
+		return $this->addValue($key, $value);
+	}
 	//
 	// Public properties.
+	/**
+	 * This method allows to intentionaly set a value on this params stack. It
+	 * won't affect the real super global.
+	 *
+	 * @param string $key Name to associate with the new value.
+	 * @param string $value Value to add/set.
+	 */
+	public function addValue($key, $value) {
+		//
+		// If the key is numerical, it is a mistake and therefore ignored.
+		if(!is_numeric($key)) {
+			$this->_params[$key] = $value;
+			$value = null;
+		}
+
+		return $value;
+	}
 	/**
 	 * This method allows to intentionaly set values on this params stack. It
 	 * won't affect the real super global.
@@ -80,12 +107,7 @@ class ParamsStack {
 		//
 		// Checking and adding each given value.
 		foreach($values as $key => $value) {
-			//
-			// If the key is numerica, it is a mistake and therefore
-			// ignored.
-			if(!is_numeric($key)) {
-				$this->_params[$key] = $value;
-			}
+			$this->addValue($key, $value);
 		}
 	}
 	/**

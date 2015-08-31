@@ -1,16 +1,18 @@
 <?php
 
 /**
- * @file DBSpecAdapterSQLite.php
+ * @file SpecSQLite.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
+
+use TooBasic\Managers\DBStructureManager;
 
 /**
- * @class DBSpecAdapterSQLite
+ * @class SpecSQLite
  */
-class DBSpecAdapterSQLite extends DBSpecAdapter {
+class SpecSQLite extends SpecAdapter {
 	//
 	// Protected properties.
 	protected $_engine = 'SQLite';

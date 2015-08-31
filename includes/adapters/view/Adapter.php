@@ -1,18 +1,23 @@
 <?php
 
 /**
- * @file ViewAdapter.php
+ * @file Adapter.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\View;
+
+//
+// Class aliases.
+use \TooBasic\Params;
+use \TooBasic\Paths;
 
 /**
+ * @class Adapter
  * @abstract
- * @class ViewAdapter
  * This class represents the basic structure for a view adapter.
  */
-abstract class ViewAdapter extends Adapter {
+abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Protected properties.
 	/**

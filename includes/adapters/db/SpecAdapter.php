@@ -1,12 +1,23 @@
 <?php
 
-namespace TooBasic;
+/**
+ * @file SpecAdapter.php
+ * @author Alejandro Dario Simi
+ */
 
-abstract class DBSpecAdapter extends Adapter {
+namespace TooBasic\Adapters\DB;
+
+use TooBasic\Params;
+
+/**
+ * @class SpecAdapter
+ * @abstract
+ */
+abstract class SpecAdapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Protected properties.
 	/**
-	 * @var \TooBasic\DBAdapter
+	 * @var \TooBasic\Adapters\DB\Adapter
 	 */
 	protected $_db = false;
 	protected $_debugUpgrade = false;
@@ -14,7 +25,7 @@ abstract class DBSpecAdapter extends Adapter {
 	protected $_engine = 'UnknownEngine';
 	//
 	// Magic methods.
-	public function __construct(DBAdapter $db) {
+	public function __construct(Adapter $db) {
 		parent::__construct();
 
 		$this->_db = $db;
@@ -63,7 +74,7 @@ abstract class DBSpecAdapter extends Adapter {
 	}
 	protected function exec($query) {
 		$this->debugUpgradeQuery($query);
-		$out = $this->_debugdbEmulation ? 'true' : $this->_db->exec($query, false) !== false;
+		$out = $this->_debugdbEmulation ? true : $this->_db->exec($query, false) !== false;
 
 		if(!$out) {
 			$info = $this->_db->errorInfo();

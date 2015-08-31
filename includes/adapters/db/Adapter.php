@@ -1,15 +1,18 @@
 <?php
 
 /**
- * @file DBAdapter.php
+ * @file Adapter.php
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Adapters\DB;
+
+use TooBasic\Params;
+
 /**
- * @class DBAdapter
+ * @class Adapter
  */
-class DBAdapter extends Adapter {
+class Adapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Protected properties.
 	protected $_engine = false;
@@ -209,7 +212,7 @@ class DBAdapter extends Adapter {
 	/**
 	 * @todo doc
 	 *
-	 * @return \TooBasic\DBQueryAdapter @todo doc
+	 * @return \TooBasic\Adapters\DB\QueryAdapter @todo doc
 	 * @throws \TooBasic\DBException @todo doc
 	 */
 	public function queryAdapter() {
@@ -222,7 +225,7 @@ class DBAdapter extends Adapter {
 		if(isset($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()])) {
 			//
 			// Obtaining the right adapter.
-			$out = \TooBasic\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
+			$out = \TooBasic\Adapters\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
 		} else {
 			throw new \TooBasic\DBException("There's no define adapter for a '{$this->engine()}' connection");
 		}

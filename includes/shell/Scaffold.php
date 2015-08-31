@@ -7,13 +7,17 @@
 
 namespace TooBasic\Shell;
 
-use TooBasic\Shell\Color as TBS_Color;
-use TooBasic\Shell\Option as TBS_Option;
-use TooBasic\Sanitizer as TB_Sanitizer;
+//
+// Class aliases.
+use TooBasic\Shell\Color;
+use TooBasic\Shell\Option;
+use TooBasic\Sanitizer;
 
 /**
  * @class Scaffold
  * @abstract
+ * This is class represents a basic logic for a system shell tool capable of
+ * generating TooBasic scaffolds.
  */
 abstract class Scaffold extends ShellTool {
 	//
@@ -24,44 +28,91 @@ abstract class Scaffold extends ShellTool {
 	const OptionRemove = 'Remove';
 	//
 	// Protected properties.
+	/**
+	 * @var mixed[string] List values to be use inside a scaffold tempalte.
+	 */
 	protected $_assignments = false;
+	/**
+	 * @var string[] List of files to be created.
+	 */
 	protected $_files = array();
+	/**
+	 * @var boolean This flag indicates if existing files have to be
+	 * overwritten.
+	 */
 	protected $_forced = null;
+	/**
+	 * @var mixed[string] Internal list of values to be used on scaffold
+	 * generations.
+	 */
 	protected $_names = false;
+	/**
+	 * @var \TooBasic\Adapters\View\Smarty Shortcut to a Smarty view adapter.
+	 */
 	protected $_render = false;
 	protected $_requiredDirectories = array();
+	/**
+	 * @var \stdClass[] List of routes to be added as configuration.
+	 */
 	protected $_routes = false;
+	/**
+	 *
+	 * @var string General name of the scaffold to be generated, it's used to
+	 * the proper set of templates.
+	 */
 	protected $_scaffoldName = '';
+	/**
+	 * @var \stdClass[] List of language translations to be added as
+	 * configuration for the current language.
+	 */
 	protected $_translations = false;
 	//
 	// Protected methods.
+	/**
+	 * This method is the one in charge of triggering the generation of routes
+	 * and adding them into configuration.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function addAllRoutes($spacer) {
 		//
-		// Default values-
+		// Default values.
 		$ok = true;
 		//
 		// Global dependencies.
 		global $Defaults;
-
+		//
+		// Routes are added only when active.
 		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			//
+			// Generating the list of required routes.
 			$this->genRoutes();
-
+			//
+			// Checking if there's at least one route to be added.
 			if(count($this->_routes)) {
 				echo "{$spacer}Adding routes configuration:\n";
+				//
+				// Checking each route.
 				foreach($this->_routes as $route) {
 					echo "{$spacer}\t- '{$route->route}': ";
-
+					//
+					// Attempting to add a route.
 					$error = '';
 					$fatal = false;
 					if($this->addRoute($route, $error, $fatal)) {
-						echo TBS_Color::Green('Ok');
+						echo Color::Green('Ok');
 					} else {
+						//
+						// Checking the severity of the
+						// error found.
 						if($fatal) {
-							echo TBS_Color::Red('Failed');
+							echo Color::Red('Failed');
 							$ok = false;
 							break;
 						} else {
-							echo TBS_Color::Yellow('Ignored');
+							echo Color::Yellow('Ignored');
 						}
 						echo " ({$error})";
 					}
@@ -72,32 +123,48 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method is the one in charge of triggering the generation of
+	 * language translations and adding them into configuration.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function addAllTranslations($spacer) {
 		//
-		// Default values-
+		// Default values.
 		$ok = true;
 		//
 		// Global dependencies.
 		global $LanguageName;
-
+		//
+		// Generating translations.
 		$this->genTranslations();
-
+		//
+		// Checking if there are translations to add.
 		if(count($this->_translations)) {
 			echo "{$spacer}Adding translation ({$LanguageName}):\n";
+			//
+			// Cechking each translation item.
 			foreach($this->_translations as $tr) {
 				echo "{$spacer}\t- '{$tr->key}': ";
-
+				//
+				// Attempting to add a translation.
 				$error = '';
 				$fatal = false;
 				if($this->addTranslation($tr, $error, $fatal)) {
-					echo TBS_Color::Green('Ok');
+					echo Color::Green('Ok');
 				} else {
+					//
+					// Checking the severity of the error
+					// found.
 					if($fatal) {
-						echo TBS_Color::Red('Failed');
+						echo Color::Red('Failed');
 						$ok = false;
 						break;
 					} else {
-						echo TBS_Color::Yellow('Ignored');
+						echo Color::Yellow('Ignored');
 					}
 					echo " ({$error})";
 				}
@@ -107,24 +174,46 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method adds a single route into configuration.
+	 *
+	 * @param \stdClass $newRoute Route to be added.
+	 * @param string $error Error message given when something goes wrong.
+	 * @param boolean $fatal This flag indicats if it's a fatal error or not.
+	 * @return boolean Returns TRUE there were no errors.
+	 */
 	protected function addRoute(\stdClass $newRoute, &$error, &$fatal) {
+		//
+		// Defualt values.
 		$ok = true;
-
 		$backup = false;
 		$fatal = false;
 		$error = '';
-
+		$config = false;
+		//
+		// Checking if there's a route configuration file prensent in the
+		// system.
 		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+			//
+			// Attemptting to create a routes confifuration file with
+			// a basic JSON configuraion.
 			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], '{"routes":[]}')) {
 				$ok = false;
 				$error = "unable to create file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 				$fatal = true;
 			}
 		}
-		$config = false;
 		if($ok) {
+			//
+			// Backing up current configuration to avoid problems in
+			// further steps.
 			$backup = file_get_contents($this->_names[GC_AFIELD_ROUTES_PATH]);
+			//
+			// Loading current configuration.
 			$config = json_decode($backup);
+			//
+			// If the configuration was not loaded it's considered to
+			// be a fatal error.
 			if(!$config) {
 				$ok = false;
 				$error = 'unable to use routes file';
@@ -132,6 +221,9 @@ abstract class Scaffold extends ShellTool {
 			}
 		}
 		if($ok) {
+			//
+			// Checking each route to avoid duplicates. If there's
+			// already a similar route it should not be replaced.
 			foreach($config->routes as $route) {
 				if($route->action == $newRoute->action) {
 					$ok = false;
@@ -141,36 +233,65 @@ abstract class Scaffold extends ShellTool {
 			}
 		}
 		if($ok) {
+			//
+			// Appending the new route.
 			$config->routes[] = $newRoute;
-
+			//
+			// Saving the configuration and checking it's successfully
+			// saved.
 			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 				$ok = false;
 				$error = 'something went wrong writing back routes file';
 				$fatal = true;
+				//
+				// Restoring back up.
 				file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
 			}
 		}
-
+		//
+		// Retruning the final status of the whole operation.
 		return $ok;
 	}
+	/**
+	 * This method adds a single language translation into configuration.
+	 *
+	 * @param \stdClass $newTr Route to be added.
+	 * @param string $error Error message given when something goes wrong.
+	 * @param boolean $fatal This flag indicats if it's a fatal error or not.
+	 * @return boolean Returns TRUE there were no errors.
+	 */
 	protected function addTranslation($newTr, &$error, &$fatal) {
+		//
+		// Default values.
 		$ok = true;
-
 		$backup = false;
 		$fatal = false;
 		$error = '';
-
+		$config = false;
+		//
+		// Checking if there's a language configuration file present in
+		// the system.
 		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+			//
+			// Creating a basic language configuration file with an
+			// initial JSON configuration.
 			if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], '{"keys":[]}')) {
 				$ok = false;
 				$error = "unable to create file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
 				$fatal = true;
 			}
 		}
-		$config = false;
 		if($ok) {
+			//
+			// Backing up current configuration to avoid problems in
+			// further steps.
 			$backup = file_get_contents($this->_names[GC_AFIELD_LANGS_PATH]);
+			//
+			// Loading current configuration.
 			$config = json_decode($backup);
+			//
+			// If the configuration was not loaded it's considered to
+			// be a fatal error.
 			if(!$config) {
 				$ok = false;
 				$error = 'unable to use language file';
@@ -178,6 +299,10 @@ abstract class Scaffold extends ShellTool {
 			}
 		}
 		if($ok) {
+			//
+			// Checking each translation key to avoid duplicates. If
+			// there's already a similar key it should not be
+			// replaced.
 			foreach($config->keys as $tr) {
 				if($tr->key == $newTr->key) {
 					$ok = false;
@@ -187,56 +312,104 @@ abstract class Scaffold extends ShellTool {
 			}
 		}
 		if($ok) {
+			//
+			// Appending the new translation key.
 			$config->keys[] = $newTr;
-
+			//
+			// Saving the configuration and checking it's successfully
+			// saved.
 			if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 				$ok = false;
 				$error = 'something went wrong writing back language file';
 				$fatal = true;
+				//
+				// Restoring back up.
 				file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], $backup);
 			}
 		}
 
+		//
+		// Retruning the final status of the whole operation.
 		return $ok;
 	}
+	/**
+	 * This method looking into each generated file path and adds its
+	 * directory path to a list for further creation. Also it sets some
+	 * required details (when not present) on each file description.
+	 */
 	protected function enforceFilesList() {
+		//
+		// Cecking each file.
 		foreach($this->_files as &$file) {
+			//
+			// Enforcing the presence of a description.
 			if(!isset($file[GC_AFIELD_DESCRIPTION])) {
 				$file[GC_AFIELD_DESCRIPTION] = "file '".basename($file[GC_AFIELD_PATH])."'";
 			}
+			//
+			// Setting the scaffold builder method as
+			// 'genFileByTemplate()' when there's none.
 			if(!isset($file[GC_AFIELD_GENERATOR])) {
 				$file[GC_AFIELD_GENERATOR] = 'genFileByTemplate';
 			}
+			//
+			// Enforcing template configuration.
 			if(!isset($file[GC_AFIELD_TEMPLATE])) {
 				$file[GC_AFIELD_TEMPLATE] = false;
 			}
-
+			//
+			// Adding directory path as required.
 			$this->_requiredDirectories[] = dirname($file[GC_AFIELD_PATH]);
 		}
 	}
+	/**
+	 * This method generates the list of values to be use inside a scaffold
+	 * tempalte. In this class it's a just an initializer, it should be
+	 * implemented by inherited classes.
+	 */
 	protected function genAssignments() {
+		//
+		// Triggering names generation.
 		$this->genNames();
+		//
+		// Avoiding multiple generations.
 		if($this->_assignments === false) {
 			//
 			// Default values.
 			$this->_assignments = array();
 		}
 	}
+	/**
+	 * This method is the one in charge of generating a specific file based on
+	 * a template file and a rendering callback method.
+	 * Actualy, it's the initial point on a generation, the real generation is
+	 * called from here.
+	 *
+	 * @param string $path Absolute path where the results must be stored.
+	 * @param string $template Name of the template on which results will be
+	 * based.
+	 * @param string $callback Method in charge of the actual file generation.
+	 * @return boolean Returns TRUE There were no errors.
+	 */
 	protected function genFile($path, $template = false, $callback = 'genFileByTemplate') {
 		//
 		// Default values.
 		$ok = true;
-
+		//
+		// Avoiding file overwrite.
 		if(!$this->isForced() && is_file($path)) {
-			echo TBS_Color::Yellow('Ignored').' (file already exist)';
+			echo Color::Yellow('Ignored').' (file already exist)';
 		} else {
-			$completeTemplate = TB_Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
-
+			//
+			// Generating a more complete scaffold template name.
+			$completeTemplate = Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
+			//
+			// Forwarding the generation call and checking for errors.
 			$error = false;
 			if($this->{$callback}($path, $completeTemplate, $error)) {
-				echo TBS_Color::Green('Ok');
+				echo Color::Green('Ok');
 			} else {
-				echo TBS_Color::Red('Failed')." ({$error})";
+				echo Color::Red('Failed')." ({$error})";
 				$ok = false;
 			}
 		}
@@ -244,6 +417,15 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method holdes the logic to generate a file based on a scaffold
+	 * template.
+	 *
+	 * @param string $path Absolute path where the file must be created.
+	 * @param string $template Nam eof the template to use as base.
+	 * @param string $error Error message.
+	 * @return boolean Return TRUE when there where no errors.
+	 */
 	protected function genFileByTemplate($path, $template, &$error) {
 		//
 		// Default values.
@@ -257,8 +439,11 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Generating file content.
 		$output = $this->_render->render($this->_assignments, $template);
-
+		//
+		// Generating a file.
 		$result = file_put_contents($path, $output);
+		//
+		// Checking for errors.
 		if($result === false) {
 			$error = "Unable to write file '{$path}'";
 			$out = false;
@@ -266,11 +451,19 @@ abstract class Scaffold extends ShellTool {
 
 		return $out;
 	}
+	/**
+	 * This method is called when the list of internal values has to be
+	 * generated.
+	 */
 	protected function genNames() {
+		//
+		// Avoiding multiple analysis.
 		if($this->_names === false) {
 			//
 			// Global dependecies.
 			global $LanguageName;
+			global $Directories;
+			global $Paths;
 			//
 			// Default values.
 			$this->_names = array();
@@ -285,10 +478,7 @@ abstract class Scaffold extends ShellTool {
 				$baseName = $rOpt->value();
 			}
 			//
-			// Global dependencies.
-			global $Directories;
-			global $Paths;
-
+			// Basic internal values.
 			$this->_names[GC_AFIELD_NAME] = $baseName;
 			$this->_names[GC_AFIELD_MODULE_NAME] = false;
 			$this->_names[GC_AFIELD_PARENT_DIRECTORY] = false;
@@ -301,13 +491,25 @@ abstract class Scaffold extends ShellTool {
 			} else {
 				$this->_names[GC_AFIELD_PARENT_DIRECTORY] = $Directories[GC_DIRECTORIES_SITE];
 			}
-
-			$this->_names[GC_AFIELD_ROUTES_PATH] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
+			//
+			// Routes configuration file path.
+			$this->_names[GC_AFIELD_ROUTES_PATH] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/routes.json");
 			$this->_requiredDirectories[] = dirname($this->_names[GC_AFIELD_ROUTES_PATH]);
-			$this->_names[GC_AFIELD_LANGS_PATH] = TB_Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_LANGS]}/{$LanguageName}.json");
+			//
+			// Language translation configuration file path for
+			// current language.
+			$this->_names[GC_AFIELD_LANGS_PATH] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_LANGS]}/{$LanguageName}.json");
 			$this->_requiredDirectories[] = dirname($this->_names[GC_AFIELD_LANGS_PATH]);
 		}
 	}
+	/**
+	 * This method is the one in charge of creating all requiered directories
+	 * before creating any file
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function genRequiredDirectories($spacer) {
 		$ok = true;
 		//
@@ -330,11 +532,12 @@ abstract class Scaffold extends ShellTool {
 			foreach($toGen as $dirPath) {
 				echo "{$spacer}\t\tCreating '{$dirPath}': ";
 				@mkdir($dirPath, 0777, true);
-
+				//
+				// Checking creation.
 				if(is_dir($dirPath)) {
-					echo TBS_Color::Green('Ok')."\n";
+					echo Color::Green('Ok')."\n";
 				} else {
-					echo TBS_Color::Red('Failed')."\n";
+					echo Color::Red('Failed')."\n";
 					$ok = false;
 					break;
 				}
@@ -343,63 +546,114 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method generates the list of routes to be added as configuration.
+	 * In this class it's a just an initializer, it should be implemented by
+	 * inherited classes.
+	 */
 	protected function genRoutes() {
+		//
+		// Avoiding multiple generations.
 		if($this->_routes === false) {
 			$this->_routes = array();
 		}
 	}
+	/**
+	 * This method generates the list of language translations to be added as
+	 * configuration. In this class it's a just an initializer, it should be
+	 * implemented by inherited classes.
+	 */
 	protected function genTranslations() {
+		//
+		// Triggering names generation.
 		$this->genNames();
+		//
+		// Avoiding multiple generations.
 		if($this->_translations === false) {
 			//
 			// Default values.
 			$this->_translations = array();
 		}
 	}
+	/**
+	 * This method allows to know if this is an forced execution where files
+	 * are overwritten.
+	 *
+	 * @return boolean Returns TRUE when it's a forced execution.
+	 */
 	protected function isForced() {
+		//
+		// Checking given options if it hasn't been done yet.
 		if($this->_forced === null) {
 			$this->_forced = $this->_options->option(self::OptionForced)->activated();
 		}
 
 		return $this->_forced;
 	}
+	/**
+	 * Loading and setting a shortcut to a view renderer based on Samrty.
+	 */
 	protected function loadRender() {
+		//
+		// Checking that it hasn't been loaded before.
 		if(!$this->_render) {
-			$this->_render = \TooBasic\Adapter::Factory('\TooBasic\ViewAdapterSmarty');
-
+			//
+			// Creating a proper view adapter.
+			$this->_render = \TooBasic\Adapters\Adapter::Factory('\\TooBasic\\Adapters\\View\\Smarty');
+			//
+			// Configurating the Smarty object with some specific
+			// parameters required for schaffolds.
 			$engine = $this->_render->engine();
 			$engine->left_delimiter = '<%';
 			$engine->right_delimiter = '%>';
 			$engine->force_compile = true;
 		}
 	}
+	/**
+	 * This method is the one in charge of triggering the generation of routes
+	 * and removing them from configuration.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function removeAllRoutes($spacer) {
 		//
-		// Default values-
+		// Default values.
 		$ok = true;
 		//
 		// Global dependencies.
 		global $Defaults;
-
+		//
+		// Routes are removed only when active.
 		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			//
+			// Generating the list of required routes.
 			$this->genRoutes();
-
+			//
+			// Checking if there's at least one route to be removed.
 			if(count($this->_routes)) {
 				echo "{$spacer}Removing routes configuration:\n";
+				//
+				// Checking each route.
 				foreach($this->_routes as $route) {
 					echo "{$spacer}\t- '{$route->route}': ";
-
+					//
+					// Attempting to remove a route.
 					$error = '';
 					$fatal = false;
 					if($this->removeRoute($route, $error, $fatal)) {
-						echo TBS_Color::Green('Ok');
+						echo Color::Green('Ok');
 					} else {
+						//
+						// Checking the severity of the
+						// error found.
 						if($fatal) {
-							echo TBS_Color::Red('Failed');
+							echo Color::Red('Failed');
 							$ok = false;
 							break;
 						} else {
-							echo TBS_Color::Yellow('Ignored');
+							echo Color::Yellow('Ignored');
 						}
 						echo " ({$error})";
 					}
@@ -410,6 +664,14 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method is the one in charge of triggering the generation of
+	 * language translations and removing them from configuration.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function removeAllTranslations($spacer) {
 		//
 		// Default values.
@@ -417,25 +679,33 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Global dependencies.
 		global $LanguageName;
-
+		//
+		// Generating translations.
 		$this->genTranslations();
-
+		//
+		// Checking if there are translations to remove.
 		if(count($this->_translations)) {
 			echo "{$spacer}Removing translations ({$LanguageName}):\n";
+			//
+			// Cechking each translation item.
 			foreach($this->_translations as $tr) {
 				echo "{$spacer}\t- '{$tr->key}': ";
-
+				//
+				// Attempting to remove a translation.
 				$error = '';
 				$fatal = false;
 				if($this->removeTranslation($tr, $error, $fatal)) {
-					echo TBS_Color::Green('Ok');
+					echo Color::Green('Ok');
 				} else {
+					//
+					// Checking the severity of the error
+					// found.
 					if($fatal) {
-						echo TBS_Color::Red('Failed');
+						echo Color::Red('Failed');
 						$ok = false;
 						break;
 					} else {
-						echo TBS_Color::Yellow('Ignored');
+						echo Color::Yellow('Ignored');
 					}
 					echo " ({$error})";
 				}
@@ -445,19 +715,31 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method is the one in charge of removing a generated file and
+	 * checking the results of such operation.
+	 *
+	 * @param string $path Absolute path of the file to be remove.
+	 * @return boolean Returns TRUE when it's successfully removed.
+	 */
 	protected function removeFile($path) {
 		//
 		// Default values.
 		$ok = true;
-
+		//
+		// Checking the existence of the file.
 		if(!is_file($path)) {
-			echo TBS_Color::Yellow('Ignored').' (file already removed)';
+			echo Color::Yellow('Ignored').' (file already removed)';
 		} else {
+			//
+			// Remove it.
 			@unlink($path);
+			//
+			// Checking for errors.
 			if(!is_file($path)) {
-				echo TBS_Color::Green('Ok');
+				echo Color::Green('Ok');
 			} else {
-				echo TBS_Color::Red('Failed').' (unable to remove it)';
+				echo Color::Red('Failed').' (unable to remove it)';
 				$ok = false;
 			}
 		}
@@ -465,22 +747,41 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This method removes a single route from configuration.
+	 *
+	 * @param \stdClass $badRoute Route to be removed.
+	 * @param string $error Error message given when something goes wrong.
+	 * @param boolean $fatal This flag indicats if it's a fatal error or not.
+	 * @return boolean Returns TRUE there were no errors.
+	 */
 	protected function removeRoute(\stdClass $badRoute, &$error, &$fatal) {
+		//
+		// Defualt values.
 		$ok = true;
-
 		$backup = false;
 		$fatal = false;
 		$error = '';
-
+		$config = false;
+		//
+		// Checking if there's a route configuration file prensent in the
+		// system.
 		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 			$fatal = true;
 		}
-		$config = false;
 		if($ok) {
+			//
+			// Backing up current configuration to avoid problems in
+			// further steps.
 			$backup = file_get_contents($this->_names[GC_AFIELD_ROUTES_PATH]);
+			//
+			// Loading current configuration.
 			$config = json_decode($backup);
+			//
+			// If the configuration was not loaded it's considered to
+			// be a fatal error.
 			if(!$config) {
 				$ok = false;
 				$error = 'unable to use routes file';
@@ -489,18 +790,30 @@ abstract class Scaffold extends ShellTool {
 		}
 		if($ok) {
 			$found = false;
+			//
+			// Looking for the route and removing it.
 			foreach($config->routes as $routeKey => $route) {
 				if($route->action == $badRoute->action) {
 					unset($config->routes[$routeKey]);
 					$found = true;
 				}
 			}
+			//
+			// Checking if there's something save back into
+			// configuration or not.
 			if($found) {
+				//
+				// Cleaning rotues list keys to avoid worng JSON
+				// encoding.
 				$config->routes = array_values($config->routes);
+				//
+				// Enconding and saving routes.
 				if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 					$ok = false;
 					$error = 'something went wrong writing back routes file';
 					$fatal = true;
+					//
+					// Restoring back up.
 					file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
 				}
 			} else {
@@ -508,25 +821,45 @@ abstract class Scaffold extends ShellTool {
 				$error = 'no routes found';
 			}
 		}
-
+		//
+		// Retruning the final status of the whole operation.
 		return $ok;
 	}
+	/**
+	 * This method removes a single language translation from configuration.
+	 *
+	 * @param \stdClass $badTr Route to be added.
+	 * @param string $error Error message given when something goes wrong.
+	 * @param boolean $fatal This flag indicats if it's a fatal error or not.
+	 * @return boolean Returns TRUE there were no errors.
+	 */
 	protected function removeTranslation(\stdClass $badTr, &$error, &$fatal) {
+		//
+		// Default values.
 		$ok = true;
-
 		$backup = false;
 		$fatal = false;
 		$error = '';
-
+		$config = false;
+		//
+		// Checking if there's a language configuration file present in
+		// the system.
 		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
 			$fatal = true;
 		}
-		$config = false;
 		if($ok) {
+			//
+			// Backing up current configuration to avoid problems in
+			// further steps.
 			$backup = file_get_contents($this->_names[GC_AFIELD_LANGS_PATH]);
+			//
+			// Loading current configuration.
 			$config = json_decode($backup);
+			//
+			// If the configuration was not loaded it's considered to
+			// be a fatal error.
 			if(!$config) {
 				$ok = false;
 				$error = 'unable to use language file';
@@ -535,18 +868,30 @@ abstract class Scaffold extends ShellTool {
 		}
 		if($ok) {
 			$found = false;
+			//
+			// Looking for the translation key and removing it.
 			foreach($config->keys as $trPos => $tr) {
 				if($tr->key == $badTr->key) {
 					unset($config->keys[$trPos]);
 					$found = true;
 				}
 			}
+			//
+			// Checking if there's something save back into
+			// configuration or not.
 			if($found) {
+				//
+				// Cleaning translations list keys to avoid worng
+				// JSON encoding.
 				$config->keys = array_values($config->keys);
+				//
+				// Enconding and saving routes.
 				if(!file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
 					$ok = false;
 					$error = 'something went wrong writing back laguage file';
 					$fatal = true;
+					//
+					// Restoring back up.
 					file_put_contents($this->_names[GC_AFIELD_LANGS_PATH], $backup);
 				}
 			} else {
@@ -554,22 +899,34 @@ abstract class Scaffold extends ShellTool {
 				$error = 'no translations found';
 			}
 		}
-
+		//
+		// Retruning the final status of the whole operation.
 		return $ok;
 	}
+	/**
+	 * This method sets some default options for this scaffold class. It's
+	 * suggested that inherited classes update their help texts.
+	 */
 	protected function setOptions() {
 		$text = 'Use: $this->_options->option(self::OptionCreate)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), TBS_Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'name'));
 
 		$text = 'Use: $this->_options->option(self::OptionRemove)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), TBS_Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'name'));
 
 		$text = 'Generate files inside a module.';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionModule, array('--module', '-m'), TBS_Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-m'), Option::TypeValue, $text, 'name'));
 
 		$text = 'Overwrite files when they exist (routes are excluded).';
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionForced, array('--forced'), TBS_Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced'), Option::TypeNoValue, $text));
 	}
+	/**
+	 * This is the main task in charge of creating scaffold assets.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function taskCreate($spacer = '') {
 		//
 		// Default values.
@@ -613,6 +970,13 @@ abstract class Scaffold extends ShellTool {
 
 		return $ok;
 	}
+	/**
+	 * This is the main task in charge of removing scaffold assets.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
 	protected function taskRemove($spacer = '') {
 		//
 		// Default values.

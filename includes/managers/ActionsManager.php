@@ -5,22 +5,36 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+//
+// Class aliases.
+use \TooBasic\Exception;
+use \TooBasic\Exporter;
+use \TooBasic\Managers\DBStructureManager;
+use \TooBasic\Paths;
 
 /**
  * @class ActionsManager
+ * This manager is the one in charge of interpreting a action/controller request
+ * and executing it.
  */
 class ActionsManager extends UrlManager {
 	//
 	// Protected methods.
+	/**
+	 * @var string Name of the current redirection configuration (if any was
+	 * triggered).
+	 */
 	protected $_currentRedirector = false;
 	//
 	// Public methods.
 	/**
-	 * 
-	 * @global string $ActionName
-	 * @param boolean $autoDisplay
-	 * @return mixed 
+	 * This is the main method to call in order to execute a service.
+	 *
+	 * @param boolean $autoDisplay This flag tells to actually prompt the
+	 * generated output.
+	 * @return mixed[string] Returns the execution's result.
 	 */
 	public function run($autoDisplay = true) {
 		//
@@ -48,12 +62,18 @@ class ActionsManager extends UrlManager {
 			//
 			// Displaying if required.
 			if($autoDisplay) {
+				//
+				// Generating a full list of required headers.
 				$headers = array();
+				//
+				// Adding layout headers if there was a layout
+				// executed.
 				if($layoutLastRun) {
 					$headers = array_merge($headers, $layoutLastRun[GC_AFIELD_HEADERS]);
 				}
 				$headers = array_merge($headers, $actionLastRun[GC_AFIELD_HEADERS]);
-
+				//
+				// Setting headers.
 				foreach($headers as $name => $value) {
 					header("{$name}: {$value}");
 				}
@@ -135,7 +155,7 @@ class ActionsManager extends UrlManager {
 				$url.= '&'.GC_REQUEST_REDIRECTOR.'='.urlencode($this->params->server->REQUEST_URI);
 				//
 				// Cleaning and replacing routes.
-				$url = \TooBasic\RoutesManager::Instance()->enroute($url);
+				$url = \TooBasic\Managers\RoutesManager::Instance()->enroute($url);
 				//
 				// Is it a debug or the real deal?
 				if(isset($this->params->debugredirection)) {
@@ -173,9 +193,16 @@ class ActionsManager extends UrlManager {
 	 */
 	protected function init() {
 		parent::init();
-
+		//
+		// Checking database structure @{
+		//
+		// Loading database structure manager.
 		$dbStructureManager = DBStructureManager::Instance();
+		//
+		// Checking for loading errors.
 		if($dbStructureManager->hasErrors()) {
+			//
+			// Adding found errors int this manager.
 			foreach($dbStructureManager->errors() as $error) {
 				$code = $error[GC_AFIELD_CODE];
 				if(is_numeric($code)) {
@@ -186,24 +213,45 @@ class ActionsManager extends UrlManager {
 			}
 			throw new Exception('There are database errors specs');
 		} else {
+			//
+			// Checing if the structure is correct. Otherwise, an
+			// upgrade is attempted.
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
 					throw new Exception('Database couldn\'t be upgraded');
 				}
 			}
 		}
+		// @}
 	}
 	//
 	// Public class methods.
+	/**
+	 * This class method loads a specific action/controller, execute it and
+	 * retruns it's result.
+	 *
+	 * @param string $actionName Name of the action/controller to execute.
+	 * @param mixed[string] $previousActionRun Execution results from a
+	 * previous controller, useful for layouts.
+	 * @param string $layoutName Returns the name of the layout used by the
+	 * controller.
+	 * @return mixed[string] Returns an execution result structure.
+	 * @throws \TooBasic\Exception
+	 */
 	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
 		//
 		// Default values.
 		$redirector = false;
 		$status = true;
+		$lastRun = false;
 		//
-		// Loading controller based on current action name.
+		// Loading controller based on current action's name.
 		$controllerClass = self::FetchController($actionName);
+		//
+		// Checking if the load was a success.
 		if($controllerClass !== false) {
+			//
+			// Obtaining a name for the layout used by the controller.
 			$layoutName = $controllerClass->layout();
 			//
 			// If there's a previous run, this must be the layout and
@@ -215,8 +263,12 @@ class ActionsManager extends UrlManager {
 				/** @fixme There should be a way to change layout's cache key setting from the controller. */
 				$controllerClass->massiveAssign($previousActionRun[GC_AFIELD_ASSIGNMENTS]);
 			}
-
+			//
+			// Checking if a redirector was triggered.
 			$redirector = $controllerClass->checkRedirectors();
+			//
+			// Executing the controller unless a redirector was
+			// triggered.
 			if(!$redirector) {
 				$status = $controllerClass->run();
 			} else {
@@ -225,22 +277,41 @@ class ActionsManager extends UrlManager {
 		} else {
 			$status = false;
 		}
-
-		$lastRun = false;
+		//
+		// Checking execution status.
 		if($status) {
+			//
+			// At this point, the controller was executed
+			// successfully.
 			$lastRun = $controllerClass->lastRun();
 		} elseif($redirector) {
+			//
+			// At this point, a redirector was triggered and it should
+			// be used to generate a execution result.
 			$lastRun = array(
 				GC_AFIELD_REDIRECTOR => $redirector
 			);
 		} else {
 			//
+			// At this point there was an error executing the
+			// controller.
+			//
 			// Global dependencies.
 			global $Defaults;
-
+			//
+			// The default error is a HTTP-404.
 			$errorActionName = HTTPERROR_NOT_FOUND;
+			//
+			// Checking if the controller's class was at least loaded.
 			if($controllerClass instanceof Exporter) {
+				//
+				// Obtainig the last error found by the
+				// controller.
 				$lastError = $controllerClass->lastError();
+				//
+				// If the controller found an error, its code is
+				// used as error page name. Otherwise, it is
+				// consider to be HTTP-500 error.
 				if($lastError) {
 					$errorActionName = $lastError[GC_AFIELD_CODE];
 				} else {
@@ -252,16 +323,25 @@ class ActionsManager extends UrlManager {
 			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
 				throw new \TooBasic\Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
 			}
-
+			//
+			// Loading a proper error page controller.
 			$errorControllerClass = self::FetchController($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName]);
+			//
+			// Adding more information about the error.
 			if($controllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
 				$errorControllerClass->setErrorMessage("Unable to find {$whatIsIt} '{$actionName}'");
 			}
+			//
+			// Loading layout name used by the error page.
 			$layoutName = $errorControllerClass->layout();
+			//
+			// Executing the error page.
 			$errorControllerClass->run();
+			//
+			// Fetching controller's execution result.
 			$lastRun = $errorControllerClass->lastRun();
 		}
 

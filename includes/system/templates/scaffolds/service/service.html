@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @class <%$service%>
+ *
+ * Accessible at '?service=<%$name%>'
+ */
+class <%$service%> extends \TooBasic\Service {
+	//
+	// Protected properties
+	protected $_cached = <%$cached%>;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		return $this->status();
+	}
+<%if $init%>
+	protected function init() {
+		parent::init();
+<%if !$nocache%>
+<%foreach from=$cache_params item=param%>
+		$this->_cacheParams['<%$method%>'][] = '<%$param%>';
+<%/foreach%>
+<%/if%>
+<%foreach from=$required_params item=param%>
+		$this->_requiredParams['<%$method%>'][] = '<%$param%>';
+<%/foreach%>
+	}
+<%/if%>
+}

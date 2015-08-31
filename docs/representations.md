@@ -30,7 +30,7 @@ that we'll create a file with the next code and save it in
 __ROOTDIR/site/models/representations/PersonRepresentation.php__:
 ```php
 <?php
-class PersonRepresentation extends \TooBasic\ItemRepresentation {
+class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
 	protected $_CP_IDColumn = "id";
 	protected $_CP_ColumnsPerfix = "ppl_";
 	protected $_CP_Table = "people";
@@ -58,7 +58,7 @@ can't be modified because there's a different mechanism in charge of that.
 With all this, out example mey become this:
 ```php
 <?php
-class PersonRepresentation extends \TooBasic\ItemRepresentation {
+class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
 	protected $_CP_IDColumn = "id";
 	protected $_CP_ColumnsPerfix = "ppl_";
 	protected $_CP_Table = "people";
@@ -76,7 +76,7 @@ __ROOTDIR/site/models/representations/PeopleFactory.php__ (sounds weird to say
 "people factory", just ignore that fact):
 ```php
 <?php
-class PeopleFactory extends \TooBasic\ItemsFactory {
+class PeopleFactory extends \TooBasic\Representations\ItemsFactory {
 	protected $_CP_IDColumn = "id";
 	protected $_CP_ColumnsPerfix = "rep_";
 	protected $_CP_RepresentationClass = "person";

@@ -45,7 +45,7 @@ class <%$editActionController%> extends \TooBasic\Controller {
 		}
 
 		if($this->status()) {
-			header('Location: '.\TooBasic\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
+			header('Location: '.\TooBasic\Managers\RoutesManager::Instance()->enroute(ROOTURI.'?action=<%$listAction%>'));
 		}
 
 		return $this->status();

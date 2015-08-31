@@ -5,7 +5,11 @@
  * @author Alejandro Dario Simi
  */
 
-namespace TooBasic;
+namespace TooBasic\Managers;
+
+//
+// Class aliases
+use \TooBasic\DBException;
 
 /**
  * @class DBManager
@@ -15,7 +19,7 @@ class DBManager extends Manager {
 	//
 	// Protected properties.
 	/**
-	 * @var \TooBasic\DBAdapter[string] List of known database connections.
+	 * @var \TooBasic\Adapters\DB\Adapter[string] List of known database connections.
 	 */
 	protected $_connections = array();
 	//
@@ -25,7 +29,7 @@ class DBManager extends Manager {
 	 *
 	 * @param string $dbname Name for the database connection configuration to
 	 * look for.
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 */
 	public function __get($dbname) {
 		//
@@ -40,7 +44,7 @@ class DBManager extends Manager {
 	 *
 	 * @param string $dbname Name for the database connection configuration to
 	 * look for.
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 * @throws \TooBasic\DBException
 	 */
 	public function get($dbname) {
@@ -59,10 +63,10 @@ class DBManager extends Manager {
 				if(isset($Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine])) {
 					$this->_connections[$dbname] = new $Database[GC_DATABASE_DB_CONNECTION_ADAPTERS][$engine]($dbname);
 				} else {
-					$this->_connections[$dbname] = new DBAdapter($dbname);
+					$this->_connections[$dbname] = new \TooBasic\Adapters\DB\Adapter($dbname);
 				}
 			} else {
-				throw new \TooBasic\DBException("There's no database connection configuration named '{$dbname}'");
+				throw new DBException("There's no database connection configuration named '{$dbname}'");
 			}
 		}
 		//
@@ -72,7 +76,7 @@ class DBManager extends Manager {
 	/**
 	 * Returns a database connection suitable for cache-in-database entries.
 	 *
-	 * @return \TooBasic\DBAdapter Returns a database connection.
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
 	 */
 	public function getCache() {
 		return $this->get($this->getCacheName());
@@ -99,26 +103,60 @@ class DBManager extends Manager {
 
 		return $name;
 	}
+	/**
+	 * This method provides access to current default database connection
+	 * adapter.
+	 *
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
+	 */
 	public function getDefault() {
 		return $this->get($this->getDefaultName());
 	}
+	/**
+	 * This method provides access to current default database connection
+	 * name.
+	 *
+	 * @return string Returns a connection name.
+	 */
 	public function getDefaultName() {
 		global $Connections;
 		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
 	}
+	/**
+	 * This method provides access to current installacion database connection
+	 * adapter.
+	 *
+	 * @return \TooBasic\Adapters\DB\Adapter Returns a database connection.
+	 */
 	public function getInstall() {
 		return $this->get($this->getInstallName());
 	}
+	/**
+	 * This method provides access to current installation database connection
+	 * name.
+	 *
+	 * @return string Returns a connection name.
+	 */
 	public function getInstallName() {
+		//
+		// Global dependencies.
 		global $Connections;
-
-		$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+		//
+		// Checking if there's a specific connection for installations,
+		// otherwise, the default is used.
+		$name = $this->getDefaultName();
 		if(isset($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL])) {
 			$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL];
 		}
 
 		return $name;
 	}
+	/**
+	 * This method allows to know if unknown object inside a database should
+	 * be kept or not.
+	 *
+	 * @return boolean Returns TRUE when unknown objects has to be kept.
+	 */
 	public function keepUnknowns() {
 		global $Connections;
 		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];

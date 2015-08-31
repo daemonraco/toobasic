@@ -22,7 +22,7 @@ choose on for your site and we are going to describe them.
 
 ### File Cache Adapter
 The most basic (and default) cache adapter provided by __TooBasic__ is a class
-called __\TooBasic\CacheAdapterFile__ and it stores data inside a files. When
+called __\TooBasic\Adapters\Cache\File__ and it stores data inside a files. When
 active, you'll find files coming and going inside __ROOTDIR/cache/filecache__.
 
 ### Database Cache Adapter
@@ -30,8 +30,8 @@ A not very polite way of caching data is to store it inside a database, but in
 some cases it could be useful (I hope _Mr.Potato_ won't kill for suggesting this
 mechanism).
 For those cases, __TooBasic__ provides an abstract adapter class called
-__\TooBasic\CacheAdapterDB__ and a specification for __MySQL__ called
-__\TooBasic\CacheAdapterDBMySQL__.
+__\TooBasic\Adapters\Cache\DB__ and a specification for __MySQL__ called
+__\TooBasic\Adapters\Cache\DBMySQL__.
 This adapter makes use of a table called __cache__ (if there's a table prefix it
 will use it) inside the database configured in
 `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE]` (or
@@ -54,7 +54,7 @@ A better approach is to use something like
 [__Memcached__](http://php.net/manual/en/book.memcached.php) where you can store
 data in memory inside a cache service prepared for that task.
 For this, __TooBasic__ provides a cache adapter class called
-__\TooBasic\CacheAdapterMemcached__ and it requires settings like these:
+__\TooBasic\Adapters\Cache\Memcached__ and it requires settings like these:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER] = 'localhost';
@@ -71,7 +71,7 @@ key with a prefix depending on your site.
 If you are using _memcache_ libraries (not _memcached_), try this:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterMemcache';
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\Memcache';
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER] = 'localhost';
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] = 11211;
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = '';
@@ -80,7 +80,7 @@ $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = '';
 ### Redis Adapter
 An alternative to __Memcached__ is [__Redis__
 ](https://en.wikipedia.org/wiki/Redis) and you can make use of it by using a cache
-adapter called __\TooBasic\CacheAdapterRedis__ and settings these values:
+adapter called __\TooBasic\Adapters\Cache\Redis__ and settings these values:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_SCHEME] = 'tcp';
@@ -95,7 +95,7 @@ them, well, that's the easy part, you just need to set something like the next
 piece of code and that's all:
 ```php
 <?php
-$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\CacheAdapterMemcached';
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\Memcached';
 ```
 
 ## Cached Controller
@@ -176,8 +176,8 @@ will consider it as empty and generate a different key.
 ## What if you don't want it?
 Yes, what if you don't want any cache system and the use of `&debugresetcache` in
 the url annoys you?
-Well, there's an adapter called __CacheAdapterNoCache__ that acts as a dummy
-providing you with the solution.
+Well, there's an adapter called __NoCache__ that acts as a dummy providing you
+with the solution.
 It will interact as any other cache adapter but it won't do a thing and you'll
 be working without cache.
 
@@ -193,7 +193,7 @@ You can also change your controllers and use something like this:
 ```php
 <?php
 class MyactionController extends \TooBasic\Controller {
-	protected $_cached = \TooBasic\CacheAdapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
 	public function basicRun() {
 		. . .
 ```
@@ -202,15 +202,15 @@ configured.
 
 Available constants are:
 
-* `\TooBasic\CacheAdapter::ExpirationSizeDouble`: Double of
+* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeDouble`: Double of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\CacheAdapter::ExpirationSizeLarge`: Same size as
+* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge`: Same size as
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\CacheAdapter::ExpirationSizeMedium`: A half of
+* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeMedium`: A half of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\CacheAdapter::ExpirationSizeSmall`: A quarter of
+* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeSmall`: A quarter of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
 
 Any other value will be considered as
-`\TooBasic\CacheAdapter::ExpirationSizeLarge`, including the boolean `true` used
+`\TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge`, including the boolean `true` used
 in versions before 0.3.0.
