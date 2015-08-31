@@ -12,6 +12,7 @@ namespace TooBasic\Managers;
 use \TooBasic\Exception;
 use \TooBasic\Exporter;
 use \TooBasic\Managers\DBStructureManager;
+use \TooBasic\Managers\ManifestsManager;
 use \TooBasic\Paths;
 
 /**
@@ -193,6 +194,21 @@ class ActionsManager extends UrlManager {
 	 */
 	protected function init() {
 		parent::init();
+		//
+		// Checking modules status @{
+		$manifestsManager = ManifestsManager::Instance();
+		if(!$manifestsManager->check()) {
+			$errors = $manifestsManager->errors();
+			$error = array_shift($errors);
+
+			$exceptionMessage = "[MF-{$error[GC_AFIELD_CODE]}] {$error[GC_AFIELD_MESSAGE]}";
+			if($error[GC_AFIELD_MODULE_NAME]) {
+				$exceptionMessage.= " (module: {$error[GC_AFIELD_MODULE_NAME]})";
+			}
+
+			throw new Exception($exceptionMessage);
+		}
+		// @}
 		//
 		// Checking database structure @{
 		//

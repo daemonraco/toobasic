@@ -457,6 +457,7 @@ class RoutesManager extends Manager {
 	 * Manager's initilization.
 	 */
 	protected function init() {
+		parent::init();
 		$this->_params = Params::Instance();
 	}
 	/**

@@ -247,8 +247,8 @@ function guessSkin() {
  * This method copies an object's fields into another object and enforces the
  * existence of a list of field.
  *
- * @param string[] $fields List of field names that must be present at the end of the
- * copy. 
+ * @param string[] $fields List of field names that must be present at the end of
+ * the copy. 
  * @param \stdClass $origin Object from which take vales.
  * @param \stdClass $destination Object in which values has to be copied.
  * @param mixed[string] $defualt Associative list of values to be used as default
