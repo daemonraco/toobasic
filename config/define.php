@@ -28,6 +28,7 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_DEBUG_PAGE', 'debug-page');
 define('GC_DEFAULTS_EMAIL_FROM', 'email-from');
 define('GC_DEFAULTS_EMAIL_LAYOUT', 'email-layout');
 define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');

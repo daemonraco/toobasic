@@ -162,6 +162,51 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 		echo "{$out}</pre>";
 	}
 }
+function debugThingInPage($thing, $title = null) {
+	//
+	// Global dependencies.
+	global $Defaults;
+	//
+	// Storing data displayed in a buffer for post processing.
+	ob_start();
+	//
+	// Trying to print it in the best way.
+	if(is_bool($thing)) {
+		//
+		// When it's a boolean, true or false should be printed.
+		echo (boolval($thing) ? 'true' : 'false')."\n";
+	} elseif(is_null($thing)) {
+		//
+		// When its null, it 'NULL'.
+		echo "NULL\n";
+	} elseif(is_callable($thing) || $thing instanceof \Closure) {
+		//
+		// If it's the name of a callable function, it should be executed.
+		$thing();
+	} elseif(is_object($thing) || is_array($thing)) {
+		//
+		// Objects and arrays go through 'print_r()'.
+		print_r($thing);
+	} else {
+		//
+		// Otherwise, they go directly.
+		echo "{$thing}\n";
+	}
+	//
+	// Obtaining buffer's data and closing it.
+	$out = ob_get_contents();
+	ob_end_clean();
+
+	$DebugPage = new \stdClass();
+	$DebugPage->thing = $out;
+	$DebugPage->title = $title;
+	//
+	// Rendering page.
+	include $Defaults[GC_DEFAULTS_DEBUG_PAGE];
+	//
+	// When using a debug in page, no other task can be performed.
+	die;
+}
 /**
  * This function centralize the logic to obtain the current language.
  *

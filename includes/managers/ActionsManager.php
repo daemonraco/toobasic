@@ -198,14 +198,18 @@ class ActionsManager extends UrlManager {
 		// Checking modules status @{
 		$manifestsManager = ManifestsManager::Instance();
 		if(!$manifestsManager->check()) {
+			//
+			// Obtaining the first error found.
 			$errors = $manifestsManager->errors();
 			$error = array_shift($errors);
-
+			//
+			// Building a message to show.
 			$exceptionMessage = "[MF-{$error[GC_AFIELD_CODE]}] {$error[GC_AFIELD_MESSAGE]}";
 			if($error[GC_AFIELD_MODULE_NAME]) {
 				$exceptionMessage.= " (module: {$error[GC_AFIELD_MODULE_NAME]})";
 			}
-
+			//
+			// Throwing the exception.
 			throw new Exception($exceptionMessage);
 		}
 		// @}

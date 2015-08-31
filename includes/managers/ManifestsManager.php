@@ -36,12 +36,14 @@ class ManifestsManager extends Manager {
 	/**
 	 * This method checks every manifest status.
 	 *
+	 * @param boolean $forced When TRUE, checks even if site is flagged as
+	 * installed.
 	 * @return boolean Returns TRUE when there were no errors.
 	 */
-	public function check() {
+	public function check($forced = false) {
 		//
 		// Checks are run only when the site is not flagged as installed.
-		if(!$this->_installed) {
+		if($forced || !$this->_installed) {
 			//
 			// Checking each module.
 			foreach($this->manifests() as $module => $manifest) {
@@ -100,6 +102,94 @@ class ManifestsManager extends Manager {
 		global $Defaults;
 
 		$this->_installed = $Defaults[GC_DEFAULTS_INSTALLED];
+
+		if(isset($this->params->debugmanifests)) {
+			\TooBasic\debugThingInPage(function() {
+				foreach($this->manifests() as $manifest) {
+					$info = $manifest->information();
+
+					echo '<div class="panel panel-default">';
+					echo "<div class=\"panel-heading\">{$info->name} (v{$info->version})</div>";
+					echo '<div class="panel-body">';
+					echo '<table class="table">';
+
+					if($info->description) {
+						echo '<tr>';
+						echo '<td><strong>Description</strong>:</td>';
+						echo "<td>{$info->description}</td>";
+						echo '</tr>';
+					}
+					if($info->author->name) {
+						echo '<tr>';
+						echo '<td><strong>Author</strong>:</td>';
+						if($info->author->page) {
+							echo "<td><a href=\"{$info->author->page}\" target=\"_blank\">{$info->author->name}</td>";
+						} else {
+							echo "<td>{$info->author->name}</td>";
+						}
+						echo '</tr>';
+					}
+					if($info->copyright) {
+						echo '<tr>';
+						echo '<td><strong>Copyright</strong>:</td>';
+						echo "<td>&copy; {$info->copyright} {$info->author->name}</td>";
+						echo '</tr>';
+					}
+					if($info->license) {
+						echo '<tr>';
+						echo '<td><strong>License</strong>:</td>';
+						echo "<td>{$info->license}</td>";
+						echo '</tr>';
+					}
+					if($info->url) {
+						echo '<tr>';
+						echo '<td><strong>Page</strong>:</td>';
+						echo "<td><a href=\"{$info->url}\" target=\"_blank\">{$info->url}</td>";
+						echo '</tr>';
+					}
+					if($info->url_doc && $info->url_doc != $info->url) {
+						echo '<tr>';
+						echo '<td><strong>Documentation</strong>:</td>';
+						echo "<td><a href=\"{$info->url_doc}\" target=\"_blank\">{$info->url_doc}</td>";
+						echo '</tr>';
+					}
+
+					echo '<tr>';
+					echo '<td><strong>Requirements</strong>:</td>';
+					echo '<td><ul>';
+					echo "<li><strong>PHP</strong>: {$info->required_versions->php}</li>";
+					echo "<li><strong>TooBasic</strong>: {$info->required_versions->toobasic}</li>";
+					echo '</ul></td>';
+					echo '</tr>';
+
+					echo '</table>';
+					echo '</div>';
+					echo '</div>';
+				}
+
+				if(!$this->check(true)) {
+					echo '<div class="panel panel-default">';
+					echo "<div class=\"panel-heading\">Check Errors</div>";
+					echo '<div class="panel-body">';
+					echo '<table class="table">';
+					echo '<tr>';
+					echo '<th>Code</th>';
+					echo '<th>Message</th>';
+					echo '<th>Module</th>';
+					echo '</tr>';
+					foreach($this->errors() as $error) {
+						echo '<tr>';
+						echo "<td>{$error[GC_AFIELD_CODE]}</td>";
+						echo "<td>{$error[GC_AFIELD_MESSAGE]}</td>";
+						echo "<td>{$error[GC_AFIELD_MODULE_NAME]}</td>";
+						echo '</tr>';
+					}
+					echo '</table>';
+					echo '</div>';
+					echo '</div>';
+				}
+			}, 'Manifests');
+		}
 	}
 	/**
 	 * This method loads evrey module manifest.
