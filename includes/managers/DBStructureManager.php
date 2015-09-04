@@ -840,12 +840,12 @@ class DBStructureManager extends Manager {
 			}
 			//
 			// No default database connection.
-			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]) || !$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB])) {
+			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]) || !$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB])) {
 				$this->_installed = true;
 			}
 			// 
 			// Wrong default database connection.
-			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB][$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]]))) {
+			if(!$this->_installed && (!isset($Connections[GC_CONNECTIONS_DB][$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]]))) {
 				$this->_installed = true;
 			}
 		}

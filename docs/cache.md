@@ -12,20 +12,21 @@ stores all the assignments made by a controller.
 * __View Cache__: You can see this as a HTML cache where you store the final
 result of rendering a controller call.
 
-Why is it separated? well, if recall a cache controller but requesting a different
+_Why is it separated?_
+Well, if recall a cached controller but requesting a different
 format, you wouldn't want to run all your logics and queries and etc. when you
 only need a different format.
 
 ## Adapters
-From factory, __TooBasic__ provides three types of cache adaptations you can
+From factory, __TooBasic__ provides five basic types of cache adaptations you can
 choose on for your site and we are going to describe them.
 
-### File Cache Adapter
+### File cache adapter
 The most basic (and default) cache adapter provided by __TooBasic__ is a class
-called __\TooBasic\Adapters\Cache\File__ and it stores data inside a files. When
+called __\TooBasic\Adapters\Cache\File__ and it stores data inside files. When
 active, you'll find files coming and going inside __ROOTDIR/cache/filecache__.
 
-### Database Cache Adapter
+### Database cache adapter
 A not very polite way of caching data is to store it inside a database, but in
 some cases it could be useful (I hope _Mr.Potato_ won't kill for suggesting this
 mechanism).
@@ -34,8 +35,8 @@ __\TooBasic\Adapters\Cache\DB__ and a specification for __MySQL__ called
 __\TooBasic\Adapters\Cache\DBMySQL__.
 This adapter makes use of a table called __cache__ (if there's a table prefix it
 will use it) inside the database configured in
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE]` (or
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]` if none) and
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_CACHE]` (or
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]` if none) and
 its structure will be created with a query like the next one (if __MySQL__):
 ```sql
 create table if not exists cache (
@@ -49,7 +50,12 @@ By default, __TooBasic__ will attempt to create this table every time it's
 invoked, if you want to avoid this behavior you can set the global
 `$Defaults[GC_DEFAULTS_INSTALLED]` to `true`.
 
-### Memcached Adapter
+#### Also
+Also, __TooBasic__ provides __\TooBasic\Adapters\Cache\DBSQLite__ and
+__\TooBasic\Adapters\Cache\DBPostgreSQL__ as cache on database adapters for
+_SQLite_ and _PostgreSQL_.
+
+### Memcached adapter
 A better approach is to use something like
 [__Memcached__](http://php.net/manual/en/book.memcached.php) where you can store
 data in memory inside a cache service prepared for that task.
@@ -67,7 +73,7 @@ have more than one __TooBasic__ based site using the same __Memcached__ service,
 you may find some collision problems and this global allows you to tag each cache
 key with a prefix depending on your site.
 
-### Memcache Adapter
+### Memcache adapter
 If you are using _memcache_ libraries (not _memcached_), try this:
 ```php
 <?php
@@ -77,7 +83,7 @@ $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] = 11211;
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = '';
 ```
 
-### Redis Adapter
+### Redis adapter
 An alternative to __Memcached__ is [__Redis__
 ](https://en.wikipedia.org/wiki/Redis) and you can make use of it by using a cache
 adapter called __\TooBasic\Adapters\Cache\Redis__ and settings these values:
@@ -89,7 +95,7 @@ $Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PORT] = 6379;
 $Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PREFIX] = '';
 ```
 
-## Setting Adapter
+## Setting an adapter
 We've been talking about cache adapter classes but we haven't said how to use
 them, well, that's the easy part, you just need to set something like the next
 piece of code and that's all:
@@ -98,10 +104,11 @@ piece of code and that's all:
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\Memcached';
 ```
 
-## Cached Controller
+## Cached controller
 Now that you know all this about __TooBasic__'s cache system, you need to know how
 to configure it for your controller. Once again, let's use a simple example,
-suppose we have a controller that shows a user information... something like this:
+suppose we have a controller that displays a users' information... something like
+this:
 ```php
 <?php
 class UserinfoController extends \TooBasic\Controller {
@@ -109,7 +116,7 @@ class UserinfoController extends \TooBasic\Controller {
         $user = $this->representations->users->item($this->params->get->userid);
         $this->assign('info', $user->toArray());
         $this->assign('bgcolor', isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : 'red');
-        return true;
+        return $this->status();
     }
     protected function init() {
         parent::init();
@@ -117,14 +124,14 @@ class UserinfoController extends \TooBasic\Controller {
     }
 }
 ```
-Now, let's say we want to cache this controller's called based on the _user ID_
-and a parameter called _bgcolor_. For that we need to do two things:
+Now, let's say we want to cache this controller's calls based on the _user ID_ and
+a parameter called _bgcolor_. For that we need to do two things:
 
 * First, we need to activate the use of cache:
 ```php
 <?php
 class UserinfoController extends \TooBasic\Controller {
-    protected $_cache = true;
+    protected $_cached = true;
     . . .
 }
 ```
@@ -147,12 +154,12 @@ All together will look like this:
 ```php
 <?php
 class UserinfoController extends \TooBasic\Controller {
-    protected $_cache = true;
+    protected $_cached = true;
     protected function basicRun() {
         $user = $this->representations->users->item($this->params->get->userid);
         $this->assign('info', $user->toArray());
         $this->assign('bgcolor', isset($this->params->get->bgcolor) ? $this->params->get->bgcolor : 'red');
-        return true;
+        return $this->status();
     }
     protected function init() {
         parent::init();
@@ -173,18 +180,21 @@ these will have different entries:
 What about the last one? well, if you don't pass a parameter called _bgcolor_ it
 will consider it as empty and generate a different key.
 
+## Cached services?
+Yes, services can also be cached in the same way a controller does.
+
 ## What if you don't want it?
 Yes, what if you don't want any cache system and the use of `&debugresetcache` in
 the url annoys you?
-Well, there's an adapter called __NoCache__ that acts as a dummy providing you
-with the solution.
+Well, there's an adapter called __\TooBasic\Adapters\Cache\NoCache__ that acts as
+a dummy providing you with the solution.
 It will interact as any other cache adapter but it won't do a thing and you'll
 be working without cache.
 
 ## Duration
 Before version 0.3.0, every cache entry had a duration of 3600 seconds (one hour)
 and it couldn't be changed, but now it is possible adding something like this in
-your sites configuration file:
+your site's configuration file:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 86400; // 1 day

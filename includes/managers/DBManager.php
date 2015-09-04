@@ -93,12 +93,12 @@ class DBManager extends Manager {
 		global $Connections;
 		//
 		// Default name is the default database name.
-		$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+		$name = $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB];
 		//
 		// But, if there's an specific connection for cache-in-database,
 		// it should be used.
-		if(isset($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE])) {
-			$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE];
+		if(isset($Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_CACHE])) {
+			$name = $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_CACHE];
 		}
 
 		return $name;
@@ -120,7 +120,7 @@ class DBManager extends Manager {
 	 */
 	public function getDefaultName() {
 		global $Connections;
-		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB];
+		return $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB];
 	}
 	/**
 	 * This method provides access to current installacion database connection
@@ -145,8 +145,8 @@ class DBManager extends Manager {
 		// Checking if there's a specific connection for installations,
 		// otherwise, the default is used.
 		$name = $this->getDefaultName();
-		if(isset($Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL])) {
-			$name = $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL];
+		if(isset($Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_INSTALL])) {
+			$name = $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_INSTALL];
 		}
 
 		return $name;
@@ -159,6 +159,6 @@ class DBManager extends Manager {
 	 */
 	public function keepUnknowns() {
 		global $Connections;
-		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];
+		return $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS];
 	}
 }

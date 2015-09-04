@@ -272,12 +272,12 @@ connection and table too.
 ### Default connection
 How about that default connection we name somewhere above? As you may expect, the
 default connection is that one you name in
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]`.
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]`.
 But in some cases you may want to have a connection to access your default
 database with only DML access permissions and another connection for DDL
 operations, if that's the case, you may use the configuration field `connection`
 or simple set its name in
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL]`.
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_INSTALL]`.
 
 ## Callbacks
 Callbacks is rather an easy topic that allows allows you to execute one or more
@@ -356,7 +356,7 @@ This database maintenance mechanism is rather violent and it might destroy unkno
 tables, columns and indexes (data is always kept as it is) and only lets live
 those inside the _database structure specification_.
 To avoid such trouble, you may set
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS]` to
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS]` to
 _true_ and no drop will be run.
 
 ## Performance

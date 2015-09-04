@@ -121,9 +121,9 @@ $Connections = array();
 //      GC_CONNECTIONS_DB_SID      => false  // for Oracle only.
 // );
 $Connections[GC_CONNECTIONS_DB] = array();
-$Connections[GC_CONNECTIONS_DEFAUTLS] = array();
-$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
-$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = false;
+$Connections[GC_CONNECTIONS_DEFAULTS] = array();
+$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB] = false;
+$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS] = false;
 //
 // Database structure configurations.
 $Database = array();

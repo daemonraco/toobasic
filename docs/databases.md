@@ -80,14 +80,14 @@ To make things a little bit easer, there are a few extra configuration you can
 make to set a database as default:
 
 * __Main Database__: You can set the name of your default database configuration
-in `$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]`. This is
+in `$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]`. This is
 the connection to be used on every database access where no database-name is
 specified.
     * It's recommended to set this global to avoid error when using databases.
 * __Cache Database__: If you site uses cache on database, you may want to set such
 information into a different connection. If that's the case, you can configure a
 database-name into
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_CACHE]`.
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_CACHE]`.
     * The default behavior is to use the default database.
 
 ## SQLite connection

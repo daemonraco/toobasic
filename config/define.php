@@ -156,11 +156,11 @@ define('GC_CONNECTIONS_DB_USERNAME', 'username');
 define('GC_CONNECTIONS_DB_PASSWORD', 'password');
 define('GC_CONNECTIONS_DB_PREFIX', 'prefix');
 define('GC_CONNECTIONS_DB_SID', 'sid');
-define('GC_CONNECTIONS_DEFAUTLS', 'defaults');
-define('GC_CONNECTIONS_DEFAUTLS_DB', 'db');
-define('GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS', 'keep-unknowns');
-define('GC_CONNECTIONS_DEFAUTLS_INSTALL', 'dbinstall');
-define('GC_CONNECTIONS_DEFAUTLS_CACHE', 'cache');
+define('GC_CONNECTIONS_DEFAULTS', 'defaults');
+define('GC_CONNECTIONS_DEFAULTS_DB', 'db');
+define('GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS', 'keep-unknowns');
+define('GC_CONNECTIONS_DEFAULTS_INSTALL', 'dbinstall');
+define('GC_CONNECTIONS_DEFAULTS_CACHE', 'cache');
 // @}
 //
 // Database structure @{

@@ -117,7 +117,7 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 	}
 	public function keepUnknowns() {
 		global $Connections;
-		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];
+		return $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS];
 	}
 	/**
 	 * This method allows to get the last id used by an INSERT operation.

@@ -15,21 +15,25 @@ first page of a google search, but if you want to try a simple framework, keep
 reading.
 
 ## Basic features?
-__TooBasic__ provide some sort of solution to features like:
+__TooBasic__ provides some sort of solution to features like:
 
 * __Services__: Controllers that only return a JSON result avoiding presentation
-logics.
-* __Plugins (modules)__: A simple mechanism to expand your site through plugins
+logics (visit [Services](docs/services.md)).
+* __Plugins (modules)__: A simple mechanism to expand your site through plugins.
 * __Shell Tools__: Some sites usually have background tools to perform heavy
-tasks, __TooBasic__ provides a way to define and manage this tools.
-	* __Crons__: Something like tools but restricted to cron-type executions.
-* __Cache__: It already has a simple way to cache controller result avoiding its
+tasks, __TooBasic__ provides a way to define and manage this tools (visit
+[Shell Tools and Crons](docs/shelltools.md)).
+	* __Crons__: Something like tools, but restricted to cron-type executions.
+* __Cache__: It provides a simple way to cache controller result avoiding its
 logic on a second request (visit [Cache](docs/cache.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by
-representation (visit [Databases](docs/databases.md)).
+representations (visit [Databases](docs/databases.md) and
+[Representations](docs/representations.md)).
 * __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
-* __Skins__: Provide different ways of displaying your sites (visit
+* __Skins__: Provides different ways of displaying your sites (visit
 [Skins](docs/skins.md)).
+* __Scaffolds__: Also provides a basic set of tools to create artifacts in a
+faster way (visit [Facilities](docs/facilities.md)).
 
 ## Folders
 __TooBasic__ has many folders and we're not going to list them all here, Just a
@@ -37,20 +41,20 @@ few you may need to know.
 
 * `ROOTDIR`
     * `site`: Mainly, all your site's stuff goes somewhere inside this folder.
-        * `controllers`: Here you start all your PHP files with controller
+        * `controllers`: Here you store all your PHP files with controller
         specifications.
         * `templates`: Here your store all your templates separated by the way you
         show them.
             * `action`: here you store the way your controllers are seen by
             default.
-            * `modal`: and here the way your controllers are seen when they are
+            * `modal`: and here the way your controllers are seen when they're
             used as modals.
         * `config`: Specific configuration for your site goes here.
         * `models`: Well, this are a bunch of classes that represent your real
         site's logic. Remember, your controllers shouldn't have complex logics.
         * `langs`: Translations.
     * `modules`: Consider these as plugins.
-    * `cache`: All the dynamic stuff of your site like cache files, smarty
+    * `cache`: All the dynamic stuff of your site like cache files, Smarty
     compilations, etc. will be stored here.
 
 ## How to create a basic page
@@ -66,13 +70,13 @@ For our examples we'll use __myaction__ as our _chosen one_.
 
 ### Controller
 The controller will be a simple PHP class where you assign values to a set of
-names, trigger models calls and perform basic logics, etc.
+names, trigger models calls, perform basic logics, etc.
 Basically, this new controller will look like this:
 ```php
 <?php
 class MyactionController extends \TooBasic\Controller {
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 }
 ```
@@ -88,8 +92,8 @@ __basicRun()__.
 Why? well, __TooBasic__ uses this status to show errors and avoid features like
 _cache_.
 ### Template
-Now that you have a controller, you need a template to specify the way you new
-action is seen when it's called. You may write something like this:
+Now that you have a controller, you need a template to specify the way your new
+action is displayed when it's called. You may write something like this:
 ```html
 <!DOCTYPE html>
 <html>
@@ -120,7 +124,7 @@ class MyactionController extends \TooBasic\Controller {
     protected $_cached = true;
 	protected function basicRun() {
 	    $this->assign("hello", "Hello World!");
-		return true;
+		return $this->status();
 	}
 }
 ```
@@ -161,7 +165,7 @@ Modify your controller:
 class MyactionController extends \TooBasic\Controller {
     protected function basicRun() {
 	    $this->assign("hello", $this->translate->hello);
-		return true;
+		return $this->status();
 	}
 }
 ```
