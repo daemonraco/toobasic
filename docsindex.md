@@ -59,7 +59,7 @@
 
 * [Is it necessary an explanation?](docs/configs.md#is-it-necessary-an-explanation)
 * [User defined configuration files](docs/configs.md#user-defined-configuration-files)
-* [I want em all!](docs/configs.md#i-want-em-all)
+* [I want 'em all!](docs/configs.md#i-want-em-all)
 * [Automatic config files](docs/configs.md#automatic-config-files)
 	* [_config.php_](docs/configs.md#configphp)
 	* [_config_shell.php_](docs/configs.md#config_shellphp)

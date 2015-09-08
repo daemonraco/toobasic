@@ -19,16 +19,16 @@ functionality.
 Also, all the examples on this page will be using the Smarty view adapter.
 
 ## How to call an exported function
-The first thing you need to know is how to call one of these function, and here is
-an example of it:
+The first thing you need to know is how to call one of these functions, and here
+is an example of it:
 ```html
 	<a href="{$ctrl->link('?action=moreinfo&id=10')}" target="_blank">{$tr->label_more_info}</a>
 ```
-Once render, it may look like this
+Once rendered, it may look like this:
 ```html
 	<a href="/mysite/moreinfo/10" target="_blank">More Info</a>
 ```
-In this example, we've used `$ctrl->link()` to clean an URL of our site and be
+In this example, we've used `$ctrl->link()` to clean an URL of our site and make
 sure that it uses the right absolute path and route transformations.
 
 An easy way to identify this kind of functions is by the object `$ctrl` because
@@ -39,17 +39,17 @@ The functions we'll explain in this section are exported function that simply
 generate proper paths for a link or an asset.
 
 ### _$ctrl->css()_
-This exporting method takes a stylesheet name, assumes its extension is _.css_ and
-looks for it inside folder __styles__ on each module and then the site, and the
-first one found is returned as an absolute URI.
+This exporting method takes a stylesheet name, assumes its extension as _.css_ and
+looks for it inside the folder __styles__ on each module and then the site, and
+the first one found is returned as an absolute URI.
 If it's not found it will return an empty string.
 
 ### _$ctrl->js()_
-Idem for JavaScript files and they are looked for inside a folder called
+Idem for JavaScript files and they are looked for inside the folder called
 __scripts__.
 
 ### _$ctrl->img()_
-Idem for images files and they are looked for inside folders called
+Idem for image files and they are looked for inside folders called
 __images__ and __img__.
 
 By default, this method assumes the _.png_ extension, but it may be change using a
@@ -94,9 +94,9 @@ Your browser may end up receiving something like this:
 ```
 
 ## Controller insertion
-There's an exported function called `$ctrl->insert()` that allows to call another
-controller, execute it, render it's view and then insert its result somewhere in a
-template.
+There's an exported function called `$ctrl->insert()` that allows you to call
+another controller, execute it, render its view and then insert its result
+somewhere in a template.
 This mechanism allows you to extract some functionality you'll be repeating and
 place it inside a controller along with its template, later on you can call such
 controller from anywhere in your templates and expect it to be inserted.
@@ -178,7 +178,7 @@ configurations.
 The previous example may look like magic, but truth is you'll have to make same
 configuration to make it work.
 If we continue the example with those assets, you'll have to add a configuration
-like this this in your __ROOTDIR/site/config.php__:
+like this at __ROOTDIR/site/config.php__:
 ```php
 $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'jsquery.siteplugins';
 $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'links.sanitizer';
@@ -188,17 +188,17 @@ $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'magic_menu
 ```
 This mechanism allows you to add templates in your layout without modifying its
 template.
-Also, a any module may add its own assets in a cleaner way.
+Also, any module may add its own assets in a cleaner way.
 
 ### Specifics
 Throughout many pages is common to see a bunch of JavaScript files included inside
-the `<head>` and another bunch of them at the end o tag `<body>`, which can be a
+tag `<head>` and another bunch of them at the end of tag `<body>`, which can be a
 problem for the previous configuration explanation.
 But don't panic, there's a way in which you can specify which assets are included
 at the end or wherever inside a controllers template.
 
 Let's suppose the same example we've been using and add the idea of a fourth
-javascript file called 'magic_menu.fixes.js' that must be included at the end of
+javascript file called '*magic_menu.fixes.js*' that must be included at the end of
 tag `<body>`.
 Also, let's suppose our layout is called __my_layout__.
 
@@ -248,10 +248,10 @@ folder __ROOTDIR/libraries__.
 ## Ajax insert
 In essence, `$ctrl->ajaxInsert()` is similar to `$ctrl->insert()`, but instead of
 rendering and inserting a controller's result, it just inserts a simple `<div>`
-tab that may be used as to asynchronously insert a controller's result.
+tag that may be used to asynchronously insert a controller's result.
 
-Let's reuse the example we gave in (Controller insertion)[?#controller-insertion]
-and say that we want that view called __ads.html__ to load asynchronously.
+Let's reuse the example we gave in section __Controller insertion__ and say that
+we want that view called __ads.html__ to load asynchronously.
 The only change we need to do would be this:
 ```html
 	<div class="AdsSection">
@@ -272,8 +272,8 @@ Or something like this if there's a route configuration supporting it:
 ```
 
 ### Autoloading
-Yes, you made the change and nothing happens, it doesn't "asynchronously load" a
-thing?
+Yes, you made the change and nothing happens, _it doesn't "asynchronously load" a
+thing._
 The problem here is really simple and it comes from the idea of giving you the
 flexibility of writing your own code to perform these _asynchronous loads_.
 Nonetheless, if you don't want to worry about it, just add this to your
@@ -339,7 +339,7 @@ $('#mainAds').tooBasicReload();
 ```
 
 ## Suggestions
-You may also want to visit this pages:
+You may also want to visit these pages:
 
 * [Layouts](layout.md)
 * [Snippets](snippets.md)
