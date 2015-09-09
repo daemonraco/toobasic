@@ -37,6 +37,7 @@
 
 * [TooBasic?!](docs/authorsnote.md#toobasic)
 * [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
+* [Engrish](docs/authorsnote.md#engrish)
 
 ##  Cache (docs/cache.md):
 

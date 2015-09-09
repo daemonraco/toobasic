@@ -70,3 +70,7 @@ somewhere else.
 
 Enough!, let's change the topic already.
 
+## Engrish
+As you may noticed, English is not my mother language, that's the reason way you
+will find some many mistakes. Believe me, I'm trying to get better at it, but s**t
+happens :D
