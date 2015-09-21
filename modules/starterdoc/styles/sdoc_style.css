@@ -1,0 +1,38 @@
+html {
+	background: url(../images/sdoc-background-html.png) #303030 no-repeat fixed;
+	background-position-y: -200px;
+	/*background-size: cover;*/
+}
+
+body {
+	background-color: rgba(0, 0, 0, 0.6);
+	/*background: url(../images/sdoc-background-body2.png) black no-repeat fixed;*/
+	/*background-position-x: -200px;*/
+	/*background-position-y: -200px;*/
+	/*background-size: contain;*/
+	color: white;
+}
+
+#MainContents {
+	margin-top: 60px;
+}
+
+.well, .jumbotron {
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+pre, .panel-default {
+	background-color: rgba(0, 0, 0, 0.25);
+	color: white;
+}
+
+hr {
+	margin-bottom: 50px;
+	margin-top: 50px;
+	border: 0;
+	height: 2px;
+	background-image: -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+	background-image:    -moz-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+	background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+	background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+}

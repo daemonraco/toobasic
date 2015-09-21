@@ -229,8 +229,13 @@ $auxParamsManager = \TooBasic\Params::Instance();
 if(isset($auxParamsManager->debugdebugs)) {
 	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
 	ksort($config['debugs']);
-	\TooBasic\debugThing($config['debugs']);
-	die;
+	\TooBasic\debugThingInPage(function() use ($config) {
+		echo '<ul>';
+		foreach($config['debugs'] as $name => $description) {
+			echo "<li><strong>{$name}</strong>: {$description}</li>";
+		}
+		echo '</ul>';
+	}, 'Debugs');
 }
 //
 // Routes

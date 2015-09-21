@@ -1,0 +1,142 @@
+<div class="row">
+	<div class="col-xs-10 col-xs-offset-1 jumbotron text-center">
+		<img src="{$ctrl->img('TooBasic-icon-128px')}"/>
+		<h1>Welcome to TooBasic</h1>
+		<h2>v{$TOOBASIC_VERSION}-{$TOOBASIC_VERSION_NAME}</h2>
+	</div>
+</div>
+
+<hr/>
+
+<h2>What is <b>TooBasic</b>?</h2>
+<p>
+	<b>TooBasic</b> is a PHP framework that provides you with many features
+	you don't want to worry about like cache, database connection, views and
+	controllers, etc.
+</p>
+
+<hr/>
+
+<h2>What can I do with it?</h2>
+<p>
+	<b>TooBasic</b> provides some sort of solution to features like:
+</p>
+<ul>
+	<li><strong>Services</strong>: Controllers that only return a JSON result
+		avoiding presentation logics (visit <a
+			href="{$ctrl->link('?action=mddoc&doc=docs/services.md')}">
+			Services</a>).</li>
+	<li><strong>Plugins (modules)</strong>: A simple mechanism to expand your
+		site through plugins.</li>
+	<li><strong>Shell Tools</strong>: Some sites usually have background tools
+		to perform heavy tasks, <b>TooBasic</b> provides a way to define
+		and manage this tools (visit <a
+			href="{$ctrl->link('?action=mddoc&doc=docs/shelltools.md')}">
+			Shell Tools and Crons</a>).</li>
+	<li><strong>Crons</strong>: Something like tools, but restricted to
+		cron-type executions.</li>
+	<li><strong>Cache</strong>: It provides a simple way to cache controller
+		result avoiding its logic on a second request (visit
+		<a href="{$ctrl->link('?action=mddoc&doc=docs/cache.md')}">
+			Cache</a>).</li>
+	<li><strong>Database Wrapping</strong>: Provides a simple way access
+		tables in a database by representations (visit <a
+			href="{$ctrl->link('?action=mddoc&doc=docs/databases.md')}">
+			Databases</a> and
+		<a href="{$ctrl->link('?action=mddoc&doc=docs/representations.md')}">
+			Representations</a>).</li>
+	<li><strong>Routes</strong>: Pretty and clean urls (visit
+		<a href="{$ctrl->link('?action=mddoc&doc=docs/routes.md')}">
+			Routes</a>).</li>
+	<li><strong>Skins</strong>: Provides different ways of displaying your
+		sites (visit <a
+			href="{$ctrl->link('?action=mddoc&doc=docs/skins.md')}">
+			Skins</a>).</li>
+	<li><strong>Scaffolds</strong>: Also provides a basic set of tools to
+		create artifacts in a faster way (visit <a
+			href="{$ctrl->link('?action=mddoc&doc=docs/facilities.md')}">
+			Facilities</a>).</li>
+</ul>
+
+<hr/>
+
+<h2>Where do I start?</h2>
+<p>
+	I guess the most simple answer for this question is to point you to our
+	main documentation page.
+</p>
+<p>
+	You may use the menu on the top-right corner of this page and choosing
+	<b>Main Document</b> or just click <a
+		href="{$ctrl->link('?action=mddoc&doc=README.md')}">this
+		link</a>.
+</p>
+
+<hr/>
+
+<h2>Ok, I like it, but how do I disable this page?!</h2>
+<p>
+	There are at least 4 ways to disable this page and I'll try to explain
+	them.
+</p>
+<div class="panel panel-default">
+	<div class="panel-heading">The aggressive one:</div>
+	<div class="panel-body">
+		<p>
+			Go to the directory <b>ROOTDIR/modules</b> and remove the folder
+			called <b>starterdoc</b>.
+			Harsh, but effective.
+		</p>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">Not so aggressive:</div>
+	<div class="panel-body">
+		<p>
+			One way in which you won't lose any file is to rename
+			<b>starterdoc</b> to <b>_starterdoc</b> or even <b>.starterdoc</b>
+			(with a dot at the begining).
+		</p>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">The polite one:</div>
+	<div class="panel-body">
+		<p>
+			Go to the directory <b>ROOTDIR/modules/starterdoc</b> and create
+			a file called <b>.inactive</b>.
+			This doesn't require file removal or renaming and has the same
+			effect.
+		</p>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">The useful one:</div>
+	<div class="panel-body">
+		<p>
+			If you like this page and the way it shows document pages, and you
+			want to keep it available in your page, you can add something like
+			this in your site's configuration file at
+			<b>ROOTDIR/site/config.php</b>:
+		</p>
+		<pre>
+&lt;?php
+starterdoc_disable();
+		</pre>
+		<p>
+			In some cases this may not completely work, but let's not think
+			about that :)
+		</p>
+	</div>
+</div>
+
+<hr/>
+
+<h2>About us?</h2>
+<p>
+	Visit this project at GitHub following <a
+		href="https://github.com/daemonraco/toobasic" target="_blank">this
+		link.</a>
+</p>
+
+<hr/>
