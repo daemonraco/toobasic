@@ -108,7 +108,7 @@
 
 * [What is this?](docs/databasespecs.md#what-is-this)
 * [Cross database basic configurations](docs/databasespecs.md#cross-database-basic-configurations)
-* [Tables structures](docs/databasespecs.md#tables-structures)
+* [Table structures](docs/databasespecs.md#table-structures)
 	* [Fields](docs/databasespecs.md#fields)
 	* [Column type](docs/databasespecs.md#column-type)
 	* [Override policy](docs/databasespecs.md#override-policy)
@@ -121,7 +121,7 @@
 * [Callbacks](docs/databasespecs.md#callbacks)
 	* [What else can I do?](docs/databasespecs.md#what-else-can-i-do)
 	* [Indexes](docs/databasespecs.md#indexes)
-	* [Why no drop callback?](docs/databasespecs.md#why-no-drop-callback)
+	* [Why no drop callbacks?](docs/databasespecs.md#why-no-drop-callbacks)
 * [Unknowns](docs/databasespecs.md#unknowns)
 * [Performance](docs/databasespecs.md#performance)
 * [Suggestions](docs/databasespecs.md#suggestions)
@@ -187,16 +187,16 @@
 
 ##  Using Layouts (docs/layout.md):
 
-* [What is a Layout?](docs/layout.md#what-is-a-layout)
-* [Create a Site with Layout](docs/layout.md#create-a-site-with-layout)
-	* [Main Content](docs/layout.md#main-content)
-	* [Nav Bar](docs/layout.md#nav-bar)
+* [What is a layout?](docs/layout.md#what-is-a-layout)
+* [Create a site with layout](docs/layout.md#create-a-site-with-layout)
+	* [Main content](docs/layout.md#main-content)
+	* [Nav bar](docs/layout.md#nav-bar)
 	* [Layout](docs/layout.md#layout)
 	* [Config](docs/layout.md#config)
 * [Doubts](docs/layout.md#doubts)
-	* [What the Heck is That?](docs/layout.md#what-the-heck-is-that)
+	* [What the heck is that?](docs/layout.md#what-the-heck-is-that)
 	* [Insert?](docs/layout.md#insert)
-* [Wrong Layout?](docs/layout.md#wrong-layout)
+* [Wrong layout?](docs/layout.md#wrong-layout)
 * [Suggestions](docs/layout.md#suggestions)
 
 ##  MagicProp (docs/magicprop.md):
