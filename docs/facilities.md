@@ -1,7 +1,7 @@
 # TooBasic: Facilities
 ## What is this?
-Facilities is a bunch of shell _sys-tools_ you can use to ease your experience with
-__TooBasic__.
+Facilities is a bunch of shell _sys-tools_ you can use to ease your experience
+with __TooBasic__.
 Basically, these tools allow you, for example, to create a controller an its view
 with a single command line.
 If you used other frameworks, for example Ruby on Rails, you may find this
@@ -21,7 +21,8 @@ In the example we are trying to create an action called __my_action__ and this
 operation will generate these artefacts:
 
 * A new file at __ROOTDIR/site/controllers/my_action.php__
-	* This file will contain the definition of class __MyActionController__.
+	* This file will contain the definition of class called
+	__MyActionController__.
 * A new file at __ROOTDIR/site/templates/action/my_action.html__.
 * A new route entry in __ROOTDIR/site/configs/routes.json__ (only when routes are
 activated).
@@ -49,7 +50,7 @@ These are the values supported by `--cached`:
 * others will act as `large`.
 
 ### Layout
-The default here is the default... wut?!
+_The default here is the default... wut?!_
 Yes, by default, the new controller has no layout configuration, so it will use
 the one set as default layout for your site, if any.
 If you want your controller to use a different layout you can use a command like
@@ -88,7 +89,7 @@ you may specify a module name in this way:
 ```plain
 $ php shell.php sys controller create my_action --module MyPlugin
 ```
-And if that module doesn't exists it will create all the folders it needs.
+And if that module doesn't exists it will create every folder it needs.
 
 ### Removing an action
 If you find yourself in the need to destroy a controller, due to a wrong creation
@@ -100,12 +101,12 @@ It will run almost in the same way than `create`, but it will delete files inste
 of creating them.
 
 ## Sys-tool _shell_
-Shell tool allow you to perform scheduled tasks or some background operation from
+Shell tools allow you to perform scheduled tasks or some background operation from
 a command line, so it would be useful if you can have something that creates one
 of these _things_ so you can start typing your logic.
 Well that's what this tool is for.
 
-if you want to know more about shell tools press [this link](shelltools.md).
+if you want to know more about shell tools go to [this link](shelltools.md).
 
 ### Creating a simple tool
 Let's say you want to create a new tool called __manage_users__ to perform some
@@ -133,18 +134,18 @@ __DeadUsers__ and other called __Id__.
 The first parameter will be a simple parameter that requires no values and its
 triggers will be `--dead-users` and `-d`.
 The second will be a multi-value parameter, which means you can specify it as many
-time you need on a command line, and its triggers will be `--id` and `-i`.
+times as you need on a command line, and its triggers will be `--id` and `-i`.
 
-Now here is a tricky thing, we've said _multi-value_, but how did that happened?
+Now here is a tricky thing, we've said _multi-value_, _but how did that happened?_
 Well, if you look closely we've added a suffix `:M` on the name of our parameter
 meaning that it is a multi-value parameter.
-You can also use `:V` for a parameters with only one value or `:N` (the default)
-for no values.
+You can also use `:V` for a parameters with only one possible value or `:N` (the
+default) for no values.
 
 ### Master parameters
 On the previous example, __DeadUsers__ seems to be a specific task you would
-probably want to attend in a separated method inside your tool.
-In these cases you need change a little the command and do something like this:
+probably want to attend it in a separated method inside your tool.
+In these cases you need to change a little the command and do something like this:
 ```plain
 $ php shell.php sys shell create manage_users --type tool --master-param dead-users --param id:M
 ```
@@ -181,7 +182,7 @@ class ManageUsersTool extends TooBasic\Shell\ShellTool {
         }
 }
 ```
-And probably be able to do something like this:
+And you'll probably be able to do something like this:
 ```plain
 $ php shell.php tool manage_users --help
 TODO tool summary
@@ -216,7 +217,7 @@ $ php shell.php sys shell remove manage_users --type tool
 
 ### Cron shell tool
 If you want create a tool that can be called on a _cron_ execution, just change
-the type, something like this:
+the type. Something like this:
 ```plain
 $ php shell.php sys shell create manage_users --type cron --module my_module --master-param dead-users --param id:M
 ```
@@ -259,11 +260,11 @@ Let's make an example and work on it with this _sys-tool_.
 Suppose you want to represent _people_ inside your database and each person has
 these attributes:
 
-* `name`
+* `name`: First and last name.
 * `age`
 * `childern`: The amount of children this person has.
-* `notes`: A first and last name
-* `hair_color`: This is a list of a fue possible values:
+* `notes`: Some reminder you may need related to a person.
+* `hair_color`: This is a list of a few possible values:
 	* `brown`
 	* `redhead`
 	* `blonde`
@@ -281,15 +282,15 @@ __ROOTDIR__:
 ```bash
 $ php shell.php sys table create person -c name:varchar -c age:int -c children:int -c notes:text -c hair_color:enum:brown:redhead:blonde:black:other
 ```
-Now what the heck is that?!
+_Now what the heck is that?!_
 Basically, this command is telling __TooBasic__ to create all the required
-artifacts for a new table with some parameters.
-As Jack would say, let's cut it into pieces.
+artefacts for a new table with some parameters.
+But, as Jack would say, let's cut it into pieces.
 
 The parameters `create person` means that you need to create a table to hold
 information for each person on your site.
 In other words, this means you want to create a table called __persons__ (prefixes
-will be added automaticly based on your connections configuration).
+will be added automatically based on your connections configuration).
 
 Perhaps something you may not like about this is the fact you like to say _people_
 instead of _persons_, for whatever reason.
@@ -326,11 +327,11 @@ away.
 saved in a location where __TooBasic__ can load it and apply it (if your system is
 not flagged as installed).
 
-* The second is a list of action for manage information inside your new table, their
-url may look like this:
+* The second is a list of action to manage information inside your new table and
+their URLs may look like this:
 	* http://www.example.com/?action=people to list all the items in your table. We
 	recommend you start here
-		* No pagination included).
+		* No pagination included.
 	* http://www.example.com/?action=person_add to add a new person.
 	* http://www.example.com/?action=person&id=123 to view information of a specific
 	person, in this case the one with ID _123_.
@@ -339,8 +340,8 @@ url may look like this:
 	* http://www.example.com/?action=person_delete&id=123 to remove a specific person
 	from your data base.
 
-* The third set of generated artifacts are an items representation for your table
-and also a factory for those representation.
+* The third set of generated artefacts are an items representation for your table
+and also a factory for those representations.
 This enables you to do something like this (for example, inside a controller):
 ```php
 <?php
@@ -367,8 +368,8 @@ There is a way in which you can solve this problem, but that is heavy stuff and
 this is not the right moment to talk about it -___-
 
 ### Database type
-Now if you look closely, the JSON file generated with your tables specification
-has a index for a primary key over an automatic field called `id`.
+Now if you look closely, the JSON file generated with your table specification has
+an index for a primary key over an automatic field called `id`.
 The problem is, if you're using MySQL, the property `autoincrement` implies an
 automatic primary key called `PRIMARY`.
 To avoid this kind of issues you can add a parameter specifying your targeted
@@ -387,7 +388,7 @@ are generated:
 * `id`: An integer autoincremented column to uniquely identify each row.
 * `create_date`: A time stamp for the date when each row was inserted.
 * `indexed`: A varchar field that may contain __Y__ or __N__ as values (this last
-one is the default) and it will be implemented in future version.
+one is the default) and it will be implemented in future versions.
 
 Another automatic concept is the prefix for each column.
 By default the first three letters of your table's name are taken and in our
@@ -401,10 +402,10 @@ Of course, this means no controller or representation will be generated.
 Only the JSON file specifying your table will be created.
 
 ### Removal
-Yes you can use `remove` instead of `create` to remove all artifacts.
+Yes you can use `remove` instead of `create` to remove all artefacts.
 
 ### Module
-Also yes, you can use `--module` to specify a module in which your artifacts has
+Also yes, you can use `--module` to specify a module in which your artefacts has
 to be created.
 
 ### Connection?
@@ -412,8 +413,8 @@ If your new table has to use a different connection configuration, you may speci
 its name using `--connection`.
 
 ### Bootstrap
-If you the parameter `--bootstrap` all templates will be generated with a basic
-Twitter Bootstrap structure.
+If you use the parameter `--bootstrap` all templates will be generated with a
+basic Twitter Bootstrap structure.
 Visit the album [__TooBasic: Table Scaffold
 Screenshots__](https://imgur.com/a/8rQA4) to take look at a few screenshots, and
 here's one of those images:
@@ -421,7 +422,7 @@ here's one of those images:
 
 ## Sys-tool _service_
 This _sys-tool_ is very similar to _sys-tool_ _controller_ because it also creates
-a controller, but in this case it will be accessible at `something like
+a controller, but in this case it will be accessible at something like
 `?service=<service-name>`.
 Again the functionality generated will be very simple and will give a place to
 start your new service.
