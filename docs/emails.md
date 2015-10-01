@@ -1,12 +1,12 @@
 # TooBasic: Emails
 ## Huh?!
-No, we are not redifining the concept of an email, we're just making it easier
+No, we are not redefining the concept of an email, we're just making it easier
 inside __TooBasic__.
 
 Let's say your site keeps getting better and now you would like to send emails to
-your users due to account updates and issues, or maybe just advertisment.
+your users due to account updates and issues, or maybe just advertisement.
 For this you created a beautiful page with your site's logo at the top and a some
-important licences related texts in the footer.
+important licenses related texts in the footer.
 And in the middle you want to insert the real thing you want to say to your
 recipient.
 
@@ -103,7 +103,7 @@ your email along with its layout.
 In this way you can see how your email may look when it arrives.
 
 This is what we call _email simulation_ and here is where the method
-`simulation()` makes more sence.
+`simulation()` makes more sense.
 As you may already guest, `basicRun()` is where you place your logic and
 assignments to be used in the view, but when you are simulating, there's no real
 information to base your logic and instead of looking at how beautiful your email
@@ -140,7 +140,7 @@ talk between each other and we still don't like it, but in this case, when a mod
 or a controller triggers a email send, it has to tell something to an _emails
 manager_ and finally to the email itself.
 Now, because we don't like it, we've created a mechanism called _email payload_
-which transport such information between somethin class and the _emails manager_.
+which transport such information between something class and the _emails manager_.
 Let's take a look to an example with a possible _model_ in which we send our
 _hello_ mail:
 ```php
