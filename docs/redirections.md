@@ -14,7 +14,7 @@ events and redirect them to the right place, and we're going to explain how to u
 it based on the given example.
 
 ## Configuration
-For our example we are goingto suppose we have a controller called __my_profile__
+For our example we are going to suppose we have a controller called __my_profile__
 that allows a user to review its profile information and a controller called
 __login__ through which a user may sign-in.
 In our site, whenever a condition of a not-logged-in user is reached, we should
@@ -31,8 +31,8 @@ This simple step will configure a new redirector that redirects to our __login__
 controller.
 
 ## Checking conditions
-Now that we have our redirector configured, we need to check it must be used and
-for we're going to edit our controller __my_profile__ (it might by at
+Now that we have our redirector configured, we need to check when it must be used
+and for that we're going to edit our controller __my_profile__ (it might by at
 __ROOTDIR/site/controllers/my_profile.php__) and add a public method called
 `checkRedirectors()`. Something like this:
 
@@ -54,7 +54,7 @@ class MyProfileController extends \TooBasic\Controller {
 	. . .
 }
 ```
-Here we are suppousing there's a model called `Session` that provides all the
+Here we are supposing there's a model called `Session` that provides all the
 functionality to determine if a user is logged in or not.
 In the case there's no user logged in, this new method returns the name of a
 redirector configuration to be processed.
@@ -78,8 +78,8 @@ parameters that we're going to explain in this section.
 Let's say your login page is capable of displaying a specific message when a user
 arrives to it after a redirection saying things like "_You got here because
 'reasons'._".
-To do that you may search for the URL parameter __redirectedfrom__ or write
-something like this:
+To do that you may search for something in the URL parameter __redirectedfrom__ or
+write something like this:
 ```php
 $Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
 	GC_AFIELD_ACTION => 'login',
@@ -88,12 +88,12 @@ $Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
 	)
 );
 ```
-In this way, when a user gets redirected, it may end up with this url:
+In this way, when a user gets redirected, it may end up with this URL:
 
 >http://www.example.com/mysite/?action=login&showmessage=reasons&redirectedfrom=%2Fmysite%2F%3Faction%3Dmy_profile
 
 ### Layout
-Layout allows a redirector to set a specific layout when changing the url.
+Layout allows a redirector to set a specific layout when changing the URL.
 For example:
 ```php
 $Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
@@ -104,6 +104,6 @@ $Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
 	)
 );
 ```
-Whit this a user may end up at:
+With this a user may end up at:
 
 >http://www.example.com/mysite/?action=login&layout=errorlayout&showmessage=reasons&redirectedfrom=%2Fmysite%2F%3Faction%3Dmy_profile
