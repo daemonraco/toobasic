@@ -215,6 +215,7 @@
 * [Example](docs/models.md#example)
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
+* [Suggestions](docs/models.md#suggestions)
 
 ##  Using Redirections (docs/redirections.md):
 

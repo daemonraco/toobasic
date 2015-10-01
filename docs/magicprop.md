@@ -21,14 +21,15 @@ At this point, you may use these magic properties inside any of these:
 * Models
 * Shell Tools
 * Shell Crons
+* Emails
 
 ## Known properties
 The properties you may use are:
 
 * `$this->model`: To access any model defined of your site (visit
 [Models](models.md)).
-* `$this->representation`: To access any representation factory of your site visit
-[Representations](representations.md)).
+* `$this->representation`: To access any representation factory of your site
+(visit [Representations](representations.md)).
 * `$this->params`: To access the singleton `Params` and then any of its public
 methods. For example:
 ```php

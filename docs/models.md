@@ -2,8 +2,9 @@
 ## What is a Model in __TooBasic__?
 A good practice is NEVER to put real logic inside a controller, that must be
 inside some class in a common place where many controllers can access it.
-That's a __Model__, a class where you can store logics and use it from any
-controller in your site.
+That's a __TooBasic Model__, a class where you can store logics and use it from
+any controller in your site.
+
 ## Example
 For this page we are going to suppose an example where a service return the
 information of a user (based on an ID) and a controller that shows information of
@@ -75,3 +76,10 @@ class UserinfoService extends \TooBasic\Service {
 
 In both cases you don't need to care about _how_ the user information is build,
 you just worry about forwarding the information letting the model do its job.
+
+## Suggestions
+Here you have a few links you may want to visit:
+
+* [Services](services.md)
+* [Representations](representations.md)
+* [Magic Properties](magicprop.md)
