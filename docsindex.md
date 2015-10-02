@@ -316,6 +316,7 @@
 	* [Have you installed _Smarty_?](docs/troubleshooting.md#have-you-installed-smarty)
 	* [Permissions](docs/troubleshooting.md#permissions)
 	* [There goes nothing](docs/troubleshooting.md#there-goes-nothing)
+	* [Have you installed _Predis_?](docs/troubleshooting.md#have-you-installed-predis)
 * [Database](docs/troubleshooting.md#database)
 	* [SQLite & autoincrements](docs/troubleshooting.md#sqlite-&-autoincrements)
 	* [SQLite & deprecated columns](docs/troubleshooting.md#sqlite-&-deprecated-columns)

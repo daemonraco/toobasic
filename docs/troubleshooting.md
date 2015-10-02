@@ -58,6 +58,19 @@ If you are not on a standard *nix system,
 [google](https://www.google.com/search?q=apache+logs+location) where you can find
 this files.
 
+### Have you installed _Predis_?
+Similar to Smarty you may have a problem with
+[Predis](https://github.com/nrk/predis) if you want to connect to a
+[Redis](http://redis.io/) server.
+
+Again, _don't panic_, just follow these steps:
+
+* Download a ZIP version of _Predis_' repository into __ROOTDIR/libraries__.
+* Unpack it's contents.
+* Rename the unpacked folder (probably named __predis-1.0__) to __predis__.
+
+And that's it, it should load _Predis_ from that new folder.
+
 ## Database
 ### SQLite & autoincrements
 _"I specified a database field with autoincrement and nothing happends!"_
