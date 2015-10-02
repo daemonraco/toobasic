@@ -28,7 +28,7 @@ Or this when there's an error:
 		"message": "Parameter 'id' is not set (GET)",
 		"location": {
 			"method": "TooBasic\\Exporter::checkParams()",
-			"file": "C:\\RACO\\xampp\\htdocs\\toobasic-dev\\includes\\Exporter.php",
+			"file": "/var/www/mysite/includes/Exporter.php",
 			"line": 186
 		}
 	},
@@ -38,7 +38,7 @@ Or this when there's an error:
 			"message": "Parameter 'id' is not set (GET)",
 			"location": {
 				"method": "TooBasic\\Exporter::checkParams()",
-				"file": "C:\\RACO\\xampp\\htdocs\\toobasic-dev\\includes\\Exporter.php",
+				"file": "/var/www/mysite/includes/Exporter.php",
 				"line": 186
 			}
 		}
@@ -49,7 +49,8 @@ Or this when there's an error:
 ## Let's use an example
 Let's think you have a site that handles users and it must provide a way to log-in
 from anywhere without using a web page, say a cell phone application or another
-site with REST access.
+site with [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
+access.
 When you provide the right username and password, you obtain a token you can use
 later on every request.
 
@@ -61,10 +62,10 @@ it at __ROOTDIR/site/services/login.php__:
 class LoginService extends \TooBasic\Service {
 	protected function basicRun() {
 		$out = true;
-		if($_SERVER["REQUEST_METHOD"] != "POST") {
-			$this->setError(HTTPERROR_BAD_REQUEST, "Method '{$_SERVER["REQUEST_METHOD"]}' not supported");
+		if($this->params->server->REQUEST_METHOD != "POST") {
+			$this->setError(HTTPERROR_BAD_REQUEST, "Method '{$this->params->server->REQUEST_METHOD}' not supported");
 			$out = false;
-		}else{
+		} else {
 			$username = $this->params->post->username;
 			$password = $this->params->post->password;
 			if($this->model->users->auth($username, $password)) {
@@ -171,11 +172,11 @@ You may obtain something like this:
 				"Accept",
 				"Content-Type"
 			],
-			methods: [
+			"methods": [
 				"POST",
 				"OPTIONS"
 			],
-			origins: []
+			"origins": []
 		}
 	},
 	"error": false,
@@ -198,7 +199,7 @@ Let's say you created a service at http://example.com and then a page at
 http://otherexample.com.
 In this last one you have a JavaScript that wants to use the service from the
 first page.
-Everything seem nice, but your browser will fail and won't let you access it due
+Everything seems nice, but your browser will fail and won't let you access it due
 to CORS issues.
 The reason is that you can only use JavaScript to access remote servers when the
 page your are visiting has the same server name than the remote one (and schema
@@ -213,7 +214,7 @@ trough it, but __TooBasic__ provides a more polite way to do this.
 The first thing you'll want to configure is which sites are allowed to access your
 services and there are three way to achieve it.
 
-The first one is to allow sites inside each service writing something like this:
+* The first one is to allow sites inside each service writing something like this:
 ```php
 <?php
 class LoginService extends \TooBasic\Service {
@@ -232,18 +233,17 @@ class LoginService extends \TooBasic\Service {
 This setting will allow any page in http://otherexample.com to access your login
 service using JavaScript.
 
-The second way and the most generic is to add a configuration like this one:
+* The second way and the most generic is to add a configuration like this one:
 ```php
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES][] = 'http://otherexample.com';
 ```
 This mechanism allows any page in http://otherexample.com to access _any_ service
 in your site.
 
-If you take a closer look, the first way implies code modification every time you
+* If you take a closer look, the first way implies code modification every time you
 need to add/remove/update a site, while the second one affects all services at
 once.
 For this reason there's a third way that is in the middle of the other two.
-
 If you want to make only your __login__ service available at any page in
 http://otherexample.com without changing the code, you may add this configuration:
 ```php

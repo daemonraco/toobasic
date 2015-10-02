@@ -178,8 +178,6 @@ class ManageUsersTool extends TooBasic\Shell\ShellTool {
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);
         }
-        protected function taskInfo($spacer = "") {
-        }
 }
 ```
 And you'll probably be able to do something like this:
@@ -245,8 +243,6 @@ class ManageUsersCron extends TooBasic\Shell\ShellCron {
         }
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);
-        }
-        protected function taskInfo($spacer = "") {
         }
 }
 ```

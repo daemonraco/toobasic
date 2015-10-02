@@ -271,15 +271,16 @@
 ##  Shell Tools and Crons (docs/shelltools.md):
 
 * [What's a Shell Tools?](docs/shelltools.md#whats-a-shell-tools)
-* [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)
-* [Let's Make Things Interesting](docs/shelltools.md#lets-make-things-interesting)
-* [Things We Didn't Explain](docs/shelltools.md#things-we-didnt-explain)
-* [Recommendation](docs/shelltools.md#recommendation)
-* [Cron Tools](docs/shelltools.md#cron-tools)
-* [Create a Cron Tool](docs/shelltools.md#create-a-cron-tool)
-* [How Does It Work?](docs/shelltools.md#how-does-it-work)
-* [Dead Flags](docs/shelltools.md#dead-flags)
+* [Creating a shell tool](docs/shelltools.md#creating-a-shell-tool)
+	* [Let's make things interesting](docs/shelltools.md#lets-make-things-interesting)
+	* [Things we didn't explain](docs/shelltools.md#things-we-didnt-explain)
+	* [Recommendation](docs/shelltools.md#recommendation)
+* [Cron tools](docs/shelltools.md#cron-tools)
+	* [Create a cron tool](docs/shelltools.md#create-a-cron-tool)
+	* [How does it work?](docs/shelltools.md#how-does-it-work)
+	* [Dead flags](docs/shelltools.md#dead-flags)
 * [Profiles](docs/shelltools.md#profiles)
+* [Suggestions](docs/shelltools.md#suggestions)
 
 ##  Skins (docs/skins.md):
 
