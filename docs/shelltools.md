@@ -161,7 +161,7 @@ do.
 Also, you are using a simpler way to add options.
 
 ## Cron tools
-*What is a _cron tool_?*
+_What is a cron tool?_
 Well, basically it is a _shell tool_ but it controls that only one instance of a
 task is running at the same time.
 

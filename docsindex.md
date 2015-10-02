@@ -293,19 +293,21 @@
 	* [By session](docs/skins.md#by-session)
 * [Debugging](docs/skins.md#debugging)
 * [Multiple sites](docs/skins.md#multiple-sites)
+* [Suggestions](docs/skins.md#suggestions)
 
 ##  Using Snippets (docs/snippets.md):
 
 * [Snippets?](docs/snippets.md#snippets)
-* [Pager Snippet](docs/snippets.md#pager-snippet)
-* [Pager Snippet Mananger](docs/snippets.md#pager-snippet-mananger)
-* [Current Problem](docs/snippets.md#current-problem)
-	* [Note Here](docs/snippets.md#note-here)
-* [Adding Pages](docs/snippets.md#adding-pages)
-* [Explain It!](docs/snippets.md#explain-it)
-	* [How to Invoke a Snippet.](docs/snippets.md#how-to-invoke-a-snippet)
-	* [Separated Assignments](docs/snippets.md#separated-assignments)
-	* [Something Good](docs/snippets.md#something-good)
+* [Pager snippet](docs/snippets.md#pager-snippet)
+* [Pager snippet mananger](docs/snippets.md#pager-snippet-mananger)
+* [Current problem](docs/snippets.md#current-problem)
+	* [Note here](docs/snippets.md#note-here)
+* [Adding pages](docs/snippets.md#adding-pages)
+* [Explain it!](docs/snippets.md#explain-it)
+	* [How to invoke a snippet.](docs/snippets.md#how-to-invoke-a-snippet)
+	* [Separated assignments](docs/snippets.md#separated-assignments)
+	* [Something good](docs/snippets.md#something-good)
+* [Suggestions](docs/snippets.md#suggestions)
 
 ##  Troubleshooting (docs/troubleshooting.md):
 
