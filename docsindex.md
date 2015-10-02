@@ -322,4 +322,5 @@
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
+* [Suggestions](docs/troubleshooting.md#suggestions)
 
