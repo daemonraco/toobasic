@@ -13,8 +13,7 @@ use \TooBasic\Managers\EmailsManager as EmailsManager;
 
 try {
 	if(isset(Params::Instance()->debugphpinfo)) {
-		\TooBasic\debugThing('phpinfo');
-		die;
+		\TooBasic\debugThingInPage('phpinfo', 'PHP Sites Information');
 	}
 
 	if(isset(Params::Instance()->get->debugemail)) {

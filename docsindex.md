@@ -229,11 +229,11 @@
 ##  Representations (docs/representations.md):
 
 * [What it this?](docs/representations.md#what-it-this)
-* [A Table](docs/representations.md#a-table)
-* [Row Representation](docs/representations.md#row-representation)
+* [A table](docs/representations.md#a-table)
+* [Row representation](docs/representations.md#row-representation)
 	* [CP?](docs/representations.md#cp)
-* [Table Representation](docs/representations.md#table-representation)
-* [Let's Use It](docs/representations.md#lets-use-it)
+* [Table representation](docs/representations.md#table-representation)
+* [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
 * [Suggestions](docs/representations.md#suggestions)
 
@@ -242,17 +242,18 @@
 * [What are routes?](docs/routes.md#what-are-routes)
 * [Before we start](docs/routes.md#before-we-start)
 	* [mod_rewrite](docs/routes.md#mod_rewrite)
-	* [Allow Override](docs/routes.md#allow-override)
+	* [Allow override](docs/routes.md#allow-override)
 	* [Permissions](docs/routes.md#permissions)
 	* [The right name](docs/routes.md#the-right-name)
 * [Activating routes](docs/routes.md#activating-routes)
 * [Our first route](docs/routes.md#our-first-route)
-* [Route Analysis](docs/routes.md#route-analysis)
+* [Route analysis](docs/routes.md#route-analysis)
 	* [Parameters types](docs/routes.md#parameters-types)
 	* [Let's write a few more](docs/routes.md#lets-write-a-few-more)
 * [Url issues](docs/routes.md#url-issues)
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
+* [Suggestions](docs/routes.md#suggestions)
 
 ##  Services (docs/services.md):
 
