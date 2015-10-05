@@ -13,8 +13,8 @@ $StarterdocDefaultsBackUps[GC_DEFAULTS_SKIN] = $Defaults[GC_DEFAULTS_SKIN];
 // @}
 //
 // Setting this modules as the main application @{
-$Defaults[GC_DEFAULTS_ACTION] = 'starterdoc';
-$Defaults[GC_DEFAULTS_SKIN] = 'united';
+$Defaults[GC_DEFAULTS_ACTION] = 'sdoc_home';
+$Defaults[GC_DEFAULTS_SKIN] = 'simplex';
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_BAD_REQUEST] = 'starterdoc_'.HTTPERROR_BAD_REQUEST;
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_FORBIDDEN] = 'starterdoc_'.HTTPERROR_FORBIDDEN;
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_INTERNAL_SERVER_ERROR] = 'starterdoc_'.HTTPERROR_INTERNAL_SERVER_ERROR;

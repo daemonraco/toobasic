@@ -60,7 +60,7 @@ abstract class SpecAdapter extends \TooBasic\Adapters\Adapter {
 	abstract public function indexExists($indexName);
 	public function keepUnknowns() {
 		global $Connections;
-		return $Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS];
+		return $Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS];
 	}
 	abstract public function tableExists($tableName);
 	abstract public function updateIndex(\stdClass $index);

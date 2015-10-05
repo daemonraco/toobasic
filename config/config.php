@@ -53,6 +53,7 @@ $Defaults[GC_DEFAULTS_ERROR_PAGES] = array(
 	HTTPERROR_UNAUTHORIZED => HTTPERROR_UNAUTHORIZED
 );
 $Defaults[GC_DEFAULTS_EXCEPTION_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/exception_page.php');
+$Defaults[GC_DEFAULTS_DEBUG_PAGE] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system/others/debug_page.php');
 $Defaults[GC_DEFAULTS_HTMLASSETS] = array(
 	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(),
 	GC_DEFAULTS_HTMLASSETS_STYLES => array()
@@ -120,9 +121,9 @@ $Connections = array();
 //      GC_CONNECTIONS_DB_SID      => false  // for Oracle only.
 // );
 $Connections[GC_CONNECTIONS_DB] = array();
-$Connections[GC_CONNECTIONS_DEFAUTLS] = array();
-$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB] = false;
-$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS] = false;
+$Connections[GC_CONNECTIONS_DEFAULTS] = array();
+$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB] = false;
+$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS] = false;
 //
 // Database structure configurations.
 $Database = array();
@@ -228,8 +229,13 @@ $auxParamsManager = \TooBasic\Params::Instance();
 if(isset($auxParamsManager->debugdebugs)) {
 	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
 	ksort($config['debugs']);
-	\TooBasic\debugThing($config['debugs']);
-	die;
+	\TooBasic\debugThingInPage(function() use ($config) {
+		echo '<ul>';
+		foreach($config['debugs'] as $name => $description) {
+			echo "<li><strong>{$name}</strong>: {$description}</li>";
+		}
+		echo '</ul>';
+	}, 'Debugs');
 }
 //
 // Routes

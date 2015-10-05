@@ -6,17 +6,17 @@ their rows, where these are viewed as objects.
 If you are not familiar with this it may seem heavy stuff, but it's not. Let's go
 through an example and see if it helps.
 
-## A Table
+## A table
 Let's suppose you have a table in your database called __ss_people__ (__ss__ is
-the prefix for all your tables) and it has this fields on each row:
+the prefix for all your tables) and it has these fields on each row:
 
-* ppl_id: Numeric unique identifier, also primary key.
-* ppl_name: Characters string.
-* ppl_age: Numeric
-* ppl_username: Unique characters string identifier.
-* ppl_children: How many kids a represented person has.
+* `ppl_id`: Numeric unique identifier, also primary key.
+* `ppl_fullname`: Characters string.
+* `ppl_age`: Numeric.
+* `ppl_username`: Unique characters string identifier.
+* `ppl_children`: How many kids a represented person has.
 
-Now let's suppose you have this rows inside your table:
+Now let's suppose you have these rows inside your table:
 
 | ppl_id | ppl_fullname | ppl_age | ppl_username | ppl_children |
 |:------:|--------------|:-------:|--------------|-------------:|
@@ -24,7 +24,7 @@ Now let's suppose you have this rows inside your table:
 |   2    | Juan Perez   |   46    | hulk         |            2 |
 |   3    | Jane Doe     |   27    | ironman      |            1 |
 
-## Row Representation
+## Row representation
 The first thing you need to represent is each row as an object and to accomplish
 that we'll create a file with the next code and save it in
 __ROOTDIR/site/models/representations/PersonRepresentation.php__:
@@ -37,9 +37,9 @@ class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation 
 }
 ```
 
-As you may noticed, there are a few class properties that look rather important
-and related to your table, so let's explain them along others that may come in
-handy:
+As you may noticed, there are a few instance properties that look rather important
+and are related to your table, so let's explain them along with others that may
+come in handy:
 
 * `$_CP_IDColumn`: This is the column name (without its prefix) for an unique
 identifier of each row. This implies that your table must have a primary key
@@ -48,14 +48,14 @@ composed by a single column.
 used on every column. We recommend this practice to make your queries more
 readable.
 * `$_CP_Table`: This is the table name where all your represented rows are stored.
-* `$_CP_NameColumn`: If you have a column that can point specifically each row you
-might want to set its name on this property (without prefix). In our example it
-would be __username__.
+* `$_CP_NameColumn`: If you have a column that can point specifically each row by
+a characters string you might want to set its name on this property (without
+prefix). In our example it would be __username__.
 * `$_CP_ReadOnlyColumns`: It's a list of column names (without prefix) of columns
 that cannot be altered due to internal reason. In our example, let's say __age__
 can't be modified because there's a different mechanism in charge of that.
 
-With all this, out example mey become this:
+With all this, out example may become this:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
@@ -69,11 +69,11 @@ class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation 
 ### CP?
 Yup, "Core Property" :'(
 
-## Table Representation
+## Table representation
 The second and last thing we need to represent is the table itself, and for that
 we take a similar action writing a code like the next one and storing it at
-__ROOTDIR/site/models/representations/PeopleFactory.php__ (sounds weird to say
-"people factory", just ignore that fact):
+__ROOTDIR/site/models/representations/PeopleFactory.php__ (it sounds weird to say
+"people factory", let's just ignore that fact):
 ```php
 <?php
 class PeopleFactory extends \TooBasic\Representations\ItemsFactory {
@@ -86,21 +86,21 @@ class PeopleFactory extends \TooBasic\Representations\ItemsFactory {
 Here you have some properties you already know, so let's explain those you don't
 
 * `$_CP_RepresentationClass`: This is a way to point the class we've created in
-the previous step and it will be used to obtain row representations. For examples,
-the proper name is "person" and it will translate into "PersonRepresentation" as a
-class name.
+the previous step and it will be used to obtain row representations. In our
+example, the right value would be __person__ and it will translate into
+__PersonRepresentation__ as a class name.
 * `$_CP_OrderBy`: It's a list of fields to use as sorting condition associated to
 a sorting direction. In our example, it may by
 `protected $_CP_OrderBy = array('fullname'=>'asc','username'=>'asc');`.
 
-## Let's Use It
+## Let's use it
 Now, for the sake of our example, we'll create a model that updates the amount of
 kids a person has. Let's write the next code and save it in
 __ROOTDIR/site/models/Kids.php__:
 ```php
 <?php
 class KidsModel extends \TooBasic\Model {
-	public function setPersonKids($personId,$kidsCount) {
+	public function setPersonKids($personId, $kidsCount) {
 		$person = $this->representation->people->item($personId);
 		if($person) {
 			$person->kids = $kidsCount;
@@ -116,12 +116,12 @@ And that's it. Now, what just happend here?:
 our class __PeopeFactory__.
 	* Also, this short access can be used inside a controller, a service or a
 shell tool.
-* Then, we use a method of it called __item()__ to obtain a represented row for an
+* Then, we use a method of it called `item()` to obtain a represented row for an
 specific id.
-* We've checked if we actually obtained a row, that's our __if__.
+* We've checked if we actually obtained a row, that's our `if`.
 * We've accessed one of its fields and changed its value (virtually, not in the
 database).
-* and we've finally sent those changes to the data base (methods __persist()__).
+* And we've finally sent those changes to the data base (methods `persist()`).
 
 As you can see here, you can access a row columns as if they were properties and
 without the need of their prefixes.
@@ -130,9 +130,9 @@ without the need of their prefixes.
 An obvious requirement is the use of a database, so you probably want to check on
 that.
 
-Which database? the one you've set as default would be the first option, but you
-may change this behavior by acquiring the factory in a different way, check the
-next example:
+_Which database?_
+The one you've set as default would be the first option, but you may change this
+behavior by acquiring the factory in a different way, check the next example:
 ```php
 class KidsModel extends \TooBasic\Model {
 	public function kidsChanged($personId) {
@@ -154,7 +154,7 @@ This is how you can obtain a people factory pointing to a different database, in
 our case __backup__.
 
 ## Suggestions
-If you want or need, you may visit this documentation pages:
+If you want or need, you may visit these documentation pages:
 
 * [Models](models.md)
 * [Database Connections](databases.md)

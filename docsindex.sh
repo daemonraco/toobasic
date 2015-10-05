@@ -32,19 +32,24 @@ function Generate() {
 
 	for p in $P_FILES; do
 		title="$(cat "${p}" | grep '^# ' | cut -c2- | sed 's%TooBasic: %%g')";
+		#
+		# Fixing non MD lines:
+		title="$(echo "${title}" | grep -v '^.*m.*h.*dom.*mon.*dow.*command$')";
+
 		if [ "$p" == "README.md" ]; then
 			title="Main Page";
 		fi;
+
 		echo "## ${title} (${p}):";
 		echo;
 		while read line; do
 			if [ -n "$line" ]; then
 				prefix="";
 				subTitle="$line";
-				if [ -n "$(echo -e "$line" | grep '^###')" ]; then
+				if [ -n "$(echo "$line" | grep '^###')" ]; then
 					prefix="	* ";
 					subTitle="$(echo "$line"|cut -c5-)";
-				elif [ -n "$(echo -e "$line" | grep '^##')" ]; then
+				elif [ -n "$(echo "$line" | grep '^##')" ]; then
 					prefix="* ";
 					subTitle="$(echo "$line"|cut -c4-)";
 				fi;

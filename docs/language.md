@@ -20,9 +20,9 @@ the _Spanish_ spoken in _Argentina_.
 Translations are based on keys, which means somewhere in your site there's a key
 that points to a translated text.
 Let's say we're going to use a key called `welcome_site` to translate into those
-texts we've mentioned at the begining of this page.
-The first thing to do is to create a file at __ROOTDIR/site/langs/en_us.json__ with
-something like this inside:
+texts we've mentioned at the beginning of this page.
+The first thing to do is to create a file at __ROOTDIR/site/langs/en_us.json__
+with something like this inside:
 ```json
 {
     "keys": [{
@@ -48,7 +48,7 @@ the current language.
 ## Using translations
 Now we know how to configure translations, but how do we use them?
 Let's say you want to use this new translation key inside a controller and assign
-it some view value, for that you may write something like this:
+it to some view value, for that you may write something like this:
 ```php
 	protected function basicRun() {
 		. . .
@@ -62,7 +62,7 @@ it some view value, for that you may write something like this:
 ```
 As you can see, the magic property `tr` allows you to use your translation key
 directly.
-This is also avalable inside models, services, emails and others.
+This is also available inside models, services, emails and others.
 
 Now if you're already inside a template (for Smarty templates), you may write
 something like this:
@@ -78,15 +78,15 @@ something like this:
 ## Advanced
 All of this may seem easy, but the problem comes when your translation have
 variable pieces in the middle of it, and those pieces are in different places
-depending on yout language.
-For exmaple, if you want to formally address a person by its last name, in English
+depending on your language.
+For example, if you want to formally address a person by its last name, in English
 and Spanish it would mean to set a translation key for _Mr._ and _Sr._, and then
 paste it before the last name.
 But if you also serve your site in Japanese, the translated key goes after the
 last name.
 
 In these cases is where you need to make an advanced usage of translation keys.
-To handle our example let's write somethig like this at
+To handle our example let's write something like this at
 __ROOTDIR/site/langs/en_us.json__
 ```json
 {
@@ -137,14 +137,14 @@ translation keys, also each module/plugin may define its own translation keys or
 even override some.
 This is something interesting and useful, but it might also become a burden for
 your site's performance because if you translate at least one key, it will load
-and analyse all translation files for the current language.
+and analyze all translation files for the current language.
 
 Fortunately, this happens for the first translation, the rest will use what is
 loaded.
-Nonetheless each and every request were there's a tranlation will trigger this
+Nonetheless each and every request were there's a translation will trigger this
 loading process.
 
-To reduce the performance problem, __TooBasic__ provides a way to pre-analyse all
+To reduce the performance problem, __TooBasic__ provides a way to pre-analyze all
 language specifications and store them as one per each language.
 This is not a mandatory functionality, but if you're having problems with
 performance, it may help a little.
@@ -155,16 +155,16 @@ provides a _shell tool_ called __translate__ that can be used in this way:
 ```bash
 $ php shell.php tool translate --compile
 ```
-This tool will load and analyse each translation file for every language and
-generate a single per language and store them at __ROOTDIR/cache/langs/__.
+This tool will load and analyze each translation file for every language and
+generate a single file per language and store them at __ROOTDIR/cache/langs/__.
 
 __Note__: If you are using precompiled translations, remember to run this tool
 everytime you install or remove a module and when you add, remove or change
 translations in your site.
 
 ### Configuration
-Once you've have your language configuration files compiled, you must add
-something like this to your site's configuration file:
+Once you have your language configuration files compiled, you must add something
+like this to your site's configuration file:
 ```php
 $Defaults[GC_DEFAULTS_LANGS_BUILT] = true;
 ```
@@ -172,7 +172,7 @@ This configuration tells __TooBasic__ to use precompiled files instead of normal
 translation files.
 
 ## Suggestions
-You may also visit this documentation pages:
+You may also visit these documentation pages:
 
 * [Magic Properties](magicprop.md)
 * [Shell Tools](shelltools.md)

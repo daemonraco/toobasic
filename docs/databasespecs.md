@@ -13,8 +13,8 @@ on your site, but if you do, you know that if a table index or column gets remov
 by accident, __TooBasic__ will re-create it (nonetheless data will be lost in most
 cases).
 
-What can you specify? __TooBasic__ provides a way to specify four things we're
-going to explain later on:
+What can you specify? __TooBasic__ provides a way to specify four things that
+we're going to explain later on:
 
 * Cross database basic configurations
 * Tables structures
@@ -41,8 +41,8 @@ this:
 }
 ```
 
-`configs` indicates what you are trying to specify and the only thing it supports
-right now are index prefixes for:
+`configs` indicates what you are trying to specify core settings and the only
+thing it supports right now are index prefixes for:
 
 * indexes with unique values (`key`).
 * indexes with duplicated values (`index`).
@@ -58,7 +58,7 @@ survive.
 Be careful with every specification section because each one has its own
 overriding policy.
 
-## Tables structures
+## Table structures
 This is the main section of _database structure specifications_ and may look like
 this:
 ```json
@@ -92,8 +92,9 @@ this:
 }
 ```
 
-What's this?! let's explain it.
-First of all, `tables` is a list of specification object representing each table,
+
+_What's this?!_ let's explain it.
+First of all, `tables` is a list of object specifications representing each table,
 but you already got that.
 Each table has three mandatory fields you should never forget:
 
@@ -102,13 +103,14 @@ on the connection used.
 * `prefix`: This is the general prefix to prepend on each field name.
 * `fields`: The list of table fields/columns with their own specs.
 
-You may also give these fields:
+You may also provide these fields:
 
 * `connection`: The name of the database connection through which a table should
 be maintained.
 	* When _null_ or not given, it takes the default connection (read more
 	about it in further sections).
 * `comment`: Table description text.
+	* Some databases may not support this and it will be ignored.
 * `engine`: The engine to use with a table, for example __myisam__. But, this is
 useless if your not using _MySQL_.
 
@@ -119,16 +121,16 @@ Each table field/column has its own list of mandatory fields:
 and let the system add the prefix later.
 * `type`: Column type specification (read more about it below).
 
-And you may also give these:
+And you may also provide these:
 
 * `null`: This is a boolean field and configures a column to accept null values or
-not. When not present, it's assumed false.
+not. When not present, it's assumed `false`.
 * `autoincrement`: This is a boolean field and it indicates if current column
 increments its value automatically.
 	* This also means this is a primary key field.
-	* When not given it's assumed false.
+	* When not given it's assumed `false`.
 * `comment`: Column description text.
-* `default`: 
+* `default`: The value to be taken when no value is given for certain column.
 
 ### Column type
 Column types have their own specification mechanism with this fields:
@@ -143,7 +145,7 @@ Column types have their own specification mechanism with this fields:
 	* _timestamp_
 		* `precision` may be _false_.
 	* _varchar_
-* `precision`<sup>mandatory when type is not _enum_</sup>: Indicates how log a
+* `precision`<sup>mandatory almost every time</sup>: Indicates how log a
 field is.
 * `values`<sup>mandatory when type is _enum_</sup>: List of values to be used by a
 enumerative field.
@@ -195,8 +197,8 @@ ignored.
 When an index is specified more than once, the last one survives.
 
 ## Initial table data
-Let's suppose you database represents some kind of items and those items have a
-_status_ indicated with a numeric id.
+Let's suppose your database represents some kind of items and those items have a
+_status_ indicated with a numeric ID.
 If your site is polite enough, you'll have a table of statuses in which you
 associate that with a displayable name and a description.
 
@@ -233,12 +235,12 @@ like this one:
 }
 ```
 
-Now what's going on here? As you can see, every element inside `entries` is a row
-specification and every column name is given without its prefix because that will
-depend on its table.
+_Now what's going on here?_ As you can see, every element inside `entries` is a
+row specification and every column name is given without its prefix because that
+will depend on its table.
 
-But what is `checkfields`? This specification is a maintenance specification,
-which means it must check if an entry exists and insert it when it doesn't.
+_But what is `checkfields`?_ This specification is a maintenance specification,
+which means _it must check if an entry exists and insert it when it doesn't_.
 `checkfields` is the list of columns to use when checking if an entry is already
 there.
 In our example, we know __sts_id__ is a primary key, so we assume that searching
@@ -247,7 +249,7 @@ entries by their *id*s would be enough.
 The rest is:
 
 * `table`: for the table name. Mandatory and without prefixes.
-* `connection`: To optionaly specify a database connection to use.
+* `connection`: To optionally specify a database connection to use.
 
 ### Policies
 A few policies to have in mind:
@@ -270,14 +272,16 @@ Also when you specify an index or some initial data, it will point to the right
 connection and table too.
 
 ### Default connection
-How about that default connection we name somewhere above? As you may expect, the
-default connection is that one you name in
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_DB]`.
+_How about that default connection we named somewhere above?_ As you may expect,
+the default connection is that one you named in
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_DB]`.
 But in some cases you may want to have a connection to access your default
-database with only DML access permissions and another connection for DDL
-operations, if that's the case, you may use the configuration field `connection`
-or simple set its name in
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_INSTALL]`.
+database with only [DML](https://en.wikipedia.org/wiki/Data_manipulation_language)
+access permissions and another connection for
+[DDL](https://en.wikipedia.org/wiki/Data_definition_language) operations, if
+that's the case, you may use the configuration field `connection` or simple set
+its name in
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_INSTALL]`.
 
 ## Callbacks
 Callbacks is rather an easy topic that allows allows you to execute one or more
@@ -305,7 +309,7 @@ Let's consider changing your specification to something like this:
 	. . . 
 ```
 
-Now, what the heck is that thing there?
+_Now, what the heck is that thing there?_
 This specification adds a callback to be executed right after the table is
 created in the database.
 __uhy_first_entries__ would be the name for a file store along side with other
@@ -339,13 +343,13 @@ This is the complete list:
 * `after_update`: After altering the structure of a table or table column.
 
 ### Indexes
-You can use callback for index specs too, but in this case you'll less possible
-callback types:
+You can use callback for index specs too, but in this case you'll have less
+possible callback types:
 
 * `before_create`: Before creating an index.
 * `after_create`: After creating an index.
 
-### Why no drop callback?
+### Why no drop callbacks?
 That's an interesting question and the answer comes from the way these specs work.
 When you want to remove a table, column or index, you just remove its
 specification and it will get remove by the system, this means there's no place to
@@ -356,15 +360,18 @@ This database maintenance mechanism is rather violent and it might destroy unkno
 tables, columns and indexes (data is always kept as it is) and only lets live
 those inside the _database structure specification_.
 To avoid such trouble, you may set
-`$Connections[GC_CONNECTIONS_DEFAUTLS][GC_CONNECTIONS_DEFAUTLS_KEEPUNKNOWNS]` to
+`$Connections[GC_CONNECTIONS_DEFAULTS][GC_CONNECTIONS_DEFAULTS_KEEPUNKNOWNS]` to
 _true_ and no drop will be run.
 
 ## Performance
-Yes _performance_ is an issue here, all these checks will eat your system and make
-everything slower, but we encourage you to use it because it will keep your
-databases healthy and basically because you can turn it off and temporarily back
-on again when you install a new module or when you have the feeling that something
-went wrong inside your databases.
+Yes _performance_ is an issue here, all these checks will eat your system alive
+and make everything slower, but we encourage you to use it because it will keep
+your databases healthy and basically because you can turn it off and temporarily
+back on again when you install a new module or when you have the feeling that
+something went wrong inside your databases.
+
+_How?_
+When your site is flagged as installed, this checks are avoided.
 
 ## Suggestions
 If you want or need it, you may visit this documentation pages:

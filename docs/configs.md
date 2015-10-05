@@ -1,8 +1,8 @@
 # TooBasic: Using Config Files
 ## Is it necessary an explanation?
 Well yes, you already know every site has its own configuration files and
-probably several logic block inside a site have their own configurations, so
-what's new about this?
+probably several logic blocks inside a site have their own configurations, so
+_what's new about this?_
 
 __TooBasic__ provides a mechanism to store and easily find two kind of
 configuration files:
@@ -37,8 +37,8 @@ content and store in __ROOTDIR/site/configs/boxes_types.json__:
 	}]
 }
 ```
-Why JSON? well JSON is an object specification very easy to use through
-`json_decode` in PHP and it's already a _javascript_ object you can use directly
+_Why JSON?_ Well JSON is an object specification very easy to use through
+`json_decode()` in PHP and it's already a _javascript_ object you can use directly
 in your scripts.
 If you want to keep things privately and access only from PHP files, you can
 create a file called __ROOTDIR/site/configs/boxes_types.php__ containing something
@@ -65,9 +65,10 @@ $boxesTypes = array(
 );
 ```
 
-Now, how do you access them?
+Now, _how do you access them?_
 Here is when the singleton `Paths` comes in handy, such singleton provides a
-method called `configPath()`, take a look to this examples:
+method called `configPath()` that helps with these files.
+Take a look at this examples:
 ```php
 <?php
 //
@@ -78,15 +79,15 @@ echo \TooBasic\Paths::Instance()->configPath("boxes_types")."\n";
 echo \TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::ExtensionJSON)."\n";
 ```
 
-Where is the magic in this? the real magic comes when you install a module, if it
-has a file named __boxes_types.json__ in its _configs_ directory, it will be
+_Where is the magic in this?_ The real magic comes when you install a module, if
+it has a file named __boxes_types.json__ in its __configs__ directory, it will be
 overriding our first file which is useful if such module improves your site giving
 it the ability to handle other types of boxes.
 
-## I want em all!
+## I want 'em all!
 At the end of the previous section we used the word "overriding" and it may no be
-what you wanted to hear... I mean, read, well there's a work around for that and
-it will look like this:
+what you wanted to hear (... I mean, read), well there's a work around for that
+and it will look like this:
 ```php
 <?php
 print_r(\TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::ExtensionPHP, true));
@@ -102,26 +103,26 @@ overridden between them.
 
 ### _config.php_
 If you store a file at __ROOTDIR/site/configs/__ and/or
-__ROOTDIR/modules/_modname_/configs__ and name it __config.php__, it will be
+__ROOTDIR/modules/*&lt;modname&gt;*/configs__ and name it __config.php__, it will be
 loaded automatically.
 This allows you to give specific configurations for your site or your modules,
 respectively.
 
 ### _config_shell.php_
-This kind of file loads automatically before __config.php__ but only the current
-execution is been run from a shell command line.
+This kind of file loads automatically before __config.php__ but if only the
+current execution is been run from a shell command line.
 
 ### _config_http.php_
-Idem than the previous one, but when it's not run from a shell command line.
+Same than the previous one, but when it's not run from a shell command line.
 
 ### Site config file
 The last automatic file is always stored at __ROOTDIR/site/config.php__ and allows
-you to give the final toches.
+you to give the final touches.
 
 ### Summary
 So, how is it again?
 
-* First, from every module folder and the the site folder: 
+* First, from every module folder and then the folder __ROOTDIR/site__:
  * it loads every __config_http.php__ if it's not shell,
  * then every __config_shell.php__ if it is shell,
  * then every __config.php__,
@@ -131,6 +132,6 @@ And if it doesn't find any of these files, it won't say a thing and do as if the
 were no problems.
 
 ## Suggestions
-If you want you may visit this documentation pages:
+If you want you may visit these documentation pages:
 
 * [MagicProp](magicprop.md)

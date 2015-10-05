@@ -1,0 +1,17 @@
+{
+	"name": "StarterDoc",
+	"version": "1.0.0",
+	"description": "This module provides a starter page for newly installed sites and access to offline documentation.",
+	"author": {
+		"name": "Alejandro Dario Simi",
+		"page": "http://daemonraco.com/"
+	},
+	"copyright": "2015",
+	"license": "GPLv3",
+	"url": "http://toobasic.daemonraco.com/",
+	"url_doc": "http://toobasic.daemonraco.com/?action=mddoc&doc=README.md",
+	"required_versions": {
+		"php": "5.4",
+		"toobasic": "1.0.0"
+	}
+}

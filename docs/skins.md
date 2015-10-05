@@ -2,8 +2,8 @@
 ## What are skins for __TooBasic__?
 Throughout many frameworks, _skins_, also called _themes_ are an important topic
 because it provides a way to change and enhance the look and feel of a site, even
-in some cases provide the flexibility so users to choose the way they want to see
-your site.
+in some cases provides the flexibility for users to choose the way they want to
+see your site.
 
 Let's have an example of this, if you visit
 [Bootswatch.com](http://bootswatch.com/), you'll find a site that provide several
@@ -31,7 +31,7 @@ myskin/templates/action/
 ```
 
 You can also create this same structure inside a module, for example inside
-__ROOTDIR/modules/mymodule/skins/myskin__ (if yout module is called __mymodule__),
+__ROOTDIR/modules/mymodule/skins/myskin__ (if your module is called __mymodule__),
 and it will be considered when __myskin__ skin is active.
 
 If you're wondering, you don't need to create all those folders, only those you
@@ -42,7 +42,7 @@ Let's say your site looks good either with light or dark colors and you are
 thinking about using that as skins.
 Let's also say that the structure may be the same, but the stylesheet to use has
 to change entirely between skins.
-To achieve this, we propouse this structure:
+To achieve this, we propose this structure:
 ```text
 ROOTDIR/site/styles/mystyle.css
 ROOTDIR/site/skins/myskin/styles/mystyle.css
@@ -73,7 +73,7 @@ For example:
 This mechanism has the highest priority when choosing a current skin.
 
 ### By configuration
-If you decide to configure a specific skin for your site, you can achive this by
+If you decide to configure a specific skin for your site, you can achieve this by
 specifying it this way in your site's configuration file:
 ```php
 <?php
@@ -108,14 +108,21 @@ values you may need.
 
 ## Multiple sites
 If you're using more than one __TooBasic__ site in your PHP server, and we thank
-you for that, you may run into some issues when selection a skin on one those
-sites.
+you for that ^o^ , you may run into some issues when selecting a skin on one
+those sites.
 This may happen because the session data depends on the connection and not on the
 page being requested.
-To avoid these collitions you may set a specific suffix for the value store in
+To avoid these collisions you may set a specific suffix for the value store in
 your session that is different for each __TooBasic__ site.
 To do so, you must add something like this in your site's configuration file:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] = 'site1';
 ```
+
+## Suggestions
+If you want or need, you may visit these documentation pages:
+
+* [Layouts](layout.md)
+* [Controller Exports](controllerexports.md)
+* [Snippets](snippets.md)

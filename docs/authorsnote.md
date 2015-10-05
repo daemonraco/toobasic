@@ -10,8 +10,8 @@ simple framework I could paste somewhere in a _xampp_ or _Apache_ folder and sta
 typing some logic right away without the need to worry about _how I read the
 current class to use from the url_.
 
-In manner of speaking I still think and feel that's the goal of this framework,
-but if your read a little more about it you'll see it's not that _basic_.
+In a manner of speaking I still think and feel that's the goal of this framework,
+but if you read a little more about it you'll see it's not that _basic_.
 Perhaps, in some point I had to ask my self _"Am I going too far for a basic
 framework?"_, but I've never asked me that because all the stuff I'm adding are
 things I want to have in my reach and in the reach of anyone who uses it
@@ -30,7 +30,7 @@ But I'll agree if someone says _it's not that basic_.
 
 ## One action one controller?!
 Yes, the answer is as plain and simple as that.
-That's because this topic will be like the decision of placing a curly brace in
+That's because this topic would be like the decision of placing a curly brace in
 the same line or the next when you write an `if` sentence (python doesn't apply).
 Anyway, I'll try to give some explanation on why I do this.
 
@@ -51,8 +51,8 @@ takes a ton of metallic grey duct tape and tucks them together so tightly they
 start sharing that complex logic... NOOOOO!!!... cof... cof, let me... let me calm
 down a little, I'll just take this jerrycan of gasoline AND BURN THE CODE TO
 ASHES!!!
-
-_Wait!, calm down, what is the problem?_
+ 
+"_Wait!, calm down, what is the problem?_"
 
 Well, it's WRONG!, wrong from the beginning, that complex logic is shouting for
 its own place to live and be visited by those controllers.
@@ -63,10 +63,14 @@ dig that piece of code out of there.
 
 This kind of situations are those I want to mitigate by having separated
 classes/controllers for each action.
-At least this way, that programmer will think twice about putting that logic
+At least in this way, that programmer will think twice about putting that logic
 somewhere else.
 
-_But... what about shell tools?_
+"_But... what about shell tools?_"
 
 Enough!, let's change the topic already.
 
+## Engrish
+As you may noticed, English is not my mother language, that's the reason way you
+will find some many mistakes. Believe me, I'm trying to get better at it, but s**t
+happens :D

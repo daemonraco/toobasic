@@ -12,7 +12,8 @@ you'll end up with an almost empty folder at __ROOTDIR/libraries__.
 This means your site will start throwing errors everywhere because it's looking
 for Smarty.
 
-What to do? Well there's the easy way and the hard way.
+_What to do?_
+Well there's the easy way and the hard way.
 The easy way is to run (we're supposing you used `git clone`):
 ```plain
 $ git submodule init
@@ -31,7 +32,7 @@ latest version,
 
 ### Permissions
 There are a few folders that need writing permission and __TooBasic__ will try to
-tell you this when possible, but just to be sure check this folders:
+tell you this when possible, but just to be sure check these folders:
 
 * `ROOTDIR/cache`
 * `ROOTDIR/cache/filecache`
@@ -53,16 +54,32 @@ If you are under a standard *nix installation using apache, check these files:
 
 They may give a hint of your problem.
 
-If you are not on a standard *nix system, google where you can find this files.
+If you are not on a standard *nix system,
+[google](https://www.google.com/search?q=apache+logs+location) where you can find
+this files.
+
+### Have you installed _Predis_?
+Similar to Smarty you may have a problem with
+[Predis](https://github.com/nrk/predis) if you want to connect to a
+[Redis](http://redis.io/) server.
+
+Again, _don't panic_, just follow these steps:
+
+* Download a ZIP version of _Predis_' repository into __ROOTDIR/libraries__.
+* Unpack it's contents.
+* Rename the unpacked folder (probably named __predis-1.0__) to __predis__.
+
+And that's it, it should load _Predis_ from that new folder.
 
 ## Database
 ### SQLite & autoincrements
 _"I specified a database field with autoincrement and nothing happends!"_
-Well, if you're using a database engine that is not MySQL, this feature has no
-meaning. You probably would need to find another way to emulate this.
+Well, if you're using a database engine that is not MySQL or PostgreSQL, this
+feature has no meaning. You probably would need to find another way to emulate
+this.
 
 ### SQLite & deprecated columns
-If you removed or changed the specification of a table column and you SQLite
+If you removed or changed the specification of a table column and your SQLite
 database doesn't applied the change, you should know SQLite does not support this
 kind of changes in a data base.
 You can add columns, but you can't change them or modify them.
@@ -71,8 +88,8 @@ If you want some more information, visit [SQL As Understood By
 SQLite](http://sqlite.org/lang_altertable.html).
 
 ## Environment globals
-If you are developing a shell tool and for some reason you can use
-`\TooBasic\Params::Instance()->env->myprop`, even though you exported in your
+If you are developing a shell tool and for some reason you can't use
+`\TooBasic\Params::Instance()->env->myprop`, even though you exported it in your
 command line, you probably have an security issue in your __php.ini__ file.
 
 Open your __php.ini__ file and look for something like:
@@ -98,4 +115,9 @@ your PHP web server.
 Sometimes, when the submodule _Smarty_ is updated, you may experience some file
 permissions errors and to solve this, remove the folder located at
 __ROOTDIR/cache/smarty__ along with its contents, don't worry, __TooBasic__ will
-recreate it by automatically  when it's required.
+recreate it automatically when it's required.
+
+## Suggestions
+If you want, you may visit these documentation pages:
+
+* [Author's Note](authorsnote.md)

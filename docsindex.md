@@ -37,19 +37,22 @@
 
 * [TooBasic?!](docs/authorsnote.md#toobasic)
 * [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
+* [Engrish](docs/authorsnote.md#engrish)
 
 ##  Cache (docs/cache.md):
 
 * [We All Know What It Is](docs/cache.md#we-all-know-what-it-is)
 * [What is it cached?](docs/cache.md#what-is-it-cached)
 * [Adapters](docs/cache.md#adapters)
-	* [File Cache Adapter](docs/cache.md#file-cache-adapter)
-	* [Database Cache Adapter](docs/cache.md#database-cache-adapter)
-	* [Memcached Adapter](docs/cache.md#memcached-adapter)
-	* [Memcache Adapter](docs/cache.md#memcache-adapter)
-	* [Redis Adapter](docs/cache.md#redis-adapter)
-* [Setting Adapter](docs/cache.md#setting-adapter)
-* [Cached Controller](docs/cache.md#cached-controller)
+	* [File cache adapter](docs/cache.md#file-cache-adapter)
+	* [Database cache adapter](docs/cache.md#database-cache-adapter)
+	* [ Also](docs/cache.md#-also)
+	* [Memcached adapter](docs/cache.md#memcached-adapter)
+	* [Memcache adapter](docs/cache.md#memcache-adapter)
+	* [Redis adapter](docs/cache.md#redis-adapter)
+* [Setting an adapter](docs/cache.md#setting-an-adapter)
+* [Cached controller](docs/cache.md#cached-controller)
+* [Cached services?](docs/cache.md#cached-services)
 * [What if you don't want it?](docs/cache.md#what-if-you-dont-want-it)
 * [Duration](docs/cache.md#duration)
 
@@ -57,7 +60,7 @@
 
 * [Is it necessary an explanation?](docs/configs.md#is-it-necessary-an-explanation)
 * [User defined configuration files](docs/configs.md#user-defined-configuration-files)
-* [I want em all!](docs/configs.md#i-want-em-all)
+* [I want 'em all!](docs/configs.md#i-want-em-all)
 * [Automatic config files](docs/configs.md#automatic-config-files)
 	* [_config.php_](docs/configs.md#configphp)
 	* [_config_shell.php_](docs/configs.md#config_shellphp)
@@ -105,7 +108,7 @@
 
 * [What is this?](docs/databasespecs.md#what-is-this)
 * [Cross database basic configurations](docs/databasespecs.md#cross-database-basic-configurations)
-* [Tables structures](docs/databasespecs.md#tables-structures)
+* [Table structures](docs/databasespecs.md#table-structures)
 	* [Fields](docs/databasespecs.md#fields)
 	* [Column type](docs/databasespecs.md#column-type)
 	* [Override policy](docs/databasespecs.md#override-policy)
@@ -118,7 +121,7 @@
 * [Callbacks](docs/databasespecs.md#callbacks)
 	* [What else can I do?](docs/databasespecs.md#what-else-can-i-do)
 	* [Indexes](docs/databasespecs.md#indexes)
-	* [Why no drop callback?](docs/databasespecs.md#why-no-drop-callback)
+	* [Why no drop callbacks?](docs/databasespecs.md#why-no-drop-callbacks)
 * [Unknowns](docs/databasespecs.md#unknowns)
 * [Performance](docs/databasespecs.md#performance)
 * [Suggestions](docs/databasespecs.md#suggestions)
@@ -184,16 +187,16 @@
 
 ##  Using Layouts (docs/layout.md):
 
-* [What is a Layout?](docs/layout.md#what-is-a-layout)
-* [Create a Site with Layout](docs/layout.md#create-a-site-with-layout)
-	* [Main Content](docs/layout.md#main-content)
-	* [Nav Bar](docs/layout.md#nav-bar)
+* [What is a layout?](docs/layout.md#what-is-a-layout)
+* [Create a site with layout](docs/layout.md#create-a-site-with-layout)
+	* [Main content](docs/layout.md#main-content)
+	* [Nav bar](docs/layout.md#nav-bar)
 	* [Layout](docs/layout.md#layout)
 	* [Config](docs/layout.md#config)
 * [Doubts](docs/layout.md#doubts)
-	* [What the Heck is That?](docs/layout.md#what-the-heck-is-that)
+	* [What the heck is that?](docs/layout.md#what-the-heck-is-that)
 	* [Insert?](docs/layout.md#insert)
-* [Wrong Layout?](docs/layout.md#wrong-layout)
+* [Wrong layout?](docs/layout.md#wrong-layout)
 * [Suggestions](docs/layout.md#suggestions)
 
 ##  MagicProp (docs/magicprop.md):
@@ -212,6 +215,7 @@
 * [Example](docs/models.md#example)
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
+* [Suggestions](docs/models.md#suggestions)
 
 ##  Using Redirections (docs/redirections.md):
 
@@ -225,11 +229,11 @@
 ##  Representations (docs/representations.md):
 
 * [What it this?](docs/representations.md#what-it-this)
-* [A Table](docs/representations.md#a-table)
-* [Row Representation](docs/representations.md#row-representation)
+* [A table](docs/representations.md#a-table)
+* [Row representation](docs/representations.md#row-representation)
 	* [CP?](docs/representations.md#cp)
-* [Table Representation](docs/representations.md#table-representation)
-* [Let's Use It](docs/representations.md#lets-use-it)
+* [Table representation](docs/representations.md#table-representation)
+* [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
 * [Suggestions](docs/representations.md#suggestions)
 
@@ -238,17 +242,18 @@
 * [What are routes?](docs/routes.md#what-are-routes)
 * [Before we start](docs/routes.md#before-we-start)
 	* [mod_rewrite](docs/routes.md#mod_rewrite)
-	* [Allow Override](docs/routes.md#allow-override)
+	* [Allow override](docs/routes.md#allow-override)
 	* [Permissions](docs/routes.md#permissions)
 	* [The right name](docs/routes.md#the-right-name)
 * [Activating routes](docs/routes.md#activating-routes)
 * [Our first route](docs/routes.md#our-first-route)
-* [Route Analysis](docs/routes.md#route-analysis)
+* [Route analysis](docs/routes.md#route-analysis)
 	* [Parameters types](docs/routes.md#parameters-types)
 	* [Let's write a few more](docs/routes.md#lets-write-a-few-more)
 * [Url issues](docs/routes.md#url-issues)
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
+* [Suggestions](docs/routes.md#suggestions)
 
 ##  Services (docs/services.md):
 
@@ -266,15 +271,16 @@
 ##  Shell Tools and Crons (docs/shelltools.md):
 
 * [What's a Shell Tools?](docs/shelltools.md#whats-a-shell-tools)
-* [Creating a Shell Tool](docs/shelltools.md#creating-a-shell-tool)
-* [Let's Make Things Interesting](docs/shelltools.md#lets-make-things-interesting)
-* [Things We Didn't Explain](docs/shelltools.md#things-we-didnt-explain)
-* [Recommendation](docs/shelltools.md#recommendation)
-* [Cron Tools](docs/shelltools.md#cron-tools)
-* [Create a Cron Tool](docs/shelltools.md#create-a-cron-tool)
-* [How Does It Work?](docs/shelltools.md#how-does-it-work)
-* [Dead Flags](docs/shelltools.md#dead-flags)
+* [Creating a shell tool](docs/shelltools.md#creating-a-shell-tool)
+	* [Let's make things interesting](docs/shelltools.md#lets-make-things-interesting)
+	* [Things we didn't explain](docs/shelltools.md#things-we-didnt-explain)
+	* [Recommendation](docs/shelltools.md#recommendation)
+* [Cron tools](docs/shelltools.md#cron-tools)
+	* [Create a cron tool](docs/shelltools.md#create-a-cron-tool)
+	* [How does it work?](docs/shelltools.md#how-does-it-work)
+	* [Dead flags](docs/shelltools.md#dead-flags)
 * [Profiles](docs/shelltools.md#profiles)
+* [Suggestions](docs/shelltools.md#suggestions)
 
 ##  Skins (docs/skins.md):
 
@@ -287,19 +293,21 @@
 	* [By session](docs/skins.md#by-session)
 * [Debugging](docs/skins.md#debugging)
 * [Multiple sites](docs/skins.md#multiple-sites)
+* [Suggestions](docs/skins.md#suggestions)
 
 ##  Using Snippets (docs/snippets.md):
 
 * [Snippets?](docs/snippets.md#snippets)
-* [Pager Snippet](docs/snippets.md#pager-snippet)
-* [Pager Snippet Mananger](docs/snippets.md#pager-snippet-mananger)
-* [Current Problem](docs/snippets.md#current-problem)
-	* [Note Here](docs/snippets.md#note-here)
-* [Adding Pages](docs/snippets.md#adding-pages)
-* [Explain It!](docs/snippets.md#explain-it)
-	* [How to Invoke a Snippet.](docs/snippets.md#how-to-invoke-a-snippet)
-	* [Separated Assignments](docs/snippets.md#separated-assignments)
-	* [Something Good](docs/snippets.md#something-good)
+* [Pager snippet](docs/snippets.md#pager-snippet)
+* [Pager snippet mananger](docs/snippets.md#pager-snippet-mananger)
+* [Current problem](docs/snippets.md#current-problem)
+	* [Note here](docs/snippets.md#note-here)
+* [Adding pages](docs/snippets.md#adding-pages)
+* [Explain it!](docs/snippets.md#explain-it)
+	* [How to invoke a snippet.](docs/snippets.md#how-to-invoke-a-snippet)
+	* [Separated assignments](docs/snippets.md#separated-assignments)
+	* [Something good](docs/snippets.md#something-good)
+* [Suggestions](docs/snippets.md#suggestions)
 
 ##  Troubleshooting (docs/troubleshooting.md):
 
@@ -308,10 +316,12 @@
 	* [Have you installed _Smarty_?](docs/troubleshooting.md#have-you-installed-smarty)
 	* [Permissions](docs/troubleshooting.md#permissions)
 	* [There goes nothing](docs/troubleshooting.md#there-goes-nothing)
+	* [Have you installed _Predis_?](docs/troubleshooting.md#have-you-installed-predis)
 * [Database](docs/troubleshooting.md#database)
 	* [SQLite & autoincrements](docs/troubleshooting.md#sqlite-&-autoincrements)
 	* [SQLite & deprecated columns](docs/troubleshooting.md#sqlite-&-deprecated-columns)
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
+* [Suggestions](docs/troubleshooting.md#suggestions)
 

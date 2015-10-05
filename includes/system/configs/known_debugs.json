@@ -23,6 +23,7 @@
 		"debugnoemaillayout": "Disables current layout if any for emails.",
 		"debugemailstriptags": "This activates the tags stripping when debugging emails.",
 		"debugdbquery": "Displays queries used by database query adapters.",
-		"debugredirection": "Disables redirect conditions and prompt what it's going to happen."
+		"debugredirection": "Disables redirect conditions and prompt what it's going to happen.",
+		"debugmanifests": "Displays all manifests information."
 	}
 }

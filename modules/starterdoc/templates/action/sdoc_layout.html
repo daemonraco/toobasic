@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TooBasic-{$TOOBASIC_VERSION}-{$TOOBASIC_VERSION_NAME}</title>
+
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+		<link rel="shortcut icon" type="image/png" href="docs/images/TooBasic-icon-24px.png"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap.min.css')}"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap-theme.min.css')}"/>
+		<link rel="stylesheet" type="text/css" href="{$ctrl->css('sdoc_style')}"/>
+
+		<script type="text/javascript" src="{$ctrl->lib('jquery/jquery-2.1.3.min.js')}"></script>
+		<script type="text/javascript" src="{$ctrl->lib('bootstrap/js/bootstrap.min.js')}"></script>
+		<script type="text/javascript" src="{$ctrl->js('sdoc_script')}"></script>
+	</head>
+	<body class="container Action_{$action}">
+		<header>
+			<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a href="{$ctrl->link('?action=sdoc_home')}" class="navbar-brand">TooBasic-{$TOOBASIC_VERSION}-{$TOOBASIC_VERSION_NAME}</a>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li><a href="{$ctrl->link('?action=sdoc_authors')}">Author's</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Documentation <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="?action=mddoc&doc=README.md">Main Document</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href="?action=mddoc&doc=docs/layout.md">Using Layouts</a></li>
+									<li><a href="?action=mddoc&doc=docs/controllerexports.md">Controller Exports</a></li>
+									<li><a href="?action=mddoc&doc=docs/language.md">Using Languages</a></li>
+									<li><a href="?action=mddoc&doc=docs/models.md">Models</a></li>
+									<li><a href="?action=mddoc&doc=docs/configs.md">Using Configs</a></li>
+									<li><a href="?action=mddoc&doc=docs/services.md">Services</a></li>
+									<li><a href="?action=mddoc&doc=docs/cache.md">Cache</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href="?action=mddoc&doc=docsindex.md">Full Index</a></li>
+									<li><a href="?action=mddoc&doc=docs/troubleshooting.md">Troubleshooting</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</div><!-- /.container-fluid -->
+			</nav>
+		</header>
+		<div id="MainContents" class="row-fluid">
+			<!-- MAIN CONTENT @{ -->
+			%TOO_BASIC_ACTION_CONTENT%
+			<!-- @} /MAIN CONTENT -->
+		</div>
+		<footer>
+
+		</footer>
+	</body>
+</html>

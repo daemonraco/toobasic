@@ -10,13 +10,13 @@ technology providing you with a more flexible support.
 For example, let's say you can't afford to have MySQL, for whatever reason, in
 your site but SQLite will be great.
 For this cases, __TooBasic__ has a generic way to interact with database
-structures and before talking to the real database, it relay those actions to a
+structures and, before talking to the real database, it relays actions to a
 middleman, a specific class with the knowledge to translate those intended action
 into the real deal. This classes are _adapters_ and we're going to explain them
 in further sections and try to tell you how to create your own.
 
-Anyway, if you are here, you probably know what an _adapter pattern_ and a
-_strategy pattern_ are, and __TooBasic__ uses a bit of both.
+Anyway, if you are here, you probably know what _adapter pattern_ and _strategy
+pattern_ are, and __TooBasic__ uses a bit of both.
 If you don't know them, you may read these links:
 
 * [Adapter Pattern](http://en.wikipedia.org/wiki/Adapter_pattern)
@@ -34,8 +34,9 @@ Cache adapters provided by __TooBasic__ are:
 * `TooBasic\Adapters\Cache\Memcached`
 * `TooBasic\Adapters\Cache\Memcache`
 * `TooBasic\Adapters\Cache\NoCache`
+* `TooBasic\Adapters\Cache\Redis`
 
-If you want you can read more about them in the [Cache Documentation](cache.md).
+If you want you can read more about them in the [cache documentation](cache.md).
 
 ## Database structure maintainer adapters
 Something that is always different between database engines is _how_ they provide
@@ -69,6 +70,7 @@ engine of your connection configuration.
 ## I want mine!
 Let's say you want to use [CouchBase](http://www.couchbase.com/) instead of
 _Memcached_ because it's what you need and because you already paid the license :)
+
 You may try using `TooBasic\Adapters\Cache\Memcached` because _CouchBase_ provides
 an access with the same interface, but that's not what you need.
 In other words, you need a cache adapter for _CouchBase_.
@@ -77,7 +79,7 @@ To achieve this you have to go through the next 3 steps:
 
 ### Step 0: into a module
 For this example will suppose you're creating a module/plugin for __TooBasic__
-named __CouchBasePlugin__ and you have it deployed at
+named __CouchBasePlugin__ and you'll have it deployed at
 __ROOTDIR/modules/CouchBasePlugin__ with this basic folders list:
 
 * `ROOTDIR/modules/CouchBasePlugin/configs`
@@ -157,13 +159,13 @@ this line to your site's configuration:
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\Adapters\\View\\MyEngine';
 ```
 
-Also, if you are not sure if it works or not, you can add it just as a format
+Also, if you are not sure if it works or not, you can just add it as a format
 interpreter by doing this:
 ```php
 <?php
 $Defaults[GC_DEFAULTS_FORMATS]['myformat'] = '\\TooBasic\\Adapters\\View\\MyEngine';
 ```
-And then accessing your URLs like this:
+And then access your URLs like this:
 
 > http://www.example.com/mysite/?action=myaction&format=myformat
 
@@ -171,16 +173,17 @@ And then accessing your URLs like this:
 Other view adapters are:
 
 * `\TooBasic\Adapters\View\Smarty`: The not-so-corner-stone :)
-* `\TooBasic\Adapters\View\Dump`: Display your controllers as `var_dump()` results
-(`?format=dump`).
-* `\TooBasic\Adapters\View\JSON`: Display your controllers in JSON fromat
+* `\TooBasic\Adapters\View\Dump`: Displays your controllers as `var_dump()`
+results (`?format=dump`).
+* `\TooBasic\Adapters\View\JSON`: Displays your controllers in JSON fromat
 (`?format=json`).
-* `\TooBasic\Adapters\View\Print`: Display your controllers as `print_r()` results
-(`?format=print`).
-* `\TooBasic\Adapters\View\Serialize`: Display your controllers as `serialize()`
+* `\TooBasic\Adapters\View\Printr`: Displays your controllers as `print_r()`
+results (`?format=print`).
+* `\TooBasic\Adapters\View\Serialize`: Displays your controllers as `serialize()`
 results (`?format=serialize`).
-* `\TooBasic\Adapters\View\XML`: Display your controllers in XML fromat
+* `\TooBasic\Adapters\View\XML`: Displays your controllers in XML fromat
 (`?format=xml`).
+	* _Warning_: This depends on some PHP functions in status BETA.
 
 ## Suggestions
 We suggest you visit these links:

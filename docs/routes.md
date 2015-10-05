@@ -9,7 +9,7 @@ explain it for us and follow these links:
 * [Rewrite Engine](http://en.wikipedia.org/wiki/Rewrite_engine)
 
 Perhaps too much to read and not that much understanding, well let's say you have
-this complex and ugly url here:
+this complex and ugly URL here:
 
 >http://www.myhost.com/mysite/?action=product&id=204578&view_mode=clean&expand=description
 
@@ -38,7 +38,10 @@ If not, follow
 [this link](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) and you may
 find some help in how to solve this issue.
 
-### Allow Override
+Also, if you have __TooBasic__ up and running you can use the debug parameter
+`?debugphpinfo` and it will show you such information.
+
+### Allow override
 Check you _Apache_ configuration file (probably at __/etc/apache2/apache2.conf__
 on *nix systems).
 Inside it look for something looking like this:
@@ -73,8 +76,8 @@ __.htaccess__ you have to take one of these options:
 * Change the _Apache_ configuration (here I hope you know what you are doing).
 
 ## Activating routes
-By default, __TooBasic__ assumes you're not using clean url, therefore the first
-step to take is activate it.
+By default, __TooBasic__ assumes you're not using clean URLs, therefore the first
+step to take is to activate them.
 Go to your site's main configuration file located at __ROOTDIR/site/config.php__
 and add something like this:
 ```php
@@ -82,10 +85,10 @@ and add something like this:
 $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = true;
 ```
 This will change many internal behaviors and it will start analyzing routes
-configurations and checking for a url parameter called __route__.
+configurations and checking for a URL parameter called __route__.
 
 ## Our first route
-Let's think about the url we mentioned at the beginning of this page and use it as
+Let's think about the URL we mentioned at the beginning of this page and use it as
 our example:
 
 >http://www.myhost.com/mysite/?action=product&id=204578&view_mode=clean&expand=description
@@ -97,7 +100,7 @@ a product.
 * `id`: The id of a product to display.
 * `view_mode`: The way a product has to be displayed.
 
-Based on this, we may want to transform this url into something simpler, something
+Based on this, we may want to transform this URL into something simpler, something
 like our example:
 
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
@@ -120,31 +123,31 @@ __ROOTDIR/site/configs/routes.json__ with something like this:
 }
 ```
 
-Now, what the heck is going on here?
+_Now, what the heck is going on here?_
 First thing you need to know is that every route specification has two important
-parameters __route__ and __action__, in other words, the way the url looks like
+parameters __route__ and __action__, in other words, the way the URL looks like
 and the action/controller that is going to take care of it.
 
-The parameters `params` is a way to implicitly set url parameters, in our case,
-when this route is valid it will assume there's a url parameter called
+The parameters `params` is a way to implicitly set URL parameters, in our case,
+when this route is valid it will assume there's a URL parameter called
 __view_mode__ with the value _clean_.
 
-## Route Analysis
+## Route analysis
 Ok, we've seen how to configure a route, but, how does the __route__ pattern work?
 Well the first thing you need to know is that __TooBasic__ splits this value on
-each slash (`/`) and checks each piece against the current url, also split in the
+each slash (`/`) and checks each piece against the current URL, also split in the
 same manner.
 
 First two pieces, `product` and `cleaned` are considered to be _literal_ which
 means they must be exact matches.
 The third piece is a little more tricky and it's considered a _parameter_.
 
-Now, a _parameter_ is not a piece of url that has to be check, in fact is a piece
-that has to be transformed into a url query's parameter.
+Now, a _parameter_ is not a piece of URL that has to be check, in fact is a piece
+that has to be transformed into a URL query's parameter.
 In our example, when we say `:id:` we are saying the piece is a parameter (that's
 the meaning of those colons) and it's name will be __id__.
 Also we are adding a type check saying `:id:int`, which means it is a parameter
-called __id__ and it must be an integer:
+called __id__ and it must be an integer.
 
 ### Parameters types
 When validating parameters types, you may use this:
@@ -155,7 +158,7 @@ When validating parameters types, you may use this:
 * nothing: for no validation.
 
 ### Let's write a few more
-Let's use the things we've said and write something like this:
+Let's use those things we've said and write something like this:
 ```json
 {
     "routes": [{
@@ -164,8 +167,7 @@ Let's use the things we've said and write something like this:
         "params": {"view_mode": "clean"}
     },{
         "route": "product/:view_mode:enum:clean,compact,full/:id:int",
-        "action": "product",
-        "params": {"view_mode": "clean"}
+        "action": "product"
     },{
         "route": "product/:id:int",
         "action": "product",
@@ -179,7 +181,7 @@ Let's use the things we've said and write something like this:
     }]
 }
 ```
-Here is a bunch of valid url for these routes:
+Here is a bunch of valid URL for these routes:
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
 
 >http://www.myhost.com/mysite/product/clean/204578?expand=description
@@ -231,7 +233,7 @@ And you shouldn't use something like this:
 Because you'll never know where your site will be deployed, so __/mysite__ is a
 directory name that may change.
 
-Here is where the controller exports come in handy.
+Here is where _controller exports_ come in handy.
 Let's rewrite this layout in this way:
 ```html
 <!DOCTYPE html>
@@ -252,10 +254,10 @@ Let's rewrite this layout in this way:
 	</body>
 </html>
 ```
-In this way, we are letting __TooBasic__ take care of many of our url trusting
+In this way, we are letting __TooBasic__ take care of many of our URLs trusting
 that it will add the write prefix to avoid problems.
 
-If you want to know more about controller exports, you may visit
+If you want to know more about _controller exports_, you may visit
 [this link](controllerexports.md).
 
 ### Final result
@@ -281,5 +283,11 @@ After rendering, our layout may look like this:
 ```
 
 ## Modules?
-Yes, each module may add a __routes.json__ file inside their __configs__ directory
+Yes, each module may add a __routes.json__ file inside its __configs__ directory
 and it will be loaded.
+
+## Suggestions
+If you want, you may visit these documentation pages:
+
+* [Controller Exports](controllerexports.md)
+* [Layouts](layout.md)

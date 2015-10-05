@@ -1,12 +1,12 @@
 # TooBasic: Emails
 ## Huh?!
-No, we are not redifining the concept of an email, we're just making it easier
+No, we are not redefining the concept of an email, we're just making it easier
 inside __TooBasic__.
 
 Let's say your site keeps getting better and now you would like to send emails to
-your users due to account updates and issues, or maybe just advertisment.
+your users due to account updates and issues, or maybe just advertisement.
 For this you created a beautiful page with your site's logo at the top and a some
-important licences related texts in the footer.
+important licenses related texts in the footer.
 And in the middle you want to insert the real thing you want to say to your
 recipient.
 
@@ -103,7 +103,7 @@ your email along with its layout.
 In this way you can see how your email may look when it arrives.
 
 This is what we call _email simulation_ and here is where the method
-`simulation()` makes more sence.
+`simulation()` makes more sense.
 As you may already guest, `basicRun()` is where you place your logic and
 assignments to be used in the view, but when you are simulating, there's no real
 information to base your logic and instead of looking at how beautiful your email
@@ -134,14 +134,14 @@ And:
 ```
 
 ## How do I send it?
-Now is time that we talk about _email payloads_.
+Now is time for us to talk about _email payloads_.
 Somewhere in all this document pages we said that we don't like controllers that
 talk between each other and we still don't like it, but in this case, when a model
-or a controller triggers a email send, it has to tell something to an _emails
+or controller triggers an email send, it has to tell some things to an _emails
 manager_ and finally to the email itself.
 Now, because we don't like it, we've created a mechanism called _email payload_
-which transport such information between somethin class and the _emails manager_.
-Let's take a look to an example with a possible _model_ in which we send our
+which transport such information between some class and the _emails manager_.
+Let's take a look at an example with a possible _model_ in which we send our
 _hello_ mail:
 ```php
 <?php
@@ -183,7 +183,7 @@ class HelloEmail extends \TooBasic\Email {
 ```
 
 ### Let's explain things
-The first thing to understand is the payload it self
+The first thing to understand is the payload it self:
 ```php
 		. . .
 
@@ -196,15 +196,16 @@ The first thing to understand is the payload it self
 
 		. . .
 ```
+The steps it takes are:
 * Creates a new payload object to exchange with an email controller.
-* Sets teh name of the email controller, view and other things related it it.
-* Sets what subject you the email will have when it arrives, in this case 'Hello
-Friend'.
-* Sets the email address.
+* Sets the name of the email controller, view and other things related it.
+* Sets what subject the email will have when it arrives, in this case _'Hello
+Friend'_.
+* Sets the email address that will receive it.
 * And, this is the tricky part, it sets a value that can be used inside the email
 controller. This is a dynamic behavior we don't like but it could be worse :/
 	* If you take a look at the changes we made to our mail, it now uses
-	information in the payload.
+	information from the payload.
 
 The second thing to understand is how we actually send it:
 ```php
@@ -219,15 +220,15 @@ The second thing to understand is how we actually send it:
 		. . .
 ```
 * Invokes the _emails manager_.
-* Set the payload to send the right mail to the right recipient.
+* Sets the payload to send the right mail to the right recipient.
 * Renders the email.
-* Sends the email return the operation result.
-	* Remember, if it's true, it only means the email was sent to an email
-	queue, it doesn't mean it was actually delivered. Asynchronous mumbo-jumbo
-	that can give you a little headache.
+* Sends the email and returns the operation result.
+	* Remember, if it's `true`, it only means the email was sent to an email
+	queue, it doesn't mean it was actually delivered. It's asynchronous
+	mumbo-jumbo that can give you a little headache.
 
 ## Exports
-Can I use `{$ctrl->...` in the same way I do on controllers?
+_Can I use `{$ctrl->...` in the same way I do on controllers?_
 Yes, you can (except for `insert()`) and perhaps the only difference here is the
 server name.
 If you check the email you've sent, all URL have the server name and this is
@@ -262,12 +263,12 @@ And you can debug it calling to an URL like this one:
 
 ## Origin
 If you look at your email headers you're going to find some default values you may
-not like, header like:
+not like, headers like:
 
 * __From__: _somewhere@example.com_
 * __Replay to__: _noreplay@example.com_
 
-We strongly recommend you to change these values into something that suites your
+We strongly recommend you to change these values into something that suits your
 site.
 For that you can set this default values:
 ```php

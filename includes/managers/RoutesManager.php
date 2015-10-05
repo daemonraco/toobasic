@@ -450,13 +450,13 @@ class RoutesManager extends Manager {
 		}
 		//
 		// Displaying debug information and stopping the execution.
-		\TooBasic\debugThing($out);
-		die;
+		\TooBasic\debugThingInPage("<div class=\"row\"><pre>{$out}</pre></div>", 'Routes');
 	}
 	/**
 	 * Manager's initilization.
 	 */
 	protected function init() {
+		parent::init();
 		$this->_params = Params::Instance();
 	}
 	/**
@@ -521,7 +521,7 @@ class RoutesManager extends Manager {
 				}
 			} else {
 				if(isset($this->_params->debugroutes)) {
-					debugit('Routes are disabled', true);
+					\TooBasic\debugThingInPage('Routes are disabled', 'Routes');
 				}
 			}
 		}

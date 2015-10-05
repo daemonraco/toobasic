@@ -1,9 +1,9 @@
 # TooBasic: Using Layouts
-## What is a Layout?
+## What is a layout?
 Well, you know, the part of your page that surrounds your main content an usually
 stays always the same.
-## Create a Site with Layout
-### Main Content
+## Create a site with layout
+### Main content
 Let's follow an old example an create an action called __myaction__ this way:
 
 * A controller in __ROOTDIR/site/controllers/myaction.php__:
@@ -24,7 +24,7 @@ class MyactionController extends \TooBasic\Controller {
 > http://www.example.com/?action=myaction
 
 After all of this you'll find a page saying __Hello World!__.
-### Nav Bar
+### Nav bar
 Let's create another action to emulate a navigation bar and call it __mynav__:
 
 * A controller in __ROOTDIR/site/controllers/nav.php__:
@@ -75,8 +75,8 @@ class MylayoutController extends \TooBasic\Layout {
 > http://www.example.com/?action=myaction&layout=mylayout
 
 ### Config
-As you may see, using a parameter called __layout__ on each url may not be pretty,
-therefore you can configure your site by creating a file in
+As you may see, using a parameter called __layout__ on each URL may not be pretty,
+therefore you can configure your site by creating/modifying a file in
 __ROOTDIR/site/config.php__ with this content:
 ```php
 <?php
@@ -94,8 +94,8 @@ And then access this way:
 > http://www.example.com/
 
 ## Doubts
-### What the Heck is That?
-You've probably seen an extrange word/constant/keyword/thing called
+### What the heck is that?
+You've probably seen an strange word/constant/keyword/thing called
 __%TOO_BASIC_ACTION_CONTENT%__, this is a keyword you must use inside your
 template in the place where you want to put your main content.
 ### Insert?
@@ -104,7 +104,7 @@ If you look closely to our example you'll find something like
 called __mynav__. Of course you can import that part with AJAX later on, but in
 this way, that part will be add to your layout cache when it's activated.
 
-## Wrong Layout?
+## Wrong layout?
 If for any reason you create an action that requires a different layout, you can
 change it writing something like this:
 ```php
@@ -128,7 +128,7 @@ class MyactionController extends \TooBasic\Controller {
 ```
 
 ## Suggestions
-If you want you may visit this documentation pages:
+If you want, you may visit these documentation pages:
 
 * [Snippets](snippets.md)
 * [Redirections](redirections.md)
