@@ -45,7 +45,9 @@ public methods. For example:
 ```php
 echo $this->translate->key_hello_world;
 ```
-* `$this->cache`: To access current cache adapter  (visit [Cache](cache.md)).
+* `$this->cache`: To access current cache adapter (visit [Cache](cache.md)).
+* `$this->config`: To access the singleton `ConfigsManager` and therefore JSON
+configuration files (visit [Cache](configs.md)).
 
 ## My own
 Now suppose you are inside one of your own classes and you don't have these magic

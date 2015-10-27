@@ -131,6 +131,45 @@ So, how is it again?
 And if it doesn't find any of these files, it won't say a thing and do as if there
 were no problems.
 
+## Easier with JSON
+If you decide to use JSON files for your configurations, there's an easier way to
+access then and use their properties.
+
+Let's say we go back to that example of __ROOTDIR/site/configs/boxes_types.json__
+and we want to use it, you can write something like this:
+```php
+. . .
+print_r(\TooBasic\Managers\ConfigsManager::Instance()->boxes_types->types);
+. . .
+```
+This example shows that accessing the singleton `ConfigsManager` you can load your
+JSON configuration file and use its properties the same way you do with any basic
+object. Also, if you're writing inside a controller or a model, you can write
+something like this using _magic properties_:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->boxes_types->types);
+	}
+. . .
+```
+
+### Multiple files
+Let's say you created two or more of these files, all with the same name and
+scattered across your plugins, each one with different properties.
+Now let's say you want to load them all as if they where one configuration file,
+for that you can write something like this:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->boxes_types(\TooBasic\Config::ModeMultiple)->types);
+	}
+. . .
+```
+Remember that when all these files are loaded, properties specified in more than
+one JSON configuration file will override properties with the same name loaded in
+a previous file.
+
 ## Suggestions
 If you want you may visit these documentation pages:
 

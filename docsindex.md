@@ -67,6 +67,8 @@
 	* [_config_http.php_](docs/configs.md#config_httpphp)
 	* [Site config file](docs/configs.md#site-config-file)
 	* [Summary](docs/configs.md#summary)
+* [Easier with JSON](docs/configs.md#easier-with-json)
+	* [Multiple files](docs/configs.md#multiple-files)
 * [Suggestions](docs/configs.md#suggestions)
 
 ##  Controller Exports (docs/controllerexports.md):
