@@ -161,10 +161,10 @@ class MagicProp extends Singleton {
 			// an alias it's value is used for the next try.
 			// Otherwise, it's left with it's last value and then
 			// returned.
-			if(isset($MagicProps[GC_MAGICPROP_PROPERTIES][$prop])) {
+			if(isset($MagicProps[GC_MAGICPROP_PROPERTIES][$out])) {
 				$done = true;
-			} elseif(isset($MagicProps[GC_MAGICPROP_ALIASES][$prop])) {
-				$prop = $MagicProps[GC_MAGICPROP_ALIASES][$prop];
+			} elseif(isset($MagicProps[GC_MAGICPROP_ALIASES][$out])) {
+				$out = $MagicProps[GC_MAGICPROP_ALIASES][$out];
 			} else {
 				//
 				// Not found.
