@@ -207,6 +207,7 @@
 * [Known properties](docs/magicprop.md#known-properties)
 * [My own](docs/magicprop.md#my-own)
 	* [MagicPropException](docs/magicprop.md#magicpropexception)
+* [Dynamic Properties](docs/magicprop.md#dynamic-properties)
 * [Suggestions](docs/magicprop.md#suggestions)
 
 ##  Models (docs/models.md):

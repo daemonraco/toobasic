@@ -90,6 +90,35 @@ If you look closely, in the second example we're using a try-catch sentence and
 trapping an exception called `\TooBasic\MagicPropException` which is raised when
 an unknown property is requested.
 
+## Dynamic Properties
+As far as we've told, there are just a few possible parameters that point to a
+specific set of singletons, but that's no completely true.
+If for example you create a singleton called `MySingleton` and you want to access
+it through _magic props_ using the name `ms` or even `mys`, you can add this piece
+of code to, for example, your configuration file:
+```php
+$MagicProps[GC_MAGICPROP_PROPERTIES]['ms'] = 'MySingleton';
+$MagicProps[GC_MAGICPROP_ALIASES]['mys'] = 'ms';
+```
+In this example you can see an association between the name `ms` and your
+singleton which means you can do something like this, for example, inside a model:
+```php
+. . .
+	public function myMethod() {
+		return $this->ms->someMethod();
+	}
+. . .
+```
+Also, in the previous example you can see the association between the name `mys`
+and `ms` which serves as an alias and you can also do this:
+```php
+. . .
+	public function myMethod() {
+		return $this->mys->someMethod();
+	}
+. . .
+```
+
 ## Suggestions
 Here you have a few links you may want to visit:
 
