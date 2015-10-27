@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '1.0.1');
+define('TOOBASIC_VERSION', '1.1.0');
 define('TOOBASIC_VERSION_NAME', 'serpent');
 // @}
 //
@@ -277,5 +277,17 @@ define('GC_DBQUERY_NAMES_COLUMN_ID', 'column-id');
 define('GC_DBQUERY_NAMES_COLUMN_NAME', 'column-name');
 define('GC_DBQUERY_PREFIX_COLUMN', 'column');
 define('GC_DBQUERY_PREFIX_TABLE', 'table');
+// @}
+//
+// Magic Properties @{
+define('GC_MAGICPROP_PROPERTIES', 'properties');
+define('GC_MAGICPROP_ALIASES', 'aliases');
+define('GC_MAGICPROP_PROP_MODEL', 'model');
+define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
+define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
+define('GC_MAGICPROP_PROP_TR', 'translate');
+define('GC_MAGICPROP_PROP_PARAMS', 'params');
+define('GC_MAGICPROP_PROP_CACHE', 'cache');
+define('GC_MAGICPROP_PROP_PATHS', 'paths');
 // @}
 // @}

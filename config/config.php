@@ -170,6 +170,20 @@ $Paths[GC_PATHS_TEMPLATES] = '/templates';
 // SuperLoader main list.
 $SuperLoader = array();
 //
+// Magic properties configurations
+$MagicProps = array();
+$MagicProps[GC_MAGICPROP_PROPERTIES] = array(
+	GC_MAGICPROP_PROP_MODEL => '\\TooBasic\\ModelsFactory',
+	GC_MAGICPROP_PROP_REPRESENTATION => '\\TooBasic\\Representations\\ItemsFactoryProvider',
+	GC_MAGICPROP_PROP_TRANSLATE => '\\TooBasic\\Translate',
+	GC_MAGICPROP_PROP_PARAMS => '\\TooBasic\\Params',
+	//GC_MAGICPROP_PROP_CACHE => '',
+	GC_MAGICPROP_PROP_PATHS => '\\TooBasic\\Paths'
+);
+$MagicProps[GC_MAGICPROP_ALIASES] = array(
+	GC_MAGICPROP_PROP_TR => GC_MAGICPROP_PROP_TRANSLATE
+);
+//
 // Cron profiles:
 // $Connections[GC_CONNECTIONS_DB]['<name>'] = array();
 // $Connections[GC_CONNECTIONS_DB]['<name>'][] = array(
