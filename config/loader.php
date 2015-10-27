@@ -13,6 +13,8 @@ $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLU
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapters\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
+$SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Config.php";
+$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Config.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
 $SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
@@ -41,6 +43,7 @@ $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/T
 //
 // Managers @{
 $SuperLoader['TooBasic\\Managers\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
+$SuperLoader['TooBasic\\Managers\\ConfigsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ConfigsManager.php";
 $SuperLoader['TooBasic\\Managers\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
 $SuperLoader['TooBasic\\Managers\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
 $SuperLoader['TooBasic\\Managers\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";

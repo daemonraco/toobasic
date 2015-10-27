@@ -7,11 +7,9 @@
 
 namespace TooBasic;
 
-use TooBasic\Representations\ItemsFactoryProvider;
-
 /**
  * @class MagicPropException
- * This exeption is thrown whenever 'MagicProp' founds a halting error.
+ * This exeption is thrown whenever 'MagicProp' finds a halting error.
  */
 class MagicPropException extends Exception {
 	

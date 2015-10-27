@@ -282,12 +282,13 @@ define('GC_DBQUERY_PREFIX_TABLE', 'table');
 // Magic Properties @{
 define('GC_MAGICPROP_PROPERTIES', 'properties');
 define('GC_MAGICPROP_ALIASES', 'aliases');
-define('GC_MAGICPROP_PROP_MODEL', 'model');
-define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
-define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
-define('GC_MAGICPROP_PROP_TR', 'translate');
-define('GC_MAGICPROP_PROP_PARAMS', 'params');
 define('GC_MAGICPROP_PROP_CACHE', 'cache');
+define('GC_MAGICPROP_PROP_CONFIG', 'config');
+define('GC_MAGICPROP_PROP_MODEL', 'model');
+define('GC_MAGICPROP_PROP_PARAMS', 'params');
 define('GC_MAGICPROP_PROP_PATHS', 'paths');
+define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
+define('GC_MAGICPROP_PROP_TR', 'translate');
+define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
 // @}
 // @}
