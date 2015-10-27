@@ -18,7 +18,6 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 	// Constants.
 	const OptionCached = 'Cached';
 	const OptionFluid = 'Fluid';
-	const OptionName = 'Name';
 	const OptionType = 'Type';
 	const TypeBasic = 'basic';
 	const TypeBootstrap = 'bootstrap';
@@ -130,14 +129,11 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		$text = 'Allows you to eliminate a layout and its artifacts from your site.';
 		$this->_options->option(self::OptionRemove)->setHelpText($text, 'layout-name');
 
-		$text = "TODO help text for: '--name', '-n'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionName, array('--name', '-n'), Option::TypeValue, $text, 'value'));
-
 		$text = "This options allows you to choose a initial structure for your new layout. Options are:\n";
 		$text.= "\t- 'basic' (the default)\n";
 		$text.= "\t- 'bootstrap'\n";
 		$text.= "\t- 'table'\n";
-		$text.= "\t- other values are considered 'basic'.\n";
+		$text.= "\t- other values are considered 'basic'.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'value'));
 
 		$text = 'When using Twitter Bootstrap, main containers are fluid.';
