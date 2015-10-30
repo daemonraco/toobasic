@@ -67,6 +67,7 @@ $Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] = '';
 $Defaults[GC_DEFAULTS_SERVICE] = '';
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV] = array();
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES] = array();
+$Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES] = array();
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\Adapters\\View\\Smarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],

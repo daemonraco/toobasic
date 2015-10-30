@@ -86,6 +86,9 @@ class ShellManager extends Manager {
 		// Checking for start errors.
 		if(!$this->hasErrors()) {
 			//
+			// Check option aliases.
+			$this->checkAliases();
+			//
 			// Setting and checking basic options.
 			$options = $this->starterOptions();
 			$options->check();
@@ -137,6 +140,45 @@ class ShellManager extends Manager {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method updates the super global '$argv' expanding aliases for the
+	 * first parameter.
+	 */
+	protected function checkAliases() {
+		//
+		// Global dependencies.
+		global $Defaults;
+		global $argv;
+		global $argc;
+		//
+		// Checking if there's a parameter to analyze.
+		if($argc > 1) {
+			$param = $argv[1];
+			//
+			// Checking if there's an alias.
+			if(isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
+				$aux = array();
+				//
+				// Copying each value.
+				foreach($argv as $k => $v) {
+					//
+					// Checking if it's an alias position.
+					if($k == 1) {
+						//
+						// Replacing alias.
+						foreach($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param] as $p) {
+							$aux[] = $p;
+						}
+					} else {
+						$aux[] = $v;
+					}
+				}
+				//
+				// Updating superglobal.
+				$argv = $aux;
+			}
+		}
+	}
 	/**
 	 * Class initialization.
 	 */

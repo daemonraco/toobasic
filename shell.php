@@ -6,7 +6,7 @@
  */
 include __DIR__.'/config/config.php';
 
-use TooBasic\Managers\ShellManager as ShellManager;
+use TooBasic\Managers\ShellManager;
 
 try {
 	if(!defined('__SHELL__')) {

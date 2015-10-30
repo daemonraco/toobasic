@@ -49,6 +49,7 @@ define('GC_DEFAULTS_REDIRECTIONS', 'redirections');
 define('GC_DEFAULTS_SERVICE', 'service');
 define('GC_DEFAULTS_SERVICE_ALLOWEDBYSRV', 'service-allowed-by-srv');
 define('GC_DEFAULTS_SERVICE_ALLOWEDSITES', 'service-allowed-sites');
+define('GC_DEFAULTS_SHELLTOOLS_ALIASES', 'shelltools-aliases');
 define('GC_DEFAULTS_SKIN', 'skin');
 define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
 define('GC_DEFAULTS_VIEW_ADAPTER', 'view-adapter');
