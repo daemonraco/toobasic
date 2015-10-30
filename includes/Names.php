@@ -5,6 +5,12 @@ namespace TooBasic;
 class Names extends FactoryClass {
 	//
 	// Public class methods.
+	public static function ConfigClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_CONFIG);
+	}
+	public static function ConfigFilename($seed) {
+		return self::SnakeFilename($seed);
+	}
 	public static function ControllerClass($seed) {
 		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_CONTROLLER);
 	}

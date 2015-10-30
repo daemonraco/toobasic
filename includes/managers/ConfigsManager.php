@@ -10,6 +10,7 @@ namespace TooBasic\Managers;
 //
 // Class aliases.
 use TooBasic\Config;
+use TooBasic\Names;
 
 /**
  * @class ConfigsManager
@@ -36,7 +37,7 @@ class ConfigsManager extends Manager {
 	 * @throws \TooBasic\ConfigException
 	 */
 	public function __get($name) {
-		return $this->get($name, Config::ModeSimple);
+		return $this->get($name, Config::ModeSimple, false);
 	}
 	/**
 	 * This method is similar to '__get()' but it also allows to specify the
@@ -45,13 +46,15 @@ class ConfigsManager extends Manager {
 	 * 	- Config::ModeMultiple: Each one found with a certain name.
 	 *
 	 * @param string $name JSON configuration file name.
-	 * @param mixed[] $args List of parameter given on the call. Only the
-	 * first is used as a mechanism name.
+	 * @param mixed[] $args List of parameter given on the call. The first
+	 * entry is used as a mechanism name and the second as a namespace name.
 	 * @return \TooBasic\Config Returns a configuration file.
 	 * @throws \TooBasic\ConfigException
 	 */
 	public function __call($name, $args) {
-		return $this->get($name, isset($args[0]) ? $args[0] : Config::ModeSimple);
+		$mode = isset($args[0]) ? $args[0] : Config::ModeSimple;
+		$namespace = isset($args[1]) ? $args[1] : false;
+		return $this->get($name, $mode, $namespace);
 	}
 	//
 	// Protected methods.
@@ -63,7 +66,20 @@ class ConfigsManager extends Manager {
 	 * @return \TooBasic\Config Returns a configuration file.
 	 * @throws \TooBasic\ConfigException
 	 */
-	protected function get($name, $mode) {
+	protected function get($name, $mode, $namespace) {
+		//
+		// Guessing interpreter class full name @{
+		$interpreter = '';
+		$className = Names::ConfigClass($name);
+		$fullClassName = Names::ClassName("{$namespace}\\{$className}");
+		if($namespace !== false && class_exists($fullClassName, true)) {
+			$interpreter = $fullClassName;
+		} elseif(class_exists($className, true)) {
+			$interpreter = $className;
+		} else {
+			$interpreter = 'TooBasic\\Config';
+		}
+		// @}
 		//
 		// Creating an entry for current name.
 		if(!isset($this->_configs[$name])) {
@@ -73,7 +89,7 @@ class ConfigsManager extends Manager {
 		// Creating an entry for the right mode and loading the
 		// configuration file.
 		if(!isset($this->_configs[$name][$mode])) {
-			$this->_configs[$name][$mode] = new Config($name, $mode);
+			$this->_configs[$name][$mode] = new $interpreter($name, $mode);
 		}
 
 		return $this->_configs[$name][$mode];

@@ -130,6 +130,7 @@ define('GC_AFIELD_TYPE', 'type');
 //
 // Directories @{
 define('GC_DIRECTORIES_CACHE', 'cache');
+define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');
@@ -225,6 +226,7 @@ define('GC_SERVER_TOOBASIC_ROUTE', 'TOOBASIC_ROUTE');
 // @}
 //
 // Class Suffixes @{
+define('GC_CLASS_SUFFIX_CONFIG', 'Config');
 define('GC_CLASS_SUFFIX_CONTROLLER', 'Controller');
 define('GC_CLASS_SUFFIX_CRON', 'Cron');
 define('GC_CLASS_SUFFIX_EMAIL_CONTROLLER', 'Email');

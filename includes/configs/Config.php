@@ -136,7 +136,9 @@ class Config extends \stdClass {
 				// Loading parameters and overring those that
 				// already exist.
 				foreach($json as $k => $v) {
-					$this->{$k} = $v;
+					if(!preg_match('/^_mode$|^_name$|^_CP_.*/', $k)) {
+						$this->{$k} = $v;
+					}
 				}
 			} else {
 				throw new ConfigException("Wrong configuration file '{$confPath}' (".json_last_error_msg().')');

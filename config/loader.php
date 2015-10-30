@@ -13,7 +13,6 @@ $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLU
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapters\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
-$SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Config.php";
 $SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Config.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
@@ -105,6 +104,11 @@ $SuperLoader['TooBasic\\Shell\\Options'] = "{$Directories[GC_DIRECTORIES_SHELL_I
 $SuperLoader['TooBasic\\Shell\\ShellCron'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellCron.php";
 $SuperLoader['TooBasic\\Shell\\ShellTool'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellTool.php";
 $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Scaffold.php";
+// @}
+//
+// Config interpreters includes @{
+$SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
+$SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
 // @}
 //
 // Known librearies @{
