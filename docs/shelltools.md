@@ -268,7 +268,53 @@ previous one ends.
 Another interesting feature this mechanism provides is to let modules to insert
 their own _cron tools_ in a profile.
 
+## Aliases
+Something that can be a little tedious is to write a log list of parameters over
+and over again, so there's a shortcut mechanism for that kind of situations.
+
+Let's go back to our examples and say that you run this line quite a lot:
+```sh
+$ sudo -u www-data php /var/www/mysite/shell.php tool users -l
+```
+Now imagine that you could run something like this:
+```sh
+$ sudo -u www-data php /var/www/mysite/shell.php ulist
+```
+Still a bit long, but if you are in the right place with the right permissions,
+you may end up running this:
+```sh
+$ php shell.php ulist
+```
+_But how?_
+Of course, somewhere in your site there's a configuration telling __TooBasic__ to
+understand `ulist` as `tool users -l` and that's what we're going to explain in
+the next section.
+
+### Configuration
+Following the examples we can add a code like the ext one to our sites
+configuration:
+```php
+$Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES]['ulist'] = array(
+	'sys',
+	'shell',
+	'remove'
+);
+```
+Using this configuration, __TooBasic__ will expand command line parameters before
+executing the proper command line.
+In other words, you write something shorter, but it executes the long way.
+
+### Rules
+This alias mechanism works only with the first parameter and not with the rest.
+If you run something like the next line it won't work:
+```sh
+$ sudo -u www-data php /var/www/mysite/shell.php -someparam ulist
+```
+Also, if the alias is a core parameter like `cron`, `profile`, etc., it will be
+ignored as if it's not defined.
+
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
 * [Models](models.md)
+* [Facilities](facilities.md)

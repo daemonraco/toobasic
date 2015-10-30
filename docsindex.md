@@ -283,6 +283,9 @@
 	* [How does it work?](docs/shelltools.md#how-does-it-work)
 	* [Dead flags](docs/shelltools.md#dead-flags)
 * [Profiles](docs/shelltools.md#profiles)
+* [Aliases](docs/shelltools.md#aliases)
+	* [Configuration](docs/shelltools.md#configuration)
+	* [Rules](docs/shelltools.md#rules)
 * [Suggestions](docs/shelltools.md#suggestions)
 
 ##  Skins (docs/skins.md):

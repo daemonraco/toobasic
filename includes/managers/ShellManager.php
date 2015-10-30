@@ -27,6 +27,7 @@ class ShellManager extends Manager {
 	const ErrorUnknownTool = 5;
 	const ErrorNoProfileName = 6;
 	const ErrorUnknownProfile = 7;
+	const ModeAlias = 'alias';
 	const ModeCron = 'cron';
 	const ModeProfile = 'profile';
 	const ModeTool = 'tool';
@@ -100,6 +101,9 @@ class ShellManager extends Manager {
 			//
 			// Checking what to do based on the selected mode.
 			switch($this->_mode) {
+				case self::ModeAlias:
+					$this->displayAliases($spacer);
+					break;
 				case self::ModeProfile:
 					$this->_profile = $this->_tool;
 					$this->_tool = false;
@@ -131,6 +135,8 @@ class ShellManager extends Manager {
 					echo "{$spacer}\t- ".self::ModeTool."\n";
 					echo "{$spacer}\t- ".self::ModeProfile."\n";
 					echo "{$spacer}\t- ".self::ModeCron."\n";
+					echo "{$spacer}\t- ".self::ModeAlias."\n";
+					echo "{$spacer}\t- ".self::ModeSys."\n";
 					echo "\n";
 			}
 		}
@@ -155,8 +161,8 @@ class ShellManager extends Manager {
 		if($argc > 1) {
 			$param = $argv[1];
 			//
-			// Checking if there's an alias.
-			if(isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
+			// Checking if there's an alias avoiding core values.
+			if(!in_array($param, array(self::ModeAlias, self::ModeCron, self::ModeProfile, self::ModeTool, self::ModeSys)) && isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
 				$aux = array();
 				//
 				// Copying each value.
@@ -178,6 +184,28 @@ class ShellManager extends Manager {
 				$argv = $aux;
 			}
 		}
+	}
+	/**
+	 * This method displays a message listing all command aliases and their
+	 * translations.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 */
+	protected function displayAliases($spacer) {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Sorting for better display.
+		ksort($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES]);
+		//
+		// Showing all available tools as a hint.
+		echo "{$spacer}Available aliases:\n";
+		foreach($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES] as $alias => $params) {
+			echo "{$spacer}\t- {$alias} (same as '".implode(' ', $params)."')\n";
+		}
+		echo "\n";
 	}
 	/**
 	 * Class initialization.
