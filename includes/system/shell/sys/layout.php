@@ -67,6 +67,13 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 				}
 			}
+			//
+			// Checking bootstrap option.
+			$opt = $this->_options->option(self::OptionType);
+			if($opt->activated() && $opt->value() == self::TypeBootstrap) {
+				$this->_assignments['name_nav'] = $this->_names['name-nav'];
+				$this->_assignments['controller_nav'] = $this->_names['layout-name-nav'];
+			}
 		}
 	}
 	protected function genNames() {
@@ -80,6 +87,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$this->_names['templates-prefix'] = '';
 			//
 			// Checking bootstrap option.
+			$serparatedBSNav = false;
 			$opt = $this->_options->option(self::OptionType);
 			if($opt->activated()) {
 				switch($opt->value()) {
@@ -88,6 +96,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 						break;
 					case self::TypeBootstrap:
 						$this->_names['templates-prefix'] = 'bs/';
+						$serparatedBSNav = true;
 						break;
 					case self::TypeBasic:
 					default:
@@ -116,6 +125,21 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}style.html",
 				GC_AFIELD_DESCRIPTION => 'basic CSS file'
 			);
+			if($serparatedBSNav) {
+				$this->_names['name-nav'] = "{$this->_names[GC_AFIELD_NAME]}_nav";
+				$this->_names['layout-name-nav'] = Names::ControllerClass($this->_names['name-nav']);
+
+				$this->_files[] = array(
+					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name-nav']}.php"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}controller_nav.html",
+					GC_AFIELD_DESCRIPTION => 'nav controller file'
+				);
+				$this->_files[] = array(
+					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name-nav']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view_nav.html",
+					GC_AFIELD_DESCRIPTION => 'nav view file'
+				);
+			}
 		}
 	}
 	protected function setOptions() {
