@@ -54,6 +54,16 @@ class Paths extends Singleton {
 	 */
 	protected $_dbSpecPaths = false;
 	/**
+	 * @var string[] Last loaded list of full paths that cannot be considered
+	 * as a valid result of any path search.
+	 */
+	protected $_disabledPaths = false;
+	/**
+	 * @var int This property keeps count of the last loaded list of disabled
+	 * paths.
+	 */
+	protected $_disabledPathsCount = -1;
+	/**
 	 * @var string[] List of available emails controllers directories.
 	 */
 	protected $_emailControllerPaths = false;
@@ -145,6 +155,34 @@ class Paths extends Singleton {
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
 		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This methods provides access to a list of paths that won't be returned
+	 * by this singleton in any search.
+	 * Its internal mechanism is based on '$Defaults[GC_DEFAULTS_DISABLED_PATHS]'
+	 * but uses a different approach to avoid performance issues when checking
+	 * paths.
+	 *
+	 * @return string[] Returns a list of absolute paths.
+	 */
+	public function disabledPaths() {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Avoiding multiple loads.
+		if($this->_disabledPathsCount != count($Defaults[GC_DEFAULTS_DISABLED_PATHS])) {
+			//
+			// Reseting list.
+			$this->_disabledPaths = array();
+			//
+			// Loading disabled paths.
+			foreach($Defaults[GC_DEFAULTS_DISABLED_PATHS] as $v) {
+				$this->_disabledPaths[] = Sanitizer::DirPath(ROOTDIR."/{$v}");
+			}
+		}
+
+		return $this->_disabledPaths;
 	}
 	/**
 	 * This method provides a way to get one or all email controller files
@@ -670,6 +708,28 @@ class Paths extends Singleton {
 		if($asUri) {
 			foreach($out as &$v) {
 				$v = self::Path2Uri($v);
+			}
+		}
+		//
+		// Removing disabled paths.
+		if($this->disabledPaths()) {
+			//
+			// List shortcut.
+			$dPaths = $this->disabledPaths();
+			//
+			// Removing disabled results.
+			foreach($out as $k => $v) {
+				if(in_array($v, $dPaths)) {
+					unset($out[$k]);
+				}
+			}
+			//
+			// Cleaning keys.
+			$out = array_values($out);
+			//
+			// Debugs.
+			if($debugPathsActive) {
+				$debugPaths[GC_AFIELD_DISABLED] = $dPaths;
 			}
 		}
 		//

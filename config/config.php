@@ -41,6 +41,7 @@ $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_DISABLED_PATHS] = array();
 $Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
 $Defaults[GC_DEFAULTS_EMAIL_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'noreplay@example.com';
