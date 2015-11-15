@@ -293,7 +293,7 @@ define('GC_MAGICPROP_PROP_MODEL', 'model');
 define('GC_MAGICPROP_PROP_PARAMS', 'params');
 define('GC_MAGICPROP_PROP_PATHS', 'paths');
 define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
-define('GC_MAGICPROP_PROP_TR', 'translate');
+define('GC_MAGICPROP_PROP_TR', 'tr');
 define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
 // @}
 // @}
