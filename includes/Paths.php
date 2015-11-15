@@ -625,6 +625,23 @@ class Paths extends Singleton {
 			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SYSTEM]}/{$subpath}");
 		}
 		//
+		// Removing disabled paths.
+		if($this->disabledPaths()) {
+			//
+			// List shortcut.
+			$dPaths = $this->disabledPaths();
+			//
+			// Removing disabled results.
+			foreach($list as $k => $v) {
+				if(in_array($v, $dPaths)) {
+					unset($list[$k]);
+				}
+			}
+			//
+			// Cleaning keys.
+			$list = array_values($list);
+		}
+		//
 		// Returning the built list.
 		return $list;
 	}
