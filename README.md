@@ -1,4 +1,4 @@
-# TooBasic 1.0.1-serpent
+# TooBasic 1.0.2-serpent
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 

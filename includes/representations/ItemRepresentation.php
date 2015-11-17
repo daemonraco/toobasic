@@ -119,9 +119,9 @@ abstract class ItemRepresentation {
 		//
 		// Attepting to obtain a value either from knwon fields or from
 		// extra properties.
-		if(isset($this->_properties[$realName])) {
+		if(array_key_exists($realName, $this->_properties)) {
 			$out = $this->_properties[$realName];
-		} elseif(isset($this->_extraProperties[$name])) {
+		} elseif(array_key_exists($name, $this->_extraProperties)) {
 			$out = $this->_extraProperties[$name];
 		}
 
@@ -142,7 +142,7 @@ abstract class ItemRepresentation {
 		$realName = "{$this->_CP_ColumnsPerfix}{$name}";
 		//
 		// Checking if its a known table column.
-		if(isset($this->_properties[$realName])) {
+		if(array_key_exists($realName, $this->_properties)) {
 			//
 			// Checking that:
 			//	- the column is not the ID column.
