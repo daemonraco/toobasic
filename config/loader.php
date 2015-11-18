@@ -78,6 +78,9 @@ $SuperLoader['TooBasic\\Adapters\\DB\\SpecAdapter'] = "{$Directories[GC_DIRECTOR
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecMySQL.php";
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecPostgreSQL.php";
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Version1'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/Version1.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Version2'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/Version2.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\VersionAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/VersionAdapter.php";
 // @}
 //
 // View adapters @{
