@@ -1224,6 +1224,8 @@ class DBStructureManager extends Manager {
 				//
 				// Updating callbacks.
 				$this->_callbacks = $results[GC_AFIELD_CALLBACKS];
+
+				/** @todo analyse indexes: $results[GC_AFIELD_INDEXES] */
 			}
 		}
 	}
