@@ -7,10 +7,15 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
 use TooBasic\Managers\DBStructureManager;
+use TooBasic\Managers\DBStructureManagerExeption;
 
 /**
  * @class Version2
+ * This interpreter holds the logic to manage version 2 of database structure
+ * specifications.
  */
 class Version2 extends VersionAdapter {
 	//
@@ -20,6 +25,18 @@ class Version2 extends VersionAdapter {
 	const PrecisionVarchar = 256;
 	//
 	// Public methods.
+	/**
+	 * This method takes table specification read from configuration,
+	 * validates it and convert it into a standard specification useful for
+	 * the manager.
+	 *
+	 * @param \stdClass $table Table specification as it was loaded.
+	 * @param mixed[string] $callbacks Currently knwon callbacks by the
+	 * manager. This method will use it to merge it with its own list.
+	 * @return mixed[string] Returns a list of values required by the manager
+	 * to analyse and accept the parsing.
+	 * @throws DBStructureManagerExeption
+	 */
 	public function parseTable($table, $callbacks) {
 		$out = $this->parseTableStartResponse($table, $callbacks);
 		//
@@ -204,36 +221,51 @@ class Version2 extends VersionAdapter {
 			//
 			// Checking index definitions.
 			if(!$out[GC_AFIELD_IGNORED] && count($out[GC_AFIELD_ERRORS]) == 0) {
+				//
+				// Checking for each index type.
 				foreach(array_keys($tableIndexFileds) as $indexType) {
+					//
+					// Checking multiple primary keys.
+					if($indexType == 'primary' && count($out[GC_AFIELD_SPECS]->{$indexType}) > 1) {
+						throw new DBStructureManagerExeption("More than one primary key specified");
+					}
+					//
+					// Checking each index specification.
 					foreach($out[GC_AFIELD_SPECS]->{$indexType} as $index => $fields) {
-						if($fields) {
-							$auxIndex = new \stdClass();
-							$auxIndex->name = "{$auxTable->prefix}{$index}";
-							$auxIndex->table = $out[GC_AFIELD_SPECS]->name;
-							switch($indexType) {
-								case 'primary':
-									$auxIndex->type = 'primary';
-									break;
-								case 'keys':
-									$auxIndex->type = 'key';
-									break;
-								case 'indexes':
-								default:
-									$auxIndex->type = 'index';
-							}
-							$auxIndex->connection = $out[GC_AFIELD_SPECS]->connection;
-							$auxIndex->fields = $fields;
-							$auxIndex->callbacks = array(
-								GC_AFIELD_BEFORE_CREATE => array(),
-								GC_AFIELD_AFTER_CREATE => array(),
-								GC_AFIELD_BEFORE_DROP => array(),
-								GC_AFIELD_AFTER_DROP => array()
-							);
-
-							$out[GC_AFIELD_INDEXES][] = $auxIndex;
+						//
+						// Basic values
+						$auxIndex = new \stdClass();
+						$auxIndex->name = "{$auxTable->prefix}{$index}";
+						$auxIndex->table = $out[GC_AFIELD_SPECS]->name;
+						$auxIndex->connection = $out[GC_AFIELD_SPECS]->connection;
+						$auxIndex->fields = $fields;
+						//
+						// Chossing the right type.
+						switch($indexType) {
+							case 'primary':
+								$auxIndex->type = 'primary';
+								break;
+							case 'keys':
+								$auxIndex->type = 'key';
+								break;
+							case 'indexes':
+							default:
+								$auxIndex->type = 'index';
 						}
 						//
-						// Removing index V2 specs to
+						// Basic clean callbacks
+						// structure.
+						$auxIndex->callbacks = array(
+							GC_AFIELD_BEFORE_CREATE => array(),
+							GC_AFIELD_AFTER_CREATE => array(),
+							GC_AFIELD_BEFORE_DROP => array(),
+							GC_AFIELD_AFTER_DROP => array()
+						);
+						//
+						// Adding index to the list.
+						$out[GC_AFIELD_INDEXES][] = $auxIndex;
+						//
+						// Removing V2 index specs to
 						// avoid confusion.
 						unset($out[GC_AFIELD_SPECS]->{$indexType});
 					}
@@ -245,6 +277,15 @@ class Version2 extends VersionAdapter {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method expand a simple type specification of version 2 into a more
+	 * standard version.
+	 *
+	 * @param string $type String specification to expand.
+	 * @param mixed[string] $errors List of error where to report problems.
+	 * @return \stdClass Returns a type object similar to version 1 or FALSE
+	 * when there's an error.
+	 */
 	protected function expandType($type, &$errors) {
 		//
 		// Default values.
@@ -255,7 +296,11 @@ class Version2 extends VersionAdapter {
 		//
 		// Checking if it's an allowed type.
 		if(in_array($expType[0], self::$_AllowedColumnTypes)) {
+			//
+			// Creating a response object.
 			$out = new \stdClass();
+			//
+			// Analyzing type.
 			switch($expType[0]) {
 				case DBStructureManager::ColumnTypeInt:
 					$out->type = DBStructureManager::ColumnTypeInt;
@@ -278,7 +323,7 @@ class Version2 extends VersionAdapter {
 					} else {
 						$out[GC_AFIELD_ERRORS][] = array(
 							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
-							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value"
+							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no values"
 						);
 					}
 					break;

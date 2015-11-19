@@ -92,7 +92,6 @@ this:
 }
 ```
 
-
 _What's this?!_ let's explain it.
 First of all, `tables` is a list of object specifications representing each table,
 but you already got that.
@@ -354,6 +353,114 @@ That's an interesting question and the answer comes from the way these specs wor
 When you want to remove a table, column or index, you just remove its
 specification and it will get remove by the system, this means there's no place to
 write _drop callback_ specs.
+
+## Table structures version 2
+__TooBasic__ version _1.1.0_ introduced a simpler way to specify tables and its
+indexes which is called version 2.
+Basically it is the same than version 1 (the default), but the behavior of
+`fields` is much simpler and it also adds three new fields called `keys`,
+`indexes` and `primary`.
+
+Following our first examples we may write a specification like the next one based
+on version 2 syntax:
+```json
+{
+    "tables": [{
+            "version": 2,
+            "connection": "seconddb",
+            "name": "users",
+            "prefix": "usr_",
+            "fields": {
+                "id": {
+                    "type": "int",
+                    "autoincrement": true
+                },
+                "username": "varchar:32",
+                "password": "varchar:50"
+            },
+            "keys": {
+                "username": ["username"]
+            }
+        }]
+}
+```
+The main difference is that `fields` is no longer a list of specification, it has
+become an object where each of its fields are considered to be table fields and
+their values are their specifications.
+
+Here we have to be careful of adding the field `version` with the right value,
+otherwise it will be considered as version 1 and it may cause bit of a mess.
+
+### String specification
+When a field's values is just a string as in `password` and `username` from our
+example, it is considered to be _type_ specification and the rest is assumed with
+default values.
+For example `username` is specified as `varchar:32` this will be similar to say
+this in version 1:
+```json
+{
+    "name": "username",
+    "type": {
+        "type": "varchar",
+        "precision": 32
+    },
+    "autoincrement": false,
+    "null": false
+}
+```
+As you can see, the value is used as `type` and `precision`.
+This behavior is also applied to _int_ and _float_ types and ignored for the rest
+of available types.
+The only type that has a rather different behavior is _enum_ in which case one can
+specify `enum:Y:N` and version 2 will consider it as a type followed by a list
+possible values which may be something like this in version 1:
+```json
+{
+    "name": "username",
+    "type": {
+        "type": "enum",
+        "values": ["Y", "N"]
+    },
+    "autoincrement": false,
+    "null": false
+}
+```
+
+When no precision is provided, these are the assumed values:
+
+* float: 11
+* int: 11
+* varchar: 256
+
+### Extended specification
+In our example, if look at `id` you'll see that it doesn't use a string
+specification and it uses an extended one instead.
+This kind of specifications may have these fields:
+
+* `type`: the same value of a _string specification_.
+* `autoincrement`: A boolean value indicating auto incremental behavior.
+* `null`: A boolean value indicating if it allows NULL values.
+* `default`: Default value for such field.
+
+### Indexes
+Version 2 provides a quick way to specify indexes reusing a lot of values already
+specified for the table.
+The three possible lists of index are `indexes` for simple indexes, `keys` for
+indexes with unique values and `primary` from the table's primary key (this can
+have only one entry).
+
+In our example we're using a list of indexes called `keys` and it will trigger
+logics in the same way this next specification would do in version 1:
+```json
+{
+    "indexes": [{
+            "name": "usr_username",
+            "table": "users",
+            "type": "key",
+            "fields": ["username"]
+        }]
+}
+```
 
 ## Unknowns
 This database maintenance mechanism is rather violent and it might destroy unknown

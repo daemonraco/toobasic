@@ -7,18 +7,30 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
 use TooBasic\Managers\DBStructureManager;
 
 /**
  * @class Version1
+ * This interpreter holds the logic to manage version 1 of database structure
+ * specifications.
  */
 class Version1 extends VersionAdapter {
 	//
-	// Protected properties
-	//
-	// Magic methdos.
-	//
 	// Public methods.
+	/**
+	 * This method takes table specification read from configuration,
+	 * validates it and convert it into a standard specification useful for
+	 * the manager.
+	 *
+	 * @param \stdClass $table Table specification as it was loaded.
+	 * @param mixed[string] $callbacks Currently knwon callbacks by the
+	 * manager. This method will use it to merge it with its own list.
+	 * @return mixed[string] Returns a list of values required by the manager
+	 * to analyse and accept the parsing.
+	 * @throws DBStructureManagerExeption
+	 */
 	public function parseTable($table, $callbacks) {
 		$out = $this->parseTableStartResponse($table, $callbacks);
 		//

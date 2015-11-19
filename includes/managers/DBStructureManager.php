@@ -1224,8 +1224,11 @@ class DBStructureManager extends Manager {
 				//
 				// Updating callbacks.
 				$this->_callbacks = $results[GC_AFIELD_CALLBACKS];
-
+				//
+				// Checking if there are index specifications to
+				// consider.
 				if($results[GC_AFIELD_INDEXES]) {
+					/** @fixme this is a duplicated code, it should go into a method */
 					foreach($results[GC_AFIELD_INDEXES] as $pos => &$auxIndex) {
 						//
 						// Obtainig current connection table prefix.
