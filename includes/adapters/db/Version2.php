@@ -79,7 +79,7 @@ class Version2 extends VersionAdapter {
 			// Checking specification connection against
 			// configuration.
 			if(!isset($Connections[GC_CONNECTIONS_DB][$auxTable->connection])) {
-				// 
+				//
 				// If there was a connection specified, an error
 				// is shown.
 				if($auxTable->connection) {
