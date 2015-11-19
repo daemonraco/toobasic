@@ -21,6 +21,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionConnection = 'Connection';
 	const OptionPlural = 'Plural';
 	const OptionRaw = 'Raw';
+	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
 	//
 	// Protected properties.
@@ -305,6 +306,19 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		}
 	}
 	protected function genSpecsFile($path, $template, &$error) {
+		$out = false;
+
+		$opt = $this->_options->option(self::OptionSpecsVersion);
+		if(!$opt->activated() || ($opt->value() + 0) == 2) {
+			$out = $this->genSpecsFileV2($path, $error);
+		} elseif(($opt->value() + 0) == 1) {
+			$out = $this->genSpecsFileV1($path, $error);
+		} else {
+			$this->setError(self::ErrorWrongParameters, "Unknown specifications file version '{$opt->value()}'");
+		}
+		return $out;
+	}
+	protected function genSpecsFileV1($path, &$error) {
 		//
 		// Default values.
 		$out = true;
@@ -319,6 +333,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Table specs.
 		$table = new \stdClass();
+		$table->version = 1;
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
@@ -409,6 +424,95 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 
 		return $out;
 	}
+	protected function genSpecsFileV2($path, &$error) {
+		//
+		// Default values.
+		$out = true;
+		//
+		// Assignments.
+		$this->genAssignments($this->_names);
+		//
+		// Main specs structure.
+		$specs = new \stdClass();
+		$specs->tables = array();
+		//
+		// Table specs.
+		$table = new \stdClass();
+		$table->version = 2;
+		$table->name = $this->_assignments['pluralName'];
+		$table->prefix = $this->_assignments['tablePrefix'];
+		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
+			$table->engine = 'myisam';
+		}
+		if(isset($this->_assignments['connection'])) {
+			$table->connection = $this->_assignments['connection'];
+		}
+		$table->fields = array();
+		//
+		// Adding an id column.
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->type = 'int';
+			$field->autoincrement = true;
+			$table->fields['id'] = $field;
+		}
+		//
+		// Adding specified columns.
+		foreach($this->_assignments['tableFields'] as $column) {
+			$field = new \stdClass();
+			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			if(isset($column[GC_AFIELD_TYPE]['values'])) {
+				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE]['values']);
+			}
+			if($column['default']) {
+				$field->default = $column['default'];
+			} else {
+				$field = $field->type;
+			}
+
+			$table->fields[$column['name']] = $field;
+		}
+		//
+		// Adding a creation date column.
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->type = 'timestamp';
+			$field->null = false;
+			$field->default = 'CURRENT_TIMESTAMP';
+			$table->fields['create_date'] = $field;
+		}
+		//
+		// Adding an indexation status column.
+		if(!$this->isRaw()) {
+			$field = new \stdClass();
+			$field->type = 'varchar:1';
+			$field->null = false;
+			$field->default = 'N';
+			$table->fields['indexed'] = $field;
+		}
+		//
+		// Adding a primary key for column 'id'.
+		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
+			$table->primary= new \stdClass();
+			$table->primary->id=array(
+				"id"
+			);
+		}
+		//
+		// Adding table.
+		$specs->tables[] = $table;
+		//
+		// Generating file content.
+		$output = json_encode($specs, JSON_PRETTY_PRINT);
+
+		$result = file_put_contents($path, $output);
+		if($result === false) {
+			$error = "Unable to write file '{$path}'";
+			$out = false;
+		}
+
+		return $out;
+	}
 	protected function genTranslations() {
 		parent::genTranslations();
 
@@ -475,6 +579,10 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text = "If you want to create a simple table without default columns and indexes, use this parameter.\n";
 		$text = "Note: This won't create controllers and ohter related stuff.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRaw, array('--raw', '-r'), Option::TypeNoValue, $text));
+
+		$text = "Sets the specifications file version, possible values are: '1' and '2'.\n";
+		$text.= "By default it assumes '2'.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSpecsVersion, array('--specs-version', '-sv'), Option::TypeValue, $text));
 
 		$text = 'All generated view will have a bootstrap structure.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));

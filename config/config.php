@@ -143,6 +143,10 @@ $Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
 	'sqlite' => '\\TooBasic\\Adapters\\DB\\SpecSQLite',
 	'pgsql' => '\\TooBasic\\Adapters\\DB\\SpecPostgreSQL'
 );
+$Database[GC_DATABASE_DB_VERSION_ADAPTERS] = array(
+	'v1' => '\\TooBasic\\Adapters\\DB\\Version1',
+	'v2' => '\\TooBasic\\Adapters\\DB\\Version2'
+);
 //
 // Directory configurations.
 $Uris = array();

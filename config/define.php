@@ -94,6 +94,7 @@ define('GC_AFIELD_HOSTS', 'hosts');
 define('GC_AFIELD_INDEXES', 'indexes');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
+define('GC_AFIELD_KEY', 'key');
 define('GC_AFIELD_KEYS', 'keys');
 define('GC_AFIELD_KEYS_BY_LANG', 'keys-by-lang');
 define('GC_AFIELD_LANGS', 'langs');
@@ -173,6 +174,7 @@ define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
 define('GC_DATABASE_DB_CONNECTION_ADAPTERS', 'db-connection-adapters');
 define('GC_DATABASE_DB_QUERY_ADAPTERS', 'db-query-adapters');
 define('GC_DATABASE_DB_SPEC_ADAPTERS', 'db-spec-adapters');
+define('GC_DATABASE_DB_VERSION_ADAPTERS', 'db-version-adapters');
 // @}
 //
 // URIs @{
