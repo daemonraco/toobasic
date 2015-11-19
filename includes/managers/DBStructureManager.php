@@ -1225,7 +1225,35 @@ class DBStructureManager extends Manager {
 				// Updating callbacks.
 				$this->_callbacks = $results[GC_AFIELD_CALLBACKS];
 
-				/** @todo analyse indexes: $results[GC_AFIELD_INDEXES] */
+				if($results[GC_AFIELD_INDEXES]) {
+					foreach($results[GC_AFIELD_INDEXES] as $pos => &$auxIndex) {
+						//
+						// Obtainig current connection table prefix.
+						$prefix = '';
+						if(isset($this->_specs->configs->prefixes->{$auxIndex->type})) {
+							$prefix = $this->_specs->configs->prefixes->{$auxIndex->type};
+						}
+						//
+						// Generating table's full name.
+						$auxIndex->fullname = "{$prefix}{$auxIndex->name}";
+						//
+						// Generating a key to internally identify current index.
+						$key = sha1("{$auxIndex->connection}-{$auxIndex->fullname}");
+						//
+						// Accepting index spec.
+						$this->_specs->indexes[$key] = $auxIndex;
+						//
+						// Enforcing structure @{
+						if(!isset($this->_perConnection[$auxIndex->connection])) {
+							$this->_perConnection[$auxIndex->connection] = array();
+						}
+						if(!isset($this->_perConnection[$auxIndex->connection][GC_AFIELD_INDEXES])) {
+							$this->_perConnection[$auxIndex->connection][GC_AFIELD_INDEXES] = array();
+						}
+						// @}
+						$this->_perConnection[$auxIndex->connection][GC_AFIELD_INDEXES][] = $auxIndex->fullname;
+					}
+				}
 			}
 		}
 	}
