@@ -224,6 +224,11 @@
 * [Using a Model](docs/models.md#using-a-model)
 * [Suggestions](docs/models.md#suggestions)
 
+##  Modules (docs/modules.md):
+
+* [What are modules?](docs/modules.md#what-are-modules)
+* [Suggestions](docs/modules.md#suggestions)
+
 ##  Using Redirections (docs/redirections.md):
 
 * [What is a redirection?](docs/redirections.md#what-is-a-redirection)
