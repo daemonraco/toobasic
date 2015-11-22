@@ -8,13 +8,13 @@
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control" readonly="readonly"/>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control input-sm" readonly="readonly"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</div>
 <%/if%>
 <%/if%><%/foreach%>
