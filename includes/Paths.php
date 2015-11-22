@@ -40,6 +40,10 @@ class Paths extends Singleton {
 	 */
 	protected $_controllerPaths = false;
 	/**
+	 * @var string[string][] List of lists for available custom directories.
+	 */
+	protected $_customPaths = array();
+	/**
 	 * @var string[] List of available styles directories.
 	 */
 	protected $_cssPaths = false;
@@ -155,6 +159,35 @@ class Paths extends Singleton {
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
 		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This methods allows to search files inside a custom subfolder.
+	 *
+	 * @param string $folder Subfolder to look into, either inside 'site' or
+	 * any module.
+	 * @param string $name Name of the file to look for.
+	 * @param string $extension File extension.
+	 * @param boolean $full Indicates if all found files has to be retunred or
+	 * only one.
+	 * @param string $skin Skin to have in consideration. It's usually a
+	 * boolean true indication current skin.
+	 * @param boolean $asUri When true every path is transformed into an
+	 * absolute URI before returning.
+	 * @return mixed Returns an array with every path found or just one string
+	 * when it's not set as full. All paths are absolute.
+	 */
+	public function customPaths($folder, $name, $extension, $full = false, $skin = false, $asUri = false) {
+		//
+		// Generating a proper key.
+		$key = md5(is_array($folder) ? implode('-', $folder) : $folder);
+		//
+		// If there's no list for these paths, one is created.
+		if(!isset($this->_customPaths[$key])) {
+			$this->_customPaths[$key] = false;
+		}
+		//
+		// Searching and returning it's result.
+		return $this->find($this->_customPaths[$key], $skin, $folder, $name, $extension, $full, $asUri);
 	}
 	/**
 	 * This methods provides access to a list of paths that won't be returned
