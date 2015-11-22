@@ -20,8 +20,8 @@ class SApiReaderException extends \TooBasic\Exception {
 
 /**
  * @class SApiReader
- * This class is the basic representation of a API reader.
- * All the responses it can get are returned as they where read.
+ * This class is the basic representation of an API reader.
+ * All the responses it can get are returned as they were read.
  * 
  * Debugs:
  * 	- debugsar: Prompts several debug entries with basic information.
@@ -294,7 +294,6 @@ class SApiReader {
 	protected function validate() {
 		//
 		// Checking abstraction flag.
-		
 		//
 		// Checking main fields presence.
 		foreach(array('services', 'url', 'name', 'description') as $field) {
