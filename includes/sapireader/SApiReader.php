@@ -257,7 +257,6 @@ class SApiReader {
 				\curl_setopt($ch, CURLOPT_POST, true);
 				\curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 				break;
-				break;
 			case 'GET':
 			default:
 		}
