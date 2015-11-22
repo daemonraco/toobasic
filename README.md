@@ -223,6 +223,7 @@ related)
 	* [Routes](docs/routes.md)
 	* [MagicProp](docs/magicprop.md)
 	* [Conditional Redirections](docs/redirections.md)
+	* [Simple API Reader](docs/sapireader.md)
 
 Also:
 

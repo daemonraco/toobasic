@@ -104,7 +104,7 @@ $Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/in
 $Directories[GC_DIRECTORIES_ADAPTERS_DB] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/db');
 $Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/view');
 $Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR.'/modules');
-$Directories[GC_DIRECTORIES_SHELL] = TB_Sanitizer::DirPath(ROOTDIR.'/shell');
+$Directories[GC_DIRECTORIES_SAPIREADER] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/sapireader');
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/shell');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
@@ -187,10 +187,20 @@ $MagicProps[GC_MAGICPROP_PROPERTIES] = array(
 	GC_MAGICPROP_PROP_PARAMS => '\\TooBasic\\Params',
 	//GC_MAGICPROP_PROP_CACHE => '',
 	GC_MAGICPROP_PROP_PATHS => '\\TooBasic\\Paths',
-	GC_MAGICPROP_PROP_CONFIG => '\\TooBasic\\Managers\\ConfigsManager'
+	GC_MAGICPROP_PROP_CONFIG => '\\TooBasic\\Managers\\ConfigsManager',
+	GC_MAGICPROP_PROP_SAPIREADER => '\\TooBasic\\Managers\\SApiManager'
 );
 $MagicProps[GC_MAGICPROP_ALIASES] = array(
 	GC_MAGICPROP_PROP_TR => GC_MAGICPROP_PROP_TRANSLATE
+);
+//
+// Simple API Reader basic configuration.
+$SApiReader = array();
+$SApiReader[GC_SAPIREADER_DEFAULT_TYPE] = GC_SAPIREADER_TYPE_BASIC;
+$SApiReader[GC_SAPIREADER_TYPES] = array(
+	GC_SAPIREADER_TYPE_BASIC => '\\TooBasic\\SApiReader',
+	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
+	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
 //
 // Cron profiles:

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="col-xs-10">
 	<h4 class="text-center">{$tr->title_edit_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
@@ -8,19 +8,19 @@
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control"/>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control input-sm"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control">{$<%$singularName%>.<%$field.name%>}</textarea>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</div>
 <%/if%>
 <%if $field.type.type == 'enum' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control">
+				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm">
 <%foreach from=$field.type.values item=value%>
 					<option value="<%$value%>"{if $<%$singularName%>.<%$field.name%> == '<%$value%>'} selected="selected"{/if}>{$tr->select_option_<%$value%>}</option>
 <%/foreach%>
