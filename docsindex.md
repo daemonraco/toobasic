@@ -267,6 +267,18 @@
 * [Modules?](docs/routes.md#modules)
 * [Suggestions](docs/routes.md#suggestions)
 
+##  Simple API Reader (docs/sapireader.md):
+
+* [What is SApiReader?](docs/sapireader.md#what-is-sapireader)
+* [Specification](docs/sapireader.md#specification)
+	* [Parameters](docs/sapireader.md#parameters)
+	* [Defaults](docs/sapireader.md#defaults)
+* [Extends](docs/sapireader.md#extends)
+* [Headers](docs/sapireader.md#headers)
+* [Methods](docs/sapireader.md#methods)
+	* [POST parameters](docs/sapireader.md#post-parameters)
+* [Suggestions](docs/sapireader.md#suggestions)
+
 ##  Services (docs/services.md):
 
 * [Service?](docs/services.md#service)

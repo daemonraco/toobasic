@@ -114,6 +114,14 @@ $SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRE
 $SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
 // @}
 //
+// Simple API Reader includes @{
+$SuperLoader['TooBasic\\Managers\\SApiManager'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiManager.php";
+$SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
+$SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
+// @}
+//
 // Known librearies @{
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",

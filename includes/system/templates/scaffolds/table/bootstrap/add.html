@@ -7,19 +7,19 @@
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="" class="form-control"/>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="" class="form-control input-sm"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control"></textarea>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm"></textarea>
 			</div>
 <%/if%>
 <%if $field.type.type == 'enum' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control">
+				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm">
                                     <option value="">{$tr->select_option_NOOPTION}</option>
 <%foreach from=$field.type.values item=value%>
 					<option value="<%$value%>">{$tr->select_option_<%$value%>}</option>
