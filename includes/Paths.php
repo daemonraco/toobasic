@@ -186,7 +186,7 @@ class Paths extends Singleton {
 			$this->_customPaths[$key] = false;
 		}
 		//
-		// Searching and returning it's result.
+		// Searching and returning the result.
 		return $this->find($this->_customPaths[$key], $skin, $folder, $name, $extension, $full, $asUri);
 	}
 	/**

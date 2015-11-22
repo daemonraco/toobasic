@@ -144,7 +144,7 @@ define('GC_DIRECTORIES_ADAPTERS_CACHE', 'adapters-cache');
 define('GC_DIRECTORIES_ADAPTERS_DB', 'adapters-db');
 define('GC_DIRECTORIES_ADAPTERS_VIEW', 'adapters-view');
 define('GC_DIRECTORIES_MODULES', 'modules');
-define('GC_DIRECTORIES_SHELL', 'shell');
+define('GC_DIRECTORIES_SAPIREADER', 'sapireader');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
@@ -295,7 +295,16 @@ define('GC_MAGICPROP_PROP_MODEL', 'model');
 define('GC_MAGICPROP_PROP_PARAMS', 'params');
 define('GC_MAGICPROP_PROP_PATHS', 'paths');
 define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
+define('GC_MAGICPROP_PROP_SAPIREADER', 'sapireader');
 define('GC_MAGICPROP_PROP_TR', 'tr');
 define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
+// @}
+//
+// Simple API Reader @{
+define('GC_SAPIREADER_DEFAULT_TYPE', 'default');
+define('GC_SAPIREADER_TYPES', 'types');
+define('GC_SAPIREADER_TYPE_BASIC', 'basic');
+define('GC_SAPIREADER_TYPE_JSON', 'json');
+define('GC_SAPIREADER_TYPE_XML', 'xml');
 // @}
 // @}
