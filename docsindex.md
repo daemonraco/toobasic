@@ -174,6 +174,8 @@
 	* [Module](docs/facilities.md#module)
 	* [Connection?](docs/facilities.md#connection)
 	* [Bootstrap](docs/facilities.md#bootstrap)
+	* [Predictive](docs/facilities.md#predictive)
+	* [jQueryUI Autocomplete](docs/facilities.md#jqueryui-autocomplete)
 * [Sys-tool _service_](docs/facilities.md#sys-tool-service)
 	* [Features](docs/facilities.md#features)
 	* [Removing a service](docs/facilities.md#removing-a-service)

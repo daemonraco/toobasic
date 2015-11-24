@@ -29,6 +29,8 @@ logic on a second request (visit [Cache](docs/cache.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by
 representations (visit [Databases](docs/databases.md) and
 [Representations](docs/representations.md)).
+* __APIs Wrapping__: Provides a simple mechanism to access external APIs (visit
+[Simple API Reader](docs/sapireader.md)).
 * __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
 * __Skins__: Provides different ways of displaying your sites (visit
 [Skins](docs/skins.md)).
