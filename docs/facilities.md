@@ -258,7 +258,7 @@ these attributes:
 
 * `name`: First and last name.
 * `age`
-* `childern`: The amount of children this person has.
+* `children`: The amount of children this person has.
 * `notes`: Some reminder you may need related to a person.
 * `hair_color`: This is a list of a few possible values:
 	* `brown`
@@ -269,7 +269,7 @@ these attributes:
 
 Let's have this in mind on the next sub-sections.
 
-__Note__: we are gonig to assume you have a default database connection
+__Note__: we are going to assume you have a default database connection
 configured.
 
 ### Creating a table
@@ -416,6 +416,53 @@ Screenshots__](https://imgur.com/a/8rQA4) to take look at a few screenshots, and
 here's one of those images:
 ![scaffold_table_03_table_with_data](http://i.imgur.com/4osCZTT.png)
 
+### Predictive
+If you take a look around you'll find that [representations](representations.md)
+allow the specification of a _name_ column that can act as a unique index inside a
+table and then look for entries by name.
+_Sys-tool_ `table` allows a way to use this functionality and generate a better
+set of files.
+Following our examples let's consider the next command:
+```bash
+$ php shell.php sys table create person -P people -c name:varchar -nf name -c age:int -c children:int -c notes:text -c hair_color:enum:brown:redhead:blonde:black:other
+```
+Just by adding the parameters `-nf name` (or even `--name-field name`) we saying
+that this field has to be used for that unique index.
+This commands activates these changes:
+
+* The representation now uses this field as name.
+* The factory too and also uses it as order for selections.
+* The column gets its own unique index.
+
+Some conditions:
+
+* The column has to be also specified with command `--column`.
+* Such column has to be of type `varchar`.
+* It's not a _raw_ table.
+
+Now why we call this section predictive?
+Happens that this parameter also triggers the generation of a service that allows
+the search of entries by a partial value in this column flagged as _name_ and it
+can be access with something like this:
+> http://www.example.com/mysite/?service=people_predictive&pattern=john
+
+> http://www.example.com/mysite/?service=people_predictive&pattern=john&limit=25
+
+### jQueryUI Autocomplete
+Following the predictive functionality, if we add the parameter `-ac` or
+`--autocomplete` it will generate a javascript file named
+__people_predictive_name.js__ containing instructions to add [_jQueryUI_
+autocomplete](http://api.jqueryui.com/autocomplete/) behavior to any HTML tag with
+a CSS class named 'people_predictive_name'.
+
+Now, if it is what you wanted, you'll have to consider a few previous steps:
+
+* This JS asset is dependant on jQueryUI so make sure you are including its JS
+files in your layout and also its CSS assets.
+* You need to include the JS asset called `toobasic_asset` because it holds some
+basic functions required by this automatic files.
+* And don't forget to include the asset itself :)
+
 ## Sys-tool _service_
 This _sys-tool_ is very similar to _sys-tool_ _controller_ because it also creates
 a controller, but in this case it will be accessible at something like
@@ -463,3 +510,4 @@ $ php shell.php sys controller remove request_info
 Here are some links you may like to read:
 
 * [Shell Tools and Cron](shelltools.md)
+* [Representations](representations.md)
