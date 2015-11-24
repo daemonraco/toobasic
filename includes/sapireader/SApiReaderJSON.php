@@ -50,4 +50,20 @@ class SApiReaderJSON extends SApiReader {
 
 		return $response;
 	}
+	//
+	// Protected methods.
+	/**
+	 * This method ensures the presence of some required field inside the
+	 * configuration with at least some default values and types.
+	 */
+	protected function expand() {
+		//
+		// Forwarding the call.
+		parent::expand();
+		//
+		// Enforcing header 'Accept'
+		if(!isset($this->_config->headers->Accept)) {
+			$this->_config->headers->Accept = 'application/json';
+		}
+	}
 }

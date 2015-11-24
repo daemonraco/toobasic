@@ -168,8 +168,8 @@ class SApiReader {
 	//
 	// Protected methods.
 	/**
-	 * This method ensures the presence of some required field insde the
-	 * configuration with default values and types.
+	 * This method ensures the presence of some required field inside the
+	 * configuration with at least some default values and types.
 	 */
 	protected function expand() {
 		//
@@ -246,16 +246,9 @@ class SApiReader {
 		switch($method) {
 			case 'POST':
 				//
-				// Generating POST params.
-				$params = array();
-				foreach($sendParams as $k => $v) {
-					$params[] = "{$k}=".urlencode($v);
-				}
-				$params = implode('&', $params);
-				//
 				// Setting POST cURL options.
 				\curl_setopt($ch, CURLOPT_POST, true);
-				\curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				\curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($sendParams));
 				break;
 			case 'GET':
 			default:
