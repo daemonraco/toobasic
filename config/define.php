@@ -129,6 +129,7 @@ define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
 define('GC_AFIELD_TABLES', 'tables');
 define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
 // @}
 //
