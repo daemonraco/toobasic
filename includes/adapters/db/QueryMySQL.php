@@ -46,7 +46,12 @@ class QueryMySQL extends QueryAdapter {
 
 		$where = array();
 		foreach($whereFields as $key) {
-			$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
+			} else {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+			}
 		}
 
 		$query = "delete from {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
@@ -77,7 +82,12 @@ class QueryMySQL extends QueryAdapter {
 
 		$where = array();
 		foreach($whereFields as $key) {
-			$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
+			} else {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+			}
 		}
 
 		$order = array();
@@ -113,7 +123,12 @@ class QueryMySQL extends QueryAdapter {
 		}
 		$where = array();
 		foreach($whereFields as $key) {
-			$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :w_{$key}";
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :w_{$xKey[GC_AFIELD_NAME]}";
+			} else {
+				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :w_{$key}";
+			}
 		}
 
 		$query = "update  {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";

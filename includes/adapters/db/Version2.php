@@ -155,6 +155,11 @@ class Version2 extends VersionAdapter {
 					$auxField->hasDefault = false;
 				}
 				//
+				// Analysing NULL settings.
+				if(!isset($spec->null)) {
+					$auxField->null = true;
+				}
+				//
 				// Field callbacks.
 				$auxField->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $auxField->callbacks instanceof \stdClass ? $auxField->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
 				//
@@ -316,9 +321,10 @@ class Version2 extends VersionAdapter {
 						// Ignoring first value becuase it
 						// is the actual type.
 						array_shift($expType);
-						$this->values = array();
+						$out->type = DBStructureManager::ColumnTypeEnum;
+						$out->values = array();
 						foreach($expType as $v) {
-							$this->values[] = $v;
+							$out->values[] = $v;
 						}
 					} else {
 						$out[GC_AFIELD_ERRORS][] = array(

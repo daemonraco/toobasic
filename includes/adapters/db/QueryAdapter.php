@@ -64,7 +64,12 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($where as $key => $value) {
-			$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+			} else {
+				$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+			}
 		}
 		//
 		// Debugging.
@@ -160,7 +165,12 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($where as $key => $value) {
-			$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+			} else {
+				$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+			}
 		}
 		//
 		// Debugging.
@@ -203,7 +213,12 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 			$out[GC_AFIELD_PARAMS][":d_{$key}"] = $value;
 		}
 		foreach($where as $key => $value) {
-			$out[GC_AFIELD_PARAMS][":w_{$key}"] = $value;
+			$xKey = self::ExpandFieldName($key);
+			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+				$out[GC_AFIELD_PARAMS][":w_{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+			} else {
+				$out[GC_AFIELD_PARAMS][":w_{$key}"] = $value;
+			}
 		}
 		// @}
 		//
@@ -237,5 +252,36 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		$params = \TooBasic\Params::Instance();
 		$this->_debugQueries = isset($params->debugdbquery);
 		$this->_className = get_called_class();
+	}
+	//
+	// Protected class methods.
+	/**
+	 * This class method tries to expand a field name into a flag character
+	 * and its clean name. For example the name '*username' will be expanded
+	 * into:
+	 * 	- flag: '*'
+	 * 	- name: 'username'
+	 *
+	 * @param string $name Name to expand.
+	 * @return mixed[string] Expanded result.
+	 */
+	protected static function ExpandFieldName($name) {
+		//
+		// Response strucutre.
+		$out = array(
+			GC_AFIELD_FLAG => '',
+			GC_AFIELD_NAME => $name,
+			GC_AFIELD_RESULT => false
+		);
+		//
+		// Expansion pattern.
+		$pattern = '/^(?P<flag>[*]{0,1})(?P<name>.*)$/';
+		//
+		// Checking field name.
+		$out[GC_AFIELD_RESULT] = preg_match($pattern, $name, $matches);
+		$out[GC_AFIELD_FLAG] = $matches['flag'];
+		$out[GC_AFIELD_NAME] = $matches['name'];
+
+		return $out;
 	}
 }

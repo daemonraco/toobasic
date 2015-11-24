@@ -85,6 +85,7 @@ define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
+define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HEADERS', 'headers');
