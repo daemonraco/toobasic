@@ -168,8 +168,8 @@ class SApiReader {
 	//
 	// Protected methods.
 	/**
-	 * This method ensures the presence of some required field insde the
-	 * configuration with default values and types.
+	 * This method ensures the presence of some required field inside the
+	 * configuration with at least some default values and types.
 	 */
 	protected function expand() {
 		//
