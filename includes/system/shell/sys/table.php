@@ -20,6 +20,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionColumn = 'Column';
 	const OptionConnection = 'Connection';
 	const OptionPlural = 'Plural';
+	const OptionNameField = 'NameField';
 	const OptionRaw = 'Raw';
 	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
@@ -146,6 +147,13 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// List table items controller.
 			$this->_assignments['deleteAction'] = $this->_names['delete-action'];
 			$this->_assignments['deleteActionController'] = $this->_names['delete-action-controller'];
+			//
+			// Predictive service items.
+			if(isset($this->_names['name-field'])) {
+				$this->_assignments['nameField'] = $this->_names['name-field'];
+				$this->_assignments['predictiveService'] = $this->_names['predictive-service'];
+				$this->_assignments['predictiveServiceController'] = $this->_names['predictive-service-controller'];
+			}
 		}
 	}
 	protected function genNames() {
@@ -196,10 +204,18 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->_names['delete-action'] = "{$this->_names['singular-name']}_delete";
 			$this->_names['delete-action-controller'] = Names::ControllerClass($this->_names['delete-action']);
 			//
+			// Name field and service.
+			$opt = $this->_options->option(self::OptionNameField);
+			if($opt->activated()) {
+				$this->_names['name-field'] = $opt->value();
+				$this->_names['predictive-service'] = "{$this->_names['plural-name']}_predictive";
+				$this->_names['predictive-service-controller'] = Names::ServiceClass($this->_names['predictive-service']);
+			}
+			//
 			// Files
 			$this->_files[] = array(
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
-				'generator' => 'genSpecsFile',
+				GC_AFIELD_GENERATOR => 'genSpecsFile',
 				GC_AFIELD_DESCRIPTION => 'specifications file'
 			);
 			if(!$this->isRaw()) {
@@ -213,6 +229,18 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					GC_AFIELD_TEMPLATE => 'factory.html',
 					GC_AFIELD_DESCRIPTION => 'representations factory file'
 				);
+				if(isset($this->_names['name-field'])) {
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SERVICES]}/{$this->_names['predictive-service']}.php"),
+						GC_AFIELD_TEMPLATE => 'predictive.html',
+						GC_AFIELD_DESCRIPTION => 'predictive search service file'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/{$this->_names['predictive-service']}_autocomplete.js"),
+						GC_AFIELD_TEMPLATE => 'autocomplete.html',
+						GC_AFIELD_DESCRIPTION => 'predictive search service file'
+					);
+				}
 				$this->_files[] = array(
 					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
 					GC_AFIELD_TEMPLATE => 'list_controller.html',
@@ -413,6 +441,19 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$specs->indexes[] = $index;
 		}
 		//
+		// Adding unique index for name field.
+		if(isset($this->_assignments['nameField'])) {
+			$index = new \stdClass();
+			$index->name = "{$this->_assignments['tablePrefix']}{$this->_assignments['nameField']}";
+			$index->table = $this->_assignments['pluralName'];
+			if(isset($this->_assignments['connection'])) {
+				$index->connection = $this->_assignments['connection'];
+			}
+			$index->type = 'key';
+			$index->fields = array($this->_assignments['nameField']);
+			$specs->indexes[] = $index;
+		}
+		//
 		// Generating file content.
 		$output = json_encode($specs, JSON_PRETTY_PRINT);
 
@@ -493,9 +534,17 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
-			$table->primary= new \stdClass();
-			$table->primary->id=array(
+			$table->primary = new \stdClass();
+			$table->primary->id = array(
 				"id"
+			);
+		}
+		//
+		// Adding unique index for name field.
+		if(isset($this->_assignments['nameField'])) {
+			$table->key = new \stdClass();
+			$table->key->{$this->_assignments['nameField']} = array(
+				$this->_assignments['nameField']
 			);
 		}
 		//
@@ -565,6 +614,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
 		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).\n";
 		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, array('--column', '-c'), Option::TypeMultiValue, $text, 'name'));
+
+		$text = "This parameters indicates which column shoud be consided as an unique name.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionNameField, array('--name-field', '-nf'), Option::TypeValue, $text, 'name'));
 
 		$text = "If your table doesn't use the default connection, you may specify it with this parameter.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionConnection, array('--connection', '-C'), Option::TypeValue, $text, 'name'));
