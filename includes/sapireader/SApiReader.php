@@ -246,16 +246,9 @@ class SApiReader {
 		switch($method) {
 			case 'POST':
 				//
-				// Generating POST params.
-				$params = array();
-				foreach($sendParams as $k => $v) {
-					$params[] = "{$k}=".urlencode($v);
-				}
-				$params = implode('&', $params);
-				//
 				// Setting POST cURL options.
 				\curl_setopt($ch, CURLOPT_POST, true);
-				\curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				\curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($sendParams));
 				break;
 			case 'GET':
 			default:
