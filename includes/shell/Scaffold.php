@@ -79,7 +79,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addAllRoutes($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -134,7 +134,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addAllTranslations($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
 		// Global dependencies.
 		global $LanguageName;
@@ -143,7 +143,7 @@ abstract class Scaffold extends ShellTool {
 		$this->genTranslations();
 		//
 		// Checking if there are translations to add.
-		if(count($this->_translations)) {
+		if($ok && count($this->_translations)) {
 			echo "{$spacer}Adding translation ({$LanguageName}):\n";
 			//
 			// Cechking each translation item.
@@ -185,7 +185,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addRoute(\stdClass $newRoute, &$error, &$fatal) {
 		//
 		// Defualt values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -193,7 +193,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a route configuration file prensent in the
 		// system.
-		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			//
 			// Attemptting to create a routes confifuration file with
 			// a basic JSON configuraion.
@@ -263,7 +263,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addTranslation($newTr, &$error, &$fatal) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -271,7 +271,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a language configuration file present in
 		// the system.
-		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
 			//
 			// Creating a basic language configuration file with an
 			// initial JSON configuration.
@@ -373,7 +373,7 @@ abstract class Scaffold extends ShellTool {
 		$this->genNames();
 		//
 		// Avoiding multiple generations.
-		if($this->_assignments === false) {
+		if(!$this->hasErrors() && $this->_assignments === false) {
 			//
 			// Default values.
 			$this->_assignments = array();
@@ -394,26 +394,32 @@ abstract class Scaffold extends ShellTool {
 	protected function genFile($path, $template = false, $callback = 'genFileByTemplate') {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Avoiding file overwrite.
-		if(!$this->isForced() && is_file($path)) {
-			echo Color::Yellow('Ignored').' (file already exist)';
-		} else {
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Generating a more complete scaffold template name.
-			$completeTemplate = Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
-			//
-			// Forwarding the generation call and checking for errors.
-			$error = false;
-			if($this->{$callback}($path, $completeTemplate, $error)) {
-				echo Color::Green('Ok');
+			// Avoiding file overwrite.
+			if(!$this->isForced() && is_file($path)) {
+				echo Color::Yellow('Ignored').' (file already exist)';
 			} else {
-				echo Color::Red('Failed')." ({$error})";
-				$ok = false;
+				//
+				// Generating a more complete scaffold template
+				// name.
+				$completeTemplate = Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
+				//
+				// Forwarding the generation call and checking for
+				// errors.
+				$error = false;
+				if($this->{$callback}($path, $completeTemplate, $error)) {
+					echo Color::Green('Ok');
+				} else {
+					echo Color::Red('Failed')." ({$error})";
+					$ok = false;
+				}
 			}
+			echo "\n";
 		}
-		echo "\n";
 
 		return $ok;
 	}
@@ -429,24 +435,28 @@ abstract class Scaffold extends ShellTool {
 	protected function genFileByTemplate($path, $template, &$error) {
 		//
 		// Default values.
-		$out = true;
+		$out = !$this->hasErrors();
 		//
-		// Forcing render to be loaded.
-		$this->loadRender();
-		//
-		// Assignments.
-		$this->genAssignments();
-		//
-		// Generating file content.
-		$output = $this->_render->render($this->_assignments, $template);
-		//
-		// Generating a file.
-		$result = file_put_contents($path, $output);
-		//
-		// Checking for errors.
-		if($result === false) {
-			$error = "Unable to write file '{$path}'";
-			$out = false;
+		// Ingnoring process when there are previous errors.
+		if($out) {
+			//
+			// Forcing render to be loaded.
+			$this->loadRender();
+			//
+			// Assignments.
+			$this->genAssignments();
+			//
+			// Generating file content.
+			$output = $this->_render->render($this->_assignments, $template);
+			//
+			// Generating a file.
+			$result = file_put_contents($path, $output);
+			//
+			// Checking for errors.
+			if($result === false) {
+				$error = "Unable to write file '{$path}'";
+				$out = false;
+			}
 		}
 
 		return $out;
@@ -458,7 +468,7 @@ abstract class Scaffold extends ShellTool {
 	protected function genNames() {
 		//
 		// Avoiding multiple analysis.
-		if($this->_names === false) {
+		if(!$this->hasErrors() && $this->_names === false) {
 			//
 			// Global dependecies.
 			global $LanguageName;
@@ -511,35 +521,39 @@ abstract class Scaffold extends ShellTool {
 	 * @return boolean Returns TRUE where there were no critical errors.
 	 */
 	protected function genRequiredDirectories($spacer) {
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Cleaning directories list.
-		$this->_requiredDirectories = array_unique($this->_requiredDirectories);
-		//
-		// Checking which directories have to be created.
-		$toGen = array();
-		foreach($this->_requiredDirectories as $dirPath) {
-			if(!is_dir($dirPath)) {
-				$toGen[] = $dirPath;
-			}
-		}
-		//
-		// Is there something to create.
-		if($toGen) {
-			echo "{$spacer}\tCreating required directories:\n";
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Creating each directory.
-			foreach($toGen as $dirPath) {
-				echo "{$spacer}\t\tCreating '{$dirPath}': ";
-				@mkdir($dirPath, 0777, true);
+			// Cleaning directories list.
+			$this->_requiredDirectories = array_unique($this->_requiredDirectories);
+			//
+			// Checking which directories have to be created.
+			$toGen = array();
+			foreach($this->_requiredDirectories as $dirPath) {
+				if(!is_dir($dirPath)) {
+					$toGen[] = $dirPath;
+				}
+			}
+			//
+			// Is there something to create.
+			if($toGen) {
+				echo "{$spacer}\tCreating required directories:\n";
 				//
-				// Checking creation.
-				if(is_dir($dirPath)) {
-					echo Color::Green('Ok')."\n";
-				} else {
-					echo Color::Red('Failed')."\n";
-					$ok = false;
-					break;
+				// Creating each directory.
+				foreach($toGen as $dirPath) {
+					echo "{$spacer}\t\tCreating '{$dirPath}': ";
+					@mkdir($dirPath, 0777, true);
+					//
+					// Checking creation.
+					if(is_dir($dirPath)) {
+						echo Color::Green('Ok')."\n";
+					} else {
+						echo Color::Red('Failed')."\n";
+						$ok = false;
+						break;
+					}
 				}
 			}
 		}
@@ -554,7 +568,7 @@ abstract class Scaffold extends ShellTool {
 	protected function genRoutes() {
 		//
 		// Avoiding multiple generations.
-		if($this->_routes === false) {
+		if(!$this->hasErrors() && $this->_routes === false) {
 			$this->_routes = array();
 		}
 	}
@@ -569,7 +583,7 @@ abstract class Scaffold extends ShellTool {
 		$this->genNames();
 		//
 		// Avoiding multiple generations.
-		if($this->_translations === false) {
+		if(!$this->hasErrors() && $this->_translations === false) {
 			//
 			// Default values.
 			$this->_translations = array();
@@ -620,7 +634,7 @@ abstract class Scaffold extends ShellTool {
 	protected function removeAllRoutes($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -675,41 +689,45 @@ abstract class Scaffold extends ShellTool {
 	protected function removeAllTranslations($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $LanguageName;
-		//
-		// Generating translations.
-		$this->genTranslations();
-		//
-		// Checking if there are translations to remove.
-		if(count($this->_translations)) {
-			echo "{$spacer}Removing translations ({$LanguageName}):\n";
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Cechking each translation item.
-			foreach($this->_translations as $tr) {
-				echo "{$spacer}\t- '{$tr->key}': ";
+			// Global dependencies.
+			global $LanguageName;
+			//
+			// Generating translations.
+			$this->genTranslations();
+			//
+			// Checking if there are translations to remove.
+			if(count($this->_translations)) {
+				echo "{$spacer}Removing translations ({$LanguageName}):\n";
 				//
-				// Attempting to remove a translation.
-				$error = '';
-				$fatal = false;
-				if($this->removeTranslation($tr, $error, $fatal)) {
-					echo Color::Green('Ok');
-				} else {
+				// Cechking each translation item.
+				foreach($this->_translations as $tr) {
+					echo "{$spacer}\t- '{$tr->key}': ";
 					//
-					// Checking the severity of the error
-					// found.
-					if($fatal) {
-						echo Color::Red('Failed');
-						$ok = false;
-						break;
+					// Attempting to remove a translation.
+					$error = '';
+					$fatal = false;
+					if($this->removeTranslation($tr, $error, $fatal)) {
+						echo Color::Green('Ok');
 					} else {
-						echo Color::Yellow('Ignored');
+						//
+						// Checking the severity of the
+						// error found.
+						if($fatal) {
+							echo Color::Red('Failed');
+							$ok = false;
+							break;
+						} else {
+							echo Color::Yellow('Ignored');
+						}
+						echo " ({$error})";
 					}
-					echo " ({$error})";
+					echo "\n";
 				}
-				echo "\n";
 			}
 		}
 
@@ -725,25 +743,29 @@ abstract class Scaffold extends ShellTool {
 	protected function removeFile($path) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Checking the existence of the file.
-		if(!is_file($path)) {
-			echo Color::Yellow('Ignored').' (file already removed)';
-		} else {
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Remove it.
-			@unlink($path);
-			//
-			// Checking for errors.
+			// Checking the existence of the file.
 			if(!is_file($path)) {
-				echo Color::Green('Ok');
+				echo Color::Yellow('Ignored').' (file already removed)';
 			} else {
-				echo Color::Red('Failed').' (unable to remove it)';
-				$ok = false;
+				//
+				// Remove it.
+				@unlink($path);
+				//
+				// Checking for errors.
+				if(!is_file($path)) {
+					echo Color::Green('Ok');
+				} else {
+					echo Color::Red('Failed').' (unable to remove it)';
+					$ok = false;
+				}
 			}
+			echo "\n";
 		}
-		echo "\n";
 
 		return $ok;
 	}
@@ -758,7 +780,7 @@ abstract class Scaffold extends ShellTool {
 	protected function removeRoute(\stdClass $badRoute, &$error, &$fatal) {
 		//
 		// Defualt values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -766,7 +788,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a route configuration file prensent in the
 		// system.
-		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 			$fatal = true;
@@ -836,7 +858,7 @@ abstract class Scaffold extends ShellTool {
 	protected function removeTranslation(\stdClass $badTr, &$error, &$fatal) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -844,7 +866,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a language configuration file present in
 		// the system.
-		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
 			$fatal = true;
@@ -929,14 +951,17 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function taskCreate($spacer = '') {
 		//
-		// Default values.
-		$ok = true;
-		//
 		// Enforcing names generation.
 		$this->genNames();
 		//
+		// Enforcing assignment generation.
+		$this->genAssignments();
+		//
 		// Enforcing files list structure.
 		$this->enforceFilesList();
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
 		//
 		// Directories
 		if($ok) {
@@ -979,14 +1004,14 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function taskRemove($spacer = '') {
 		//
-		// Default values.
-		$ok = true;
-		//
 		// Enforcing names generation.
 		$this->genNames();
 		//
 		// Enforcing files list structure.
 		$this->enforceFilesList();
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
 		//
 		// Files
 		if($ok) {

@@ -19,8 +19,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionBootstrap = 'Bootstrap';
 	const OptionColumn = 'Column';
 	const OptionConnection = 'Connection';
-	const OptionPlural = 'Plural';
+	const OptionGenAutocomplete = 'GenAutocomplete';
 	const OptionNameField = 'NameField';
+	const OptionPlural = 'Plural';
 	const OptionRaw = 'Raw';
 	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
@@ -38,121 +39,144 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Parent standards.
 			parent::genAssignments();
 			//
-			// Assignments.
-			$this->_assignments['singularName'] = $this->_names['singular-name'];
-			$this->_assignments['pluralName'] = $this->_names['plural-name'];
-			$this->_assignments['isRaw'] = $this->isRaw();
-			//
-			// Generating a table prefix.
-			$this->_assignments['tablePrefix'] = substr(str_replace('_', '', $this->_names['plural-name']), 0, 3).'_';
-			//
-			// Connection settings.
-			$opt = $this->_options->option(self::OptionConnection);
-			if($opt->activated()) {
-				$this->_assignments['connection'] = $opt->value();
-			}
-			//
-			// Generating a table prefix.
-			$this->_assignments['tableFields'] = array();
-			$opt = $this->_options->option(self::OptionColumn);
-			if($opt->activated()) {
-				foreach($opt->value() as $column) {
-					$columnParts = explode(':', $column);
-					$field = array();
-					$field['name'] = $columnParts[0];
-
-					if(!isset($columnParts[1])) {
-						$columnParts = 'varchar';
-					}
-					$columnParts[1] = strtolower($columnParts[1]);
-					$field[GC_AFIELD_TYPE] = array();
-					switch($columnParts[1]) {
-						case 'int':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'int';
-							$field[GC_AFIELD_TYPE]['precision'] = 11;
-							$field['default'] = 0;
-							$field['inForm'] = true;
-							break;
-						case 'blob':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'blob';
-							$field[GC_AFIELD_TYPE]['precision'] = false;
-							$field['default'] = '';
-							$field['inForm'] = false;
-							break;
-						case 'float':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
-							$field[GC_AFIELD_TYPE]['precision'] = 11;
-							$field['default'] = .0;
-							$field['inForm'] = true;
-							break;
-						case 'text':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'text';
-							$field[GC_AFIELD_TYPE]['precision'] = false;
-							$field['default'] = '';
-							$field['inForm'] = true;
-							break;
-						case 'timestamp':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'timestamp';
-							$field[GC_AFIELD_TYPE]['precision'] = false;
-							$field['default'] = 0;
-							$field['inForm'] = false;
-							break;
-						case 'enum':
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
-							$field[GC_AFIELD_TYPE]['precision'] = false;
-							$field[GC_AFIELD_TYPE]['values'] = $columnParts;
-							array_shift($field[GC_AFIELD_TYPE]['values']);
-							array_shift($field[GC_AFIELD_TYPE]['values']);
-							if($field[GC_AFIELD_TYPE]['values']) {
-								$field[GC_AFIELD_TYPE]['values'] = array_values($field[GC_AFIELD_TYPE]['values']);
-							} else {
-								$field[GC_AFIELD_TYPE]['values'][0] = 'Y';
-								$field[GC_AFIELD_TYPE]['values'][1] = 'N';
-							}
-							$field['default'] = "'{$field[GC_AFIELD_TYPE]['values'][0]}'";
-							$field['inForm'] = true;
-							break;
-						case 'varchar':
-						default:
-							$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
-							$field[GC_AFIELD_TYPE]['precision'] = 256;
-							$field['default'] = '';
-							$field['inForm'] = true;
-					}
-					$field['null'] = false;
-					$this->_assignments['tableFields'][] = $field;
+			// Ingnoring process when there are previous errors.
+			if(!$this->hasErrors()) {
+				//
+				// Assignments.
+				$this->_assignments['singularName'] = $this->_names['singular-name'];
+				$this->_assignments['pluralName'] = $this->_names['plural-name'];
+				$this->_assignments['isRaw'] = $this->isRaw();
+				//
+				// Generating a table prefix.
+				$this->_assignments['tablePrefix'] = substr(str_replace('_', '', $this->_names['plural-name']), 0, 3).'_';
+				//
+				// Connection settings.
+				$opt = $this->_options->option(self::OptionConnection);
+				if($opt->activated()) {
+					$this->_assignments['connection'] = $opt->value();
 				}
-			}
-			//
-			// Representations.
-			$this->_assignments['representationName'] = $this->_names['representation-name'];
-			$this->_assignments['factoryName'] = $this->_names['factory-name'];
-			//
-			// List table items controller.
-			$this->_assignments['listAction'] = $this->_names['list-action'];
-			$this->_assignments['listActionController'] = $this->_names['list-action-controller'];
-			//
-			// List table items controller.
-			$this->_assignments['viewAction'] = $this->_names['view-action'];
-			$this->_assignments['viewActionController'] = $this->_names['view-action-controller'];
-			//
-			// List table items controller.
-			$this->_assignments['editAction'] = $this->_names['edit-action'];
-			$this->_assignments['editActionController'] = $this->_names['edit-action-controller'];
-			//
-			// List table items controller.
-			$this->_assignments['addAction'] = $this->_names['add-action'];
-			$this->_assignments['addActionController'] = $this->_names['add-action-controller'];
-			//
-			// List table items controller.
-			$this->_assignments['deleteAction'] = $this->_names['delete-action'];
-			$this->_assignments['deleteActionController'] = $this->_names['delete-action-controller'];
-			//
-			// Predictive service items.
-			if(isset($this->_names['name-field'])) {
-				$this->_assignments['nameField'] = $this->_names['name-field'];
-				$this->_assignments['predictiveService'] = $this->_names['predictive-service'];
-				$this->_assignments['predictiveServiceController'] = $this->_names['predictive-service-controller'];
+				//
+				// Generating a table prefix.
+				$this->_assignments['tableFields'] = array();
+				$opt = $this->_options->option(self::OptionColumn);
+				if($opt->activated()) {
+					foreach($opt->value() as $column) {
+						$columnParts = explode(':', $column);
+						$field = array();
+						$field['name'] = $columnParts[0];
+
+						if(!isset($columnParts[1])) {
+							$columnParts = 'varchar';
+						}
+						$columnParts[1] = strtolower($columnParts[1]);
+						$field[GC_AFIELD_TYPE] = array();
+						switch($columnParts[1]) {
+							case 'int':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'int';
+								$field[GC_AFIELD_TYPE]['precision'] = 11;
+								$field['default'] = 0;
+								$field['inForm'] = true;
+								break;
+							case 'blob':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'blob';
+								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field['default'] = '';
+								$field['inForm'] = false;
+								break;
+							case 'float':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
+								$field[GC_AFIELD_TYPE]['precision'] = 11;
+								$field['default'] = .0;
+								$field['inForm'] = true;
+								break;
+							case 'text':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'text';
+								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field['default'] = '';
+								$field['inForm'] = true;
+								break;
+							case 'timestamp':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'timestamp';
+								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field['default'] = 0;
+								$field['inForm'] = false;
+								break;
+							case 'enum':
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
+								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field[GC_AFIELD_TYPE]['values'] = $columnParts;
+								array_shift($field[GC_AFIELD_TYPE]['values']);
+								array_shift($field[GC_AFIELD_TYPE]['values']);
+								if($field[GC_AFIELD_TYPE]['values']) {
+									$field[GC_AFIELD_TYPE]['values'] = array_values($field[GC_AFIELD_TYPE]['values']);
+								} else {
+									$field[GC_AFIELD_TYPE]['values'][0] = 'Y';
+									$field[GC_AFIELD_TYPE]['values'][1] = 'N';
+								}
+								$field['default'] = "'{$field[GC_AFIELD_TYPE]['values'][0]}'";
+								$field['inForm'] = true;
+								break;
+							case 'varchar':
+							default:
+								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
+								$field[GC_AFIELD_TYPE]['precision'] = 256;
+								$field['default'] = '';
+								$field['inForm'] = true;
+						}
+						$field['null'] = false;
+						$this->_assignments['tableFields'][] = $field;
+					}
+				}
+				//
+				// Representations.
+				$this->_assignments['representationName'] = $this->_names['representation-name'];
+				$this->_assignments['factoryName'] = $this->_names['factory-name'];
+				//
+				// List table items controller.
+				$this->_assignments['listAction'] = $this->_names['list-action'];
+				$this->_assignments['listActionController'] = $this->_names['list-action-controller'];
+				//
+				// List table items controller.
+				$this->_assignments['viewAction'] = $this->_names['view-action'];
+				$this->_assignments['viewActionController'] = $this->_names['view-action-controller'];
+				//
+				// List table items controller.
+				$this->_assignments['editAction'] = $this->_names['edit-action'];
+				$this->_assignments['editActionController'] = $this->_names['edit-action-controller'];
+				//
+				// List table items controller.
+				$this->_assignments['addAction'] = $this->_names['add-action'];
+				$this->_assignments['addActionController'] = $this->_names['add-action-controller'];
+				//
+				// List table items controller.
+				$this->_assignments['deleteAction'] = $this->_names['delete-action'];
+				$this->_assignments['deleteActionController'] = $this->_names['delete-action-controller'];
+				//
+				// Predictive service items.
+				if(isset($this->_names['name-field'])) {
+					//
+					// Checking name field.
+					$found = false;
+					foreach($this->_assignments['tableFields'] as $field) {
+						if($field['name'] == $this->_names['name-field']) {
+							//
+							// Checking type.
+							if($field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] != 'varchar') {
+								$this->setError(self::ErrorWrongParameters, "Column '{$this->_names['name-field']}' is not a varchar field.");
+							}
+							$found = true;
+							break;
+						}
+					}
+					if(!$found) {
+						$this->setError(self::ErrorWrongParameters, "Column '{$this->_names['name-field']}' was not specified.");
+					}
+					//
+					// Assigning fields.
+					$this->_assignments['nameField'] = $this->_names['name-field'];
+					$this->_assignments['predictiveService'] = $this->_names['predictive-service'];
+					$this->_assignments['predictiveServiceController'] = $this->_names['predictive-service-controller'];
+				}
 			}
 		}
 	}
@@ -162,174 +186,184 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			// Parent standards.
 			parent::genNames();
 			//
-			// Global dependencies.
-			global $Paths;
+			// Ingnoring process when there are previous errors.
+			if(!$this->hasErrors()) {
+				//
+				// Global dependencies.
+				global $Paths;
 
-			$this->_names[GC_AFIELD_TYPE] = false;
-			$this->_names['singular-name'] = $this->_names[GC_AFIELD_NAME];
-			$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
-			$this->_names['templates-prefix'] = '';
-			//
-			// Checking plural name.
-			$opt = $this->_options->option(self::OptionPlural);
-			if($opt->activated()) {
-				$this->_names['plural-name'] = $opt->value();
-			}
-			//
-			// Checking bootstrap option.
-			$opt = $this->_options->option(self::OptionBootstrap);
-			if($opt->activated()) {
-				$this->_names['templates-prefix'] = 'bootstrap/';
-			}
-			//
-			// Checking type.
-			$opt = $this->_options->option(self::OptionSystem);
-			if($opt->activated()) {
-				$this->_names[GC_AFIELD_TYPE] = strtolower($opt->value());
-			}
-			//
-			// Representations.
-			$this->_names['representation-name'] = Names::ItemRepresentationClass($this->_names['singular-name']);
-			$this->_names['factory-name'] = Names::ItemsFactoryClass($this->_names['plural-name']);
-			//
-			// Actions.
-			$this->_names['list-action'] = $this->_names['plural-name'];
-			$this->_names['list-action-controller'] = Names::ControllerClass($this->_names['list-action']);
-			$this->_names['view-action'] = "{$this->_names['singular-name']}";
-			$this->_names['view-action-controller'] = Names::ControllerClass($this->_names['view-action']);
-			$this->_names['edit-action'] = "{$this->_names['singular-name']}_edit";
-			$this->_names['edit-action-controller'] = Names::ControllerClass($this->_names['edit-action']);
-			$this->_names['add-action'] = "{$this->_names['singular-name']}_add";
-			$this->_names['add-action-controller'] = Names::ControllerClass($this->_names['add-action']);
-			$this->_names['delete-action'] = "{$this->_names['singular-name']}_delete";
-			$this->_names['delete-action-controller'] = Names::ControllerClass($this->_names['delete-action']);
-			//
-			// Name field and service.
-			$opt = $this->_options->option(self::OptionNameField);
-			if($opt->activated()) {
-				$this->_names['name-field'] = $opt->value();
-				$this->_names['predictive-service'] = "{$this->_names['plural-name']}_predictive";
-				$this->_names['predictive-service-controller'] = Names::ServiceClass($this->_names['predictive-service']);
-			}
-			//
-			// Files
-			$this->_files[] = array(
-				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
-				GC_AFIELD_GENERATOR => 'genSpecsFile',
-				GC_AFIELD_DESCRIPTION => 'specifications file'
-			);
-			if(!$this->isRaw()) {
+				$this->_names[GC_AFIELD_TYPE] = false;
+				$this->_names['singular-name'] = $this->_names[GC_AFIELD_NAME];
+				$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
+				$this->_names['templates-prefix'] = '';
+				//
+				// Checking plural name.
+				$opt = $this->_options->option(self::OptionPlural);
+				if($opt->activated()) {
+					$this->_names['plural-name'] = $opt->value();
+				}
+				//
+				// Checking bootstrap option.
+				$opt = $this->_options->option(self::OptionBootstrap);
+				if($opt->activated()) {
+					$this->_names['templates-prefix'] = 'bootstrap/';
+				}
+				//
+				// Checking type.
+				$opt = $this->_options->option(self::OptionSystem);
+				if($opt->activated()) {
+					$this->_names[GC_AFIELD_TYPE] = strtolower($opt->value());
+				}
+				//
+				// Representations.
+				$this->_names['representation-name'] = Names::ItemRepresentationClass($this->_names['singular-name']);
+				$this->_names['factory-name'] = Names::ItemsFactoryClass($this->_names['plural-name']);
+				//
+				// Actions.
+				$this->_names['list-action'] = $this->_names['plural-name'];
+				$this->_names['list-action-controller'] = Names::ControllerClass($this->_names['list-action']);
+				$this->_names['view-action'] = "{$this->_names['singular-name']}";
+				$this->_names['view-action-controller'] = Names::ControllerClass($this->_names['view-action']);
+				$this->_names['edit-action'] = "{$this->_names['singular-name']}_edit";
+				$this->_names['edit-action-controller'] = Names::ControllerClass($this->_names['edit-action']);
+				$this->_names['add-action'] = "{$this->_names['singular-name']}_add";
+				$this->_names['add-action-controller'] = Names::ControllerClass($this->_names['add-action']);
+				$this->_names['delete-action'] = "{$this->_names['singular-name']}_delete";
+				$this->_names['delete-action-controller'] = Names::ControllerClass($this->_names['delete-action']);
+				//
+				// Name field and service.
+				$opt = $this->_options->option(self::OptionNameField);
+				if(!$this->isRaw() && $opt->activated()) {
+					$this->_names['name-field'] = $opt->value();
+					$this->_names['predictive-service'] = "{$this->_names['plural-name']}_predictive";
+					$this->_names['predictive-service-controller'] = Names::ServiceClass($this->_names['predictive-service']);
+				}
+				//
+				// Files
 				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
-					GC_AFIELD_TEMPLATE => 'representation.html',
-					GC_AFIELD_DESCRIPTION => 'representations file'
+					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
+					GC_AFIELD_GENERATOR => 'genSpecsFile',
+					GC_AFIELD_DESCRIPTION => 'specifications file'
 				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
-					GC_AFIELD_TEMPLATE => 'factory.html',
-					GC_AFIELD_DESCRIPTION => 'representations factory file'
-				);
-				if(isset($this->_names['name-field'])) {
+				if(!$this->isRaw()) {
 					$this->_files[] = array(
-						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SERVICES]}/{$this->_names['predictive-service']}.php"),
-						GC_AFIELD_TEMPLATE => 'predictive.html',
-						GC_AFIELD_DESCRIPTION => 'predictive search service file'
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
+						GC_AFIELD_TEMPLATE => 'representation.html',
+						GC_AFIELD_DESCRIPTION => 'representations file'
 					);
 					$this->_files[] = array(
-						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/{$this->_names['predictive-service']}_autocomplete.js"),
-						GC_AFIELD_TEMPLATE => 'autocomplete.html',
-						GC_AFIELD_DESCRIPTION => 'predictive search service file'
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
+						GC_AFIELD_TEMPLATE => 'factory.html',
+						GC_AFIELD_DESCRIPTION => 'representations factory file'
+					);
+					if(isset($this->_names['name-field'])) {
+						$this->_files[] = array(
+							GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SERVICES]}/{$this->_names['predictive-service']}.php"),
+							GC_AFIELD_TEMPLATE => 'predictive.html',
+							GC_AFIELD_DESCRIPTION => 'predictive search service file'
+						);
+						$opt = $this->_options->option(self::OptionGenAutocomplete);
+						if($opt->activated()) {
+							$this->_files[] = array(
+								GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/{$this->_names['singular-name']}_predictive_{$this->_names['name-field']}.js"),
+								GC_AFIELD_TEMPLATE => 'autocomplete.html',
+								GC_AFIELD_DESCRIPTION => 'predictive search service file'
+							);
+						}
+					}
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
+						GC_AFIELD_TEMPLATE => 'list_controller.html',
+						GC_AFIELD_DESCRIPTION => 'controller file to list table items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
+						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}list.html",
+						GC_AFIELD_DESCRIPTION => 'view file to list table items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
+						GC_AFIELD_TEMPLATE => 'view_controller.html',
+						GC_AFIELD_DESCRIPTION => 'controller file to view items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
+						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
+						GC_AFIELD_DESCRIPTION => 'view file to view items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
+						GC_AFIELD_TEMPLATE => 'edit_controller.html',
+						GC_AFIELD_DESCRIPTION => 'controller file to edit items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
+						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}edit.html",
+						GC_AFIELD_DESCRIPTION => 'view file to edit items'
+					);
+
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
+						GC_AFIELD_TEMPLATE => 'add_controller.html',
+						GC_AFIELD_DESCRIPTION => 'controller file to add items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
+						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}add.html",
+						GC_AFIELD_DESCRIPTION => 'view file to add items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
+						GC_AFIELD_TEMPLATE => 'delete_controller.html',
+						GC_AFIELD_DESCRIPTION => 'controller file to delete items'
+					);
+					$this->_files[] = array(
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
+						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}delete.html",
+						GC_AFIELD_DESCRIPTION => 'view file to delete items'
 					);
 				}
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
-					GC_AFIELD_TEMPLATE => 'list_controller.html',
-					GC_AFIELD_DESCRIPTION => 'controller file to list table items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
-					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}list.html",
-					GC_AFIELD_DESCRIPTION => 'view file to list table items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
-					GC_AFIELD_TEMPLATE => 'view_controller.html',
-					GC_AFIELD_DESCRIPTION => 'controller file to view items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
-					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
-					GC_AFIELD_DESCRIPTION => 'view file to view items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
-					GC_AFIELD_TEMPLATE => 'edit_controller.html',
-					GC_AFIELD_DESCRIPTION => 'controller file to edit items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
-					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}edit.html",
-					GC_AFIELD_DESCRIPTION => 'view file to edit items'
-				);
-
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
-					GC_AFIELD_TEMPLATE => 'add_controller.html',
-					GC_AFIELD_DESCRIPTION => 'controller file to add items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
-					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}add.html",
-					GC_AFIELD_DESCRIPTION => 'view file to add items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
-					GC_AFIELD_TEMPLATE => 'delete_controller.html',
-					GC_AFIELD_DESCRIPTION => 'controller file to delete items'
-				);
-				$this->_files[] = array(
-					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
-					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}delete.html",
-					GC_AFIELD_DESCRIPTION => 'view file to delete items'
-				);
 			}
 		}
 	}
 	protected function genRoutes() {
 		if($this->_routes === false) {
 			parent::genRoutes();
-
-			if(!$this->isRaw()) {
-				//
-				// List table items route.
-				$route = new \stdClass();
-				$route->route = $this->_names['list-action'];
-				$route->action = $this->_names['list-action'];
-				$this->_routes[] = $route;
-				//
-				// View table item route.
-				$route = new \stdClass();
-				$route->route = "{$this->_names['view-action']}/:id:";
-				$route->action = $this->_names['view-action'];
-				$this->_routes[] = $route;
-				//
-				// Edit table item route.
-				$route = new \stdClass();
-				$route->route = "{$this->_names['edit-action']}/:id:";
-				$route->action = $this->_names['edit-action'];
-				$this->_routes[] = $route;
-				//
-				// Add table item route.
-				$route = new \stdClass();
-				$route->route = "{$this->_names['add-action']}";
-				$route->action = $this->_names['add-action'];
-				$this->_routes[] = $route;
-				//
-				// Delete table item route.
-				$route = new \stdClass();
-				$route->route = "{$this->_names['delete-action']}/:id:";
-				$route->action = $this->_names['delete-action'];
-				$this->_routes[] = $route;
+			//
+			// Ingnoring process when there are previous errors.
+			if(!$this->hasErrors()) {
+				if(!$this->isRaw()) {
+					//
+					// List table items route.
+					$route = new \stdClass();
+					$route->route = $this->_names['list-action'];
+					$route->action = $this->_names['list-action'];
+					$this->_routes[] = $route;
+					//
+					// View table item route.
+					$route = new \stdClass();
+					$route->route = "{$this->_names['view-action']}/:id:";
+					$route->action = $this->_names['view-action'];
+					$this->_routes[] = $route;
+					//
+					// Edit table item route.
+					$route = new \stdClass();
+					$route->route = "{$this->_names['edit-action']}/:id:";
+					$route->action = $this->_names['edit-action'];
+					$this->_routes[] = $route;
+					//
+					// Add table item route.
+					$route = new \stdClass();
+					$route->route = "{$this->_names['add-action']}";
+					$route->action = $this->_names['add-action'];
+					$this->_routes[] = $route;
+					//
+					// Delete table item route.
+					$route = new \stdClass();
+					$route->route = "{$this->_names['delete-action']}/:id:";
+					$route->action = $this->_names['delete-action'];
+					$this->_routes[] = $route;
+				}
 			}
 		}
 	}
@@ -344,6 +378,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		} else {
 			$this->setError(self::ErrorWrongParameters, "Unknown specifications file version '{$opt->value()}'");
 		}
+
 		return $out;
 	}
 	protected function genSpecsFileV1($path, &$error) {
@@ -564,8 +599,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	}
 	protected function genTranslations() {
 		parent::genTranslations();
-
-		if(!$this->isRaw()) {
+		//
+		// Ingnoring process when there are previous errors.
+		if(!$this->hasErrors() && !$this->isRaw()) {
 			$this->genAssignments();
 
 			foreach($this->_assignments['tableFields'] as $column) {
@@ -635,6 +671,10 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text = "Sets the specifications file version, possible values are: '1' and '2'.\n";
 		$text.= "By default it assumes '2'.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSpecsVersion, array('--specs-version', '-sv'), Option::TypeValue, $text));
+
+		$text = 'This parameter activates the generation of JS scripts for autocompletion. ';
+		$text.= "It depends on parameter '--name-field'.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionGenAutocomplete, array('--autocomplete', '-ac'), Option::TypeNoValue, $text));
 
 		$text = 'All generated view will have a bootstrap structure.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));
