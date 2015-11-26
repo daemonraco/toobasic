@@ -155,9 +155,17 @@ class Version2 extends VersionAdapter {
 					$auxField->hasDefault = false;
 				}
 				//
-				// Analysing NULL settings.
-				if(!isset($spec->null)) {
-					$auxField->null = true;
+				// Analyzing NULL settings.
+				if($auxField->autoincrement) {
+					$auxField->null = false;
+				} elseif(in_array($auxField->type->type, array(DBStructureManager::ColumnTypeTimestamp))) {
+					$auxField->null = false;
+					$auxField->default = 0;
+					$auxField->hasDefault = true;
+				} else {
+					if(!isset($spec->null)) {
+						$auxField->null = true;
+					}
 				}
 				//
 				// Field callbacks.
