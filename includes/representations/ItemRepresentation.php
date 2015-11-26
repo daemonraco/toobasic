@@ -72,6 +72,13 @@ abstract class ItemRepresentation {
 	 * @var string[] Last database error detected.
 	 */
 	protected $_lastDBError = false;
+	/**
+	 * @var \TooBasic\MagicProp MagicProp shortcut.
+	 */
+	protected $_magic = false;
+	/**
+	 * @var mixed[string] List of properties/columns loaded from database.
+	 */
 	protected $_properties = array();
 	/**
 	 * @var string[string] List of prefixes used by query adapters.
@@ -391,6 +398,18 @@ abstract class ItemRepresentation {
 	protected function preLoad($id) {
 		//
 		// Sub-class responsibility.
+	}
+	/**
+	 * This method provides access to a MagicProp instance shortcut.
+	 *
+	 * @return \TooBasic\MagicProp Returns the shortcut.
+	 */
+	protected function magic() {
+		if($this->_magic === false) {
+			$this->_magic = \TooBasic\MagicProp::Instance();
+		}
+
+		return $this->_magic;
 	}
 	/**
 	 * This method is an entry point for sub-classes to perform specific
