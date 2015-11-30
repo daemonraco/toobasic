@@ -171,11 +171,14 @@ define('GC_CONNECTIONS_DEFAULTS_CACHE', 'cache');
 // @}
 //
 // Database structure @{
-define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
 define('GC_DATABASE_DB_CONNECTION_ADAPTERS', 'db-connection-adapters');
 define('GC_DATABASE_DB_QUERY_ADAPTERS', 'db-query-adapters');
 define('GC_DATABASE_DB_SPEC_ADAPTERS', 'db-spec-adapters');
 define('GC_DATABASE_DB_VERSION_ADAPTERS', 'db-version-adapters');
+define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
+define('GC_DATABASE_FIELD_FILTER_BOOLEAN', 'boolean');
+define('GC_DATABASE_FIELD_FILTER_JSON', 'json');
+define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // @}
 //
 // URIs @{

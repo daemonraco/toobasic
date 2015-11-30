@@ -95,6 +95,9 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 // @}
 //
 // Representations @{
+$SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";

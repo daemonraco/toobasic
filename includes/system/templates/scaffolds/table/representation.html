@@ -4,6 +4,9 @@ class <%$representationName%> extends \TooBasic\Representations\ItemRepresentati
 	//
 	// Protected core properties.
 	protected $_CP_ColumnsPerfix = '<%$tablePrefix%>';
+	protected $_CP_ColumnFilters = array(
+		'indexed' => GC_DATABASE_FIELD_FILTER_BOOLEAN
+	);
 	protected $_CP_IDColumn = 'id';
 <%if isset($nameField)%>
 	protected $_CP_NameColumn = '<%$nameField%>';

@@ -244,6 +244,8 @@
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
+* [Field Filters](docs/representations.md#field-filters)
+	* [Persistence policies](docs/representations.md#persistence-policies)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  Routes (docs/routes.md):
@@ -288,6 +290,7 @@
 	* [Allowing sites](docs/services.md#allowing-sites)
 	* [Methods](docs/services.md#methods)
 	* [Headers](docs/services.md#headers)
+* [Transaction Tracking](docs/services.md#transaction-tracking)
 
 ##  Shell Tools and Crons (docs/shelltools.md):
 

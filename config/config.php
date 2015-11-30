@@ -146,6 +146,10 @@ $Database[GC_DATABASE_DB_VERSION_ADAPTERS] = array(
 	'v1' => '\\TooBasic\\Adapters\\DB\\Version1',
 	'v2' => '\\TooBasic\\Adapters\\DB\\Version2'
 );
+$Database[GC_DATABASE_FIELD_FILTERS] = array(
+	GC_DATABASE_FIELD_FILTER_BOOLEAN => 'TooBasic\\Representations\\BooleanFilter',
+	GC_DATABASE_FIELD_FILTER_JSON => '\\TooBasic\\Representations\\JSONFilter'
+);
 //
 // Directory configurations.
 $Uris = array();
