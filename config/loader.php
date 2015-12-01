@@ -130,6 +130,8 @@ $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREAD
 $SuperLoader['TooBasic\\Managers\\SearchManager'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchManager.php";
 $SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableFactory.php";
 $SuperLoader['TooBasic\\Search\\SearchableItem'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItem.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemRepresentation.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
 // @}
 //
 // Known librearies @{
