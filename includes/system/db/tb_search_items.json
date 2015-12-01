@@ -10,7 +10,7 @@
 				"id": "int"
 			},
 			"primary": {
-				"item": ["term", "id"]
+				"item": ["term", "type", "id"]
 			}
 		}
 	]

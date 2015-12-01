@@ -74,7 +74,11 @@ abstract class ItemRepresentation {
 	 * properties.
 	 */
 	protected $_extraProperties = array();
-	protected $_forcedPersistence = array();
+	/**
+	 * @var boolean This flag gets active when a field filter used by this
+	 * class always requires presistance.
+	 */
+	protected $_forcedPersistence =false;
 	/**
 	 * @var string[] Last database error detected.
 	 */

@@ -23,6 +23,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionNameField = 'NameField';
 	const OptionPlural = 'Plural';
 	const OptionRaw = 'Raw';
+	const OptionSearchable = 'Searchable';
 	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
 	//
@@ -46,6 +47,14 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_assignments['singularName'] = $this->_names['singular-name'];
 				$this->_assignments['pluralName'] = $this->_names['plural-name'];
 				$this->_assignments['isRaw'] = $this->isRaw();
+				//
+				// Searchable items flags.
+				if(isset($this->_names['search-code'])) {
+					$this->_assignments['isSearchable'] = true;
+					$this->_assignments['searchCode'] = $this->_names['search-code'];
+				} else {
+					$this->_assignments['isSearchable'] = false;
+				}
 				//
 				// Generating a table prefix.
 				$this->_assignments['tablePrefix'] = substr(str_replace('_', '', $this->_names['plural-name']), 0, 3).'_';
@@ -213,6 +222,12 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$opt = $this->_options->option(self::OptionSystem);
 				if($opt->activated()) {
 					$this->_names[GC_AFIELD_TYPE] = strtolower($opt->value());
+				}
+				//
+				// Checking search engine flags.
+				$opt = $this->_options->option(self::OptionSearchable);
+				if($opt->activated()) {
+					$this->_names['search-code'] = strtoupper($opt->value());
 				}
 				//
 				// Representations.
@@ -678,6 +693,10 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 
 		$text = 'All generated view will have a bootstrap structure.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));
+
+		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
+		$text.= "Given value is used as item type for searchable items indexation.\n";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, array('--searchable', '-sr'), Option::TypeValue, $text, 'item-code'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
