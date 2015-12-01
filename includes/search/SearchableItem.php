@@ -46,6 +46,13 @@ interface SearchableItem {
 	 */
 	public function terms();
 	/**
+	 * This method provides a to convert an complex item object into a simpler
+	 * version of in represented into an array.
+	 *
+	 * @return mixed[string] Returns a simpler version of the object.
+	 */
+	public function toArray();
+	/**
 	 * This method provides the search item type to use when indexing this
 	 * object.
 	 *

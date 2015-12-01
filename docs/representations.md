@@ -202,9 +202,9 @@ field.
 Nonetheless, this doesn't mean that your database is constantly updated, remember
 that you decide when to call `persist()`.
 
-
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
 * [Models](models.md)
 * [Database Connections](databases.md)
+* [TooBasic's Search Engine](searchengine.md)

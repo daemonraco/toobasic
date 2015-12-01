@@ -226,6 +226,7 @@ related)
 	* [MagicProp](docs/magicprop.md)
 	* [Conditional Redirections](docs/redirections.md)
 	* [Simple API Reader](docs/sapireader.md)
+	* [Search Engine](docs/searchengine.md)
 
 Also:
 

@@ -278,6 +278,25 @@
 	* [POST parameters](docs/sapireader.md#post-parameters)
 * [Suggestions](docs/sapireader.md#suggestions)
 
+##  Search Engine (docs/searchengine.md):
+
+* [What is __TooBasic__'s Search Engine?](docs/searchengine.md#what-is-toobasic_s-search-engine)
+* [Database](docs/searchengine.md#database)
+* [Searchable items](docs/searchengine.md#searchable-items)
+	* [Search item code](docs/searchengine.md#search-item-code)
+	* [Searchable items](docs/searchengine.md#searchable-items)
+	* [Searchable item factories](docs/searchengine.md#searchable-item-factories)
+* [Examples](docs/searchengine.md#examples)
+	* [Representation](docs/searchengine.md#representation)
+	* [Factory](docs/searchengine.md#factory)
+	* [Configuration?](docs/searchengine.md#configuration)
+* [Where is my search?](docs/searchengine.md#where-is-my-search)
+	* [Indexation](docs/searchengine.md#indexation)
+	* [Search](docs/searchengine.md#search)
+	* [In code](docs/searchengine.md#in-code)
+	* [Service](docs/searchengine.md#service)
+* [Suggestions](docs/searchengine.md#suggestions)
+
 ##  Services (docs/services.md):
 
 * [Service?](docs/services.md#service)
