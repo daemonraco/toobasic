@@ -189,6 +189,58 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			}
 		}
 	}
+	protected function genConfigLines() {
+		$this->genNames();
+		if($this->_configLines === false) {
+			//
+			// Parent standards.
+			parent::genConfigLines();
+			//
+			// Global depdendencies.
+			global $Directories;
+			global $Paths;
+			//
+			// Adding searchable configuration.
+			if(isset($this->_names['search-code'])) {
+				//
+				// Checking module and parent directory.
+				$opt = $this->_options->option(self::OptionModule);
+				if($opt->activated()) {
+					$path = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/config.php");
+					$this->_requiredDirectories[] = dirname($path);
+
+					if(!isset($this->_configLines[$path])) {
+						$this->_configLines[$path] = array();
+					}
+
+					$this->_configLines[$path][] = "function activateSearchFor{$this->_assignments['searchCode']}() {";
+					$this->_configLines[$path][] = "\tglobal \$Search; //DEPENDENCY activateSearchFor{$this->_assignments['searchCode']}()";
+					$this->_configLines[$path][] = "\t\\TooBasic\\MagicProp::Instance()->representation->{$this->_names['plural-name']};";
+					$this->_configLines[$path][] = "\t\$Search[GC_SEARCH_ENGINE_FACTORIES]['{$this->_assignments['searchCode']}'] = '{$this->_names['factory-name']}';";
+					$this->_configLines[$path][] = "} //ENDOF activateSearchFor{$this->_assignments['searchCode']}()";
+
+					$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");
+					$this->_requiredDirectories[] = dirname($path);
+
+					if(!isset($this->_configLines[$path])) {
+						$this->_configLines[$path] = array();
+					}
+
+					$this->_configLines[$path][] = "activateSearchFor{$this->_assignments['searchCode']}();";
+				} else {
+					$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/config.php");
+					$this->_requiredDirectories[] = dirname($path);
+
+					if(!isset($this->_configLines[$path])) {
+						$this->_configLines[$path] = array();
+					}
+
+					$this->_configLines[$path][] = "\\TooBasic\\MagicProp::Instance()->representation->{$this->_names['plural-name']};";
+					$this->_configLines[$path][] = "\$Search[GC_SEARCH_ENGINE_FACTORIES]['{$this->_assignments['searchCode']}'] = '{$this->_names['factory-name']}';";
+				}
+			}
+		}
+	}
 	protected function genNames() {
 		if($this->_names === false) {
 			//
@@ -227,7 +279,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				// Checking search engine flags.
 				$opt = $this->_options->option(self::OptionSearchable);
 				if($opt->activated()) {
-					$this->_names['search-code'] = strtoupper($opt->value());
+					$this->_names['search-code'] = substr(strtoupper($opt->value()), 0, 10);
 				}
 				//
 				// Representations.

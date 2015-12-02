@@ -33,6 +33,11 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected $_assignments = false;
 	/**
+	 * @var string[string][] Lists of configuration lines to add into PHP
+	 * files.
+	 */
+	protected $_configLines = false;
+	/**
 	 * @var string[] List of files to be created.
 	 */
 	protected $_files = array();
@@ -68,6 +73,123 @@ abstract class Scaffold extends ShellTool {
 	protected $_translations = false;
 	//
 	// Protected methods.
+	/**
+	 * This method injects confiugration lines into PHP files.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
+	protected function addConfigLines($spacer) {
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
+		//
+		// Checking for errors and the existens of at least one line.
+		if($ok && count($this->_configLines)) {
+			echo "\n{$spacer}Injecting configuration lines:\n";
+			//
+			// Creating pending files.
+			foreach($this->_configLines as $path => $confLines) {
+				if(!is_file($path)) {
+					echo "{$spacer}\tCreating empty file '{$path}': ";
+					file_put_contents($path, "<?php\n");
+					echo Color::Green("Done\n");
+				}
+			}
+			//
+			// Modifying each file.
+			foreach($this->_configLines as $path => $confLines) {
+				//
+				// Default values.
+				$sections = array(
+					GC_AFIELD_START => array(),
+					GC_AFIELD_MIDDLE => array(),
+					GC_AFIELD_END => array()
+				);
+				//
+				// Adding required end of line;
+				foreach($confLines as $pos => $confLine) {
+					$confLines[$pos] = "{$confLine}\n";
+				}
+				//
+				// Flag lines.
+				$startLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[START]\n";
+				$endLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[END]\n";
+				//
+				// Streching out file lines.
+				$startFound = false;
+				$endFound = false;
+				foreach(file($path) as $line) {
+					//
+					// Fixing end of line.
+					$line = str_replace("\r\n", "\n", $line);
+					//
+					// Separating sections.
+					if(!$startFound) {
+						if($line == $startLine) {
+							$startFound = true;
+						} else {
+							$sections[GC_AFIELD_START][] = $line;
+						}
+					} else {
+						if(!$endFound) {
+							if($line == $endLine) {
+								$endFound = true;
+							} else {
+								$sections[GC_AFIELD_MIDDLE][] = $line;
+							}
+						} else {
+							$sections[GC_AFIELD_END][] = $line;
+						}
+					}
+				}
+				//
+				// If this is the first time this section is
+				// added, a new line should be added to keep it
+				// nice.
+				if(!$startFound) {
+					$sections[GC_AFIELD_START][] = "\n";
+				}
+				//
+				// Removing conf lines for order safety.
+				foreach($sections[GC_AFIELD_MIDDLE] as $pos => $line) {
+					if(in_array($line, $confLines)) {
+						unset($sections[GC_AFIELD_MIDDLE][$pos]);
+					}
+				}
+				//
+				// Appending new conf lines.
+				foreach($confLines as $confLine) {
+					$sections[GC_AFIELD_MIDDLE][] = $confLine;
+				}
+				//
+				// Re-building file
+				$builtLines = array();
+				foreach($sections[GC_AFIELD_START] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $startLine;
+				foreach($sections[GC_AFIELD_MIDDLE] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $endLine;
+				foreach($sections[GC_AFIELD_END] as $line) {
+					$builtLines[] = $line;
+				}
+				//
+				// Updating.
+				echo "{$spacer}\tUpdating '{$path}': ";
+				if(file_put_contents($path, implode('', $builtLines)) !== false) {
+					echo Color::Green("Done\n");
+				} else {
+					echo Color::Green("Failed\n");
+				}
+			}
+		}
+
+		return $ok;
+	}
 	/**
 	 * This method is the one in charge of triggering the generation of routes
 	 * and adding them into configuration.
@@ -377,6 +499,22 @@ abstract class Scaffold extends ShellTool {
 			//
 			// Default values.
 			$this->_assignments = array();
+		}
+	}
+	/**
+	 * This method generates lists of configuration lines to be inserted in
+	 * several PHP files.
+	 */
+	protected function genConfigLines() {
+		//
+		// Triggering names generation.
+		$this->genNames();
+		//
+		// Avoiding multiple generations.
+		if(!$this->hasErrors() && $this->_configLines === false) {
+			//
+			// Default values.
+			$this->_configLines = array();
 		}
 	}
 	/**
@@ -734,6 +872,113 @@ abstract class Scaffold extends ShellTool {
 		return $ok;
 	}
 	/**
+	 * This method removes injected confiugration lines into PHP files.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
+	protected function removeConfigLines($spacer) {
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
+		//
+		// Checking for errors and the existens of at least one line.
+		if($ok && count($this->_configLines)) {
+			echo "\n{$spacer}Removing configuration lines:\n";
+			//
+			// Modifying each file.
+			foreach($this->_configLines as $path => $confLines) {
+				//
+				// Ignoring unexisting files.
+				if(!is_file($path)) {
+					continue;
+				}
+				//
+				// Default values.
+				$sections = array(
+					GC_AFIELD_START => array(),
+					GC_AFIELD_MIDDLE => array(),
+					GC_AFIELD_END => array()
+				);
+				//
+				// Adding required end of line;
+				foreach($confLines as $pos => $confLine) {
+					$confLines[$pos] = "{$confLine}\n";
+				}
+				//
+				// Flag lines.
+				$startLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[START]\n";
+				$endLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[END]\n";
+				//
+				// Streching out file lines.
+				$startFound = false;
+				$endFound = false;
+				foreach(file($path) as $line) {
+					//
+					// Fixing end of line.
+					$line = str_replace("\r\n", "\n", $line);
+					//
+					// Separating sections.
+					if(!$startFound) {
+						if($line == $startLine) {
+							$startFound = true;
+						} else {
+							$sections[GC_AFIELD_START][] = $line;
+						}
+					} else {
+						if(!$endFound) {
+							if($line == $endLine) {
+								$endFound = true;
+							} else {
+								$sections[GC_AFIELD_MIDDLE][] = $line;
+							}
+						} else {
+							$sections[GC_AFIELD_END][] = $line;
+						}
+					}
+				}
+				//
+				// This file doesn't seems to have configuration
+				// generated by this controller. Ignoring.
+				if(!$startFound) {
+					continue;
+				}
+				//
+				// Removing conf lines for order safety.
+				foreach($sections[GC_AFIELD_MIDDLE] as $pos => $line) {
+					if(in_array($line, $confLines)) {
+						unset($sections[GC_AFIELD_MIDDLE][$pos]);
+					}
+				}
+				//
+				// Re-building file
+				$builtLines = array();
+				foreach($sections[GC_AFIELD_START] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $startLine;
+				foreach($sections[GC_AFIELD_MIDDLE] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $endLine;
+				foreach($sections[GC_AFIELD_END] as $line) {
+					$builtLines[] = $line;
+				}
+				//
+				// Updating.
+				echo "{$spacer}\tUpdating '{$path}': ";
+				if(file_put_contents($path, implode('', $builtLines)) !== false) {
+					echo Color::Green("Done\n");
+				} else {
+					echo Color::Green("Failed\n");
+				}
+			}
+		}
+
+		return $ok;
+	}
+	/**
 	 * This method is the one in charge of removing a generated file and
 	 * checking the results of such operation.
 	 *
@@ -958,6 +1203,9 @@ abstract class Scaffold extends ShellTool {
 		$this->genAssignments();
 		//
 		// Enforcing files list structure.
+		$this->genConfigLines();
+		//
+		// Enforcing files list structure.
 		$this->enforceFilesList();
 		//
 		// Default values.
@@ -992,6 +1240,11 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$ok = $this->addAllTranslations("{$spacer}\t");
 		}
+		//
+		// PHP  configuration lines.
+		if($ok) {
+			$ok = $this->addConfigLines("{$spacer}\t");
+		}
 
 		return $ok;
 	}
@@ -1006,6 +1259,12 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Enforcing names generation.
 		$this->genNames();
+		//
+		// Enforcing assignment generation.
+		$this->genAssignments();
+		//
+		// Enforcing files list structure.
+		$this->genConfigLines();
 		//
 		// Enforcing files list structure.
 		$this->enforceFilesList();
@@ -1037,6 +1296,11 @@ abstract class Scaffold extends ShellTool {
 #		if($ok) {
 #			$ok = $this->removeAllTranslations("{$spacer}\t");
 #		}
+		//
+		// PHP  configuration lines.
+		if($ok) {
+			$ok = $this->removeConfigLines("{$spacer}\t");
+		}
 
 		return $ok;
 	}
