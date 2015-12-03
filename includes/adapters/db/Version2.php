@@ -160,7 +160,7 @@ class Version2 extends VersionAdapter {
 					$auxField->null = false;
 				} elseif(in_array($auxField->type->type, array(DBStructureManager::ColumnTypeTimestamp))) {
 					$auxField->null = false;
-					$auxField->default = 0;
+					$auxField->default = 'CURRENT_TIMESTAMP';
 					$auxField->hasDefault = true;
 				} else {
 					if(!isset($spec->null)) {
