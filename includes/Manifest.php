@@ -9,8 +9,9 @@ namespace TooBasic;
 
 //
 // Class aliases.
-use \TooBasic\Exception;
-use \TooBasic\Sanitizer;
+use TooBasic\Exception;
+use TooBasic\Managers\ManifestsManager;
+use TooBasic\Sanitizer;
 
 /**
  * @class Manifest
@@ -50,6 +51,11 @@ class Manifest {
 	}
 	//
 	// Public methods.
+	/**
+	 * This method checks for versions requirements.
+	 *
+	 * @return boolean Returns TRUE if it detected no errors.
+	 */
 	public function check() {
 		//
 		// Checking required PHP version.
@@ -60,6 +66,30 @@ class Manifest {
 		// Checking required TooBasic version.
 		if(version_compare(self::CleanVersion(TOOBASIC_VERSION), self::CleanVersion($this->_information->required_versions->toobasic)) < 0) {
 			$this->setError(self::ErrorPHPVersion, "This module requires at least version {$this->_information->required_versions->toobasic} of TooBasic");
+		}
+		//
+		// Checking cross-module dependencies.
+		foreach($this->_information->required_versions as $field => $reqVersion) {
+			$matches = false;
+			//
+			// Detecting module dependency and name.
+			if(preg_match('/^mod:(?P<ucode>.+)$/', $field, $matches)) {
+				//
+				// Looking for the requested module.
+				$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
+				//
+				// Checking installation.
+				if($manifest) {
+					//
+					// Comparing version.
+					$modVersion = $manifest->information()->version;
+					if(version_compare(self::CleanVersion($modVersion), self::CleanVersion($reqVersion)) < 0) {
+						$this->setError(self::ErrorPHPVersion, "Required version '{$reqVersion}' for module '{$manifest->information()->name}' (found version '{$modVersion}')");
+					}
+				} else {
+					$this->setError(self::ErrorPHPVersion, "Unable to obtain version number for module 'UCODE:{$matches['ucode']}'. Please make sure it is installed?");
+				}
+			}
 		}
 
 		return !$this->hasErrors();
@@ -122,7 +152,7 @@ class Manifest {
 			}
 			//
 			// Enforcing main object.
-			\TooBasic\objectCopyAndEnforce(array('name', 'version', 'description', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
+			\TooBasic\objectCopyAndEnforce(array('name', 'ucode', 'version', 'description', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
 				'author' => new \stdClass(),
 				'required_versions' => new \stdClass()
 			));
@@ -136,12 +166,16 @@ class Manifest {
 				'toobasic' => TOOBASIC_VERSION
 			));
 			//
-			// Enforcing name and version.
+			// Enforcing name, universal code and version number.
 			if(!$this->_information->name) {
 				$this->_information->name = ucwords($this->_moduleName);
 			}
+			if(!$this->_information->ucode) {
+				$this->_information->ucode = $this->_information->name;
+			}
+			$this->_information->ucode = strtolower($this->_information->ucode);
 			if(!$this->_information->version) {
-				$this->_information->version = '1.0';
+				$this->_information->version = '0.0.1';
 			}
 			//
 			// Enforcing documentation url.

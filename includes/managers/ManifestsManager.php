@@ -80,6 +80,32 @@ class ManifestsManager extends Manager {
 		return \boolval($this->_errors);
 	}
 	/**
+	 * This method provides access to a certain module manifest based on it's
+	 * universal code.
+	 *
+	 * @param string $uCode Universal code to look for.
+	 * @return \TooBasic\Manifest[string] Returns a manifest object.
+	 */
+	public function manifestByUCode($uCode) {
+		$out = false;
+		//
+		// Cleaning UCode.
+		$uCode = strtolower($uCode);
+		//
+		// Enforcing loading.
+		$this->loadManifests();
+		//
+		// Looking for the right one.
+		foreach($this->_manifests as $manifest) {
+			if($manifest->information()->ucode == $uCode) {
+				$out = $manifest;
+				break;
+			}
+		}
+
+		return $out;
+	}
+	/**
 	 * This method provides access to all loaded manifests.
 	 *
 	 * @return \TooBasic\Manifest[string] Returns a list of manifests.
