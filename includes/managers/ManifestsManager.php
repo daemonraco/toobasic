@@ -154,6 +154,11 @@ class ManifestsManager extends Manager {
 					echo '</center></td>';
 					echo '</tr>';
 
+					echo '<tr>';
+					echo '<td><strong>UCode</strong>:</td>';
+					echo "<td>{$info->ucode}</td>";
+					echo '</tr>';
+
 					if($info->description) {
 						echo '<tr>';
 						echo '<td><strong>Description</strong>:</td>';
@@ -200,6 +205,15 @@ class ManifestsManager extends Manager {
 					echo '<td><ul>';
 					echo "<li><strong>PHP</strong>: {$info->required_versions->php}</li>";
 					echo "<li><strong>TooBasic</strong>: {$info->required_versions->toobasic}</li>";
+
+					foreach($info->required_versions as $field => $reqVersion) {
+						$matches = false;
+						if(preg_match('/^mod:(?P<ucode>.+)$/', $field, $matches)) {
+							$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
+							echo "<li><strong>{$manifest->information()->name}</strong> <sup>ucode:{$matches['ucode']}</sup>: {$reqVersion}</li>";
+						}
+					}
+
 					echo '</ul></td>';
 					echo '</tr>';
 
