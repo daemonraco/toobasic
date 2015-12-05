@@ -152,9 +152,10 @@ class Manifest {
 			}
 			//
 			// Enforcing main object.
-			\TooBasic\objectCopyAndEnforce(array('name', 'ucode', 'version', 'description', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
+			\TooBasic\objectCopyAndEnforce(array('name', 'ucode', 'version', 'description', 'icon', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
 				'author' => new \stdClass(),
-				'required_versions' => new \stdClass()
+				'required_versions' => new \stdClass(),
+				'icon' => false
 			));
 			//
 			// Enforcing author's information.

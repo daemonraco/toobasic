@@ -9,7 +9,8 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Manifest;
+use TooBasic\Manifest;
+use TooBasic\Paths;
 
 /**
  * @class ManifestsManager
@@ -134,10 +135,24 @@ class ManifestsManager extends Manager {
 				foreach($this->manifests() as $manifest) {
 					$info = $manifest->information();
 
+					$url = '';
+					if($info->icon) {
+						$url = Paths::Instance()->imagePath($info->icon, 'png');
+					} else {
+						$url = Paths::Instance()->imagePath('TooBasic-default-module-icon-512px', 'png');
+					}
+					$uri = Paths::Path2Uri($url);
+
 					echo '<div class="panel panel-default">';
-					echo "<div class=\"panel-heading\">{$info->name} (v{$info->version})</div>";
+					echo "<div class=\"panel-heading\"><img src=\"{$uri}\" class=\"pull-right\"style=\"width:20px;height:auto;\"/> {$info->name} (v{$info->version})</div>";
 					echo '<div class="panel-body">';
 					echo '<table class="table">';
+
+					echo '<tr>';
+					echo '<td colspan="2"><center>';
+					echo '<img src="'.$uri.'" style="width:64px;height:auto;"/>';
+					echo '</center></td>';
+					echo '</tr>';
 
 					if($info->description) {
 						echo '<tr>';
