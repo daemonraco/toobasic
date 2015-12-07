@@ -304,8 +304,13 @@ class RoutesManager extends Manager {
 					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_EXTRA_ROUTE => $extraRoute));
 				}
 				//
-				// Setting the action/controller to exectute.
-				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
+				// Setting the action/controller to exectute (or
+				// service).
+				if(boolval($matchingRoute->service)) {
+					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_SERVICE => $matchingRoute->service));
+				} else {
+					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
+				}
 				//
 				// Adding route specs as a '$_SERVER' value.
 				$this->_params->addValues(Params::TypeSERVER, array(GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route));
@@ -404,7 +409,11 @@ class RoutesManager extends Manager {
 		// Generating information about each route.
 		foreach($this->routes() as $route) {
 			$out.= "- '{$route->route}':\n";
-			$out.= "\tAction: '{$route->action}'\n";
+			if(boolval($route->service)) {
+				$out.= "\tService: '{$route->service}'\n";
+			} else {
+				$out.= "\tAction: '{$route->action}'\n";
+			}
 			//
 			// Describing how the route is analysed.
 			$out.= "\tPieces:\n";
@@ -484,7 +493,7 @@ class RoutesManager extends Manager {
 				//
 				// Copying only useful field and enforcing those
 				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'params'), $route, new \stdClass(), array('params' => array()));
+				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'service', 'params'), $route, new \stdClass(), array('params' => array(), 'action' => false, 'service' => false));
 				//
 				// Expanding route's pattern.
 				$this->buildPattern($auxRoute);
