@@ -284,8 +284,8 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Checking field name.
 		$out[GC_AFIELD_RESULT] = preg_match($pattern, $name, $matches);
-		$out[GC_AFIELD_FLAG] = strtoupper($matches['flag']);
-		$out[GC_AFIELD_NAME] = $matches['name'];
+		$out[GC_AFIELD_FLAG] = isset($matches['flag']) ? strtoupper($matches['flag']) : false;
+		$out[GC_AFIELD_NAME] = isset($matches['name']) ? $matches['name'] : false;
 
 		return $out;
 	}
