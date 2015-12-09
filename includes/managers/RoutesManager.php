@@ -84,15 +84,30 @@ class RoutesManager extends Manager {
 			//
 			// This works if there's not host set and if there's an
 			// action name given in the parameters.
-			if(!isset($url[GC_AFIELD_HOST]) && isset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION])) {
+			if(!isset($url[GC_AFIELD_HOST])) {
 				//
-				// Checking each route.
-				foreach($this->routes() as $route) {
+				// Checking action or service routes.
+				if(isset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION])) {
 					//
-					// If the action matches is a route to
-					// consider.
-					if($route->action == $url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]) {
-						$matchingRoutes[] = $route;
+					// Checking each route.
+					foreach($this->routes() as $route) {
+						//
+						// If the action matches is a
+						// route to consider.
+						if($route->action == $url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]) {
+							$matchingRoutes[] = $route;
+						}
+					}
+				} elseif(isset($url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE])) {
+					//
+					// Checking each route.
+					foreach($this->routes() as $route) {
+						//
+						// If the action matches is a
+						// route to consider.
+						if($route->service == $url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE]) {
+							$matchingRoutes[] = $route;
+						}
 					}
 				}
 			}
@@ -101,8 +116,10 @@ class RoutesManager extends Manager {
 			$matchingRoute = false;
 			if($matchingRoutes) {
 				//
-				// Action is no longer needed at this point.
+				// Action and Service parameters are no longer
+				// needed at this point.
 				unset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]);
+				unset($url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE]);
 				//
 				// Checking each matching route.
 				foreach($matchingRoutes as $matchingRoute) {
