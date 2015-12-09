@@ -82,6 +82,7 @@ class QuerySQLite extends QueryAdapter {
 		//
 		// Default values.
 		$query = "select  * \n";
+		$fieldPrefix = '';
 		//
 		// Checking if this is a multi-table select.
 		if(is_array($table)) {
@@ -116,6 +117,7 @@ class QuerySQLite extends QueryAdapter {
 				}
 			}
 		} else {
+			$fieldPrefix = $prefixes[GC_DBQUERY_PREFIX_COLUMN];
 			//
 			// Building 'from' sentence.
 			$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
@@ -140,7 +142,7 @@ class QuerySQLite extends QueryAdapter {
 		// Building 'order by' sentence.
 		$order = array();
 		foreach($orderBy as $field => $way) {
-			$order[] = "{$field} {$way}";
+			$order[] = "{$fieldPrefix}{$field} {$way}";
 		}
 		if($order) {
 			$query.= 'order by '.implode(', ', $order)." \n";
