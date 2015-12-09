@@ -347,11 +347,11 @@ abstract class Scaffold extends ShellTool {
 			// Checking each route to avoid duplicates. If there's
 			// already a similar route it should not be replaced.
 			foreach($config->routes as $route) {
-				if(isset($newRoute->action) && $route->action == $newRoute->action) {
+				if(isset($newRoute->action) && isset($route->action) && $route->action == $newRoute->action) {
 					$ok = false;
 					$error = "there's another rule for this controller";
 					break;
-				} elseif(isset($newRoute->service) && $route->service == $newRoute->service) {
+				} elseif(isset($newRoute->service) && isset($route->service) && $route->service == $newRoute->service) {
 					$ok = false;
 					$error = "there's another rule for this service";
 					break;
@@ -1064,10 +1064,10 @@ abstract class Scaffold extends ShellTool {
 			//
 			// Looking for the route and removing it.
 			foreach($config->routes as $routeKey => $route) {
-				if(isset($badRoute->action) && $route->action == $badRoute->action) {
+				if(isset($badRoute->action) && isset($route->action) && $route->action == $badRoute->action) {
 					unset($config->routes[$routeKey]);
 					$found = true;
-				} elseif(isset($badRoute->service) && $route->service == $badRoute->service) {
+				} elseif(isset($badRoute->service) && isset($route->service) && $route->service == $badRoute->service) {
 					unset($config->routes[$routeKey]);
 					$found = true;
 				}
