@@ -159,15 +159,20 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		// values.
 		$out = array(
 			GC_AFIELD_ADAPTER => $this->_className,
-			GC_AFIELD_QUERY => $this->selectPrepare($table, array_keys($where), $prefixes, $orderBy, $limit, $offset),
+			GC_AFIELD_QUERY => $this->selectPrepare($table, $where, $prefixes, $orderBy, $limit, $offset),
 			GC_AFIELD_PARAMS => array()
 		);
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($where as $key => $value) {
 			$xKey = self::ExpandFieldName($key);
-			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
-				$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+
+			if($xKey[GC_AFIELD_RESULT]) {
+				switch($xKey[GC_AFIELD_FLAG]) {
+					case '*':
+						$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+						break;
+				}
 			} else {
 				$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
 			}
@@ -234,12 +239,12 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	// Protected methods.
 	protected function cleanPrefixes(&$prefixes) {
 		static $requiredPrefixes = array(
-			GC_DBQUERY_PREFIX_COLUMN,
-			GC_DBQUERY_PREFIX_TABLE
+			GC_DBQUERY_PREFIX_COLUMN => '',
+			GC_DBQUERY_PREFIX_TABLE => ''
 		);
-		foreach($requiredPrefixes as $reqPfx) {
+		foreach($requiredPrefixes as $reqPfx => $defaultValue) {
 			if(!isset($prefixes[$reqPfx])) {
-				$prefixes[$reqPfx] = '';
+				$prefixes[$reqPfx] = $defaultValue;
 			}
 		}
 	}
@@ -275,11 +280,11 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		);
 		//
 		// Expansion pattern.
-		$pattern = '/^(?P<flag>[*]{0,1})(?P<name>.*)$/';
+		$pattern = '/^((?P<flag>[*cC]{0,1}):)(?P<name>.*)$/';
 		//
 		// Checking field name.
 		$out[GC_AFIELD_RESULT] = preg_match($pattern, $name, $matches);
-		$out[GC_AFIELD_FLAG] = $matches['flag'];
+		$out[GC_AFIELD_FLAG] = strtoupper($matches['flag']);
 		$out[GC_AFIELD_NAME] = $matches['name'];
 
 		return $out;

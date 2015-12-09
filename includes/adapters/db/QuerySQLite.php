@@ -79,29 +79,74 @@ class QuerySQLite extends QueryAdapter {
 	}
 	public function selectPrepare($table, $whereFields, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false) {
 		$this->cleanPrefixes($prefixes);
+		//
+		// Default values.
+		$query = "select  * \n";
+		//
+		// Checking if this is a multi-table select.
+		if(is_array($table)) {
+			//
+			// Building 'from' sentence.
+			$first = true;
+			$auxList = [];
+			foreach($table as $t) {
+				$aux = $first ? "from    " : "        ";
+				$aux.= "{$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$t}";
+				$auxList[] = $aux;
 
-		$where = array();
-		foreach($whereFields as $key) {
-			$xKey = self::ExpandFieldName($key);
-			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
-				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
-			} else {
-				$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+				$first = false;
+			}
+			$query.= implode(", \n", $auxList)." \n";
+			//
+			// Building 'where' sentence pieces.
+			$where = array();
+			foreach($whereFields as $key => $value) {
+				$xKey = self::ExpandFieldName($key);
+				if($xKey[GC_AFIELD_RESULT]) {
+					switch($xKey[GC_AFIELD_FLAG]) {
+						case 'C':
+							$where[] = "{$xKey[GC_AFIELD_NAME]} = {$value}";
+							break;
+						case '*':
+							$where[] = "{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
+							break;
+					}
+				} else {
+					$where[] = "{$key} = :{$key}";
+				}
+			}
+		} else {
+			//
+			// Building 'from' sentence.
+			$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
+			//
+			// Building 'where' sentence pieces.
+			$where = array();
+			foreach($whereFields as $key => $value) {
+				$xKey = self::ExpandFieldName($key);
+				if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
+					$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
+				} else {
+					$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
+				}
 			}
 		}
-
-		$order = array();
-		foreach($orderBy as $field => $way) {
-			$order[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$field} {$way}";
-		}
-		$query = "select  * \n";
-		$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
+		//
+		// Appending 'where' conditions.
 		if($where) {
 			$query.= "where   ".implode(' and ', $where)." \n";
+		}
+		//
+		// Building 'order by' sentence.
+		$order = array();
+		foreach($orderBy as $field => $way) {
+			$order[] = "{$field} {$way}";
 		}
 		if($order) {
 			$query.= 'order by '.implode(', ', $order)." \n";
 		}
+		//
+		// Limit.
 		if($limit !== false) {
 			$limit += 0;
 			if($offset !== false) {
