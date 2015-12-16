@@ -170,7 +170,7 @@ protected function basicRun() {
 You can also access a basic service that allows provides you with the same basic
 search functionality:
 
-> http://www.example.com/mysite/?service=search&terms=JOHN%20dOe
+>http://www.example.com/mysite/?service=search&terms=JOHN%20dOe
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:

@@ -25,7 +25,8 @@ class MyactionController extends \TooBasic\Controller {
 Such class must be saved into a file called __myaction.php__ inside
 __ROOTDIR/site/controllers/__.
 Also, the class must be name based on the action name:
-> Take your chosen name, change its first letter to upper-case and append
+
+>Take your chosen name, change its first letter to upper-case and append
 __Controller__.
 Then inherit __\TooBasic\Controller__ and define a protected method called
 `basicRun()`.
@@ -59,7 +60,8 @@ __ROOTDIR/site/templates/action/__.
 Well, yes, that's all you need, now go to your browser, and enter your URL using
 the name of your action.
 Something like this:
-> http://www.example.com/?action=myaction
+
+>http://www.example.com/?action=myaction
 
 ### But?
 Ya ya ya, I know, this seems to be too complicated to build just a HTML, _where is

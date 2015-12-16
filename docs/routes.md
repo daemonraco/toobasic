@@ -182,6 +182,7 @@ Let's use those things we've said and write something like this:
 }
 ```
 Here is a bunch of valid URL for these routes:
+
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
 
 >http://www.myhost.com/mysite/product/clean/204578?expand=description

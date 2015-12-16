@@ -23,7 +23,8 @@ class MyactionController extends \TooBasic\Controller {
         <h4>{$helloaciton}</h4>
 ```
 * And visit it, for example, at:
-> http://www.example.com/?action=myaction
+
+>http://www.example.com/?action=myaction
 
 After all of this you'll find a page saying __Hello World!__.
 
@@ -75,7 +76,8 @@ class MylayoutController extends \TooBasic\Layout {
 </html>
 ```
 * And visit it, for example, at:
-> http://www.example.com/?action=myaction&layout=mylayout
+
+>http://www.example.com/?action=myaction&layout=mylayout
 
 ### Config
 As you may see, using a parameter called __layout__ on each URL may not be pretty,
@@ -94,7 +96,8 @@ $Defaults["layout"] = "mylayout";
 $Defaults["action"] = "myaction";
 ```
 And then access this way:
-> http://www.example.com/
+
+>http://www.example.com/
 
 ## Doubts
 

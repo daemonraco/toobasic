@@ -102,7 +102,8 @@ $ git submodule update
 
 ## Final check
 If there were no errors, you should have a working page that you can access at:
-> http://localhost/mysite
+
+>http://localhost/mysite
 
 ## Post installation
 After you installed __TooBasic__ you may find some known issues that you can solve

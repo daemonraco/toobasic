@@ -96,6 +96,7 @@ Now we have a mail and its layout, but how do I know if it's well created or if
 I'm missing something?
 For this purpose you'll need to use a debug parameter on your site, something like
 this:
+
 >http://www.example.com/mysite/?debugemail=hello
 
 This won't show a normal page on your browser, instead it will render and display
@@ -259,6 +260,7 @@ can alter your _email payload_ in this way:
 		. . .
 ```
 And you can debug it calling to an URL like this one:
+
 >http://www.example.com/mysite/?debugemail=hello&debugemailstriptags
 
 ## Origin

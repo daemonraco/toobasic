@@ -167,7 +167,7 @@ $Defaults[GC_DEFAULTS_FORMATS]['myformat'] = '\\TooBasic\\Adapters\\View\\MyEngi
 ```
 And then access your URLs like this:
 
-> http://www.example.com/mysite/?action=myaction&format=myformat
+>http://www.example.com/mysite/?action=myaction&format=myformat
 
 ### Others
 Other view adapters are:

@@ -28,7 +28,8 @@ operation will generate these artefacts:
 activated).
 
 Once you've run this command, you can access this action at, for example:
-> http://www.example.com/mysite/?action=my_action
+
+>http://www.example.com/mysite/?action=my_action
 
 ### Cache
 By default, a controller created by this _sys-tool_ is a controller that is stored
@@ -444,9 +445,10 @@ Now why we call this section predictive?
 Happens that this parameter also triggers the generation of a service that allows
 the search of entries by a partial value in this column flagged as _name_ and it
 can be access with something like this:
-> http://www.example.com/mysite/?service=people_predictive&pattern=john
 
-> http://www.example.com/mysite/?service=people_predictive&pattern=john&limit=25
+>http://www.example.com/mysite/?service=people_predictive&pattern=john
+
+>http://www.example.com/mysite/?service=people_predictive&pattern=john&limit=25
 
 ### jQueryUI Autocomplete
 Following the predictive functionality, if we add the parameter `-ac` or
@@ -480,7 +482,8 @@ operation will generate these artefacts:
 	* This file will contain the definition of class __RequestInfoService__.
 
 Once you've run this command, you can access this service at, for example:
-> http://www.example.com/mysite/?service=request_info
+
+>http://www.example.com/mysite/?service=request_info
 
 ### Features
 In the same way you do with controllers, you may specify:
