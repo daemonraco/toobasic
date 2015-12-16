@@ -18,7 +18,7 @@ reading.
 __TooBasic__ provides some sort of solution to features like:
 
 * __MVC__: Provides model-view-controller mechanism (visit
-[Controllers](docs/controller.md) and [Controllers](docs/models.md)).
+[Controllers](docs/controller.md) and [Models](docs/models.md)).
 * __Skins__: Provides different ways of displaying your sites (visit
 [Skins](docs/skins.md)).
 * __Scaffolds__: Also provides a basic set of tools to create artifacts in a
