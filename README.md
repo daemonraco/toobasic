@@ -56,6 +56,7 @@ php shell.php sys controller new my_controller
 ```
 * Access your newly created controller with your browser at an URL similar to
 this:
+
 > http://localhost/mysite/?action=my_controller
 
 And just to let you know:
