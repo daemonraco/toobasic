@@ -1,8 +1,10 @@
-# TooBasic: Using Layouts
+# TooBasic: Layouts
 ## What is a layout?
 Well, you know, the part of your page that surrounds your main content an usually
 stays always the same.
+
 ## Create a site with layout
+
 ### Main content
 Let's follow an old example an create an action called __myaction__ this way:
 
@@ -24,6 +26,7 @@ class MyactionController extends \TooBasic\Controller {
 > http://www.example.com/?action=myaction
 
 After all of this you'll find a page saying __Hello World!__.
+
 ### Nav bar
 Let's create another action to emulate a navigation bar and call it __mynav__:
 
@@ -94,10 +97,12 @@ And then access this way:
 > http://www.example.com/
 
 ## Doubts
+
 ### What the heck is that?
 You've probably seen an strange word/constant/keyword/thing called
 __%TOO_BASIC_ACTION_CONTENT%__, this is a keyword you must use inside your
 template in the place where you want to put your main content.
+
 ### Insert?
 If you look closely to our example you'll find something like
 `{$ctrl->insert("mynav")}`. This sentence "inserts" the results of an action
@@ -130,5 +135,6 @@ class MyactionController extends \TooBasic\Controller {
 ## Suggestions
 If you want, you may visit these documentation pages:
 
+* [Controllers](controller.md)
 * [Snippets](snippets.md)
 * [Redirections](redirections.md)

@@ -36,7 +36,7 @@ Cache adapters provided by __TooBasic__ are:
 * `TooBasic\Adapters\Cache\NoCache`
 * `TooBasic\Adapters\Cache\Redis`
 
-If you want you can read more about them in the [cache documentation](cache.md).
+If you want you can read more about them in the [cache documentation](../cache.md).
 
 ## Database structure maintainer adapters
 Something that is always different between database engines is _how_ they provide
@@ -115,7 +115,7 @@ Of course, you'll have to fill this method with some actual logic.
 
 ### Step 2: using the adapter
 Now that you have an adapter, you need to change your site's configuration.
-If you visit [this link](cache.md), you'll find how to do this, but to save you
+If you visit [this link](../cache.md), you'll find how to do this, but to save you
 same time, add this line at __ROOTDIR/site/config.php__:
 ```php
 <?php
@@ -188,5 +188,6 @@ results (`?format=serialize`).
 ## Suggestions
 We suggest you visit these links:
 
-* [Database Structure Specifications](databasespecs.md)
-* [Cache](cache.md)
+* [Database Structure Specifications](../databasespecs.md)
+* [Cache](../cache.md)
+* [Query Adapter](queryadapter.md)
