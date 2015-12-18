@@ -155,6 +155,19 @@ class Version2 extends VersionAdapter {
 					$auxField->hasDefault = false;
 				}
 				//
+				// Analyzing NULL settings.
+				if($auxField->autoincrement) {
+					$auxField->null = false;
+				} elseif(in_array($auxField->type->type, array(DBStructureManager::ColumnTypeTimestamp))) {
+					$auxField->null = false;
+					$auxField->default = 'CURRENT_TIMESTAMP';
+					$auxField->hasDefault = true;
+				} else {
+					if(!isset($spec->null)) {
+						$auxField->null = true;
+					}
+				}
+				//
 				// Field callbacks.
 				$auxField->callbacks = \TooBasic\objectCopyAndEnforce(array_keys($callbackEntries), $auxField->callbacks instanceof \stdClass ? $auxField->callbacks : new \stdClass(), new \stdClass(), $callbackEntries);
 				//
@@ -316,9 +329,10 @@ class Version2 extends VersionAdapter {
 						// Ignoring first value becuase it
 						// is the actual type.
 						array_shift($expType);
-						$this->values = array();
+						$out->type = DBStructureManager::ColumnTypeEnum;
+						$out->values = array();
 						foreach($expType as $v) {
-							$this->values[] = $v;
+							$out->values[] = $v;
 						}
 					} else {
 						$out[GC_AFIELD_ERRORS][] = array(

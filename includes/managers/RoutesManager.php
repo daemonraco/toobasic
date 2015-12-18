@@ -84,15 +84,30 @@ class RoutesManager extends Manager {
 			//
 			// This works if there's not host set and if there's an
 			// action name given in the parameters.
-			if(!isset($url[GC_AFIELD_HOST]) && isset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION])) {
+			if(!isset($url[GC_AFIELD_HOST])) {
 				//
-				// Checking each route.
-				foreach($this->routes() as $route) {
+				// Checking action or service routes.
+				if(isset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION])) {
 					//
-					// If the action matches is a route to
-					// consider.
-					if($route->action == $url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]) {
-						$matchingRoutes[] = $route;
+					// Checking each route.
+					foreach($this->routes() as $route) {
+						//
+						// If the action matches is a
+						// route to consider.
+						if($route->action == $url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]) {
+							$matchingRoutes[] = $route;
+						}
+					}
+				} elseif(isset($url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE])) {
+					//
+					// Checking each route.
+					foreach($this->routes() as $route) {
+						//
+						// If the action matches is a
+						// route to consider.
+						if($route->service == $url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE]) {
+							$matchingRoutes[] = $route;
+						}
 					}
 				}
 			}
@@ -101,8 +116,10 @@ class RoutesManager extends Manager {
 			$matchingRoute = false;
 			if($matchingRoutes) {
 				//
-				// Action is no longer needed at this point.
+				// Action and Service parameters are no longer
+				// needed at this point.
 				unset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]);
+				unset($url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE]);
 				//
 				// Checking each matching route.
 				foreach($matchingRoutes as $matchingRoute) {
@@ -304,8 +321,13 @@ class RoutesManager extends Manager {
 					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_EXTRA_ROUTE => $extraRoute));
 				}
 				//
-				// Setting the action/controller to exectute.
-				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
+				// Setting the action/controller to exectute (or
+				// service).
+				if(boolval($matchingRoute->service)) {
+					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_SERVICE => $matchingRoute->service));
+				} else {
+					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
+				}
 				//
 				// Adding route specs as a '$_SERVER' value.
 				$this->_params->addValues(Params::TypeSERVER, array(GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route));
@@ -404,7 +426,11 @@ class RoutesManager extends Manager {
 		// Generating information about each route.
 		foreach($this->routes() as $route) {
 			$out.= "- '{$route->route}':\n";
-			$out.= "\tAction: '{$route->action}'\n";
+			if(boolval($route->service)) {
+				$out.= "\tService: '{$route->service}'\n";
+			} else {
+				$out.= "\tAction: '{$route->action}'\n";
+			}
 			//
 			// Describing how the route is analysed.
 			$out.= "\tPieces:\n";
@@ -484,7 +510,7 @@ class RoutesManager extends Manager {
 				//
 				// Copying only useful field and enforcing those
 				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'params'), $route, new \stdClass(), array('params' => array()));
+				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'service', 'params'), $route, new \stdClass(), array('params' => array(), 'action' => false, 'service' => false));
 				//
 				// Expanding route's pattern.
 				$this->buildPattern($auxRoute);

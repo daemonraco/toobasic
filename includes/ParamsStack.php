@@ -51,7 +51,7 @@ class ParamsStack {
 		$out = null;
 		//
 		// Searching and fetching.
-		if(isset($this->_params[$name])) {
+		if(isset($this->{$name})) {
 			$out = $this->_params[$name];
 		}
 		//
@@ -65,7 +65,17 @@ class ParamsStack {
 	 * @return boolean Returns true when it's present.
 	 */
 	public function __isset($name) {
-		return isset($this->_params[$name]);
+		$out = false;
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Avoiding debug parameters when they are disabled.
+		if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] || !preg_match('/^debug([a-z0-9]*)$/', $name)) {
+			$out = isset($this->_params[$name]);
+		}
+
+		return $out;
 	}
 	/**
 	 * This magic method provides a easy way to set values.
@@ -129,18 +139,26 @@ class ParamsStack {
 		// Checking if it's already calculated.
 		if($this->_debugs === false) {
 			//
+			// Global dependencies.
+			global $Defaults;
+			//
 			// Default values.
 			$this->_debugs = array();
 			//
-			// Detecting debug parameters
-			foreach($this->_params as $param => $value) {
-				if(preg_match('/^debug([a-z0-9]*)$/', $param)) {
-					//
-					// At this point, we do have debugs.
-					$this->_hasDebugs = true;
-					//
-					// Adding debugs to the list.
-					$this->_debugs[$param] = $value;
+			// Avoiding analisis when debugs are disabled.
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS]) {
+				//
+				// Detecting debug parameters
+				foreach($this->_params as $param => $value) {
+					if(preg_match('/^debug([a-z0-9]*)$/', $param)) {
+						//
+						// At this point, we do have
+						// debugs.
+						$this->_hasDebugs = true;
+						//
+						// Adding debugs to the list.
+						$this->_debugs[$param] = $value;
+					}
 				}
 			}
 		}

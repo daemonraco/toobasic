@@ -95,6 +95,10 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 // @}
 //
 // Representations @{
+$SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
@@ -122,6 +126,14 @@ $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREA
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
 // @}
 //
+// TooBasic's search engine @{
+$SuperLoader['TooBasic\\Managers\\SearchManager'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchManager.php";
+$SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableFactory.php";
+$SuperLoader['TooBasic\\Search\\SearchableItem'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItem.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemRepresentation.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
+// @}
+//
 // Known librearies @{
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
@@ -137,6 +149,7 @@ $SuperLoader['Predis\\Client'] = array(
 // This is the function in charge of loading TooBasic clases when they are
 // required.
 spl_autoload_register(function($class) {
+	global $Defaults;
 	global $SuperLoader;
 
 	if(isset($SuperLoader[$class])) {
@@ -155,12 +168,12 @@ spl_autoload_register(function($class) {
 		}
 
 		if($path) {
-			if(isset($_REQUEST['debugloader']) || isset($_ENV['debugloader'])) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && (isset($_REQUEST['debugloader']) || isset($_ENV['debugloader']))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from '{$path}'.");
 			}
 			require_once $path;
 		} else {
-			if((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || ( isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy')) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && ((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || (isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy'))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from: '".implode("', '", $SuperLoader[$class])."'.");
 			}
 		}

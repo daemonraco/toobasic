@@ -9,7 +9,8 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Manifest;
+use TooBasic\Manifest;
+use TooBasic\Paths;
 
 /**
  * @class ManifestsManager
@@ -80,6 +81,32 @@ class ManifestsManager extends Manager {
 		return \boolval($this->_errors);
 	}
 	/**
+	 * This method provides access to a certain module manifest based on it's
+	 * universal code.
+	 *
+	 * @param string $uCode Universal code to look for.
+	 * @return \TooBasic\Manifest[string] Returns a manifest object.
+	 */
+	public function manifestByUCode($uCode) {
+		$out = false;
+		//
+		// Cleaning UCode.
+		$uCode = strtolower($uCode);
+		//
+		// Enforcing loading.
+		$this->loadManifests();
+		//
+		// Looking for the right one.
+		foreach($this->_manifests as $manifest) {
+			if($manifest->information()->ucode == $uCode) {
+				$out = $manifest;
+				break;
+			}
+		}
+
+		return $out;
+	}
+	/**
 	 * This method provides access to all loaded manifests.
 	 *
 	 * @return \TooBasic\Manifest[string] Returns a list of manifests.
@@ -108,10 +135,29 @@ class ManifestsManager extends Manager {
 				foreach($this->manifests() as $manifest) {
 					$info = $manifest->information();
 
+					$url = '';
+					if($info->icon) {
+						$url = Paths::Instance()->imagePath($info->icon, 'png');
+					} else {
+						$url = Paths::Instance()->imagePath('TooBasic-default-module-icon-512px', 'png');
+					}
+					$uri = Paths::Path2Uri($url);
+
 					echo '<div class="panel panel-default">';
-					echo "<div class=\"panel-heading\">{$info->name} (v{$info->version})</div>";
+					echo "<div class=\"panel-heading\"><img src=\"{$uri}\" class=\"pull-right\"style=\"width:20px;height:auto;\"/> {$info->name} (v{$info->version})</div>";
 					echo '<div class="panel-body">';
 					echo '<table class="table">';
+
+					echo '<tr>';
+					echo '<td colspan="2"><center>';
+					echo '<img src="'.$uri.'" style="width:64px;height:auto;"/>';
+					echo '</center></td>';
+					echo '</tr>';
+
+					echo '<tr>';
+					echo '<td><strong>UCode</strong>:</td>';
+					echo "<td>{$info->ucode}</td>";
+					echo '</tr>';
 
 					if($info->description) {
 						echo '<tr>';
@@ -159,6 +205,15 @@ class ManifestsManager extends Manager {
 					echo '<td><ul>';
 					echo "<li><strong>PHP</strong>: {$info->required_versions->php}</li>";
 					echo "<li><strong>TooBasic</strong>: {$info->required_versions->toobasic}</li>";
+
+					foreach($info->required_versions as $field => $reqVersion) {
+						$matches = false;
+						if(preg_match('/^mod:(?P<ucode>.+)$/', $field, $matches)) {
+							$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
+							echo "<li><strong>{$manifest->information()->name}</strong> <sup>ucode:{$matches['ucode']}</sup>: {$reqVersion}</li>";
+						}
+					}
+
 					echo '</ul></td>';
 					echo '</tr>';
 

@@ -182,6 +182,7 @@ Let's use those things we've said and write something like this:
 }
 ```
 Here is a bunch of valid URL for these routes:
+
 >http://www.myhost.com/mysite/product/cleaned/204578?expand=description
 
 >http://www.myhost.com/mysite/product/clean/204578?expand=description
@@ -286,8 +287,14 @@ After rendering, our layout may look like this:
 Yes, each module may add a __routes.json__ file inside its __configs__ directory
 and it will be loaded.
 
+## Services
+Services can also specify routes and they are very much the same with only one
+difference, instead of setting the parameter `action` you should use `service` and
+it will assume `?service=...` instead of  `?action=...`.
+
 ## Suggestions
 If you want, you may visit these documentation pages:
 
 * [Controller Exports](controllerexports.md)
 * [Layouts](layout.md)
+* [Services](services.md)

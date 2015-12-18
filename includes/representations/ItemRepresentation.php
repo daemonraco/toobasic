@@ -10,6 +10,7 @@ namespace TooBasic\Representations;
 //
 // Class aliases.
 use TooBasic\Managers\DBManager;
+use TooBasic\Representations\FieldFilterException;
 
 /**
  * @class ItemRepresentation
@@ -25,6 +26,11 @@ abstract class ItemRepresentation {
 	 * @var string Generic prefix for all columns on the represented table.
 	 */
 	protected $_CP_ColumnsPerfix = '';
+	/**
+	 * @var string[string] Associative list of field names and the filter to
+	 * be applied on them.
+	 */
+	protected $_CP_ColumnFilters = array();
 	/**
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
@@ -69,9 +75,21 @@ abstract class ItemRepresentation {
 	 */
 	protected $_extraProperties = array();
 	/**
+	 * @var boolean This flag gets active when a field filter used by this
+	 * class always requires presistance.
+	 */
+	protected $_forcedPersistence =false;
+	/**
 	 * @var string[] Last database error detected.
 	 */
 	protected $_lastDBError = false;
+	/**
+	 * @var \TooBasic\MagicProp MagicProp shortcut.
+	 */
+	protected $_magic = false;
+	/**
+	 * @var mixed[string] List of properties/columns loaded from database.
+	 */
 	protected $_properties = array();
 	/**
 	 * @var string[string] List of prefixes used by query adapters.
@@ -87,9 +105,27 @@ abstract class ItemRepresentation {
 	 */
 	public function __construct($dbname) {
 		//
+		// Global dependencies.
+		global $Database;
+		//
 		// Generating shortcuts.
 		$this->_db = DBManager::Instance()->{$dbname};
 		$this->_dbprefix = $this->_db->prefix();
+		//
+		// Checking forced persistence and field filters validity.
+		foreach($this->_CP_ColumnFilters as $field => $filter) {
+			//
+			// Checking field filter.
+			if(!isset($Database[GC_DATABASE_FIELD_FILTERS][$filter])) {
+				throw new FieldFilterException("Undefined field filter for '{$filter}' required by field '{$field}'.");
+			}
+			//
+			// Field filter class shortcut.
+			$filterClass = $Database[GC_DATABASE_FIELD_FILTERS][$filter];
+			//
+			// Checking forced persistence.
+			$this->_forcedPersistence = $this->_forcedPersistence || $filterClass ::ForcePersistence();
+		}
 	}
 	/**
 	 * This magic method allows to directly print a representation.
@@ -178,7 +214,7 @@ abstract class ItemRepresentation {
 	 * @return bool Returns a data status.
 	 */
 	public function dirty() {
-		return $this->_dirty;
+		return $this->_forcedPersistence || $this->_dirty;
 	}
 	/**
 	 * This method indicates if this object represent a existing row on a
@@ -234,6 +270,9 @@ abstract class ItemRepresentation {
 			//
 			// At this point, the entry exists.
 			$this->_exists = true;
+			//
+			// Analyzing field filters.
+			$this->decodeFieldFilters();
 			//
 			// Triggering specific post-loading operations.
 			$this->postLoad();
@@ -299,6 +338,9 @@ abstract class ItemRepresentation {
 		// Default values.
 		$persisted = false;
 		//
+		// Analyzing field filters.
+		$this->encodeFieldFilters();
+		//
 		// Checking that there's something to persist and also triggering
 		// specific checks before persisting.
 		if($this->dirty() && $this->prePersist()) {
@@ -329,6 +371,9 @@ abstract class ItemRepresentation {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
 		}
+		//
+		// Analyzing field filters back.
+		$this->decodeFieldFilters();
 
 		return $persisted;
 	}
@@ -382,6 +427,70 @@ abstract class ItemRepresentation {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method modifies all entrys decoding all properties where a field
+	 * filter must be applied.
+	 *
+	 * @throws \TooBasic\Representations\FieldFilterException
+	 */
+	protected function decodeFieldFilters() {
+		//
+		// Global depdendencies.
+		global $Database;
+		//
+		// Decoding each field with filters.
+		foreach($this->_CP_ColumnFilters as $name => $filter) {
+			//
+			// Is it a knwon field?
+			$realName = "{$this->_CP_ColumnsPerfix}{$name}";
+			if(array_key_exists($realName, $this->_properties)) {
+				//
+				// Shortcut.
+				$filterClass = $Database[GC_DATABASE_FIELD_FILTERS][$filter];
+				//
+				// Encoding.
+				$this->_properties[$realName] = $filterClass::Decode($this->_properties[$realName]);
+			}
+		}
+	}
+	/**
+	 * This method modifies all entrys encoding all properties where a field
+	 * filter was applied.
+	 *
+	 * @throws \TooBasic\Representations\FieldFilterException
+	 */
+	protected function encodeFieldFilters() {
+		//
+		// Global depdendencies.
+		global $Database;
+		//
+		// Encoding each field with filters.
+		foreach($this->_CP_ColumnFilters as $name => $filter) {
+			//
+			// Is it a knwon field?
+			$realName = "{$this->_CP_ColumnsPerfix}{$name}";
+			if(array_key_exists($realName, $this->_properties)) {
+				//
+				// Shortcut.
+				$filterClass = $Database[GC_DATABASE_FIELD_FILTERS][$filter];
+				//
+				// Encoding.
+				$this->_properties[$realName] = $filterClass::Encode($this->_properties[$realName]);
+			}
+		}
+	}
+	/**
+	 * This method provides access to a MagicProp instance shortcut.
+	 *
+	 * @return \TooBasic\MagicProp Returns the shortcut.
+	 */
+	protected function magic() {
+		if($this->_magic === false) {
+			$this->_magic = \TooBasic\MagicProp::Instance();
+		}
+
+		return $this->_magic;
+	}
 	/**
 	 * This method is an entry point for sub-classes to perform specific
 	 * operations before an item is loaded.

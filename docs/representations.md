@@ -31,9 +31,9 @@ __ROOTDIR/site/models/representations/PersonRepresentation.php__:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = "id";
-	protected $_CP_ColumnsPerfix = "ppl_";
-	protected $_CP_Table = "people";
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'ppl_';
+	protected $_CP_Table = 'people';
 }
 ```
 
@@ -54,16 +54,18 @@ prefix). In our example it would be __username__.
 * `$_CP_ReadOnlyColumns`: It's a list of column names (without prefix) of columns
 that cannot be altered due to internal reason. In our example, let's say __age__
 can't be modified because there's a different mechanism in charge of that.
+* `$_CP_ColumnFilters`: It's a list of column names (without prefix) associated
+with a field filter to apply when it's read or saved.
 
 With all this, out example may become this:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = "id";
-	protected $_CP_ColumnsPerfix = "ppl_";
-	protected $_CP_Table = "people";
-	protected $_CP_NameColumn = "username";
-	protected $_CP_ReadOnlyColumns = array("age");
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'ppl_';
+	protected $_CP_Table = 'people';
+	protected $_CP_NameColumn = 'username';
+	protected $_CP_ReadOnlyColumns = array('age');
 }
 ```
 ### CP?
@@ -77,10 +79,10 @@ __ROOTDIR/site/models/representations/PeopleFactory.php__ (it sounds weird to sa
 ```php
 <?php
 class PeopleFactory extends \TooBasic\Representations\ItemsFactory {
-	protected $_CP_IDColumn = "id";
-	protected $_CP_ColumnsPerfix = "rep_";
-	protected $_CP_RepresentationClass = "person";
-	protected $_CP_Table = "people";
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'rep_';
+	protected $_CP_RepresentationClass = 'person';
+	protected $_CP_Table = 'people';
 }
 ```
 Here you have some properties you already know, so let's explain those you don't
@@ -137,7 +139,7 @@ behavior by acquiring the factory in a different way, check the next example:
 class KidsModel extends \TooBasic\Model {
 	public function kidsChanged($personId) {
 		$personNew = $this->representation->people->item($personId);
-		$personOld = $this->representation->people("backup")->item($personId);
+		$personOld = $this->representation->people('backup')->item($personId);
 		return !personOld || $personNew->kids != $personOld->kids;
 	}
 	protected function init() {}
@@ -153,8 +155,56 @@ updated.
 This is how you can obtain a people factory pointing to a different database, in
 our case __backup__.
 
+## Field Filters
+Let's suppose that our table gets a little more complex and it looks like this:
+
+| ppl_id | ppl_fullname | ppl_age | ppl_username | ppl_children | ppl_active |           ppl_info          |
+|:------:|--------------|:-------:|--------------|-------------:|:----------:|:----------------------------|
+|   1    | John Doe     |   35    | deadpool     |            0 |     Y      | {"address":"street 236(B)"} |
+|   2    | Juan Perez   |   46    | hulk         |            2 |     Y      | {"address":false}           |
+|   3    | Jane Doe     |   27    | ironman      |            1 |     N      | {}                          |
+
+As you can see, we've added two new fields:
+
+* `ppl_active`: To indicate if our user can log in or not.
+* `ppl_info`: Some arbitrary data stored as a JSON string.
+
+Based on this, we should add some kind of logic to manage `ppl_active` with only
+two values (a _boolean_) and `ppl_info` as string decoded into an object and back
+to string before saving.
+
+Here is where the concept of _field filters_ comes in handy.
+Let's change our representation definition into something like this:
+```php
+<?php
+class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'ppl_';
+	protected $_CP_Table = 'people';
+	protected $_CP_NameColumn = 'username';
+	protected $_CP_ReadOnlyColumns = array('age');
+	protected $_CP_ColumnFilters = array(
+		'active' => GC_DATABASE_FIELD_FILTER_BOOLEAN,
+		'info' => GC_DATABASE_FIELD_FILTER_JSON
+	);
+}
+```
+This simple modification tells __TooBasic__ to manage these fields the way we need
+and the next time we write something like `$person->info` we are going to obtain a
+`stdClass` object.
+
+### Persistence policies
+Every time you configure a JSON filter for a field, it's representation will
+always act as persistence pending (a.k.a. _dirty_).
+This strange behavior is cause due to a lack of control over the object in the
+field.
+
+Nonetheless, this doesn't mean that your database is constantly updated, remember
+that you decide when to call `persist()`.
+
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
 * [Models](models.md)
 * [Database Connections](databases.md)
+* [TooBasic's Search Engine](searchengine.md)
