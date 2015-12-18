@@ -1,7 +1,9 @@
 {
 	"name": "StarterDoc",
+	"ucode": "toobasic-starterdoc",
 	"version": "1.0.0",
 	"description": "This module provides a starter page for newly installed sites and access to offline documentation.",
+	"icon": "toobasic-starterdoc-module-icon-512px",
 	"author": {
 		"name": "Alejandro Dario Simi",
 		"page": "http://daemonraco.com/"

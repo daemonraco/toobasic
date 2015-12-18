@@ -105,6 +105,7 @@ $Directories[GC_DIRECTORIES_ADAPTERS_DB] = TB_Sanitizer::DirPath(ROOTDIR.'/inclu
 $Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/view');
 $Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR.'/modules');
 $Directories[GC_DIRECTORIES_SAPIREADER] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/sapireader');
+$Directories[GC_DIRECTORIES_SEARCH] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/search');
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/shell');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
@@ -146,6 +147,10 @@ $Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
 $Database[GC_DATABASE_DB_VERSION_ADAPTERS] = array(
 	'v1' => '\\TooBasic\\Adapters\\DB\\Version1',
 	'v2' => '\\TooBasic\\Adapters\\DB\\Version2'
+);
+$Database[GC_DATABASE_FIELD_FILTERS] = array(
+	GC_DATABASE_FIELD_FILTER_BOOLEAN => 'TooBasic\\Representations\\BooleanFilter',
+	GC_DATABASE_FIELD_FILTER_JSON => '\\TooBasic\\Representations\\JSONFilter'
 );
 //
 // Directory configurations.
@@ -202,6 +207,10 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
+//
+// TooBasic's search engine configuration.
+$Search = array();
+$Search[GC_SEARCH_ENGINE_FACTORIES] = array();
 //
 // Cron profiles:
 // $Connections[GC_CONNECTIONS_DB]['<name>'] = array();

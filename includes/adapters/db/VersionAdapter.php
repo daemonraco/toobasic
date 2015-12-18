@@ -9,7 +9,6 @@ namespace TooBasic\Adapters\DB;
 
 //
 // Class aliases.
-use TooBasic\Adapters\Adapter;
 use TooBasic\Managers\DBManager;
 use TooBasic\Managers\DBStructureManager;
 
@@ -19,7 +18,7 @@ use TooBasic\Managers\DBStructureManager;
  * This class represent a basic adapter for database structure specification
  * version interpreters.
  */
-abstract class VersionAdapter extends Adapter {
+abstract class VersionAdapter extends \TooBasic\Adapters\Adapter {
 	// 
 	// Protected class properties.
 	/**

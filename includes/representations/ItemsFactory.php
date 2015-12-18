@@ -168,6 +168,47 @@ abstract class ItemsFactory {
 
 		return $out;
 	}
+
+	/**
+	 * This method retrieves a list of ID of all available entries where the
+	 * column flagged as name follows certain pattern.
+	 *
+	 * @return int[] Returns a list of IDs.
+	 */
+	public function idsByNamesLike($pattern) {
+		//
+		// Checking if there's an name field configured, if not it means
+		// this representation doesn't support this method.
+		if(!$this->_CP_NameColumn) {
+			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+		}
+		//
+		// Default values.
+		$out = array();
+		//
+		// Enforcing order configuration.
+		if(!is_array($this->_CP_OrderBy)) {
+			$this->_CP_OrderBy = array();
+		}
+		//
+		// Generating a proper query to obtain a list of IDs.
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*{$this->_CP_NameColumn}" => $pattern), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+			foreach($stmt->fetchAll() as $row) {
+				$out[] = $row[$idKey];
+			}
+		} else {
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
+		}
+
+		return $out;
+	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
 	 * its ID.

@@ -5,7 +5,7 @@ PROGRAM="$0";
 #
 F_GENERATE="";
 F_SHOWHELP="";
-P_FILES="README.md docs/";
+P_FILES="README.md docs/ docs/tech/";
 F_FILES_LOADED="";
 P_GLOSSARY_PATH="docsindex.md";
 #

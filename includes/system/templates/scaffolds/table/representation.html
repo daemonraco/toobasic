@@ -1,9 +1,22 @@
 <?php
 
-class <%$representationName%> extends \TooBasic\Representations\ItemRepresentation {
+class <%$representationName%> extends <%if $isSearchable%>\TooBasic\Search\SearchableItemRepresentation<%else%>\TooBasic\Representations\ItemRepresentation<%/if%> {
 	//
 	// Protected core properties.
 	protected $_CP_ColumnsPerfix = '<%$tablePrefix%>';
+<%if !$isSearchable%>
+	protected $_CP_ColumnFilters = array(
+		'indexed' => GC_DATABASE_FIELD_FILTER_BOOLEAN
+	);
+<%/if%>
 	protected $_CP_IDColumn = 'id';
+<%if isset($nameField)%>
+	protected $_CP_NameColumn = '<%$nameField%>';
+<%/if%>
 	protected $_CP_Table = '<%$pluralName%>';
+<%if $isSearchable%>
+	public function type() {
+		return '<%$searchCode%>';
+	}
+<%/if%>
 }

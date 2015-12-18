@@ -95,6 +95,10 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 // @}
 //
 // Representations @{
+$SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
@@ -120,6 +124,14 @@ $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]
 $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
+// @}
+//
+// TooBasic's search engine @{
+$SuperLoader['TooBasic\\Managers\\SearchManager'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchManager.php";
+$SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableFactory.php";
+$SuperLoader['TooBasic\\Search\\SearchableItem'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItem.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemRepresentation.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
 // @}
 //
 // Known librearies @{

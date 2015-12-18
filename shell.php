@@ -4,11 +4,11 @@
  * @file shell.php
  * @author Alejandro Dario Simi
  */
-include __DIR__.'/config/config.php';
-
 use TooBasic\Managers\ShellManager;
 
 try {
+	include __DIR__.'/config/config.php';
+
 	if(!defined('__SHELL__')) {
 		echo 'This is a shell only script';
 	} else {

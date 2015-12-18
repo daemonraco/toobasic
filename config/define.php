@@ -81,19 +81,24 @@ define('GC_AFIELD_DATA', 'data');
 define('GC_AFIELD_DISABLED', 'disabled');
 define('GC_AFIELD_DB', 'db');
 define('GC_AFIELD_DESCRIPTION', 'description');
+define('GC_AFIELD_END', 'end');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
+define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HEADERS', 'headers');
+define('GC_AFIELD_HITS', 'hits');
 define('GC_AFIELD_HOST', 'host');
 define('GC_AFIELD_HOSTS', 'hosts');
+define('GC_AFIELD_ID', 'id');
 define('GC_AFIELD_INDEXES', 'indexes');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
+define('GC_AFIELD_ITEMS', 'items');
 define('GC_AFIELD_KEY', 'key');
 define('GC_AFIELD_KEYS', 'keys');
 define('GC_AFIELD_KEYS_BY_LANG', 'keys-by-lang');
@@ -106,6 +111,7 @@ define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
 define('GC_AFIELD_METHOD', 'method');
 define('GC_AFIELD_METHODS', 'methods');
+define('GC_AFIELD_MIDDLE', 'middle');
 define('GC_AFIELD_MODULE_NAME', 'module-name');
 define('GC_AFIELD_NAME', 'name');
 define('GC_AFIELD_ORIGIN', 'origin');
@@ -125,11 +131,14 @@ define('GC_AFIELD_SERVICES', 'services');
 define('GC_AFIELD_SKIN', 'skin');
 define('GC_AFIELD_SPEC', 'spec');
 define('GC_AFIELD_SPECS', 'specs');
+define('GC_AFIELD_START', 'start');
 define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
 define('GC_AFIELD_TABLES', 'tables');
 define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
+define('GC_AFIELD_TYPES', 'types');
 // @}
 //
 // Directories @{
@@ -146,6 +155,7 @@ define('GC_DIRECTORIES_ADAPTERS_DB', 'adapters-db');
 define('GC_DIRECTORIES_ADAPTERS_VIEW', 'adapters-view');
 define('GC_DIRECTORIES_MODULES', 'modules');
 define('GC_DIRECTORIES_SAPIREADER', 'sapireader');
+define('GC_DIRECTORIES_SEARCH', 'search');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
@@ -170,11 +180,14 @@ define('GC_CONNECTIONS_DEFAULTS_CACHE', 'cache');
 // @}
 //
 // Database structure @{
-define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
 define('GC_DATABASE_DB_CONNECTION_ADAPTERS', 'db-connection-adapters');
 define('GC_DATABASE_DB_QUERY_ADAPTERS', 'db-query-adapters');
 define('GC_DATABASE_DB_SPEC_ADAPTERS', 'db-spec-adapters');
 define('GC_DATABASE_DB_VERSION_ADAPTERS', 'db-version-adapters');
+define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
+define('GC_DATABASE_FIELD_FILTER_BOOLEAN', 'boolean');
+define('GC_DATABASE_FIELD_FILTER_JSON', 'json');
+define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // @}
 //
 // URIs @{
@@ -307,5 +320,9 @@ define('GC_SAPIREADER_TYPES', 'types');
 define('GC_SAPIREADER_TYPE_BASIC', 'basic');
 define('GC_SAPIREADER_TYPE_JSON', 'json');
 define('GC_SAPIREADER_TYPE_XML', 'xml');
+// @}
+//
+// TooBasic's search engine @{
+define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
 // @}
 // @}
