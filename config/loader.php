@@ -149,6 +149,7 @@ $SuperLoader['Predis\\Client'] = array(
 // This is the function in charge of loading TooBasic clases when they are
 // required.
 spl_autoload_register(function($class) {
+	global $Defaults;
 	global $SuperLoader;
 
 	if(isset($SuperLoader[$class])) {
@@ -167,12 +168,12 @@ spl_autoload_register(function($class) {
 		}
 
 		if($path) {
-			if(isset($_REQUEST['debugloader']) || isset($_ENV['debugloader'])) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && (isset($_REQUEST['debugloader']) || isset($_ENV['debugloader']))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from '{$path}'.");
 			}
 			require_once $path;
 		} else {
-			if((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || ( isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy')) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && ((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || (isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy'))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from: '".implode("', '", $SuperLoader[$class])."'.");
 			}
 		}

@@ -139,18 +139,26 @@ class ParamsStack {
 		// Checking if it's already calculated.
 		if($this->_debugs === false) {
 			//
+			// Global dependencies.
+			global $Defaults;
+			//
 			// Default values.
 			$this->_debugs = array();
 			//
-			// Detecting debug parameters
-			foreach($this->_params as $param => $value) {
-				if(preg_match('/^debug([a-z0-9]*)$/', $param)) {
-					//
-					// At this point, we do have debugs.
-					$this->_hasDebugs = true;
-					//
-					// Adding debugs to the list.
-					$this->_debugs[$param] = $value;
+			// Avoiding analisis when debugs are disabled.
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS]) {
+				//
+				// Detecting debug parameters
+				foreach($this->_params as $param => $value) {
+					if(preg_match('/^debug([a-z0-9]*)$/', $param)) {
+						//
+						// At this point, we do have
+						// debugs.
+						$this->_hasDebugs = true;
+						//
+						// Adding debugs to the list.
+						$this->_debugs[$param] = $value;
+					}
 				}
 			}
 		}

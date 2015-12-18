@@ -133,4 +133,4 @@ of if you like the danger, switch to our development branch `dev`.
 ## Suggestions
 Here you have a few links you may want to visit:
 
-* [Troubleshooting](docs/troubleshooting.md)
+* [Troubleshooting](troubleshooting.md)
