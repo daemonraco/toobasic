@@ -9,6 +9,9 @@ namespace TooBasic\Representations;
 
 //
 // Class aliases.
+use TooBasic\DBException;
+use TooBasic\Exception;
+use TooBasic\MagicProp;
 use TooBasic\Managers\DBManager;
 use TooBasic\Representations\FieldFilterException;
 
@@ -31,6 +34,11 @@ abstract class ItemRepresentation {
 	 * be applied on them.
 	 */
 	protected $_CP_ColumnFilters = array();
+	/**
+	 * @var mixed[string] Sub-representation associated columns
+	 * specifications.
+	 */
+	protected $_CP_ExtendedColumns = array();
 	/**
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
@@ -69,6 +77,16 @@ abstract class ItemRepresentation {
 	 */
 	protected $_exists = false;
 	/**
+	 * @var mixed[string] This is the list of loaded sub-representation
+	 * associated with certain column.
+	 */
+	protected $_extendedColumns = array();
+	/**
+	 * @var string[string] Reverse list of methods associated to extended
+	 * column names.
+	 */
+	protected $_extendedColumnMethods = array();
+	/**
 	 * @var mixed[string] List of properties stored in this object that does
 	 * not represent real field on database. These can also be called volatile
 	 * properties.
@@ -78,7 +96,7 @@ abstract class ItemRepresentation {
 	 * @var boolean This flag gets active when a field filter used by this
 	 * class always requires presistance.
 	 */
-	protected $_forcedPersistence =false;
+	protected $_forcedPersistence = false;
 	/**
 	 * @var string[] Last database error detected.
 	 */
@@ -97,6 +115,28 @@ abstract class ItemRepresentation {
 	protected $_queryAdapterPrefixes = false;
 	//
 	// Magic methods.
+	/**
+	 * This magic methods captures any undefined method called. It's main task
+	 * is to redirect calls for sub-representations object, either for getting
+	 * or setting values.
+	 *
+	 * @param string $method Name of the called method.
+	 * @param mixed[] $args Parameters given when calling.
+	 * @return mixed The result of this method depend on what is called.
+	 * Usually is an instance of un object inherited from this class.
+	 * @throws \TooBasic\Exception
+	 */
+	public function __call($method, $args) {
+		$out = false;
+
+		if(isset($this->_extendedColumnMethods[$method])) {
+			$out = $this->callSubRepresentation($this->_extendedColumnMethods[$method], $args);
+		} else {
+			throw new Exception("Unknown method called '{$method}'.");
+		}
+
+		return $out;
+	}
 	/**
 	 * Class constructor.
 	 *
@@ -125,6 +165,23 @@ abstract class ItemRepresentation {
 			//
 			// Checking forced persistence.
 			$this->_forcedPersistence = $this->_forcedPersistence || $filterClass ::ForcePersistence();
+		}
+		//
+		// Checking extended colums.
+		foreach($this->_CP_ExtendedColumns as $name => $specs) {
+			//
+			// Checking representation field.
+			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
+				throw new Exception("Extended column '{$name}' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY').");
+			}
+			//
+			// Checking which method should attend this column.
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD])) {
+				$specs[GC_REPRESENTATIONS_METHOD] = $name;
+			}
+			//
+			// Caching a reverse list of methods.
+			$this->_extendedColumnMethods[$specs[GC_REPRESENTATIONS_METHOD]] = $name;
 		}
 	}
 	/**
@@ -189,6 +246,10 @@ abstract class ItemRepresentation {
 				// Setting a new value.
 				$this->_properties[$realName] = $value;
 				//
+				// Assuming it was not yet loaded if it's a
+				// extended column.
+				unset($this->_extendedColumns[$name]);
+				//
 				// Flagging this representation as dirty.
 				$this->_dirty = true;
 			} else {
@@ -224,6 +285,15 @@ abstract class ItemRepresentation {
 	 */
 	public function exists() {
 		return $this->_exists;
+	}
+	/**
+	 * This simple method returns current object's id.
+	 *
+	 * @return mixed Returns an ID based on the core property that conigures
+	 * its column name. When this is not a valid object it returns FALSE.
+	 */
+	public function id() {
+		return $this->exists() ? $this->{$this->_CP_IDColumn} : false;
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -322,7 +392,7 @@ abstract class ItemRepresentation {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
 		} else {
-			throw new \TooBasic\DBException("No name column set for table '{$this->_CP_Table}'");
+			throw new DBException("No name column set for table '{$this->_CP_Table}'");
 		}
 
 		return $this->exists();
@@ -407,6 +477,7 @@ abstract class ItemRepresentation {
 	public function reset() {
 		$this->_dirty = false;
 		$this->_exists = false;
+		$this->_extendedColumns = array();
 		$this->_extraProperties = array();
 		$this->_properties = array();
 	}
@@ -417,16 +488,79 @@ abstract class ItemRepresentation {
 	 * @return mixed[string] List of field names associated to their values.
 	 */
 	public function toArray() {
+		//
+		// Extra properties go as they are.
 		$out = $this->_extraProperties;
-
+		//
+		// Copying main properties.
 		foreach($this->_properties as $key => $value) {
 			$out[substr($key, strlen($this->_CP_ColumnsPerfix))] = $value;
+		}
+		//
+		// Copying/overriding main properties with their extended
+		// versions.
+		foreach($this->_extendedColumns as $name => $item) {
+			$out[$name] = $item ? $item->toArray() : null;
 		}
 
 		return $out;
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method attends calles for sub-representation, either to get or set
+	 * them.
+	 *
+	 * @param string $column Name of the column associated with such call.
+	 * @param mixed[] $args List of parameters given when the call was made.
+	 * @return \TooBasic\Representations\ItemRepresentation Returns an
+	 * instance of a sub-representation associated with the ID contained in
+	 * the requested column.
+	 * @throws \TooBasic\Exception
+	 */
+	protected function callSubRepresentation($column, $args) {
+		//
+		// Checking column existence.
+		if(!array_key_exists($this->_CP_ColumnsPerfix.$column, $this->_properties)) {
+			throw new Exception("Unknown column '{$column}'.");
+		}
+		//
+		// Cheching if this is a call to change current object.
+		if(isset($args[0])) {
+			$newItem = $args[0];
+			//
+			// Checking the right type.
+			if(!$newItem instanceof ItemRepresentation) {
+				throw new Exception("Given parameter is not an instances of 'ItemRepresentation'.");
+			}
+			//
+			// Setting new values.
+			$this->{$column} = $newItem->id();
+			//
+			// Assuming it was not yet loaded.
+			unset($this->_extendedColumns[$column]);
+			//
+			// Checking the actual change.
+			if($this->{$column} != $newItem->id()) {
+				throw new Exception("It was not possible to change column '{$column}' vaule.");
+			}
+		}
+		//
+		// Avoiding multiple loads.
+		if(!isset($this->_extendedColumns[$column])) {
+			//
+			// Expanding factory name and namespace.
+			$parts = explode('\\', $this->_CP_ExtendedColumns[$column][GC_REPRESENTATIONS_FACTORY]);
+			$factoryName = array_pop($parts);
+			$factoryNamespace = count($parts) > 0 ? implode('\\', $parts) : false;
+			//
+			// Trying to load the right item.
+			// @warning: This will always force the default database.
+			$this->_extendedColumns[$column] = $this->magic()->representation->{$factoryName}(false, $factoryNamespace)->item($this->{$column});
+		}
+
+		return $this->_extendedColumns[$column];
+	}
 	/**
 	 * This method modifies all entrys decoding all properties where a field
 	 * filter must be applied.
@@ -486,7 +620,7 @@ abstract class ItemRepresentation {
 	 */
 	protected function magic() {
 		if($this->_magic === false) {
-			$this->_magic = \TooBasic\MagicProp::Instance();
+			$this->_magic = MagicProp::Instance();
 		}
 
 		return $this->_magic;
