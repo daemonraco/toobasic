@@ -4,7 +4,7 @@ To be able to install __TooBasic__ you at least need:
 
 * [PHP](http://php.net/) 5.4 or above
 * [Git](https://git-scm.com/)
-	* This is optional if you use an TooBasic tarball.
+	* This is optional if you use a TooBasic tarball.
 
 We also recommend to install some of this tools depending on what kind of site you
 are going to build.
@@ -66,18 +66,18 @@ Here we suppose that:
 * `php` and `git` are available in your _PATH_ settings, otherwise you know how to
 invoke them.
 * You known where is you default root directory and we are going to refer to it as
-___HTMLROOT__ from now on.
+__ROOTDIR__ from now on.
 
 ### Step 1: location
-Open a terminal and go to your __HTMLROOT__ directory and inside it create a new
+Open a terminal and go to your __ROOTDIR__ directory and inside it create a new
 folder, for example, one called __mysite__; then go into this new folder.
-Generally speaking, something like this (Linux example):
+Generally speaking, do something like this (Linux example):
 ```text
 $ cd /var/www/html
 $ mkdir mysite
 $ cd mysite
 ```
-If you prefer you can remove all contents inside your __HTMLROOT__ directory and
+If you prefer you can remove all contents inside your __ROOTDIR__ directory and
 perform the installation there, but for this guide we are going to use a
 sub-folder.
 
@@ -114,6 +114,7 @@ After installing under a standard Linux environment you may find some permission
 issues.
 A simple but not so polite way to solve this would be:
 ```text
+$ sudo chmod -v 0777 /var/www/html/mysite/cache
 $ cd /var/www/html/mysite/cache
 $ sudo find . -type d | xargs sudo chmod -v 0777
 $ sudo find . -type f | xargs sudo rm -v
@@ -125,10 +126,10 @@ The final line is to avoid _Git_ conflicts.
 
 ## Versions
 By default, cloning from [_Github_](https://github.com/) installs the master
-branch which is our newest but stable branch, let say out _closed for testing_
+branch which is our newest but stable branch, let say our _closed for testing_
 branch.
 If you prefer, you can use a more stable version switching to our branch `v1.0.0`
-of if you like the danger, switch to our development branch `dev`.
+or if you like the danger, switch to our development branch `dev`.
 
 ## Suggestions
 Here you have a few links you may want to visit:

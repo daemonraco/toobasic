@@ -64,8 +64,8 @@ And just to let you know:
 * this already gave you a controller and a separated view rendered using _Smarty_.
 * and it's already using a really basic files based cache system.
 
-Of course you can write controllers and views manually as explained in [this
-link](docs/controller.md).
+Of course, if you want you can write controllers and views manually as explained
+in [this link](docs/controller.md).
 
 ## Documentation
 These are some documentation pages we suggest you to visit to get more knowledge
