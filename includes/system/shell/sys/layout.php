@@ -132,7 +132,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 						break;
 					case self::TypeBasic:
 					default:
-						$this->_names['templates-prefix'] = 'table/';
+						$this->_names['templates-prefix'] = '/';
 						$this->_names['templates-type'] = self::TypeBasic;
 				}
 			}
