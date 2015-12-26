@@ -76,6 +76,37 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			}
 		}
 	}
+	protected function genConfigLines() {
+		$this->genNames();
+		if($this->_configLines === false) {
+			//
+			// Parent standards.
+			parent::genConfigLines();
+			//
+			// Global depdendencies.
+			global $Paths;
+
+			$path = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/config_http.php");
+			$this->_requiredDirectories[] = dirname($path);
+
+			if(!isset($this->_configLines[$path])) {
+				$this->_configLines[$path] = array();
+			}
+
+			if($this->_names['templates-type'] == self::TypeBootstrap) {
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap.min.css';";
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap-theme.min.css';";
+
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-2.1.3.min.js';";
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:bootstrap/js/bootstrap.min.js';";
+			}
+
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'style';";
+
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'toobasic_asset';";
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'script';";
+		}
+	}
 	protected function genNames() {
 		if($this->_names === false) {
 			parent::genNames();
@@ -90,6 +121,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$serparatedBSNav = false;
 			$opt = $this->_options->option(self::OptionType);
 			if($opt->activated()) {
+				$this->_names['templates-type'] = $opt->value();
 				switch($opt->value()) {
 					case self::TypeTable:
 						$this->_names['templates-prefix'] = 'table/';
@@ -101,6 +133,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 					case self::TypeBasic:
 					default:
 						$this->_names['templates-prefix'] = 'table/';
+						$this->_names['templates-type'] = self::TypeBasic;
 				}
 			}
 			//
