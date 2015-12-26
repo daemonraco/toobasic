@@ -203,11 +203,8 @@ abstract class Scaffold extends ShellTool {
 		// Default values.
 		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $Defaults;
-		//
-		// Routes are added only when active.
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+		// Adding routes if everything is ok.
+		if($ok) {
 			//
 			// Generating the list of required routes.
 			$this->genRoutes();
@@ -778,11 +775,8 @@ abstract class Scaffold extends ShellTool {
 		// Default values.
 		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $Defaults;
-		//
-		// Routes are removed only when active.
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+		// Removing routes only if everything is ok.
+		if($ok) {
 			//
 			// Generating the list of required routes.
 			$this->genRoutes();
