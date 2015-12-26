@@ -97,15 +97,15 @@ a sorting direction. In our example, it may by
 
 ## Let's use it
 Now, for the sake of our example, we'll create a model that updates the amount of
-kids a person has. Let's write the next code and save it in
+children a person has. Let's write the next code and save it in
 __ROOTDIR/site/models/Kids.php__:
 ```php
 <?php
 class KidsModel extends \TooBasic\Model {
-	public function setPersonKids($personId, $kidsCount) {
+	public function setPersonKids($personId, $childrenCount) {
 		$person = $this->representation->people->item($personId);
 		if($person) {
-			$person->kids = $kidsCount;
+			$person->children = $childrenCount;
 			$person->persist();
 		}
 	}
@@ -137,10 +137,10 @@ The one you've set as default would be the first option, but you may change this
 behavior by acquiring the factory in a different way, check the next example:
 ```php
 class KidsModel extends \TooBasic\Model {
-	public function kidsChanged($personId) {
+	public function childrenChanged($personId) {
 		$personNew = $this->representation->people->item($personId);
 		$personOld = $this->representation->people('backup')->item($personId);
-		return !personOld || $personNew->kids != $personOld->kids;
+		return !personOld || $personNew->children != $personOld->children;
 	}
 	protected function init() {}
 }
@@ -148,12 +148,58 @@ class KidsModel extends \TooBasic\Model {
 In the example we've created a method that works with two database connections.
 The variable `$personNew` represents a person store inside the default database
 while `$personOld` may represent the same person stored in a backup database.
-Based on that idea, the method `kidsChanged()` allows us to know if the current
-person had changes in its children count since the last time the backup was
-updated.
+Based on that idea, the method `childrenChanged()` allows us to know if the
+current person had changes in its children count since the last time the backup
+was updated.
 
 This is how you can obtain a people factory pointing to a different database, in
 our case __backup__.
+
+## New entries
+A representation also allows you to create new entries and then modify its
+properties.
+For example:
+```php
+public function addPerson($name, $age) {
+	$id = $this->representation->people->create();
+	$person = $this->representation->people->item($personId);
+	if($person) {
+		$person->fullname = $name;
+		$person->username = strtolower(preg_replace('/([ _-]+)/', '', $name));
+		$person->age = $age;
+		$person->children = 0;
+		$person->persist();
+	}
+}
+```
+Here you see the use of a method called `create()` which inserts a new record in
+your table and returns the inserted ID.
+Of course, this magic has a few condition before it can work:
+
+* The table requires to have an auto-incremental column.
+* Each column must either have a default value or allow `NULL` values.
+	* Except the auto-incremental one.
+
+The reason behind these conditions is that __TooBasic__ attempts to insert a
+completely empty row and expects to obtain an ID.
+This also explains why you should retrieve this new row and set its values almost
+immediately.
+
+### Disabling empty creation
+If for any reason you think that creating new entries the way __TooBasic__ does it
+doesn't fit with your needs, you can disable this mechanism setting the _core
+property_ `$_CP_DisableCreate` to `true`.
+If you do so, every time something calls to `create()` you'll get an exception
+with the next message allowing you to track the place where you should write some
+code:
+
+>Method 'create()' cannot be called directly.
+
+Also, if you set a method's name instead of `true` to such _core property_ you'll
+get an exception with a message similar to this (let's suppose you set its value
+as `createWithName`):
+
+>Method 'create()' cannot be called directly. Use 'createWithName()' instead.
 
 ## Field Filters
 Let's suppose that our table gets a little more complex and it looks like this:
