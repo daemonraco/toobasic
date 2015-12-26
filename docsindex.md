@@ -255,6 +255,12 @@
 * [Database](docs/representations.md#database)
 * [Field Filters](docs/representations.md#field-filters)
 	* [Persistence policies](docs/representations.md#persistence-policies)
+* [Sub-representations](docs/representations.md#sub-representations)
+	* [Representation definition](docs/representations.md#representation-definition)
+	* [Relationship specifications](docs/representations.md#relationship-specifications)
+	* [Usage](docs/representations.md#usage)
+	* [toArray()](docs/representations.md#toarray)
+	* [Setter](docs/representations.md#setter)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  Routes (docs/routes.md):

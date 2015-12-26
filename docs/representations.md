@@ -202,6 +202,97 @@ field.
 Nonetheless, this doesn't mean that your database is constantly updated, remember
 that you decide when to call `persist()`.
 
+## Sub-representations
+After some time coding tables you'll find rather common to have certain column in
+a table that holds ids in another table.
+For example, let's suppose these two tables:
+
+* A table called `people`:
+
+| ppl_id | ppl_fullname | ppl_age | ppl_country |
+|:------:|--------------|:-------:|:-----------:|
+|   1    | John Doe     |   35    |      1      |
+|   2    | Juan Perez   |   46    |      1      |
+|   3    | Jane Doe     |   27    |      2      |
+
+* And another called `countries`:
+
+| cou_id | cou_name  |
+|:------:|-----------|
+|   1    | Argentina |
+|   2    | Germany   |
+|   3    | Findland  |
+
+A simple thing may want to do here is to get a person's entry and access its
+related country object without writting a lot of code.
+
+### Representation definition
+To achieve this relationship we need to write a few specification in our person
+representation.
+```php
+<?php
+class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'ppl_';
+	protected $_CP_Table = 'people';
+	protected $_CP_ExtendedColumns = array(
+		'country' => array(
+			GC_REPRESENTATIONS_FACTORY => 'countries'
+		)
+	);
+}
+```
+If you look at the _core property_ `$_CP_ExtendedColumns` you'll find a list with
+two important things.
+
+* The key of each entry is the name (without prefixes) of a column that holds id's
+in another table.
+* Each entry contains an array with specifications of how to manage the
+relationship.
+
+__Note__: This configuration assumes that you already created a representations
+factory class called `CountriesFactory`.
+
+### Relationship specifications
+Each relationship specifications may have these values:
+
+* `GC_REPRESENTATIONS_FACTORY` (required): Specifies the name of an items factory
+that can solve ids in this relationship.
+* `GC_REPRESENTATIONS_METHOD` (optional): Allows to define a specific name for the
+method that will attend request for the column. This option solves possible method
+name collisions.
+
+### Usage
+_Now, how do I use it?_
+Once you have the configuration suggested above, you can write something like this
+in your codes.
+```php
+class KidsModel extends \TooBasic\Model {
+	public function promptCountry($personId) {
+		$person = $this->representation->people->item($personId);
+		if($person) {
+			debugit(array(
+				'ID only' => $person->country,
+				'full object' => $person->country()
+			), true);
+		} else {
+			debugit("Unknown id '{$personId}'.", true);
+		}
+	}
+	protected function init() {}
+}
+
+### toArray()
+Something you need to have in mind is that every time you access an associated
+column and it returns a valid object, it will affect the results of calling
+`toArray()` and instead of seeing just an ID you'll get and expanded object also
+filter through its `toArray()` method.
+
+### Setter
+Yes, you can use these _magic methods_ to set new values with something like
+`$person->country($otherCountry)`, but remember to give a valid representation
+object as parameter (in our case a valid country).
+
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
