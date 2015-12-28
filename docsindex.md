@@ -258,8 +258,16 @@
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
+* [New entries](docs/representations.md#new-entries)
+	* [Disabling empty creation](docs/representations.md#disabling-empty-creation)
 * [Field Filters](docs/representations.md#field-filters)
 	* [Persistence policies](docs/representations.md#persistence-policies)
+* [Sub-representations](docs/representations.md#sub-representations)
+	* [Representation definition](docs/representations.md#representation-definition)
+	* [Relationship specifications](docs/representations.md#relationship-specifications)
+	* [Usage](docs/representations.md#usage)
+	* [toArray()](docs/representations.md#toarray)
+	* [Setter](docs/representations.md#setter)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  Routes (docs/routes.md):

@@ -7,9 +7,10 @@
 		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
 		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
-		<link rel="stylesheet" type="text/css" href="{$ctrl->css('style')}"/>
 
-		<script type="text/javascript" src="{$ctrl->js('script')}"></script>
+{$ctrl->htmlAllScripts(false,"\t\t")}
+
+{$ctrl->htmlAllStyles(false,"\t\t")}
 	</head>
 	<body class="Action_{$action}">
 		<div id="MainContents">

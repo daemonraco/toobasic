@@ -190,6 +190,11 @@ define('GC_DATABASE_FIELD_FILTER_JSON', 'json');
 define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // @}
 //
+// Representations @{
+define('GC_REPRESENTATIONS_FACTORY', 'factory');
+define('GC_REPRESENTATIONS_METHOD', 'method');
+// @}
+//
 // URIs @{
 define('GC_URIS_INCLUDES', 'includes');
 // @}

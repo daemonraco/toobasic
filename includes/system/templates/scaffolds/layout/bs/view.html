@@ -7,13 +7,10 @@
 		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
 		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
-		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap.min.css')}"/>
-		<link rel="stylesheet" type="text/css" href="{$ctrl->lib('bootstrap/css/bootstrap-theme.min.css')}"/>
-		<link rel="stylesheet" type="text/css" href="{$ctrl->css('style')}"/>
 
-		<script type="text/javascript" src="{$ctrl->lib('jquery/jquery-2.1.3.min.js')}"></script>
-		<script type="text/javascript" src="{$ctrl->lib('bootstrap/js/bootstrap.min.js')}"></script>
-		<script type="text/javascript" src="{$ctrl->js('script')}"></script>
+{$ctrl->htmlAllScripts(false,"\t\t")}
+
+{$ctrl->htmlAllStyles(false,"\t\t")}
 	</head>
 	<body class="<%if !$containerFluid %>container <%/if%>Action_{$action}">
 		<header>

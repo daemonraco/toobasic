@@ -9,6 +9,7 @@ namespace TooBasic\Representations;
 
 //
 // Class aliases.
+use TooBasic\Exception;
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
@@ -33,6 +34,13 @@ abstract class ItemsFactory {
 	 * @var string Generic prefix for all columns on the represented table.
 	 */
 	protected $_CP_ColumnsPerfix = '';
+	/**
+	 * @var boolean This flag indicates if method 'create()' is disabled or
+	 * not.
+	 * It can also have a string as value and it will be used as method name
+	 * when its related exception is raised.
+	 */
+	protected $_CP_DisableCreate = false;
 	/**
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
@@ -83,7 +91,12 @@ abstract class ItemsFactory {
 	 * Prevent users from directly creating the singleton's instance.
 	 */
 	final protected function __constructor() {
-		
+		//
+		// Checking if there's an ID field configured, if not it means
+		// this representation doesn't support empty entries creation.
+		if(!$this->_CP_IDColumn) {
+			$this->_CP_DisableCreate = true;
+		}
 	}
 	/**
 	 * Prevent users from clone the singleton's instance.
@@ -104,32 +117,34 @@ abstract class ItemsFactory {
 	 */
 	public function create() {
 		//
+		// Checking if this method is disabled.
+		if(\boolval($this->_CP_DisableCreate)) {
+			if(is_string($this->_CP_DisableCreate)) {
+				throw new Exception("Method 'create()' cannot be called directly. Use '{$this->_CP_DisableCreate}()' instead.");
+			} else {
+				throw new Exception("Method 'create()' cannot be called directly.");
+			}
+		}
+		//
 		// Default values.
 		$out = false;
 		//
-		// Checking if there's an ID field configured, if not it means
-		// this representation doesn't support empty entries creation.
-		if($this->_CP_IDColumn) {
+		// Generating a proper query to insert an empty entry.
+		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
+			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
+			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
+			), $this->queryAdapterPrefixes());
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Attepting to create an entry.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
 			//
-			// Generating a proper query to insert an empty entry.
-			$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
-				GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
-				GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
-				), $this->queryAdapterPrefixes());
-			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-			//
-			// Attepting to create an entry.
-			if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-				//
-				// Fetching the ID.
-				$out = $this->_db->lastInsertId($query[GC_AFIELD_SEQNAME]);
-			} else {
-				//
-				// Catching the last error for further analysis.
-				$this->_lastDBError = $stmt->errorInfo();
-			}
+			// Fetching the ID.
+			$out = $this->_db->lastInsertId($query[GC_AFIELD_SEQNAME]);
 		} else {
-			throw new \TooBasic\Exception('This representation has no ID field defined meaning it does not support empty entry creation');
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
 		}
 
 		return $out;
@@ -168,7 +183,6 @@ abstract class ItemsFactory {
 
 		return $out;
 	}
-
 	/**
 	 * This method retrieves a list of ID of all available entries where the
 	 * column flagged as name follows certain pattern.
