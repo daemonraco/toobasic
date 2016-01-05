@@ -47,6 +47,7 @@ class RoutesManager extends Manager {
 		//
 		// Default values.
 		$out = $path;
+		$debugInfo = array();
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -78,6 +79,7 @@ class RoutesManager extends Manager {
 					$url[GC_AFIELD_QUERY][$aux[0]] = "true";
 				}
 			}
+			$debugInfo['url-info'] = $url;
 			//
 			// Tring to match a suitable route.
 			$matchingRoutes = array();
@@ -96,6 +98,7 @@ class RoutesManager extends Manager {
 					}
 				}
 			}
+			$debugInfo['matching-routes'] = $matchingRoutes;
 			//
 			// Checking matching routes for the right one.
 			$matchingRoute = false;
@@ -105,12 +108,14 @@ class RoutesManager extends Manager {
 				unset($url[GC_AFIELD_QUERY][GC_REQUEST_ACTION]);
 				//
 				// Checking each matching route.
-				foreach($matchingRoutes as $matchingRoute) {
+				$debugInfo['ignored-routes'] = array();
+				foreach($matchingRoutes as $route) {
 					$wrong = false;
 					$newPath = array();
+					$auxQuery = $url[GC_AFIELD_QUERY];
 					//
 					// Checking routes pattern.
-					foreach($matchingRoute->pattern as $piece) {
+					foreach($route->pattern as $piece) {
 						//
 						// Checking what type of
 						// parameters is the current
@@ -122,24 +127,24 @@ class RoutesManager extends Manager {
 							// Is there a parameter
 							// with the same name of
 							// this piece.
-							if(isset($url[GC_AFIELD_QUERY][$piece->name])) {
-								$newPath[] = $url[GC_AFIELD_QUERY][$piece->name];
+							if(isset($auxQuery[$piece->name])) {
+								$newPath[] = $auxQuery[$piece->name];
 								//
 								// Checking found piece type.
 								switch($piece->valueType) {
 									case self::ValueTypeInteger:
-										$wrong = !is_numeric($url[GC_AFIELD_QUERY][$piece->name]);
+										$wrong = !is_numeric($auxQuery[$piece->name]);
 										break;
 									case self::ValueTypeString:
-										$wrong = !is_string($url[GC_AFIELD_QUERY][$piece->name]);
+										$wrong = !is_string($auxQuery[$piece->name]);
 										break;
 									case self::ValueTypeEnumerative:
-										$wrong = !in_array($url[GC_AFIELD_QUERY][$piece->name], $piece->values);
+										$wrong = !in_array($auxQuery[$piece->name], $piece->values);
 										break;
 								}
 								//
 								// The parameter is no longer needed.
-								unset($url[GC_AFIELD_QUERY][$piece->name]);
+								unset($auxQuery[$piece->name]);
 							} else {
 								$wrong = true;
 							}
@@ -155,13 +160,18 @@ class RoutesManager extends Manager {
 					// If there were no problems, it is the
 					// right route.
 					if(!$wrong) {
+						$matchingRoute = $route;
+						$url[GC_AFIELD_QUERY] = $auxQuery;
 						break;
+					} else {
+						$debugInfo['ignored-routes'][] = $route->route;
 					}
 				}
 			}
 			//
 			// Did we find a route?
 			if($matchingRoute) {
+				$debugInfo['matching-route'] = $matchingRoute->route;
 				//
 				// Build the basic part of the new URL.
 				$out = Sanitizer::UriPath("{$url[GC_AFIELD_PATH]}/".implode('/', $newPath));
@@ -175,7 +185,13 @@ class RoutesManager extends Manager {
 					}
 					$out.= '?'.implode('&', $aux);
 				}
+				$debugInfo['enrouted-url'] = $out;
 			}
+		}
+		//
+		// Showing logic debug information.
+		if(isset($this->params->debugenroutes)) {
+			\TooBasic\debugThing($debugInfo);
 		}
 		//
 		// Returning a processed and cleaned url.
@@ -201,6 +217,9 @@ class RoutesManager extends Manager {
 		// Global dependencies.
 		global $Defaults;
 		//
+		// Stack for debug information.
+		$debugInfo = array();
+		//
 		// This method works only when routes are active and there is a
 		// route in the URL query.
 		if($Defaults[GC_DEFAULTS_ALLOW_ROUTES] && isset($this->_params->{GC_REQUEST_ROUTE})) {
@@ -210,6 +229,10 @@ class RoutesManager extends Manager {
 			//
 			// Expanding given route for analysis.
 			$path = explode('/', $this->_params->{GC_REQUEST_ROUTE});
+			$debugInfo['route-parameter'] = array(
+				'value' => $this->_params->{GC_REQUEST_ROUTE},
+				'exploded' => $path
+			);
 
 			$matches = false;
 			$matchingRoute = false;
@@ -217,6 +240,7 @@ class RoutesManager extends Manager {
 			$settings = false;
 			//
 			// Checking each configured route a matching one.
+			$debugInfo['ignored-routes'] = array();
 			foreach($this->routes() as $route) {
 				$matches = true;
 				$settings = array();
@@ -280,11 +304,14 @@ class RoutesManager extends Manager {
 					//
 					// No more analysis is required.
 					break;
+				} else {
+					$debugInfo['ignored-routes'][] = $route->route;
 				}
 			}
 			//
 			// Checking if there's a matching route.
 			if($matchingRoute) {
+				$debugInfo['matching-route'] = $matchingRoute;
 				//
 				// Setting parameters required by the route
 				// configuration.
@@ -309,10 +336,25 @@ class RoutesManager extends Manager {
 				//
 				// Adding route specs as a '$_SERVER' value.
 				$this->_params->addValues(Params::TypeSERVER, array(GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route));
+
+				$debugInfo['parameters'] = $this->_params->get->all();
 			} else {
 				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND));
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
+		} else {
+			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+				$debugInfo['no-analysis'] = 'Routes are disabled';
+			} elseif(isset($this->_params->{GC_REQUEST_ROUTE})) {
+				$debugInfo['no-analysis'] = "Parameter '".GC_REQUEST_ROUTE."' given by '.htaccess' is not present";
+			} else {
+				$debugInfo['no-analysis'] = 'Unknown reason';
+			}
+		}
+		//
+		// Showing logic debug information.
+		if(isset($this->params->debugroute)) {
+			\TooBasic\debugThing($debugInfo);
 		}
 	}
 	/**
