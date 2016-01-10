@@ -233,7 +233,7 @@ class Params extends Singleton {
 	 * This method loads all params stacks.
 	 */
 	protected function loadParams() {
-		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack(array()) : ParamsStack(array());
+		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack(array()) : new ParamsStack(array());
 		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
 		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
