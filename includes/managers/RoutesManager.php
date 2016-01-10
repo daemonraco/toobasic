@@ -333,7 +333,13 @@ class RoutesManager extends Manager {
 				// Setting parameters required by the route
 				// configuration.
 				foreach($matchingRoute->params as $key => $value) {
-					$this->_params->addValues(Params::TypeGET, array($key => $value));
+					//
+					// Fixed parameters should only be applied
+					// if they were not given by the URL query
+					// section.
+					if(!isset($this->_params->{$key})) {
+						$this->_params->addValues(Params::TypeGET, array($key => $value));
+					}
 				}
 				//
 				// Setting parameters found in the URL associated
