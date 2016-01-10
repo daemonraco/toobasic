@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\Adapters\Adapter;
+
 /**
  * @class MagicPropException
  * This exeption is thrown whenever 'MagicProp' finds a halting error.
@@ -101,7 +105,7 @@ class MagicProp extends Singleton {
 	protected function cache() {
 		if($this->_cache === false) {
 			global $Defaults;
-			$this->_cache = \TooBasic\Adapters\Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
+			$this->_cache = Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
 		}
 
 		return $this->_cache;
