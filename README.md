@@ -67,6 +67,19 @@ And just to let you know:
 Of course, if you want you can write controllers and views manually as explained
 in [this link](docs/controller.md).
 
+## Suggested modules (plugins)
+If you are already using __TooBasic__ and you want to expand your possibilities,
+we suggest you visit this plugins:
+
+* [__Logger__](https://github.com/daemonraco/toobasic-logger): To generate and
+manage log files in your site.
+* [__Workflows__](https://github.com/daemonraco/toobasic-workflows): If items in
+your site have to follow a intricate process with different stages and status and
+you're thinking about a _work flow_, well, check this module.
+* [__ZFieldFilters__](https://github.com/daemonraco/toobasic-zfieldfilters): This
+is a simple extention of complex fields in your representation that allows you to
+use some columns as zipped data.
+
 ## Documentation
 These are some documentation pages we suggest you to visit to get more knowledge
 of how __TooBasic__ works:

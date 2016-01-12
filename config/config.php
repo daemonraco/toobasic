@@ -272,11 +272,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
 	ksort($config['debugs']);
 	\TooBasic\debugThingInPage(function() use ($config) {
-		echo '<ul>';
+		echo '<dl class="dl-horizontal">';
 		foreach($config['debugs'] as $name => $description) {
-			echo "<li><strong>{$name}</strong>: {$description}</li>";
+			echo "<dt>{$name}</dt><dd>{$description}</dd>";
 		}
-		echo '</ul>';
+		echo '</dl>';
 	}, 'Debugs');
 }
 //
