@@ -331,6 +331,7 @@ function getConfigurationFilesList() {
 	$priotitiesOk = true;
 	$prioritiesData = false;
 	$prioritiesPath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SYSTEM_CACHE]}/config-priorities.json");
+	$whatList = defined('__SHELL__') ? 'shell' : 'http';
 	//
 	// Checking existence.
 	if(is_file($prioritiesPath)) {
@@ -339,7 +340,9 @@ function getConfigurationFilesList() {
 		$prioritiesData = json_decode(file_get_contents($prioritiesPath));
 		//
 		// Checking that it's considering all config files.
-		if(count($out) != count($prioritiesData->configsList)) {
+		if(!isset($prioritiesData->{$whatList})) {
+			$priotitiesOk = false;
+		} elseif(count($out) != count($prioritiesData->{$whatList}->configsList)) {
 			$priotitiesOk = false;
 		}
 	} else {
@@ -350,7 +353,11 @@ function getConfigurationFilesList() {
 	if(!is_file($prioritiesPath) || !$priotitiesOk) {
 		//
 		// Basic structure.
-		$prioritiesData = new \stdClass();
+		if($prioritiesData === false) {
+			$prioritiesData = new \stdClass();
+		}
+		$prioritiesData->{$whatList} = new \stdClass();
+		$prioritiesData->{$whatList}->preConfigsList = $out;
 		//
 		// Paths helpers.
 		$manifestsProvider = ManifestsManager::Instance();
@@ -444,7 +451,8 @@ function getConfigurationFilesList() {
 		// @}
 		//
 		// Resorting paths by priority.
-		$newMiddle = array(); {
+		$newMiddle = array();
+		{
 			//
 			// Adding paths that go at the very to of module paths.
 			foreach($dependantPaths as $prefix => $depPrefixes) {
@@ -469,17 +477,18 @@ function getConfigurationFilesList() {
 		$out = array_merge($pathsByPriority[GC_AFIELD_TOP], $newMiddle, $pathsByPriority[GC_AFIELD_BOTTOM]);
 		//
 		// Setting new information.
-		$prioritiesData->configsList = $out;
-		$prioritiesData->dependantPaths = $dependantPaths;
-		$prioritiesData->interestingPaths = $interestingPaths;
-		$prioritiesData->pathsByPriority = $pathsByPriority;
+		$prioritiesData->{$whatList}->configsList = $out;
+		$prioritiesData->{$whatList}->dependantPaths = $dependantPaths;
+		$prioritiesData->{$whatList}->interestingPaths = $interestingPaths;
+		$prioritiesData->{$whatList}->pathsByPriority = $pathsByPriority;
 		//
 		// Saving information.
 		file_put_contents($prioritiesPath, json_encode($prioritiesData, JSON_PRETTY_PRINT));
+		@chmod($prioritiesPath, 0666);
 	} else {
 		//
 		// Using the previously calculated list.
-		$out = $prioritiesData->configsList;
+		$out = $prioritiesData->{$whatList}->configsList;
 	}
 	// @}
 
