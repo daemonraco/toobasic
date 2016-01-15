@@ -8,6 +8,10 @@
 namespace TooBasic;
 
 //
+// Class aliases.
+use TooBasic\Managers\ManifestsManager;
+
+//
 // Global constants for the generic debug message printer @{
 const DebugThingTypeOk = 'ok';
 const DebugThingTypeError = 'error';
@@ -27,7 +31,8 @@ function checkBasicPermissions() {
 		$Directories[GC_DIRECTORIES_CACHE],
 		Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/filecache"),
 		Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/langs"),
-		Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/shellflags")
+		$Directories[GC_DIRECTORIES_SHELL_FLAGS],
+		$Directories[GC_DIRECTORIES_SYSTEM_CACHE]
 	);
 	//
 	// Checking each directory.
@@ -287,6 +292,198 @@ function guessSkin() {
 	//
 	// Returtning found skin name.
 	return $SkinName;
+}
+/**
+ * This function generates a proper list of configuration files considering
+ * dependencies between modules and also stores such priority calculation into a
+ * cached file for better performance.
+ */
+function getConfigurationFilesList() {
+	//
+	// Global dependencies.
+	global $Directories;
+	//
+	// Paths helpers.
+	$pathsProvider = Paths::Instance();
+	//
+	// Full list of cofiguration files to load.
+	$out = array();
+	//
+	// Loading specific configurations for shell or web accesses.
+	if(defined('__SHELL__')) {
+		//
+		// Loading each extension and site sub-config file named
+		// 'config_http.php'.
+		$out = array_reverse($pathsProvider->configPath('config_shell', Paths::ExtensionPHP, true));
+	} else {
+		//
+		// Loading each extension and site sub-config file named
+		// 'config_http.php'.
+		$out = array_reverse($pathsProvider->configPath('config_http', Paths::ExtensionPHP, true));
+	}
+	//
+	// Loading each extension and site sub-config file named 'config.php'.
+	$out = array_merge(array_reverse($pathsProvider->configPath('config', Paths::ExtensionPHP, true)), $out);
+	//
+	// Priorities @{
+	//
+	// Loading and checking cached configuration priorities.
+	$priotitiesOk = true;
+	$prioritiesData = false;
+	$prioritiesPath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SYSTEM_CACHE]}/config-priorities.json");
+	//
+	// Checking existence.
+	if(is_file($prioritiesPath)) {
+		//
+		// Lading cached data.
+		$prioritiesData = json_decode(file_get_contents($prioritiesPath));
+		//
+		// Checking that it's considering all config files.
+		if(count($out) != count($prioritiesData->configsList)) {
+			$priotitiesOk = false;
+		}
+	} else {
+		$priotitiesOk = false;
+	}
+	//
+	// If there's no valid cache file, it should be generated.
+	if(!is_file($prioritiesPath) || !$priotitiesOk) {
+		//
+		// Basic structure.
+		$prioritiesData = new \stdClass();
+		//
+		// Paths helpers.
+		$manifestsProvider = ManifestsManager::Instance();
+		//
+		// Loading all manifests.
+		$manifests = $manifestsProvider->manifests();
+		//
+		// Building list of module path dependencies.
+		$dependantPaths = array();
+		$interestingPaths = array();
+		foreach($manifests as $manifest) {
+			//
+			// Checking the existence of requirements.
+			$requirements = $manifest->requiredModules();
+			if($requirements) {
+				$path = $manifest->modulePath();
+				$interestingPaths[] = $path;
+				//
+				// Creating a list of path dependencies.
+				$dependantPaths[$path] = array();
+				foreach($requirements as $subManifest) {
+					$aux = $subManifest->modulePath();
+					$interestingPaths[] = $aux;
+					$dependantPaths[$path][] = $aux;
+				}
+			}
+		}
+		sort($interestingPaths);
+		$interestingPaths = array_unique($interestingPaths);
+		//
+		// Separating interesting paths into:
+		//	- list of non-module paths on the top.
+		//	- list of module paths:
+		//		- paths with dependencies.
+		//		- paths without dependencies.
+		//	- list of non-module paths on the bottom.
+		// @{
+		//
+		// Default values.
+		$pathsByPriority = array(
+			GC_AFIELD_TOP => array(),
+			GC_AFIELD_MIDDLE => array(
+				GC_AFIELD_TOP => array(),
+				GC_AFIELD_BOTTOM => array()
+			),
+			GC_AFIELD_BOTTOM => array()
+		);
+		$mainWhere = GC_AFIELD_TOP;
+		$mainWhereStillTop = true;
+		foreach($out as $path) {
+			//
+			// Guessing path prefixes.
+			$prefix = dirname(dirname($path));
+			$modulePrefix = dirname($prefix);
+			//
+			// Checking if it's a module path.
+			if($modulePrefix == $Directories[GC_DIRECTORIES_MODULES]) {
+				$mainWhere = GC_AFIELD_MIDDLE;
+				//
+				// At this point, any non-module path has to be
+				// appended affter all module paths.
+				$mainWhereStillTop = false;
+				//
+				// Checking if it's a path with dependencies.
+				$where = in_array($prefix, $interestingPaths) ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
+				//
+				// Enforcing structure.
+				if(!isset($pathsByPriority[$mainWhere][$where])) {
+					$pathsByPriority[$mainWhere][$where] = array();
+				}
+				//
+				// Checking how to add this path.
+				if($where == GC_AFIELD_TOP) {
+					//
+					// Enforcing structure.
+					if(!isset($pathsByPriority[$mainWhere][$where][$prefix])) {
+						$pathsByPriority[$mainWhere][$where][$prefix] = array();
+					}
+
+					$pathsByPriority[$mainWhere][$where][$prefix][] = $path;
+				} else {
+					$pathsByPriority[$mainWhere][$where][] = $path;
+				}
+			} else {
+				//
+				// Storing the non-module path.
+				$mainWhere = $mainWhereStillTop ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
+				$pathsByPriority[$mainWhere][] = $path;
+			}
+		}
+		// @}
+		//
+		// Resorting paths by priority.
+		$newMiddle = array(); {
+			//
+			// Adding paths that go at the very to of module paths.
+			foreach($dependantPaths as $prefix => $depPrefixes) {
+				foreach($depPrefixes as $depPrefix) {
+					$newMiddle = array_merge($newMiddle, $pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_TOP][$depPrefix]);
+				}
+			}
+			// Adding the rest.
+			foreach($pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_TOP] as $subList) {
+				foreach($subList as $path) {
+					if(!in_array($path, $newMiddle)) {
+						$newMiddle[] = $path;
+					}
+				}
+			}
+			//
+			// Adding bottom part.
+			$newMiddle = array_merge($newMiddle, $pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_BOTTOM]);
+		}
+		//
+		// Rebuiding final result.
+		$out = array_merge($pathsByPriority[GC_AFIELD_TOP], $newMiddle, $pathsByPriority[GC_AFIELD_BOTTOM]);
+		//
+		// Setting new information.
+		$prioritiesData->configsList = $out;
+		$prioritiesData->dependantPaths = $dependantPaths;
+		$prioritiesData->interestingPaths = $interestingPaths;
+		$prioritiesData->pathsByPriority = $pathsByPriority;
+		//
+		// Saving information.
+		file_put_contents($prioritiesPath, json_encode($prioritiesData, JSON_PRETTY_PRINT));
+	} else {
+		//
+		// Using the previously calculated list.
+		$out = $prioritiesData->configsList;
+	}
+	// @}
+
+	return $out;
 }
 /**
  * This method copies an object's fields into another object and enforces the

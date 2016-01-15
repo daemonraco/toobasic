@@ -36,6 +36,14 @@ class Manifest {
 	 * @var string Name of the module represented.
 	 */
 	protected $_moduleName = false;
+	/**
+	 * @var string Path where the module is stored.
+	 */
+	protected $_modulePath = false;
+	/**
+	 * @var string[] List of required TooBasic modules.
+	 */
+	protected $_requiredModules = array();
 	//
 	// Magic methods.
 	/**
@@ -46,6 +54,12 @@ class Manifest {
 	 */
 	public function __construct($moduleName) {
 		$this->_moduleName = $moduleName;
+		//
+		// Global dependencies.
+		global $Directories;
+		//
+		// Guessing the modules path.
+		$this->_modulePath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_moduleName}");
 
 		$this->load();
 	}
@@ -77,6 +91,9 @@ class Manifest {
 				//
 				// Looking for the requested module.
 				$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
+				//
+				// Updating the list of requirements.
+				$this->_requiredModules[$matches['ucode']] = $manifest;
 				//
 				// Checking installation.
 				if($manifest) {
@@ -120,6 +137,43 @@ class Manifest {
 	public function information() {
 		return $this->_information;
 	}
+	/**
+	 * Provides access to the name used to load this module manifest.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function moduleName() {
+		return $this->_moduleName;
+	}
+	/**
+	 * Provides access to the path where the represented module is stored.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function modulePath() {
+		return $this->_modulePath;
+	}
+	/**
+	 * Provides access to the configured module name.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function name() {
+		return $this->_information->name;
+	}
+	/**
+	 * Provides accesss to the list of required modules.
+	 *
+	 * @return \TooBasic\Manifest[string] List of required modules. Keys in
+	 * this list are UCODEs and values are manifest objects or FALSE.
+	 */
+	public function requiredModules() {
+		//
+		// This method requires a prior check.
+		$this->check();
+
+		return $this->_requiredModules;
+	}
 	//
 	// Protected methods.
 	/**
@@ -137,11 +191,8 @@ class Manifest {
 			$this->_information = new \stdClass();
 			$json = false;
 			//
-			// Global dependencies.
-			global $Directories;
-			//
 			// Loading file.
-			$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_moduleName}/manifest.json");
+			$path = Sanitizer::DirPath("{$this->modulePath()}/manifest.json");
 			if(is_readable($path)) {
 				$json = json_decode(file_get_contents($path));
 				if(!$json) {
