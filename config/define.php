@@ -28,6 +28,7 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS', 'ctrl-exports-extensions');
 define('GC_DEFAULTS_DEBUG_PAGE', 'debug-page');
 define('GC_DEFAULTS_DISABLED_DEBUGS', 'disabled-debugs');
 define('GC_DEFAULTS_DISABLED_PATHS', 'disabled-paths');

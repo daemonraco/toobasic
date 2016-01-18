@@ -18,6 +18,34 @@ class ControllerExports extends AbstractExports {
 	// Protected methods.
 	protected $_htmlAssets = false;
 	//
+	// Magic methods.
+	/**
+	 * This magic method allows to extend this exporter and have more methods
+	 * dynamically defined by the site or its modules.
+	 *
+	 * @param string $method Name of the invoked method.
+	 * @param mixed[] $args List of parameters given at execution.
+	 * @return string Returns a resulting string that can be inserted in a
+	 * view.
+	 */
+	public function __call($method, $args) {
+		//
+		// Default values.
+		$out = '';
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Checking method definition.
+		if(isset($Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS][$method])) {
+			$out = call_user_func_array($Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS][$method], $args);
+		} else {
+			$out = "Unknown controller exported method called '{$method}'.";
+		}
+
+		return $out;
+	}
+	//
 	// Public methods.
 	public function ajaxInsert($actionName, $params = array(), $attrs = array()) {
 		//
