@@ -10,7 +10,6 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\Managers\ManifestsManager;
-use TooBasic\Sanitizer;
 
 //
 // Global constants for the generic debug message printer @{
@@ -500,6 +499,52 @@ function getConfigurationFilesList() {
 		$out = $prioritiesData->{$whatList}->configsList;
 	}
 	// @}
+	//
+	// Debugging loading mechanism.
+	if(isset(Params::Instance()->debugconfigs)) {
+		\TooBasic\debugThingInPage(function() use ($prioritiesData) {
+			foreach(array('http', 'shell') as $whatList) {
+				if(!isset($prioritiesData->{$whatList})) {
+					continue;
+				}
+
+				echo '<div class="panel panel-default">';
+				echo '<div class="panel-heading">Behavior for: '.strtoupper($whatList).'</div>';
+				echo '<div class="panel-body">';
+
+				echo '<h4>Loading Order:</h4>';
+				echo '<ul>';
+				foreach($prioritiesData->{$whatList}->configsList as $path) {
+					echo "<li>{$path}</li>";
+				}
+				echo '</ul>';
+
+				echo '<h4>Module priorities:</h4>';
+				echo '<dl class="dl-horizontal">';
+				foreach($prioritiesData->{$whatList}->modulePriorities as $path => $priority) {
+					$basename = basename($path);
+					echo "<dt>{$basename}:<dt><dd><kbd>{$priority}</kbd></dd>";
+				}
+				echo '</dl>';
+
+				echo '<h4>Requirement Links:</h4>';
+				echo '<ul>';
+				foreach($prioritiesData->{$whatList}->requirementLinks as $path => $dependencies) {
+					if($dependencies) {
+						$basename = basename($path);
+						echo "<li>{$basename}:<ul>";
+						foreach($dependencies as $dependency) {
+							$dBasename = basename($dependency);
+							echo "<li>{$dBasename}</li>";
+						}
+						echo '</ul></li>';
+					}
+				}
+				echo '</ul>';
+				echo '</div></div>';
+			}
+		}, 'Debugs');
+	}
 
 	return $out;
 }
