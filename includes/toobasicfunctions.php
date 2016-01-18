@@ -543,7 +543,7 @@ function getConfigurationFilesList() {
 				echo '</ul>';
 				echo '</div></div>';
 			}
-		}, 'Debugs');
+		}, 'System Configs Order');
 	}
 
 	return $out;
