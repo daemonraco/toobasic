@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\Managers\ManifestsManager;
+use TooBasic\Sanitizer;
 
 //
 // Global constants for the generic debug message printer @{
@@ -302,6 +303,7 @@ function getConfigurationFilesList() {
 	//
 	// Global dependencies.
 	global $Directories;
+	global $Paths;
 	//
 	// Paths helpers.
 	$pathsProvider = Paths::Instance();
@@ -314,16 +316,16 @@ function getConfigurationFilesList() {
 		//
 		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		$out = array_reverse($pathsProvider->configPath('config_shell', Paths::ExtensionPHP, true));
+		$out = $pathsProvider->configPath('config_shell', Paths::ExtensionPHP, true);
 	} else {
 		//
 		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		$out = array_reverse($pathsProvider->configPath('config_http', Paths::ExtensionPHP, true));
+		$out = $pathsProvider->configPath('config_http', Paths::ExtensionPHP, true);
 	}
 	//
 	// Loading each extension and site sub-config file named 'config.php'.
-	$out = array_merge(array_reverse($pathsProvider->configPath('config', Paths::ExtensionPHP, true)), $out);
+	$out = array_merge($pathsProvider->configPath('config', Paths::ExtensionPHP, true), $out);
 	//
 	// Priorities @{
 	//
@@ -361,6 +363,12 @@ function getConfigurationFilesList() {
 		//
 		// Paths helpers.
 		$manifestsProvider = ManifestsManager::Instance();
+		//
+		// Top config prefixes.
+		$topPrefixes = array(
+			$Directories[GC_DIRECTORIES_SYSTEM],
+			$Directories[GC_DIRECTORIES_SITE]
+		);
 		//
 		// Loading all manifests.
 		$manifests = $manifestsProvider->manifests();
@@ -405,47 +413,59 @@ function getConfigurationFilesList() {
 			),
 			GC_AFIELD_BOTTOM => array()
 		);
-		$mainWhere = GC_AFIELD_TOP;
-		$mainWhereStillTop = true;
+		//
+		// Basic list order.
+		sort($out);
+		//
+		// Separating top paths.
+		foreach($topPrefixes as $tPrefix) {
+			foreach($out as $k => $path) {
+				//
+				// Guessing path prefixes.
+				$prefix = dirname(dirname($path));
+				if($prefix == $tPrefix) {
+					$pathsByPriority[GC_AFIELD_TOP][] = $path;
+					unset($out[$k]);
+				}
+			}
+		}
+		//
+		// Separating top paths.
+		foreach($out as $k => $path) {
+			//
+			// Guessing path prefixes.
+			$prefix = dirname(dirname(dirname($path)));
+			if(!preg_match("%^{$Directories[GC_DIRECTORIES_MODULES]}%", $prefix)) {
+				$pathsByPriority[GC_AFIELD_BOTTOM][] = $path;
+				unset($out[$k]);
+			}
+		}
+		//
+		// Sorting by module configs by priority.
 		foreach($out as $path) {
 			//
 			// Guessing path prefixes.
 			$prefix = dirname(dirname($path));
-			$modulePrefix = dirname($prefix);
 			//
-			// Checking if it's a module path.
-			if($modulePrefix == $Directories[GC_DIRECTORIES_MODULES]) {
-				$mainWhere = GC_AFIELD_MIDDLE;
-				//
-				// At this point, any non-module path has to be
-				// appended affter all module paths.
-				$mainWhereStillTop = false;
-				//
-				// Checking if it's a path with dependencies.
-				$where = in_array($prefix, $interestingPaths) ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
+			// Checking if it's a path with dependencies.
+			$where = in_array($prefix, $interestingPaths) ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
+			//
+			// Enforcing structure.
+			if(!isset($pathsByPriority[GC_AFIELD_MIDDLE][$where])) {
+				$pathsByPriority[GC_AFIELD_MIDDLE][$where] = array();
+			}
+			//
+			// Checking how to add this path.
+			if($where == GC_AFIELD_TOP) {
 				//
 				// Enforcing structure.
-				if(!isset($pathsByPriority[$mainWhere][$where])) {
-					$pathsByPriority[$mainWhere][$where] = array();
+				if(!isset($pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix])) {
+					$pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix] = array();
 				}
-				//
-				// Checking how to add this path.
-				if($where == GC_AFIELD_TOP) {
-					//
-					// Enforcing structure.
-					if(!isset($pathsByPriority[$mainWhere][$where][$prefix])) {
-						$pathsByPriority[$mainWhere][$where][$prefix] = array();
-					}
 
-					$pathsByPriority[$mainWhere][$where][$prefix][] = $path;
-				} else {
-					$pathsByPriority[$mainWhere][$where][] = $path;
-				}
+				$pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix][] = $path;
 			} else {
-				//
-				// Storing the non-module path.
-				$mainWhere = $mainWhereStillTop ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
-				$pathsByPriority[$mainWhere][] = $path;
+				$pathsByPriority[GC_AFIELD_MIDDLE][$where][] = $path;
 			}
 		}
 		// @}
