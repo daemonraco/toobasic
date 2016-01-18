@@ -543,6 +543,10 @@ function getConfigurationFilesList() {
 				echo '</ul>';
 				echo '</div></div>';
 			}
+
+			global $Directories;
+			echo "<p class=\"bg-danger\" style=\"padding: 15px;\">This doesn't include post configuration files like '{$Directories[GC_DIRECTORIES_SITE]}/config.php'.</p>";
+			echo "<p class=\"bg-danger\" style=\"padding: 15px;\">Non system configs searches don't follow this mechanism.</p>";
 		}, 'System Configs Order');
 	}
 
