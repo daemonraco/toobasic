@@ -74,3 +74,7 @@ Enough!, let's change the topic already.
 As you may noticed, English is not my mother language, that's the reason way you
 will find some many mistakes. Believe me, I'm trying to get better at it, but s**t
 happens :D
+
+## _Why query adapter is so complicated?_
+I know I know, I wasn't expecting it to become so complicated and weird and I'll
+try address this in the future, it is a pain even for me.

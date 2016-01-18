@@ -295,6 +295,26 @@ function guessSkin() {
 	return $SkinName;
 }
 /**
+ * @private
+ * This is an internal method that belongs to 'getConfigurationFilesList()' and it
+ * builds a recursive list of files based on a list of dependencies where keys in
+ * the list are paths with dependencies and values are list of dependencies paths.
+ *
+ * @param string[string] $fullList List of dependencies.
+ * @param string $start First path to analize.
+ * @return string[] Flat list of dependencies.
+ */
+function _configurationTreeSolver($fullList, $start) {
+	$out = array();
+
+	foreach($fullList[$start] as $subDependency) {
+		$out[] = $subDependency;
+		$out = array_merge($out, _configurationTreeSolver($fullList, $subDependency));
+	}
+
+	return $out;
+}
+/**
  * This function generates a proper list of configuration files considering
  * dependencies between modules and also stores such priority calculation into a
  * cached file for better performance.
@@ -373,28 +393,46 @@ function getConfigurationFilesList() {
 		// Loading all manifests.
 		$manifests = $manifestsProvider->manifests();
 		//
-		// Building list of module path dependencies.
-		$dependantPaths = array();
-		$interestingPaths = array();
+		// Building list of module path dependencies and a list of paths
+		// associated with their priorities.
+		$requirementLinks = array();
+		$modulePriorities = array();
 		foreach($manifests as $manifest) {
+			//
+			// Current module path.
+			$path = $manifest->modulePath();
+			//
+			// Default values.
+			$requirementLinks[$path] = array();
+			$modulePriorities[$path] = 0;
 			//
 			// Checking the existence of requirements.
 			$requirements = $manifest->requiredModules();
 			if($requirements) {
-				$path = $manifest->modulePath();
-				$interestingPaths[] = $path;
 				//
-				// Creating a list of path dependencies.
-				$dependantPaths[$path] = array();
+				// Associating requirements.
 				foreach($requirements as $subManifest) {
 					$aux = $subManifest->modulePath();
-					$interestingPaths[] = $aux;
-					$dependantPaths[$path][] = $aux;
+					$requirementLinks[$path][] = $aux;
 				}
 			}
 		}
-		sort($interestingPaths);
-		$interestingPaths = array_unique($interestingPaths);
+		//
+		// Assigning priorities depending on how required a path is. This
+		// considers dependencies of dependencies.
+		foreach($requirementLinks as $path => $dependencies) {
+			//
+			// Recursive list of dependencies.
+			$fullDependencies = _configurationTreeSolver($requirementLinks, $path);
+			//
+			// Increasing priority of each depdendency.
+			foreach($fullDependencies as $subDependency) {
+				$modulePriorities[$subDependency] ++;
+			}
+		}
+		//
+		// Sorting priorities.
+		arsort($modulePriorities);
 		//
 		// Separating interesting paths into:
 		//	- list of non-module paths on the top.
@@ -407,10 +445,7 @@ function getConfigurationFilesList() {
 		// Default values.
 		$pathsByPriority = array(
 			GC_AFIELD_TOP => array(),
-			GC_AFIELD_MIDDLE => array(
-				GC_AFIELD_TOP => array(),
-				GC_AFIELD_BOTTOM => array()
-			),
+			GC_AFIELD_MIDDLE => array(),
 			GC_AFIELD_BOTTOM => array()
 		);
 		//
@@ -430,76 +465,30 @@ function getConfigurationFilesList() {
 			}
 		}
 		//
-		// Separating top paths.
-		foreach($out as $k => $path) {
-			//
-			// Guessing path prefixes.
-			$prefix = dirname(dirname(dirname($path)));
-			if(!preg_match("%^{$Directories[GC_DIRECTORIES_MODULES]}%", $prefix)) {
-				$pathsByPriority[GC_AFIELD_BOTTOM][] = $path;
-				unset($out[$k]);
+		// Separating module paths considering their priorities.
+		foreach(array_keys($modulePriorities) as $tPrefix) {
+			foreach($out as $k => $path) {
+				//
+				// Guessing path prefixes.
+				$prefix = dirname(dirname($path));
+				if($prefix == $tPrefix) {
+					$pathsByPriority[GC_AFIELD_MIDDLE][] = $path;
+					unset($out[$k]);
+				}
 			}
 		}
 		//
-		// Sorting by module configs by priority.
-		foreach($out as $path) {
-			//
-			// Guessing path prefixes.
-			$prefix = dirname(dirname($path));
-			//
-			// Checking if it's a path with dependencies.
-			$where = in_array($prefix, $interestingPaths) ? GC_AFIELD_TOP : GC_AFIELD_BOTTOM;
-			//
-			// Enforcing structure.
-			if(!isset($pathsByPriority[GC_AFIELD_MIDDLE][$where])) {
-				$pathsByPriority[GC_AFIELD_MIDDLE][$where] = array();
-			}
-			//
-			// Checking how to add this path.
-			if($where == GC_AFIELD_TOP) {
-				//
-				// Enforcing structure.
-				if(!isset($pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix])) {
-					$pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix] = array();
-				}
-
-				$pathsByPriority[GC_AFIELD_MIDDLE][$where][$prefix][] = $path;
-			} else {
-				$pathsByPriority[GC_AFIELD_MIDDLE][$where][] = $path;
-			}
-		}
+		// The rest are bottom paths.
+		$pathsByPriority[GC_AFIELD_BOTTOM] = $out;
 		// @}
 		//
-		// Resorting paths by priority.
-		$newMiddle = array();
-		{
-			//
-			// Adding paths that go at the very to of module paths.
-			foreach($dependantPaths as $prefix => $depPrefixes) {
-				foreach($depPrefixes as $depPrefix) {
-					$newMiddle = array_merge($newMiddle, $pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_TOP][$depPrefix]);
-				}
-			}
-			// Adding the rest.
-			foreach($pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_TOP] as $subList) {
-				foreach($subList as $path) {
-					if(!in_array($path, $newMiddle)) {
-						$newMiddle[] = $path;
-					}
-				}
-			}
-			//
-			// Adding bottom part.
-			$newMiddle = array_merge($newMiddle, $pathsByPriority[GC_AFIELD_MIDDLE][GC_AFIELD_BOTTOM]);
-		}
-		//
 		// Rebuiding final result.
-		$out = array_merge($pathsByPriority[GC_AFIELD_TOP], $newMiddle, $pathsByPriority[GC_AFIELD_BOTTOM]);
+		$out = array_merge($pathsByPriority[GC_AFIELD_TOP], $pathsByPriority[GC_AFIELD_MIDDLE], $pathsByPriority[GC_AFIELD_BOTTOM]);
 		//
 		// Setting new information.
 		$prioritiesData->{$whatList}->configsList = $out;
-		$prioritiesData->{$whatList}->dependantPaths = $dependantPaths;
-		$prioritiesData->{$whatList}->interestingPaths = $interestingPaths;
+		$prioritiesData->{$whatList}->modulePriorities = $modulePriorities;
+		$prioritiesData->{$whatList}->requirementLinks = $requirementLinks;
 		$prioritiesData->{$whatList}->pathsByPriority = $pathsByPriority;
 		//
 		// Saving information.
