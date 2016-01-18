@@ -110,6 +110,7 @@ $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/in
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
 $Directories[GC_DIRECTORIES_SYSTEM] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system');
+$Directories[GC_DIRECTORIES_SYSTEM_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/system');
 //
 // Connections.
 $Connections = array();
@@ -225,34 +226,13 @@ require_once __DIR__.'/loader.php';
 //
 // Modules, site and system configuration files.
 {
-	$pathsProvider = TB_Paths::Instance();
 	//
-	// Full list of cofiguration files to load.
-	$auxConfigsList = array();
-	//
-	// Loading specific configurations for shell or web accesses.
-	if(defined('__SHELL__')) {
-		//
-		// Loading each extension and site sub-config file named
-		// 'config_http.php'.
-		$auxConfigsList = array_reverse($pathsProvider->configPath('config_shell', TB_Paths::ExtensionPHP, true));
-	} else {
-		//
-		// Loading each extension and site sub-config file named
-		// 'config_http.php'.
-		$auxConfigsList = array_reverse($pathsProvider->configPath('config_http', TB_Paths::ExtensionPHP, true));
-	}
-	//
-	// Loading each extension and site sub-config file named 'config.php'.
-	$auxConfigsList = array_merge(array_reverse($pathsProvider->configPath('config', TB_Paths::ExtensionPHP, true)), $auxConfigsList);
-	//
-	// Requiring each extension and site sub-config file.
-	foreach($auxConfigsList as $subConfig) {
+	// Loading each extension and site sub-config path named
+	// 'config_shell.php', 'config_http.php' and 'config.php'.
+	foreach(\TooBasic\getConfigurationFilesList() as $subConfig) {
 		require_once $subConfig;
 	}
 
-	unset($auxConfigsList);
-	unset($pathsProvider);
 	unset($subConfig);
 }
 //
@@ -272,11 +252,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
 	ksort($config['debugs']);
 	\TooBasic\debugThingInPage(function() use ($config) {
-		echo '<ul>';
+		echo '<dl class="dl-horizontal">';
 		foreach($config['debugs'] as $name => $description) {
-			echo "<li><strong>{$name}</strong>: {$description}</li>";
+			echo "<dt>{$name}</dt><dd>{$description}</dd>";
 		}
-		echo '</ul>';
+		echo '</dl>';
 	}, 'Debugs');
 }
 //

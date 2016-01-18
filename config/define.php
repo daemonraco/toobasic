@@ -68,6 +68,7 @@ define('GC_AFIELD_ASSIGNMENTS', 'assignments');
 define('GC_AFIELD_BEFORE_CREATE', 'before_create');
 define('GC_AFIELD_BEFORE_DROP', 'before_drop');
 define('GC_AFIELD_BEFORE_UPDATE', 'before_update');
+define('GC_AFIELD_BOTTOM', 'bottom');
 define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
 define('GC_AFIELD_CACHED', 'cached');
 define('GC_AFIELD_CALLBACKS', 'callbacks');
@@ -136,6 +137,7 @@ define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
 define('GC_AFIELD_TABLES', 'tables');
 define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TOP', 'top');
 define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
 define('GC_AFIELD_TYPES', 'types');
@@ -160,6 +162,7 @@ define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
 define('GC_DIRECTORIES_SYSTEM', 'system');
+define('GC_DIRECTORIES_SYSTEM_CACHE', 'system-cache');
 // @}
 //
 // Connections @{
