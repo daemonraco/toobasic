@@ -560,18 +560,18 @@ function getConfigurationFilesList() {
  * the copy. 
  * @param \stdClass $origin Object from which take vales.
  * @param \stdClass $destination Object in which values has to be copied.
- * @param mixed[string] $defualt Associative list of values to be used as default
+ * @param mixed[string] $default Associative list of values to be used as default
  * on enforced fields. If one of them is not present and empty string is used as
  * default.
  * @return \stdClass Returns the destination object with it's values overriden by
  * those in the origin object and, if it was necessary, with enforced fields.
  */
-function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = array()) {
+function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $default = array()) {
 	//
 	// If the list of defaults is not an array, it's forced to be an empty
 	// array.
-	if(!is_array($defualt)) {
-		$defualt = array();
+	if(!is_array($default)) {
+		$default = array();
 	}
 	//
 	// Checking each required field.
@@ -584,7 +584,7 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 		if(isset($origin->{$field})) {
 			$destination->{$field} = $origin->{$field};
 		} elseif(!isset($destination->{$field})) {
-			$destination->{$field} = isset($defualt[$field]) ? $defualt[$field] : '';
+			$destination->{$field} = isset($default[$field]) ? $default[$field] : '';
 		}
 	}
 	//
