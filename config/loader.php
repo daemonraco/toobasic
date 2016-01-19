@@ -127,6 +127,16 @@ $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREA
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
 // @}
 //
+// Forms builder includes @{
+$SuperLoader['TooBasic\\Forms\\BasicType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/BasicType.php";
+$SuperLoader['TooBasic\\Forms\\BootstrapType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/BootstrapType.php";
+$SuperLoader['TooBasic\\Forms\\Form'] = "{$Directories[GC_DIRECTORIES_FORMS]}/Form.php";
+$SuperLoader['TooBasic\\Forms\\FormsException'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsException.php";
+$SuperLoader['TooBasic\\Forms\\FormsFactory'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsFactory.php";
+$SuperLoader['TooBasic\\Forms\\FormsManager'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsManager.php";
+$SuperLoader['TooBasic\\Forms\\FormType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormType.php";
+// @}
+//
 // TooBasic's search engine @{
 $SuperLoader['TooBasic\\Managers\\SearchManager'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchManager.php";
 $SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableFactory.php";

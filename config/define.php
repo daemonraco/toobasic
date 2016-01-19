@@ -38,6 +38,7 @@ define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
 define('GC_DEFAULTS_ERROR_PAGES', 'error-pages');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
+define('GC_DEFAULTS_FORMS_TYPES', 'form-type');
 define('GC_DEFAULTS_HTMLASSETS', 'html-assets');
 define('GC_DEFAULTS_HTMLASSETS_SCRIPTS', 'scripts');
 define('GC_DEFAULTS_HTMLASSETS_SPECIFICS', 'html-specific-assets');
@@ -148,6 +149,7 @@ define('GC_AFIELD_TYPES', 'types');
 define('GC_DIRECTORIES_CACHE', 'cache');
 define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
+define('GC_DIRECTORIES_FORMS', 'forms');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');
 define('GC_DIRECTORIES_REPRESENTATIONS', 'representations');
@@ -210,6 +212,7 @@ define('GC_PATHS_CSS', 'css');
 define('GC_PATHS_DBSPECS', 'dbspecs');
 define('GC_PATHS_DBSPECSCALLBACK', 'dbspecscallbacks');
 define('GC_PATHS_EMAIL_CONTROLLERS', 'email-controllers');
+define('GC_PATHS_FORMS', 'forms');
 define('GC_PATHS_IMAGES', 'images');
 define('GC_PATHS_JS', 'js');
 define('GC_PATHS_LANGS', 'langs');
@@ -333,5 +336,24 @@ define('GC_SAPIREADER_TYPE_XML', 'xml');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+// @}
+//
+// Forms @{
+//
+// Build flags.
+define('GC_FORMS_BUILDTYPE_BASIC', 'basic');
+define('GC_FORMS_BUILDTYPE_BOOTSTRAP', 'bootstrap');
+//
+// Build flags.
+define('GC_FORMS_BUILDFLAG_ACTION', 'action');
+define('GC_FORMS_BUILDFLAG_METHOD', 'method');
+define('GC_FORMS_BUILDFLAG_ONSUBMIT', 'onsubmit');
+define('GC_FORMS_BUILDFLAG_SPACER', 'spacer');
+//
+// Build mode.
+define('GC_FORMS_BUILDMODE_CREATE', 'create');
+define('GC_FORMS_BUILDMODE_EDIT', 'edit');
+define('GC_FORMS_BUILDMODE_REMOVE', 'remove');
+define('GC_FORMS_BUILDMODE_VIEW', 'view');
 // @}
 // @}
