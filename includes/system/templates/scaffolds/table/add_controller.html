@@ -12,7 +12,17 @@ class <%$addActionController%> extends \TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		return true;
+<%if $formBuilder%>
+		$this->assign('formFlags', array(
+<%if $templatesStyle == 'bootstrap'%>
+			GC_FORMS_BUILDFLAG_SPACER => "\t\t"
+<%else%>
+			GC_FORMS_BUILDFLAG_SPACER => ""
+<%/if%>
+		));
+
+<%/if%>
+		return $this->status();
 	}
 	protected function init() {
 		parent::init();

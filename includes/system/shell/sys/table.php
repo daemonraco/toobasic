@@ -21,6 +21,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionConnection = 'Connection';
 	const OptionGenAutocomplete = 'GenAutocomplete';
 	const OptionNameField = 'NameField';
+	const OptionNoFormBuilder = 'NoFormBuilder';
 	const OptionPlural = 'Plural';
 	const OptionRaw = 'Raw';
 	const OptionSearchable = 'Searchable';
@@ -46,7 +47,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				// Assignments.
 				$this->_assignments['singularName'] = $this->_names['singular-name'];
 				$this->_assignments['pluralName'] = $this->_names['plural-name'];
+				$this->_assignments['templatesStyle'] = $this->_names['templates-style'];
 				$this->_assignments['isRaw'] = $this->isRaw();
+				$this->_assignments['formBuilder'] = $this->_names['form-builder'];
 				//
 				// Searchable items flags.
 				if(isset($this->_names['search-code'])) {
@@ -258,6 +261,10 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
 				$this->_names['templates-prefix'] = '';
 				//
+				// Checking form mechanism.
+				$opt = $this->_options->option(self::OptionNoFormBuilder);
+				$this->_names['form-builder'] = !$opt->activated();
+				//
 				// Checking plural name.
 				$opt = $this->_options->option(self::OptionPlural);
 				if($opt->activated()) {
@@ -268,6 +275,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$opt = $this->_options->option(self::OptionBootstrap);
 				if($opt->activated()) {
 					$this->_names['templates-prefix'] = 'bootstrap/';
+					$this->_names['templates-style'] = 'bootstrap';
 				}
 				//
 				// Checking type.
@@ -313,6 +321,13 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					GC_AFIELD_DESCRIPTION => 'specifications file'
 				);
 				if(!$this->isRaw()) {
+					if($this->_names['form-builder']) {
+						$this->_files[] = array(
+							GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_FORMS]}/table_{$this->_names['plural-name']}.json"),
+							GC_AFIELD_GENERATOR => 'genFormBuilderFile',
+							GC_AFIELD_DESCRIPTION => 'form builder specifications file'
+						);
+					}
 					$this->_files[] = array(
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
 						GC_AFIELD_TEMPLATE => 'representation.html',
@@ -434,6 +449,123 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			}
 		}
 	}
+	protected function genFormBuilderFile($path, $template, &$error) {
+		//
+		// Default values.
+		$out = true;
+		//
+		// Assignments.
+		$this->genAssignments();
+		//
+		// Main specs structure.
+		$specs = new \stdClass();
+		$specs->form = new \stdClass();
+		//
+		// Basic values.
+		if($this->params->opt->{self::OptionBootstrap}) {
+			$specs->form->type = GC_FORMS_BUILDTYPE_BOOTSTRAP;
+		} else {
+			$specs->form->type = GC_FORMS_BUILDTYPE_BASIC;
+		}
+		$specs->form->name = "{$this->_names['singular-name']}_form";
+		$specs->form->method = 'post';
+		//
+		// Attributes.
+		$specs->form->attrs = new \stdClass();
+		$specs->form->attrs->role = 'form';
+		$specs->form->attrs->{'ng-non-bindable'} = true;
+		//
+		// Fields.
+		$specs->form->fields = new \stdClass();
+		//
+		// Adding an ID field.
+		$field = new \stdClass();
+		$field->type = 'hidden';
+		$field->excludedModes = array(GC_FORMS_BUILDMODE_CREATE);
+		$specs->form->fields->id = $field;
+		//
+		// Adding specified columns.
+		foreach($this->_assignments['tableFields'] as $column) {
+			$field = new \stdClass();
+			$field->label = "table_column_{$column['name']}";
+			$field->attrs = new \stdClass();
+			$field->attrs->class = 'input-sm';
+
+			switch($column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]) {
+				case 'enum':
+					$field->type = 'enum';
+					if(isset($column[GC_AFIELD_TYPE]['values'])) {
+						$field->values = $column[GC_AFIELD_TYPE]['values'];
+					}
+					$field->value = '';
+					$field->emptyOption = new \stdClass();
+					$field->emptyOption->label = 'select_option_NOOPTION';
+					$field->emptyOption->value = '';
+					break;
+				case 'text':
+					$field->type = 'text';
+					$field->value = $column['default'] ? $column['default'] : '';
+					break;
+				case 'int':
+				case 'varchar':
+				default:
+					$field->type = 'input';
+					$field->value = $column['default'] ? $column['default'] : '';
+			}
+
+			$specs->form->fields->{$column['name']} = $field;
+		}
+		//
+		// Modes @{
+		$specs->form->modes = new \stdClass();
+		$specs->form->modes->create = new \stdClass();
+		$specs->form->modes->edit = new \stdClass();
+		$specs->form->modes->remove = new \stdClass();
+		$specs->form->modes->remove->attrs = new \stdClass();
+		$specs->form->modes->remove->attrs->onsubmit = "return confirm('Are you sure you want to remove this {$this->_names['singular-name']}?')";
+		//
+		// Create mode buttons.
+		$specs->form->modes->create->buttons = new \stdClass();
+		$specs->form->modes->create->buttons->add = new \stdClass();
+		$specs->form->modes->create->buttons->add->type = 'submit';
+		$specs->form->modes->create->buttons->add->attrs = new \stdClass();
+		$specs->form->modes->create->buttons->add->attrs->class = 'btn-sm btn-success';
+		$specs->form->modes->create->buttons->clear_fields = new \stdClass();
+		$specs->form->modes->create->buttons->clear_fields->type = 'reset';
+		$specs->form->modes->create->buttons->clear_fields->attrs = new \stdClass();
+		$specs->form->modes->create->buttons->clear_fields->attrs->class = 'btn-sm btn-default';
+		//
+		// Edit mode buttons.
+		$specs->form->modes->edit->buttons = new \stdClass();
+		$specs->form->modes->edit->buttons->save = new \stdClass();
+		$specs->form->modes->edit->buttons->save->type = 'submit';
+		$specs->form->modes->edit->buttons->save->attrs = new \stdClass();
+		$specs->form->modes->edit->buttons->save->attrs->class = 'btn-sm btn-success';
+		$specs->form->modes->edit->buttons->restore_fields = new \stdClass();
+		$specs->form->modes->edit->buttons->restore_fields->type = 'reset';
+		$specs->form->modes->edit->buttons->restore_fields->attrs = new \stdClass();
+		$specs->form->modes->edit->buttons->restore_fields->attrs->class = 'btn-sm btn-default';
+		//
+		// Remove mode buttons.
+		$specs->form->modes->remove->buttons = new \stdClass();
+		$specs->form->modes->remove->buttons->delete = new \stdClass();
+		$specs->form->modes->remove->buttons->delete->label = "btn_delete_{$this->_names['singular-name']}";
+		$specs->form->modes->remove->buttons->delete->type = 'submit';
+		$specs->form->modes->remove->buttons->delete->attrs = new \stdClass();
+		$specs->form->modes->remove->buttons->delete->attrs->class = 'btn-sm btn-danger';
+		// @}
+		//
+		// Generating file content.
+		$output = json_encode($specs, JSON_PRETTY_PRINT);
+
+		$result = file_put_contents($path, $output);
+		if($result === false) {
+			$error = "Unable to write file '{$path}'";
+			$out = false;
+		}
+
+		return $out;
+	}
 	protected function genSpecsFile($path, $template, &$error) {
 		$out = false;
 
@@ -446,6 +578,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->setError(self::ErrorWrongParameters, "Unknown specifications file version '{$opt->value()}'");
 		}
 
+
 		return $out;
 	}
 	protected function genSpecsFileV1($path, &$error) {
@@ -454,7 +587,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$out = true;
 		//
 		// Assignments.
-		$this->genAssignments($this->_names);
+		$this->genAssignments();
 		//
 		// Main specs structure.
 		$specs = new \stdClass();
@@ -573,7 +706,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$out = true;
 		//
 		// Assignments.
-		$this->genAssignments($this->_names);
+		$this->genAssignments();
 		//
 		// Main specs structure.
 		$specs = new \stdClass();
@@ -670,6 +803,12 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Ingnoring process when there are previous errors.
 		if(!$this->hasErrors() && !$this->isRaw()) {
 			$this->genAssignments();
+			//
+			// Delete button label
+			$auxTr = new \stdClass();
+			$auxTr->key = "btn_delete_{$this->_names['singular-name']}";
+			$auxTr->value = 'Delete this '.ucwords(str_replace('_', ' ', $this->_names['singular-name']));
+			$this->_translations[] = $auxTr;
 
 			foreach($this->_assignments['tableFields'] as $column) {
 				$auxTr = new \stdClass();
@@ -715,7 +854,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:int Column named 'colname' of type NUMBER/INTEGER.\n";
 		$text.= "\t- colname:text Column named 'colname' of type TEXT.\n";
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
-		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).\n";
+		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).";
 		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, array('--column', '-c'), Option::TypeMultiValue, $text, 'name'));
 
 		$text = "This parameters indicates which column shoud be consided as an unique name.";
@@ -747,8 +886,11 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));
 
 		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
-		$text.= "Given value is used as item type for searchable items indexation.\n";
+		$text.= "Given value is used as item type for searchable items indexation.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, array('--searchable', '-sr'), Option::TypeValue, $text, 'item-code'));
+
+		$text = "This option disables the use of form builders to generate each form.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, array('--no-form-builder', '-nofb'), Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
