@@ -217,6 +217,7 @@ $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
 	GC_FORMS_BUILDTYPE_BASIC => 'TooBasic\\Forms\\BasicType',
 	GC_FORMS_BUILDTYPE_BOOTSTRAP => 'TooBasic\\Forms\\BootstrapType'
 );
+$Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = function($form, $object = false, $mode = false, $flags = array()) {
 	return \TooBasic\Forms\FormsManager::Instance()->formFor($form, $object, $mode, $flags);
 };

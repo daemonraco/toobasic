@@ -41,6 +41,24 @@ abstract class FormType {
 	abstract public function buildFor($item, $mode, $flags);
 	//
 	// Protected methods.
+	protected function attrs($mode) {
+		$out = new \stdClass();
+
+		foreach($this->_config->form->attrs as $k => $v) {
+			$out->{$k} = $v;
+		}
+
+		if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->attrs)) {
+			foreach($this->_config->form->modes->{$mode}->attrs as $k => $v) {
+				$out->{$k} = $v;
+			}
+		}
+
+		return $out;
+	}
+	protected function action($mode) {
+		return isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->action) ? $this->_config->form->modes->{$mode}->action : $this->_config->form->action;
+	}
 	protected function attrsToString($attrs) {
 		$out = '';
 
@@ -54,21 +72,24 @@ abstract class FormType {
 
 		return $out;
 	}
+	protected function buttonsFor($mode) {
+		$out = $this->_config->form->buttons;
+
+		if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->buttons)) {
+			$out = $this->_config->form->modes->{$mode}->buttons;
+		}
+
+		return $out;
+	}
 	protected function expandBuildFlags(&$flags) {
 		if(!isset($flags[GC_FORMS_BUILDFLAG_SPACER])) {
 			$flags[GC_FORMS_BUILDFLAG_SPACER] = '';
 		}
-		if(!isset($flags[GC_FORMS_BUILDFLAG_ACTION])) {
-			$flags[GC_FORMS_BUILDFLAG_ACTION] = '#';
-		}
-		if(!isset($flags[GC_FORMS_BUILDFLAG_METHOD])) {
-			$flags[GC_FORMS_BUILDFLAG_METHOD] = isset($this->_config->method) ? $this->_config->method : 'get';
-		}
-		if(!isset($flags[GC_FORMS_BUILDFLAG_ONSUBMIT])) {
-			$flags[GC_FORMS_BUILDFLAG_ONSUBMIT] = isset($this->_config->onSubmit) ? $this->_config->onSubmit : false;
-		}
 	}
 	protected function isReadOnly($mode) {
 		return $mode == GC_FORMS_BUILDMODE_VIEW || $mode == GC_FORMS_BUILDMODE_REMOVE;
+	}
+	protected function method($mode) {
+		return isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->method) ? $this->_config->form->modes->{$mode}->method : $this->_config->form->method;
 	}
 }

@@ -22,38 +22,33 @@ class BootstrapType extends FormType {
 		if($this->_config->form->name) {
 			$out.= " id=\"{$this->_config->form->name}\"";
 		}
-		$out.= " action=\"{$flags[GC_FORMS_BUILDFLAG_ACTION]}\" method=\"{$flags[GC_FORMS_BUILDFLAG_METHOD]}\"";
-		if($flags[GC_FORMS_BUILDFLAG_ONSUBMIT]) {
-			$out.= " onsubmit=\"{$flags[GC_FORMS_BUILDFLAG_ONSUBMIT]}\"";
-		}
-		$out.= $this->attrsToString($this->_config->form->attrs);
+		$out.= " action=\"{$this->action($mode)}\" method=\"{$this->method($mode)}\"";
+		$out.= $this->attrsToString($this->attrs($mode));
 		$out.= ">\n";
 		//
 		// Fields.
 		$fields = array();
 		foreach($this->_config->form->fields as $name => $config) {
+			if(in_array($mode, $config->excludedModes)) {
+				continue;
+			}
+
 			if($readOnly) {
 				$config->attrs->readonly = 'readonly';
 			}
 			if(isset($config->attrs->class)) {
-				$config->attrs->class.=' form-control';
+				$config->attrs->class = "form-control {$config->attrs->class}";
 			} else {
 				$config->attrs->class = 'form-control';
 			}
 
 			if($config->type == 'hidden') {
-				$out.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<input id=\"{$this->_config->form->name}_{$name}\"";
-				if(!$readOnly) {
-					$out.= " name=\"{$name}\"";
-				}
+				$out.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<input id=\"{$this->_config->form->name}_{$name}\" name=\"{$name}\"";
 				$out.= " type=\"hidden\" value=\"".(isset($item[$name]) && $mode != GC_FORMS_BUILDMODE_CREATE ? $item[$name] : '')."\"/>\n";
 			} elseif($config->type == 'input' || $config->type == 'password' || ( $readOnly && $config->type == 'enum')) {
 				$aux = "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<div class=\"form-group\">\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<label for=\"{$this->_config->form->name}_{$name}\">".$tr->{$config->label}."</label>\n";
-				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<input id=\"{$this->_config->form->name}_{$name}\"";
-				if(!$readOnly) {
-					$aux.= " name=\"{$name}\"";
-				}
+				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<input id=\"{$this->_config->form->name}_{$name}\" name=\"{$name}\"";
 				$aux.= " type=\"".($config->type == 'password' ? 'password' : 'text').'"';
 				foreach(get_object_vars($config->attrs) as $k => $v) {
 					if($v === true) {
@@ -79,14 +74,21 @@ class BootstrapType extends FormType {
 			} elseif($config->type == 'enum') {
 				$aux = "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<div class=\"form-group\">\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<label for=\"{$this->_config->form->name}_{$name}\">".$tr->{$config->label}."</label>\n";
-				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<select id=\"{$this->_config->form->name}_{$name}\"";
-				if(!$readOnly) {
-					$aux.= " name=\"{$name}\"";
-				}
+				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<select id=\"{$this->_config->form->name}_{$name}\" name=\"{$name}\"";
 				$aux.= $this->attrsToString($config->attrs);
 				$aux.= ">\n";
-
+				//
+				// Currently selected value.
 				$selectedValue = isset($item[$name]) && $mode != GC_FORMS_BUILDMODE_CREATE ? $item[$name] : $config->value;
+				//
+				// Empty value.
+				if(isset($config->emptyOption)) {
+					$trValue = $tr->{$config->emptyOption->label};
+					$selected = $selectedValue == $config->emptyOption->value ? ' selected="selected"' : '';
+					$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t\t<option value=\"{$config->emptyOption->value}\"{$selected}>{$trValue}</option>\n";
+				}
+				//
+				// All possible values.
 				foreach($config->values as $value) {
 					$trValue = $tr->{"select_option_{$value}"};
 					$selected = $selectedValue == $value ? ' selected="selected"' : '';
@@ -100,10 +102,7 @@ class BootstrapType extends FormType {
 			} elseif($config->type == 'text') {
 				$aux = "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<div class=\"form-group\">\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<label for=\"{$this->_config->form->name}_{$name}\">".$tr->{$config->label}."</label>\n";
-				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<textarea id=\"{$this->_config->form->name}_{$name}\"";
-				if(!$readOnly) {
-					$aux.= " name=\"{$name}\"";
-				}
+				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t<textarea id=\"{$this->_config->form->name}_{$name}\" name=\"{$name}\"";
 				$aux.= $this->attrsToString($config->attrs);
 				$aux.= '>'.(isset($item[$name]) && $mode != GC_FORMS_BUILDMODE_CREATE ? $item[$name] : $config->value)."</textarea>\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t</div>\n";
@@ -114,6 +113,25 @@ class BootstrapType extends FormType {
 			}
 		}
 		$out.= "\n".implode("\n\n\n", $fields);
+
+		$buttons = array();
+		foreach($this->buttonsFor($mode) as $name => $config) {
+			if(isset($config->attrs->class)) {
+				$config->attrs->class = "btn {$config->attrs->class}";
+			} else {
+				$config->attrs->class = 'btn';
+			}
+
+			$aux = "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<button type=\"{$config->type}\" id=\"{$this->_config->form->name}_{$name}\"";
+			$aux.= $this->attrsToString($config->attrs);
+			$aux.= ">";
+			$aux.= $tr->{$config->label}.'</button>';
+
+			$buttons[] = $aux;
+		}
+		if($buttons) {
+			$out.= "\n".implode("\n", $buttons)."\n";
+		}
 
 		$out.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}</form>\n";
 

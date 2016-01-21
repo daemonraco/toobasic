@@ -121,6 +121,9 @@ class Form {
 	// Protected methods.
 	protected function checkConfig() {
 		//
+		// Global dependencies.
+		global $Defaults;
+		//
 		// Checking required fields.
 		if(!isset($this->_config->form)) {
 			throw new FormsException("Wrong form specification, unable to find path '///form'.");
@@ -131,20 +134,31 @@ class Form {
 		//
 		// Expanding default values.
 		$formFields = array(
+			'type' => $Defaults[GC_DEFAULTS_FORMS_TYPE],
 			'name' => '',
-			'attrs' => false
+			'action' => '#',
+			'method' => 'get',
+			'attrs' => false,
+			'modes' => false,
+			'buttons' => false
 		);
 		$this->_config->form = \TooBasic\objectCopyAndEnforce(array_keys($formFields), new \stdClass(), $this->_config->form, $formFields);
-
-		if(!$this->_config->form->attrs) {
-			$this->_config->form->attrs = new \stdClass();
+		//
+		// Required objects.
+		foreach(array('attrs', 'modes', 'buttons') as $name) {
+			if(!$this->_config->form->{$name}) {
+				$this->_config->form->{$name} = new \stdClass();
+			}
 		}
-
+		//
+		// Checking fields configuration.
 		$fieldFields = array(
 			'type' => 'input',
 			'attrs' => false,
 			'value' => '',
-			'values' => array()
+			'label' => false,
+			'values' => array(),
+			'excludedModes' => array()
 		);
 		foreach($this->_config->form->fields as $name => $config) {
 			if(!is_object($config)) {
@@ -152,14 +166,75 @@ class Form {
 				$aux->type = $config;
 				$config = $aux;
 			}
-			$fieldFields['label'] = "label_formcontrol_{$name}";
 
 			$config = \TooBasic\objectCopyAndEnforce(array_keys($fieldFields), new \stdClass(), $config, $fieldFields);
-			if(!$config->attrs) {
-				$config->attrs = new \stdClass();
+			//
+			// Field label.
+			$fieldFields['label'] = !$fieldFields['label'] ? "label_formcontrol_{$name}" : $fieldFields['label'];
+			//
+			// Required objects.
+			foreach(array('attrs') as $subName) {
+				if(!$config->{$subName}) {
+					$config->{$subName} = new \stdClass();
+				}
 			}
-
+			//
+			// Special checks for 'enum' fields.
+			if($config->type == 'enum' && isset($config->emptyOption)) {
+				if(!is_object($config->emptyOption)) {
+					$aux = new \stdClass();
+					$aux->label = $config->emptyOption;
+					$config->emptyOption = $aux;
+				}
+				if(!isset($config->emptyOption->label)) {
+					$config->emptyOption->label = 'select_option_NOOPTION';
+				}
+				if(!isset($config->emptyOption->value)) {
+					$config->emptyOption->value = '';
+				}
+			}
+			//
+			// Updating configuration.
 			$this->_config->form->fields->{$name} = $config;
+		}
+		//
+		// Checking buttons.
+		$this->checkConfigForButtons($this->_config->form->buttons);
+		foreach($this->_config->form->modes as $mode => $config) {
+			if(isset($config->buttons)) {
+				$this->checkConfigForButtons($this->_config->form->modes->{$mode}->buttons);
+			}
+		}
+		if(isset($this->magic()->params->debugformconfig)) {
+			\TooBasic\debugThing($this->_config);
+		}
+	}
+	protected function checkConfigForButtons(&$buttons) {
+		//
+		// Checking buttons configuration.
+		$buttonFields = array(
+			'type' => 'button',
+			'attrs' => false
+		);
+		foreach($buttons as $name => $config) {
+			if(!is_object($config)) {
+				$aux = new \stdClass();
+				$aux->type = $config;
+				$config = $aux;
+			}
+			$buttonFields['label'] = "btn_{$name}";
+
+			$config = \TooBasic\objectCopyAndEnforce(array_keys($buttonFields), new \stdClass(), $config, $buttonFields);
+			//
+			// Required objects.
+			foreach(array('attrs') as $subName) {
+				if(!$config->{$subName}) {
+					$config->{$subName} = new \stdClass();
+				}
+			}
+			//
+			// Updating configuration.
+			$buttons->{$name} = $config;
 		}
 	}
 	/**

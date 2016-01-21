@@ -38,7 +38,8 @@ define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
 define('GC_DEFAULTS_ERROR_PAGES', 'error-pages');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
-define('GC_DEFAULTS_FORMS_TYPES', 'form-type');
+define('GC_DEFAULTS_FORMS_TYPE', 'form-type');
+define('GC_DEFAULTS_FORMS_TYPES', 'form-types');
 define('GC_DEFAULTS_HTMLASSETS', 'html-assets');
 define('GC_DEFAULTS_HTMLASSETS_SCRIPTS', 'scripts');
 define('GC_DEFAULTS_HTMLASSETS_SPECIFICS', 'html-specific-assets');
@@ -345,9 +346,6 @@ define('GC_FORMS_BUILDTYPE_BASIC', 'basic');
 define('GC_FORMS_BUILDTYPE_BOOTSTRAP', 'bootstrap');
 //
 // Build flags.
-define('GC_FORMS_BUILDFLAG_ACTION', 'action');
-define('GC_FORMS_BUILDFLAG_METHOD', 'method');
-define('GC_FORMS_BUILDFLAG_ONSUBMIT', 'onsubmit');
 define('GC_FORMS_BUILDFLAG_SPACER', 'spacer');
 //
 // Build mode.
@@ -355,5 +353,10 @@ define('GC_FORMS_BUILDMODE_CREATE', 'create');
 define('GC_FORMS_BUILDMODE_EDIT', 'edit');
 define('GC_FORMS_BUILDMODE_REMOVE', 'remove');
 define('GC_FORMS_BUILDMODE_VIEW', 'view');
+//
+// Button types.
+define('GC_FORMS_BOTTONTYPE_BUTTON', 'button');
+define('GC_FORMS_BOTTONTYPE_RESET', 'reset');
+define('GC_FORMS_BOTTONTYPE_SUBMIT', 'submit');
 // @}
 // @}
