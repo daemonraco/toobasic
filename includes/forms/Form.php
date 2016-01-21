@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file Form.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Forms;
 
 //
@@ -8,6 +13,10 @@ use TooBasic\MagicProp;
 use TooBasic\Names;
 use TooBasic\Paths;
 
+/**
+ * @class Form
+ * This class represents a form configuration and the logic to trigger its build.
+ */
 class Form {
 	//
 	// Protected properties.
@@ -45,17 +54,26 @@ class Form {
 	}
 	//
 	// Public methods.
+	/**
+	 * This method generates an HTML form based on this form's configuration
+	 * using the proper builder.
+	 *
+	 * @param mixed[string] $item Information to fill fields (except for mode
+	 * 'create').
+	 * @param string $mode Mode in which it must be built.
+	 * @param mixed[string] $flags List of extra parameters used to build.
+	 * @return string Returns a HTML piece of code.
+	 * @throws \TooBasic\Forms\FormsException
+	 */
 	public function buildFor($item, $mode = false, $flags = array()) {
-		//
-		// Default values.
-		$out = '';
 		//
 		// Global dependencies.
 		global $Defaults;
 		//
 		// Loading all required settings.
 		$this->load();
-
+		//
+		// Creating the proper builder.
 		$builder = false;
 		if(isset($Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type])) {
 			$className = $Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type];
@@ -67,14 +85,10 @@ class Form {
 		// Fixing mode.
 		if(!$mode) {
 			$mode = GC_FORMS_BUILDMODE_EDIT;
-		} elseif(!in_array($mode, array(GC_FORMS_BUILDMODE_CREATE, GC_FORMS_BUILDMODE_EDIT, GC_FORMS_BUILDMODE_REMOVE, GC_FORMS_BUILDMODE_VIEW))) {
-			throw new FormsException("Unrecognized form mode '{$mode}'.");
 		}
 		//
 		// Building form.
-		$out = $builder->buildFor($item, $mode, $flags);
-
-		return $out;
+		return $builder->buildFor($item, $mode, $flags);
 	}
 	/**
 	 * This method provides access to the loaded configuration.
@@ -119,6 +133,13 @@ class Form {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method checks for required fields in a form configuration and
+	 * expand the rest with default values, in other words, it sanitizes the
+	 * configuration.
+	 *
+	 * @throws \TooBasic\Forms\FormsException
+	 */
 	protected function checkConfig() {
 		//
 		// Global dependencies.
@@ -132,7 +153,7 @@ class Form {
 			throw new FormsException("Wrong form specification, unable to find path '///form/fields' or maybe empty.");
 		}
 		//
-		// Expanding default values.
+		// Checking and expanding default form values.
 		$formFields = array(
 			'type' => $Defaults[GC_DEFAULTS_FORMS_TYPE],
 			'name' => '',
@@ -144,14 +165,14 @@ class Form {
 		);
 		$this->_config->form = \TooBasic\objectCopyAndEnforce(array_keys($formFields), new \stdClass(), $this->_config->form, $formFields);
 		//
-		// Required objects.
+		// Required form objects.
 		foreach(array('attrs', 'modes', 'buttons') as $name) {
 			if(!$this->_config->form->{$name}) {
 				$this->_config->form->{$name} = new \stdClass();
 			}
 		}
 		//
-		// Checking fields configuration.
+		// Checking and expanding default field values.
 		$fieldFields = array(
 			'type' => 'input',
 			'attrs' => false,
@@ -161,12 +182,15 @@ class Form {
 			'excludedModes' => array()
 		);
 		foreach($this->_config->form->fields as $name => $config) {
+			//
+			// Expanding the simple configuration.
 			if(!is_object($config)) {
 				$aux = new \stdClass();
 				$aux->type = $config;
 				$config = $aux;
 			}
-
+			//
+			// Enforcing fields.
 			$config = \TooBasic\objectCopyAndEnforce(array_keys($fieldFields), new \stdClass(), $config, $fieldFields);
 			//
 			// Field label.
@@ -205,26 +229,39 @@ class Form {
 				$this->checkConfigForButtons($this->_config->form->modes->{$mode}->buttons);
 			}
 		}
+		//
+		// Debugging configuration.
 		if(isset($this->magic()->params->debugformconfig)) {
 			\TooBasic\debugThing($this->_config);
 		}
 	}
+	/**
+	 * This method sanitizes a list of buttons configuration.
+	 *
+	 * @param \stdClass $buttons List of buttons.
+	 */
 	protected function checkConfigForButtons(&$buttons) {
 		//
 		// Checking buttons configuration.
 		$buttonFields = array(
 			'type' => 'button',
-			'attrs' => false
+			'attrs' => false,
+			'label' => false
 		);
 		foreach($buttons as $name => $config) {
+			//
+			// Expanding the simple configuration.
 			if(!is_object($config)) {
 				$aux = new \stdClass();
 				$aux->type = $config;
 				$config = $aux;
 			}
-			$buttonFields['label'] = "btn_{$name}";
-
+			//
+			// Enforcing fields.
 			$config = \TooBasic\objectCopyAndEnforce(array_keys($buttonFields), new \stdClass(), $config, $buttonFields);
+			//
+			// Botton label.
+			$config->label = $config->label ? $config->label : "btn_{$name}";
 			//
 			// Required objects.
 			foreach(array('attrs') as $subName) {
@@ -257,7 +294,11 @@ class Form {
 			//
 			// Checking path existence.
 			if($this->_path && is_readable($this->_path)) {
+				//
+				// Loading configuration.
 				$this->_config = json_decode(file_get_contents($this->_path));
+				//
+				// Checking configuration.
 				if($this->_config) {
 					$this->_status = true;
 					$this->checkConfig();
