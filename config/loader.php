@@ -135,6 +135,7 @@ $SuperLoader['TooBasic\\Forms\\FormsException'] = "{$Directories[GC_DIRECTORIES_
 $SuperLoader['TooBasic\\Forms\\FormsFactory'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsFactory.php";
 $SuperLoader['TooBasic\\Forms\\FormsManager'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsManager.php";
 $SuperLoader['TooBasic\\Forms\\FormType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormType.php";
+$SuperLoader['TooBasic\\Forms\\TableType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/TableType.php";
 // @}
 //
 // TooBasic's search engine @{

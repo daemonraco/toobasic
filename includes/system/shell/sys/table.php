@@ -260,6 +260,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_names['singular-name'] = $this->_names[GC_AFIELD_NAME];
 				$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
 				$this->_names['templates-prefix'] = '';
+				$this->_names['templates-style'] = 'default';
 				//
 				// Checking form mechanism.
 				$opt = $this->_options->option(self::OptionNoFormBuilder);
@@ -465,7 +466,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		if($this->params->opt->{self::OptionBootstrap}) {
 			$specs->form->type = GC_FORMS_BUILDTYPE_BOOTSTRAP;
 		} else {
-			$specs->form->type = GC_FORMS_BUILDTYPE_BASIC;
+			$specs->form->type = GC_FORMS_BUILDTYPE_TABLE;
 		}
 		$specs->form->name = "{$this->_names['singular-name']}_form";
 		$specs->form->method = 'post';

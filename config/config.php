@@ -214,8 +214,9 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 //
 // Forms builder basic configuration.
 $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
-	GC_FORMS_BUILDTYPE_BASIC => 'TooBasic\\Forms\\BasicType',
-	GC_FORMS_BUILDTYPE_BOOTSTRAP => 'TooBasic\\Forms\\BootstrapType'
+	GC_FORMS_BUILDTYPE_BASIC => '\\TooBasic\\Forms\\BasicType',
+	GC_FORMS_BUILDTYPE_BOOTSTRAP => '\\TooBasic\\Forms\\BootstrapType',
+	GC_FORMS_BUILDTYPE_TABLE => '\\TooBasic\\Forms\\TableType'
 );
 $Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = '\\TooBasic\\ctrlExports_formFor';

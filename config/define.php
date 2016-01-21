@@ -344,6 +344,7 @@ define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
 // Build flags.
 define('GC_FORMS_BUILDTYPE_BASIC', 'basic');
 define('GC_FORMS_BUILDTYPE_BOOTSTRAP', 'bootstrap');
+define('GC_FORMS_BUILDTYPE_TABLE', 'table');
 //
 // Build flags.
 define('GC_FORMS_BUILDFLAG_SPACER', 'spacer');
