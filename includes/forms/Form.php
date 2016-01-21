@@ -161,7 +161,8 @@ class Form {
 			'method' => 'get',
 			'attrs' => false,
 			'modes' => false,
-			'buttons' => false
+			'buttons' => false,
+			'readonly' => false
 		);
 		$this->_config->form = \TooBasic\objectCopyAndEnforce(array_keys($formFields), new \stdClass(), $this->_config->form, $formFields);
 		//

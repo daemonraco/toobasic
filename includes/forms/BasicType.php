@@ -1,8 +1,27 @@
 <?php
 
+/**
+ * @file BasicType.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Forms;
 
+/**
+ * @class BasicType
+ * @todo doc
+ */
 class BasicType extends FormType {
+	/**
+	 * This method build a HTML form code based on its configuration.
+	 *
+	 * @param mixed[string] $item Information to fill fields (except for mode
+	 * 'create').
+	 * @param string $mode Mode in which it must be built.
+	 * @param mixed[string] $flags List of extra parameters used to build.
+	 * @return string Returns a HTML piece of code.
+	 * @throws \TooBasic\Forms\FormsException
+	 */
 	public function buildFor($item, $mode, $flags) {
 		//
 		// Default values.

@@ -32,7 +32,13 @@ class RoutesManager extends Manager {
 	 * @var string Error message.
 	 */
 	protected $_lastErrorMessage = false;
+	/**
+	 * @var \TooBasic\Params Parameters manager shortcut.
+	 */
 	protected $_params = false;
+	/**
+	 * @var \stdClass[] List of loaded routes.
+	 */
 	protected $_routes = false;
 	//
 	// Public methods.
