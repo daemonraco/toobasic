@@ -6,6 +6,7 @@
 * [Basic features?](README.md#basic-features)
 * [Installation](README.md#installation)
 * [Start up](README.md#start-up)
+* [Suggested modules (plugins)](README.md#suggested-modules-plugins)
 * [Documentation](README.md#documentation)
 * [Thanks](README.md#thanks)
 	* [Smarty](README.md#smarty)
@@ -17,6 +18,7 @@
 * [TooBasic?!](docs/authorsnote.md#toobasic)
 * [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
 * [Engrish](docs/authorsnote.md#engrish)
+* [_Why query adapter is so complicated?_](docs/authorsnote.md#why-query-adapter-is-so-complicated)
 
 ##  Cache (docs/cache.md):
 
@@ -170,6 +172,11 @@
 	* [Features](docs/facilities.md#features)
 	* [Removing a service](docs/facilities.md#removing-a-service)
 * [Suggestions](docs/facilities.md#suggestions)
+
+##  Forms Builder (docs/forms.md):
+
+* [What is Forms Builder?](docs/forms.md#what-is-forms-builder)
+* [Suggestions](docs/forms.md#suggestions)
 
 ##  Installation (docs/install.md):
 
@@ -373,37 +380,6 @@
 	* [Something good](docs/snippets.md#something-good)
 * [Suggestions](docs/snippets.md#suggestions)
 
-##  Adapters (docs/tech/adapters.md):
-
-* [What are _adapters_](docs/tech/adapters.md#what-are-adapters)
-* [Cache adapters](docs/tech/adapters.md#cache-adapters)
-* [Database structure maintainer adapters](docs/tech/adapters.md#database-structure-maintainer-adapters)
-* [I want mine!](docs/tech/adapters.md#i-want-mine)
-	* [Step 0: into a module](docs/tech/adapters.md#step-0-into-a-module)
-	* [Step 1: new adapter](docs/tech/adapters.md#step-1-new-adapter)
-	* [Step 2: using the adapter](docs/tech/adapters.md#step-2-using-the-adapter)
-	* [Step 3: including the adapter](docs/tech/adapters.md#step-3-including-the-adapter)
-* [I want my database structure maintainer adapter](docs/tech/adapters.md#i-want-my-database-structure-maintainer-adapter)
-* [View adapters](docs/tech/adapters.md#view-adapters)
-	* [Others](docs/tech/adapters.md#others)
-* [Suggestions](docs/tech/adapters.md#suggestions)
-
-##  Query Adapter (docs/tech/queryadapter.md):
-
-* [What's a Query Adapter?](docs/tech/queryadapter.md#whats-a-query-adapter)
-* [Examples](docs/tech/queryadapter.md#examples)
-* [Select](docs/tech/queryadapter.md#select)
-	* [Order](docs/tech/queryadapter.md#order)
-	* [Limit](docs/tech/queryadapter.md#limit)
-	* [Specific condition](docs/tech/queryadapter.md#specific-condition)
-	* [Partial condition](docs/tech/queryadapter.md#partial-condition)
-* [Multi-table select](docs/tech/queryadapter.md#multi-table-select)
-* [Insert](docs/tech/queryadapter.md#insert)
-* [Delete](docs/tech/queryadapter.md#delete)
-* [Update](docs/tech/queryadapter.md#update)
-* [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
-* [Suggestions](docs/tech/queryadapter.md#suggestions)
-
 ##  Troubleshooting (docs/troubleshooting.md):
 
 * [What is this page?](docs/troubleshooting.md#what-is-this-page)
@@ -434,6 +410,11 @@
 * [View adapters](docs/tech/adapters.md#view-adapters)
 	* [Others](docs/tech/adapters.md#others)
 * [Suggestions](docs/tech/adapters.md#suggestions)
+
+##  Forms Builder (docs/tech/forms.md):
+
+* [XXXXXXXXXXXXX](docs/tech/forms.md#xxxxxxxxxxxxx)
+* [Suggestions](docs/tech/forms.md#suggestions)
 
 ##  Query Adapter (docs/tech/queryadapter.md):
 

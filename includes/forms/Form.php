@@ -51,6 +51,13 @@ class Form {
 		//
 		// Saving name.
 		$this->_name = $name;
+			//
+			// Global dependencies.
+			global $Paths;
+		//
+		// Guessing names.
+		$fileName = Names::SnakeFilename($this->name());
+		$this->_path = Paths::Instance()->customPaths($Paths[GC_PATHS_FORMS], $fileName, Paths::ExtensionJSON);
 	}
 	//
 	// Public methods.
@@ -116,10 +123,6 @@ class Form {
 	 * @return string Returns an absolute path.
 	 */
 	public function path() {
-		//
-		// Loading all required settings.
-		$this->load();
-
 		return $this->_path;
 	}
 	/**
@@ -195,7 +198,7 @@ class Form {
 			$config = \TooBasic\objectCopyAndEnforce(array_keys($fieldFields), new \stdClass(), $config, $fieldFields);
 			//
 			// Field label.
-			$fieldFields['label'] = !$fieldFields['label'] ? "label_formcontrol_{$name}" : $fieldFields['label'];
+			$config->label = !$config->label ? "label_formcontrol_{$name}" : $config->label;
 			//
 			// Required objects.
 			foreach(array('attrs') as $subName) {
@@ -286,28 +289,21 @@ class Form {
 			// Reseting current stauts value.
 			$this->_status = false;
 			//
-			// Global dependencies.
-			global $Paths;
-			//
-			// Guessing names.
-			$fileName = Names::SnakeFilename($this->name());
-			$this->_path = Paths::Instance()->customPaths($Paths[GC_PATHS_FORMS], $fileName, Paths::ExtensionJSON);
-			//
 			// Checking path existence.
-			if($this->_path && is_readable($this->_path)) {
+			if($this->path() && is_readable($this->path())) {
 				//
 				// Loading configuration.
-				$this->_config = json_decode(file_get_contents($this->_path));
+				$this->_config = json_decode(file_get_contents($this->path()));
 				//
 				// Checking configuration.
 				if($this->_config) {
 					$this->_status = true;
 					$this->checkConfig();
 				}
-			} elseif(!$this->_path) {
+			} elseif(!$this->path()) {
 				throw new FormsException("Unknown form '{$this->name()}'.");
 			} else {
-				throw new FormsException("Unable to read form path '{$this->_path}'.");
+				throw new FormsException("Unable to read form path '{$this->path()}'.");
 			}
 		}
 	}
