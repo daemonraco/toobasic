@@ -40,6 +40,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionSetFormAttribute = 'SetFormAttribute';
 	const OptionSetMethod = 'SetMethod';
 	const OptionSetName = 'SetName';
+	const OptionSetType = 'SetType';
 	const OptionType = 'Type';
 	const OptionValue = 'Value';
 	//
@@ -58,6 +59,10 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		}
 	}
 	protected function setOptions() {
+		//
+		// Global dependencies.
+		global $Defaults;
+
 		$this->_options->setHelpText("This tool allows you to create, modify and remove Forms Builder specification files.");
 
 		$text = "This options create a basic Forms Builder specification file.\n";
@@ -78,6 +83,10 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text = "This method sets name of form (it doesn't change file names).\n";
 		$text.= "It must be use along with option '--value'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetName, array('--set-name', '-sN'), Option::TypeValue, $text, 'form-name'));
+
+		$text = "This method sets the form's type.\n";
+		$text.= "It must be use along with option '--type'";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetType, array('--set-type', '-sT'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option appends a new field to a form specification.\n";
 		$text.= "It requires options:\n";
@@ -134,38 +143,25 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "Some specific type required by another option.\n";
 		$text.= "When used with '--add-field' available options are:\n";
-		$text.= "\t- 'input'\n";
-		$text.= "\t- 'password'\n";
-		$text.= "\t- 'text'\n";
-		$text.= "\t- 'enum' (it should be used as: 'enum:VALUE1:VALUE2:OTHERVALUE')\n";
+		$text.= "\t- '".GC_FORMS_FIELDTYPE_INPUT."'\n";
+		$text.= "\t- '".GC_FORMS_FIELDTYPE_PASSWORD."'\n";
+		$text.= "\t- '".GC_FORMS_FIELDTYPE_TEXT."'\n";
+		$text.= "\t- '".GC_FORMS_FIELDTYPE_ENUM."' (it should be used as: 'enum:VALUE1:VALUE2:OTHERVALUE')\n";
 		$text.= "When used with '--add-button' available options are:\n";
-		$text.= "\t- 'submit'\n";
-		$text.= "\t- 'reset'\n";
-		$text.= "\t- 'button' (default)\n";
+		$text.= "\t- '".GC_FORMS_BOTTONTYPE_SUBMIT."'\n";
+		$text.= "\t- '".GC_FORMS_BOTTONTYPE_RESET."'\n";
+		$text.= "\t- '".GC_FORMS_BOTTONTYPE_BUTTON."' (default)\n";
+		$text.= "When used with '--set-type' available options are:";
+		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
+			$text.= "\n\t- '{$type}'";
+		}
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-M'), Option::TypeValue, $text, 'module-name'));
 	}
-	protected function taskCreate($spacer = "") {
-		//
-		// Default values.
-		$name = $this->params->opt->{self::OptionCreate};
-		//
-		// Loading helpers.
-		$this->loadHelpers();
-		//
-		// Checking parameters.
-		$module = $this->params->opt->{self::OptionModule};
-		//
-		// Creating form.
-		echo "{$spacer}Creating form '{$name}': ";
-		$result = $this->_formsHelper->createForm($name, $module);
-		if($result[GC_AFIELD_STATUS]) {
-			echo Color::Green('Done')." (Path: {$result[GC_AFIELD_PATH]})\n";
-		} else {
-			echo Color::Red('Failed').' (Error: '.Color::Yellow($result[GC_AFIELD_ERROR]).")\n";
-		}
+	protected function taskAddButton($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskAddField($spacer = "") {
 		//
@@ -212,17 +208,25 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			}
 		}
 	}
-	protected function taskAddButton($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetFormAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetFieldAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetButtonAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+	protected function taskCreate($spacer = "") {
+		//
+		// Default values.
+		$name = $this->params->opt->{self::OptionCreate};
+		//
+		// Loading helpers.
+		$this->loadHelpers();
+		//
+		// Checking parameters.
+		$module = $this->params->opt->{self::OptionModule};
+		//
+		// Creating form.
+		echo "{$spacer}Creating form '{$name}': ";
+		$result = $this->_formsHelper->createForm($name, $module);
+		if($result[GC_AFIELD_STATUS]) {
+			echo Color::Green('Done')." (Path: {$result[GC_AFIELD_PATH]})\n";
+		} else {
+			echo Color::Red('Failed').' (Error: '.Color::Yellow($result[GC_AFIELD_ERROR]).")\n";
+		}
 	}
 	protected function taskRemove($spacer = "") {
 		//
@@ -241,19 +245,28 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			echo Color::Red('Failed').' (Error: '.Color::Yellow($result[GC_AFIELD_ERROR]).")\n";
 		}
 	}
-	protected function taskRemoveField($spacer = "") {
+	protected function taskRemoveAction($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskRemoveButton($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
-	protected function taskRemoveFormAttribute($spacer = "") {
+	protected function taskRemoveButtonAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskRemoveField($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskRemoveFieldAttribute($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
-	protected function taskRemoveButtonAttribute($spacer = "") {
+	protected function taskRemoveFormAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskRemoveMethod($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskRemoveName($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskSetAction($spacer = "") {
@@ -297,6 +310,15 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 				}
 			}
 		}
+	}
+	protected function taskSetButtonAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskSetFieldAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskSetFormAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskSetMethod($spacer = "") {
 		//
@@ -382,13 +404,40 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			}
 		}
 	}
-	protected function taskRemoveAction($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskRemoveMethod($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskRemoveName($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+	protected function taskSetType($spacer = "") {
+		//
+		// Default values.
+		$name = $this->params->opt->{self::OptionSetType};
+		//
+		// Checking params.
+		if(!$this->params->opt->{self::OptionType}) {
+			$this->setError(self::ErrorWrongParameters, "No type specified.");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting form '{$name}' type: ";
+			//
+			// Loading form.
+			$form = new Form($name);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setType($this->params->opt->{self::OptionType});
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 }

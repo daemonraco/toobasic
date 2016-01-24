@@ -125,7 +125,7 @@ class BasicType extends FormType {
 				//
 				// Building a textarea.
 				//
-				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<label for=\"{$this->_config->form->name}_{$name}\">".$tr->{$config->label}."</label>\n";
+				$aux = "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<label for=\"{$this->_config->form->name}_{$name}\">".$tr->{$config->label}."</label>\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<textarea id=\"{$this->_config->form->name}_{$name}\" name=\"{$name}\"";
 				$aux.= $this->attrsToString($config->attrs);
 				$aux.= '>'.(isset($item[$name]) && $mode != GC_FORMS_BUILDMODE_CREATE ? $item[$name] : $config->value)."</textarea>\n";

@@ -70,13 +70,15 @@ class FormWriter {
 			if(!isset($this->_config->form->fields->{$name})) {
 				$this->_config->form->fields->{$name} = new \stdClass();
 				$this->_config->form->fields->{$name}->type = $type;
+				if($type == GC_FORMS_FIELDTYPE_ENUM) {
+					$this->_config->form->fields->{$name}->values = $typeValues;
+				}
 				$this->_dirty = true;
 			} else {
 				$error = "Field '{$name}' already defined";
 				$ok = false;
 			}
 		}
-		debugit('TODO', 0);
 
 		return $ok;
 	}
@@ -94,6 +96,9 @@ class FormWriter {
 	}
 	public function setName($name, $mode = false) {
 		$this->setMainValue('name', $name, $mode);
+	}
+	public function setType($type, $mode = false) {
+		$this->setMainValue('type', $type, $mode);
 	}
 	public function save() {
 		return $this->dirty() ? \boolval(file_put_contents($this->_path, json_encode($this->_config, JSON_PRETTY_PRINT))) : false;

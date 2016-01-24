@@ -355,6 +355,12 @@ define('GC_FORMS_BUILDMODE_EDIT', 'edit');
 define('GC_FORMS_BUILDMODE_REMOVE', 'remove');
 define('GC_FORMS_BUILDMODE_VIEW', 'view');
 //
+// Field type.
+define('GC_FORMS_FIELDTYPE_ENUM', 'enum');
+define('GC_FORMS_FIELDTYPE_INPUT', 'inout');
+define('GC_FORMS_FIELDTYPE_PASSWORD', 'password');
+define('GC_FORMS_FIELDTYPE_TEXT', 'text');
+//
 // Button types.
 define('GC_FORMS_BOTTONTYPE_BUTTON', 'button');
 define('GC_FORMS_BOTTONTYPE_RESET', 'reset');
