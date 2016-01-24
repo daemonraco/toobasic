@@ -12,6 +12,18 @@ behavior and maybe how many buttons it has at the end.
 For those cases, _Forms Builder_ provides a way to specify fields once and some
 specific properties depending on how the form should be built.
 
+## Example
+
+## Using forms
+
+
+
+## Generating forms
+
+
+
+
+
 ## Suggestions
 If you want or need it, you may visit these documentation pages:
 

@@ -176,6 +176,9 @@
 ##  Forms Builder (docs/forms.md):
 
 * [What is Forms Builder?](docs/forms.md#what-is-forms-builder)
+* [Example](docs/forms.md#example)
+* [Using forms](docs/forms.md#using-forms)
+* [Generating forms](docs/forms.md#generating-forms)
 * [Suggestions](docs/forms.md#suggestions)
 
 ##  Installation (docs/install.md):
