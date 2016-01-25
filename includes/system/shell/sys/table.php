@@ -6,6 +6,9 @@
  */
 //
 // Class aliases.
+use TooBasic\Forms\Form;
+use TooBasic\Forms\FormsManager;
+use TooBasic\Forms\FormWriter;
 use TooBasic\Names;
 use TooBasic\Sanitizer;
 use TooBasic\Shell\Option;
@@ -116,16 +119,16 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 							case 'enum':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
 								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field[GC_AFIELD_TYPE]['values'] = $columnParts;
-								array_shift($field[GC_AFIELD_TYPE]['values']);
-								array_shift($field[GC_AFIELD_TYPE]['values']);
-								if($field[GC_AFIELD_TYPE]['values']) {
-									$field[GC_AFIELD_TYPE]['values'] = array_values($field[GC_AFIELD_TYPE]['values']);
+								$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = $columnParts;
+								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+								if($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]) {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = array_values($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 								} else {
-									$field[GC_AFIELD_TYPE]['values'][0] = 'Y';
-									$field[GC_AFIELD_TYPE]['values'][1] = 'N';
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0] = 'Y';
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][1] = 'N';
 								}
-								$field['default'] = "'{$field[GC_AFIELD_TYPE]['values'][0]}'";
+								$field['default'] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
 								$field['inForm'] = true;
 								break;
 							case 'varchar':
@@ -452,116 +455,95 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	}
 	protected function genFormBuilderFile($path, $template, &$error) {
 		//
-		// Default values.
-		$out = true;
-		//
 		// Assignments.
 		$this->genAssignments();
 		//
+		// Helpers.
+		$formsHelper = FormsManager::Instance();
+		//
+		// Default values.
+		$out = true;
+		$formName = "table_{$this->_names['plural-name']}";
+		//
+		// Removing when forced.
+		if($this->isForced()) {
+			@unlink($path);
+		}
+		//
 		// Main specs structure.
-		$specs = new \stdClass();
-		$specs->form = new \stdClass();
-		//
-		// Basic values.
-		if($this->params->opt->{self::OptionBootstrap}) {
-			$specs->form->type = GC_FORMS_BUILDTYPE_BOOTSTRAP;
-		} else {
-			$specs->form->type = GC_FORMS_BUILDTYPE_TABLE;
-		}
-		$specs->form->name = "{$this->_names['singular-name']}_form";
-		$specs->form->method = 'post';
-		//
-		// Attributes.
-		$specs->form->attrs = new \stdClass();
-		$specs->form->attrs->role = 'form';
-		$specs->form->attrs->{'ng-non-bindable'} = true;
-		//
-		// Fields.
-		$specs->form->fields = new \stdClass();
-		//
-		// Adding an ID field.
-		$field = new \stdClass();
-		$field->type = 'hidden';
-		$field->excludedModes = array(GC_FORMS_BUILDMODE_CREATE);
-		$specs->form->fields->id = $field;
-		//
-		// Adding specified columns.
-		foreach($this->_assignments['tableFields'] as $column) {
-			$field = new \stdClass();
-			$field->label = "table_column_{$column['name']}";
-			$field->attrs = new \stdClass();
-			$field->attrs->class = 'input-sm';
+		$result = $formsHelper->createForm($formName, $this->_names[GC_AFIELD_MODULE_NAME]);
+		if($result[GC_AFIELD_STATUS]) {
+			$form = new Form($formName);
+			$writer = new FormWriter($form);
+			//
+			// Basic values.
+			$writer->setType($this->params->opt->{self::OptionBootstrap} ? GC_FORMS_BUILDTYPE_BOOTSTRAP : GC_FORMS_BUILDTYPE_TABLE);
+			$writer->setName("{$this->_names['singular-name']}_form");
+			$writer->setMethod('post');
+			//
+			// Attributes.
+			$writer->setAttribute('role', 'form');
+			$writer->setAttribute('ng-non-bindable', true);
+			//
+			// Fields @{
+			//
+			// Adding an ID field.
+			$writer->addField('id', 'hidden');
+			$writer->excludeFieldFrom('id', array(GC_FORMS_BUILDMODE_CREATE));
+			//
+			// Adding specified columns.
+			foreach($this->_assignments['tableFields'] as $column) {
+				switch($column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]) {
+					case 'enum':
+						$type = 'enum';
+						if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+							$type.= ':'.implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+						}
+						$writer->addField($column['name'], $type);
+						$writer->setFieldDefault($column['name'], '');
+						$writer->setFieldEmptyOption($column['name'], 'select_option_NOOPTION', '');
+						break;
+					case 'text':
+						$writer->addField($column['name'], 'text');
+						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						break;
+					case 'int':
+					case 'varchar':
+					default:
+						$writer->addField($column['name'], 'input');
+						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+				}
 
-			switch($column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]) {
-				case 'enum':
-					$field->type = 'enum';
-					if(isset($column[GC_AFIELD_TYPE]['values'])) {
-						$field->values = $column[GC_AFIELD_TYPE]['values'];
-					}
-					$field->value = '';
-					$field->emptyOption = new \stdClass();
-					$field->emptyOption->label = 'select_option_NOOPTION';
-					$field->emptyOption->value = '';
-					break;
-				case 'text':
-					$field->type = 'text';
-					$field->value = $column['default'] ? $column['default'] : '';
-					break;
-				case 'int':
-				case 'varchar':
-				default:
-					$field->type = 'input';
-					$field->value = $column['default'] ? $column['default'] : '';
+				$writer->setFieldLabel($column['name'], "table_column_{$column['name']}");
+				$writer->setFieldAttribute($column['name'], 'class', 'input-sm');
 			}
-
-			$specs->form->fields->{$column['name']} = $field;
-		}
-		//
-		// Modes @{
-		$specs->form->modes = new \stdClass();
-		$specs->form->modes->create = new \stdClass();
-		$specs->form->modes->edit = new \stdClass();
-		$specs->form->modes->remove = new \stdClass();
-		$specs->form->modes->remove->attrs = new \stdClass();
-		$specs->form->modes->remove->attrs->onsubmit = "return confirm('Are you sure you want to remove this {$this->_names['singular-name']}?')";
-		//
-		// Create mode buttons.
-		$specs->form->modes->create->buttons = new \stdClass();
-		$specs->form->modes->create->buttons->add = new \stdClass();
-		$specs->form->modes->create->buttons->add->type = 'submit';
-		$specs->form->modes->create->buttons->add->attrs = new \stdClass();
-		$specs->form->modes->create->buttons->add->attrs->class = 'btn-sm btn-success';
-		$specs->form->modes->create->buttons->clear_fields = new \stdClass();
-		$specs->form->modes->create->buttons->clear_fields->type = 'reset';
-		$specs->form->modes->create->buttons->clear_fields->attrs = new \stdClass();
-		$specs->form->modes->create->buttons->clear_fields->attrs->class = 'btn-sm btn-default';
-		//
-		// Edit mode buttons.
-		$specs->form->modes->edit->buttons = new \stdClass();
-		$specs->form->modes->edit->buttons->save = new \stdClass();
-		$specs->form->modes->edit->buttons->save->type = 'submit';
-		$specs->form->modes->edit->buttons->save->attrs = new \stdClass();
-		$specs->form->modes->edit->buttons->save->attrs->class = 'btn-sm btn-success';
-		$specs->form->modes->edit->buttons->restore_fields = new \stdClass();
-		$specs->form->modes->edit->buttons->restore_fields->type = 'reset';
-		$specs->form->modes->edit->buttons->restore_fields->attrs = new \stdClass();
-		$specs->form->modes->edit->buttons->restore_fields->attrs->class = 'btn-sm btn-default';
-		//
-		// Remove mode buttons.
-		$specs->form->modes->remove->buttons = new \stdClass();
-		$specs->form->modes->remove->buttons->delete = new \stdClass();
-		$specs->form->modes->remove->buttons->delete->label = "btn_delete_{$this->_names['singular-name']}";
-		$specs->form->modes->remove->buttons->delete->type = 'submit';
-		$specs->form->modes->remove->buttons->delete->attrs = new \stdClass();
-		$specs->form->modes->remove->buttons->delete->attrs->class = 'btn-sm btn-danger';
-		// @}
-		//
-		// Generating file content.
-		$output = json_encode($specs, JSON_PRETTY_PRINT);
-
-		$result = file_put_contents($path, $output);
-		if($result === false) {
-			$error = "Unable to write file '{$path}'";
+			//@}
+			//
+			// Modes @{
+			$writer->setAttribute('onsubmit', "return confirm('Are you sure you want to remove this {$this->_names['singular-name']}?')", GC_FORMS_BUILDMODE_REMOVE);
+			//
+			// Create mode buttons.
+			$writer->addButton('add', 'submit', GC_FORMS_BUILDMODE_CREATE);
+			$writer->setButtonAttribute('add', 'class', 'btn-sm btn-success', GC_FORMS_BUILDMODE_CREATE);
+			$writer->addButton('clear_fields', 'reset', GC_FORMS_BUILDMODE_CREATE);
+			$writer->setButtonAttribute('clear_fields', 'class', 'btn-sm btn-default', GC_FORMS_BUILDMODE_CREATE);
+			//
+			// Edit mode buttons.
+			$writer->addButton('save', 'submit', GC_FORMS_BUILDMODE_EDIT);
+			$writer->setButtonAttribute('save', 'class', 'btn-sm btn-success', GC_FORMS_BUILDMODE_EDIT);
+			$writer->addButton('restore_fields', 'reset', GC_FORMS_BUILDMODE_EDIT);
+			$writer->setButtonAttribute('restore_fields', 'class', 'btn-sm btn-default', GC_FORMS_BUILDMODE_EDIT);
+			//
+			// Remove mode buttons.
+			$writer->addButton('delete', 'submit', GC_FORMS_BUILDMODE_REMOVE);
+			$writer->setButtonLabel('delete', "btn_delete_{$this->_names['singular-name']}", GC_FORMS_BUILDMODE_REMOVE);
+			$writer->setButtonAttribute('delete', 'class', 'btn-sm btn-danger', GC_FORMS_BUILDMODE_REMOVE);
+			// @}
+			//
+			// Saving changes.
+			$writer->save();
+		} else {
+			$error = $result[GC_AFIELD_ERROR];
 			$out = false;
 		}
 
@@ -626,8 +608,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$field->name = $column['name'];
 			$field->type = new \stdClass();
 			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
-			if(isset($column[GC_AFIELD_TYPE]['values'])) {
-				$field->type->values = $column[GC_AFIELD_TYPE]['values'];
+			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+				$field->type->values = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
 			} else {
 				$field->type->precision = $column[GC_AFIELD_TYPE]['precision'];
 			}
@@ -738,8 +720,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		foreach($this->_assignments['tableFields'] as $column) {
 			$field = new \stdClass();
 			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
-			if(isset($column[GC_AFIELD_TYPE]['values'])) {
-				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE]['values']);
+			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 			}
 			if($column['default']) {
 				$field->default = $column['default'];
@@ -817,8 +799,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$auxTr->value = ucwords(str_replace('_', ' ', $column['name']));
 				$this->_translations[] = $auxTr;
 
-				if(isset($column[GC_AFIELD_TYPE]['values'])) {
-					foreach($column[GC_AFIELD_TYPE]['values'] as $option) {
+				if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+					foreach($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES] as $option) {
 						$auxTr = new \stdClass();
 						$auxTr->key = "select_option_{$option}";
 						$auxTr->value = ucwords(str_replace('_', ' ', $option));

@@ -130,15 +130,23 @@ abstract class FormType {
 	 * inserted in HTML tag.
 	 *
 	 * @param \stdClass $attrs List of attributes.
+	 * @param boolean $isForm When TRUE it ignores some form attributes
+	 * managed by other functionalities.
 	 * @return string Returns the same list as a string.
 	 */
-	protected function attrsToString($attrs) {
+	protected function attrsToString($attrs, $isForm = false) {
 		//
 		// Default values.
 		$out = '';
 		//
 		// Appending each attribute.
+		$ignoredFormAttrs = array('action', 'id', 'method');
 		foreach(get_object_vars($attrs) as $k => $v) {
+			//
+			// Ignoring core form attributes.
+			if($isForm && in_array($k, $ignoredFormAttrs)) {
+				continue;
+			}
 			//
 			// Checking if it's an attribute with value or not.
 			if($v === true) {

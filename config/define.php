@@ -144,6 +144,7 @@ define('GC_AFIELD_TOP', 'top');
 define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
 define('GC_AFIELD_TYPES', 'types');
+define('GC_AFIELD_VALUES', 'values');
 // @}
 //
 // Directories @{
@@ -357,7 +358,8 @@ define('GC_FORMS_BUILDMODE_VIEW', 'view');
 //
 // Field type.
 define('GC_FORMS_FIELDTYPE_ENUM', 'enum');
-define('GC_FORMS_FIELDTYPE_INPUT', 'inout');
+define('GC_FORMS_FIELDTYPE_HIDDEN', 'hidden');
+define('GC_FORMS_FIELDTYPE_INPUT', 'input');
 define('GC_FORMS_FIELDTYPE_PASSWORD', 'password');
 define('GC_FORMS_FIELDTYPE_TEXT', 'text');
 //

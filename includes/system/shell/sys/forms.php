@@ -22,6 +22,8 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionAddButton = 'AddButton';
 	const OptionAddField = 'AddField';
 	const OptionCreate = 'Create';
+	const OptionFalse = 'False';
+	const OptionForm = 'Form';
 	const OptionMode = 'Mode';
 	const OptionModule = 'Module';
 	const OptionName = 'Name';
@@ -41,6 +43,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionSetMethod = 'SetMethod';
 	const OptionSetName = 'SetName';
 	const OptionSetType = 'SetType';
+	const OptionTrue = 'True';
 	const OptionType = 'Type';
 	const OptionValue = 'Value';
 	//
@@ -72,40 +75,56 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text = "This options remove a Forms Builder specification file.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "This method sets the configuration for the attribute 'action' of a form.\n";
-		$text.= "It must be use along with option '--value'";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetAction, array('--set-action', '-sA'), Option::TypeValue, $text, 'form-name'));
+		$text = "This option sets the configuration for the attribute 'action' of a form.\n";
+		$text.= "It must be use along with option '--form'";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetAction, array('--set-action', '-sA'), Option::TypeValue, $text, 'form-action'));
 
-		$text = "This method sets the configuration for the attribute 'method' of a form.\n";
-		$text.= "It must be use along with option '--value'";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetMethod, array('--set-method', '-sM'), Option::TypeValue, $text, 'form-name'));
+		$text = "This option sets the configuration for the attribute 'method' of a form.\n";
+		$text.= "It must be use along with option '--form'";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetMethod, array('--set-method', '-sM'), Option::TypeValue, $text, 'form-method'));
 
-		$text = "This method sets name of form (it doesn't change file names).\n";
-		$text.= "It must be use along with option '--value'";
+		$text = "This option set a name to a form to be used for ID and other main properties (it doesn't change file names).\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetName, array('--set-name', '-sN'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "This method sets the form's type.\n";
-		$text.= "It must be use along with option '--type'";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetType, array('--set-type', '-sT'), Option::TypeValue, $text, 'form-name'));
+		$text = "This option sets the form's type.\n";
+		$text.= "It must be use along with option '--form'";
+		$text.= "Available values are:";
+		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
+			$text.= "\n\t- '{$type}'";
+		}
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetType, array('--set-type', '-sT'), Option::TypeValue, $text, 'form-type'));
 
 		$text = "This option appends a new field to a form specification.\n";
 		$text.= "It requires options:\n";
-		$text.= "\t'--name': Specifying a name for the field.\n";
+		$text.= "\t'--form': Specifying form's name.\n";
 		$text.= "\t'--type': Specifying a type for the field.\n";
 		$text.= "Optional options:\n";
 		$text.= "\t'--value': Specifying a default value.\n";
-		$this->_options->addOption(Option::EasyFactory(self::OptionAddField, array('--add-field', '-af'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionAddField, array('--add-field', '-af'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionAddButton, array('--add-button', '-ab'), Option::TypeValue, $text, 'form-name'));
+		$text = "This option appends a button definition.\n";
+		$text.= "It must be use along with option '--form'";
+		$this->_options->addOption(Option::EasyFactory(self::OptionAddButton, array('--add-button', '-ab'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetFormAttribute, array('--set-attribute', '-sfa'), Option::TypeValue, $text, 'form-name'));
+		$text = "This option set a specific form attribute value.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--value' or '--true'; Attribute's value.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFormAttribute, array('--set-attribute', '-sfa'), Option::TypeValue, $text, 'attribute-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option set a specific field attribute value.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--name': Attribute's name.\n";
+		$text.= "\t'--value' or '--true'; Attribute's value.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sa'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option set a specific field attribute value.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--name': Attribute's name.\n";
+		$text.= "\t'--value' or '--true'; Attribute's value.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonAttribute, array('--set-button-attribute', '-sba'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "@TODO code it.";
@@ -132,14 +151,23 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text = "@TODO code it.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonAttribute, array('--remove-button-attribute', '-rba'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "@TODO code it.";
+		$text = 'Indicates which form building mode is being affected by current command.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionMode, array('--mode', '-m'), Option::TypeValue, $text, 'form-mode'));
+
+		$text = 'Indicates which form is being affected by current command.';
+		$this->_options->addOption(Option::EasyFactory(self::OptionForm, array('--form', '-f'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "Some specific name required by another option.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionName, array('--name', '-n'), Option::TypeValue, $text, 'name'));
 
 		$text = "Some specific value required by another option.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionValue, array('--value', '-v'), Option::TypeValue, $text, 'value'));
+
+		$text = "Some negative value required by another option.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionFalse, array('--false', '-no', '-N'), Option::TypeNoValue, $text));
+
+		$text = "Some positive value required by another option.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionTrue, array('--true', '-yes', '-Y'), Option::TypeNoValue, $text));
 
 		$text = "Some specific type required by another option.\n";
 		$text.= "When used with '--add-field' available options are:\n";
@@ -151,33 +179,68 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t- '".GC_FORMS_BOTTONTYPE_SUBMIT."'\n";
 		$text.= "\t- '".GC_FORMS_BOTTONTYPE_RESET."'\n";
 		$text.= "\t- '".GC_FORMS_BOTTONTYPE_BUTTON."' (default)\n";
-		$text.= "When used with '--set-type' available options are:";
-		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
-			$text.= "\n\t- '{$type}'";
-		}
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-M'), Option::TypeValue, $text, 'module-name'));
 	}
 	protected function taskAddButton($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$buttonName = $this->params->opt->{self::OptionAddButton};
+		$buttonType = $this->params->opt->{self::OptionType};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!$buttonType) {
+			$this->setError(self::ErrorWrongParameters, "No button type specified");
+		} elseif(!in_array($buttonType, array(GC_FORMS_BOTTONTYPE_BUTTON, GC_FORMS_BOTTONTYPE_RESET, GC_FORMS_BOTTONTYPE_SUBMIT))) {
+			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Adding field '{$buttonName}' to form '{$formName}': ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$error = false;
+				$writer = new FormWriter($form);
+				$writer->addButton($buttonName, $buttonType, $formMode, $error);
+
+				if($writer->dirty() || $error) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed").' (Error: '.Color::Yellow($error).")\n";
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskAddField($spacer = "") {
 		//
 		// Default values.
-		$formName = $this->params->opt->{self::OptionAddField};
+		$fieldName = $this->params->opt->{self::OptionAddField};
+		$fieldType = $this->params->opt->{self::OptionType};
+		$formName = $this->params->opt->{self::OptionForm};
 		//
 		// Checking params.
-		if(!$this->params->opt->{self::OptionName}) {
-			$this->setError(self::ErrorWrongParameters, "No field name specified.");
-		} elseif(!$this->params->opt->{self::OptionType}) {
-			$this->setError(self::ErrorWrongParameters, "No field type specified.");
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!$fieldType) {
+			$this->setError(self::ErrorWrongParameters, "No field type specified");
 		} else {
-			//
-			// Loading parameters.
-			$fieldName = $this->params->opt->{self::OptionName};
-			$fieldType = $this->params->opt->{self::OptionType};
 			//
 			// Loading helpers.
 			$this->loadHelpers();
@@ -190,17 +253,18 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			if(!$form->path()) {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
+				$error = false;
 				$writer = new FormWriter($form);
-				$writer->addField($fieldName, $fieldType);
+				$writer->addField($fieldName, $fieldType, $error);
 				if(isset($this->params->opt->{self::OptionValue})) {
 					$writer->setFieldDefault($fieldName, $this->params->opt->{self::OptionValue});
 				}
 
-				if($writer->dirty()) {
+				if($writer->dirty() || $error) {
 					if($writer->save()) {
 						echo Color::Green("Done\n");
 					} else {
-						echo Color::Red("Failed\n");
+						echo Color::Red("Failed").' (Error: '.Color::Yellow($error).")\n";
 					}
 				} else {
 					echo Color::Yellow('Ignored')." (No changes were made)\n";
@@ -272,32 +336,33 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	protected function taskSetAction($spacer = "") {
 		//
 		// Default values.
-		$name = $this->params->opt->{self::OptionSetAction};
-		$mode = $this->params->opt->{self::OptionMode};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		$formAction = $this->params->opt->{self::OptionSetAction};
 		//
 		// Checking params.
-		if(!$this->params->opt->{self::OptionValue}) {
-			$this->setError(self::ErrorWrongParameters, "No value specified.");
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting form '{$name}' action";
-			if($mode) {
-				echo " (for mode '{$mode}'): ";
+			echo "{$spacer}Setting form '{$formName}' action";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
 			} else {
 				echo ": ";
 			}
 			//
 			// Loading form.
-			$form = new Form($name);
+			$form = new Form($formName);
 			if(!$form->path()) {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
 				$writer = new FormWriter($form);
-				$writer->setAction($this->params->opt->{self::OptionValue}, $mode);
+				$writer->setAction($formAction, $formMode);
 
 				if($writer->dirty()) {
 					if($writer->save()) {
@@ -312,43 +377,162 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		}
 	}
 	protected function taskSetButtonAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetFieldAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetFormAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
-	}
-	protected function taskSetMethod($spacer = "") {
 		//
 		// Default values.
-		$name = $this->params->opt->{self::OptionSetMethod};
-		$mode = $this->params->opt->{self::OptionMode};
+		$buttonName = $this->params->opt->{self::OptionSetButtonAttribute};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		$attrName = $this->params->opt->{self::OptionName};
+		$attrValue = $this->params->opt->{self::OptionValue} ? $this->params->opt->{self::OptionValue} : (isset($this->params->opt->{self::OptionTrue}) ? true : false);
 		//
 		// Checking params.
-		if(!$this->params->opt->{self::OptionValue}) {
-			$this->setError(self::ErrorWrongParameters, "No value specified.");
+		if(!$attrName) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$attrValue) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting form '{$name}' method";
-			if($mode) {
-				echo " (for mode '{$mode}'): ";
+			echo "{$spacer}Setting button '{$buttonName}' attribute '{$attrName}' (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setButtonAttribute($buttonName, $attrName, $attrValue, $formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetFieldAttribute($spacer = "") {
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionSetFieldAttribute};
+		$formName = $this->params->opt->{self::OptionForm};
+		$attrName = $this->params->opt->{self::OptionName};
+		$attrValue = $this->params->opt->{self::OptionValue} ? $this->params->opt->{self::OptionValue} : (isset($this->params->opt->{self::OptionTrue}) ? true : false);
+		//
+		// Checking params.
+		if(!$attrName) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$attrValue) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting field '{$fieldName}' attribute '{$attrName}' (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setFieldAttribute($fieldName, $attrName, $attrValue);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetFormAttribute($spacer = "") {
+		//
+		// Default values.
+		$attrName = $this->params->opt->{self::OptionSetFormAttribute};
+		$attrValue = isset($this->params->opt->{self::OptionValue}) ? $this->params->opt->{self::OptionValue} : (isset($this->params->opt->{self::OptionTrue}) ? true : false);
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!$attrValue) {
+			$this->setError(self::ErrorWrongParameters, "No attribute value specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting form '{$formName}' attribute '{$attrName}': ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setAttribute($attrName, $attrValue);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetMethod($spacer = "") {
+		//
+		// Default values.
+		$formMethod = $this->params->opt->{self::OptionSetMethod};
+		$formMode = $this->params->opt->{self::OptionMode};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting form '{$formName}' method";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
 			} else {
 				echo ": ";
 			}
 			//
 			// Loading form.
-			$form = new Form($name);
+			$form = new Form($formName);
 			if(!$form->path()) {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
 				$writer = new FormWriter($form);
-				$writer->setMethod($this->params->opt->{self::OptionValue}, $mode);
+				$writer->setMethod($formMethod, $formMode);
 
 				if($writer->dirty()) {
 					if($writer->save()) {
@@ -366,31 +550,26 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Default values.
 		$name = $this->params->opt->{self::OptionSetName};
-		$mode = $this->params->opt->{self::OptionMode};
+		$formName = $this->params->opt->{self::OptionForm};
 		//
 		// Checking params.
-		if(!$this->params->opt->{self::OptionValue}) {
-			$this->setError(self::ErrorWrongParameters, "No value specified.");
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting form '{$name}' name";
-			if($mode) {
-				echo " (for mode '{$mode}'): ";
-			} else {
-				echo ": ";
-			}
+			echo "{$spacer}Setting form '{$formName}' name: ";
 			//
 			// Loading form.
-			$form = new Form($name);
+			$form = new Form($formName);
 			if(!$form->path()) {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
 				$writer = new FormWriter($form);
-				$writer->setName($this->params->opt->{self::OptionValue}, $mode);
+				$writer->setName($name);
 
 				if($writer->dirty()) {
 					if($writer->save()) {
@@ -407,26 +586,32 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	protected function taskSetType($spacer = "") {
 		//
 		// Default values.
-		$name = $this->params->opt->{self::OptionSetType};
+		$formType = $this->params->opt->{self::OptionSetType};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Global dependencies.
+		global $Defaults;
 		//
 		// Checking params.
-		if(!$this->params->opt->{self::OptionType}) {
-			$this->setError(self::ErrorWrongParameters, "No type specified.");
+		if(!$formType) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!isset($Defaults[GC_DEFAULTS_FORMS_TYPES][$formType])) {
+			$this->setError(self::ErrorWrongParameters, "Unknown type '{$formType}'");
 		} else {
 			//
 			// Loading helpers.
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting form '{$name}' type: ";
+			echo "{$spacer}Setting form '{$formName}' type: ";
 			//
 			// Loading form.
-			$form = new Form($name);
+			$form = new Form($formName);
 			if(!$form->path()) {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
 				$writer = new FormWriter($form);
-				$writer->setType($this->params->opt->{self::OptionType});
+				$writer->setType($formType);
 
 				if($writer->dirty()) {
 					if($writer->save()) {

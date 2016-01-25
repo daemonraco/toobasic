@@ -42,7 +42,7 @@ class BootstrapType extends FormType {
 			$out.= " id=\"{$this->_config->form->name}\"";
 		}
 		$out.= " action=\"{$this->action($mode)}\" method=\"{$this->method($mode)}\"";
-		$out.= $this->attrsToString($this->attrs($mode));
+		$out.= $this->attrsToString($this->attrs($mode), true);
 		$out.= ">\n";
 		//
 		// Fields.
