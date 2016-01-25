@@ -51,9 +51,9 @@ class Form {
 		//
 		// Saving name.
 		$this->_name = $name;
-			//
-			// Global dependencies.
-			global $Paths;
+		//
+		// Global dependencies.
+		global $Paths;
 		//
 		// Guessing names.
 		$fileName = Names::SnakeFilename($this->name());
@@ -61,6 +61,19 @@ class Form {
 	}
 	//
 	// Public methods.
+	public function action($mode = false) {
+		//
+		// Loading all required settings.
+		$this->load();
+
+		$out = isset($this->_config->form->action) ? $this->_config->form->action : '#';
+
+		if($mode && isset($this->_config->form->modes->{$mode}->action)) {
+			$out = $this->_config->form->modes->{$mode}->action;
+		}
+
+		return $out;
+	}
 	/**
 	 * This method generates an HTML form based on this form's configuration
 	 * using the proper builder.
@@ -109,6 +122,26 @@ class Form {
 
 		return $this->_config;
 	}
+	public function method($mode = false) {
+		//
+		// Loading all required settings.
+		$this->load();
+
+		$out = isset($this->_config->form->method) ? $this->_config->form->method : '#';
+
+		if($mode && isset($this->_config->form->modes->{$mode}->method)) {
+			$out = $this->_config->form->modes->{$mode}->method;
+		}
+
+		return $out;
+	}
+	public function modes() {
+		//
+		// Loading all required settings.
+		$this->load();
+
+		return isset($this->_config->form->modes) ? array_keys(get_object_vars($this->_config->form->modes)) : array();
+	}
 	/**
 	 * This method provides access to this form's name.
 	 *
@@ -133,6 +166,16 @@ class Form {
 	public function status() {
 		$this->load();
 		return $this->_status;
+	}
+	public function type() {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Loading all required settings.
+		$this->load();
+
+		return isset($this->_config->form->type) ? $this->_config->form->type : $Defaults[GC_DEFAULTS_FORMS_TYPE];
 	}
 	//
 	// Protected methods.

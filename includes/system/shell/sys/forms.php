@@ -22,6 +22,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionAddButton = 'AddButton';
 	const OptionAddField = 'AddField';
 	const OptionCreate = 'Create';
+	const OptionDescribe = 'Describe';
 	const OptionFalse = 'False';
 	const OptionForm = 'Form';
 	const OptionMode = 'Mode';
@@ -68,12 +69,15 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 
 		$this->_options->setHelpText("This tool allows you to create, modify and remove Forms Builder specification files.");
 
-		$text = "This options create a basic Forms Builder specification file.\n";
+		$text = "This option creates a basic Forms Builder specification file.\n";
 		$text.= "It can be use with '--module' to generate the specification inside certain module";
 		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "This options remove a Forms Builder specification file.";
+		$text = "This option removes a Forms Builder specification file.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'form-name'));
+
+		$text = "This option display a Forms Builder specification information.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionDescribe, array('--describe', '-d'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option sets the configuration for the attribute 'action' of a form.\n";
 		$text.= "It must be use along with option '--form'";
@@ -85,7 +89,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "This option set a name to a form to be used for ID and other main properties (it doesn't change file names).\n";
 		$text.= "It must be use along with option '--form'";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetName, array('--set-name', '-sN'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetName, array('--set-name', '-sN'), Option::TypeValue, $text, 'new-form-name'));
 
 		$text = "This option sets the form's type.\n";
 		$text.= "It must be use along with option '--form'";
@@ -118,7 +122,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.\n";
 		$text.= "\t'--value' or '--true'; Attribute's value.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sa'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sa'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "This option set a specific field attribute value.\n";
 		$text.= "It must be use along with options:\n";
@@ -128,28 +132,28 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonAttribute, array('--set-button-attribute', '-sba'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveAction, array('--remove-action', '-rA'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveAction, array('--remove-action', '-rA'), Option::TypeNoValue, $text));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveMethod, array('--remove-method', '-rM'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveMethod, array('--remove-method', '-rM'), Option::TypeNoValue, $text));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveName, array('--remove-name', '-rN'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveName, array('--remove-name', '-rN'), Option::TypeNoValue, $text));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveField, array('--remove-field', '-rf'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveField, array('--remove-field', '-rf'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButton, array('--remove-button', '-rb'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButton, array('--remove-button', '-rb'), Option::TypeValue, $text, 'button-name'));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFormAttribute, array('--remove-attribute', '-ra'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFormAttribute, array('--remove-attribute', '-ra'), Option::TypeValue, $text, 'attribute-name'));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldAttribute, array('--remove-field-attribute', '-rfa'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldAttribute, array('--remove-field-attribute', '-rfa'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "@TODO code it.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonAttribute, array('--remove-button-attribute', '-rba'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonAttribute, array('--remove-button-attribute', '-rba'), Option::TypeValue, $text, 'button-name'));
 
 		$text = 'Indicates which form building mode is being affected by current command.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionMode, array('--mode', '-m'), Option::TypeValue, $text, 'form-mode'));
@@ -176,9 +180,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t- '".GC_FORMS_FIELDTYPE_TEXT."'\n";
 		$text.= "\t- '".GC_FORMS_FIELDTYPE_ENUM."' (it should be used as: 'enum:VALUE1:VALUE2:OTHERVALUE')\n";
 		$text.= "When used with '--add-button' available options are:\n";
-		$text.= "\t- '".GC_FORMS_BOTTONTYPE_SUBMIT."'\n";
-		$text.= "\t- '".GC_FORMS_BOTTONTYPE_RESET."'\n";
-		$text.= "\t- '".GC_FORMS_BOTTONTYPE_BUTTON."' (default)\n";
+		$text.= "\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'\n";
+		$text.= "\t- '".GC_FORMS_BUTTONTYPE_RESET."'\n";
+		$text.= "\t- '".GC_FORMS_BUTTONTYPE_BUTTON."' (default)\n";
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
@@ -197,7 +201,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			$this->setError(self::ErrorWrongParameters, "No form name specified");
 		} elseif(!$buttonType) {
 			$this->setError(self::ErrorWrongParameters, "No button type specified");
-		} elseif(!in_array($buttonType, array(GC_FORMS_BOTTONTYPE_BUTTON, GC_FORMS_BOTTONTYPE_RESET, GC_FORMS_BOTTONTYPE_SUBMIT))) {
+		} elseif(!in_array($buttonType, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
 			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
 		} else {
 			//
@@ -270,6 +274,35 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 					echo Color::Yellow('Ignored')." (No changes were made)\n";
 				}
 			}
+		}
+	}
+	protected function taskDescribe($spacer = "") {
+		//
+		// Default values.
+		$name = $this->params->opt->{self::OptionDescribe};
+		//
+		// Loading helpers.
+		$this->loadHelpers();
+		//
+		// Checking parameters.
+		$form = new Form($name);
+		if($form->path()) {
+			//
+			// Descriving form.
+			echo "{$spacer}Descriving form '{$name}':\n";
+			echo "{$spacer}\tType:   '".Color::Green($form->type())."'\n";
+			echo "{$spacer}\tAction: '".Color::Green($form->action())."'\n";
+			echo "{$spacer}\tMethod: '".Color::Green($form->method())."'\n";
+
+			$modes = $form->modes();
+			sort($modes);
+			foreach($modes as $mode) {
+				echo "\n{$spacer}\tIn mode '".Color::Yellow($mode)."':\n";
+				echo "{$spacer}\t\tAction: '".Color::Green($form->action($mode))."'\n";
+				echo "{$spacer}\t\tMethod: '".Color::Green($form->method($mode))."'\n";
+			}
+		} else {
+			$this->setError(self::ErrorWrongParameters, "Unknown form called '{$name}'");
 		}
 	}
 	protected function taskCreate($spacer = "") {
@@ -469,6 +502,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$attrName = $this->params->opt->{self::OptionSetFormAttribute};
 		$attrValue = isset($this->params->opt->{self::OptionValue}) ? $this->params->opt->{self::OptionValue} : (isset($this->params->opt->{self::OptionTrue}) ? true : false);
 		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
 		//
 		// Checking params.
 		if(!$formName) {
@@ -481,7 +515,12 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting form '{$formName}' attribute '{$attrName}': ";
+			echo "{$spacer}Setting form '{$formName}' attribute '{$attrName}'";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
+			} else {
+				echo ": ";
+			}
 			//
 			// Loading form.
 			$form = new Form($formName);
@@ -489,7 +528,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
 			} else {
 				$writer = new FormWriter($form);
-				$writer->setAttribute($attrName, $attrValue);
+				$writer->setAttribute($attrName, $attrValue, $formMode);
 
 				if($writer->dirty()) {
 					if($writer->save()) {

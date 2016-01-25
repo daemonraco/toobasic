@@ -72,6 +72,8 @@ define('GC_AFIELD_BEFORE_CREATE', 'before_create');
 define('GC_AFIELD_BEFORE_DROP', 'before_drop');
 define('GC_AFIELD_BEFORE_UPDATE', 'before_update');
 define('GC_AFIELD_BOTTOM', 'bottom');
+define('GC_AFIELD_BUTTON', 'bottom');
+define('GC_AFIELD_BUTTONS', 'bottoms');
 define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
 define('GC_AFIELD_CACHED', 'cached');
 define('GC_AFIELD_CALLBACKS', 'callbacks');
@@ -89,6 +91,8 @@ define('GC_AFIELD_END', 'end');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
+define('GC_AFIELD_FIELD', 'field');
+define('GC_AFIELD_FIELDS', 'fields');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
@@ -364,8 +368,8 @@ define('GC_FORMS_FIELDTYPE_PASSWORD', 'password');
 define('GC_FORMS_FIELDTYPE_TEXT', 'text');
 //
 // Button types.
-define('GC_FORMS_BOTTONTYPE_BUTTON', 'button');
-define('GC_FORMS_BOTTONTYPE_RESET', 'reset');
-define('GC_FORMS_BOTTONTYPE_SUBMIT', 'submit');
+define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
+define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
+define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 // @}
 // @}

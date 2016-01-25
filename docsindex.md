@@ -178,7 +178,16 @@
 * [What is Forms Builder?](docs/forms.md#what-is-forms-builder)
 * [Example](docs/forms.md#example)
 * [Using forms](docs/forms.md#using-forms)
-* [Generating forms](docs/forms.md#generating-forms)
+	* [Creating a form](docs/forms.md#creating-a-form)
+	* [Form name](docs/forms.md#form-name)
+	* [Form action and method](docs/forms.md#form-action-and-method)
+	* [Form type](docs/forms.md#form-type)
+	* [Form attributes](docs/forms.md#form-attributes)
+	* [Form fields](docs/forms.md#form-fields)
+* [Views](docs/forms.md#views)
+	* [Create view](docs/forms.md#create-view)
+* [Removing](docs/forms.md#removing)
+* [Extras parameters](docs/forms.md#extras-parameters)
 * [Suggestions](docs/forms.md#suggestions)
 
 ##  Installation (docs/install.md):

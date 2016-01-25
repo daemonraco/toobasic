@@ -74,7 +74,7 @@ function LoadFiles() {
 		aux="";
 		for p in $P_FILES; do
 			if [ -n "$(echo "${p}"|grep '\/$')" ]; then
-				aux="${aux} $(find $p -type f -maxdepth 1|grep '\.md$'|sort|grep -v "${P_GLOSSARY_PATH}")";
+				aux="${aux} $(find $p -maxdepth 1 -type f|grep '\.md$'|sort|grep -v "${P_GLOSSARY_PATH}")";
 			else
 				aux="${aux} ${p}";
 			fi;

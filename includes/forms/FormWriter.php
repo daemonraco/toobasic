@@ -33,6 +33,12 @@ class FormWriter {
 	protected $_path = false;
 	//
 	// Magic methods.
+	/**
+	 * Class constructor.
+	 *
+	 * @param \TooBasic\Forms\Form $form Form to mange.
+	 * @throws \TooBasic\Forms\FormsException
+	 */
 	public function __construct(Form $form) {
 		//
 		// Shortcut.
@@ -54,7 +60,7 @@ class FormWriter {
 		$ok = true;
 		//
 		// Checking type.
-		if(!in_array($type, array(GC_FORMS_BOTTONTYPE_BUTTON, GC_FORMS_BOTTONTYPE_RESET, GC_FORMS_BOTTONTYPE_SUBMIT))) {
+		if(!in_array($type, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
 			$error = "Unknown type '{$type}'";
 			$ok = false;
 		}

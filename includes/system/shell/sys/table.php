@@ -463,7 +463,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Default values.
 		$out = true;
-		$formName = "table_{$this->_names['plural-name']}";
+		$formPath = pathinfo($path);
+		$formName = $formPath['filename'];
 		//
 		// Removing when forced.
 		if($this->isForced()) {
@@ -580,6 +581,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Table specs.
 		$table = new \stdClass();
 		$table->version = 1;
+		$table->usesFormBuilder = $this->_names['form-builder'];
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
@@ -698,6 +700,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Table specs.
 		$table = new \stdClass();
 		$table->version = 2;
+		$table->usesFormBuilder = $this->_names['form-builder'];
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
