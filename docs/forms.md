@@ -44,8 +44,10 @@ Let's say you want to use a single form definition for all your room controllers
 The next sections will guide you in how to do such a thing.
 
 ### Warning
-This example will be build step by step so you can see how to create a complete
+This example will be built step by step so you can see how to create a complete
 form with its details using commands.
+But that can be a little tedious, so, if you simply want to create a basic form,
+[this link](tech/qforms.md) may be of more use.
 
 ## Using forms
 ### Creating a form
@@ -221,27 +223,10 @@ __Warning__: Again, you should have in mind that these labels won't show directl
 they will always be considered as translation keys and they'll be translated at
 building time.
 
-
-
-
-
-
-
-
-
-@TODO
-
-
-
-
-
-
-
-
 ### Commands summary
-By new you may be confused on what commands we've run and what command was just an
-example so let's show a full list of commands we considered to be run in our
-example:
+By now you may be confused on what commands we've run and what command was just
+used as an example, so let's show a full list of commands we considered to be run
+in our example:
 ```text
 $ php shell.php sys forms create table_rooms
 $ php shell.php sys forms --set-name my_form --form table_rooms
@@ -276,11 +261,22 @@ $ php shell.php sys forms --set-button-attribute clear --name class --value btn-
 $ php shell.php sys forms --set-button-attribute delete --name class --value 'btn-sm btn-danger' --form table_rooms --mode remove
 $ php shell.php sys forms --set-button-label delete --value 'btn_delete_room' --form table_rooms --mode remove
 ```
+Quite a lot, but this is the base for a good example.
 
 ## Views
-Now that you have your definition, you can use it in your view and we are going to
-explain the difference for each one.
-Now _modes_ have a meaning.
+Now that you have your definition, you can use it in your views and we are going
+to explain the difference for each one.
+Now _modes_ will make more sense.
+
+### _$ctrl->formFor()_
+_Forms Builder_ provides you with a special function for you _Smarty_ templates
+called `formFor` that allows you to render and insert a form based on one of your
+configurations.
+Such function requires three parameters and these are:
+
+* __specification__: Name of your form specification.
+* __item__: An associative array with values that can be used to fill your for.
+* __mode__: Mode in which the form has to be built.
 
 ### Create view
 Let's edit you view `room_create.html` and write something like this inside (using
@@ -289,8 +285,67 @@ _Smarty_):
 {$ctrl->formFor('table_rooms', false, 'create')}
 ```
 This simple command will trigger the building of form `table_rooms` and generate
-for mode `create`, this will basically means that all form controls will be shown
-with their default values.
+it for mode `create`, this will basically means that all form controls will be
+shown with their default values.
+Even if the second parameters is other than `false`, it will be ignored.
+
+The result you'll get will look like this:
+
+<center>![](docs/images/forms/room_create.png)</center>
+
+As we mention before, all labels are _translation keys_ which means you need to
+define them.
+Visit [this link](docs/language.md) for more information about it.
+
+### Show view
+Before we talk about how it looks like, let's make a modification in your
+controller `room.php`. let's say we change it's default method into something like
+this:
+```php
+protected function basicRun() {
+	$room = $this->representation->rooms->item($this->params->get->id);
+	$this->assign('room', $room ? $room->toArray() : false);
+
+	return $this->status();
+}
+```
+With that in mind, and supposing that you have all required representations
+implemented, we're going to write something like this in your view `room.html`:
+```html
+{$ctrl->formFor('table_rooms', $room, 'view')}
+```
+And it may look like this:
+
+<center>![](docs/images/forms/room.png)</center>
+
+Now, the two major differences you'll find is that this form has all field flagged
+as read only and it's using the information from your item to fill each field with
+some initial values.
+
+### Edit view
+Using this for view `room_edit.html`:
+```html
+{$ctrl->formFor('table_rooms', $room, 'edit')}
+```
+You'll get something like this:
+
+<center>![](docs/images/forms/room_edit.png)</center>
+
+This is similar to the previous example, but all field can be modified.
+
+## Remove view
+And using this for view `room_delete.html`:
+```html
+{$ctrl->formFor('table_rooms', $room, 'remove')}
+```
+You'll get something like this:
+
+<center>![](docs/images/forms/room_delete.png)</center>
+
+Here the differences are all fields in read-only mode and the red button we set
+before with our commands.
+Also, if you click the red button, it will present a confirmation modal and
+then send data, also set by our commands.
 
 ## Removing
 
@@ -304,3 +359,5 @@ If you want or need it, you may visit these documentation pages:
 
 * [Quick Forms](tech/qforms.md)
 * [Forms Specifications](tech/forms.md)
+* [Languages](docs/language.md)
+* [Representations](docs/representations.md)

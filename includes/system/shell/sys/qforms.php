@@ -74,10 +74,10 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t- 2nd: Button type.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionButton, array('--button', '-b'), Option::TypeMultiValue, $text, 'name:type'));
 
-		$text = "TODO help text";
+		$text = "This option specifies the default URL where a form should submit its data.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionAction, array('--action', '-a'), Option::TypeValue, $text, 'action'));
 
-		$text = "TODO help text";
+		$text = "This option specifies which method should be used when the form is submitted.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionMethod, array('--method', '-m'), Option::TypeValue, $text, 'method'));
 
 		$text = "This option specifies a form type. Available values are:";
@@ -86,10 +86,10 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		}
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
 
-		$text = "TODO help text";
+		$text = "Generate files inside a module.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-M'), Option::TypeValue, $text, 'name'));
 
-		$text = "TODO help text";
+		$text = "This option forces the creation of this form previously removing other definition sharing the same name.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced', '-F'), Option::TypeNoValue, $text));
 
 		$text = "This option adds some automatic twiks for bootstrap. Available values are:\n";
