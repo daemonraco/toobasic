@@ -295,7 +295,7 @@ The result you'll get will look like this:
 
 As we mention before, all labels are _translation keys_ which means you need to
 define them.
-Visit [this link](docs/language.md) for more information about it.
+Visit [this link](language.md) for more information about it.
 
 ### Show view
 Before we talk about how it looks like, let's make a modification in your
@@ -359,5 +359,5 @@ If you want or need it, you may visit these documentation pages:
 
 * [Quick Forms](tech/qforms.md)
 * [Forms Specifications](tech/forms.md)
-* [Languages](docs/language.md)
-* [Representations](docs/representations.md)
+* [Languages](language.md)
+* [Representations](representations.md)
