@@ -43,6 +43,10 @@ Let's say you want to use a single form definition for all your room controllers
 (except controller `rooms`) and then invoke it inside your view.
 The next sections will guide you in how to do such a thing.
 
+### Warning
+This example will be build step by step so you can see how to create a complete
+form with its details using commands.
+
 ## Using forms
 ### Creating a form
 the first thing to do is to create an initial definition for our form and for that
@@ -154,8 +158,9 @@ $ php shell.php sys forms --add-field status --type enum:AVAILABLE:OCCUPIED:REPA
 This with specify our six fields with their types, and in the case of `status`, it
 will also tell which values are accepted and the default value for it.
 
-But let's go a little further, since we're using a for of type `bootstrap`, we can
-add some nice classes to our form controls, for example:
+But let's go a little further.
+Because we're using a form of type `bootstrap`, we can add some nice classes to
+our form controls, for example:
 ```text
 $ php shell.php sys forms --set-field-attribute id --name class --value input-sm --form table_rooms
 $ php shell.php sys forms --set-field-attribute name --name class --value input-sm --form table_rooms
@@ -165,6 +170,60 @@ $ php shell.php sys forms --set-field-attribute height --name class --value inpu
 $ php shell.php sys forms --set-field-attribute status --name class --value input-sm --form table_rooms
 ```
 Now our form controls will appear thinner :)
+
+### Field labels
+By default all field labels are build using field names and the prefix
+`label_formcontrol_` unless you modify them by running commands like these:
+```text
+$ php shell.php sys forms --set-field-label name --value 'table_column_name' --form table_rooms
+$ php shell.php sys forms --set-field-label description --value 'table_column_description' --form table_rooms
+$ php shell.php sys forms --set-field-label width --value 'table_column_width' --form table_rooms
+$ php shell.php sys forms --set-field-label height --value 'table_column_height' --form table_rooms
+$ php shell.php sys forms --set-field-label status --value 'table_column_status' --form table_rooms
+```
+This commands sets the label we want for our fields except field `id`, we don't
+care about its label because it's a hidden field.
+
+__Warning__: You should have in mind that these labels won't show directly, they
+will always be considered as translation keys and they'll be translated at
+building time.
+
+### Buttons
+The last part you should specify for your form are buttons and here we're going to
+make the next assumptions:
+
+* All form buttons use the style `btn-sm` for not so big buttons.
+* All form modes require a `submit` button and a `reset` except mode `remove`.
+** `submit` buttons use the style `btn-success`.
+* Form mode `remove` has only a `submit` button using the style `btn-danger`.
+
+With all this things in mind, let's run these commands to create our buttons:
+```text
+$ php shell.php sys forms --add-button send --type submit --form table_rooms
+$ php shell.php sys forms --add-button clear --type reset --form table_rooms
+$ php shell.php sys forms --add-button delete --type submit --form table_rooms --mode remove
+```
+And now let's set some styles:
+```text
+$ php shell.php sys forms --set-button-attribute send --name class --value 'btn-sm btn-success' --form table_rooms
+$ php shell.php sys forms --set-button-attribute clear --name class --value btn-sm --form table_rooms
+$ php shell.php sys forms --set-button-attribute delete --name class --value 'btn-sm btn-danger' --form table_rooms --mode remove
+```
+
+### Button labels
+By default, all buttons get a label using its name and the prefix `btn_`, but you
+can change this using a command like this one:
+```text
+$ php shell.php sys forms --set-button-label delete --value 'btn_delete_room' --form table_rooms --mode remove
+```
+
+__Warning__: Again, you should have in mind that these labels won't show directly,
+they will always be considered as translation keys and they'll be translated at
+building time.
+
+
+
+
 
 
 
@@ -177,6 +236,46 @@ Now our form controls will appear thinner :)
 
 
 
+
+
+### Commands summary
+By new you may be confused on what commands we've run and what command was just an
+example so let's show a full list of commands we considered to be run in our
+example:
+```text
+$ php shell.php sys forms create table_rooms
+$ php shell.php sys forms --set-name my_form --form table_rooms
+$ php shell.php sys forms --set-action '?action=someaction' --form table_rooms --mode dry_test
+$ php shell.php sys forms --set-method 'post' --form table_rooms --mode dry_test
+$ php shell.php sys forms --set-type bootstrap --form table_rooms
+$ php shell.php sys forms --set-attribute role --value form --form table_rooms
+$ php shell.php sys forms --set-attribute onsubmit --value "return confirm('Are you sure you want to remove this room?')" --form table_rooms --mode remove
+$ php shell.php sys forms --set-attribute ng-non-bindable --true --form table_rooms
+$ php shell.php sys forms --add-field id --type hidden --form table_rooms
+$ php shell.php sys forms --add-field name --type input --form table_rooms
+$ php shell.php sys forms --add-field description --type text --form table_rooms
+$ php shell.php sys forms --add-field width --type input --form table_rooms
+$ php shell.php sys forms --add-field height --type input --form table_rooms
+$ php shell.php sys forms --add-field status --type enum:AVAILABLE:OCCUPIED:REPAIR:UNKNOWN --value UNKNOWN --form table_rooms
+$ php shell.php sys forms --set-field-attribute id --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-attribute name --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-attribute description --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-attribute width --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-attribute height --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-attribute status --name class --value input-sm --form table_rooms
+$ php shell.php sys forms --set-field-label name --value 'table_column_name' --form table_rooms
+$ php shell.php sys forms --set-field-label description --value 'table_column_description' --form table_rooms
+$ php shell.php sys forms --set-field-label width --value 'table_column_width' --form table_rooms
+$ php shell.php sys forms --set-field-label height --value 'table_column_height' --form table_rooms
+$ php shell.php sys forms --set-field-label status --value 'table_column_status' --form table_rooms
+$ php shell.php sys forms --add-button send --type submit --form table_rooms
+$ php shell.php sys forms --add-button clear --type reset --form table_rooms
+$ php shell.php sys forms --add-button delete --type submit --form table_rooms --mode remove
+$ php shell.php sys forms --set-button-attribute send --name class --value 'btn-sm btn-success' --form table_rooms
+$ php shell.php sys forms --set-button-attribute clear --name class --value btn-sm --form table_rooms
+$ php shell.php sys forms --set-button-attribute delete --name class --value 'btn-sm btn-danger' --form table_rooms --mode remove
+$ php shell.php sys forms --set-button-label delete --value 'btn_delete_room' --form table_rooms --mode remove
+```
 
 ## Views
 Now that you have your definition, you can use it in your view and we are going to
@@ -203,4 +302,5 @@ _Sys-tool_ `forms` also accept parameters like:
 ## Suggestions
 If you want or need it, you may visit these documentation pages:
 
+* [Quick Forms](tech/qforms.md)
 * [Forms Specifications](tech/forms.md)

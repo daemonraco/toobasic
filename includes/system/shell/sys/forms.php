@@ -32,14 +32,18 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionRemoveAction = 'RemoveAction';
 	const OptionRemoveButton = 'RemoveButton';
 	const OptionRemoveButtonAttribute = 'RemoveButtonAttribute';
+	const OptionRemoveButtonLabel = 'RemoveButtonLabel';
 	const OptionRemoveField = 'RemoveField';
 	const OptionRemoveFieldAttribute = 'RemoveFieldAttribute';
+	const OptionRemoveFieldLabel = 'RemoveFieldLabel';
 	const OptionRemoveFormAttribute = 'RemoveFormAttribute';
 	const OptionRemoveMethod = 'RemoveMethod';
 	const OptionRemoveName = 'RemoveName';
 	const OptionSetAction = 'SetAction';
 	const OptionSetButtonAttribute = 'SetButtonAttribute';
+	const OptionSetButtonLabel = 'SetButtonLabel';
 	const OptionSetFieldAttribute = 'SetFieldAttribute';
+	const OptionSetFieldLabel = 'SetFieldLabel';
 	const OptionSetFormAttribute = 'SetFormAttribute';
 	const OptionSetMethod = 'SetMethod';
 	const OptionSetName = 'SetName';
@@ -115,21 +119,27 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--value' or '--true'; Attribute's value.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetFormAttribute, array('--set-attribute', '-sfa'), Option::TypeValue, $text, 'attribute-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFormAttribute, array('--set-attribute', '-sa'), Option::TypeValue, $text, 'attribute-name'));
 
 		$text = "This option set a specific field attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.\n";
 		$text.= "\t'--value' or '--true'; Attribute's value.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sa'), Option::TypeValue, $text, 'field-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sfa'), Option::TypeValue, $text, 'field-name'));
+
+		$text = "@TODO code it.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldLabel, array('--set-field-label', '-sfl'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "This option set a specific field attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.\n";
 		$text.= "\t'--value' or '--true'; Attribute's value.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonAttribute, array('--set-button-attribute', '-sba'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonAttribute, array('--set-button-attribute', '-sba'), Option::TypeValue, $text, 'button-name'));
+
+		$text = "@TODO code it.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonLabel, array('--set-button-label', '-sbl'), Option::TypeValue, $text, 'button-name'));
 
 		$text = "@TODO code it.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveAction, array('--remove-action', '-rA'), Option::TypeNoValue, $text));
@@ -153,7 +163,13 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldAttribute, array('--remove-field-attribute', '-rfa'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "@TODO code it.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldLabel, array('--remove-field-label', '-rfl'), Option::TypeValue, $text, 'field-name'));
+
+		$text = "@TODO code it.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonAttribute, array('--remove-button-attribute', '-rba'), Option::TypeValue, $text, 'button-name'));
+
+		$text = "@TODO code it.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonLabel, array('--remove-button-label', '-rbl'), Option::TypeValue, $text, 'button-name'));
 
 		$text = 'Indicates which form building mode is being affected by current command.';
 		$this->_options->addOption(Option::EasyFactory(self::OptionMode, array('--mode', '-m'), Option::TypeValue, $text, 'form-mode'));
@@ -360,7 +376,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 					foreach($buttons as $buttonName) {
 						echo "{$spacer}\tButton '".Color::Green($buttonName)."':\n";
 						echo "{$spacer}\t\tType:            '".Color::Green($form->buttonType($buttonName, $mode))."':\n";
-						echo "{$spacer}\t\tID:              '".Color::Green($form->buttonId($buttonName, $mode))."':\n";
+						echo "{$spacer}\t\tID:              '".Color::Green($form->buttonId($buttonName))."':\n";
 						echo "{$spacer}\t\tLabel:           '".Color::Green($form->buttonLabel($buttonName, $mode))."':\n";
 						$attrs = get_object_vars($form->buttonAttributes($buttonName, $mode));
 						if($attrs) {
@@ -424,10 +440,16 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	protected function taskRemoveButtonAttribute($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
+	protected function taskRemoveButtonLabel($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
 	protected function taskRemoveField($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskRemoveFieldAttribute($spacer = "") {
+		debugit("TODO write some valid code for this option.", true);
+	}
+	protected function taskRemoveFieldLabel($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
 	}
 	protected function taskRemoveFormAttribute($spacer = "") {
@@ -504,7 +526,12 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Setting button '{$buttonName}' attribute '{$attrName}' (in form '{$formName}'): ";
+			echo "{$spacer}Setting button '{$buttonName}' attribute '{$attrName}' (in form '{$formName}'";
+			if($formMode) {
+				echo " and mode '{$formMode}'): ";
+			} else {
+				echo "): ";
+			}
 			//
 			// Loading form.
 			$form = new Form($formName);
@@ -513,6 +540,52 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			} else {
 				$writer = new FormWriter($form);
 				$writer->setButtonAttribute($buttonName, $attrName, $attrValue, $formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetButtonLabel($spacer = "") {
+		//
+		// Default values.
+		$buttonName = $this->params->opt->{self::OptionSetButtonLabel};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		$labelValue = $this->params->opt->{self::OptionValue};
+		//
+		// Checking params.
+		if(!$labelValue) {
+			$this->setError(self::ErrorWrongParameters, "No label value specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting button '{$buttonName}' label (in form '{$formName}'";
+			if($formMode) {
+				echo " and mode '{$formMode}'): ";
+			} else {
+				echo "): ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setButtonLabel($buttonName, $labelValue, $formMode);
 
 				if($writer->dirty()) {
 					if($writer->save()) {
@@ -556,6 +629,46 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			} else {
 				$writer = new FormWriter($form);
 				$writer->setFieldAttribute($fieldName, $attrName, $attrValue);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetFieldLabel($spacer = "") {
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionSetFieldLabel};
+		$formName = $this->params->opt->{self::OptionForm};
+		$labelValue = $this->params->opt->{self::OptionValue};
+		//
+		// Checking params.
+		if(!$labelValue) {
+			$this->setError(self::ErrorWrongParameters, "No label value specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting field '{$fieldName}' label (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setFieldLabel($fieldName, $labelValue);
 
 				if($writer->dirty()) {
 					if($writer->save()) {

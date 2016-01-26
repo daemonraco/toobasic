@@ -148,7 +148,7 @@ class BasicType extends FormType {
 		$buttons = array();
 		foreach($this->_form->buttonsFor($mode) as $buttonName) {
 			$buttonType = $this->_form->buttonType($buttonName, $mode);
-			$buttonId = $this->_form->buttonId($buttonName, $mode);
+			$buttonId = $this->_form->buttonId($buttonName);
 			$buttonAttrs = $this->_form->buttonAttributes($buttonName, $mode);
 			$buttonLabel = $this->_form->buttonLabel($buttonName, $mode);
 

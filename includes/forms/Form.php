@@ -162,21 +162,21 @@ class Form {
 		$out = false;
 		//
 		// Checking mode's buttons.
-		if($mode) {
-			if(isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
-				$out = $this->_config->form->modes->{$mode}->buttons->{$buttonName};
-			}
+		if($mode && isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
+			$out = $this->_config->form->modes->{$mode}->buttons->{$buttonName};
 		} else {
 			if(isset($this->_config->form->buttons->{$buttonName})) {
 				$out = $this->_config->form->buttons->{$buttonName};
+			} else {
+				$out = new \stdClass();
 			}
 		}
 
 		return $out;
 	}
-	public function buttonId($buttonName, $mode = false) {
-		$this->load();
-		return "{$this->_config->form->name}_{$buttonName}";
+	public function buttonId($buttonName) {
+		$name = $this->virtualName();
+		return $name ? "{$name}_{$buttonName}" : $buttonName;
 	}
 	public function buttonLabel($buttonName, $mode = false) {
 		$config = $this->buttonConfigFor($buttonName, $mode);
@@ -230,8 +230,8 @@ class Form {
 		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) ? $this->_config->form->fields->{$fieldName}->excludedModes : array();
 	}
 	public function fieldId($fieldName) {
-		$this->load();
-		return "{$this->_config->form->name}_{$fieldName}";
+		$name = $this->virtualName();
+		return $name ? "{$name}_{$fieldName}" : $fieldName;
 	}
 	public function fieldLabel($fieldName) {
 		$this->load();
