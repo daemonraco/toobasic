@@ -348,6 +348,51 @@ Also, if you click the red button, it will present a confirmation modal and
 then send data, also set by our commands.
 
 ## Removing
+Now that you know how to created and add properties to your forms, you need to be
+aware of these commands that will let you remove undesired properties.
+Let's write a list of examples of what you can do:
+```text
+#
+# Removing a specifiction file.
+$ php shell.php sys forms remove table_rooms
+#
+# Removing form's virtual name.
+$ php shell.php sys forms --remove-name --form table_rooms
+#
+# Removing form's action for method 'dry_test'.
+$ php shell.php sys forms --remove-action --form table_rooms --mode dry_test
+#
+# Removing form's method.
+$ php shell.php sys forms --remove-method 'post' --form table_rooms
+#
+# Removing form's attribute 'role'.
+$ php shell.php sys forms --remove-attribute role --form table_rooms
+#
+# Removing field 'height'.
+$ php shell.php sys forms --remove-field height --form table_rooms
+#
+# Removing field's attribute 'class' from field 'status'.
+$ php shell.php sys forms --remove-field-attribute status --name class --form table_rooms
+#
+# Removing field's label from field 'name'.
+$ php shell.php sys forms --remove-field-label name --form table_rooms
+#
+# Removing button 'delete' from mode 'remove'.
+$ php shell.php sys forms --remove-button delete --form table_rooms --mode remove
+#
+# Removing button's attribute 'class' from button 'send'.
+$ php shell.php sys forms --remove-button-attribute send --name class --form table_rooms
+#
+# Removing button's label 'class' from button 'send'.
+$ php shell.php sys forms --remove-button-label send --form table_rooms
+```
+
+## Representations?
+Well, you've read all this and you want to use it in your representations but it's
+going to a pain to do all this on each table.
+Well, don't panic because unless you use the parameter `--no-form-builder`, the
+_sys-tool_ `table` already generates a _Forms Builder_ specification for your
+table and all view (except list) use it with the proper values.
 
 ## Extras parameters
 _Sys-tool_ `forms` also accept parameters like:
@@ -357,7 +402,7 @@ _Sys-tool_ `forms` also accept parameters like:
 ## Suggestions
 If you want or need it, you may visit these documentation pages:
 
-* [Quick Forms](tech/qforms.md)
+* [Quick Forms](qforms.md)
 * [Forms Specifications](tech/forms.md)
 * [Languages](language.md)
 * [Representations](representations.md)

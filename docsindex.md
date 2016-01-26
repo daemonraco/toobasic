@@ -196,6 +196,7 @@
 	* [Edit view](docs/forms.md#edit-view)
 * [Remove view](docs/forms.md#remove-view)
 * [Removing](docs/forms.md#removing)
+* [Representations?](docs/forms.md#representations)
 * [Extras parameters](docs/forms.md#extras-parameters)
 * [Suggestions](docs/forms.md#suggestions)
 

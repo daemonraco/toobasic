@@ -65,13 +65,23 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t- 1st: Field name.\n";
 		$text.= "\t- 2nd: Field type.\n";
 		$text.= "\t- 3rd: Extra values.\n";
-		$text.= "When the type is '".GC_FORMS_FIELDTYPE_ENUM."', the 3rd piece must be a list of values also separater by colons.";
+		$text.= "When the type is '".GC_FORMS_FIELDTYPE_ENUM."', the 3rd piece must be a list of values also separater by colons.\n";
+		$text.= "Available types are:";
+		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_ENUM."'.";
+		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_HIDDEN."'.";
+		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_INPUT."'.";
+		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_PASSWORD."'.";
+		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_TEXT."'.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionField, array('--field', '-f'), Option::TypeMultiValue, $text, 'name:type:...'));
 
 		$text = "This option allows to specify a button. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
 		$text.= "\t- 1st: Button name.\n";
-		$text.= "\t- 2nd: Button type.";
+		$text.= "\t- 2nd: Button type.\n";
+		$text.= "Available types are:";
+		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_BUTTON."'.";
+		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'.";
+		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_RESET."'.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionButton, array('--button', '-b'), Option::TypeMultiValue, $text, 'name:type'));
 
 		$text = "This option specifies the default URL where a form should submit its data.";
@@ -92,9 +102,9 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text = "This option forces the creation of this form previously removing other definition sharing the same name.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced', '-F'), Option::TypeNoValue, $text));
 
-		$text = "This option adds some automatic twiks for bootstrap. Available values are:\n";
-		$text = "\t- 'thin': thin inputs.";
-		$text = "\t- 'bcolors': Green submits and default for other buttons";
+		$text = "This option adds some automatic twiks for bootstrap. Available values are:";
+		$text.= "\n\t- 'thin': thin inputs.";
+		$text.= "\n\t- 'bcolors': Green submits and default for other buttons";
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, array('--bootstrap-extras', '-bx'), Option::TypeMultiValue, $text, 'twik'));
 	}
 	protected function checkParameters() {
@@ -175,7 +185,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 
 		if($out[GC_AFIELD_STATUS]) {
 			if(isset($this->params->opt->{self::OptionAction})) {
-				$out[GC_AFIELD_STATUS] = $this->params->opt->{self::OptionAction};
+				$out[GC_AFIELD_ACTION] = $this->params->opt->{self::OptionAction};
 			}
 			if(isset($this->params->opt->{self::OptionMethod})) {
 				$out[GC_AFIELD_METHOD] = $this->params->opt->{self::OptionMethod};
@@ -186,19 +196,33 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		}
 
 		if($out[GC_AFIELD_STATUS] && isset($this->params->opt->{self::OptionBootstrapExtras})) {
+			foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
+				if(!isset($out[GC_AFIELD_FIELDS][$k]['attrs'])) {
+					$out[GC_AFIELD_FIELDS][$k]['attrs'] = array('class' => '');
+				}
+			}
+			foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
+				if(!isset($out[GC_AFIELD_BUTTONS][$k]['attrs'])) {
+					$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => '');
+				}
+			}
+
 			foreach($this->params->opt->{self::OptionBootstrapExtras} as $twik) {
 				switch($twik) {
 					case self::TwikThin:
 						foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
-							$out[GC_AFIELD_FIELDS][$k]['attrs'] = array('class' => 'input-sm');
+							$out[GC_AFIELD_FIELDS][$k]['attrs']['class'].= ' input-sm';
+						}
+						foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
+							$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'].= ' btn-sm';
 						}
 						break;
 					case self::TwikBColors:
 						foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
 							if($v[GC_AFIELD_TYPE] == GC_FORMS_BUTTONTYPE_SUBMIT) {
-								$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-success');
+								$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'].= ' btn-success';
 							} else {
-								$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-default');
+								$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'].= ' btn-default';
 							}
 						}
 						break;
@@ -206,6 +230,20 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 						$out[GC_AFIELD_STATUS] = false;
 						$out[GC_AFIELD_ERROR] = "Unknown bootstrap extra twik called '{$twik}'";
 						break;
+				}
+			}
+			//
+			// Trimming and removing empty classes.
+			foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
+				$out[GC_AFIELD_FIELDS][$k]['attrs']['class'] = trim($out[GC_AFIELD_FIELDS][$k]['attrs']['class']);
+				if(!$out[GC_AFIELD_FIELDS][$k]['attrs']['class']) {
+					unset($out[GC_AFIELD_FIELDS][$k]['attrs']['class']);
+				}
+			}
+			foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
+				$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'] = trim($out[GC_AFIELD_BUTTONS][$k]['attrs']['class']);
+				if(!$out[GC_AFIELD_BUTTONS][$k]['attrs']['class']) {
+					unset($out[GC_AFIELD_BUTTONS][$k]['attrs']['class']);
 				}
 			}
 		}
