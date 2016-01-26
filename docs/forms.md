@@ -291,7 +291,7 @@ Even if the second parameters is other than `false`, it will be ignored.
 
 The result you'll get will look like this:
 
-<center>![](docs/images/forms/room_create.png)</center>
+<center>![](images/forms/room_create.png)</center>
 
 As we mention before, all labels are _translation keys_ which means you need to
 define them.
@@ -316,7 +316,7 @@ implemented, we're going to write something like this in your view `room.html`:
 ```
 And it may look like this:
 
-<center>![](docs/images/forms/room.png)</center>
+<center>![](images/forms/room.png)</center>
 
 Now, the two major differences you'll find is that this form has all field flagged
 as read only and it's using the information from your item to fill each field with
@@ -329,7 +329,7 @@ Using this for view `room_edit.html`:
 ```
 You'll get something like this:
 
-<center>![](docs/images/forms/room_edit.png)</center>
+<center>![](images/forms/room_edit.png)</center>
 
 This is similar to the previous example, but all field can be modified.
 
@@ -340,7 +340,7 @@ And using this for view `room_delete.html`:
 ```
 You'll get something like this:
 
-<center>![](docs/images/forms/room_delete.png)</center>
+<center>![](images/forms/room_delete.png)</center>
 
 Here the differences are all fields in read-only mode and the red button we set
 before with our commands.
