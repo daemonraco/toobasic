@@ -10,6 +10,7 @@ namespace TooBasic\Forms;
 //
 // Class aliases.
 use TooBasic\MagicProp;
+use TooBasic\Managers\RoutesManager;
 use TooBasic\Names;
 use TooBasic\Paths;
 
@@ -61,15 +62,53 @@ class Form {
 	}
 	//
 	// Public methods.
+	/**
+	 * This method returns the proper form action based on its defaults and
+	 * specific values for certain mode.
+	 *
+	 * @param string $mode Mode to be used when checking action.
+	 * @return string Returns a URL.
+	 */
 	public function action($mode = false) {
 		//
 		// Loading all required settings.
 		$this->load();
-
-		$out = isset($this->_config->form->action) ? $this->_config->form->action : '#';
-
-		if($mode && isset($this->_config->form->modes->{$mode}->action)) {
-			$out = $this->_config->form->modes->{$mode}->action;
+		//
+		// Default value.
+		$action = $this->_config->form->action;
+		//
+		// Current mode's value.
+		if($mode && isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->action)) {
+			$action = $this->_config->form->modes->{$mode}->action;
+		}
+		//
+		// Cleaning routes and returning.
+		return RoutesManager::Instance()->enroute($action);
+	}
+	/**
+	 * This method returns a proper list of form's HTML attributes merging
+	 * defaults and specific attributes for certain mode.
+	 *
+	 * @param string $mode Mode to be used when merging attributes.
+	 * @return \stdClass Returns a complete list of attributes.
+	 */
+	public function attributes($mode = false) {
+		//
+		// Default values.
+		$out = new \stdClass();
+		//
+		// Copying default values.
+		foreach($this->_config->form->attrs as $k => $v) {
+			$out->{$k} = $v;
+		}
+		if($mode) {
+			//
+			// Copying mode's form attributies, if any.
+			if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->attrs)) {
+				foreach($this->_config->form->modes->{$mode}->attrs as $k => $v) {
+					$out->{$k} = $v;
+				}
+			}
 		}
 
 		return $out;
@@ -97,7 +136,7 @@ class Form {
 		$builder = false;
 		if(isset($Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type])) {
 			$className = $Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type];
-			$builder = new $className($this->config());
+			$builder = new $className($this);
 		} else {
 			throw new FormsException("Unknown form type '{$this->_config->form->type}' at path '///form/type'.");
 		}
@@ -110,26 +149,148 @@ class Form {
 		// Building form.
 		return $builder->buildFor($item, $mode, $flags);
 	}
+	public function buttonAttributes($buttonName, $mode = false) {
+		$config = $this->buttonConfigFor($buttonName, $mode);
+		return $config->attrs;
+	}
+	public function buttonConfigFor($buttonName, $mode = false) {
+		//
+		// Loading all required settings.
+		$this->load();
+		//
+		// Default values.
+		$out = false;
+		//
+		// Checking mode's buttons.
+		if($mode) {
+			if(isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
+				$out = $this->_config->form->modes->{$mode}->buttons->{$buttonName};
+			}
+		} else {
+			if(isset($this->_config->form->buttons->{$buttonName})) {
+				$out = $this->_config->form->buttons->{$buttonName};
+			}
+		}
+
+		return $out;
+	}
+	public function buttonId($buttonName, $mode = false) {
+		$this->load();
+		return "{$this->_config->form->name}_{$buttonName}";
+	}
+	public function buttonLabel($buttonName, $mode = false) {
+		$config = $this->buttonConfigFor($buttonName, $mode);
+		return $config->label;
+	}
+	/**
+	 * This method returns the proper list of buttons based on current form
+	 * defaults and specific buttons for certain mode.
+	 *
+	 * @param string $mode Mode to be used when checking buttons.
+	 * @return \stdClass Returns a list of buttons.
+	 */
+	public function buttonsFor($mode = false) {
+		//
+		// Loading all required settings.
+		$this->load();
+		//
+		// Default values.
+		$out = $this->_config->form->buttons;
+		//
+		// Checking mode's buttons.
+		if($mode && isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->buttons)) {
+			$out = $this->_config->form->modes->{$mode}->buttons;
+		}
+
+		return array_keys(get_object_vars($out));
+	}
+	public function buttonType($buttonName, $mode = false) {
+		$config = $this->buttonConfigFor($buttonName, $mode);
+		return $config->type;
+	}
 	/**
 	 * This method provides access to the loaded configuration.
 	 *
 	 * @return \stdClass Returns a configuration object.
 	 */
 	public function config() {
-		//
-		// Loading all required settings.
 		$this->load();
-
 		return $this->_config;
 	}
+	public function fieldAttributes($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->attrs : false;
+	}
+	public function fieldEmptyOption($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->emptyOption) ? $this->_config->form->fields->{$fieldName}->emptyOption : false;
+	}
+	public function fieldExcludedModes($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) ? $this->_config->form->fields->{$fieldName}->excludedModes : array();
+	}
+	public function fieldId($fieldName) {
+		$this->load();
+		return "{$this->_config->form->name}_{$fieldName}";
+	}
+	public function fieldLabel($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->label : '';
+	}
+	public function fields() {
+		$this->load();
+		return array_keys(get_object_vars($this->_config->form->fields));
+	}
+	public function fieldType($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->type : false;
+	}
+	public function fieldValue($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->value : '';
+	}
+	public function fieldValues($fieldName) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) && $this->_config->form->fields->{$fieldName}->type == GC_FORMS_FIELDTYPE_ENUM ? $this->_config->form->fields->{$fieldName}->values : array();
+	}
+	public function id() {
+		return $this->virtualName();
+	}
+	public function isFieldExcluded($fieldName, $mode) {
+		$this->load();
+		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) && in_array($mode, $this->_config->form->fields->{$fieldName}->excludedModes);
+	}
+	/**
+	 * This method allows to know if current form is in read-only mode for
+	 * certain mode.
+	 *
+	 * @param string $mode Mode to be used when checking read-only status.
+	 * @return boolean Returns TRUE when it's a read-only form.
+	 */
+	public function isReadOnly($mode) {
+		$out = $this->_config->form->readonly || $mode == GC_FORMS_BUILDMODE_VIEW || $mode == GC_FORMS_BUILDMODE_REMOVE;
+
+		if(!$out && isset($this->_config->form->modes->{$mode}->readonly)) {
+			$out = $this->_config->form->modes->{$mode}->readonly;
+		}
+
+		return $out;
+	}
+	/**
+	 * This method returns the proper form method based on its defaults and
+	 * specific values for certain mode.
+	 *
+	 * @param string $mode Mode to be used when checking mode.
+	 * @return string Returns a method name.
+	 */
 	public function method($mode = false) {
 		//
 		// Loading all required settings.
 		$this->load();
 
-		$out = isset($this->_config->form->method) ? $this->_config->form->method : '#';
+		$out = $this->_config->form->method;
 
-		if($mode && isset($this->_config->form->modes->{$mode}->method)) {
+		if($mode && isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->method)) {
 			$out = $this->_config->form->modes->{$mode}->method;
 		}
 
@@ -176,6 +337,13 @@ class Form {
 		$this->load();
 
 		return isset($this->_config->form->type) ? $this->_config->form->type : $Defaults[GC_DEFAULTS_FORMS_TYPE];
+	}
+	public function virtualName() {
+		//
+		// Loading all required settings.
+		$this->load();
+
+		return $this->_config->form->name;
 	}
 	//
 	// Protected methods.

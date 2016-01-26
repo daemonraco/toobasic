@@ -11,7 +11,6 @@ namespace TooBasic\Forms;
 // Class aliases.
 use TooBasic\MagicProp;
 use TooBasic\MagicPropException;
-use TooBasic\Managers\RoutesManager;
 
 /**
  * @class FormType
@@ -23,9 +22,9 @@ abstract class FormType {
 	//
 	// Protected properties.
 	/**
-	 * @var \stdClass Current builder configuration shortcut.
+	 * @var \TooBasic\Forms\Form Form specification shortcut.
 	 */
-	protected $_config = false;
+	protected $_form = false;
 	/**
 	 * @var boolean This flag indicates if current building form is read-only
 	 * or not.
@@ -36,10 +35,10 @@ abstract class FormType {
 	/**
 	 * Class constructor.
 	 *
-	 * @param \stdClass $config Form configuration to work with.
+	 * @param \TooBasic\Forms\Form $form Form specification object.
 	 */
-	public function __construct($config) {
-		$this->_config = $config;
+	public function __construct(Form $form) {
+		$this->_form = $form;
 	}
 	/**
 	 * This magic method provides a shortcut for magicprops
@@ -80,52 +79,6 @@ abstract class FormType {
 	//
 	// Protected methods.
 	/**
-	 * This method returns the proper form action based on its defaults and
-	 * specific values for certain mode.
-	 *
-	 * @param string $mode Mode to be used when checking action.
-	 * @return string Returns a URL.
-	 */
-	protected function action($mode) {
-		//
-		// Default value.
-		$action = $this->_config->form->action;
-		//
-		// Current mode's value.
-		if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->action)) {
-			$action = $this->_config->form->modes->{$mode}->action;
-		}
-		//
-		// Cleaning routes and returning.
-		return RoutesManager::Instance()->enroute($action);
-	}
-	/**
-	 * This method returns a proper list of form's HTML attributes merging
-	 * defaults and specific attributes for certain mode.
-	 *
-	 * @param string $mode Mode to be used when merging attributes.
-	 * @return \stdClass Returns a complete list of attributes.
-	 */
-	protected function attrs($mode) {
-		//
-		// Default values.
-		$out = new \stdClass();
-		//
-		// Copying default values.
-		foreach($this->_config->form->attrs as $k => $v) {
-			$out->{$k} = $v;
-		}
-		//
-		// Copying mode's form attributies, if any.
-		if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->attrs)) {
-			foreach($this->_config->form->modes->{$mode}->attrs as $k => $v) {
-				$out->{$k} = $v;
-			}
-		}
-
-		return $out;
-	}
-	/**
 	 * This method converts a list of parameters into a string that can be
 	 * inserted in HTML tag.
 	 *
@@ -159,25 +112,6 @@ abstract class FormType {
 		return $out;
 	}
 	/**
-	 * This method returns the proper list of buttons based on current form
-	 * defaults and specific buttons for certain mode.
-	 *
-	 * @param string $mode Mode to be used when checking buttons.
-	 * @return \stdClass Returns a list of buttons.
-	 */
-	protected function buttonsFor($mode) {
-		//
-		// Default values.
-		$out = $this->_config->form->buttons;
-		//
-		// Checking mode's buttons.
-		if(isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->buttons)) {
-			$out = $this->_config->form->modes->{$mode}->buttons;
-		}
-
-		return $out;
-	}
-	/**
 	 * This method expands the list of extra parameters given when a form is
 	 * called for building.
 	 *
@@ -189,31 +123,5 @@ abstract class FormType {
 		if(!isset($flags[GC_FORMS_BUILDFLAG_SPACER])) {
 			$flags[GC_FORMS_BUILDFLAG_SPACER] = '';
 		}
-	}
-	/**
-	 * This method allows to know if current form is in read-only mode or not.
-	 *
-	 * @param string $mode Mode to be used when checking read-only status.
-	 * @return boolean Returns TRUE when it's a read-only form.
-	 */
-	protected function isReadOnly($mode) {
-		if(is_null($this->_readonly)) {
-			$this->_readonly = $this->_config->form->readonly || $mode == GC_FORMS_BUILDMODE_VIEW || $mode == GC_FORMS_BUILDMODE_REMOVE;
-
-			if(!$this->_readonly && isset($this->_config->form->{$mode}) && isset($this->_config->form->{$mode}->readonly)) {
-				$this->_readonly = $this->_config->form->{$mode}->readonly;
-			}
-		}
-		return $this->_readonly;
-	}
-	/**
-	 * This method returns the proper form method based on its defaults and
-	 * specific values for certain mode.
-	 *
-	 * @param string $mode Mode to be used when checking mode.
-	 * @return string Returns a method name.
-	 */
-	protected function method($mode) {
-		return isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->method) ? $this->_config->form->modes->{$mode}->method : $this->_config->form->method;
 	}
 }

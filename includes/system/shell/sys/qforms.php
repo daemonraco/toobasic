@@ -29,6 +29,8 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 	const OptionModule = 'Module';
 	const OptionRemove = 'Remove';
 	const OptionType = 'Type';
+	const TwikBColors = 'bcolors';
+	const TwikThin = 'thin';
 	//
 	// Protected properties.
 	/**
@@ -83,8 +85,9 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced', '-F'), Option::TypeNoValue, $text));
 
 		$text = "This option adds some automatic twiks for bootstrap. Available values are:\n";
-		$text = "\t- 'thin': thin inputs and green submits";
-		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, array('--bootstrap-extras', '-bx'), Option::TypeValue, $text, 'type'));
+		$text = "\t- 'thin': thin inputs.";
+		$text = "\t- 'bcolors': Green submits and default for other buttons";
+		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, array('--bootstrap-extras', '-bx'), Option::TypeMultiValue, $text, 'twik'));
 	}
 	protected function checkParameters() {
 		$out = array(
@@ -175,25 +178,27 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		}
 
 		if($out[GC_AFIELD_STATUS] && isset($this->params->opt->{self::OptionBootstrapExtras})) {
-			$twik = $this->params->opt->{self::OptionBootstrapExtras};
-
-			switch($twik) {
-				case 'thin':
-					foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
-						$out[GC_AFIELD_FIELDS][$k]['attrs'] = array('class' => 'input-sm');
-					}
-					foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
-						if($v[GC_AFIELD_TYPE] == GC_FORMS_BUTTONTYPE_SUBMIT) {
-							$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-success');
-						} else {
-							$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-default');
+			foreach($this->params->opt->{self::OptionBootstrapExtras} as $twik) {
+				switch($twik) {
+					case self::TwikThin:
+						foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
+							$out[GC_AFIELD_FIELDS][$k]['attrs'] = array('class' => 'input-sm');
 						}
-					}
-					break;
-				default:
-					$out[GC_AFIELD_STATUS] = false;
-					$out[GC_AFIELD_ERROR] = "Unknown bootstrap extra twik called '{$twik}'";
-					break;
+						break;
+					case self::TwikBColors:
+						foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
+							if($v[GC_AFIELD_TYPE] == GC_FORMS_BUTTONTYPE_SUBMIT) {
+								$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-success');
+							} else {
+								$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => 'btn-sm btn-default');
+							}
+						}
+						break;
+					default:
+						$out[GC_AFIELD_STATUS] = false;
+						$out[GC_AFIELD_ERROR] = "Unknown bootstrap extra twik called '{$twik}'";
+						break;
+				}
 			}
 		}
 

@@ -289,17 +289,90 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		if($form->path()) {
 			//
 			// Descriving form.
-			echo "{$spacer}Descriving form '{$name}':\n";
-			echo "{$spacer}\tType:   '".Color::Green($form->type())."'\n";
-			echo "{$spacer}\tAction: '".Color::Green($form->action())."'\n";
-			echo "{$spacer}\tMethod: '".Color::Green($form->method())."'\n";
+			echo "{$spacer}Describing form '{$name}':\n";
+			echo "{$spacer}\tType:       '".Color::Green($form->type())."'\n";
+			echo "{$spacer}\tAction:     '".Color::Green($form->action())."'\n";
+			echo "{$spacer}\tMethod:     '".Color::Green($form->method())."'\n";
+			$attrs = get_object_vars($form->attributes());
+			if($attrs) {
+				echo "{$spacer}\tAttributes:\n";
+				foreach($attrs as $k => $v) {
+					echo "{$spacer}\t\t'".Color::Green($k)."': '".Color::Yellow($v)."'\n";
+				}
+			}
 
 			$modes = $form->modes();
 			sort($modes);
 			foreach($modes as $mode) {
 				echo "\n{$spacer}\tIn mode '".Color::Yellow($mode)."':\n";
-				echo "{$spacer}\t\tAction: '".Color::Green($form->action($mode))."'\n";
-				echo "{$spacer}\t\tMethod: '".Color::Green($form->method($mode))."'\n";
+				echo "{$spacer}\t\tAction:     '".Color::Green($form->action($mode))."'\n";
+				echo "{$spacer}\t\tMethod:     '".Color::Green($form->method($mode))."'\n";
+				$attrs = get_object_vars($form->attributes($mode));
+				if($attrs) {
+					echo "{$spacer}\t\tAttributes:\n";
+					foreach($attrs as $k => $v) {
+						echo "{$spacer}\t\t\t'".Color::Green($k)."': '".Color::Yellow($v)."'\n";
+					}
+				}
+			}
+
+			$fields = $form->fields();
+			echo "{$spacer}Fields:\n";
+			foreach($fields as $fieldName) {
+				$fieldType = $form->fieldType($fieldName);
+				$fieldValue = $form->fieldValue($fieldName);
+
+				echo "{$spacer}\tField '".Color::Green($fieldName)."':\n";
+				echo "{$spacer}\t\tType:            '".Color::Green($fieldType)."':\n";
+				echo "{$spacer}\t\tID:              '".Color::Green($form->fieldId($fieldName))."':\n";
+				echo "{$spacer}\t\tLabel:           '".Color::Green($form->fieldLabel($fieldName))."':\n";
+				if($fieldType == GC_FORMS_FIELDTYPE_ENUM) {
+					echo "{$spacer}\t\tPossible values: '".Color::Green(implode("', '", $form->fieldValues($fieldName)))."'\n";
+				}
+				if($fieldValue) {
+					echo "{$spacer}\t\tDefault:         '".Color::Green($fieldValue)."':\n";
+				}
+				$excludedModes = $form->fieldExcludedModes($fieldName);
+				if($excludedModes) {
+					echo "{$spacer}\t\tExcluded Modes:  '".Color::Green(implode("', '", $excludedModes))."'\n";
+				}
+				$attrs = get_object_vars($form->fieldAttributes($fieldName));
+				if($attrs) {
+					echo "{$spacer}\t\tAttributes:\n";
+					foreach($attrs as $k => $v) {
+						echo "{$spacer}\t\t\t'".Color::Green($k)."': '".Color::Yellow($v)."'\n";
+					}
+				}
+
+				echo "\n";
+			}
+
+			$buttonModes = array_merge(array(false), $modes);
+			foreach($buttonModes as $mode) {
+				$buttons = $form->buttonsFor($mode);
+				if($buttons) {
+					if($mode === false) {
+						echo "{$spacer}Default Buttons:\n";
+					} else {
+						echo "{$spacer}Buttons for mode '".Color::Yellow($mode)."':\n";
+					}
+
+					foreach($buttons as $buttonName) {
+						echo "{$spacer}\tButton '".Color::Green($buttonName)."':\n";
+						echo "{$spacer}\t\tType:            '".Color::Green($form->buttonType($buttonName, $mode))."':\n";
+						echo "{$spacer}\t\tID:              '".Color::Green($form->buttonId($buttonName, $mode))."':\n";
+						echo "{$spacer}\t\tLabel:           '".Color::Green($form->buttonLabel($buttonName, $mode))."':\n";
+						$attrs = get_object_vars($form->buttonAttributes($buttonName, $mode));
+						if($attrs) {
+							echo "{$spacer}\t\tAttributes:\n";
+							foreach($attrs as $k => $v) {
+								echo "{$spacer}\t\t\t'".Color::Green($k)."': '".Color::Yellow($v)."'\n";
+							}
+						}
+
+						echo "\n";
+					}
+				}
 			}
 		} else {
 			$this->setError(self::ErrorWrongParameters, "Unknown form called '{$name}'");
@@ -632,8 +705,10 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		global $Defaults;
 		//
 		// Checking params.
-		if(!$formType) {
+		if(!$formName) {
 			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!$formType) {
+			$this->setError(self::ErrorWrongParameters, "No form type specified");
 		} elseif(!isset($Defaults[GC_DEFAULTS_FORMS_TYPES][$formType])) {
 			$this->setError(self::ErrorWrongParameters, "Unknown type '{$formType}'");
 		} else {
