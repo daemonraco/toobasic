@@ -51,20 +51,28 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		// Global dependencies.
 		global $Defaults;
 
-		$this->_options->setHelpText("TODO tool summary");
+		$this->_options->setHelpText("This is an alternative to sys-tool 'forms' and it allows to create a complete basic form in one command.");
 
 		$text = "This option creates a Forms Builder specification file based on given parameters.\n";
-		$text.= "It can be use with '--module' to generate the specification inside certain module";
+		$text.= "It can be use with '--module' to generate the specification inside certain module.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option removes a Forms Builder specification file.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'form-name'));
 
-		$text = "TODO help text";
-		$this->_options->addOption(Option::EasyFactory(self::OptionField, array('--field', '-f'), Option::TypeMultiValue, $text, 'name-type'));
+		$text = "This option allows to specify a field. ";
+		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
+		$text.= "\t- 1st: Field name.\n";
+		$text.= "\t- 2nd: Field type.\n";
+		$text.= "\t- 3rd: Extra values.\n";
+		$text.= "When the type is '".GC_FORMS_FIELDTYPE_ENUM."', the 3rd piece must be a list of values also separater by colons.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionField, array('--field', '-f'), Option::TypeMultiValue, $text, 'name:type:...'));
 
-		$text = "TODO help text";
-		$this->_options->addOption(Option::EasyFactory(self::OptionButton, array('--button', '-b'), Option::TypeMultiValue, $text, 'name-type'));
+		$text = "This option allows to specify a button. ";
+		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
+		$text.= "\t- 1st: Button name.\n";
+		$text.= "\t- 2nd: Button type.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionButton, array('--button', '-b'), Option::TypeMultiValue, $text, 'name:type'));
 
 		$text = "TODO help text";
 		$this->_options->addOption(Option::EasyFactory(self::OptionAction, array('--action', '-a'), Option::TypeValue, $text, 'action'));

@@ -110,8 +110,8 @@ $ php shell.php sys forms --set-type bootstrap --form table_rooms
 ```
 Available types are:
 
-* `basic` (default): Simple structure where each label is prompted (in the HTML
-code) alongside it's form control without any encasing.
+* `basic`: Simple structure where each label is prompted (in the HTML code)
+alongside it's form control without any encasing.
 * `table`: Inside the form, a table is prompted with two columns, left for labels
 and right for form controls.
 * `bootstrap`: This type follows the encasing suggested by _Bootstrap_ ar [this

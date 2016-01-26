@@ -267,10 +267,10 @@ class Form {
 	 * @param string $mode Mode to be used when checking read-only status.
 	 * @return boolean Returns TRUE when it's a read-only form.
 	 */
-	public function isReadOnly($mode) {
+	public function isReadOnly($mode = false) {
 		$out = $this->_config->form->readonly || $mode == GC_FORMS_BUILDMODE_VIEW || $mode == GC_FORMS_BUILDMODE_REMOVE;
 
-		if(!$out && isset($this->_config->form->modes->{$mode}->readonly)) {
+		if($mode && !$out && isset($this->_config->form->modes->{$mode}->readonly)) {
 			$out = $this->_config->form->modes->{$mode}->readonly;
 		}
 

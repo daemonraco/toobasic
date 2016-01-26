@@ -74,7 +74,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$this->_options->setHelpText("This tool allows you to create, modify and remove Forms Builder specification files.");
 
 		$text = "This option creates a basic Forms Builder specification file.\n";
-		$text.= "It can be use with '--module' to generate the specification inside certain module";
+		$text.= "It can be use with '--module' to generate the specification inside certain module.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option removes a Forms Builder specification file.";
@@ -91,12 +91,11 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetMethod, array('--set-method', '-sM'), Option::TypeValue, $text, 'form-method'));
 
-		$text = "This option set a name to a form to be used for ID and other main properties (it doesn't change file names).\n";
+		$text = "This option sets a name to a form to be used for ID and other main properties (it doesn't change file names).\n";
 		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetName, array('--set-name', '-sN'), Option::TypeValue, $text, 'new-form-name'));
 
-		$text = "This option sets the form's type.\n";
-		$text.= "It must be use along with option '--form'";
+		$text = "This option sets the form's type. It must be use along with option '--form'\n";
 		$text.= "Available values are:";
 		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
 			$text.= "\n\t- '{$type}'";
@@ -108,67 +107,100 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t'--form': Specifying form's name.\n";
 		$text.= "\t'--type': Specifying a type for the field.\n";
 		$text.= "Optional options:\n";
-		$text.= "\t'--value': Specifying a default value.\n";
+		$text.= "\t'--value': Specifying a default value.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionAddField, array('--add-field', '-af'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "This option appends a button definition.\n";
-		$text.= "It must be use along with option '--form'";
+		$text = "This option appends a new button to a form specification.\n";
+		$text.= "It requires options:\n";
+		$text.= "\t'--form': Specifying form's name.\n";
+		$text.= "\t'--type': Specifying a type for the field.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionAddButton, array('--add-button', '-ab'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "This option set a specific form attribute value.\n";
+		$text = "This option sets a specific form attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
-		$text.= "\t'--value' or '--true'; Attribute's value.";
+		$text.= "\t'--value' or '--true': Attribute's value.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetFormAttribute, array('--set-attribute', '-sa'), Option::TypeValue, $text, 'attribute-name'));
 
-		$text = "This option set a specific field attribute value.\n";
+		$text = "This option sets a specific field attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.\n";
-		$text.= "\t'--value' or '--true'; Attribute's value.";
+		$text.= "\t'--value' or '--true': Attribute's value.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldAttribute, array('--set-field-attribute', '-sfa'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option sets a field's label.";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--value': Label to set.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldLabel, array('--set-field-label', '-sfl'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "This option set a specific field attribute value.\n";
+		$text = "This option sets a specific button attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.\n";
-		$text.= "\t'--value' or '--true'; Attribute's value.";
+		$text.= "\t'--value' or '--true': Attribute's value.\n";
+		$text.= "Optional options:\n";
+		$text.= "\t'--mode'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonAttribute, array('--set-button-attribute', '-sba'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option sets a button's label.";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--value': Label to set.\n";
+		$text.= "Optional options:\n";
+		$text.= "\t'--mode'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetButtonLabel, array('--set-button-label', '-sbl'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes the configuration for the attribute 'action' of a form.\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveAction, array('--remove-action', '-rA'), Option::TypeNoValue, $text));
 
-		$text = "@TODO code it.";
+		$text = "This option removes the configuration for the attribute 'method' of a form.\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveMethod, array('--remove-method', '-rM'), Option::TypeNoValue, $text));
 
-		$text = "@TODO code it.";
+		$text = "This option removes the name to be used on a form for ID and other main properties (it doesn't change file names).\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveName, array('--remove-name', '-rN'), Option::TypeNoValue, $text));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a field from a form specification.\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveField, array('--remove-field', '-rf'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a button from a form specification.\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButton, array('--remove-button', '-rb'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a specific form attribute.\n";
+		$text.= "It must be use along with option '--form'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFormAttribute, array('--remove-attribute', '-ra'), Option::TypeValue, $text, 'attribute-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a specific field attribute.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--name': Attribute's name.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldAttribute, array('--remove-field-attribute', '-rfa'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a field's label.";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldLabel, array('--remove-field-label', '-rfl'), Option::TypeValue, $text, 'field-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a specific button attribute value.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--name': Attribute's name.\n";
+		$text.= "Optional options:\n";
+		$text.= "\t'--mode'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonAttribute, array('--remove-button-attribute', '-rba'), Option::TypeValue, $text, 'button-name'));
 
-		$text = "@TODO code it.";
+		$text = "This option removes a button's label.";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--name': Attribute's name.\n";
+		$text.= "Optional options:\n";
+		$text.= "\t'--mode'";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveButtonLabel, array('--remove-button-label', '-rbl'), Option::TypeValue, $text, 'button-name'));
 
 		$text = 'Indicates which form building mode is being affected by current command.';
@@ -198,7 +230,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "When used with '--add-button' available options are:\n";
 		$text.= "\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'\n";
 		$text.= "\t- '".GC_FORMS_BUTTONTYPE_RESET."'\n";
-		$text.= "\t- '".GC_FORMS_BUTTONTYPE_BUTTON."' (default)\n";
+		$text.= "\t- '".GC_FORMS_BUTTONTYPE_BUTTON."' (default)";
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
@@ -225,7 +257,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			$this->loadHelpers();
 			//
 			// Removing form.
-			echo "{$spacer}Adding field '{$buttonName}' to form '{$formName}': ";
+			echo "{$spacer}Adding button '{$buttonName}' to form '{$formName}': ";
 			//
 			// Loading form.
 			$form = new Form($formName);
@@ -309,6 +341,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			echo "{$spacer}\tType:       '".Color::Green($form->type())."'\n";
 			echo "{$spacer}\tAction:     '".Color::Green($form->action())."'\n";
 			echo "{$spacer}\tMethod:     '".Color::Green($form->method())."'\n";
+			echo "{$spacer}\tRead-Only:  '".Color::Green($form->isReadOnly() ? 'Yes' : 'No')."'\n";
 			$attrs = get_object_vars($form->attributes());
 			if($attrs) {
 				echo "{$spacer}\tAttributes:\n";
@@ -323,6 +356,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 				echo "\n{$spacer}\tIn mode '".Color::Yellow($mode)."':\n";
 				echo "{$spacer}\t\tAction:     '".Color::Green($form->action($mode))."'\n";
 				echo "{$spacer}\t\tMethod:     '".Color::Green($form->method($mode))."'\n";
+				echo "{$spacer}\t\tRead-Only:  '".Color::Green($form->isReadOnly($mode) ? 'Yes' : 'No')."'\n";
 				$attrs = get_object_vars($form->attributes($mode));
 				if($attrs) {
 					echo "{$spacer}\t\tAttributes:\n";
@@ -432,34 +466,412 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		}
 	}
 	protected function taskRemoveAction($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing form '{$formName}' action";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
+			} else {
+				echo ": ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeAction($formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveButton($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$buttonName = $this->params->opt->{self::OptionRemoveButton};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} elseif(!in_array($buttonType, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
+			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing button '{$buttonName}' from form '{$formName}': ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$error = false;
+				$writer = new FormWriter($form);
+				$writer->removeButton($buttonName, $formMode);
+
+				if($writer->dirty() || $error) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed").' (Error: '.Color::Yellow($error).")\n";
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveButtonAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$buttonName = $this->params->opt->{self::OptionRemoveButtonAttribute};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		$attrName = $this->params->opt->{self::OptionName};
+		//
+		// Checking params.
+		if(!$attrName) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing button '{$buttonName}' attribute '{$attrName}' (in form '{$formName}'";
+			if($formMode) {
+				echo " and mode '{$formMode}'): ";
+			} else {
+				echo "): ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeButtonAttribute($buttonName, $attrName, $formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveButtonLabel($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$buttonName = $this->params->opt->{self::OptionRemoveButtonLabel};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing button '{$buttonName}' label (in form '{$formName}'";
+			if($formMode) {
+				echo " and mode '{$formMode}'): ";
+			} else {
+				echo "): ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeButtonLabel($buttonName, $formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveField($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionRemoveField};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing field '{$fieldName}' from form '{$formName}': ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$error = false;
+				$writer = new FormWriter($form);
+				$writer->removeField($fieldName);
+
+				if($writer->dirty() || $error) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed").' (Error: '.Color::Yellow($error).")\n";
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveFieldAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionRemoveFieldAttribute};
+		$formName = $this->params->opt->{self::OptionForm};
+		$attrName = $this->params->opt->{self::OptionName};
+		//
+		// Checking params.
+		if(!$attrName) {
+			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing field '{$fieldName}' attribute '{$attrName}' (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeFieldAttribute($fieldName, $attrName);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveFieldLabel($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionRemoveFieldLabel};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing field '{$fieldName}' label (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeFieldLabel($fieldName);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveFormAttribute($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$attrName = $this->params->opt->{self::OptionRemoveFormAttribute};
+		$formName = $this->params->opt->{self::OptionForm};
+		$formMode = $this->params->opt->{self::OptionMode};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing form '{$formName}' attribute '{$attrName}'";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
+			} else {
+				echo ": ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeAttribute($attrName, $formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveMethod($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$formMode = $this->params->opt->{self::OptionMode};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing form '{$formName}' method";
+			if($formMode) {
+				echo " (for mode '{$formMode}'): ";
+			} else {
+				echo ": ";
+			}
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeMethod($formMode);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskRemoveName($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Default values.
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing form '{$formName}' name: ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeName();
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
 	}
 	protected function taskSetAction($spacer = "") {
 		//

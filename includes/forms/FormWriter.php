@@ -146,6 +146,105 @@ class FormWriter {
 			$error = "Field '{$fieldName}' doesn't exist";
 		}
 	}
+	public function removeAction($mode = false) {
+		$this->removeMainValue('action', $mode);
+	}
+	public function removeAttribute($name, $mode = false) {
+		//
+		// Choosing the right object.
+		$obj = false;
+		if($mode) {
+			if(!isset($this->_config->form->modes)) {
+				$this->_config->form->modes = new \stdClass();
+			}
+			if(!isset($this->_config->form->modes->{$mode})) {
+				$this->_config->form->modes->{$mode} = new \stdClass();
+			}
+
+			$obj = $this->_config->form->modes->{$mode};
+		} else {
+			if(isset($this->_config->form)) {
+				$obj = $this->_config->form;
+			}
+		}
+		if($obj) {
+			$this->removeAttributeFrom($name, $obj);
+		}
+	}
+	public function removeButton($buttonName, $mode = false) {
+		//
+		// Choosing the right object.
+		if($mode) {
+			if(isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
+				unset($this->_config->form->modes->{$mode}->buttons->{$buttonName});
+				$this->_dirty = true;
+			}
+		} else {
+			if(isset($this->_config->form->buttons->{$buttonName})) {
+				unset($this->_config->form->buttons->{$buttonName});
+				$this->_dirty = true;
+			}
+		}
+	}
+	public function removeButtonAttribute($buttonName, $attrName, $mode = false) {
+		//
+		// Choosing the right object.
+		$obj = false;
+		if($mode) {
+			if(isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
+				$obj = $this->_config->form->modes->{$mode}->buttons->{$buttonName};
+			}
+		} else {
+			if(isset($this->_config->form->buttons->{$buttonName})) {
+				$obj = $this->_config->form->buttons->{$buttonName};
+			}
+		}
+		if($obj) {
+			$this->removeAttributeFrom($attrName, $obj);
+		}
+	}
+	public function removeButtonLabel($buttonName, $mode = false) {
+		//
+		// Choosing the right object.
+		$obj = false;
+		if($mode) {
+			if(isset($this->_config->form->modes->{$mode}->buttons->{$buttonName})) {
+				$obj = $this->_config->form->modes->{$mode}->buttons->{$buttonName};
+			}
+		} else {
+			if(isset($this->_config->form->buttons->{$buttonName})) {
+				$obj = $this->_config->form->buttons->{$buttonName};
+			}
+		}
+		if($obj) {
+			$this->removeLabelFrom($obj);
+		}
+	}
+	public function removeField($fieldName) {
+		if(isset($this->_config->form->fields->{$fieldName})) {
+			unset($this->_config->form->fields->{$fieldName});
+			$this->_dirty = true;
+		}
+	}
+	public function removeFieldAttribute($fieldName, $attrName) {
+		if(isset($this->_config->form->fields->{$fieldName})) {
+			$this->removeAttributeFrom($attrName, $this->_config->form->fields->{$fieldName});
+		}
+	}
+	public function removeFieldLabel($fieldName) {
+		if(isset($this->_config->form->fields->{$fieldName})) {
+			$this->removeLabelFrom($this->_config->form->fields->{$fieldName});
+		}
+	}
+	public function removeMethod($mode = false) {
+		$this->removeMainValue('method', $mode);
+	}
+	public function removeName() {
+		$this->removeMainValue('name', false);
+	}
+	public function removeType() {
+		$this->removeMainValue('type', false);
+	}
 	public function setAction($action, $mode = false) {
 		$this->setMainValue('action', $action, $mode);
 	}
@@ -264,6 +363,35 @@ class FormWriter {
 		if(!isset($this->_config->form->fields)) {
 			$this->_config->form->fields = new \stdClass();
 			$this->_dirty = true;
+		}
+	}
+	protected function removeAttributeFrom($name, \stdClass &$object) {
+		if(!isset($object->attrs)) {
+			$object->attrs = new \stdClass();
+		}
+
+		if(isset($object->attrs->{$name})) {
+			unset($object->attrs->{$name});
+			$this->_dirty = true;
+		}
+	}
+	protected function removeLabelFrom(\stdClass &$object) {
+		if(isset($object->label)) {
+			unset($object->label);
+			$this->_dirty = true;
+		}
+	}
+	protected function removeMainValue($name, $mode = false) {
+		if($mode) {
+			if(isset($this->_config->form->modes->{$mode}->{$name})) {
+				unset($this->_config->form->modes->{$mode}->{$name});
+				$this->_dirty = true;
+			}
+		} else {
+			if(isset($this->_config->form->{$name})) {
+				unset($this->_config->form->{$name});
+				$this->_dirty = true;
+			}
 		}
 	}
 	protected function setAttributeTo($name, $value, \stdClass &$object) {
