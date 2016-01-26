@@ -35,6 +35,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionRemoveButtonLabel = 'RemoveButtonLabel';
 	const OptionRemoveField = 'RemoveField';
 	const OptionRemoveFieldAttribute = 'RemoveFieldAttribute';
+	const OptionRemoveFieldExcludedModes = 'RemoveFieldExcludedModes';
 	const OptionRemoveFieldLabel = 'RemoveFieldLabel';
 	const OptionRemoveFormAttribute = 'RemoveFormAttribute';
 	const OptionRemoveMethod = 'RemoveMethod';
@@ -43,6 +44,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 	const OptionSetButtonAttribute = 'SetButtonAttribute';
 	const OptionSetButtonLabel = 'SetButtonLabel';
 	const OptionSetFieldAttribute = 'SetFieldAttribute';
+	const OptionSetFieldExcludedModes = 'SetFieldExcludedModes';
 	const OptionSetFieldLabel = 'SetFieldLabel';
 	const OptionSetFormAttribute = 'SetFormAttribute';
 	const OptionSetMethod = 'SetMethod';
@@ -135,6 +137,12 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t'--value': Label to set.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldLabel, array('--set-field-label', '-sfl'), Option::TypeValue, $text, 'field-name'));
 
+		$text = "This option sets a field's list of excluded modes. Provided value should be a comma separated string.\n";
+		$text.= "It must be use along with options:\n";
+		$text.= "\t'--form': Name of the form to modify.\n";
+		$text.= "\t'--value': Label to set.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSetFieldExcludedModes, array('--set-field-exmodes', '-sfem'), Option::TypeValue, $text, 'field-name'));
+
 		$text = "This option sets a specific button attribute value.\n";
 		$text.= "It must be use along with options:\n";
 		$text.= "\t'--form': Name of the form to modify.\n";
@@ -181,6 +189,10 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\t'--form': Name of the form to modify.\n";
 		$text.= "\t'--name': Attribute's name.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldAttribute, array('--remove-field-attribute', '-rfa'), Option::TypeValue, $text, 'field-name'));
+
+		$text = "This option removes a field's list of excluded modes.";
+		$text.= "It must be use along with option '--form'";
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemoveFieldExcludedModes, array('--remove-field-exmodes', '-rfem'), Option::TypeValue, $text, 'field-name'));
 
 		$text = "This option removes a field's label.";
 		$text.= "It must be use along with options:\n";
@@ -715,6 +727,43 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			}
 		}
 	}
+	protected function taskRemoveFieldExcludedModes($spacer = "") {
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionRemoveFieldExcludedModes};
+		$formName = $this->params->opt->{self::OptionForm};
+		//
+		// Checking params.
+		if(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Removing field '{$fieldName}' excluded modes (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->removeFieldExcludedModes($fieldName);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
 	protected function taskRemoveFieldLabel($spacer = "") {
 		//
 		// Default values.
@@ -1041,6 +1090,47 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 			} else {
 				$writer = new FormWriter($form);
 				$writer->setFieldAttribute($fieldName, $attrName, $attrValue);
+
+				if($writer->dirty()) {
+					if($writer->save()) {
+						echo Color::Green("Done\n");
+					} else {
+						echo Color::Red("Failed\n");
+					}
+				} else {
+					echo Color::Yellow('Ignored')." (No changes were made)\n";
+				}
+			}
+		}
+	}
+	protected function taskSetFieldExcludedModes($spacer = "") {
+		//
+		// Default values.
+		$fieldName = $this->params->opt->{self::OptionSetFieldExcludedModes};
+		$formName = $this->params->opt->{self::OptionForm};
+		$modeValues = $this->params->opt->{self::OptionValue};
+		//
+		// Checking params.
+		if(!$modeValues) {
+			$this->setError(self::ErrorWrongParameters, "No label value specified");
+		} elseif(!$formName) {
+			$this->setError(self::ErrorWrongParameters, "No form name specified");
+		} else {
+			$modeValues = explode(':', str_replace(',', ':', $modeValues));
+			//
+			// Loading helpers.
+			$this->loadHelpers();
+			//
+			// Removing form.
+			echo "{$spacer}Setting field '{$fieldName}' excluded modes (in form '{$formName}'): ";
+			//
+			// Loading form.
+			$form = new Form($formName);
+			if(!$form->path()) {
+				echo Color::Red('Failed').' (Error: '.Color::Yellow("There's no specification for this form").")\n";
+			} else {
+				$writer = new FormWriter($form);
+				$writer->setFieldExcludedModes($fieldName, $modeValues);
 
 				if($writer->dirty()) {
 					if($writer->save()) {

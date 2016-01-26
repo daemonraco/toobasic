@@ -231,6 +231,12 @@ class FormWriter {
 			$this->removeAttributeFrom($attrName, $this->_config->form->fields->{$fieldName});
 		}
 	}
+	public function removeFieldExcludedModes($fieldName) {
+		if(isset($this->_config->form->fields->{$fieldName}->excludedModes)) {
+			unset($this->_config->form->fields->{$fieldName}->excludedModes);
+			$this->_dirty = true;
+		}
+	}
 	public function removeFieldLabel($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->removeLabelFrom($this->_config->form->fields->{$fieldName});
@@ -319,6 +325,12 @@ class FormWriter {
 			$this->_config->form->fields->{$fieldName}->emptyOption = new \stdClass();
 			$this->_config->form->fields->{$fieldName}->emptyOption->label = $label;
 			$this->_config->form->fields->{$fieldName}->emptyOption->value = $value;
+		}
+	}
+	public function setFieldExcludedModes($fieldName, $modes) {
+		if(isset($this->_config->form->fields->{$fieldName})) {
+			$this->_config->form->fields->{$fieldName}->excludedModes = $modes;
+			$this->_dirty = true;
 		}
 	}
 	public function setFieldLabel($fieldName, $value) {

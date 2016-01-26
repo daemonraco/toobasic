@@ -190,6 +190,18 @@ __Warning__: You should have in mind that these labels won't show directly, they
 will always be considered as translation keys and they'll be translated at
 building time.
 
+### Field exclusions
+At this point we show consider a security matter.
+Our field `id` is useful for almost all our forms, except when we are creating a
+new room or we are just showing a room, in those cases it should not be prompted
+in our HTML form codes, so we need to exclude it.
+For that, we need to execute something like this:
+```text
+$ php shell.php sys forms --set-field-exmodes id --value create,view --form table_rooms
+```
+From now on, whenever you build your form for `create` or `view` modes, field `id`
+won't appear.
+
 ### Buttons
 The last part you should specify for your form are buttons and here we're going to
 make the next assumptions:
@@ -253,6 +265,7 @@ $ php shell.php sys forms --set-field-label description --value 'table_column_de
 $ php shell.php sys forms --set-field-label width --value 'table_column_width' --form table_rooms
 $ php shell.php sys forms --set-field-label height --value 'table_column_height' --form table_rooms
 $ php shell.php sys forms --set-field-label status --value 'table_column_status' --form table_rooms
+$ php shell.php sys forms --set-field-exmodes id --value create,view --form table_rooms
 $ php shell.php sys forms --add-button send --type submit --form table_rooms
 $ php shell.php sys forms --add-button clear --type reset --form table_rooms
 $ php shell.php sys forms --add-button delete --type submit --form table_rooms --mode remove
@@ -376,6 +389,9 @@ $ php shell.php sys forms --remove-field-attribute status --name class --form ta
 #
 # Removing field's label from field 'name'.
 $ php shell.php sys forms --remove-field-label name --form table_rooms
+#
+# Removing field's excluded modes.
+$ php shell.php sys forms --remove-field-exmodes id --form table_rooms
 #
 # Removing button 'delete' from mode 'remove'.
 $ php shell.php sys forms --remove-button delete --form table_rooms --mode remove
