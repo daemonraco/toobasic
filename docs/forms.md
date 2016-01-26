@@ -406,7 +406,7 @@ $ php shell.php sys forms --remove-button-label send --form table_rooms
 ## Representations?
 Well, you've read all this and you want to use it in your representations but it's
 going to a pain to do all this on each table.
-Well, don't panic because unless you use the parameter `--no-form-builder`, the
+Well, don't panic because unless you use the parameter `--no-forms-builder`, the
 _sys-tool_ `table` already generates a _Forms Builder_ specification for your
 table and all view (except list) use it with the proper values.
 

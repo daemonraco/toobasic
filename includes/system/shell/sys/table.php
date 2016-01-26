@@ -876,7 +876,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, array('--searchable', '-sr'), Option::TypeValue, $text, 'item-code'));
 
 		$text = "This option disables the use of form builders to generate each form.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, array('--no-form-builder', '-nofb'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, array('--no-forms-builder', '-nofb'), Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
