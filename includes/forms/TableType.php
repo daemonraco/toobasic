@@ -65,13 +65,13 @@ class TableType extends FormType {
 			}
 			//
 			// Checking and building based un current field type.
-			if($fieldType == 'hidden') {
+			if($fieldType == GC_FORMS_FIELDTYPE_HIDDEN) {
 				//
 				// Building a hidden input.
 				//
 				$out.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t<input id=\"{$this->_form->fieldId($fieldName)}\" name=\"{$fieldName}\"";
 				$out.= " type=\"hidden\" value=\"".(isset($item[$fieldName]) && $mode != GC_FORMS_BUILDMODE_CREATE ? $item[$fieldName] : '')."\"/>\n";
-			} elseif($fieldType == 'input' || $fieldType == 'password' || ( $readOnly && $fieldType == 'enum')) {
+			} elseif($fieldType == GC_FORMS_FIELDTYPE_INPUT || $fieldType == GC_FORMS_FIELDTYPE_PASSWORD || ( $readOnly && $fieldType == GC_FORMS_FIELDTYPE_ENUM)) {
 				//
 				// Building a text input or a select in read-only
 				// mode.
@@ -81,7 +81,7 @@ class TableType extends FormType {
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t\t\t<label for=\"{$this->_form->fieldId($fieldName)}\">".$tr->{$fieldLabel}."</label>\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t\t</td><td>\n";
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t\t\t<input id=\"{$this->_form->fieldId($fieldName)}\" name=\"{$fieldName}\"";
-				$aux.= " type=\"".($fieldType == 'password' ? 'password' : 'text').'"';
+				$aux.= " type=\"".($fieldType == GC_FORMS_FIELDTYPE_PASSWORD ? 'password' : 'text').'"';
 				$aux.= $this->attrsToString($fieldAttrs);
 				//
 				// Checking if it should add current value or not.
@@ -89,7 +89,7 @@ class TableType extends FormType {
 					//
 					// Checking the proper way to get current
 					// values.
-					if($fieldType != 'enum') {
+					if($fieldType != GC_FORMS_FIELDTYPE_ENUM) {
 						$aux.= " value=\"".(isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue)."\"";
 					} else {
 						$value = isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue;
@@ -102,7 +102,7 @@ class TableType extends FormType {
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t</tr>";
 
 				$fields[] = $aux;
-			} elseif($fieldType == 'enum') {
+			} elseif($fieldType == GC_FORMS_FIELDTYPE_ENUM) {
 				//
 				// Building a select
 				//
@@ -136,7 +136,7 @@ class TableType extends FormType {
 				$aux.= "{$flags[GC_FORMS_BUILDFLAG_SPACER]}\t\t</tr>";
 
 				$fields[] = $aux;
-			} elseif($fieldType == 'text') {
+			} elseif($fieldType == GC_FORMS_FIELDTYPE_TEXT) {
 				//
 				// Building a textarea.
 				//

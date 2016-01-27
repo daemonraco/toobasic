@@ -168,6 +168,7 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 	* [Predictive](docs/facilities.md#predictive)
 	* [jQueryUI Autocomplete](docs/facilities.md#jqueryui-autocomplete)
+	* [Forms Builder](docs/facilities.md#forms-builder)
 * [Sys-tool _service_](docs/facilities.md#sys-tool-service)
 	* [Features](docs/facilities.md#features)
 	* [Removing a service](docs/facilities.md#removing-a-service)
@@ -186,6 +187,7 @@
 	* [Form attributes](docs/forms.md#form-attributes)
 	* [Form fields](docs/forms.md#form-fields)
 	* [Field labels](docs/forms.md#field-labels)
+	* [Field exclusions](docs/forms.md#field-exclusions)
 	* [Buttons](docs/forms.md#buttons)
 	* [Button labels](docs/forms.md#button-labels)
 	* [Commands summary](docs/forms.md#commands-summary)
@@ -263,6 +265,16 @@
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
 * [Suggestions](docs/models.md#suggestions)
+
+##  Quick Forms (for Forms Builder) (docs/qforms.md):
+
+* [What is Quick Forms?](docs/qforms.md#what-is-quick-forms)
+* [Example](docs/qforms.md#example)
+* [Creating a form](docs/qforms.md#creating-a-form)
+* [Colored buttons](docs/qforms.md#colored-buttons)
+* [Removing](docs/qforms.md#removing)
+* [Twiks](docs/qforms.md#twiks)
+* [Suggestions](docs/qforms.md#suggestions)
 
 ##  Using Redirections (docs/redirections.md):
 
@@ -433,9 +445,30 @@
 	* [Others](docs/tech/adapters.md#others)
 * [Suggestions](docs/tech/adapters.md#suggestions)
 
-##  Forms Builder (docs/tech/forms.md):
+##  Forms Builder Specifications (docs/tech/forms.md):
 
-* [XXXXXXXXXXXXX](docs/tech/forms.md#xxxxxxxxxxxxx)
+* [This document](docs/tech/forms.md#this-document)
+* [Basic structure](docs/tech/forms.md#basic-structure)
+* [From properties](docs/tech/forms.md#from-properties)
+	* [Default type](docs/tech/forms.md#default-type)
+	* [Attributes](docs/tech/forms.md#attributes)
+* [Fields](docs/tech/forms.md#fields)
+	* [Field type](docs/tech/forms.md#field-type)
+	* [Field label](docs/tech/forms.md#field-label)
+	* [Field attributes](docs/tech/forms.md#field-attributes)
+	* [Excluded modes](docs/tech/forms.md#excluded-modes)
+	* [Default values](docs/tech/forms.md#default-values)
+	* [Enumerative type](docs/tech/forms.md#enumerative-type)
+* [Buttons](docs/tech/forms.md#buttons)
+	* [Button types](docs/tech/forms.md#button-types)
+	* [Button label](docs/tech/forms.md#button-label)
+	* [Button attributes](docs/tech/forms.md#button-attributes)
+* [Modes](docs/tech/forms.md#modes)
+	* [Mode specifics](docs/tech/forms.md#mode-specifics)
+	* [Basic mode properties](docs/tech/forms.md#basic-mode-properties)
+	* [Mode attributes](docs/tech/forms.md#mode-attributes)
+	* [Mode buttons](docs/tech/forms.md#mode-buttons)
+* [My own type](docs/tech/forms.md#my-own-type)
 * [Suggestions](docs/tech/forms.md#suggestions)
 
 ##  Query Adapter (docs/tech/queryadapter.md):

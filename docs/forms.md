@@ -364,42 +364,53 @@ then send data, also set by our commands.
 Now that you know how to created and add properties to your forms, you need to be
 aware of these commands that will let you remove undesired properties.
 Let's write a list of examples of what you can do:
+
+* Removing a specifiction file.
 ```text
-#
-# Removing a specifiction file.
 $ php shell.php sys forms remove table_rooms
-#
-# Removing form's virtual name.
+```
+* Removing form's virtual name.
+```text
 $ php shell.php sys forms --remove-name --form table_rooms
-#
-# Removing form's action for method 'dry_test'.
+```
+* Removing form's action for method 'dry_test'.
+```text
 $ php shell.php sys forms --remove-action --form table_rooms --mode dry_test
-#
-# Removing form's method.
+```
+* Removing form's method.
+```text
 $ php shell.php sys forms --remove-method 'post' --form table_rooms
-#
-# Removing form's attribute 'role'.
+```
+* Removing form's attribute 'role'.
+```text
 $ php shell.php sys forms --remove-attribute role --form table_rooms
-#
-# Removing field 'height'.
+```
+* Removing field 'height'.
+```text
 $ php shell.php sys forms --remove-field height --form table_rooms
-#
-# Removing field's attribute 'class' from field 'status'.
+```
+* Removing field's attribute 'class' from field 'status'.
+```text
 $ php shell.php sys forms --remove-field-attribute status --name class --form table_rooms
-#
-# Removing field's label from field 'name'.
+```
+* Removing field's label from field 'name'.
+```text
 $ php shell.php sys forms --remove-field-label name --form table_rooms
-#
-# Removing field's excluded modes.
+```
+* Removing field's excluded modes.
+```text
 $ php shell.php sys forms --remove-field-exmodes id --form table_rooms
-#
-# Removing button 'delete' from mode 'remove'.
+```
+* Removing button 'delete' from mode 'remove'.
+```text
 $ php shell.php sys forms --remove-button delete --form table_rooms --mode remove
-#
-# Removing button's attribute 'class' from button 'send'.
+```
+* Removing button's attribute 'class' from button 'send'.
+```text
 $ php shell.php sys forms --remove-button-attribute send --name class --form table_rooms
-#
-# Removing button's label 'class' from button 'send'.
+```
+* Removing button's label 'class' from button 'send'.
+```text
 $ php shell.php sys forms --remove-button-label send --form table_rooms
 ```
 
