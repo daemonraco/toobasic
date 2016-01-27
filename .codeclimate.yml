@@ -8,26 +8,12 @@ engines:
       languages:
       - javascript
       - php
-    checks:
-      Identical code:
-        enabled: false
   eslint:
     enabled: true
-    exclude_fingerprints:
-    - 932dd2d56993ce8ce658885f760cf394
   fixme:
     enabled: true
   phpmd:
     enabled: true
-    exclude_fingerprints:
-    - a8163ba5c2135cc131d973c9b5fb088b
-  checks:
-    CleanCode/ElseExpression:
-      enabled: false
-    CleanCode/StaticAccess:
-      enabled: false
-    CleanCode/BooleanArgumentFlag:
-      enabled: false
 ratings:
   paths:
   - "**.php"
