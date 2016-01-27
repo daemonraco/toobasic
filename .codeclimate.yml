@@ -23,8 +23,15 @@ engines:
         enabled: false
       Design/TooManyMethods:
         enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
     exclude_fingerprints:
     - 8599ef8b2bd5e1860dbb451c0051c83e
+    - 10b71b6cd38cf2292616e0ea1b2fbfb3
 ratings:
   paths:
   - "**.php"
