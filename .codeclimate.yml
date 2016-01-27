@@ -17,6 +17,10 @@ engines:
     checks:
       Controversial/Superglobals:
         enabled: false
+      CleanCode/BooleanArgumentFlag:
+        enabled: false
+      Naming/ShortVariable:
+        enabled: false
 ratings:
   paths:
   - "**.php"
@@ -28,3 +32,5 @@ exclude_paths:
 - site/**/*
 - libraries/**/*
 - "modules/starterdoc/scripts/strapdown.js"
+- "modules/starterdoc/scripts/strapdown.css"
+- "modules/starterdoc/styles/jquery.cssemoticons.css"
