@@ -68,7 +68,7 @@ class Redis extends Adapter {
 	 */
 	public function delete($prefix, $key) {
 		$fullKey = $this->fullKey($prefix, $key);
-		$data = $this->_conn->del($fullKey);
+		$this->_conn->del($fullKey);
 
 		if($this->_debug) {
 			echo "<!-- redis delete: {$fullKey} [NOT FOUND]-->\n";
@@ -84,7 +84,6 @@ class Redis extends Adapter {
 	 * or NULL if none found.
 	 */
 	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
-		$data = null;
 		$fullKey = $this->fullKey($prefix, $key);
 
 		if($this->_debug) {
