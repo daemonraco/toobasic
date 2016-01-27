@@ -13,7 +13,7 @@ class SearchCron extends TooBasic\Shell\ShellCron {
 	//
 	// Protected methods.
 	protected function setOptions() {
-		$this->_options->setHelpText("TODO tool summary");
+		$this->_options->setHelpText("This cron tool allows you to perform periodic tasks related to searchable items.");
 
 		$text = "This options provides a simple interface to run a search.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSearch, array('--search', '-s'), Option::TypeValue, $text, 'value'));
