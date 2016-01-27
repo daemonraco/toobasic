@@ -14,6 +14,9 @@ engines:
     enabled: true
   phpmd:
     enabled: true
+    checks:
+      Controversial/Superglobals:
+        enabled: false
 ratings:
   paths:
   - "**.php"
@@ -24,3 +27,4 @@ exclude_paths:
 - cache/**/*
 - site/**/*
 - libraries/**/*
+- "modules/starterdoc/scripts/strapdown.js"
