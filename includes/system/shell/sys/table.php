@@ -6,6 +6,9 @@
  */
 //
 // Class aliases.
+use TooBasic\Forms\Form;
+use TooBasic\Forms\FormsManager;
+use TooBasic\Forms\FormWriter;
 use TooBasic\Names;
 use TooBasic\Sanitizer;
 use TooBasic\Shell\Option;
@@ -21,6 +24,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionConnection = 'Connection';
 	const OptionGenAutocomplete = 'GenAutocomplete';
 	const OptionNameField = 'NameField';
+	const OptionNoFormBuilder = 'NoFormBuilder';
 	const OptionPlural = 'Plural';
 	const OptionRaw = 'Raw';
 	const OptionSearchable = 'Searchable';
@@ -46,7 +50,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				// Assignments.
 				$this->_assignments['singularName'] = $this->_names['singular-name'];
 				$this->_assignments['pluralName'] = $this->_names['plural-name'];
+				$this->_assignments['templatesStyle'] = $this->_names['templates-style'];
 				$this->_assignments['isRaw'] = $this->isRaw();
+				$this->_assignments['formBuilder'] = $this->_names['form-builder'];
 				//
 				// Searchable items flags.
 				if(isset($this->_names['search-code'])) {
@@ -113,16 +119,16 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 							case 'enum':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
 								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field[GC_AFIELD_TYPE]['values'] = $columnParts;
-								array_shift($field[GC_AFIELD_TYPE]['values']);
-								array_shift($field[GC_AFIELD_TYPE]['values']);
-								if($field[GC_AFIELD_TYPE]['values']) {
-									$field[GC_AFIELD_TYPE]['values'] = array_values($field[GC_AFIELD_TYPE]['values']);
+								$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = $columnParts;
+								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+								if($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]) {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = array_values($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 								} else {
-									$field[GC_AFIELD_TYPE]['values'][0] = 'Y';
-									$field[GC_AFIELD_TYPE]['values'][1] = 'N';
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0] = 'Y';
+									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][1] = 'N';
 								}
-								$field['default'] = "'{$field[GC_AFIELD_TYPE]['values'][0]}'";
+								$field['default'] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
 								$field['inForm'] = true;
 								break;
 							case 'varchar':
@@ -257,6 +263,11 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_names['singular-name'] = $this->_names[GC_AFIELD_NAME];
 				$this->_names['plural-name'] = "{$this->_names[GC_AFIELD_NAME]}s";
 				$this->_names['templates-prefix'] = '';
+				$this->_names['templates-style'] = 'default';
+				//
+				// Checking form mechanism.
+				$opt = $this->_options->option(self::OptionNoFormBuilder);
+				$this->_names['form-builder'] = !$opt->activated();
 				//
 				// Checking plural name.
 				$opt = $this->_options->option(self::OptionPlural);
@@ -268,6 +279,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$opt = $this->_options->option(self::OptionBootstrap);
 				if($opt->activated()) {
 					$this->_names['templates-prefix'] = 'bootstrap/';
+					$this->_names['templates-style'] = 'bootstrap';
 				}
 				//
 				// Checking type.
@@ -313,6 +325,13 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					GC_AFIELD_DESCRIPTION => 'specifications file'
 				);
 				if(!$this->isRaw()) {
+					if($this->_names['form-builder']) {
+						$this->_files[] = array(
+							GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_FORMS]}/table_{$this->_names['plural-name']}.json"),
+							GC_AFIELD_GENERATOR => 'genFormBuilderFile',
+							GC_AFIELD_DESCRIPTION => 'form builder specifications file'
+						);
+					}
 					$this->_files[] = array(
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
 						GC_AFIELD_TEMPLATE => 'representation.html',
@@ -434,6 +453,103 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			}
 		}
 	}
+	protected function genFormBuilderFile($path, $template, &$error) {
+		//
+		// Assignments.
+		$this->genAssignments();
+		//
+		// Helpers.
+		$formsHelper = FormsManager::Instance();
+		//
+		// Default values.
+		$out = true;
+		$formPath = pathinfo($path);
+		$formName = $formPath['filename'];
+		//
+		// Removing when forced.
+		if($this->isForced()) {
+			@unlink($path);
+		}
+		//
+		// Main specs structure.
+		$result = $formsHelper->createForm($formName, $this->_names[GC_AFIELD_MODULE_NAME]);
+		if($result[GC_AFIELD_STATUS]) {
+			$form = new Form($formName);
+			$writer = new FormWriter($form);
+			//
+			// Basic values.
+			$writer->setType($this->params->opt->{self::OptionBootstrap} ? GC_FORMS_BUILDTYPE_BOOTSTRAP : GC_FORMS_BUILDTYPE_TABLE);
+			$writer->setName("{$this->_names['singular-name']}_form");
+			$writer->setMethod('post');
+			//
+			// Attributes.
+			$writer->setAttribute('role', 'form');
+			$writer->setAttribute('ng-non-bindable', true);
+			//
+			// Fields @{
+			//
+			// Adding an ID field.
+			$writer->addField('id', 'hidden');
+			$writer->excludeFieldFrom('id', array(GC_FORMS_BUILDMODE_CREATE));
+			//
+			// Adding specified columns.
+			foreach($this->_assignments['tableFields'] as $column) {
+				switch($column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]) {
+					case 'enum':
+						$type = 'enum';
+						if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+							$type.= ':'.implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+						}
+						$writer->addField($column['name'], $type);
+						$writer->setFieldDefault($column['name'], '');
+						$writer->setFieldEmptyOption($column['name'], 'select_option_NOOPTION', '');
+						break;
+					case 'text':
+						$writer->addField($column['name'], 'text');
+						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						break;
+					case 'int':
+					case 'varchar':
+					default:
+						$writer->addField($column['name'], 'input');
+						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+				}
+
+				$writer->setFieldLabel($column['name'], "table_column_{$column['name']}");
+				$writer->setFieldAttribute($column['name'], 'class', 'input-sm');
+			}
+			//@}
+			//
+			// Modes @{
+			$writer->setAttribute('onsubmit', "return confirm('Are you sure you want to remove this {$this->_names['singular-name']}?')", GC_FORMS_BUILDMODE_REMOVE);
+			//
+			// Create mode buttons.
+			$writer->addButton('add', 'submit', GC_FORMS_BUILDMODE_CREATE);
+			$writer->setButtonAttribute('add', 'class', 'btn-sm btn-success', GC_FORMS_BUILDMODE_CREATE);
+			$writer->addButton('clear_fields', 'reset', GC_FORMS_BUILDMODE_CREATE);
+			$writer->setButtonAttribute('clear_fields', 'class', 'btn-sm btn-default', GC_FORMS_BUILDMODE_CREATE);
+			//
+			// Edit mode buttons.
+			$writer->addButton('save', 'submit', GC_FORMS_BUILDMODE_EDIT);
+			$writer->setButtonAttribute('save', 'class', 'btn-sm btn-success', GC_FORMS_BUILDMODE_EDIT);
+			$writer->addButton('restore_fields', 'reset', GC_FORMS_BUILDMODE_EDIT);
+			$writer->setButtonAttribute('restore_fields', 'class', 'btn-sm btn-default', GC_FORMS_BUILDMODE_EDIT);
+			//
+			// Remove mode buttons.
+			$writer->addButton('delete', 'submit', GC_FORMS_BUILDMODE_REMOVE);
+			$writer->setButtonLabel('delete', "btn_delete_{$this->_names['singular-name']}", GC_FORMS_BUILDMODE_REMOVE);
+			$writer->setButtonAttribute('delete', 'class', 'btn-sm btn-danger', GC_FORMS_BUILDMODE_REMOVE);
+			// @}
+			//
+			// Saving changes.
+			$writer->save();
+		} else {
+			$error = $result[GC_AFIELD_ERROR];
+			$out = false;
+		}
+
+		return $out;
+	}
 	protected function genSpecsFile($path, $template, &$error) {
 		$out = false;
 
@@ -446,6 +562,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->setError(self::ErrorWrongParameters, "Unknown specifications file version '{$opt->value()}'");
 		}
 
+
 		return $out;
 	}
 	protected function genSpecsFileV1($path, &$error) {
@@ -454,7 +571,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$out = true;
 		//
 		// Assignments.
-		$this->genAssignments($this->_names);
+		$this->genAssignments();
 		//
 		// Main specs structure.
 		$specs = new \stdClass();
@@ -464,6 +581,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Table specs.
 		$table = new \stdClass();
 		$table->version = 1;
+		$table->usesFormBuilder = $this->_names['form-builder'];
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
@@ -492,8 +610,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$field->name = $column['name'];
 			$field->type = new \stdClass();
 			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
-			if(isset($column[GC_AFIELD_TYPE]['values'])) {
-				$field->type->values = $column[GC_AFIELD_TYPE]['values'];
+			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+				$field->type->values = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
 			} else {
 				$field->type->precision = $column[GC_AFIELD_TYPE]['precision'];
 			}
@@ -573,7 +691,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$out = true;
 		//
 		// Assignments.
-		$this->genAssignments($this->_names);
+		$this->genAssignments();
 		//
 		// Main specs structure.
 		$specs = new \stdClass();
@@ -582,6 +700,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Table specs.
 		$table = new \stdClass();
 		$table->version = 2;
+		$table->usesFormBuilder = $this->_names['form-builder'];
 		$table->name = $this->_assignments['pluralName'];
 		$table->prefix = $this->_assignments['tablePrefix'];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
@@ -604,8 +723,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		foreach($this->_assignments['tableFields'] as $column) {
 			$field = new \stdClass();
 			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
-			if(isset($column[GC_AFIELD_TYPE]['values'])) {
-				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE]['values']);
+			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 			}
 			if($column['default']) {
 				$field->default = $column['default'];
@@ -670,6 +789,12 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Ingnoring process when there are previous errors.
 		if(!$this->hasErrors() && !$this->isRaw()) {
 			$this->genAssignments();
+			//
+			// Delete button label
+			$auxTr = new \stdClass();
+			$auxTr->key = "btn_delete_{$this->_names['singular-name']}";
+			$auxTr->value = 'Delete this '.ucwords(str_replace('_', ' ', $this->_names['singular-name']));
+			$this->_translations[] = $auxTr;
 
 			foreach($this->_assignments['tableFields'] as $column) {
 				$auxTr = new \stdClass();
@@ -677,8 +802,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$auxTr->value = ucwords(str_replace('_', ' ', $column['name']));
 				$this->_translations[] = $auxTr;
 
-				if(isset($column[GC_AFIELD_TYPE]['values'])) {
-					foreach($column[GC_AFIELD_TYPE]['values'] as $option) {
+				if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
+					foreach($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES] as $option) {
 						$auxTr = new \stdClass();
 						$auxTr->key = "select_option_{$option}";
 						$auxTr->value = ucwords(str_replace('_', ' ', $option));
@@ -715,7 +840,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:int Column named 'colname' of type NUMBER/INTEGER.\n";
 		$text.= "\t- colname:text Column named 'colname' of type TEXT.\n";
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
-		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).\n";
+		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).";
 		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, array('--column', '-c'), Option::TypeMultiValue, $text, 'name'));
 
 		$text = "This parameters indicates which column shoud be consided as an unique name.";
@@ -747,8 +872,11 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));
 
 		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
-		$text.= "Given value is used as item type for searchable items indexation.\n";
+		$text.= "Given value is used as item type for searchable items indexation.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, array('--searchable', '-sr'), Option::TypeValue, $text, 'item-code'));
+
+		$text = "This option disables the use of form builders to generate each form.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, array('--no-forms-builder', '-nofb'), Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

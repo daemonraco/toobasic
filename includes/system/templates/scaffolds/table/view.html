@@ -1,5 +1,8 @@
 <h4>{$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
+<%if $formBuilder%>
+{$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'view', $formFlags)}
+<%else%>
 <form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;" ng-non-bindable>
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
@@ -25,5 +28,6 @@
 <%/if%><%/foreach%>
 	</table>
 </form>
+<%/if%>
 <br/>
 <a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

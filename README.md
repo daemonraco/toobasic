@@ -23,6 +23,9 @@ __TooBasic__ provides some sort of solution to features like:
 [Skins](docs/skins.md)).
 * __Scaffolds__: Also provides a basic set of tools to create artifacts in a
 faster way (visit [Facilities](docs/facilities.md)).
+* __Forms Builder__: A mechanism to define and administrate forms through JSON
+specification files (visit [Forms Builder](docs/forms.md) and [Quick
+Forms](docs/qforms.md)).
 * __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
 * __Database Wrapping__: Provides a simple way access tables in a database by
 representations (visit [Databases](docs/databases.md) and
@@ -94,6 +97,7 @@ related)
 	* [Controller Exports](docs/controllerexports.md)
 	* [Models](docs/models.md)
 	* [Scaffolds](docs/facilities.md)
+	* [Quick Forms](docs/qforms.md) form __Forms Builder__
 	* [Languages](docs/language.md)
 	* [Configs](docs/configs.md)
 	* [Services](docs/services.md)
@@ -106,9 +110,11 @@ related)
 	* [Routes](docs/routes.md)
 	* [MagicProp](docs/magicprop.md)
 	* [Conditional Redirections](docs/redirections.md)
+	* [Forms Builder](docs/forms.md)
 	* [Simple API Reader](docs/sapireader.md)
 	* [Search Engine](docs/searchengine.md)
 * Even heavier stuff:
+	* [Forms Builder Specifications](docs/tech/forms.md)
 	* [Query Adapter](docs/tech/queryadapter.md)
 	* [Adapters](docs/tech/adapters.md)
 

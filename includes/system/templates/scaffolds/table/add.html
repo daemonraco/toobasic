@@ -1,5 +1,8 @@
 <h4>{$tr->title_new_item_on_table('tablename', '<%$pluralName%>')}</h4>
 
+<%if $formBuilder%>
+{$ctrl->formFor('table_<%$pluralName%>', false, 'create', $formFlags)}
+<%else%>
 <form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
@@ -44,5 +47,6 @@
 		</tr>
 	</table>
 </form>
+<%/if%>
 <br/>
 <a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

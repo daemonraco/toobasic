@@ -60,6 +60,7 @@ function checkBasicPermissions() {
  * @return string Returns a normalized name.
  */
 function classname($simpleName) {
+	\TooBasic\deprecated();
 	//
 	// Default values.
 	$out = $simpleName;
@@ -71,6 +72,19 @@ function classname($simpleName) {
 	//
 	// Returning a clean name.
 	return $out;
+}
+/**
+ * This function is an alias for method '\TooBasic\Forms\FormsManager::formFor()'.
+ *
+ * @param string $formName Name of the form to load.
+ * @param mixed[string] $item Information to fill fields (except for mode
+ * 'create').
+ * @param string $mode Mode in which it must be built.
+ * @param mixed[string] $flags List of extra parameters used to build.
+ * @return string Returns a HTML piece of code.
+ */
+function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = array()) {
+	return \TooBasic\Forms\FormsManager::Instance()->formFor($formName, $item, $mode, $flags);
 }
 /**
  * This method prints in a basic but standard way some message.
@@ -167,6 +181,13 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 		echo "{$out}</pre>";
 	}
 }
+/**
+ * This method prints some complex message in a TooBasic debugging page.
+ *
+ * @param mixed $thing Thing to be shown.
+ * @param string $title If present, the debugging page will present this parameter
+ * as a title.
+ */
 function debugThingInPage($thing, $title = null) {
 	//
 	// Global dependencies.
@@ -211,6 +232,12 @@ function debugThingInPage($thing, $title = null) {
 	//
 	// When using a debug in page, no other task can be performed.
 	die;
+}
+/**
+ * This method triggers an error informing of a deprecated functionality.
+ */
+function deprecated() {
+	trigger_error('You are trying to use a deprecated functionality.', E_USER_ERROR);
 }
 /**
  * This function centralize the logic to obtain the current language.
@@ -560,18 +587,18 @@ function getConfigurationFilesList() {
  * the copy. 
  * @param \stdClass $origin Object from which take vales.
  * @param \stdClass $destination Object in which values has to be copied.
- * @param mixed[string] $defualt Associative list of values to be used as default
+ * @param mixed[string] $default Associative list of values to be used as default
  * on enforced fields. If one of them is not present and empty string is used as
  * default.
  * @return \stdClass Returns the destination object with it's values overriden by
  * those in the origin object and, if it was necessary, with enforced fields.
  */
-function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $defualt = array()) {
+function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $default = array()) {
 	//
 	// If the list of defaults is not an array, it's forced to be an empty
 	// array.
-	if(!is_array($defualt)) {
-		$defualt = array();
+	if(!is_array($default)) {
+		$default = array();
 	}
 	//
 	// Checking each required field.
@@ -584,7 +611,7 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 		if(isset($origin->{$field})) {
 			$destination->{$field} = $origin->{$field};
 		} elseif(!isset($destination->{$field})) {
-			$destination->{$field} = isset($defualt[$field]) ? $defualt[$field] : '';
+			$destination->{$field} = isset($default[$field]) ? $default[$field] : '';
 		}
 	}
 	//
