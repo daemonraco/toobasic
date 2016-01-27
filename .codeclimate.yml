@@ -1,26 +1,36 @@
 ---
 engines:
-  csslint:
-    enabled: true
-  duplication:
-    enabled: true
-    config:
-      languages:
-      - javascript
-      - php
-  eslint:
-    enabled: true
-  fixme:
-    enabled: true
-  phpmd:
-    enabled: true
-    exclude_fingerprints:
-    - a8163ba5c2135cc131d973c9b5fb088b
+	csslint:
+		enabled: true
+	duplication:
+		enabled: true
+		config:
+			languages:
+			- javascript
+			- php
+		checks:
+			Identical code:
+				enabled: false
+	eslint:
+		enabled: true
+	fixme:
+		enabled: true
+	phpmd:
+		enabled: true
+		exclude_fingerprints:
+		- a8163ba5c2135cc131d973c9b5fb088b
+	checks:
+		CleanCode/ElseExpression:
+                        enabled: false
+		CleanCode/StaticAccess:
+                        enabled: false
+		CleanCode/BooleanArgumentFlag:
+                        enabled: false
 ratings:
-  paths:
-  - "**.php"
-  - "**.css"
-  - "**.js"
+	paths:
+	- "**.php"
+	- "**.css"
+	- "**.js"
 exclude_paths:
 - config/**/*
 - cache/**/*
