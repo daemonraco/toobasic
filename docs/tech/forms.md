@@ -296,7 +296,7 @@ Each mode can override some of the basic properties of a form and these will be:
 The rest of form properties have their own policies.
 
 ### Mode attributes
-A mode specification can provide a property called `attrs` defining attribues for
+A mode specification can provide a property called `attrs` defining attributes for
 the HTML tag `<form>`.
 All of these won't override the forms attribute, they'll get appended instead,
 unless they share the same attribute name in which case the one defined by current
