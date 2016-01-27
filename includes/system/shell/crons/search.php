@@ -40,7 +40,7 @@ class SearchCron extends TooBasic\Shell\ShellCron {
 
 		echo "{$spacer}Searching for '{$terms}'\n";
 		$results = SearchManager::Instance()->search($terms);
-		foreach($results as $type => $items) {
+		foreach($results as $items) {
 			foreach($items as $item) {
 				echo "{$spacer}\t- {$item}\n";
 			}

@@ -73,35 +73,31 @@ abstract class ComplexConfig extends Config {
 		foreach($this->_CP_RequiredPaths as $path => $type) {
 			//
 			// Checking existence.
-			$exists = false;
-			eval("\$exists=isset(\$this->{$path});");
-			if(!$exists) {
-				throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not present");
-			} else {
+			if(isset($this->{$path})) {
 				//
 				// Checking property's type.
 				$rightType = null;
 				switch($type) {
 					case self::PathTypeList:
-						eval("\$rightType=is_array(\$this->{$path});");
+						$rightType = is_array($this->{$path});
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a list");
 						}
 						break;
 					case self::PathTypeNumeric:
-						eval("\$rightType=is_numeric(\$this->{$path});");
+						$rightType = is_numeric($this->{$path});
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not numeric");
 						}
 						break;
 					case self::PathTypeObject:
-						eval("\$rightType=is_object(\$this->{$path});");
+						$rightType = is_object($this->{$path});
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not an object");
 						}
 						break;
 					case self::PathTypeString:
-						eval("\$rightType=is_string(\$this->{$path});");
+						$rightType = is_string($this->{$path});
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a string");
 						}
@@ -113,6 +109,8 @@ abstract class ComplexConfig extends Config {
 					default:
 						throw new ConfigException("{$basicErrorMessage}Unhandled path type '{$type}'");
 				}
+			} else {
+				throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not present");
 			}
 		}
 	}

@@ -349,7 +349,6 @@ function getConfigurationFilesList() {
 	//
 	// Global dependencies.
 	global $Directories;
-	global $Paths;
 	//
 	// Paths helpers.
 	$pathsProvider = Paths::Instance();

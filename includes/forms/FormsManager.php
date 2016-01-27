@@ -128,9 +128,6 @@ class FormsManager extends \TooBasic\Managers\Manager {
 			GC_AFIELD_PATH => false
 		);
 		//
-		// Guessing paths.
-		$dir = '';
-		//
 		// Checking form existence.
 		$form = new Form($name);
 		if($out[GC_AFIELD_STATUS] && !$form->path()) {
