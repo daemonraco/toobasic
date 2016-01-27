@@ -3,7 +3,7 @@ engines:
   csslint:
     enabled: true
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
       - javascript
@@ -21,6 +21,10 @@ engines:
         enabled: false
       Naming/ShortVariable:
         enabled: false
+      Design/TooManyMethods:
+        enabled: false
+    exclude_fingerprints:
+    - 8599ef8b2bd5e1860dbb451c0051c83e
 ratings:
   paths:
   - "**.php"
