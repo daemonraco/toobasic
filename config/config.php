@@ -96,6 +96,7 @@ $Directories = array();
 $Directories[GC_DIRECTORIES_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache');
 $Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/configs');
 $Directories[GC_DIRECTORIES_CONFIGS] = TB_Sanitizer::DirPath(ROOTDIR.'/config');
+$Directories[GC_DIRECTORIES_FORMS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/forms');
 $Directories[GC_DIRECTORIES_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes');
 $Directories[GC_DIRECTORIES_LIBRARIES] = TB_Sanitizer::DirPath(ROOTDIR.'/libraries');
 $Directories[GC_DIRECTORIES_REPRESENTATIONS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/representations');
@@ -167,6 +168,7 @@ $Paths[GC_PATHS_CSS] = '/styles';
 $Paths[GC_PATHS_DBSPECS] = '/db';
 $Paths[GC_PATHS_DBSPECSCALLBACK] = '/db';
 $Paths[GC_PATHS_EMAIL_CONTROLLERS] = '/emails';
+$Paths[GC_PATHS_FORMS] = '/forms';
 $Paths[GC_PATHS_IMAGES] = '/images';
 $Paths[GC_PATHS_JS] = '/scripts';
 $Paths[GC_PATHS_LANGS] = '/langs';
@@ -209,6 +211,15 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
+//
+// Forms builder basic configuration.
+$Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
+	GC_FORMS_BUILDTYPE_BASIC => '\\TooBasic\\Forms\\BasicType',
+	GC_FORMS_BUILDTYPE_BOOTSTRAP => '\\TooBasic\\Forms\\BootstrapType',
+	GC_FORMS_BUILDTYPE_TABLE => '\\TooBasic\\Forms\\TableType'
+);
+$Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
+$Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = '\\TooBasic\\ctrlExports_formFor';
 //
 // TooBasic's search engine configuration.
 $Search = array();

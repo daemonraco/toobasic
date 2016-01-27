@@ -2,6 +2,9 @@
 	<h4 class="text-center">{$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
+<%if $formBuilder%>
+{$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'view', $formFlags)}
+<%else%>
 		<form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;" ng-non-bindable>
 			<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
@@ -19,6 +22,7 @@
 <%/if%>
 <%/if%><%/foreach%>
 		</form>
+<%/if%>
 	</div>
 
 	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-sm btn-default pull-right">{$tr->btn_back_to_list}</a>

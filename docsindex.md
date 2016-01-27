@@ -6,6 +6,7 @@
 * [Basic features?](README.md#basic-features)
 * [Installation](README.md#installation)
 * [Start up](README.md#start-up)
+* [Suggested modules (plugins)](README.md#suggested-modules-plugins)
 * [Documentation](README.md#documentation)
 * [Thanks](README.md#thanks)
 	* [Smarty](README.md#smarty)
@@ -17,6 +18,7 @@
 * [TooBasic?!](docs/authorsnote.md#toobasic)
 * [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
 * [Engrish](docs/authorsnote.md#engrish)
+* [_Why query adapter is so complicated?_](docs/authorsnote.md#why-query-adapter-is-so-complicated)
 
 ##  Cache (docs/cache.md):
 
@@ -166,10 +168,39 @@
 	* [Bootstrap](docs/facilities.md#bootstrap)
 	* [Predictive](docs/facilities.md#predictive)
 	* [jQueryUI Autocomplete](docs/facilities.md#jqueryui-autocomplete)
+	* [Forms Builder](docs/facilities.md#forms-builder)
 * [Sys-tool _service_](docs/facilities.md#sys-tool-service)
 	* [Features](docs/facilities.md#features)
 	* [Removing a service](docs/facilities.md#removing-a-service)
 * [Suggestions](docs/facilities.md#suggestions)
+
+##  Forms Builder (docs/forms.md):
+
+* [What is Forms Builder?](docs/forms.md#what-is-forms-builder)
+* [Example](docs/forms.md#example)
+	* [Warning](docs/forms.md#warning)
+* [Using forms](docs/forms.md#using-forms)
+	* [Creating a form](docs/forms.md#creating-a-form)
+	* [Form name](docs/forms.md#form-name)
+	* [Form action and method](docs/forms.md#form-action-and-method)
+	* [Form type](docs/forms.md#form-type)
+	* [Form attributes](docs/forms.md#form-attributes)
+	* [Form fields](docs/forms.md#form-fields)
+	* [Field labels](docs/forms.md#field-labels)
+	* [Field exclusions](docs/forms.md#field-exclusions)
+	* [Buttons](docs/forms.md#buttons)
+	* [Button labels](docs/forms.md#button-labels)
+	* [Commands summary](docs/forms.md#commands-summary)
+* [Views](docs/forms.md#views)
+	* [_$ctrl->formFor()_](docs/forms.md#ctrl-formfor)
+	* [Create view](docs/forms.md#create-view)
+	* [Show view](docs/forms.md#show-view)
+	* [Edit view](docs/forms.md#edit-view)
+* [Remove view](docs/forms.md#remove-view)
+* [Removing](docs/forms.md#removing)
+* [Representations?](docs/forms.md#representations)
+* [Extras parameters](docs/forms.md#extras-parameters)
+* [Suggestions](docs/forms.md#suggestions)
 
 ##  Installation (docs/install.md):
 
@@ -234,6 +265,16 @@
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
 * [Suggestions](docs/models.md#suggestions)
+
+##  Quick Forms (for Forms Builder) (docs/qforms.md):
+
+* [What is Quick Forms?](docs/qforms.md#what-is-quick-forms)
+* [Example](docs/qforms.md#example)
+* [Creating a form](docs/qforms.md#creating-a-form)
+* [Colored buttons](docs/qforms.md#colored-buttons)
+* [Removing](docs/qforms.md#removing)
+* [Twiks](docs/qforms.md#twiks)
+* [Suggestions](docs/qforms.md#suggestions)
 
 ##  Using Redirections (docs/redirections.md):
 
@@ -373,37 +414,6 @@
 	* [Something good](docs/snippets.md#something-good)
 * [Suggestions](docs/snippets.md#suggestions)
 
-##  Adapters (docs/tech/adapters.md):
-
-* [What are _adapters_](docs/tech/adapters.md#what-are-adapters)
-* [Cache adapters](docs/tech/adapters.md#cache-adapters)
-* [Database structure maintainer adapters](docs/tech/adapters.md#database-structure-maintainer-adapters)
-* [I want mine!](docs/tech/adapters.md#i-want-mine)
-	* [Step 0: into a module](docs/tech/adapters.md#step-0-into-a-module)
-	* [Step 1: new adapter](docs/tech/adapters.md#step-1-new-adapter)
-	* [Step 2: using the adapter](docs/tech/adapters.md#step-2-using-the-adapter)
-	* [Step 3: including the adapter](docs/tech/adapters.md#step-3-including-the-adapter)
-* [I want my database structure maintainer adapter](docs/tech/adapters.md#i-want-my-database-structure-maintainer-adapter)
-* [View adapters](docs/tech/adapters.md#view-adapters)
-	* [Others](docs/tech/adapters.md#others)
-* [Suggestions](docs/tech/adapters.md#suggestions)
-
-##  Query Adapter (docs/tech/queryadapter.md):
-
-* [What's a Query Adapter?](docs/tech/queryadapter.md#whats-a-query-adapter)
-* [Examples](docs/tech/queryadapter.md#examples)
-* [Select](docs/tech/queryadapter.md#select)
-	* [Order](docs/tech/queryadapter.md#order)
-	* [Limit](docs/tech/queryadapter.md#limit)
-	* [Specific condition](docs/tech/queryadapter.md#specific-condition)
-	* [Partial condition](docs/tech/queryadapter.md#partial-condition)
-* [Multi-table select](docs/tech/queryadapter.md#multi-table-select)
-* [Insert](docs/tech/queryadapter.md#insert)
-* [Delete](docs/tech/queryadapter.md#delete)
-* [Update](docs/tech/queryadapter.md#update)
-* [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
-* [Suggestions](docs/tech/queryadapter.md#suggestions)
-
 ##  Troubleshooting (docs/troubleshooting.md):
 
 * [What is this page?](docs/troubleshooting.md#what-is-this-page)
@@ -434,6 +444,32 @@
 * [View adapters](docs/tech/adapters.md#view-adapters)
 	* [Others](docs/tech/adapters.md#others)
 * [Suggestions](docs/tech/adapters.md#suggestions)
+
+##  Forms Builder Specifications (docs/tech/forms.md):
+
+* [This document](docs/tech/forms.md#this-document)
+* [Basic structure](docs/tech/forms.md#basic-structure)
+* [From properties](docs/tech/forms.md#from-properties)
+	* [Default type](docs/tech/forms.md#default-type)
+	* [Attributes](docs/tech/forms.md#attributes)
+* [Fields](docs/tech/forms.md#fields)
+	* [Field type](docs/tech/forms.md#field-type)
+	* [Field label](docs/tech/forms.md#field-label)
+	* [Field attributes](docs/tech/forms.md#field-attributes)
+	* [Excluded modes](docs/tech/forms.md#excluded-modes)
+	* [Default values](docs/tech/forms.md#default-values)
+	* [Enumerative type](docs/tech/forms.md#enumerative-type)
+* [Buttons](docs/tech/forms.md#buttons)
+	* [Button types](docs/tech/forms.md#button-types)
+	* [Button label](docs/tech/forms.md#button-label)
+	* [Button attributes](docs/tech/forms.md#button-attributes)
+* [Modes](docs/tech/forms.md#modes)
+	* [Mode specifics](docs/tech/forms.md#mode-specifics)
+	* [Basic mode properties](docs/tech/forms.md#basic-mode-properties)
+	* [Mode attributes](docs/tech/forms.md#mode-attributes)
+	* [Mode buttons](docs/tech/forms.md#mode-buttons)
+* [My own type](docs/tech/forms.md#my-own-type)
+* [Suggestions](docs/tech/forms.md#suggestions)
 
 ##  Query Adapter (docs/tech/queryadapter.md):
 

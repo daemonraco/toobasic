@@ -36,3 +36,11 @@ hr {
 	background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 	background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 }
+
+a, a:visited {
+	color: #d0e0d0;
+}
+
+a:hover {
+	color: #d0f0d0;
+}

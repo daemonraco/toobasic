@@ -38,6 +38,8 @@ define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
 define('GC_DEFAULTS_ERROR_PAGES', 'error-pages');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
+define('GC_DEFAULTS_FORMS_TYPE', 'form-type');
+define('GC_DEFAULTS_FORMS_TYPES', 'form-types');
 define('GC_DEFAULTS_HTMLASSETS', 'html-assets');
 define('GC_DEFAULTS_HTMLASSETS_SCRIPTS', 'scripts');
 define('GC_DEFAULTS_HTMLASSETS_SPECIFICS', 'html-specific-assets');
@@ -70,6 +72,8 @@ define('GC_AFIELD_BEFORE_CREATE', 'before_create');
 define('GC_AFIELD_BEFORE_DROP', 'before_drop');
 define('GC_AFIELD_BEFORE_UPDATE', 'before_update');
 define('GC_AFIELD_BOTTOM', 'bottom');
+define('GC_AFIELD_BUTTON', 'bottom');
+define('GC_AFIELD_BUTTONS', 'bottoms');
 define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
 define('GC_AFIELD_CACHED', 'cached');
 define('GC_AFIELD_CALLBACKS', 'callbacks');
@@ -87,6 +91,8 @@ define('GC_AFIELD_END', 'end');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
+define('GC_AFIELD_FIELD', 'field');
+define('GC_AFIELD_FIELDS', 'fields');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
@@ -142,12 +148,14 @@ define('GC_AFIELD_TOP', 'top');
 define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
 define('GC_AFIELD_TYPES', 'types');
+define('GC_AFIELD_VALUES', 'values');
 // @}
 //
 // Directories @{
 define('GC_DIRECTORIES_CACHE', 'cache');
 define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
+define('GC_DIRECTORIES_FORMS', 'forms');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');
 define('GC_DIRECTORIES_REPRESENTATIONS', 'representations');
@@ -210,6 +218,7 @@ define('GC_PATHS_CSS', 'css');
 define('GC_PATHS_DBSPECS', 'dbspecs');
 define('GC_PATHS_DBSPECSCALLBACK', 'dbspecscallbacks');
 define('GC_PATHS_EMAIL_CONTROLLERS', 'email-controllers');
+define('GC_PATHS_FORMS', 'forms');
 define('GC_PATHS_IMAGES', 'images');
 define('GC_PATHS_JS', 'js');
 define('GC_PATHS_LANGS', 'langs');
@@ -333,5 +342,34 @@ define('GC_SAPIREADER_TYPE_XML', 'xml');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+// @}
+//
+// Forms @{
+//
+// Build flags.
+define('GC_FORMS_BUILDTYPE_BASIC', 'basic');
+define('GC_FORMS_BUILDTYPE_BOOTSTRAP', 'bootstrap');
+define('GC_FORMS_BUILDTYPE_TABLE', 'table');
+//
+// Build flags.
+define('GC_FORMS_BUILDFLAG_SPACER', 'spacer');
+//
+// Build mode.
+define('GC_FORMS_BUILDMODE_CREATE', 'create');
+define('GC_FORMS_BUILDMODE_EDIT', 'edit');
+define('GC_FORMS_BUILDMODE_REMOVE', 'remove');
+define('GC_FORMS_BUILDMODE_VIEW', 'view');
+//
+// Field type.
+define('GC_FORMS_FIELDTYPE_ENUM', 'enum');
+define('GC_FORMS_FIELDTYPE_HIDDEN', 'hidden');
+define('GC_FORMS_FIELDTYPE_INPUT', 'input');
+define('GC_FORMS_FIELDTYPE_PASSWORD', 'password');
+define('GC_FORMS_FIELDTYPE_TEXT', 'text');
+//
+// Button types.
+define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
+define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
+define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 // @}
 // @}

@@ -9,11 +9,12 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Exception;
-use \TooBasic\Exporter;
-use \TooBasic\Managers\DBStructureManager;
-use \TooBasic\Managers\ManifestsManager;
-use \TooBasic\Paths;
+use TooBasic\Exception;
+use TooBasic\Exporter;
+use TooBasic\Managers\DBStructureManager;
+use TooBasic\Managers\ManifestsManager;
+use TooBasic\Names;
+use TooBasic\Paths;
 
 /**
  * @class ActionsManager
@@ -391,7 +392,7 @@ class ActionsManager extends UrlManager {
 			require_once $controllerPath;
 			//
 			// Guessing the right class name.
-			$controllerClassName = (is_numeric($actionName) ? 'N' : '').\TooBasic\classname($actionName).GC_CLASS_SUFFIX_CONTROLLER;
+			$controllerClassName = Names::ControllerClass($actionName);
 			//
 			// Creating the controllers class.
 			if(class_exists($controllerClassName)) {

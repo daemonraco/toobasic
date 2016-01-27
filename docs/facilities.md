@@ -465,6 +465,22 @@ files in your layout and also its CSS assets.
 basic functions required by this automatic files.
 * And don't forget to include the asset itself :)
 
+### Forms Builder
+By default, all forms used by generated views of this _sys-tool_ use _Forms
+Builder_ specification.
+This means that you view will be using a JSON file, in our examples, called
+`table_people.json` stored at `ROOTDIR/site/forms` or a similar folder if you're
+generating assets inside a module.
+
+This provides you with the advantage of add, removing and sorting field across
+your table's view by touching a single file.
+
+Even though, if you prefer to have a complete HTML form inside each of your view
+avoiding the use of _Forms Builder_, you can use this _sys-tool_ adding the
+parameter `--no-forms-builder`.
+
+If you want to know more about _Forms Builder_, visit [this link](forms.md).
+
 ## Sys-tool _service_
 This _sys-tool_ is very similar to _sys-tool_ _controller_ because it also creates
 a controller, but in this case it will be accessible at something like
@@ -514,3 +530,4 @@ Here are some links you may like to read:
 
 * [Shell Tools and Cron](shelltools.md)
 * [Representations](representations.md)
+* [Forms Builder](forms.md)
