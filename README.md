@@ -146,4 +146,4 @@ Who doesn't use jQuery?
 
 __Home Page__: https://jquery.com/
 
-[comment]: <> (a reference style link.)
+<!--:COMMENT: some commented text -->
