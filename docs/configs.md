@@ -174,3 +174,5 @@ a previous file.
 If you want you may visit these documentation pages:
 
 * [MagicProp](magicprop.md)
+
+<!--:GBSUMMARY:Configs:1:Using Config Files:-->

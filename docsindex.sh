@@ -10,7 +10,7 @@ P_FILES="README.md docs/ docs/tech/";
 F_FILES_LOADED="";
 P_GLOSSARY_PATH="docsindex.md";
 P_SUMMARY_PATH="SUMMARY.md";
-P_SUMMARY_SECTIONS=$(cat docs/summary-section.txt);
+P_SUMMARY_SECTIONS="$(cat docs/summary-section.txt|grep -v '^$')";
 #
 TORUN="";
 ERROR="";
@@ -98,11 +98,15 @@ function GenerateSummary() {
 		config="$(echo "$config"|grep -v "^:GBSUMMARY::")";
 		GenerateSummarySection "" "$sectionConfig";
 
-		for section in $P_SUMMARY_SECTIONS; do
-			sectionConfig="$(echo "$config"|grep "^:GBSUMMARY:${section}:")";
-			config="$(echo "$config"|grep -v "^:GBSUMMARY:${section}:")";
-			GenerateSummarySection "$section" "$sectionConfig";
-		done;
+		while read section; do
+			if [ -n "$section" ]; then
+				sectionConfig="$(echo "$config"|grep "^:GBSUMMARY:${section}:")";
+				config="$(echo "$config"|grep -v "^:GBSUMMARY:${section}:")";
+				GenerateSummarySection "$section" "$sectionConfig";
+			fi;
+		done << __ENDL__
+$P_SUMMARY_SECTIONS
+__ENDL__
 	} | tee -a "$P_SUMMARY_PATH";
 }
 #
@@ -114,7 +118,7 @@ function GenerateSummarySection() {
 	if [ -z "$section" ]; then
 		prefix="* ";
 	else
-		echo "* $section";
+		echo "* ${section}";
 	fi;
 
 	while read line; do

@@ -191,3 +191,5 @@ We suggest you visit these links:
 * [Database Structure Specifications](../databasespecs.md)
 * [Cache](../cache.md)
 * [Query Adapter](queryadapter.md)
+
+<!--:GBSUMMARY:Others:4:Adapters:-->

@@ -66,3 +66,5 @@ If you want or need it, you may visit these documentation pages:
 * [Forms Builder](forms.md)
 * [Forms Specifications](tech/forms.md)
 * [Languages](language.md)
+
+<!--:GBSUMMARY:Forms:2:Quick Forms:-->

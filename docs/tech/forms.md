@@ -339,3 +339,5 @@ If you want or need it, you may visit these documentation pages:
 
 * [Forms Basics](../forms.md)
 * [Quick Forms](../qforms.md)
+
+<!--:GBSUMMARY:Forms:3:Forms Builder Specifications:-->
