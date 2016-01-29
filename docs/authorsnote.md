@@ -78,3 +78,5 @@ happens :D
 ## _Why query adapter is so complicated?_
 I know I know, I wasn't expecting it to become so complicated and weird and I'll
 try address this in the future, it is a pain even for me.
+
+<!--:GBSUMMARY:Appendix:2:Author's Note:-->

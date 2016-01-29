@@ -146,4 +146,4 @@ Who doesn't use jQuery?
 
 __Home Page__: https://jquery.com/
 
-<!--:COMMENT: some commented text -->
+<!--:GBSUMMARY:::Introduction:-->
