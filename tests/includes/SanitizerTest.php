@@ -8,7 +8,7 @@ class SanitizerTest extends PHPUnit_Framework_TestCase {
 	}
 	public function testWellFormmedUri() {
 		$uri = '/some/path/script.php?parameters=value&something=else';
-		$this->assertEquals($uri.'l', TooBasic\Sanitizer::UriPath($uri));
+		$this->assertEquals($uri, TooBasic\Sanitizer::UriPath($uri));
 	}
 	public function testWellFormmedSimpleUri() {
 		$uri = '/some/path/';
