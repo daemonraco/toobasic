@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./tests/bootstrap.php"
-	 color="true"
+	 colors="true"
 	 convertErrorsToException="true"
 	 convertNoticesToException="true"
 	 convertWarningsToException="true"
 	 stopOnFailures="false"
-	 syntaxCheck="false"
-	 backupGlobals="false">
+	 syntaxCheck="false">
 	<testsuites>
 		<testsuite name="TooBasic Unit Tests">
 			<directory suffix=".php">./tests</directory>
