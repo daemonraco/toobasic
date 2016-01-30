@@ -15,13 +15,11 @@ engines:
   phpmd:
     enabled: true
     checks:
-      Controversial/Superglobals:
-        enabled: false
       CleanCode/BooleanArgumentFlag:
         enabled: false
-      Naming/ShortVariable:
+      CleanCode/ElseExpression:
         enabled: false
-      Design/TooManyMethods:
+      CleanCode/StaticAccess:
         enabled: false
       Controversial/CamelCasePropertyName:
         enabled: false
@@ -29,15 +27,24 @@ engines:
         enabled: false
       Controversial/CamelCaseMethodName:
         enabled: false
-      CleanCode/ElseExpression:
-        enabled: false
-      CleanCode/StaticAccess:
+      Controversial/Superglobals:
         enabled: false
       CyclomaticComplexity:
+        enabled: false
+      Design/TooManyMethods:
+        enabled: false
+      Naming/ConstantNamingConventions:
+        enabled: false
+      Naming/LongVariable:
+        enabled: false
+      Naming/ShortMethodName:
+        enabled: false
+      Naming/ShortVariable:
         enabled: false
     exclude_fingerprints:
     - 8599ef8b2bd5e1860dbb451c0051c83e
     - 10b71b6cd38cf2292616e0ea1b2fbfb3
+    - a8163ba5c2135cc131d973c9b5fb088b
 ratings:
   paths:
   - "**.php"

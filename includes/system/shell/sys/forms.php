@@ -529,8 +529,6 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		// Checking params.
 		if(!$formName) {
 			$this->setError(self::ErrorWrongParameters, "No form name specified");
-		} elseif(!in_array($buttonType, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
-			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
 		} else {
 			//
 			// Loading helpers.
