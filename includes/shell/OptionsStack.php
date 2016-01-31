@@ -134,6 +134,6 @@ class OptionsStack extends \TooBasic\ParamsStack {
 	 * This method should not be used.
 	 */
 	public function hasDebugs() {
-		throw false;
+		return false;
 	}
 }
