@@ -1,6 +1,6 @@
 <?php
 
-class ParamsTest extends PHPUnit_Framework_TestCase {
+class TooBasic_ParamsTest extends PHPUnit_Framework_TestCase {
 	//
 	// Set up @{
 	protected $_params = false;
@@ -9,7 +9,7 @@ class ParamsTest extends PHPUnit_Framework_TestCase {
 	}
 	// @}
 	//
-	// Basic parameter sets.
+	// Basic parameter sets @{
 	public function testGetParameters() {
 		$this->myParameterSetTest('get');
 		$this->myParameterSetTest('get');

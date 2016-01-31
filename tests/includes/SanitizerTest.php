@@ -1,6 +1,6 @@
 <?php
 
-class SanitizerTest extends PHPUnit_Framework_TestCase {
+class TooBasic_SanitizerTest extends PHPUnit_Framework_TestCase {
 	//
 	// Testing Sanitizer::DirPath() @{
 	public function testPathWithTooManySlashes() {

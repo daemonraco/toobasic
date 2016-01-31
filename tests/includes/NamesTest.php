@@ -1,6 +1,6 @@
 <?php
 
-class NamesTest extends PHPUnit_Framework_TestCase {
+class TooBasic_NamesTest extends PHPUnit_Framework_TestCase {
 	//
 	// Class names @{
 	public function testConfigClass() {
