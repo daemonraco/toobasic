@@ -1,6 +1,6 @@
 <?php
 
-class TooBasic_ParamsTest extends PHPUnit_Framework_TestCase {
+class TooBasic_ParamsTest extends TooBasic_TestCase {
 	//
 	// Set up @{
 	protected $_params = false;

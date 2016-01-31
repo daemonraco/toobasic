@@ -1,6 +1,6 @@
 <?php
 
-class TooBasic_NamesTest extends PHPUnit_Framework_TestCase {
+class TooBasic_NamesTest extends TooBasic_TestCase {
 	//
 	// Class names @{
 	public function testConfigClass() {
@@ -100,14 +100,14 @@ class TooBasic_NamesTest extends PHPUnit_Framework_TestCase {
 	}
 	public function testClassNameWithSuffix() {
 		$expected = 'MyClassSuffix';
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MyClass', 'Suffix'));
+		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MyClass', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my_class', 'Suffix'));
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my class', 'Suffix'));
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my-class', 'Suffix'));
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('My Class', 'Suffix'));
 
 		$expected = 'MySuffix';
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MySuffix', 'Suffix'));
+		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MySuffix', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my_suffix', 'Suffix'));
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my suffix', 'Suffix'));
 		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my-suffix', 'Suffix'));
@@ -123,21 +123,21 @@ class TooBasic_NamesTest extends PHPUnit_Framework_TestCase {
 	//
 	// Internal methods @{
 	protected function myClassTester($expected, $func, $suffixName = 'class') {
-		$this->assertEquals($expected, TooBasic\Names::$func($expected));
+		$this->assertEquals($expected, TooBasic\Names::$func($expected), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
 		$this->assertEquals($expected, TooBasic\Names::$func("my_{$suffixName}"));
 		$this->assertEquals($expected, TooBasic\Names::$func("my {$suffixName}"));
 		$this->assertEquals($expected, TooBasic\Names::$func("my-{$suffixName}"));
 		$this->assertEquals($expected, TooBasic\Names::$func(ucwords("my {$suffixName}")));
 	}
 	protected function myBasicFilenameTester($func) {
-		$this->assertEquals('my_file', TooBasic\Names::{$func}('my_file'));
+		$this->assertEquals('my_file', TooBasic\Names::{$func}('my_file'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
 		$this->assertEquals('my_file', TooBasic\Names::{$func}('MyFile'));
 		$this->assertEquals('my-file', TooBasic\Names::{$func}('my-file'));
 		$this->assertEquals('my-file', TooBasic\Names::{$func}('my file'));
 	}
 	protected function myUpperFilenameTester($func) {
+		$this->assertEquals('MyFile', TooBasic\Names::{$func}('MyFile'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
 		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my_file'));
-		$this->assertEquals('MyFile', TooBasic\Names::{$func}('MyFile'));
 		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my-file'));
 		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my file'));
 	}
