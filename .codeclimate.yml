@@ -55,6 +55,7 @@ exclude_paths:
 - cache/**/*
 - site/**/*
 - libraries/**/*
+- tests/**/*
 - "modules/starterdoc/scripts/strapdown.js"
 - "modules/starterdoc/scripts/strapdown.css"
 - "modules/starterdoc/styles/jquery.cssemoticons.css"

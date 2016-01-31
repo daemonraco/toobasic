@@ -66,7 +66,7 @@ class Names extends FactoryClass {
 		return self::SnakeFilename($seed);
 	}
 	//
-	// Protected class methods.
+	// Generic public class methods.
 	/**
 	 * This function normalize class names.
 	 *
