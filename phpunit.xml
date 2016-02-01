@@ -10,6 +10,7 @@
 		<testsuite name="TooBasic Unit Tests">
 			<directory suffix=".php">./tests</directory>
 			<exclude>./tests/bootstrap.php</exclude>
+			<exclude>./tests/assets</exclude>
 			<exclude>./tests/TooBasic_TestCase.php</exclude>
 		</testsuite>
 	</testsuites>
