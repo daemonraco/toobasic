@@ -27,6 +27,6 @@ require_once dirname(__DIR__).'/config/config.php';
 // @fixme remove this travis test @{
 debugit(array(
 	'PHP_VERSION' => PHP_VERSION,
-	'phpversion()' > phpversion()
+	'phpversion()' => phpversion()
 ));
 // @}

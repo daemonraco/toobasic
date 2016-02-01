@@ -296,3 +296,9 @@ $SkinName = \TooBasic\guessSkin();
 $LanguageName = \TooBasic\guessLanguage();
 
 unset($auxParamsManager);
+// @fixme remove this travis test @{
+debugit(array(
+	'PHP_VERSION' => PHP_VERSION,
+	'phpversion()' => phpversion()
+));
+// @}
