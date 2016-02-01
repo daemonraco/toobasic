@@ -6,9 +6,9 @@ php:
   - '7.0'
   - nightly
 before_script:
-  - "sh -e ./tests/travis.directorypermissions.sh"
+  - "sh -e ./tests/assets/travis.directorypermissions.sh"
   - "mkdir -p ~/.composer"
-  - cp .travis.composer.config.json ~/.composer/config.json
+  - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json
   - composer require phpunit/phpunit-selenium
   - sudo apt-get update > /dev/null
@@ -24,4 +24,3 @@ before_script:
   - "wget http://selenium-release.storage.googleapis.com/2.50/selenium-server-standalone-2.50.1.jar"
   - "java -jar selenium-server-standalone-2.50.1.jar > /dev/null &"
   - sleep 5
-  - wget -nv "http://localhost:80/index.php" -O -
