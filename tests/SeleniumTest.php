@@ -2,7 +2,7 @@
 class WebTest extends PHPUnit_Extensions_Selenium2TestCase {
 	protected function setUp() {
 		$this->setHost('localhost');
-		$this->setPort(80);
+		$this->setPort(4444);
 		$this->setBrowser('firefox');
 		$this->setBrowserUrl('http://localhost:80/');
 	}
