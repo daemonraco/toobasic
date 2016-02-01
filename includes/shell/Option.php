@@ -295,6 +295,14 @@ class Option {
 	public function triggers() {
 		return $this->_triggers;
 	}
+	/**
+	 * This method provides access to the current option's type name.
+	 *
+	 * @return string Returns a type name.
+	 */
+	public function type() {
+		return $this->_type;
+	}
 	//
 	// Public class methods.
 	/**

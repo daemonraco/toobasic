@@ -41,6 +41,9 @@ $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS] = array();
+$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] = false;
+$Defaults[GC_DEFAULTS_DISABLED_PATHS] = array();
 $Defaults[GC_DEFAULTS_EMAIL_FROM] = 'somewhere@example.com';
 $Defaults[GC_DEFAULTS_EMAIL_LAYOUT] = false;
 $Defaults[GC_DEFAULTS_EMAIL_REPLAYTO] = 'noreplay@example.com';
@@ -67,6 +70,7 @@ $Defaults[GC_DEFAULTS_LANGS_SESSIONSUFFIX] = '';
 $Defaults[GC_DEFAULTS_SERVICE] = '';
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV] = array();
 $Defaults[GC_DEFAULTS_SERVICE_ALLOWEDSITES] = array();
+$Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES] = array();
 $Defaults[GC_DEFAULTS_VIEW_ADAPTER] = '\\TooBasic\\Adapters\\View\\Smarty';
 $Defaults[GC_DEFAULTS_FORMATS] = array(
 	GC_VIEW_FORMAT_BASIC => $Defaults[GC_DEFAULTS_VIEW_ADAPTER],
@@ -90,7 +94,9 @@ $Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] = '';
 // Directory configurations.
 $Directories = array();
 $Directories[GC_DIRECTORIES_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache');
+$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/configs');
 $Directories[GC_DIRECTORIES_CONFIGS] = TB_Sanitizer::DirPath(ROOTDIR.'/config');
+$Directories[GC_DIRECTORIES_FORMS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/forms');
 $Directories[GC_DIRECTORIES_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes');
 $Directories[GC_DIRECTORIES_LIBRARIES] = TB_Sanitizer::DirPath(ROOTDIR.'/libraries');
 $Directories[GC_DIRECTORIES_REPRESENTATIONS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/representations');
@@ -100,11 +106,13 @@ $Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/in
 $Directories[GC_DIRECTORIES_ADAPTERS_DB] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/db');
 $Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/view');
 $Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR.'/modules');
-$Directories[GC_DIRECTORIES_SHELL] = TB_Sanitizer::DirPath(ROOTDIR.'/shell');
+$Directories[GC_DIRECTORIES_SAPIREADER] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/sapireader');
+$Directories[GC_DIRECTORIES_SEARCH] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/search');
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/shell');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
 $Directories[GC_DIRECTORIES_SYSTEM] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system');
+$Directories[GC_DIRECTORIES_SYSTEM_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/system');
 //
 // Connections.
 $Connections = array();
@@ -139,6 +147,14 @@ $Database[GC_DATABASE_DB_SPEC_ADAPTERS] = array(
 	'sqlite' => '\\TooBasic\\Adapters\\DB\\SpecSQLite',
 	'pgsql' => '\\TooBasic\\Adapters\\DB\\SpecPostgreSQL'
 );
+$Database[GC_DATABASE_DB_VERSION_ADAPTERS] = array(
+	'v1' => '\\TooBasic\\Adapters\\DB\\Version1',
+	'v2' => '\\TooBasic\\Adapters\\DB\\Version2'
+);
+$Database[GC_DATABASE_FIELD_FILTERS] = array(
+	GC_DATABASE_FIELD_FILTER_BOOLEAN => 'TooBasic\\Representations\\BooleanFilter',
+	GC_DATABASE_FIELD_FILTER_JSON => '\\TooBasic\\Representations\\JSONFilter'
+);
 //
 // Directory configurations.
 $Uris = array();
@@ -152,6 +168,7 @@ $Paths[GC_PATHS_CSS] = '/styles';
 $Paths[GC_PATHS_DBSPECS] = '/db';
 $Paths[GC_PATHS_DBSPECSCALLBACK] = '/db';
 $Paths[GC_PATHS_EMAIL_CONTROLLERS] = '/emails';
+$Paths[GC_PATHS_FORMS] = '/forms';
 $Paths[GC_PATHS_IMAGES] = '/images';
 $Paths[GC_PATHS_JS] = '/scripts';
 $Paths[GC_PATHS_LANGS] = '/langs';
@@ -170,6 +187,44 @@ $Paths[GC_PATHS_TEMPLATES] = '/templates';
 // SuperLoader main list.
 $SuperLoader = array();
 //
+// Magic properties configurations
+$MagicProps = array();
+$MagicProps[GC_MAGICPROP_PROPERTIES] = array(
+	GC_MAGICPROP_PROP_MODEL => '\\TooBasic\\ModelsFactory',
+	GC_MAGICPROP_PROP_REPRESENTATION => '\\TooBasic\\Representations\\ItemsFactoryProvider',
+	GC_MAGICPROP_PROP_TRANSLATE => '\\TooBasic\\Translate',
+	GC_MAGICPROP_PROP_PARAMS => '\\TooBasic\\Params',
+	//GC_MAGICPROP_PROP_CACHE => '',
+	GC_MAGICPROP_PROP_PATHS => '\\TooBasic\\Paths',
+	GC_MAGICPROP_PROP_CONFIG => '\\TooBasic\\Managers\\ConfigsManager',
+	GC_MAGICPROP_PROP_SAPIREADER => '\\TooBasic\\Managers\\SApiManager'
+);
+$MagicProps[GC_MAGICPROP_ALIASES] = array(
+	GC_MAGICPROP_PROP_TR => GC_MAGICPROP_PROP_TRANSLATE
+);
+//
+// Simple API Reader basic configuration.
+$SApiReader = array();
+$SApiReader[GC_SAPIREADER_DEFAULT_TYPE] = GC_SAPIREADER_TYPE_BASIC;
+$SApiReader[GC_SAPIREADER_TYPES] = array(
+	GC_SAPIREADER_TYPE_BASIC => '\\TooBasic\\SApiReader',
+	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
+	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
+);
+//
+// Forms builder basic configuration.
+$Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
+	GC_FORMS_BUILDTYPE_BASIC => '\\TooBasic\\Forms\\BasicType',
+	GC_FORMS_BUILDTYPE_BOOTSTRAP => '\\TooBasic\\Forms\\BootstrapType',
+	GC_FORMS_BUILDTYPE_TABLE => '\\TooBasic\\Forms\\TableType'
+);
+$Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
+$Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = '\\TooBasic\\ctrlExports_formFor';
+//
+// TooBasic's search engine configuration.
+$Search = array();
+$Search[GC_SEARCH_ENGINE_FACTORIES] = array();
+//
 // Cron profiles:
 // $Connections[GC_CONNECTIONS_DB]['<name>'] = array();
 // $Connections[GC_CONNECTIONS_DB]['<name>'][] = array(
@@ -183,34 +238,13 @@ require_once __DIR__.'/loader.php';
 //
 // Modules, site and system configuration files.
 {
-	$pathsProvider = TB_Paths::Instance();
 	//
-	// Full list of cofiguration files to load.
-	$auxConfigsList = array();
-	//
-	// Loading specific configurations for shell or web accesses.
-	if(defined('__SHELL__')) {
-		//
-		// Loading each extension and site sub-config file named
-		// 'config_http.php'.
-		$auxConfigsList = array_reverse($pathsProvider->configPath('config_shell', TB_Paths::ExtensionPHP, true));
-	} else {
-		//
-		// Loading each extension and site sub-config file named
-		// 'config_http.php'.
-		$auxConfigsList = array_reverse($pathsProvider->configPath('config_http', TB_Paths::ExtensionPHP, true));
-	}
-	//
-	// Loading each extension and site sub-config file named 'config.php'.
-	$auxConfigsList = array_merge(array_reverse($pathsProvider->configPath('config', TB_Paths::ExtensionPHP, true)), $auxConfigsList);
-	//
-	// Requiring each extension and site sub-config file.
-	foreach($auxConfigsList as $subConfig) {
+	// Loading each extension and site sub-config path named
+	// 'config_shell.php', 'config_http.php' and 'config.php'.
+	foreach(\TooBasic\getConfigurationFilesList() as $subConfig) {
 		require_once $subConfig;
 	}
 
-	unset($auxConfigsList);
-	unset($pathsProvider);
 	unset($subConfig);
 }
 //
@@ -230,11 +264,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
 	ksort($config['debugs']);
 	\TooBasic\debugThingInPage(function() use ($config) {
-		echo '<ul>';
+		echo '<dl class="dl-horizontal">';
 		foreach($config['debugs'] as $name => $description) {
-			echo "<li><strong>{$name}</strong>: {$description}</li>";
+			echo "<dt>{$name}</dt><dd>{$description}</dd>";
 		}
-		echo '</ul>';
+		echo '</dl>';
 	}, 'Debugs');
 }
 //

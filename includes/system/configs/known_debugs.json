@@ -26,6 +26,10 @@
 		"debugemailstriptags": "This activates the tags stripping when debugging emails.",
 		"debugdbquery": "Displays queries used by database query adapters.",
 		"debugredirection": "Disables redirect conditions and prompt what it's going to happen.",
-		"debugmanifests": "Displays all manifests information."
+		"debugmanifests": "Displays all manifests information.",
+		"debugsar": "Prompts several debug entries with basic information.",
+		"debugsarconf": "Shows the configuration to be used.",
+		"debugconfigs": "Shows information about how system configs are loaded.",
+		"debugformconfig": "Displays loaded form builder configuration after sanitation."
 	}
 }

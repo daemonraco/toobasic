@@ -1,5 +1,8 @@
 <h4>{$tr->title_edit_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
+<%if $formBuilder%>
+{$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'edit', $formFlags)}
+<%else%>
 <form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
 	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 	<table>
@@ -44,5 +47,6 @@
 		</tr>
 	</table>
 </form>
+<%/if%>
 <br/>
 <a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>

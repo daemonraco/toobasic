@@ -3,8 +3,16 @@
 /cache/filecache/*.data
 /cache/smarty/*
 /cache/langs/*
+/cache/system/*
 /libraries/*/*
 /tools.sh
 /nbproject
 /modules/tests
 /site/*
+/modules/toobasic-tagger
+/modules/toobasic-um
+/modules/toobasic-zfieldfilters
+/modules/toobasic-logger
+/modules/toobasic-workflows
+/composer.*
+/vendor/

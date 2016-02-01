@@ -33,6 +33,11 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected $_assignments = false;
 	/**
+	 * @var string[string][] Lists of configuration lines to add into PHP
+	 * files.
+	 */
+	protected $_configLines = false;
+	/**
 	 * @var string[] List of files to be created.
 	 */
 	protected $_files = array();
@@ -69,6 +74,123 @@ abstract class Scaffold extends ShellTool {
 	//
 	// Protected methods.
 	/**
+	 * This method injects confiugration lines into PHP files.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
+	protected function addConfigLines($spacer) {
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
+		//
+		// Checking for errors and the existens of at least one line.
+		if($ok && count($this->_configLines)) {
+			echo "\n{$spacer}Injecting configuration lines:\n";
+			//
+			// Creating pending files.
+			foreach($this->_configLines as $path => $confLines) {
+				if(!is_file($path)) {
+					echo "{$spacer}\tCreating empty file '{$path}': ";
+					file_put_contents($path, "<?php\n");
+					echo Color::Green("Done\n");
+				}
+			}
+			//
+			// Modifying each file.
+			foreach($this->_configLines as $path => $confLines) {
+				//
+				// Default values.
+				$sections = array(
+					GC_AFIELD_START => array(),
+					GC_AFIELD_MIDDLE => array(),
+					GC_AFIELD_END => array()
+				);
+				//
+				// Adding required end of line;
+				foreach($confLines as $pos => $confLine) {
+					$confLines[$pos] = "{$confLine}\n";
+				}
+				//
+				// Flag lines.
+				$startLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[START]\n";
+				$endLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[END]\n";
+				//
+				// Streching out file lines.
+				$startFound = false;
+				$endFound = false;
+				foreach(file($path) as $line) {
+					//
+					// Fixing end of line.
+					$line = str_replace("\r\n", "\n", $line);
+					//
+					// Separating sections.
+					if(!$startFound) {
+						if($line == $startLine) {
+							$startFound = true;
+						} else {
+							$sections[GC_AFIELD_START][] = $line;
+						}
+					} else {
+						if(!$endFound) {
+							if($line == $endLine) {
+								$endFound = true;
+							} else {
+								$sections[GC_AFIELD_MIDDLE][] = $line;
+							}
+						} else {
+							$sections[GC_AFIELD_END][] = $line;
+						}
+					}
+				}
+				//
+				// If this is the first time this section is
+				// added, a new line should be added to keep it
+				// nice.
+				if(!$startFound) {
+					$sections[GC_AFIELD_START][] = "\n";
+				}
+				//
+				// Removing conf lines for order safety.
+				foreach($sections[GC_AFIELD_MIDDLE] as $pos => $line) {
+					if(in_array($line, $confLines)) {
+						unset($sections[GC_AFIELD_MIDDLE][$pos]);
+					}
+				}
+				//
+				// Appending new conf lines.
+				foreach($confLines as $confLine) {
+					$sections[GC_AFIELD_MIDDLE][] = $confLine;
+				}
+				//
+				// Re-building file
+				$builtLines = array();
+				foreach($sections[GC_AFIELD_START] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $startLine;
+				foreach($sections[GC_AFIELD_MIDDLE] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $endLine;
+				foreach($sections[GC_AFIELD_END] as $line) {
+					$builtLines[] = $line;
+				}
+				//
+				// Updating.
+				echo "{$spacer}\tUpdating '{$path}': ";
+				if(file_put_contents($path, implode('', $builtLines)) !== false) {
+					echo Color::Green("Done\n");
+				} else {
+					echo Color::Green("Failed\n");
+				}
+			}
+		}
+
+		return $ok;
+	}
+	/**
 	 * This method is the one in charge of triggering the generation of routes
 	 * and adding them into configuration.
 	 *
@@ -79,13 +201,10 @@ abstract class Scaffold extends ShellTool {
 	protected function addAllRoutes($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $Defaults;
-		//
-		// Routes are added only when active.
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+		// Adding routes if everything is ok.
+		if($ok) {
 			//
 			// Generating the list of required routes.
 			$this->genRoutes();
@@ -134,7 +253,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addAllTranslations($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
 		// Global dependencies.
 		global $LanguageName;
@@ -143,7 +262,7 @@ abstract class Scaffold extends ShellTool {
 		$this->genTranslations();
 		//
 		// Checking if there are translations to add.
-		if(count($this->_translations)) {
+		if($ok && count($this->_translations)) {
 			echo "{$spacer}Adding translation ({$LanguageName}):\n";
 			//
 			// Cechking each translation item.
@@ -185,7 +304,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addRoute(\stdClass $newRoute, &$error, &$fatal) {
 		//
 		// Defualt values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -193,7 +312,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a route configuration file prensent in the
 		// system.
-		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			//
 			// Attemptting to create a routes confifuration file with
 			// a basic JSON configuraion.
@@ -225,9 +344,13 @@ abstract class Scaffold extends ShellTool {
 			// Checking each route to avoid duplicates. If there's
 			// already a similar route it should not be replaced.
 			foreach($config->routes as $route) {
-				if($route->action == $newRoute->action) {
+				if(isset($newRoute->action) && isset($route->action) && $route->action == $newRoute->action) {
 					$ok = false;
 					$error = "there's another rule for this controller";
+					break;
+				} elseif(isset($newRoute->service) && isset($route->service) && $route->service == $newRoute->service) {
+					$ok = false;
+					$error = "there's another rule for this service";
 					break;
 				}
 			}
@@ -263,7 +386,7 @@ abstract class Scaffold extends ShellTool {
 	protected function addTranslation($newTr, &$error, &$fatal) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -271,7 +394,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a language configuration file present in
 		// the system.
-		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
 			//
 			// Creating a basic language configuration file with an
 			// initial JSON configuration.
@@ -373,10 +496,26 @@ abstract class Scaffold extends ShellTool {
 		$this->genNames();
 		//
 		// Avoiding multiple generations.
-		if($this->_assignments === false) {
+		if(!$this->hasErrors() && $this->_assignments === false) {
 			//
 			// Default values.
 			$this->_assignments = array();
+		}
+	}
+	/**
+	 * This method generates lists of configuration lines to be inserted in
+	 * several PHP files.
+	 */
+	protected function genConfigLines() {
+		//
+		// Triggering names generation.
+		$this->genNames();
+		//
+		// Avoiding multiple generations.
+		if(!$this->hasErrors() && $this->_configLines === false) {
+			//
+			// Default values.
+			$this->_configLines = array();
 		}
 	}
 	/**
@@ -394,26 +533,32 @@ abstract class Scaffold extends ShellTool {
 	protected function genFile($path, $template = false, $callback = 'genFileByTemplate') {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Avoiding file overwrite.
-		if(!$this->isForced() && is_file($path)) {
-			echo Color::Yellow('Ignored').' (file already exist)';
-		} else {
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Generating a more complete scaffold template name.
-			$completeTemplate = Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
-			//
-			// Forwarding the generation call and checking for errors.
-			$error = false;
-			if($this->{$callback}($path, $completeTemplate, $error)) {
-				echo Color::Green('Ok');
+			// Avoiding file overwrite.
+			if(!$this->isForced() && is_file($path)) {
+				echo Color::Yellow('Ignored').' (file already exist)';
 			} else {
-				echo Color::Red('Failed')." ({$error})";
-				$ok = false;
+				//
+				// Generating a more complete scaffold template
+				// name.
+				$completeTemplate = Sanitizer::DirPath("scaffolds/{$this->_scaffoldName}/{$template}");
+				//
+				// Forwarding the generation call and checking for
+				// errors.
+				$error = false;
+				if($this->{$callback}($path, $completeTemplate, $error)) {
+					echo Color::Green('Ok');
+				} else {
+					echo Color::Red('Failed')." ({$error})";
+					$ok = false;
+				}
 			}
+			echo "\n";
 		}
-		echo "\n";
 
 		return $ok;
 	}
@@ -429,24 +574,28 @@ abstract class Scaffold extends ShellTool {
 	protected function genFileByTemplate($path, $template, &$error) {
 		//
 		// Default values.
-		$out = true;
+		$out = !$this->hasErrors();
 		//
-		// Forcing render to be loaded.
-		$this->loadRender();
-		//
-		// Assignments.
-		$this->genAssignments();
-		//
-		// Generating file content.
-		$output = $this->_render->render($this->_assignments, $template);
-		//
-		// Generating a file.
-		$result = file_put_contents($path, $output);
-		//
-		// Checking for errors.
-		if($result === false) {
-			$error = "Unable to write file '{$path}'";
-			$out = false;
+		// Ingnoring process when there are previous errors.
+		if($out) {
+			//
+			// Forcing render to be loaded.
+			$this->loadRender();
+			//
+			// Assignments.
+			$this->genAssignments();
+			//
+			// Generating file content.
+			$output = $this->_render->render($this->_assignments, $template);
+			//
+			// Generating a file.
+			$result = file_put_contents($path, $output);
+			//
+			// Checking for errors.
+			if($result === false) {
+				$error = "Unable to write file '{$path}'";
+				$out = false;
+			}
 		}
 
 		return $out;
@@ -458,7 +607,7 @@ abstract class Scaffold extends ShellTool {
 	protected function genNames() {
 		//
 		// Avoiding multiple analysis.
-		if($this->_names === false) {
+		if(!$this->hasErrors() && $this->_names === false) {
 			//
 			// Global dependecies.
 			global $LanguageName;
@@ -511,35 +660,39 @@ abstract class Scaffold extends ShellTool {
 	 * @return boolean Returns TRUE where there were no critical errors.
 	 */
 	protected function genRequiredDirectories($spacer) {
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Cleaning directories list.
-		$this->_requiredDirectories = array_unique($this->_requiredDirectories);
-		//
-		// Checking which directories have to be created.
-		$toGen = array();
-		foreach($this->_requiredDirectories as $dirPath) {
-			if(!is_dir($dirPath)) {
-				$toGen[] = $dirPath;
-			}
-		}
-		//
-		// Is there something to create.
-		if($toGen) {
-			echo "{$spacer}\tCreating required directories:\n";
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Creating each directory.
-			foreach($toGen as $dirPath) {
-				echo "{$spacer}\t\tCreating '{$dirPath}': ";
-				@mkdir($dirPath, 0777, true);
+			// Cleaning directories list.
+			$this->_requiredDirectories = array_unique($this->_requiredDirectories);
+			//
+			// Checking which directories have to be created.
+			$toGen = array();
+			foreach($this->_requiredDirectories as $dirPath) {
+				if(!is_dir($dirPath)) {
+					$toGen[] = $dirPath;
+				}
+			}
+			//
+			// Is there something to create.
+			if($toGen) {
+				echo "{$spacer}\tCreating required directories:\n";
 				//
-				// Checking creation.
-				if(is_dir($dirPath)) {
-					echo Color::Green('Ok')."\n";
-				} else {
-					echo Color::Red('Failed')."\n";
-					$ok = false;
-					break;
+				// Creating each directory.
+				foreach($toGen as $dirPath) {
+					echo "{$spacer}\t\tCreating '{$dirPath}': ";
+					@mkdir($dirPath, 0777, true);
+					//
+					// Checking creation.
+					if(is_dir($dirPath)) {
+						echo Color::Green('Ok')."\n";
+					} else {
+						echo Color::Red('Failed')."\n";
+						$ok = false;
+						break;
+					}
 				}
 			}
 		}
@@ -554,7 +707,7 @@ abstract class Scaffold extends ShellTool {
 	protected function genRoutes() {
 		//
 		// Avoiding multiple generations.
-		if($this->_routes === false) {
+		if(!$this->hasErrors() && $this->_routes === false) {
 			$this->_routes = array();
 		}
 	}
@@ -569,7 +722,7 @@ abstract class Scaffold extends ShellTool {
 		$this->genNames();
 		//
 		// Avoiding multiple generations.
-		if($this->_translations === false) {
+		if(!$this->hasErrors() && $this->_translations === false) {
 			//
 			// Default values.
 			$this->_translations = array();
@@ -620,13 +773,10 @@ abstract class Scaffold extends ShellTool {
 	protected function removeAllRoutes($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $Defaults;
-		//
-		// Routes are removed only when active.
-		if($ok && $Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+		// Removing routes only if everything is ok.
+		if($ok) {
 			//
 			// Generating the list of required routes.
 			$this->genRoutes();
@@ -675,41 +825,152 @@ abstract class Scaffold extends ShellTool {
 	protected function removeAllTranslations($spacer) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Global dependencies.
-		global $LanguageName;
-		//
-		// Generating translations.
-		$this->genTranslations();
-		//
-		// Checking if there are translations to remove.
-		if(count($this->_translations)) {
-			echo "{$spacer}Removing translations ({$LanguageName}):\n";
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Cechking each translation item.
-			foreach($this->_translations as $tr) {
-				echo "{$spacer}\t- '{$tr->key}': ";
+			// Global dependencies.
+			global $LanguageName;
+			//
+			// Generating translations.
+			$this->genTranslations();
+			//
+			// Checking if there are translations to remove.
+			if(count($this->_translations)) {
+				echo "{$spacer}Removing translations ({$LanguageName}):\n";
 				//
-				// Attempting to remove a translation.
-				$error = '';
-				$fatal = false;
-				if($this->removeTranslation($tr, $error, $fatal)) {
-					echo Color::Green('Ok');
-				} else {
+				// Cechking each translation item.
+				foreach($this->_translations as $tr) {
+					echo "{$spacer}\t- '{$tr->key}': ";
 					//
-					// Checking the severity of the error
-					// found.
-					if($fatal) {
-						echo Color::Red('Failed');
-						$ok = false;
-						break;
+					// Attempting to remove a translation.
+					$error = '';
+					$fatal = false;
+					if($this->removeTranslation($tr, $error, $fatal)) {
+						echo Color::Green('Ok');
 					} else {
-						echo Color::Yellow('Ignored');
+						//
+						// Checking the severity of the
+						// error found.
+						if($fatal) {
+							echo Color::Red('Failed');
+							$ok = false;
+							break;
+						} else {
+							echo Color::Yellow('Ignored');
+						}
+						echo " ({$error})";
 					}
-					echo " ({$error})";
+					echo "\n";
 				}
-				echo "\n";
+			}
+		}
+
+		return $ok;
+	}
+	/**
+	 * This method removes injected confiugration lines into PHP files.
+	 *
+	 * @param string $spacer Prefix to add on each log line promptted on
+	 * terminal.
+	 * @return boolean Returns TRUE where there were no critical errors.
+	 */
+	protected function removeConfigLines($spacer) {
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
+		//
+		// Checking for errors and the existens of at least one line.
+		if($ok && count($this->_configLines)) {
+			echo "\n{$spacer}Removing configuration lines:\n";
+			//
+			// Modifying each file.
+			foreach($this->_configLines as $path => $confLines) {
+				//
+				// Ignoring unexisting files.
+				if(!is_file($path)) {
+					continue;
+				}
+				//
+				// Default values.
+				$sections = array(
+					GC_AFIELD_START => array(),
+					GC_AFIELD_MIDDLE => array(),
+					GC_AFIELD_END => array()
+				);
+				//
+				// Adding required end of line;
+				foreach($confLines as $pos => $confLine) {
+					$confLines[$pos] = "{$confLine}\n";
+				}
+				//
+				// Flag lines.
+				$startLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[START]\n";
+				$endLine = '// TOOBASIC-SYSTOOL-'.strtoupper($this->_scaffoldName)."[END]\n";
+				//
+				// Streching out file lines.
+				$startFound = false;
+				$endFound = false;
+				foreach(file($path) as $line) {
+					//
+					// Fixing end of line.
+					$line = str_replace("\r\n", "\n", $line);
+					//
+					// Separating sections.
+					if(!$startFound) {
+						if($line == $startLine) {
+							$startFound = true;
+						} else {
+							$sections[GC_AFIELD_START][] = $line;
+						}
+					} else {
+						if(!$endFound) {
+							if($line == $endLine) {
+								$endFound = true;
+							} else {
+								$sections[GC_AFIELD_MIDDLE][] = $line;
+							}
+						} else {
+							$sections[GC_AFIELD_END][] = $line;
+						}
+					}
+				}
+				//
+				// This file doesn't seems to have configuration
+				// generated by this controller. Ignoring.
+				if(!$startFound) {
+					continue;
+				}
+				//
+				// Removing conf lines for order safety.
+				foreach($sections[GC_AFIELD_MIDDLE] as $pos => $line) {
+					if(in_array($line, $confLines)) {
+						unset($sections[GC_AFIELD_MIDDLE][$pos]);
+					}
+				}
+				//
+				// Re-building file
+				$builtLines = array();
+				foreach($sections[GC_AFIELD_START] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $startLine;
+				foreach($sections[GC_AFIELD_MIDDLE] as $line) {
+					$builtLines[] = $line;
+				}
+				$builtLines[] = $endLine;
+				foreach($sections[GC_AFIELD_END] as $line) {
+					$builtLines[] = $line;
+				}
+				//
+				// Updating.
+				echo "{$spacer}\tUpdating '{$path}': ";
+				if(file_put_contents($path, implode('', $builtLines)) !== false) {
+					echo Color::Green("Done\n");
+				} else {
+					echo Color::Green("Failed\n");
+				}
 			}
 		}
 
@@ -725,25 +986,29 @@ abstract class Scaffold extends ShellTool {
 	protected function removeFile($path) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		//
-		// Checking the existence of the file.
-		if(!is_file($path)) {
-			echo Color::Yellow('Ignored').' (file already removed)';
-		} else {
+		// Ingnoring process when there are previous errors.
+		if($ok) {
 			//
-			// Remove it.
-			@unlink($path);
-			//
-			// Checking for errors.
+			// Checking the existence of the file.
 			if(!is_file($path)) {
-				echo Color::Green('Ok');
+				echo Color::Yellow('Ignored').' (file already removed)';
 			} else {
-				echo Color::Red('Failed').' (unable to remove it)';
-				$ok = false;
+				//
+				// Remove it.
+				@unlink($path);
+				//
+				// Checking for errors.
+				if(!is_file($path)) {
+					echo Color::Green('Ok');
+				} else {
+					echo Color::Red('Failed').' (unable to remove it)';
+					$ok = false;
+				}
 			}
+			echo "\n";
 		}
-		echo "\n";
 
 		return $ok;
 	}
@@ -758,7 +1023,7 @@ abstract class Scaffold extends ShellTool {
 	protected function removeRoute(\stdClass $badRoute, &$error, &$fatal) {
 		//
 		// Defualt values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -766,7 +1031,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a route configuration file prensent in the
 		// system.
-		if(!is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
 			$fatal = true;
@@ -793,7 +1058,10 @@ abstract class Scaffold extends ShellTool {
 			//
 			// Looking for the route and removing it.
 			foreach($config->routes as $routeKey => $route) {
-				if($route->action == $badRoute->action) {
+				if(isset($badRoute->action) && isset($route->action) && $route->action == $badRoute->action) {
+					unset($config->routes[$routeKey]);
+					$found = true;
+				} elseif(isset($badRoute->service) && isset($route->service) && $route->service == $badRoute->service) {
 					unset($config->routes[$routeKey]);
 					$found = true;
 				}
@@ -836,7 +1104,7 @@ abstract class Scaffold extends ShellTool {
 	protected function removeTranslation(\stdClass $badTr, &$error, &$fatal) {
 		//
 		// Default values.
-		$ok = true;
+		$ok = !$this->hasErrors();
 		$backup = false;
 		$fatal = false;
 		$error = '';
@@ -844,7 +1112,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking if there's a language configuration file present in
 		// the system.
-		if(!is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
+		if($ok && !is_file($this->_names[GC_AFIELD_LANGS_PATH])) {
 			$ok = false;
 			$error = "unable to find file '{$this->_names[GC_AFIELD_LANGS_PATH]}'";
 			$fatal = true;
@@ -929,14 +1197,20 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function taskCreate($spacer = '') {
 		//
-		// Default values.
-		$ok = true;
-		//
 		// Enforcing names generation.
 		$this->genNames();
 		//
+		// Enforcing assignment generation.
+		$this->genAssignments();
+		//
+		// Enforcing files list structure.
+		$this->genConfigLines();
+		//
 		// Enforcing files list structure.
 		$this->enforceFilesList();
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
 		//
 		// Directories
 		if($ok) {
@@ -967,6 +1241,11 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$ok = $this->addAllTranslations("{$spacer}\t");
 		}
+		//
+		// PHP  configuration lines.
+		if($ok) {
+			$ok = $this->addConfigLines("{$spacer}\t");
+		}
 
 		return $ok;
 	}
@@ -979,14 +1258,20 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function taskRemove($spacer = '') {
 		//
-		// Default values.
-		$ok = true;
-		//
 		// Enforcing names generation.
 		$this->genNames();
 		//
+		// Enforcing assignment generation.
+		$this->genAssignments();
+		//
+		// Enforcing files list structure.
+		$this->genConfigLines();
+		//
 		// Enforcing files list structure.
 		$this->enforceFilesList();
+		//
+		// Default values.
+		$ok = !$this->hasErrors();
 		//
 		// Files
 		if($ok) {
@@ -1012,6 +1297,11 @@ abstract class Scaffold extends ShellTool {
 #		if($ok) {
 #			$ok = $this->removeAllTranslations("{$spacer}\t");
 #		}
+		//
+		// PHP  configuration lines.
+		if($ok) {
+			$ok = $this->removeConfigLines("{$spacer}\t");
+		}
 
 		return $ok;
 	}

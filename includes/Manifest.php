@@ -9,8 +9,9 @@ namespace TooBasic;
 
 //
 // Class aliases.
-use \TooBasic\Exception;
-use \TooBasic\Sanitizer;
+use TooBasic\Exception;
+use TooBasic\Managers\ManifestsManager;
+use TooBasic\Sanitizer;
 
 /**
  * @class Manifest
@@ -35,6 +36,14 @@ class Manifest {
 	 * @var string Name of the module represented.
 	 */
 	protected $_moduleName = false;
+	/**
+	 * @var string Path where the module is stored.
+	 */
+	protected $_modulePath = false;
+	/**
+	 * @var string[] List of required TooBasic modules.
+	 */
+	protected $_requiredModules = array();
 	//
 	// Magic methods.
 	/**
@@ -45,11 +54,22 @@ class Manifest {
 	 */
 	public function __construct($moduleName) {
 		$this->_moduleName = $moduleName;
+		//
+		// Global dependencies.
+		global $Directories;
+		//
+		// Guessing the modules path.
+		$this->_modulePath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_moduleName}");
 
 		$this->load();
 	}
 	//
 	// Public methods.
+	/**
+	 * This method checks for versions requirements.
+	 *
+	 * @return boolean Returns TRUE if it detected no errors.
+	 */
 	public function check() {
 		//
 		// Checking required PHP version.
@@ -60,6 +80,33 @@ class Manifest {
 		// Checking required TooBasic version.
 		if(version_compare(self::CleanVersion(TOOBASIC_VERSION), self::CleanVersion($this->_information->required_versions->toobasic)) < 0) {
 			$this->setError(self::ErrorPHPVersion, "This module requires at least version {$this->_information->required_versions->toobasic} of TooBasic");
+		}
+		//
+		// Checking cross-module dependencies.
+		foreach($this->_information->required_versions as $field => $reqVersion) {
+			$matches = false;
+			//
+			// Detecting module dependency and name.
+			if(preg_match('/^mod:(?P<ucode>.+)$/', $field, $matches)) {
+				//
+				// Looking for the requested module.
+				$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
+				//
+				// Updating the list of requirements.
+				$this->_requiredModules[$matches['ucode']] = $manifest;
+				//
+				// Checking installation.
+				if($manifest) {
+					//
+					// Comparing version.
+					$modVersion = $manifest->information()->version;
+					if(version_compare(self::CleanVersion($modVersion), self::CleanVersion($reqVersion)) < 0) {
+						$this->setError(self::ErrorPHPVersion, "Required version '{$reqVersion}' for module '{$manifest->information()->name}' (found version '{$modVersion}')");
+					}
+				} else {
+					$this->setError(self::ErrorPHPVersion, "Unable to obtain version number for module 'UCODE:{$matches['ucode']}'. Please make sure it is installed?");
+				}
+			}
 		}
 
 		return !$this->hasErrors();
@@ -90,6 +137,43 @@ class Manifest {
 	public function information() {
 		return $this->_information;
 	}
+	/**
+	 * Provides access to the name used to load this module manifest.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function moduleName() {
+		return $this->_moduleName;
+	}
+	/**
+	 * Provides access to the path where the represented module is stored.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function modulePath() {
+		return $this->_modulePath;
+	}
+	/**
+	 * Provides access to the configured module name.
+	 *
+	 * @return string Returns a name.
+	 */
+	public function name() {
+		return $this->_information->name;
+	}
+	/**
+	 * Provides accesss to the list of required modules.
+	 *
+	 * @return \TooBasic\Manifest[string] List of required modules. Keys in
+	 * this list are UCODEs and values are manifest objects or FALSE.
+	 */
+	public function requiredModules() {
+		//
+		// This method requires a prior check.
+		$this->check();
+
+		return $this->_requiredModules;
+	}
 	//
 	// Protected methods.
 	/**
@@ -107,11 +191,8 @@ class Manifest {
 			$this->_information = new \stdClass();
 			$json = false;
 			//
-			// Global dependencies.
-			global $Directories;
-			//
 			// Loading file.
-			$path = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_moduleName}/manifest.json");
+			$path = Sanitizer::DirPath("{$this->modulePath()}/manifest.json");
 			if(is_readable($path)) {
 				$json = json_decode(file_get_contents($path));
 				if(!$json) {
@@ -122,9 +203,10 @@ class Manifest {
 			}
 			//
 			// Enforcing main object.
-			\TooBasic\objectCopyAndEnforce(array('name', 'version', 'description', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
+			\TooBasic\objectCopyAndEnforce(array('name', 'ucode', 'version', 'description', 'icon', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
 				'author' => new \stdClass(),
-				'required_versions' => new \stdClass()
+				'required_versions' => new \stdClass(),
+				'icon' => false
 			));
 			//
 			// Enforcing author's information.
@@ -136,12 +218,16 @@ class Manifest {
 				'toobasic' => TOOBASIC_VERSION
 			));
 			//
-			// Enforcing name and version.
+			// Enforcing name, universal code and version number.
 			if(!$this->_information->name) {
 				$this->_information->name = ucwords($this->_moduleName);
 			}
+			if(!$this->_information->ucode) {
+				$this->_information->ucode = $this->_information->name;
+			}
+			$this->_information->ucode = strtolower($this->_information->ucode);
 			if(!$this->_information->version) {
-				$this->_information->version = '1.0';
+				$this->_information->version = '0.0.1';
 			}
 			//
 			// Enforcing documentation url.

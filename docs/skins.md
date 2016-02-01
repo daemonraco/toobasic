@@ -68,6 +68,7 @@ Well, there are three way in which a skin can be seen:
 There's a debug URL parameter you can add to you URL call `skin` that will force
 your page to consider the specified skin when rendering your page.
 For example:
+
 >http://www.example.com/?action=someaction&skin=myskin
 
 This mechanism has the highest priority when choosing a current skin.
@@ -104,6 +105,7 @@ setting and use the default skin, in other words, no skin.
 If you are not sure which skin is being used, just add to your URL the debug
 parameter called `debugskin` and it will prompt the current skin and some other
 values you may need.
+
 >http://www.example.com/?action=someaction&debugskin
 
 ## Multiple sites
@@ -126,3 +128,5 @@ If you want or need, you may visit these documentation pages:
 * [Layouts](layout.md)
 * [Controller Exports](controllerexports.md)
 * [Snippets](snippets.md)
+
+<!--:GBSUMMARY:MVC:6:Skins:-->

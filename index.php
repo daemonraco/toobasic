@@ -7,9 +7,9 @@
 include __DIR__.'/config/config.php';
 
 use \TooBasic\Params;
-use \TooBasic\Managers\ServicesManager as ServicesManager;
-use \TooBasic\Managers\ActionsManager as ActionsManager;
-use \TooBasic\Managers\EmailsManager as EmailsManager;
+use \TooBasic\Managers\ServicesManager;
+use \TooBasic\Managers\ActionsManager;
+use \TooBasic\Managers\EmailsManager;
 
 try {
 	if(isset(Params::Instance()->debugphpinfo)) {

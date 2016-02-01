@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @class <%$predictiveServiceController%>
+ *
+ * Accessible at '?service=<%$predictiveService%>'
+ */
+class <%$predictiveServiceController%> extends \TooBasic\Service {
+	//
+	// Protected properties
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeSmall;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		$factory = $this->representation-><%$pluralName%>;
+
+		$limit = 10;
+		if(isset($this->params->get->limit)) {
+			$limit = $this->params->get->limit;
+		}
+
+		$pattern = str_replace(' ', '%', $this->params->get->pattern);
+
+		$ids = $factory->idsByNamesLike($pattern);
+		$ids = array_slice($ids, 0, $limit);
+
+		$items = array();
+		foreach($ids as $id) {
+			$item = $factory->item($id);
+			$items[] = $item->toArray();
+		}
+		$this->assign("items", $items);
+		$this->assign("pattern", "%{$pattern}%");
+
+		return $this->status();
+	}
+	protected function init() {
+		parent::init();
+		$this->_cacheParams['GET'][] = 'pattern';
+		$this->_cacheParams['GET'][] = 'limit';
+		$this->_requiredParams['GET'][] = 'pattern';
+	}
+}

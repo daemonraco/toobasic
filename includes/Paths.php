@@ -40,6 +40,10 @@ class Paths extends Singleton {
 	 */
 	protected $_controllerPaths = false;
 	/**
+	 * @var string[string][] List of lists for available custom directories.
+	 */
+	protected $_customPaths = array();
+	/**
 	 * @var string[] List of available styles directories.
 	 */
 	protected $_cssPaths = false;
@@ -53,6 +57,16 @@ class Paths extends Singleton {
 	 * specifications.
 	 */
 	protected $_dbSpecPaths = false;
+	/**
+	 * @var string[] Last loaded list of full paths that cannot be considered
+	 * as a valid result of any path search.
+	 */
+	protected $_disabledPaths = false;
+	/**
+	 * @var int This property keeps count of the last loaded list of disabled
+	 * paths.
+	 */
+	protected $_disabledPathsCount = -1;
 	/**
 	 * @var string[] List of available emails controllers directories.
 	 */
@@ -145,6 +159,63 @@ class Paths extends Singleton {
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
 		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This methods allows to search files inside a custom subfolder.
+	 *
+	 * @param string $folder Subfolder to look into, either inside 'site' or
+	 * any module.
+	 * @param string $name Name of the file to look for.
+	 * @param string $extension File extension.
+	 * @param boolean $full Indicates if all found files has to be retunred or
+	 * only one.
+	 * @param string $skin Skin to have in consideration. It's usually a
+	 * boolean true indication current skin.
+	 * @param boolean $asUri When true every path is transformed into an
+	 * absolute URI before returning.
+	 * @return mixed Returns an array with every path found or just one string
+	 * when it's not set as full. All paths are absolute.
+	 */
+	public function customPaths($folder, $name, $extension, $full = false, $skin = false, $asUri = false) {
+		//
+		// Generating a proper key.
+		$key = md5(is_array($folder) ? implode('-', $folder) : $folder);
+		//
+		// If there's no list for these paths, one is created.
+		if(!isset($this->_customPaths[$key])) {
+			$this->_customPaths[$key] = false;
+		}
+		//
+		// Searching and returning the result.
+		return $this->find($this->_customPaths[$key], $skin, $folder, $name, $extension, $full, $asUri);
+	}
+	/**
+	 * This methods provides access to a list of paths that won't be returned
+	 * by this singleton in any search.
+	 * Its internal mechanism is based on '$Defaults[GC_DEFAULTS_DISABLED_PATHS]'
+	 * but uses a different approach to avoid performance issues when checking
+	 * paths.
+	 *
+	 * @return string[] Returns a list of absolute paths.
+	 */
+	public function disabledPaths() {
+		//
+		// Global dependencies.
+		global $Defaults;
+		//
+		// Avoiding multiple loads.
+		if($this->_disabledPathsCount != count($Defaults[GC_DEFAULTS_DISABLED_PATHS])) {
+			//
+			// Reseting list.
+			$this->_disabledPaths = array();
+			//
+			// Loading disabled paths.
+			foreach($Defaults[GC_DEFAULTS_DISABLED_PATHS] as $v) {
+				$this->_disabledPaths[] = Sanitizer::DirPath(ROOTDIR."/{$v}");
+			}
+		}
+
+		return $this->_disabledPaths;
 	}
 	/**
 	 * This method provides a way to get one or all email controller files
@@ -587,6 +658,23 @@ class Paths extends Singleton {
 			$list[] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SYSTEM]}/{$subpath}");
 		}
 		//
+		// Removing disabled paths.
+		if($this->disabledPaths()) {
+			//
+			// List shortcut.
+			$dPaths = $this->disabledPaths();
+			//
+			// Removing disabled results.
+			foreach($list as $k => $v) {
+				if(in_array($v, $dPaths)) {
+					unset($list[$k]);
+				}
+			}
+			//
+			// Cleaning keys.
+			$list = array_values($list);
+		}
+		//
 		// Returning the built list.
 		return $list;
 	}
@@ -670,6 +758,28 @@ class Paths extends Singleton {
 		if($asUri) {
 			foreach($out as &$v) {
 				$v = self::Path2Uri($v);
+			}
+		}
+		//
+		// Removing disabled paths.
+		if($this->disabledPaths()) {
+			//
+			// List shortcut.
+			$dPaths = $this->disabledPaths();
+			//
+			// Removing disabled results.
+			foreach($out as $k => $v) {
+				if(in_array($v, $dPaths)) {
+					unset($out[$k]);
+				}
+			}
+			//
+			// Cleaning keys.
+			$out = array_values($out);
+			//
+			// Debugs.
+			if($debugPathsActive) {
+				$debugPaths[GC_AFIELD_DISABLED] = $dPaths;
 			}
 		}
 		//

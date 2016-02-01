@@ -4,40 +4,22 @@
 * [What is it?](README.md#what-is-it)
 * [Why would I use this at all?](README.md#why-would-i-use-this-at-all)
 * [Basic features?](README.md#basic-features)
-* [Folders](README.md#folders)
-* [How to create a basic page](README.md#how-to-create-a-basic-page)
-	* [Controller](README.md#controller)
-	* [Template](README.md#template)
-	* [Is that it?](README.md#is-that-it)
-	* [But?](README.md#but)
-* [Even more basic](README.md#even-more-basic)
-* [Even easier?!](README.md#even-easier)
-* [Suggestions](README.md#suggestions)
+* [Installation](README.md#installation)
+* [Start up](README.md#start-up)
+* [Suggested modules (plugins)](README.md#suggested-modules-plugins)
+* [Documentation](README.md#documentation)
 * [Thanks](README.md#thanks)
 	* [Smarty](README.md#smarty)
 	* [Twitter Bootstrap](README.md#twitter-bootstrap)
 	* [jQuery](README.md#jquery)
-
-##  Adapters (docs/adapters.md):
-
-* [What are _adapters_](docs/adapters.md#what-are-adapters)
-* [Cache adapters](docs/adapters.md#cache-adapters)
-* [Database structure maintainer adapters](docs/adapters.md#database-structure-maintainer-adapters)
-* [I want mine!](docs/adapters.md#i-want-mine)
-	* [Step 0: into a module](docs/adapters.md#step-0-into-a-module)
-	* [Step 1: new adapter](docs/adapters.md#step-1-new-adapter)
-	* [Step 2: using the adapter](docs/adapters.md#step-2-using-the-adapter)
-	* [Step 3: including the adapter](docs/adapters.md#step-3-including-the-adapter)
-* [I want my database structure maintainer adapter](docs/adapters.md#i-want-my-database-structure-maintainer-adapter)
-* [View adapters](docs/adapters.md#view-adapters)
-	* [Others](docs/adapters.md#others)
-* [Suggestions](docs/adapters.md#suggestions)
 
 ##  Author's Note (docs/authorsnote.md):
 
 * [TooBasic?!](docs/authorsnote.md#toobasic)
 * [One action one controller?!](docs/authorsnote.md#one-action-one-controller)
 * [Engrish](docs/authorsnote.md#engrish)
+* [_Why query adapter is so complicated?_](docs/authorsnote.md#why-query-adapter-is-so-complicated)
+* [PHPUnit](docs/authorsnote.md#phpunit)
 
 ##  Cache (docs/cache.md):
 
@@ -67,6 +49,8 @@
 	* [_config_http.php_](docs/configs.md#config_httpphp)
 	* [Site config file](docs/configs.md#site-config-file)
 	* [Summary](docs/configs.md#summary)
+* [Easier with JSON](docs/configs.md#easier-with-json)
+	* [Multiple files](docs/configs.md#multiple-files)
 * [Suggestions](docs/configs.md#suggestions)
 
 ##  Controller Exports (docs/controllerexports.md):
@@ -92,6 +76,17 @@
 	* [Attributes](docs/controllerexports.md#attributes)
 	* [Reloading](docs/controllerexports.md#reloading)
 * [Suggestions](docs/controllerexports.md#suggestions)
+
+##  Controllers (docs/controller.md):
+
+* [How to create a basic page](docs/controller.md#how-to-create-a-basic-page)
+	* [Controller](docs/controller.md#controller)
+	* [View](docs/controller.md#view)
+	* [Is that it?](docs/controller.md#is-that-it)
+	* [But?](docs/controller.md#but)
+* [Language](docs/controller.md#language)
+* [Even more basic](docs/controller.md#even-more-basic)
+* [Suggestions](docs/controller.md#suggestions)
 
 ##  Databases (docs/databases.md):
 
@@ -122,6 +117,10 @@
 	* [What else can I do?](docs/databasespecs.md#what-else-can-i-do)
 	* [Indexes](docs/databasespecs.md#indexes)
 	* [Why no drop callbacks?](docs/databasespecs.md#why-no-drop-callbacks)
+* [Table structures version 2](docs/databasespecs.md#table-structures-version-2)
+	* [String specification](docs/databasespecs.md#string-specification)
+	* [Extended specification](docs/databasespecs.md#extended-specification)
+	* [Indexes](docs/databasespecs.md#indexes)
 * [Unknowns](docs/databasespecs.md#unknowns)
 * [Performance](docs/databasespecs.md#performance)
 * [Suggestions](docs/databasespecs.md#suggestions)
@@ -168,10 +167,60 @@
 	* [Module](docs/facilities.md#module)
 	* [Connection?](docs/facilities.md#connection)
 	* [Bootstrap](docs/facilities.md#bootstrap)
+	* [Predictive](docs/facilities.md#predictive)
+	* [jQueryUI Autocomplete](docs/facilities.md#jqueryui-autocomplete)
+	* [Forms Builder](docs/facilities.md#forms-builder)
 * [Sys-tool _service_](docs/facilities.md#sys-tool-service)
 	* [Features](docs/facilities.md#features)
 	* [Removing a service](docs/facilities.md#removing-a-service)
 * [Suggestions](docs/facilities.md#suggestions)
+
+##  Forms Builder (docs/forms.md):
+
+* [What is Forms Builder?](docs/forms.md#what-is-forms-builder)
+* [Example](docs/forms.md#example)
+	* [Warning](docs/forms.md#warning)
+* [Using forms](docs/forms.md#using-forms)
+	* [Creating a form](docs/forms.md#creating-a-form)
+	* [Form name](docs/forms.md#form-name)
+	* [Form action and method](docs/forms.md#form-action-and-method)
+	* [Form type](docs/forms.md#form-type)
+	* [Form attributes](docs/forms.md#form-attributes)
+	* [Form fields](docs/forms.md#form-fields)
+	* [Field labels](docs/forms.md#field-labels)
+	* [Field exclusions](docs/forms.md#field-exclusions)
+	* [Buttons](docs/forms.md#buttons)
+	* [Button labels](docs/forms.md#button-labels)
+	* [Commands summary](docs/forms.md#commands-summary)
+* [Views](docs/forms.md#views)
+	* [_$ctrl->formFor()_](docs/forms.md#ctrl-formfor)
+	* [Create view](docs/forms.md#create-view)
+	* [Show view](docs/forms.md#show-view)
+	* [Edit view](docs/forms.md#edit-view)
+* [Remove view](docs/forms.md#remove-view)
+* [Removing](docs/forms.md#removing)
+* [Representations?](docs/forms.md#representations)
+* [Extras parameters](docs/forms.md#extras-parameters)
+* [Suggestions](docs/forms.md#suggestions)
+
+##  Installation (docs/install.md):
+
+* [Requirements](docs/install.md#requirements)
+* [Linux preconditions](docs/install.md#linux-preconditions)
+	* [Checks](docs/install.md#checks)
+* [Microsoft windows](docs/install.md#microsoft-windows)
+	* [Installing PHP and others](docs/install.md#installing-php-and-others)
+	* [Installing Git](docs/install.md#installing-git)
+	* [Checks](docs/install.md#checks)
+* [Installing __TooBasic__](docs/install.md#installing-toobasic)
+	* [Step 1: location](docs/install.md#step-1-location)
+	* [Step 2: basic installation](docs/install.md#step-2-basic-installation)
+	* [Step 3: git submodules](docs/install.md#step-3-git-submodules)
+* [Final check](docs/install.md#final-check)
+* [Post installation](docs/install.md#post-installation)
+	* [Linux](docs/install.md#linux)
+* [Versions](docs/install.md#versions)
+* [Suggestions](docs/install.md#suggestions)
 
 ##  Languages (docs/language.md):
 
@@ -185,7 +234,7 @@
 	* [Configuration](docs/language.md#configuration)
 * [Suggestions](docs/language.md#suggestions)
 
-##  Using Layouts (docs/layout.md):
+##  Layouts (docs/layout.md):
 
 * [What is a layout?](docs/layout.md#what-is-a-layout)
 * [Create a site with layout](docs/layout.md#create-a-site-with-layout)
@@ -207,6 +256,7 @@
 * [Known properties](docs/magicprop.md#known-properties)
 * [My own](docs/magicprop.md#my-own)
 	* [MagicPropException](docs/magicprop.md#magicpropexception)
+* [Dynamic Properties](docs/magicprop.md#dynamic-properties)
 * [Suggestions](docs/magicprop.md#suggestions)
 
 ##  Models (docs/models.md):
@@ -216,6 +266,16 @@
 * [Model](docs/models.md#model)
 * [Using a Model](docs/models.md#using-a-model)
 * [Suggestions](docs/models.md#suggestions)
+
+##  Quick Forms (for Forms Builder) (docs/qforms.md):
+
+* [What is Quick Forms?](docs/qforms.md#what-is-quick-forms)
+* [Example](docs/qforms.md#example)
+* [Creating a form](docs/qforms.md#creating-a-form)
+* [Colored buttons](docs/qforms.md#colored-buttons)
+* [Removing](docs/qforms.md#removing)
+* [Twiks](docs/qforms.md#twiks)
+* [Suggestions](docs/qforms.md#suggestions)
 
 ##  Using Redirections (docs/redirections.md):
 
@@ -235,6 +295,16 @@
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
+* [New entries](docs/representations.md#new-entries)
+	* [Disabling empty creation](docs/representations.md#disabling-empty-creation)
+* [Field Filters](docs/representations.md#field-filters)
+	* [Persistence policies](docs/representations.md#persistence-policies)
+* [Sub-representations](docs/representations.md#sub-representations)
+	* [Representation definition](docs/representations.md#representation-definition)
+	* [Relationship specifications](docs/representations.md#relationship-specifications)
+	* [Usage](docs/representations.md#usage)
+	* [toArray()](docs/representations.md#toarray)
+	* [Setter](docs/representations.md#setter)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  Routes (docs/routes.md):
@@ -253,7 +323,39 @@
 * [Url issues](docs/routes.md#url-issues)
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
+* [Services](docs/routes.md#services)
 * [Suggestions](docs/routes.md#suggestions)
+
+##  Simple API Reader (docs/sapireader.md):
+
+* [What is SApiReader?](docs/sapireader.md#what-is-sapireader)
+* [Specification](docs/sapireader.md#specification)
+	* [Parameters](docs/sapireader.md#parameters)
+	* [Defaults](docs/sapireader.md#defaults)
+* [Extends](docs/sapireader.md#extends)
+* [Headers](docs/sapireader.md#headers)
+* [Methods](docs/sapireader.md#methods)
+	* [POST parameters](docs/sapireader.md#post-parameters)
+* [Suggestions](docs/sapireader.md#suggestions)
+
+##  Search Engine (docs/searchengine.md):
+
+* [What is __TooBasic__'s Search Engine?](docs/searchengine.md#what-is-toobasic_s-search-engine)
+* [Database](docs/searchengine.md#database)
+* [Searchable items](docs/searchengine.md#searchable-items)
+	* [Search item code](docs/searchengine.md#search-item-code)
+	* [Searchable items](docs/searchengine.md#searchable-items)
+	* [Searchable item factories](docs/searchengine.md#searchable-item-factories)
+* [Examples](docs/searchengine.md#examples)
+	* [Representation](docs/searchengine.md#representation)
+	* [Factory](docs/searchengine.md#factory)
+	* [Configuration?](docs/searchengine.md#configuration)
+* [Where is my search?](docs/searchengine.md#where-is-my-search)
+	* [Indexation](docs/searchengine.md#indexation)
+	* [Search](docs/searchengine.md#search)
+	* [In code](docs/searchengine.md#in-code)
+	* [Service](docs/searchengine.md#service)
+* [Suggestions](docs/searchengine.md#suggestions)
 
 ##  Services (docs/services.md):
 
@@ -267,6 +369,7 @@
 	* [Allowing sites](docs/services.md#allowing-sites)
 	* [Methods](docs/services.md#methods)
 	* [Headers](docs/services.md#headers)
+* [Transaction Tracking](docs/services.md#transaction-tracking)
 
 ##  Shell Tools and Crons (docs/shelltools.md):
 
@@ -280,6 +383,9 @@
 	* [How does it work?](docs/shelltools.md#how-does-it-work)
 	* [Dead flags](docs/shelltools.md#dead-flags)
 * [Profiles](docs/shelltools.md#profiles)
+* [Aliases](docs/shelltools.md#aliases)
+	* [Configuration](docs/shelltools.md#configuration)
+	* [Rules](docs/shelltools.md#rules)
 * [Suggestions](docs/shelltools.md#suggestions)
 
 ##  Skins (docs/skins.md):
@@ -324,4 +430,61 @@
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
 * [Suggestions](docs/troubleshooting.md#suggestions)
+
+##  Adapters (docs/tech/adapters.md):
+
+* [What are _adapters_](docs/tech/adapters.md#what-are-adapters)
+* [Cache adapters](docs/tech/adapters.md#cache-adapters)
+* [Database structure maintainer adapters](docs/tech/adapters.md#database-structure-maintainer-adapters)
+* [I want mine!](docs/tech/adapters.md#i-want-mine)
+	* [Step 0: into a module](docs/tech/adapters.md#step-0-into-a-module)
+	* [Step 1: new adapter](docs/tech/adapters.md#step-1-new-adapter)
+	* [Step 2: using the adapter](docs/tech/adapters.md#step-2-using-the-adapter)
+	* [Step 3: including the adapter](docs/tech/adapters.md#step-3-including-the-adapter)
+* [I want my database structure maintainer adapter](docs/tech/adapters.md#i-want-my-database-structure-maintainer-adapter)
+* [View adapters](docs/tech/adapters.md#view-adapters)
+	* [Others](docs/tech/adapters.md#others)
+* [Suggestions](docs/tech/adapters.md#suggestions)
+
+##  Forms Builder Specifications (docs/tech/forms.md):
+
+* [This document](docs/tech/forms.md#this-document)
+* [Basic structure](docs/tech/forms.md#basic-structure)
+* [From properties](docs/tech/forms.md#from-properties)
+	* [Default type](docs/tech/forms.md#default-type)
+	* [Attributes](docs/tech/forms.md#attributes)
+* [Fields](docs/tech/forms.md#fields)
+	* [Field type](docs/tech/forms.md#field-type)
+	* [Field label](docs/tech/forms.md#field-label)
+	* [Field attributes](docs/tech/forms.md#field-attributes)
+	* [Excluded modes](docs/tech/forms.md#excluded-modes)
+	* [Default values](docs/tech/forms.md#default-values)
+	* [Enumerative type](docs/tech/forms.md#enumerative-type)
+* [Buttons](docs/tech/forms.md#buttons)
+	* [Button types](docs/tech/forms.md#button-types)
+	* [Button label](docs/tech/forms.md#button-label)
+	* [Button attributes](docs/tech/forms.md#button-attributes)
+* [Modes](docs/tech/forms.md#modes)
+	* [Mode specifics](docs/tech/forms.md#mode-specifics)
+	* [Basic mode properties](docs/tech/forms.md#basic-mode-properties)
+	* [Mode attributes](docs/tech/forms.md#mode-attributes)
+	* [Mode buttons](docs/tech/forms.md#mode-buttons)
+* [My own type](docs/tech/forms.md#my-own-type)
+* [Suggestions](docs/tech/forms.md#suggestions)
+
+##  Query Adapter (docs/tech/queryadapter.md):
+
+* [What's a Query Adapter?](docs/tech/queryadapter.md#whats-a-query-adapter)
+* [Examples](docs/tech/queryadapter.md#examples)
+* [Select](docs/tech/queryadapter.md#select)
+	* [Order](docs/tech/queryadapter.md#order)
+	* [Limit](docs/tech/queryadapter.md#limit)
+	* [Specific condition](docs/tech/queryadapter.md#specific-condition)
+	* [Partial condition](docs/tech/queryadapter.md#partial-condition)
+* [Multi-table select](docs/tech/queryadapter.md#multi-table-select)
+* [Insert](docs/tech/queryadapter.md#insert)
+* [Delete](docs/tech/queryadapter.md#delete)
+* [Update](docs/tech/queryadapter.md#update)
+* [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
+* [Suggestions](docs/tech/queryadapter.md#suggestions)
 

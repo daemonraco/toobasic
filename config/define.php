@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '1.0.4');
+define('TOOBASIC_VERSION', '1.1.0');
 define('TOOBASIC_VERSION_NAME', 'serpent');
 // @}
 //
@@ -28,13 +28,18 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS', 'ctrl-exports-extensions');
 define('GC_DEFAULTS_DEBUG_PAGE', 'debug-page');
+define('GC_DEFAULTS_DISABLED_DEBUGS', 'disabled-debugs');
+define('GC_DEFAULTS_DISABLED_PATHS', 'disabled-paths');
 define('GC_DEFAULTS_EMAIL_FROM', 'email-from');
 define('GC_DEFAULTS_EMAIL_LAYOUT', 'email-layout');
 define('GC_DEFAULTS_EMAIL_REPLAYTO', 'email-replayto');
 define('GC_DEFAULTS_ERROR_PAGES', 'error-pages');
 define('GC_DEFAULTS_EXCEPTION_PAGE', 'exception-page');
 define('GC_DEFAULTS_FORMATS', 'formats');
+define('GC_DEFAULTS_FORMS_TYPE', 'form-type');
+define('GC_DEFAULTS_FORMS_TYPES', 'form-types');
 define('GC_DEFAULTS_HTMLASSETS', 'html-assets');
 define('GC_DEFAULTS_HTMLASSETS_SCRIPTS', 'scripts');
 define('GC_DEFAULTS_HTMLASSETS_SPECIFICS', 'html-specific-assets');
@@ -49,6 +54,7 @@ define('GC_DEFAULTS_REDIRECTIONS', 'redirections');
 define('GC_DEFAULTS_SERVICE', 'service');
 define('GC_DEFAULTS_SERVICE_ALLOWEDBYSRV', 'service-allowed-by-srv');
 define('GC_DEFAULTS_SERVICE_ALLOWEDSITES', 'service-allowed-sites');
+define('GC_DEFAULTS_SHELLTOOLS_ALIASES', 'shelltools-aliases');
 define('GC_DEFAULTS_SKIN', 'skin');
 define('GC_DEFAULTS_SKIN_SESSIONSUFFIX', 'skin-suffix');
 define('GC_DEFAULTS_VIEW_ADAPTER', 'view-adapter');
@@ -65,6 +71,9 @@ define('GC_AFIELD_ASSIGNMENTS', 'assignments');
 define('GC_AFIELD_BEFORE_CREATE', 'before_create');
 define('GC_AFIELD_BEFORE_DROP', 'before_drop');
 define('GC_AFIELD_BEFORE_UPDATE', 'before_update');
+define('GC_AFIELD_BOTTOM', 'bottom');
+define('GC_AFIELD_BUTTON', 'bottom');
+define('GC_AFIELD_BUTTONS', 'bottoms');
 define('GC_AFIELD_CACHE_PARAMS', 'cache_params');
 define('GC_AFIELD_CACHED', 'cached');
 define('GC_AFIELD_CALLBACKS', 'callbacks');
@@ -75,21 +84,30 @@ define('GC_AFIELD_CONNECTION', 'connection');
 define('GC_AFIELD_CORS', 'CORS');
 define('GC_AFIELD_COUNTS', 'counts');
 define('GC_AFIELD_DATA', 'data');
+define('GC_AFIELD_DISABLED', 'disabled');
 define('GC_AFIELD_DB', 'db');
 define('GC_AFIELD_DESCRIPTION', 'description');
+define('GC_AFIELD_END', 'end');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXTENSION', 'extension');
+define('GC_AFIELD_FIELD', 'field');
+define('GC_AFIELD_FIELDS', 'fields');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
+define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HEADERS', 'headers');
+define('GC_AFIELD_HITS', 'hits');
 define('GC_AFIELD_HOST', 'host');
 define('GC_AFIELD_HOSTS', 'hosts');
+define('GC_AFIELD_ID', 'id');
 define('GC_AFIELD_INDEXES', 'indexes');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
+define('GC_AFIELD_ITEMS', 'items');
+define('GC_AFIELD_KEY', 'key');
 define('GC_AFIELD_KEYS', 'keys');
 define('GC_AFIELD_KEYS_BY_LANG', 'keys-by-lang');
 define('GC_AFIELD_LANGS', 'langs');
@@ -101,6 +119,7 @@ define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
 define('GC_AFIELD_METHOD', 'method');
 define('GC_AFIELD_METHODS', 'methods');
+define('GC_AFIELD_MIDDLE', 'middle');
 define('GC_AFIELD_MODULE_NAME', 'module-name');
 define('GC_AFIELD_NAME', 'name');
 define('GC_AFIELD_ORIGIN', 'origin');
@@ -120,16 +139,23 @@ define('GC_AFIELD_SERVICES', 'services');
 define('GC_AFIELD_SKIN', 'skin');
 define('GC_AFIELD_SPEC', 'spec');
 define('GC_AFIELD_SPECS', 'specs');
+define('GC_AFIELD_START', 'start');
 define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
 define('GC_AFIELD_TABLES', 'tables');
 define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TOP', 'top');
+define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
+define('GC_AFIELD_TYPES', 'types');
+define('GC_AFIELD_VALUES', 'values');
 // @}
 //
 // Directories @{
 define('GC_DIRECTORIES_CACHE', 'cache');
+define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
+define('GC_DIRECTORIES_FORMS', 'forms');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');
 define('GC_DIRECTORIES_REPRESENTATIONS', 'representations');
@@ -139,11 +165,13 @@ define('GC_DIRECTORIES_ADAPTERS_CACHE', 'adapters-cache');
 define('GC_DIRECTORIES_ADAPTERS_DB', 'adapters-db');
 define('GC_DIRECTORIES_ADAPTERS_VIEW', 'adapters-view');
 define('GC_DIRECTORIES_MODULES', 'modules');
-define('GC_DIRECTORIES_SHELL', 'shell');
+define('GC_DIRECTORIES_SAPIREADER', 'sapireader');
+define('GC_DIRECTORIES_SEARCH', 'search');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
 define('GC_DIRECTORIES_SYSTEM', 'system');
+define('GC_DIRECTORIES_SYSTEM_CACHE', 'system-cache');
 // @}
 //
 // Connections @{
@@ -164,10 +192,19 @@ define('GC_CONNECTIONS_DEFAULTS_CACHE', 'cache');
 // @}
 //
 // Database structure @{
-define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
 define('GC_DATABASE_DB_CONNECTION_ADAPTERS', 'db-connection-adapters');
 define('GC_DATABASE_DB_QUERY_ADAPTERS', 'db-query-adapters');
 define('GC_DATABASE_DB_SPEC_ADAPTERS', 'db-spec-adapters');
+define('GC_DATABASE_DB_VERSION_ADAPTERS', 'db-version-adapters');
+define('GC_DATABASE_DEFAULT_SPECS', 'default-specs');
+define('GC_DATABASE_FIELD_FILTER_BOOLEAN', 'boolean');
+define('GC_DATABASE_FIELD_FILTER_JSON', 'json');
+define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
+// @}
+//
+// Representations @{
+define('GC_REPRESENTATIONS_FACTORY', 'factory');
+define('GC_REPRESENTATIONS_METHOD', 'method');
 // @}
 //
 // URIs @{
@@ -181,6 +218,7 @@ define('GC_PATHS_CSS', 'css');
 define('GC_PATHS_DBSPECS', 'dbspecs');
 define('GC_PATHS_DBSPECSCALLBACK', 'dbspecscallbacks');
 define('GC_PATHS_EMAIL_CONTROLLERS', 'email-controllers');
+define('GC_PATHS_FORMS', 'forms');
 define('GC_PATHS_IMAGES', 'images');
 define('GC_PATHS_JS', 'js');
 define('GC_PATHS_LANGS', 'langs');
@@ -224,6 +262,7 @@ define('GC_SERVER_TOOBASIC_ROUTE', 'TOOBASIC_ROUTE');
 // @}
 //
 // Class Suffixes @{
+define('GC_CLASS_SUFFIX_CONFIG', 'Config');
 define('GC_CLASS_SUFFIX_CONTROLLER', 'Controller');
 define('GC_CLASS_SUFFIX_CRON', 'Cron');
 define('GC_CLASS_SUFFIX_EMAIL_CONTROLLER', 'Email');
@@ -277,5 +316,60 @@ define('GC_DBQUERY_NAMES_COLUMN_ID', 'column-id');
 define('GC_DBQUERY_NAMES_COLUMN_NAME', 'column-name');
 define('GC_DBQUERY_PREFIX_COLUMN', 'column');
 define('GC_DBQUERY_PREFIX_TABLE', 'table');
+// @}
+//
+// Magic Properties @{
+define('GC_MAGICPROP_PROPERTIES', 'properties');
+define('GC_MAGICPROP_ALIASES', 'aliases');
+define('GC_MAGICPROP_PROP_CACHE', 'cache');
+define('GC_MAGICPROP_PROP_CONFIG', 'config');
+define('GC_MAGICPROP_PROP_MODEL', 'model');
+define('GC_MAGICPROP_PROP_PARAMS', 'params');
+define('GC_MAGICPROP_PROP_PATHS', 'paths');
+define('GC_MAGICPROP_PROP_REPRESENTATION', 'representation');
+define('GC_MAGICPROP_PROP_SAPIREADER', 'sapireader');
+define('GC_MAGICPROP_PROP_TR', 'tr');
+define('GC_MAGICPROP_PROP_TRANSLATE', 'translate');
+// @}
+//
+// Simple API Reader @{
+define('GC_SAPIREADER_DEFAULT_TYPE', 'default');
+define('GC_SAPIREADER_TYPES', 'types');
+define('GC_SAPIREADER_TYPE_BASIC', 'basic');
+define('GC_SAPIREADER_TYPE_JSON', 'json');
+define('GC_SAPIREADER_TYPE_XML', 'xml');
+// @}
+//
+// TooBasic's search engine @{
+define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+// @}
+//
+// Forms @{
+//
+// Build flags.
+define('GC_FORMS_BUILDTYPE_BASIC', 'basic');
+define('GC_FORMS_BUILDTYPE_BOOTSTRAP', 'bootstrap');
+define('GC_FORMS_BUILDTYPE_TABLE', 'table');
+//
+// Build flags.
+define('GC_FORMS_BUILDFLAG_SPACER', 'spacer');
+//
+// Build mode.
+define('GC_FORMS_BUILDMODE_CREATE', 'create');
+define('GC_FORMS_BUILDMODE_EDIT', 'edit');
+define('GC_FORMS_BUILDMODE_REMOVE', 'remove');
+define('GC_FORMS_BUILDMODE_VIEW', 'view');
+//
+// Field type.
+define('GC_FORMS_FIELDTYPE_ENUM', 'enum');
+define('GC_FORMS_FIELDTYPE_HIDDEN', 'hidden');
+define('GC_FORMS_FIELDTYPE_INPUT', 'input');
+define('GC_FORMS_FIELDTYPE_PASSWORD', 'password');
+define('GC_FORMS_FIELDTYPE_TEXT', 'text');
+//
+// Button types.
+define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
+define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
+define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 // @}
 // @}
