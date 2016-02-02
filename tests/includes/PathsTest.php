@@ -6,59 +6,7 @@ class TooBasic_PathsTest extends TooBasic_TestCase {
 	protected $_paths = false;
 	public function setUp() {
 		$this->_paths = \TooBasic\Paths::Instance();
-
-		global $Directories;
-		global $Paths;
-		//
-		// Config files.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_CONFIGS]}/phpunit_conf.json");
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_CONFIGS]}/phpunit_conf.php");
-		//
-		// Controller file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_CONTROLLERS]}/phpunit_ctrl.php");
-		//
-		// Custom file.
-		$dirpath = "{$Directories[GC_DIRECTORIES_SITE]}/phpunit_custom";
-		$this->addGeneratedDirectory($dirpath);
-		$this->addGeneratedFile("{$dirpath}/phpunit_cust.ext");
-		//
-		// Email file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_EMAIL_CONTROLLERS]}/phpunit_mail.php");
-		//
-		// Style file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_CSS]}/phpunit_style.css");
-		//
-		// Script file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_JS]}/phpunit_script.js");
-		//
-		// Database file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_DBSPECS]}/phpunit_table.json", '{}');
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_DBSPECSCALLBACK]}/phpunit_callback.sql");
-		//
-		// Image file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_IMAGES]}/phpunit_image.jpg");
-		//
-		// Model file.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_MODELS]}/PhpUnit.php");
-		//
-		// Representation files.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_REPRESENTATIONS]}/PhpUnitRepresentation.php");
-		//
-		// Service files.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SERVICES]}/phpunit_service.php");
-		//
-		// Shell tool files.
-		$this->addGeneratedDirectory("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SHELL_SYSTOOLS]}");
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SHELL_TOOLS]}/phpunit_tool.php");
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SHELL_CRONS]}/phpunit_cron.php");
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SHELL_SYSTOOLS]}/phpunit_systool.php");
-		//
-		// Snippet files.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_SNIPPETS]}/phpunit_snippet.html");
-		//
-		// Template files.
-		$this->addGeneratedFile("{$Directories[GC_DIRECTORIES_SITE]}{$Paths[GC_PATHS_TEMPLATES]}/action/phpunit_template.html");
-
+		$this->loadAssetsOf(__FILE__);
 		parent::setUp();
 	}
 	// @}
