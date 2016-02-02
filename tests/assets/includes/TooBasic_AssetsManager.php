@@ -22,6 +22,8 @@ class TooBasic_AssetsManager {
 			$caseName = preg_replace('/\.([a-z]*)$/', '', preg_replace('/_([_]+)/', '_', 'case_'.str_replace('/', '_', substr($path, strlen(TOOBASIC_TESTS_DIR)))));
 			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$caseName}";
 			$manifestPath = "{$caseFolder}/manifest.json";
+
+			echo "\nSetting up for '{$caseName}'... ";
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
@@ -30,6 +32,7 @@ class TooBasic_AssetsManager {
 					$ok = false;
 				}
 			} else {
+				echo "Done (No settings for it)\n";
 				$ok = false;
 			}
 			//
@@ -66,6 +69,10 @@ class TooBasic_AssetsManager {
 				foreach($manifest->generatedAssets as $asset) {
 					$this->_assetFiles[] = ROOTDIR.$asset;
 				}
+			}
+
+			if($ok) {
+				echo "Done\n";
 			}
 		}
 	}
