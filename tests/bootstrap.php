@@ -1,6 +1,11 @@
 <?php
 
 //
+// Loading TravisCI variables.
+foreach(array('TRAVISCI_URL_SCHEME', 'TRAVISCI_URL_PORT', 'TRAVISCI_URI') as $var) {
+	define($var, getenv($var));
+}
+//
 // Global dependencies.
 global $ActionName;
 global $argc;
@@ -20,13 +25,12 @@ global $Search;
 global $ServiceName;
 global $SkinName;
 global $SuperLoader;
-
-require_once dirname(__DIR__).'/vendor/autoload.php';
-require_once __DIR__.'/TooBasic_TestCase.php';
-require_once __DIR__.'/TooBasic_SeleniumTestCase.php';
-require_once dirname(__DIR__).'/config/config.php';
 //
-// Loading TravisCI variables.
-foreach(array('TRAVISCI_URL_SCHEME', 'TRAVISCI_URL_PORT', 'TRAVISCI_URI') as $var) {
-	define($var, getenv($var));
-}
+// Loading composer autoload.
+require_once dirname(__DIR__).'/vendor/autoload.php';
+//
+// Loading TooBasic test assets assets
+require_once __DIR__.'/assets/autoload.php';
+//
+// Loading TooBasic main config file.
+require_once dirname(__DIR__).'/config/config.php';

@@ -1,0 +1,26 @@
+{
+	"assetDirectories": [
+		"/site/phpunit_custom",
+		"/site/shell/sys"
+	],
+	"assets": [
+		"/site/configs/phpunit_conf.json",
+		"/site/configs/phpunit_conf.php",
+		"/site/controllers/phpunit_ctrl.php",
+		"/site/emails/phpunit_mail.php",
+		"/site/images/phpunit_image.jpg",
+		"/site/models/PhpUnit.php",
+		"/site/models/representations/PhpUnitRepresentation.php",
+		"/site/phpunit_custom/phpunit_cust.ext",
+		"/site/scripts/phpunit_script.js",
+		"/site/services/phpunit_service.php",
+		"/site/shell/crons/phpunit_cron.php",
+		"/site/shell/sys/phpunit_systool.php",
+		"/site/shell/tools/phpunit_tool.php",
+		"/site/db/phpunit_callback.sql",
+		"/site/db/phpunit_table.json",
+		"/site/snippets/phpunit_snippet.html",
+		"/site/styles/phpunit_style.css",
+		"/site/templates/action/phpunit_template.html"
+	]
+}
