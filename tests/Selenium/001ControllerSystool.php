@@ -1,6 +1,6 @@
 <?php
 
-class TooBasicTest extends TooBasic_SeleniumTestCase {
+class Selenium_ControllerSystoolTest extends TooBasic_SeleniumTestCase {
 	//
 	// Set up @{
 	public function setUp() {
