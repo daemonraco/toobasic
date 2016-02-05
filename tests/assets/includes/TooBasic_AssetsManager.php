@@ -5,6 +5,9 @@ class TooBasic_AssetsManager {
 	// Constants.
 	const BACKUP_SUFFIX = '_AMANAGER_BACKUP';
 	//
+	// Public class properties.
+	public static $Verbose = false;
+	//
 	// Protected properties.
 	protected $_assetDirectories = array();
 	protected $_assetFiles = array();
@@ -19,11 +22,21 @@ class TooBasic_AssetsManager {
 			$manifest = false;
 			//
 			// Guessing names.
-			$caseName = preg_replace('/\.([a-z]*)$/', '', preg_replace('/_([_]+)/', '_', 'case_'.str_replace('/', '_', substr($path, strlen(TOOBASIC_TESTS_DIR)))));
+			$nameReplacements = array(
+				'%-%' => '',
+				'%/%' => '_',
+				'/\.([a-z]*)$/' => '',
+				'/_([_]+)/' => '_'
+			);
+			$caseName = 'case_'.substr($path, strlen(TOOBASIC_TESTS_DIR));
+			foreach($nameReplacements as $k => $v) {
+				$caseName = preg_replace($k, $v, $caseName);
+			}
 			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$caseName}";
 			$manifestPath = "{$caseFolder}/manifest.json";
-
-			echo "\nSetting up for '{$caseName}'... ";
+			if(self::$Verbose) {
+				echo "\nSetting up for '{$caseName}'... ";
+			}
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
@@ -32,7 +45,9 @@ class TooBasic_AssetsManager {
 					$ok = false;
 				}
 			} else {
-				echo "Done (No settings for it)\n";
+				if(self::$Verbose) {
+					echo "Done (No settings for it)\n";
+				}
 				$ok = false;
 			}
 			//
@@ -71,7 +86,7 @@ class TooBasic_AssetsManager {
 				}
 			}
 
-			if($ok) {
+			if($ok && self::$Verbose) {
 				echo "Done\n";
 			}
 		}
