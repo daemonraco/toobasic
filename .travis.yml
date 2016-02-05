@@ -16,7 +16,7 @@ before_script:
   - sudo a2enmod actions
   - sudo a2enmod rewrite
   - echo "export PATH=/home/vagrant/.phpenv/bin:$PATH" | sudo tee -a /etc/apache2/envvars > /dev/null
-  - sudo mv ./tests/assets/travis.apache2-phpconfig.txt /etc/apache2/conf.d/phpconfig
+  - sudo cp ./tests/assets/travis.apache2-phpconfig.txt /etc/apache2/conf.d/phpconfig
   - cat ./tests/assets/travis.apache2-default.txt | sed -e "s,PATH,`pwd`,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 restart
   - "sh -e /etc/init.d/xvfb start"
