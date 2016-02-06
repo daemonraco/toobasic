@@ -65,23 +65,4 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 		$this->assertTrue(is_object($json->interface->CORS), 'Interface CORS policy indicators is not an object.');
 	}
 	// @}
-	//
-	// Internal methods @{
-	protected function getUrl($subUrl) {
-		$url = TRAVISCI_URL_SCHEME.'://localhost';
-		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
-		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
-		$url.= $subUrl;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		$response = curl_exec($ch);
-		curl_close($ch);
-
-		return $response;
-	}
-	// @}
 }

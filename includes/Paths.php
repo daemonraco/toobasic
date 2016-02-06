@@ -213,6 +213,9 @@ class Paths extends Singleton {
 			foreach($Defaults[GC_DEFAULTS_DISABLED_PATHS] as $v) {
 				$this->_disabledPaths[] = Sanitizer::DirPath(ROOTDIR."/{$v}");
 			}
+			//
+			// Saving new count
+			$this->_disabledPathsCount = count($this->_disabledPaths);
 		}
 
 		return $this->_disabledPaths;

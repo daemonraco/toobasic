@@ -54,7 +54,7 @@ class TooBasic_AssetsManager {
 			// Creating needed asset directories.
 			if($ok && isset($manifest->assetDirectories)) {
 				foreach($manifest->assetDirectories as $path) {
-					$fullPath = ROOTDIR.$path;
+					$fullPath = TESTS_ROOTDIR.$path;
 
 					if(!is_dir($fullPath)) {
 						mkdir($fullPath, 0777, true);
@@ -67,7 +67,7 @@ class TooBasic_AssetsManager {
 			if($ok && isset($manifest->assets)) {
 				foreach($manifest->assets as $asset) {
 					$fromPath = $caseFolder.$asset;
-					$toPath = ROOTDIR.$asset;
+					$toPath = TESTS_ROOTDIR.$asset;
 
 					if(is_file($toPath)) {
 						rename($toPath, $toPath.self::BACKUP_SUFFIX);
@@ -82,7 +82,7 @@ class TooBasic_AssetsManager {
 			// Considering generated assets.
 			if($ok && isset($manifest->generatedAssets)) {
 				foreach($manifest->generatedAssets as $asset) {
-					$this->_assetFiles[] = ROOTDIR.$asset;
+					$this->_assetFiles[] = TESTS_ROOTDIR.$asset;
 				}
 			}
 
