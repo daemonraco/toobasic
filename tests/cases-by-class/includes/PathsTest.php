@@ -186,9 +186,12 @@ class TooBasic_PathsTest extends TooBasic_TestCase {
 	//
 	// Internal methods @{
 	protected function getPathFor($funcName) {
-		$html = $this->getUrl('?action=test&format=json');
-		$json = json_decode($html);
-		$this->assertTrue(boolval($json), 'Unable to obtain a valid JSON rsponse from test action.');
+		static $json = false;
+		if($json === false) {
+			$html = $this->getUrl('?action=test&format=json');
+			$json = json_decode($html);
+			$this->assertTrue(boolval($json), 'Unable to obtain a valid JSON rsponse from test action.');
+		}
 
 		$this->assertTrue(isset($json->{$funcName}), "Test action didn't set a value for '{$funcName}'.");
 		return $json->{$funcName};
