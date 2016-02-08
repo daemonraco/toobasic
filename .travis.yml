@@ -7,11 +7,13 @@ php:
   - nightly
 services:
   - memcached
+  - mysql
 addons:
   mariadb: '10.1'
   postgresql: '9.3'
 before_script:
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
+  - "sh -e ./tests/assets/travis.mysqlconfig.sh"
   - "mkdir -p ~/.composer"
   - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json

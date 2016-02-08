@@ -1,0 +1,12 @@
+{
+	"assets": [
+		"/site/configs/config.php",
+		"/site/services/test.php"
+	],
+	"setUpScripts": [
+		"scripts/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"scripts/removedatabase.sh"
+	]
+}
