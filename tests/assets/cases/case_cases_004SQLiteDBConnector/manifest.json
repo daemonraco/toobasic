@@ -1,0 +1,9 @@
+{
+	"assets": [
+		"/site/configs/config.php",
+		"/site/services/test.php"
+	],
+	"generatedAssets": [
+		"/cache/travis_test.sqlite3"
+	]
+}
