@@ -22,7 +22,7 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	// @}
 	//
 	// Internal methods @{
-	protected function getUrl($subUrl) {
+	protected function getUrl($subUrl, $assertExceptions = true) {
 		$url = TRAVISCI_URL_SCHEME.'://localhost';
 		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
 		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
@@ -35,6 +35,10 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		$response = curl_exec($ch);
 		curl_close($ch);
+
+		if($assertExceptions) {
+			$this->assertNotRegExp('/TooBasic.([a-zA-Z]*)Exception/m', $response, "Response to '{$subUrl}' seems to have a TooBasic exception");
+		}
 
 		return $response;
 	}
