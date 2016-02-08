@@ -2,11 +2,16 @@
 
 //
 // Loading TravisCI variables.
-foreach($_ENV as $name => $value) {
+echo "Loading environment variables:\n";
+$aux = $_ENV;
+ksort($aux);
+foreach($aux as $name => $value) {
 	if(preg_match('/^TRAVISCI_/', $name)) {
+		echo "\t- '\033[1;36m{$name}\033[0m' (value length: \033[1;33m".strlen($value)."\033[0m)\n";
 		define($name, $value);
 	}
 }
+unset($aux);
 //
 // Basic constants.
 define('TESTS_ROOTDIR', dirname(__DIR__));

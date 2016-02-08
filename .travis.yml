@@ -1,23 +1,33 @@
 language: php
+
 php:
   - '5.4'
   - '5.5'
   - '5.6'
   - '7.0'
   - nightly
+
 services:
   - memcached
   - mysql
   - postgresql
+
 addons:
   mariadb: '10.1'
   postgresql: '9.3'
+
 before_script:
+  #
+  # Basic configurations.
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
+  #
+  # Installing Composer.
   - "mkdir -p ~/.composer"
   - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json
   - composer require phpunit/phpunit-selenium
+  #
+  # Installing and configuring Apache 2.
   - sudo apt-get update > /dev/null
   - sudo apt-get install apache2
   - sudo a2enmod actions
@@ -25,11 +35,17 @@ before_script:
   - echo "export PATH=/home/vagrant/.phpenv/bin:$PATH" | sudo tee -a /etc/apache2/envvars > /dev/null
   - sudo cp ./tests/assets/travis.apache2-phpconfig.txt /etc/apache2/conf.d/phpconfig
   - cat ./tests/assets/travis.apache2-default.txt | sed -e "s,PATH,`pwd`,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
+  - cat /etc/php*/apache2/php.ini|grep variables_order
   - sudo service apache2 restart
+  #
+  # Starting X server.
   - "sh -e /etc/init.d/xvfb start"
   - "export DISPLAY=:99.0"
+  #
+  # Installing and starting Selenium 2 server.
   - "wget http://selenium-release.storage.googleapis.com/${TRAVISCI_SELENIUM_VERSION}/selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar"
   - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar > /dev/null &"
   - sleep 5
+
 notifications:
   irc: "irc.freenode.org#TooBasic"
