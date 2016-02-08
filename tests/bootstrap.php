@@ -2,8 +2,10 @@
 
 //
 // Loading TravisCI variables.
-foreach(array('TRAVISCI_URL_SCHEME', 'TRAVISCI_URL_PORT', 'TRAVISCI_URI', 'TRAVISCI_MYSQL_USERNAME', 'TRAVISCI_MYSQL_PASSWORD') as $var) {
-	define($var, getenv($var));
+foreach($_ENV as $name => $value) {
+	if(preg_match('/^TRAVISCI_/', $name)) {
+		define($name, $value);
+	}
 }
 //
 // Basic constants.

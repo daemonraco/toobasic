@@ -8,6 +8,7 @@ php:
 services:
   - memcached
   - mysql
+  - postgresql
 addons:
   mariadb: '10.1'
   postgresql: '9.3'

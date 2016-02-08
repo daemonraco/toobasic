@@ -1,6 +1,6 @@
 <?php
 
-class MySQLDBConnectorTest extends TooBasic_TestCase {
+class PostgreSQLDBConnectorTest extends TooBasic_TestCase {
 	//
 	// Set up @{
 	public function setUp() {

@@ -15,7 +15,7 @@ class TestService extends \TooBasic\Service {
 	// Protected methods.
 	protected function basicRun() {
 		$db = DBManager::Instance()->test;
-		$stmt = $db->prepare('show databases');
+		$stmt = $db->prepare('select datname from pg_database where datistemplate = false');
 		if($stmt->execute()) {
 			$this->assign('executed', true);
 			$this->assign('results', $stmt->fetchAll());
