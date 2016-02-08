@@ -20,6 +20,9 @@ before_script:
   #
   # Basic configurations.
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini|grep variables
+  - phpenv config-add ./tests/assets/travis.php.ini
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini|grep variables
   #
   # Installing Composer.
   - "mkdir -p ~/.composer"
@@ -45,9 +48,6 @@ before_script:
   - "wget http://selenium-release.storage.googleapis.com/${TRAVISCI_SELENIUM_VERSION}/selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar"
   - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar > /dev/null &"
   - sleep 5
-
-after_script:
-  - wget "http://localhost/?debugphpinfo" -O -
 
 notifications:
   irc: "irc.freenode.org#TooBasic"
