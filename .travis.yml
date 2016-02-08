@@ -11,6 +11,7 @@ services:
 addons:
   mariadb: '10.1'
   postgresql: '9.3'
+sudo: required
 before_script:
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
   - "sh -e ./tests/assets/travis.mysqlconfig.sh"
