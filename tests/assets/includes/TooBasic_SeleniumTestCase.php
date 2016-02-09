@@ -33,4 +33,11 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 		self::$_AssetsManager = false;
 	}
 	// @}
+	//
+	// Internal methods @{
+	protected function checkCurrentSource() {
+		$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $this->source(), "Response to '{$this->url()}' seems to have a TooBasic exception.");
+		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $this->source(), "Response to '{$this->url()}' seems to have a PHP error.");
+	}
+	// @}
 }

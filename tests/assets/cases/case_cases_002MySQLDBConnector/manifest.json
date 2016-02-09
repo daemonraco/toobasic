@@ -3,10 +3,13 @@
 		"/site/configs/config.php",
 		"/site/services/test.php"
 	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
 	"setUpScripts": [
-		"scripts/createdatabase.sh"
+		"G:mysql/createdatabase.sh"
 	],
 	"tearDownScripts": [
-		"scripts/removedatabase.sh"
+		"G:mysql/removedatabase.sh"
 	]
 }

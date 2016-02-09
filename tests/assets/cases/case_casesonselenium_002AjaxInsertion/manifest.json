@@ -4,5 +4,8 @@
 		"/site/controllers/subaction.php",
 		"/site/templates/action/test.html",
 		"/site/templates/action/subaction.html"
+	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
 	]
 }

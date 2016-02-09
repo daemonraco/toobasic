@@ -1215,6 +1215,10 @@ abstract class Scaffold extends ShellTool {
 		// Directories
 		if($ok) {
 			$ok = $this->genRequiredDirectories($spacer);
+			//
+			// In the event a new module folder had been created,
+			// 'Paths' requires a reset.
+			$this->paths->reset();
 		}
 		//
 		// Files

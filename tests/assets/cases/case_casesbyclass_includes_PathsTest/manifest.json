@@ -6,6 +6,9 @@
 		"/site/phpunit_custom",
 		"/site/shell/sys"
 	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
 	"assets": [
 		"/modules/mymodule/controllers/phpunit_ctrl.php",
 		"/site/configs/config.php",

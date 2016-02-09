@@ -37,7 +37,8 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 		curl_close($ch);
 
 		if($assertExceptions) {
-			$this->assertNotRegExp('/TooBasic.([a-zA-Z]*)Exception/m', $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
+			$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
+			$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
 		}
 
 		return $response;

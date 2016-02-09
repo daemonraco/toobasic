@@ -1,0 +1,15 @@
+{
+	"assets": [
+		"/site/configs/config.php",
+		"/site/services/test.php"
+	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
+	"setUpScripts": [
+		"G:pgsql/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:pgsql/removedatabase.sh"
+	]
+}

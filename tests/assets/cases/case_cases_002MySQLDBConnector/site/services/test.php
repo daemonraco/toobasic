@@ -22,6 +22,7 @@ class TestService extends \TooBasic\Service {
 		} else {
 			$this->assign('executed', false);
 			$this->assign('results', array());
+			$this->assign('errorInfo', $stmt->errorInfo());
 		}
 
 		return $this->status();

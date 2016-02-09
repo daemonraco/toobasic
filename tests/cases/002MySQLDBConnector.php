@@ -24,7 +24,7 @@ class MySQLDBConnectorTest extends TooBasic_TestCase {
 
 		$this->assertTrue(isset($json->data->executed) && isset($json->data->results), "Response data section doesn't all required fields.");
 
-		$this->assertTrue($json->data->executed, "SQL excution didn't work.");
+		$this->assertTrue($json->data->executed, "SQL execution didn't work.");
 		$this->assertTrue(count($json->data->results) > 0, "No databases found when at least 1 should exist.");
 	}
 }

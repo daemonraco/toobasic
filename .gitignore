@@ -16,3 +16,5 @@
 /modules/toobasic-workflows
 /composer.*
 /vendor/
+/travis.files-status.*
+/travis.directories-status.*
