@@ -17,6 +17,10 @@ unset($aux);
 define('TESTS_ROOTDIR', dirname(__DIR__));
 define('TESTS_ROOTURI', php_sapi_name() != 'cli' ? dirname($_SERVER['SCRIPT_NAME']) : false);
 //
+// Page errors patterns
+define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '/TooBasic.([a-zA-Z]*)Exception/m');
+define('ASSERTION_PATTERN_PHP_ERROR', '/(Fatal error|Warning):/m');
+//
 // Loading composer autoload.
 require_once dirname(__DIR__).'/vendor/autoload.php';
 //
@@ -44,4 +48,4 @@ global $SkinName;
 global $SuperLoader;
 //
 // Loading TooBasic main config file.
-require_once dirname(__DIR__).'/config/config.php';
+require_once TESTS_ROOTDIR.'/config/config.php';

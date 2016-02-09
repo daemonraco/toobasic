@@ -79,6 +79,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		// Checking that all expected assets where removed except those
 		// that are generic.
 		$acceptableAssets = array(
+			TESTS_ROOTDIR."/cache/system/config-priorities.json",
 			TESTS_ROOTDIR."/modules/mymodule/configs/routes.json",
 			TESTS_ROOTDIR."/modules/mymodule/langs/en_us.json"
 		);

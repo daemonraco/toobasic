@@ -11,6 +11,7 @@
 		"/site/templates/action/layout_nav.html"
 	],
 	"generatedAssets": [
+		"/cache/system/config-priorities.json",
 		"/modules/mymodule/configs/routes.json",
 		"/modules/mymodule/controllers/people.php",
 		"/modules/mymodule/controllers/person_add.php",

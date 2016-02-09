@@ -4,6 +4,9 @@
 		"/site/services/test.php"
 	],
 	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
+	"generatedAssets": [
 		"/cache/travis_test.sqlite3"
 	]
 }

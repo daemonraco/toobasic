@@ -6,6 +6,9 @@
 
 	],
 	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
+	"generatedAssets": [
 		"/site/controllers/hello_world.php",
 		"/site/templates/action/hello_world.html"
 	]
