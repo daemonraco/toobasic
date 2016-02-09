@@ -16,14 +16,16 @@ class Selenium_ControllerSystoolTest extends TooBasic_SeleniumTestCase {
 	}
 	public function testAccessTheControllerByUrlWithParameters() {
 		$this->url('/?action=hello_world');
-		$html = $this->source();
+		$this->checkCurrentSource();
 
+		$html = $this->source();
 		$this->assertRegExp('/HelloWorldController/', $html, "Page does not contain the keyword 'HelloWorldController'.");
 	}
 	public function testAccessTheControllerByRoute() {
 		$this->url('/hello_world');
-		$html = $this->source();
+		$this->checkCurrentSource();
 
+		$html = $this->source();
 		$this->assertRegExp('/HelloWorldController/', $html, "Page does not contain the keyword 'HelloWorldController'.");
 	}
 }

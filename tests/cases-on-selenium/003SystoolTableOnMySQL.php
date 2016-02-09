@@ -39,6 +39,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 	// Table creation @{
 	public function testCheckingEmptyList() {
 		$this->url("?action={$this->_pluralName}");
+		$this->checkCurrentSource();
 		//
 		// Checking table.
 		$table = $this->byCssSelector('#MainContents table');

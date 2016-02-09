@@ -10,12 +10,14 @@ class Selenium_AjaxInsertionTest extends TooBasic_SeleniumTestCase {
 	// @}
 	public function testTestingAjaxInsertion() {
 		$this->url('/?action=test&atest=subaction');
+		$this->checkCurrentSource();
 
+		debugit($this->source());
 		$webdriver = $this;
 		$this->waitUntil(function () use($webdriver) {
 			$out = true;
 			try {
-				$out = $webdriver->byId('SubSection') ? true : false;
+				$out = boolval($webdriver->byId('SubSection'));
 			} catch(Exception $ex) {
 				$out = null;
 			}
