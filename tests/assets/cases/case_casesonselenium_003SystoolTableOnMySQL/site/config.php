@@ -2,6 +2,8 @@
 
 $Defaults[GC_DEFAULTS_LAYOUT] = 'layout';
 
+$Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\NoCache';
+
 $Connections[GC_CONNECTIONS_DB]['test'] = array(
 	GC_CONNECTIONS_DB_ENGINE => 'mysql',
 	GC_CONNECTIONS_DB_SERVER => 'localhost',
