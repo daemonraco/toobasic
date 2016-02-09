@@ -50,7 +50,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 			if(!is_dir($dir)) {
 				//
 				// Creating directory.
-				@mkdir($dir, 0755, true);
+				mkdir($dir, 0755, true);
 				//
 				// Rechecking
 				if(!is_dir($dir)) {

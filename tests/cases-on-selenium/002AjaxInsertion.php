@@ -12,7 +12,6 @@ class Selenium_AjaxInsertionTest extends TooBasic_SeleniumTestCase {
 		$this->url('/?action=test&atest=subaction');
 		$this->checkCurrentSource();
 
-		debugit($this->source());
 		$webdriver = $this;
 		$this->waitUntil(function () use($webdriver) {
 			$out = true;
