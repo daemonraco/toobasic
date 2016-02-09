@@ -52,7 +52,7 @@ before_script:
   #
   # Installing and starting Selenium 2 server.
   - "wget http://selenium-release.storage.googleapis.com/${TRAVISCI_SELENIUM_VERSION}/selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar"
-  - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar > /dev/null &"
+  - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar >/dev/null 2>&1 &"
   - sleep 5
   #
   # Getting a snapshot of current assets.
