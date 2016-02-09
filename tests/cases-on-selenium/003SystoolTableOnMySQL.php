@@ -288,8 +288,10 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		foreach($this->_fields as $field => $conf) {
 			if($conf['clear']) {
 				$inputs[$field]->clear();
+				$inputs[$field]->value($conf['update']);
+			} else {
+				$this->select($inputs[$field])->selectOptionByValue($conf['update']);
 			}
-			$inputs[$field]->value($conf['update']);
 		}
 		//
 		// Checking reset button.
@@ -302,8 +304,10 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		foreach($this->_fields as $field => $conf) {
 			if($conf['clear']) {
 				$inputs[$field]->clear();
+				$inputs[$field]->value($conf['update']);
+			} else {
+				$this->select($inputs[$field])->selectOptionByValue($conf['update']);
 			}
-			$inputs[$field]->value($conf['update']);
 		}
 		$submitButton->click();
 		$this->checkCurrentSource();
