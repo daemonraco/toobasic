@@ -3,9 +3,6 @@
 		"/site/configs/config.php",
 		"/site/services/test.php"
 	],
-	"generatedAssets": [
-		"/cache/system/config-priorities.json"
-	],
 	"setUpScripts": [
 		"G:mysql/createdatabase.sh"
 	],
