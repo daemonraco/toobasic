@@ -47,5 +47,9 @@ global $ServiceName;
 global $SkinName;
 global $SuperLoader;
 //
+// Loading some generic and useful functions.
+require_once TESTS_ROOTDIR.'/includes/corefunctions.php';
+//
 // Loading TooBasic main config file.
+// @TODO Remove this dependency.
 require_once TESTS_ROOTDIR.'/config/config.php';
