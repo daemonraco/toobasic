@@ -13,10 +13,10 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	public function testRequestingAFullInterfaceExplanation() {
 		$response = $this->getUrl('?explaininterface');
 
-		$this->assertTrue($response ? true : false, "No response obtained.");
+		$this->assertTrue(boolval($response), "No response obtained.");
 
 		$json = json_decode($response);
-		$this->assertTrue($json ? true : false, 'Response is not a JSON string.');
+		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 
 		$this->assertTrue(isset($json->status), 'Response has no status indicator.');
 		$this->assertTrue($json->status, 'Response status indicator is false.');
@@ -27,9 +27,9 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	public function testCallingASpecificService() {
 		$response = $this->getUrl('?service=hello_world');
 
-		$this->assertTrue($response ? true : false, "No response obtained.");
+		$this->assertTrue(boolval($response), "No response obtained.");
 		$json = json_decode($response);
-		$this->assertTrue($json ? true : false, 'Response is not a JSON string.');
+		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 
 		$this->assertTrue(isset($json->status), 'Response has no status indicator.');
 		$this->assertTrue($json->status, 'Response status indicator is false.');
@@ -43,9 +43,9 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	public function testExplainingASingleServiceInterface() {
 		$response = $this->getUrl('?service=hello_world&explaininterface');
 
-		$this->assertTrue($response ? true : false, "No response obtained.");
+		$this->assertTrue(boolval($response), "No response obtained.");
 		$json = json_decode($response);
-		$this->assertTrue($json ? true : false, 'Response is not a JSON string.');
+		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 
 		$this->assertTrue(isset($json->status), 'Response has no status indicator.');
 		$this->assertTrue($json->status, 'Response status indicator is false.');

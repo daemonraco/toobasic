@@ -11,10 +11,20 @@ class TooBasic_AssetsManager {
 	// Protected properties.
 	protected $_assetDirectories = array();
 	protected $_assetFiles = array();
+	protected $_generatedAssetFiles = array();
 	protected $_isLoaded = false;
 	protected $_tearDownScripts = array();
 	//
 	// Public methods.
+	public function assetDirectories() {
+		return $this->_assetDirectories;
+	}
+	public function assetFiles() {
+		return $this->_assetFiles;
+	}
+	public function generatedAssetFiles() {
+		return $this->_generatedAssetFiles;
+	}
 	public function loadAssetsOf($path) {
 		if(!$this->_isLoaded) {
 			$this->_isLoaded = true;
@@ -92,6 +102,7 @@ class TooBasic_AssetsManager {
 			if($ok && isset($manifest->generatedAssets)) {
 				foreach($manifest->generatedAssets as $asset) {
 					$this->_assetFiles[] = TESTS_ROOTDIR.$asset;
+					$this->_generatedAssetFiles[] = TESTS_ROOTDIR.$asset;
 				}
 			}
 
@@ -100,7 +111,14 @@ class TooBasic_AssetsManager {
 					$manifest->setUpScripts = array($manifest->setUpScripts);
 				}
 				foreach($manifest->setUpScripts as $script) {
-					$scriptPath = "{$caseFolder}/{$script}";
+					$scriptParts = explode(':', $script);
+					$scriptPath = false;
+					if($scriptParts[0] == 'G') {
+						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+					} else {
+						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+					}
+
 					chmod($scriptPath, 0755);
 					passthru($scriptPath);
 				}
@@ -110,7 +128,14 @@ class TooBasic_AssetsManager {
 					$manifest->tearDownScripts = array($manifest->tearDownScripts);
 				}
 				foreach($manifest->tearDownScripts as $script) {
-					$scriptPath = "{$caseFolder}/{$script}";
+					$scriptParts = explode(':', $script);
+					$scriptPath = false;
+					if($scriptParts[0] == 'G') {
+						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+					} else {
+						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+					}
+
 					chmod($scriptPath, 0755);
 					$this->_tearDownScripts[] = $scriptPath;
 				}

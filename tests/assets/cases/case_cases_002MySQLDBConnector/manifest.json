@@ -4,9 +4,9 @@
 		"/site/services/test.php"
 	],
 	"setUpScripts": [
-		"scripts/createdatabase.sh"
+		"G:mysql/createdatabase.sh"
 	],
 	"tearDownScripts": [
-		"scripts/removedatabase.sh"
+		"G:mysql/removedatabase.sh"
 	]
 }
