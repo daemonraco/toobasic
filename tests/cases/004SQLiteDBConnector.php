@@ -8,7 +8,7 @@ class SQLiteDBConnectorTest extends TooBasic_TestCase {
 		parent::setUp();
 	}
 	// @}
-	public function testTrue() {
+	public function testDatabaseConnection() {
 		$response = $this->getUrl('?service=test');
 
 		$this->assertTrue(boolval($response), "No response obtained.");
