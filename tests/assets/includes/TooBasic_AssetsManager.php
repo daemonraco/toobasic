@@ -31,6 +31,7 @@ class TooBasic_AssetsManager {
 
 			$ok = true;
 			$manifest = false;
+			$mainManifest = false;
 			//
 			// Guessing names.
 			$nameReplacements = array(
@@ -48,6 +49,7 @@ class TooBasic_AssetsManager {
 			if(self::$Verbose) {
 				echo "\nSetting up for '{$caseName}'... ";
 			}
+			$mainManifestPath = TOOBASIC_TESTS_ACASES_DIR."/manifest.json";
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
@@ -62,17 +64,42 @@ class TooBasic_AssetsManager {
 				$ok = false;
 			}
 			//
-			// Creating needed asset directories.
+			// Loading main manifest.
+			if($ok && is_readable($mainManifestPath)) {
+				$mainManifest = json_decode(file_get_contents($mainManifestPath));
+				if(!$mainManifest) {
+					$ok = false;
+				}
+			}
+			//
+			// Creating needed asset directories @{
 			if($ok && isset($manifest->assetDirectories)) {
 				foreach($manifest->assetDirectories as $path) {
 					$fullPath = TESTS_ROOTDIR.$path;
 
 					if(!is_dir($fullPath)) {
-						mkdir($fullPath, 0777, true);
 						$this->_assetDirectories[] = $fullPath;
 					}
 				}
 			}
+			if($ok && isset($mainManifest->assetDirectories)) {
+				foreach($mainManifest->assetDirectories as $path) {
+					$fullPath = TESTS_ROOTDIR.$path;
+
+					if(!is_dir($fullPath)) {
+						$this->_assetDirectories[] = $fullPath;
+					}
+				}
+			}
+			if($ok) {
+				$this->_assetDirectories = array_unique($this->_assetDirectories);
+				foreach($this->_assetDirectories as $fullPath) {
+					mkdir($fullPath, 0777, true);
+				}
+			}
+			// @}
+			//
+			// Loading asset content replacements.
 			$travisReplacements = array();
 			if($ok) {
 				foreach(get_defined_constants() as $constant => $value) {
@@ -82,9 +109,22 @@ class TooBasic_AssetsManager {
 				}
 			}
 			//
-			// Copying assets.
-			if($ok && isset($manifest->assets)) {
-				foreach($manifest->assets as $asset) {
+			// Loading and copying assets.
+			if($ok) {
+				$assets = array();
+				if(isset($manifest->assets)) {
+					foreach($manifest->assets as $asset) {
+						$assets[] = $asset;
+					}
+				}
+				if(isset($mainManifest->assets)) {
+					foreach($mainManifest->assets as $asset) {
+						$assets[] = $asset;
+					}
+				}
+				$assets = array_unique($assets);
+
+				foreach($assets as $asset) {
 					$fromPath = $caseFolder.$asset;
 					$toPath = TESTS_ROOTDIR.$asset;
 
@@ -98,19 +138,39 @@ class TooBasic_AssetsManager {
 				}
 			}
 			//
-			// Considering generated assets.
+			// Considering generated assets @{
 			if($ok && isset($manifest->generatedAssets)) {
 				foreach($manifest->generatedAssets as $asset) {
 					$this->_assetFiles[] = TESTS_ROOTDIR.$asset;
 					$this->_generatedAssetFiles[] = TESTS_ROOTDIR.$asset;
 				}
 			}
-
+			if($ok && isset($mainManifest->generatedAssets)) {
+				foreach($mainManifest->generatedAssets as $asset) {
+					$this->_assetFiles[] = TESTS_ROOTDIR.$asset;
+					$this->_generatedAssetFiles[] = TESTS_ROOTDIR.$asset;
+				}
+			}
+			$this->_assetFiles = array_unique($this->_assetFiles);
+			$this->_generatedAssetFiles = array_unique($this->_generatedAssetFiles);
+			// @}
+			//
+			// Loading and running set-up scripts @{
+			$setUpScripts = array();
 			if($ok && isset($manifest->setUpScripts)) {
 				if(!is_array($manifest->setUpScripts)) {
 					$manifest->setUpScripts = array($manifest->setUpScripts);
 				}
-				foreach($manifest->setUpScripts as $script) {
+				$setUpScripts = array_merge($setUpScripts, $manifest->setUpScripts);
+			}
+			if($ok && isset($mainManifest->setUpScripts)) {
+				if(!is_array($mainManifest->setUpScripts)) {
+					$mainManifest->setUpScripts = array($mainManifest->setUpScripts);
+				}
+				$setUpScripts = array_merge($setUpScripts, $mainManifest->setUpScripts);
+			}
+			if($ok) {
+				foreach($setUpScripts as $script) {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
@@ -123,11 +183,24 @@ class TooBasic_AssetsManager {
 					passthru($scriptPath);
 				}
 			}
+			// @}
+			//
+			// Loading and storing tear-down scripts @{
+			$tearDownScripts = array();
 			if($ok && isset($manifest->tearDownScripts)) {
 				if(!is_array($manifest->tearDownScripts)) {
 					$manifest->tearDownScripts = array($manifest->tearDownScripts);
 				}
-				foreach($manifest->tearDownScripts as $script) {
+				$tearDownScripts = array_merge($tearDownScripts, $manifest->tearDownScripts);
+			}
+			if($ok && isset($mainManifest->tearDownScripts)) {
+				if(!is_array($mainManifest->tearDownScripts)) {
+					$mainManifest->tearDownScripts = array($mainManifest->tearDownScripts);
+				}
+				$tearDownScripts = array_merge($tearDownScripts, $mainManifest->tearDownScripts);
+			}
+			if($ok) {
+				foreach($tearDownScripts as $script) {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
@@ -140,6 +213,7 @@ class TooBasic_AssetsManager {
 					$this->_tearDownScripts[] = $scriptPath;
 				}
 			}
+			// @}
 
 			if($ok && self::$Verbose) {
 				echo "Done\n";

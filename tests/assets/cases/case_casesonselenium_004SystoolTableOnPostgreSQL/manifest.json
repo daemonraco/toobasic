@@ -1,0 +1,49 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/configs/config_http.php",
+		"/site/controllers/layout_nav.php",
+		"/site/controllers/layout.php",
+		"/site/scripts/script.js",
+		"/site/styles/style.css",
+		"/site/templates/action/layout.html",
+		"/site/templates/action/layout_nav.html"
+	],
+	"generatedAssets": [
+		"/modules/mymodule/configs/routes.json",
+		"/modules/mymodule/controllers/people.php",
+		"/modules/mymodule/controllers/person_add.php",
+		"/modules/mymodule/controllers/person_delete.php",
+		"/modules/mymodule/controllers/person_edit.php",
+		"/modules/mymodule/controllers/person.php",
+		"/modules/mymodule/db/people.json",
+		"/modules/mymodule/forms/table_people.json",
+		"/modules/mymodule/langs/en_us.json",
+		"/modules/mymodule/models/representations/PeopleFactory.php",
+		"/modules/mymodule/models/representations/PersonRepresentation.php",
+		"/modules/mymodule/templates/action/people.html",
+		"/modules/mymodule/templates/action/person_add.html",
+		"/modules/mymodule/templates/action/person_delete.html",
+		"/modules/mymodule/templates/action/person_edit.html",
+		"/modules/mymodule/templates/action/person.html"
+	],
+	"assetDirectories": [
+		"/modules/mymodule",
+		"/modules/mymodule/configs",
+		"/modules/mymodule/controllers",
+		"/modules/mymodule/db",
+		"/modules/mymodule/forms",
+		"/modules/mymodule/langs",
+		"/modules/mymodule/models",
+		"/modules/mymodule/models/representations",
+		"/modules/mymodule/templates",
+		"/modules/mymodule/templates/action"
+	],
+	"setUpScripts": [
+		"G:pgsql/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:pgsql/removedatabase.sh"
+	]
+}

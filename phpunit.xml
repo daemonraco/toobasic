@@ -7,10 +7,17 @@
 	 stopOnFailures="false"
 	 syntaxCheck="false">
 	<testsuites>
-		<testsuite name="TooBasic Unit Tests">
+		<testsuite name="cases-by-class">
 			<directory suffix=".php">./tests/cases-by-class</directory>
+		</testsuite>
+		<testsuite name="cases">
 			<directory suffix=".php">./tests/cases</directory>
+		</testsuite>
+		<testsuite name="cases-on-selenium">
 			<directory suffix=".php">./tests/cases-on-selenium</directory>
+		</testsuite>
+		<testsuite name="cases-by-issue">
+			<directory suffix=".php">./tests/cases-by-issue</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
