@@ -6,7 +6,9 @@
  */
 //
 // First thing to do is to start a PHP session.
-session_start();
+if(!headers_sent($sentBy, $sentAt)) {
+	session_start();
+}
 
 use \TooBasic\Sanitizer as TB_Sanitizer;
 use \TooBasic\Paths as TB_Paths;

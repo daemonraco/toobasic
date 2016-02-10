@@ -176,3 +176,5 @@ You may also visit these documentation pages:
 
 * [Magic Properties](magicprop.md)
 * [Shell Tools](shelltools.md)
+
+<!--:GBSUMMARY:MVC:7:Languages:-->

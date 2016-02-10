@@ -91,7 +91,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$this->_options->addOption(Option::EasyFactory(self::OptionMethod, array('--method', '-m'), Option::TypeValue, $text, 'method'));
 
 		$text = "This option specifies a form type. Available values are:";
-		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
+		foreach(array_keys($Defaults[GC_DEFAULTS_FORMS_TYPES]) as $type) {
 			$text.= "\n\t- '{$type}'";
 		}
 		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));

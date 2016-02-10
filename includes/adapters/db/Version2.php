@@ -337,7 +337,7 @@ class Version2 extends VersionAdapter {
 					} else {
 						$out[GC_AFIELD_ERRORS][] = array(
 							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
-							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no values"
+							GC_AFIELD_MESSAGE => "Enumerative type without values"
 						);
 					}
 					break;

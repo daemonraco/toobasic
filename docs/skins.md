@@ -128,3 +128,5 @@ If you want or need, you may visit these documentation pages:
 * [Layouts](layout.md)
 * [Controller Exports](controllerexports.md)
 * [Snippets](snippets.md)
+
+<!--:GBSUMMARY:MVC:6:Skins:-->

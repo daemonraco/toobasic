@@ -1,0 +1,61 @@
+---
+engines:
+  csslint:
+    enabled: true
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - javascript
+      - php
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  phpmd:
+    enabled: true
+    checks:
+      CleanCode/BooleanArgumentFlag:
+        enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      Controversial/CamelCaseVariableName:
+        enabled: false
+      Controversial/CamelCaseMethodName:
+        enabled: false
+      Controversial/Superglobals:
+        enabled: false
+      CyclomaticComplexity:
+        enabled: false
+      Design/TooManyMethods:
+        enabled: false
+      Naming/ConstantNamingConventions:
+        enabled: false
+      Naming/LongVariable:
+        enabled: false
+      Naming/ShortMethodName:
+        enabled: false
+      Naming/ShortVariable:
+        enabled: false
+    exclude_fingerprints:
+    - 8599ef8b2bd5e1860dbb451c0051c83e
+    - 10b71b6cd38cf2292616e0ea1b2fbfb3
+    - a8163ba5c2135cc131d973c9b5fb088b
+ratings:
+  paths:
+  - "**.php"
+  - "**.css"
+  - "**.js"
+exclude_paths:
+- config/**/*
+- cache/**/*
+- site/**/*
+- libraries/**/*
+- tests/**/*
+- "modules/starterdoc/scripts/strapdown.js"
+- "modules/starterdoc/scripts/strapdown.css"
+- "modules/starterdoc/styles/jquery.cssemoticons.css"

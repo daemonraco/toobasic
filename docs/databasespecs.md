@@ -484,3 +484,5 @@ When your site is flagged as installed, this checks are avoided.
 If you want or need it, you may visit this documentation pages:
 
 * [Databases](databases.md)
+
+<!--:GBSUMMARY:Databases:3:Databases:-->

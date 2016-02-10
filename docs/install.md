@@ -135,3 +135,5 @@ or if you like the danger, switch to our development branch `dev`.
 Here you have a few links you may want to visit:
 
 * [Troubleshooting](troubleshooting.md)
+
+<!--:GBSUMMARY:Basics:1:Installation:-->

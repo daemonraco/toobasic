@@ -14,3 +14,7 @@
 /modules/toobasic-zfieldfilters
 /modules/toobasic-logger
 /modules/toobasic-workflows
+/composer.*
+/vendor/
+/travis.files-status.*
+/travis.directories-status.*

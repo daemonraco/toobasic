@@ -122,3 +122,5 @@ recreate it automatically when it's required.
 If you want, you may visit these documentation pages:
 
 * [Author's Note](authorsnote.md)
+
+<!--:GBSUMMARY:Appendix:1:Troubleshooting:-->

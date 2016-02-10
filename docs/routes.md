@@ -298,3 +298,5 @@ If you want, you may visit these documentation pages:
 * [Controller Exports](controllerexports.md)
 * [Layouts](layout.md)
 * [Services](services.md)
+
+<!--:GBSUMMARY:Others:1:Routes:-->

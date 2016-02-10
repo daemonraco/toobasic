@@ -99,7 +99,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "This option sets the form's type. It must be use along with option '--form'\n";
 		$text.= "Available values are:";
-		foreach($Defaults[GC_DEFAULTS_FORMS_TYPES] as $type => $value) {
+		foreach(array_keys($Defaults[GC_DEFAULTS_FORMS_TYPES]) as $type) {
 			$text.= "\n\t- '{$type}'";
 		}
 		$this->_options->addOption(Option::EasyFactory(self::OptionSetType, array('--set-type', '-sT'), Option::TypeValue, $text, 'form-type'));
@@ -529,8 +529,6 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		// Checking params.
 		if(!$formName) {
 			$this->setError(self::ErrorWrongParameters, "No form name specified");
-		} elseif(!in_array($buttonType, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
-			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
 		} else {
 			//
 			// Loading helpers.

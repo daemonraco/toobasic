@@ -1,0 +1,8 @@
+{
+	"assets": [
+		"/site/services/hello_world.php"
+	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	]
+}

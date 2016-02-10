@@ -299,3 +299,5 @@ Here you have a few links you may want to visit:
 * [Adapters](adapters.md)
 * [Databases](../databases.md)
 * [Representations](../representations.md)
+
+<!--:GBSUMMARY:Databases:4:Query Adapter:-->

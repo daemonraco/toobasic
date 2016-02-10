@@ -531,3 +531,5 @@ Here are some links you may like to read:
 * [Shell Tools and Cron](shelltools.md)
 * [Representations](representations.md)
 * [Forms Builder](forms.md)
+
+<!--:GBSUMMARY:Facilities & Scaffolds:1:Facilities:-->

@@ -213,6 +213,9 @@ class Paths extends Singleton {
 			foreach($Defaults[GC_DEFAULTS_DISABLED_PATHS] as $v) {
 				$this->_disabledPaths[] = Sanitizer::DirPath(ROOTDIR."/{$v}");
 			}
+			//
+			// Saving new count
+			$this->_disabledPathsCount = count($this->_disabledPaths);
 		}
 
 		return $this->_disabledPaths;
@@ -465,6 +468,35 @@ class Paths extends Singleton {
 	public function representationPath($representationName, $full = false) {
 		global $Paths;
 		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, self::ExtensionPHP, $full);
+	}
+	/**
+	 * This method resets all status forcing this class to reaload all of them
+	 * and provide a fresh support.
+	 */
+	public function reset() {
+		$this->_configPaths = false;
+		$this->_controllerPaths = false;
+		$this->_customPaths = array();
+		$this->_cssPaths = false;
+		$this->_dbSpecCallbackPaths = false;
+		$this->_dbSpecPaths = false;
+		$this->_disabledPaths = false;
+		$this->_disabledPathsCount = -1;
+		$this->_emailControllerPaths = false;
+		$this->_imagesPaths = false;
+		$this->_jsPaths = false;
+		$this->_langPaths = array();
+		$this->_manifests = false;
+		$this->_modelsPaths = false;
+		$this->_modules = false;
+		$this->_representationPaths = false;
+		$this->_routesPaths = false;
+		$this->_servicePaths = false;
+		$this->_shellCronsPaths = false;
+		$this->_shellSysPaths = false;
+		$this->_shellToolsPaths = false;
+		$this->_snippetsPaths = false;
+		$this->_templatesPaths = false;
 	}
 	/**
 	 * This method returns the full list of routes configurations.
@@ -797,6 +829,13 @@ class Paths extends Singleton {
 		//
 		// Returning findings.
 		return $out;
+	}
+	/**
+	 * Singleton initializer.
+	 */
+	protected function init() {
+		parent::init();
+		$this->reset();
 	}
 	/**
 	 * This method loads the list of active modules.

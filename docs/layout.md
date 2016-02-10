@@ -141,3 +141,5 @@ If you want, you may visit these documentation pages:
 * [Controllers](controller.md)
 * [Snippets](snippets.md)
 * [Redirections](redirections.md)
+
+<!--:GBSUMMARY:MVC:3:Layouts:-->

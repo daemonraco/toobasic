@@ -1,0 +1,15 @@
+{
+	"assets": [
+		"/site/configs/config.php",
+		"/site/configs/routes.json",
+		"/site/langs/en_us.json"
+
+	],
+	"generatedAssets": [
+		"/cache/system/config-priorities.json"
+	],
+	"generatedAssets": [
+		"/site/controllers/hello_world.php",
+		"/site/templates/action/hello_world.html"
+	]
+}

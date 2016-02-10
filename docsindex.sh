@@ -5,9 +5,12 @@ PROGRAM="$0";
 #
 F_GENERATE="";
 F_SHOWHELP="";
+F_SUMMARY="";
 P_FILES="README.md docs/ docs/tech/";
 F_FILES_LOADED="";
 P_GLOSSARY_PATH="docsindex.md";
+P_SUMMARY_PATH="SUMMARY.md";
+P_SUMMARY_SECTIONS="$(cat docs/summary-section.txt|grep -v '^$')";
 #
 TORUN="";
 ERROR="";
@@ -21,6 +24,8 @@ ERR0002="Needs more parameters";
 #################################################################################
 # Functions
 #	- Generate()
+#	- GenerateSummary()
+#	- GenerateSummarySection(string section, string config)
 #	- LoadFiles()
 #	- SetError(string error_code[, string message])
 #	- ShowHelp()
@@ -69,6 +74,64 @@ __ENDL__
 	done | tee -a "$P_GLOSSARY_PATH";
 }
 #
+function GenerateSummary() {
+	#
+	# <!--:GBSUMMARY:<tree-path>:<link-name>:<priority>:-->
+	#
+	LoadFiles;
+
+	echo -e "# Summary\n" | tee "$P_SUMMARY_PATH";
+	#
+	# Catching GitBooks config.
+	local config='';
+	for p in $P_FILES; do
+		gbconfig="$(cat "${p}"|egrep '^<!--:GBSUMMARY:(.*):-->$')";
+		if [ -n "$gbconfig" ]; then
+			gbconfig="$(echo "$gbconfig"|sed -e 's:<!--::g' -e 's:-->::g'):${p}";
+			config="$(echo -e "${config}\n${gbconfig}")";
+		fi;
+	done;
+	config="$(echo "${config}"|grep -v '^$'|sort -u)";
+
+	{
+		sectionConfig="$(echo "$config"|grep "^:GBSUMMARY::")";
+		config="$(echo "$config"|grep -v "^:GBSUMMARY::")";
+		GenerateSummarySection "" "$sectionConfig";
+
+		while read section; do
+			if [ -n "$section" ]; then
+				sectionConfig="$(echo "$config"|grep "^:GBSUMMARY:${section}:")";
+				config="$(echo "$config"|grep -v "^:GBSUMMARY:${section}:")";
+				GenerateSummarySection "$section" "$sectionConfig";
+			fi;
+		done << __ENDL__
+$P_SUMMARY_SECTIONS
+__ENDL__
+	} | tee -a "$P_SUMMARY_PATH";
+}
+#
+function GenerateSummarySection() {
+	local section="$1";
+	local config="$2";
+	local prefix="	* ";
+
+	if [ -z "$section" ]; then
+		prefix="* ";
+	else
+		echo "* ${section}";
+	fi;
+
+	while read line; do
+		if [ -n "$line" ]; then
+			title="$(echo "$line"|cut -d: -f5)";
+			doc="$(echo "$line"  |cut -d: -f7)";
+			echo "${prefix}[${title}](${doc})";
+		fi;
+	done << __ENDL__
+$config
+__ENDL__
+}
+#
 function LoadFiles() {
 	if [ -z "$F_FILES_LOADED" ]; then
 		aux="";
@@ -102,7 +165,10 @@ Usage:
  
 Options:
 	-g, --generate
-		Generates the docsindex ad '${P_GLOSSARY_PATH}'.
+		Generates the docsindex at '${P_GLOSSARY_PATH}'.
+
+	-s, --generate-summary
+		Generates the docsindex at '${P_SUMMARY_PATH}'.
 
 	-h, --help
 		Shows this help text.
@@ -127,6 +193,8 @@ while [ -n "$1" ]; do
 			F_SHOWHELP="F_SHOWHELP";
 		elif  [ "$1" = "-g" ] || [ "$1" = "--generate" ]; then
 			F_GENERATE="F_GENERATE";
+		elif  [ "$1" = "-s" ] || [ "$1" = "--generate-summary" ]; then
+			F_SUMMARY="F_SUMMARY";
 		fi;
 	fi;
  
@@ -140,6 +208,8 @@ elif [ -n "$addmore" ]; then
 	SetError "ERR0002";
 elif [ -n "$F_GENERATE" ]; then
 	TORUN="Generate";
+elif [ -n "$F_SUMMARY" ]; then
+	TORUN="GenerateSummary";
 elif [ -n "$F_SHOWHELP" ]; then
 	TORUN="ShowHelp";
 else

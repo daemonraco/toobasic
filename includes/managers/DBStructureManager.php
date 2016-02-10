@@ -1229,7 +1229,7 @@ class DBStructureManager extends Manager {
 				// consider.
 				if($results[GC_AFIELD_INDEXES]) {
 					/** @fixme this is a duplicated code, it should go into a method */
-					foreach($results[GC_AFIELD_INDEXES] as $pos => &$auxIndex) {
+					foreach($results[GC_AFIELD_INDEXES] as &$auxIndex) {
 						//
 						// Obtainig current connection table prefix.
 						$prefix = '';

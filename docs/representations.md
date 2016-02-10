@@ -345,3 +345,5 @@ If you want or need, you may visit these documentation pages:
 * [Models](models.md)
 * [Database Connections](databases.md)
 * [TooBasic's Search Engine](searchengine.md)
+
+<!--:GBSUMMARY:Databases:2:Representations:-->
