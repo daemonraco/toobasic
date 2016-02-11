@@ -17,6 +17,7 @@
 		</testsuite>
 		<testsuite name="cases-on-selenium">
 			<directory suffix=".php">./tests/cases-on-selenium</directory>
+			<exclude>./tests/cases-on-selenium/XXXSystoolTableOn.php</exclude>
 		</testsuite>
 		<testsuite name="cases-by-issue">
 			<directory suffix=".php">./tests/cases-by-issue</directory>
