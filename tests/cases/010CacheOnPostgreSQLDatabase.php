@@ -1,6 +1,6 @@
 <?php
 
-class CacheOnMySQLDatabaseTest extends TooBasic_TestCase {
+class CacheOnPostgreSQLDatabaseTest extends TooBasic_TestCase {
 	//
 	// Internal properties.
 	protected static $_DateFlag = '';
