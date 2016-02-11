@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php"
+	 colors="true"
+	 convertErrorsToExceptions="true"
+	 convertNoticesToExceptions="true"
+	 convertWarningsToExceptions="true"
+	 stopOnFailures="false"
+	 syntaxCheck="false">
+	<testsuites>
+		<testsuite name="cases-by-class">
+			<directory suffix=".php">./tests/cases-by-class</directory>
+		</testsuite>
+		<testsuite name="cases">
+			<directory suffix=".php">./tests/cases</directory>
+			<exclude>
+				<file>./tests/cases/007CacheOnMemcache.php</file>
+				<file>./tests/cases/008CacheOnMemcached.php</file>
+			</exclude>
+		</testsuite>
+		<testsuite name="cases-on-selenium">
+			<directory suffix=".php">./tests/cases-on-selenium</directory>
+		</testsuite>
+		<testsuite name="cases-by-issue">
+			<directory suffix=".php">./tests/cases-by-issue</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
