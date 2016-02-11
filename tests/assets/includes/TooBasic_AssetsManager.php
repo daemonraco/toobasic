@@ -180,7 +180,7 @@ class TooBasic_AssetsManager {
 					}
 
 					chmod($scriptPath, 0755);
-					passthru($scriptPath);
+					TooBasic_Helper::RunCommand(null, $scriptPath);
 				}
 			}
 			// @}
@@ -233,7 +233,7 @@ class TooBasic_AssetsManager {
 			rmdir($path);
 		}
 		foreach($this->_tearDownScripts as $script) {
-			passthru($script);
+			TooBasic_Helper::RunCommand(null, $script);
 		}
 	}
 }

@@ -61,13 +61,17 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 	// Table creation @{
 	public function testCreatingTableUsingSystoolTable() {
 		$cmd = "php shell.php sys table create {$this->_singurlarName}";
-		$cmd.=" --plural {$this->_pluralName}";
-		$cmd.=" --module {$this->_moduleName}";
-		$cmd.=" --bootstrap";
+		$cmd.= " --plural {$this->_pluralName}";
+		$cmd.= " --module {$this->_moduleName}";
+		$cmd.= ' --bootstrap';
 		foreach($this->_fields as $field => $conf) {
 			$cmd.=" --column {$field}{$conf['type']}";
 		}
-		passthru($cmd);
+		$cmd.= ' --searchable person';
+		$cmd.= ' --name-field name';
+		$cmd.= ' --autocomplete';
+		$cmd.= ' --type mysql';
+		$this->runCommand($cmd);
 		//
 		// Checking that all expected assets where generated.
 		foreach(self::$_AssetsManager->generatedAssetFiles() as $path) {
@@ -90,14 +94,14 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($thead), "Table has no header.");
 
 		$headers = $thead->elements($this->using('css selector')->value('th'));
-		$this->assertEquals(count($headers), 7 + 2, "There are more/less headers than expected.");
+		$this->assertEquals(7 + 2, count($headers), "There are more/less headers than expected.");
 		//
 		// Checking body.
 		$tbody = $table->byTag('tbody');
 		$this->assertTrue(boolval($tbody), "Table has no body.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 0, "At this point there shouldn't be any entry.");
+		$this->assertEquals(0, count($rows), "At this point there shouldn't be any entry.");
 		//
 		// Checking buttons.
 		$addButton = $this->byCssSelector("#MainContents a.btn[href*=\"{$this->_singurlarName}_add\"]");
@@ -131,7 +135,11 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		//
 		// Setting a random value and testing reset button.
 		foreach($this->_fields as $field => $conf) {
-			$inputs[$field]->value($conf['value']);
+			if($conf['clear']) {
+				$inputs[$field]->value($conf['value']);
+			} else {
+				$this->select($inputs[$field])->selectOptionByValue($conf['value']);
+			}
 		}
 		$resetButton->click();
 		foreach($this->_fields as $field => $conf) {
@@ -140,7 +148,11 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		//
 		// Setting values and submitting the new entry.
 		foreach($this->_fields as $field => $conf) {
-			$inputs[$field]->value($conf['value']);
+			if($conf['clear']) {
+				$inputs[$field]->value($conf['value']);
+			} else {
+				$this->select($inputs[$field])->selectOptionByValue($conf['value']);
+			}
 		}
 		$submitButton->click();
 		//
@@ -166,22 +178,22 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($thead), "Table has no header.");
 
 		$headers = $thead->elements($this->using('css selector')->value('th'));
-		$this->assertEquals(count($headers), 7 + 2, "There are more/less headers than expected.");
+		$this->assertEquals(7 + 2, count($headers), "There are more/less headers than expected.");
 		//
 		// Checking body.
 		$tbody = $table->byTag('tbody');
 		$this->assertTrue(boolval($tbody), "Table has no body.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 1, "At this point there should be at least one entry.");
+		$this->assertEquals(1, count($rows), "At this point there should be at least one entry.");
 		//
 		// Getting the last column of the single row and analyzing it's
 		// buttons.
 		$actionsColumn = $rows[0]->elements($this->using('css selector')->value('td'));
-		$this->assertEquals(count($actionsColumn), 7 + 2, "There are more/less columns than expected.");
+		$this->assertEquals(7 + 2, count($actionsColumn), "There are more/less columns than expected.");
 
 		$actions = $actionsColumn[8]->elements($this->using('css selector')->value('a.btn'));
-		$this->assertEquals(count($actions), 3, "There are more/less action buttons in the last column than expected.");
+		$this->assertEquals(3, count($actions), "There are more/less action buttons in the last column than expected.");
 		$this->assertRegExp("/\?action={$this->_singurlarName}&id=1$/", $actions[0]->attribute('href'), "The 'view' button points to the wrong direction.");
 		$this->assertRegExp("/\?action={$this->_singurlarName}_edit&id=1$/", $actions[1]->attribute('href'), "The 'edit' button points to the wrong direction.");
 		$this->assertRegExp("/\?action={$this->_singurlarName}_delete&id=1$/", $actions[2]->attribute('href'), "The 'delete' button points to the wrong direction.");
@@ -201,15 +213,15 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($tbody), "No tbody found.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 1, "At this point there should be at least one entry.");
+		$this->assertEquals(1, count($rows), "At this point there should be at least one entry.");
 		//
 		// Getting the last column of the single row and analyzing it's
 		// buttons.
 		$actionsColumn = $rows[0]->elements($this->using('css selector')->value('td'));
-		$this->assertEquals(count($actionsColumn), 7 + 2, "There are more/less columns than expected.");
+		$this->assertEquals(7 + 2, count($actionsColumn), "There are more/less columns than expected.");
 
 		$actions = $actionsColumn[8]->elements($this->using('css selector')->value('a.btn'));
-		$this->assertEquals(count($actions), 3, "There are more/less action buttons in the last column than expected.");
+		$this->assertEquals(3, count($actions), "There are more/less action buttons in the last column than expected.");
 		//
 		// Clicking the 'view' button.
 		$actions[0]->click();
@@ -230,7 +242,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		//
 		// Checking values.
 		foreach($this->_fields as $field => $conf) {
-			$this->assertEquals($inputs[$field]->value(), $conf['value'], "Value for field '{$field}' is not the one expected.");
+			$this->assertEquals($conf['value'], $inputs[$field]->value(), "Value for field '{$field}' is not the one expected.");
 		}
 		//
 		// Going back.
@@ -253,15 +265,15 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($tbody), "No tbody found.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 1, "At this point there should be at least one entry.");
+		$this->assertEquals(1, count($rows), "At this point there should be at least one entry.");
 		//
 		// Getting the last column of the single row and analyzing it's
 		// buttons.
 		$actionsColumn = $rows[0]->elements($this->using('css selector')->value('td'));
-		$this->assertEquals(count($actionsColumn), 7 + 2, "There are more/less columns than expected.");
+		$this->assertEquals(7 + 2, count($actionsColumn), "There are more/less columns than expected.");
 
 		$actions = $actionsColumn[8]->elements($this->using('css selector')->value('a.btn'));
-		$this->assertEquals(count($actions), 3, "There are more/less action buttons in the last column than expected.");
+		$this->assertEquals(3, count($actions), "There are more/less action buttons in the last column than expected.");
 		//
 		// Clicking the 'view' button.
 		$actions[1]->click();
@@ -281,7 +293,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 			$inputs[$field] = $this->byId("{$this->_singurlarName}_form_{$field}");
 
 			$this->assertTrue(boolval($inputs[$field]), "Field '{$field}' is not shown.");
-			$this->assertEquals($inputs[$field]->value(), $conf['value'], "Value for field '{$field}' is not the one expected.");
+			$this->assertEquals($conf['value'], $inputs[$field]->value(), "Value for field '{$field}' is not the one expected.");
 		}
 		//
 		// Setting new values.
@@ -297,7 +309,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		// Checking reset button.
 		$resetButton->click();
 		foreach($this->_fields as $field => $conf) {
-			$this->assertEquals($inputs[$field]->value(), $conf['value'], "Value for field '{$field}' is not the one expected.");
+			$this->assertEquals($conf['value'], $inputs[$field]->value(), "Value for field '{$field}' is not the one expected.");
 		}
 		//
 		// Setting and submitting new values.
@@ -315,6 +327,47 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 	}
 	// @}
 	//
+	// Tesing Searchable Entries @{
+	public function testUpdatingSearchIndex() {
+		$this->runCommand('php shell.php cron search --update');
+	}
+	public function testSearchingForTheEntryThroughServices() {
+		$json = $this->getJSONUrl("?service=search&terms={$this->_fields['name']['update']}");
+
+		$this->assertTrue(isset($json->status), "Response doesn't have a 'status' field.");
+		$this->assertTrue($json->status, "Response status is not ok.");
+
+		$this->assertTrue(isset($json->data), "Response doesn't have a 'data' field.");
+		$this->assertTrue(is_object($json->data), "Response 'data' field is not an object.");
+
+		$this->assertTrue(isset($json->data->results), "Response 'data' field doesn't have a 'results' sub-field.");
+		$this->assertTrue(isset($json->data->count), "Response 'data' field doesn't have a 'count' sub-field.");
+		$this->assertTrue(isset($json->data->countByType), "Response 'data' field doesn't have a 'countByType' sub-field.");
+
+		$this->assertTrue(is_integer($json->data->count), "Sub-field 'data->count' is not an integer.");
+
+		$this->assertEquals(1, $json->data->count, "At least one value should had been found.");
+
+		if($json->data->count == 1) {
+			$this->assertTrue(is_object($json->data->results), "Sub-field 'data->results' is not an object.");
+
+			$this->assertTrue(isset($json->data->results->PERSON), "There's no sub-field 'data->results->PERSON'.");
+			$this->assertTrue(is_array($json->data->results->PERSON), "Sub-field 'data->results->PERSON' is not a list.");
+			$this->assertEquals($json->data->count, count($json->data->results->PERSON), "Sub-field 'data->results->PERSON' has an anexpected amount of items.");
+
+			$this->assertTrue(is_object($json->data->results->PERSON[0]), "The entry in sub-field 'data->results->PERSON' is not an object.");
+			foreach($this->_fields as $field => $conf) {
+				$this->assertTrue(isset($json->data->results->PERSON[0]->{$field}), "The entry in sub-field 'data->results->PERSON' doesn't have a property called '{$field}'.");
+				$this->assertEquals($conf['update'], $json->data->results->PERSON[0]->{$field}, "The entry in sub-field 'data->results->PERSON' has an unexpected value for property '{$field}'.");
+			}
+
+			$this->assertTrue(is_object($json->data->countByType), "Sub-field 'data->countByType' is not an object.");
+			$this->assertTrue(isset($json->data->countByType->PERSON), "Count by type doesn't have a value for the entry's type.");
+			$this->assertEquals(1, $json->data->countByType->PERSON, "Specific count for the entry's type has an unexpected value.");
+		}
+	}
+	// @}
+	//
 	// Checking the 'delete' view  @{
 	public function testCheckingFirstEntryRemoval() {
 		$this->url("?action={$this->_pluralName}");
@@ -328,15 +381,15 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($tbody), "No tbody found.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 1, "At this point there should be at least one entry.");
+		$this->assertEquals(1, count($rows), "At this point there should be at least one entry.");
 		//
 		// Getting the last column of the single row and analyzing it's
 		// buttons.
 		$actionsColumn = $rows[0]->elements($this->using('css selector')->value('td'));
-		$this->assertEquals(count($actionsColumn), 7 + 2, "There are more/less columns than expected.");
+		$this->assertEquals(7 + 2, count($actionsColumn), "There are more/less columns than expected.");
 
 		$actions = $actionsColumn[8]->elements($this->using('css selector')->value('a.btn'));
-		$this->assertEquals(count($actions), 3, "There are more/less action buttons in the last column than expected.");
+		$this->assertEquals(3, count($actions), "There are more/less action buttons in the last column than expected.");
 		//
 		// Clicking the 'view' button.
 		$actions[2]->click();
@@ -356,7 +409,7 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 			$inputs[$field] = $this->byId("{$this->_singurlarName}_form_{$field}");
 
 			$this->assertTrue(boolval($inputs[$field]), "Field '{$field}' is not shown.");
-			$this->assertEquals($inputs[$field]->value(), $conf['update'], "Value for field '{$field}' is not the one expected.");
+			$this->assertEquals($conf['update'], $inputs[$field]->value(), "Value for field '{$field}' is not the one expected.");
 		}
 		//
 		// Submitting the form but canceling in the confirm window.
@@ -386,27 +439,34 @@ class Selenium_SystoolTableOnMySQLTest extends TooBasic_SeleniumTestCase {
 		$this->assertTrue(boolval($thead), "Table has no header.");
 
 		$headers = $thead->elements($this->using('css selector')->value('th'));
-		$this->assertEquals(count($headers), 7 + 2, "There are more/less headers than expected.");
+		$this->assertEquals(7 + 2, count($headers), "There are more/less headers than expected.");
 		//
 		// Checking body.
 		$tbody = $table->byTag('tbody');
 		$this->assertTrue(boolval($tbody), "Table has no body.");
 
 		$rows = $tbody->elements($this->using('css selector')->value('tr'));
-		$this->assertEquals(count($rows), 0, "At this point there shouldn't be any entry.");
+		$this->assertEquals(0, count($rows), "At this point there shouldn't be any entry.");
 	}
-	// @}	//
+	// @}
+	//
 	// Table removal @{
 	public function testRemovingTableUsingSystoolTable() {
 		$cmd = "php shell.php sys table remove {$this->_singurlarName}";
-		$cmd.=" --plural {$this->_pluralName}";
-		$cmd.=" --module {$this->_moduleName}";
-		passthru($cmd);
+		$cmd.= " --plural {$this->_pluralName}";
+		$cmd.= " --module {$this->_moduleName}";
+		$cmd.= ' --column name';
+		$cmd.= ' --name-field name';
+		$cmd.= ' --searchable person';
+		$cmd.= ' --autocomplete';
+		$cmd.= ' --type mysql';
+		$this->runCommand($cmd);
 		//
 		// Checking that all expected assets where removed except those
 		// that are generic.
 		$acceptableAssets = array(
 			TESTS_ROOTDIR."/cache/system/config-priorities.json",
+			TESTS_ROOTDIR."/modules/mymodule/configs/config.php",
 			TESTS_ROOTDIR."/modules/mymodule/configs/routes.json",
 			TESTS_ROOTDIR."/modules/mymodule/langs/en_us.json"
 		);
