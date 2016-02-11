@@ -19,7 +19,7 @@ class CacheOnFilesTest extends TooBasic_TestCase {
 	//
 	// Test cases @{
 	public function testGettingACleanCall() {
-		$response = $this->getUrl('?action=test&rand='.self::$_RandFlag);
+		$response = $this->getUrl('?action=test_cache&rand='.self::$_RandFlag);
 
 		$pattern = '/DATE:(?P<date>[0-9\-\.:]+):DATE/m';
 		$this->assertRegExp($pattern, $response, "The date flag was not found");
@@ -29,7 +29,7 @@ class CacheOnFilesTest extends TooBasic_TestCase {
 		self::$_DateFlag = $matches['date'];
 	}
 	public function testGettingTheSameCallAgain() {
-		$response = $this->getUrl('?action=test&rand='.self::$_RandFlag);
+		$response = $this->getUrl('?action=test_cache&rand='.self::$_RandFlag);
 
 		$pattern = '/DATE:(?P<date>[0-9\-\.:]+):DATE/m';
 		$this->assertRegExp($pattern, $response, "The date flag was not found");
@@ -39,7 +39,7 @@ class CacheOnFilesTest extends TooBasic_TestCase {
 		$this->assertEquals(self::$_DateFlag, $matches['date'], "The cache didn't seem to keep the value");
 	}
 	public function testGettingTheSameCallForJsonFormat() {
-		$response = $this->getUrl('?action=test&format=json&rand='.self::$_RandFlag);
+		$response = $this->getUrl('?action=test_cache&format=json&rand='.self::$_RandFlag);
 
 		$json = json_decode($response);
 		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
@@ -49,7 +49,7 @@ class CacheOnFilesTest extends TooBasic_TestCase {
 		$this->assertEquals(self::$_DateFlag, $json->date, "The cache didn't seem to keep the value");
 	}
 	public function testTestingTheResetCacheFlag() {
-		$response = $this->getUrl('?action=test&debugresetcache&rand='.self::$_RandFlag);
+		$response = $this->getUrl('?action=test_cache&debugresetcache&rand='.self::$_RandFlag);
 
 		$pattern = '/DATE:(?P<date>[0-9\-\.:]+):DATE/m';
 		$this->assertRegExp($pattern, $response, "The date flag was not found");

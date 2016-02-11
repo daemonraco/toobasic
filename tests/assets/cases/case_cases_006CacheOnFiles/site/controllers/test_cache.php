@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @class TestController
+ * @class TestCacheController
  *
- * Accessible at '?action=test'
+ * Accessible at '?action=test_cache'
  */
-class TestController extends \TooBasic\Controller {
+class TestCacheController extends \TooBasic\Controller {
 	//
 	// Protected properties
 	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;

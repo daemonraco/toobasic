@@ -1,8 +1,8 @@
 {
 	"assets": [
 		"/site/config.php",
-		"/site/controllers/test.php",
-		"/site/templates/action/test.html"
+		"/site/controllers/test_cache.php",
+		"/site/templates/action/test_cache.html"
 	],
 	"generatedAssets": [
 	]
