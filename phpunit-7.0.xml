@@ -12,10 +12,8 @@
 		</testsuite>
 		<testsuite name="cases">
 			<directory suffix=".php">./tests/cases</directory>
-			<exclude>
-				<file>./tests/cases/007CacheOnMemcache.php</file>
-				<file>./tests/cases/008CacheOnMemcached.php</file>
-			</exclude>
+			<exclude>./tests/cases/007CacheOnMemcache.php</exclude>
+			<exclude>./tests/cases/008CacheOnMemcached.php</exclude>
 		</testsuite>
 		<testsuite name="cases-on-selenium">
 			<directory suffix=".php">./tests/cases-on-selenium</directory>
