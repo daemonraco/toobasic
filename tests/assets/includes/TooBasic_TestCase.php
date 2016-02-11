@@ -41,6 +41,8 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 			$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
 		}
 
+		$this->assertTrue(boolval($response), "No response obtained.");
+
 		return $response;
 	}
 	// @}

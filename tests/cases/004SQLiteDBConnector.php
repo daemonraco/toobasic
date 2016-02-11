@@ -11,8 +11,6 @@ class SQLiteDBConnectorTest extends TooBasic_TestCase {
 	public function testDatabaseConnection() {
 		$response = $this->getUrl('?service=test');
 
-		$this->assertTrue(boolval($response), "No response obtained.");
-
 		$json = json_decode($response);
 		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 
