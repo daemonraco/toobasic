@@ -1,12 +1,6 @@
 <?php
 
 class SQLiteDBConnectorTest extends TooBasic_TestCase {
-	//
-	// Set up @{
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
 	// @}
 	public function testDatabaseConnection() {
 		$response = $this->getUrl('?service=test');

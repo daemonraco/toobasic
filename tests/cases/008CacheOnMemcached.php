@@ -11,10 +11,6 @@ class CacheOnMemcachedTest extends TooBasic_TestCase {
 		parent::setUpBeforeClass();
 		self::$_RandFlag = rand(100000, 999999);
 	}
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
 	// @}
 	//
 	// Test cases @{

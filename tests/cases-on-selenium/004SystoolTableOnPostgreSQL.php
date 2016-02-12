@@ -4,13 +4,6 @@ require_once __DIR__.'/XXXSystoolTableOn.php';
 
 class Selenium_SystoolTableOnPostgreSQLTest extends Selenium_SystoolTableOnDatabaseTest {
 	//
-	// Set up @{
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
-	// @}
-	//
 	// Inherited methods, weird but required @{
 	public function testCreatingTableUsingSystoolTable() {
 		parent::testCreatingTableUsingSystoolTable();

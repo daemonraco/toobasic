@@ -7,8 +7,14 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 	 * @var TooBasic_AssetsManager
 	 */
 	protected static $_AssetsManager = false;
-	protected function loadAssetsOf($path) {
-		self::$_AssetsManager->loadAssetsOf($path);
+	protected function loadAssetsOf($path = false) {
+		$filePath = $path;
+		if($path === false) {
+			$reflector = new ReflectionClass(get_called_class());
+			$filePath = $reflector->getFileName();
+		}
+
+		self::$_AssetsManager->loadAssetsOf($filePath);
 	}
 	public static function setUpBeforeClass() {
 		if(!self::$_AssetsManager) {
@@ -16,6 +22,7 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 		}
 	}
 	public function setUp() {
+		$this->loadAssetsOf();
 		//
 		// Selenium settings.
 		$this->setHost('localhost');

@@ -2,13 +2,6 @@
 
 class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	//
-	// Set up @{
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
-	// @}
-	//
 	// Test cases.
 	public function testRequestingAFullInterfaceExplanation() {
 		$response = $this->getUrl('?explaininterface');
