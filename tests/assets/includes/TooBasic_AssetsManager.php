@@ -221,10 +221,6 @@ class TooBasic_AssetsManager {
 				}
 			}
 			// @}
-
-			if($ok && self::$Verbose) {
-				echo "Done\n";
-			}
 		}
 	}
 	public function tearDown() {
