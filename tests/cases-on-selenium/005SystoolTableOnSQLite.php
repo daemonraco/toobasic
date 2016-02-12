@@ -30,6 +30,12 @@ class Selenium_SystoolTableOnSQLiteTest extends Selenium_SystoolTableOnDatabaseT
 	public function testSearchingForTheEntryThroughServices() {
 		parent::testSearchingForTheEntryThroughServices();
 	}
+	public function testSearchingForPartOfTheNameThroughServices() {
+		parent::testSearchingForPartOfTheNameThroughServices();
+	}
+	public function testUsingThePredictiveSearchService() {
+		parent::testUsingThePredictiveSearchService();
+	}
 	public function testCheckingFirstEntryRemoval() {
 		parent::testCheckingFirstEntryRemoval();
 	}

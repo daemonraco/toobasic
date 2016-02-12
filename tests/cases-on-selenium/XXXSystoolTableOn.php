@@ -57,13 +57,6 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 	protected $_pluralName = 'people';
 	protected $_singurlarName = 'person';
 	//
-	// Set up @{
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
-	// @}
-	//
 	// Table creation @{
 	public function testCreatingTableUsingSystoolTable() {
 		$cmd = "php shell.php sys table create {$this->_singurlarName}";
@@ -340,9 +333,6 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 	public function testSearchingForTheEntryThroughServices() {
 		$json = $this->getJSONUrl("?service=search&terms={$this->_fields['name']['update']}");
 
-		$this->assertTrue(isset($json->status), "Response doesn't have a 'status' field.");
-		$this->assertTrue($json->status, "Response status is not ok.");
-
 		$this->assertTrue(isset($json->data), "Response doesn't have a 'data' field.");
 		$this->assertTrue(is_object($json->data), "Response 'data' field is not an object.");
 
@@ -370,6 +360,44 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 			$this->assertTrue(is_object($json->data->countByType), "Sub-field 'data->countByType' is not an object.");
 			$this->assertTrue(isset($json->data->countByType->PERSON), "Count by type doesn't have a value for the entry's type.");
 			$this->assertEquals(1, $json->data->countByType->PERSON, "Specific count for the entry's type has an unexpected value.");
+		}
+	}
+	public function testSearchingForPartOfTheNameThroughServices() {
+		$terms = substr($this->_fields['name']['update'], 2, strlen($this->_fields['name']['update']) - 3);
+		$json = $this->getJSONUrl("?service=search&terms={$terms}");
+
+		$this->assertTrue(isset($json->data), "Response doesn't have a 'data' field.");
+		$this->assertTrue(is_object($json->data), "Response 'data' field is not an object.");
+		$this->assertTrue(isset($json->data->countByType), "Response 'data' field doesn't have a 'countByType' sub-field.");
+		$this->assertTrue(is_object($json->data->countByType), "Sub-field 'data->countByType' is not an object.");
+		$this->assertTrue(isset($json->data->countByType->PERSON), "Count by type doesn't have a value for the entry's type.");
+		$this->assertEquals(1, $json->data->countByType->PERSON, "Specific count for the entry's type has an unexpected value.");
+	}
+	public function testUsingThePredictiveSearchService() {
+		$transaction = rand(0, 1000);
+		$term = $this->_fields['name']['update'];
+		$json = $this->getJSONUrl("?service={$this->_pluralName}_predictive&pattern={$term}&transaction={$transaction}");
+
+		$this->assertTrue(isset($json->status), "Response doesn't have a field called 'status'.");
+		$this->assertTrue($json->status, "Field 'status' is not ok.");
+
+		$this->assertTrue(isset($json->data), "Response doesn't have a field called 'data'.");
+		$this->assertTrue(is_object($json->data), "Field 'data' is not an object.");
+
+		$this->assertTrue(isset($json->transaction), "Response doesn't have a field called 'transaction'.");
+		$this->assertEquals($transaction, $json->transaction, "Field 'transaction' has an unexpected value.");
+
+		$this->assertTrue(isset($json->data->pattern), "Response data doesn't have a field called 'pattern'.");
+		$this->assertEquals("%{$term}%", $json->data->pattern, "Response data field 'pattern' has an unexpected value.");
+
+		$this->assertTrue(isset($json->data->items), "Response data doesn't have a field called 'items'.");
+		$this->assertTrue(is_array($json->data->items), "Response data field 'items' is not a list.");
+		$this->assertEquals(1, count($json->data->items), "Service found an unexpected amount of items.");
+		$this->assertTrue(is_object($json->data->items[0]), "First items is not an object.");
+
+		foreach($this->_fields as $field => $conf) {
+			$this->assertTrue(isset($json->data->items[0]->{$field}), "Found item doesn't have a property called '{$field}'.");
+			$this->assertEquals($conf['update'], $json->data->items[0]->{$field}, "Found item's property '{$field}' has an anexpected value.");
 		}
 	}
 	// @}

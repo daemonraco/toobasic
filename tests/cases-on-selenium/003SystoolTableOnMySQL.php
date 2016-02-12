@@ -29,6 +29,12 @@ class Selenium_SystoolTableOnMySQLTest extends Selenium_SystoolTableOnDatabaseTe
 	public function testSearchingForTheEntryThroughServices() {
 		parent::testSearchingForTheEntryThroughServices();
 	}
+	public function testSearchingForPartOfTheNameThroughServices() {
+		parent::testSearchingForPartOfTheNameThroughServices();
+	}
+	public function testUsingThePredictiveSearchService() {
+		parent::testUsingThePredictiveSearchService();
+	}
 	public function testCheckingFirstEntryRemoval() {
 		parent::testCheckingFirstEntryRemoval();
 	}
