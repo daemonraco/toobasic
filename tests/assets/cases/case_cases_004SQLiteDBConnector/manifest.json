@@ -1,6 +1,6 @@
 {
 	"assets": [
-		"/site/configs/config.php",
+		"/site/config.php",
 		"/site/services/test.php"
 	],
 	"generatedAssets": [
