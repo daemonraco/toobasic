@@ -3,12 +3,7 @@
 abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTestCase {
 	//
 	// Internal Properties.
-	protected $_acceptableAssets = array(
-		TESTS_ROOTDIR."/cache/system/config-priorities.json",
-		TESTS_ROOTDIR."/modules/mymodule/configs/config.php",
-		TESTS_ROOTDIR."/modules/mymodule/configs/routes.json",
-		TESTS_ROOTDIR."/modules/mymodule/langs/en_us.json"
-	);
+	protected $_acceptableAssets = array();
 	protected $_fields = array(
 		'name' => array(
 			'type' => '',
@@ -56,6 +51,17 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 	protected $_moduleName = 'mymodule';
 	protected $_pluralName = 'people';
 	protected $_singurlarName = 'person';
+	//
+	// Set up @{
+	public function setUp() {
+		parent::setUp();
+
+		$this->_acceptableAssets[] = TESTS_ROOTDIR."/cache/system/config-priorities.json";
+		$this->_acceptableAssets[] = TESTS_ROOTDIR."/modules/mymodule/configs/config.php";
+		$this->_acceptableAssets[] = TESTS_ROOTDIR."/modules/mymodule/configs/routes.json";
+		$this->_acceptableAssets[] = TESTS_ROOTDIR."/modules/mymodule/langs/en_us.json";
+	}
+	// @}
 	//
 	// Table creation @{
 	public function testCreatingTableUsingSystoolTable() {
