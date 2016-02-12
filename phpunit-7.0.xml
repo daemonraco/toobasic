@@ -13,6 +13,7 @@
 		<testsuite name="cases">
 			<directory suffix=".php">./tests/cases</directory>
 			<exclude>./tests/cases/XXXDBConnector.php</exclude>
+			<exclude>./tests/cases/XXXCacheOn.php</exclude>
 			<exclude>./tests/cases/007CacheOnMemcache.php</exclude>
 			<exclude>./tests/cases/008CacheOnMemcached.php</exclude>
 		</testsuite>
