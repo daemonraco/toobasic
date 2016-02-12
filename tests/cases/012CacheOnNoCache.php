@@ -1,6 +1,6 @@
 <?php
 
-abstract class CacheOnTest extends TooBasic_TestCase {
+class CacheOnNoCacheTest extends TooBasic_TestCase {
 	//
 	// Internal properties.
 	protected static $_DateFlag = '';
@@ -31,7 +31,8 @@ abstract class CacheOnTest extends TooBasic_TestCase {
 
 		$matches = false;
 		preg_match($this->_pattern, $response, $matches);
-		$this->assertEquals(self::$_DateFlag, $matches['date'], "The cache didn't seem to keep the value");
+		$this->assertNotEquals(self::$_DateFlag, $matches['date'], "The cache seemed to keep the value");
+		self::$_DateFlag = $matches['date'];
 	}
 	public function testGettingTheSameCallForJsonFormat() {
 		$response = $this->getUrl('?action=test_cache&format=json&rand='.self::$_RandFlag);
@@ -41,7 +42,8 @@ abstract class CacheOnTest extends TooBasic_TestCase {
 
 		$this->assertTrue(isset($json->date), "No field 'date' set.");
 
-		$this->assertEquals(self::$_DateFlag, $json->date, "The cache didn't seem to keep the value");
+		$this->assertNotEquals(self::$_DateFlag, $json->date, "The cache seemed to keep the value");
+		self::$_DateFlag = $json->date;
 	}
 	public function testTestingTheResetCacheFlag() {
 		$response = $this->getUrl('?action=test_cache&debugresetcache&rand='.self::$_RandFlag);
