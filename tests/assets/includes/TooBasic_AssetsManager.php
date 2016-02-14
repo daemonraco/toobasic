@@ -134,6 +134,9 @@ class TooBasic_AssetsManager {
 					$fromPath = $caseFolder.$asset;
 					$toPath = TESTS_ROOTDIR.$asset;
 
+					if(!is_file($fromPath)) {
+						$fromPath = TOOBASIC_TESTS_ACASES_DIR.$asset;
+					}
 					if(is_file($toPath)) {
 						if(self::$Verbose) {
 							echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
