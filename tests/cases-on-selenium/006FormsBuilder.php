@@ -8,7 +8,7 @@ class FormsBuilderTest extends TooBasic_SeleniumTestCase {
 	//
 	// Creation and edition @{
 	public function testCreateACleanForm() {
-		$this->runFormCommand("php shell.php sys forms new {$this->_formName} -M {$this->_moduleName}", "Creating form '{$this->_formName}':(.*)Done(.*)\(Path: /var/www-ssl/toobasic-dev/modules/mymodule/forms/{$this->_formName}.json\)");
+		$this->runFormCommand("php shell.php sys forms new {$this->_formName} -M {$this->_moduleName}", "Creating form '{$this->_formName}':(.*)Done(.*)\(Path: /(.*)/modules/mymodule/forms/{$this->_formName}\.json\)");
 	}
 	public function testSettingFormsName() {
 		$this->runFormCommand("php shell.php sys forms --set-name 'test_form' -f {$this->_formName}", "Setting form '{$this->_formName}' name:(.*)Done");
@@ -110,7 +110,7 @@ class FormsBuilderTest extends TooBasic_SeleniumTestCase {
 	//
 	// Removal @{
 	public function testRemovingForm() {
-		$this->runFormCommand("php shell.php sys forms rm {$this->_formName}", "Removing form '{$this->_formName}':(.*)Done(.*)\(Path: /var/www-ssl/toobasic-dev/modules/mymodule/forms/{$this->_formName}.json\)");
+		$this->runFormCommand("php shell.php sys forms rm {$this->_formName}", "Removing form '{$this->_formName}':(.*)Done(.*)\(Path: /(.*)/modules/mymodule/forms/{$this->_formName}\.json\)");
 	}
 	// @}
 	//
@@ -184,6 +184,7 @@ class FormsBuilderTest extends TooBasic_SeleniumTestCase {
 		foreach(['ACTIVE', 'INACTIVE', 'REMOVED', 'UNKNOWN'] as $value) {
 			$option = $field[0]->elements($this->using('css selector')->value("option[value='{$value}']"));
 			$this->assertEquals(1, count($option), "The amount of options for field 'status' with value '{$value}' is unexpected.");
+			$this->assertEquals("@select_option_{$value}", $option[0]->text(), "Field 'status' option with value '{$value}' has an unexpected text.");
 		}
 		$selectedOptions = $field[0]->elements($this->using('css selector')->value('option[selected]'));
 		$this->assertEquals(1, count($selectedOptions), "The amount of selected options for field 'status' is unexpected.");
