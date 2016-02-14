@@ -22,13 +22,10 @@ class TooBasic_Helper {
 		$response = curl_exec($ch);
 		curl_close($ch);
 
-		if(boolval($case)) {
-			if($assertIt) {
-				$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
-				$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
-			}
-
-			$case->assertTrue(boolval($response), "No response obtained.");
+		if(boolval($case) && $assertIt) {
+			$case->assertTrue(boolval($response), "No response obtained for '{$subUrl}'.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
 		}
 
 		return $response;
@@ -36,7 +33,7 @@ class TooBasic_Helper {
 	public static function GetJSONUrl($case, $subUrl, $assertIt = true) {
 		$json = json_decode(self::GetUrl($case, $subUrl, $assertIt));
 
-		if($assertIt) {
+		if(boolval($case) && $assertIt) {
 			$case->assertTrue(boolval($json), 'Response is not a JSON string.');
 		}
 

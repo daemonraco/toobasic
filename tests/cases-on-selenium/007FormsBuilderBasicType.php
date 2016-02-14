@@ -1,6 +1,6 @@
 <?php
 
-class FormsBuilderTest extends TooBasic_SeleniumTestCase {
+class FormsBuilderBasicTypeTest extends TooBasic_SeleniumTestCase {
 	//
 	// Internal properties.
 	protected $_formName = 'tform';
