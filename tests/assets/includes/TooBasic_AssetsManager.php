@@ -14,6 +14,7 @@ class TooBasic_AssetsManager {
 	protected $_caseName = false;
 	protected $_generatedAssetFiles = array();
 	protected $_isLoaded = false;
+	protected $_manifest = false;
 	protected $_tearDownScripts = array();
 	//
 	// Public methods.
@@ -55,7 +56,9 @@ class TooBasic_AssetsManager {
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
 				$manifest = json_decode(file_get_contents($manifestPath));
-				if(!$manifest) {
+				if($manifest) {
+					$this->appendManifest($manifest);
+				} else {
 					$ok = false;
 				}
 			} else {
@@ -65,7 +68,9 @@ class TooBasic_AssetsManager {
 			// Loading main manifest.
 			if($ok && is_readable($mainManifestPath)) {
 				$mainManifest = json_decode(file_get_contents($mainManifestPath));
-				if(!$mainManifest) {
+				if($mainManifest) {
+					$this->appendManifest($mainManifest);
+				} else {
 					$ok = false;
 				}
 			}
@@ -223,6 +228,9 @@ class TooBasic_AssetsManager {
 			// @}
 		}
 	}
+	public function manifest() {
+		return $this->_manifest;
+	}
 	public function tearDown() {
 		if(self::$Verbose) {
 			echo "\n\e[1;34mTearing down for '{$this->_caseName}'.\e[0m\n";
@@ -249,6 +257,21 @@ class TooBasic_AssetsManager {
 		}
 		foreach($this->_tearDownScripts as $script) {
 			TooBasic_Helper::RunCommand(null, $script);
+		}
+	}
+	//
+	// Protected methods.
+	protected function appendManifest(\stdClass $manifest) {
+		if($this->_manifest === false) {
+			$this->_manifest = new \stdClass();
+		}
+
+		foreach($manifest as $prop => $value) {
+			if(!isset($this->_manifest->{$prop})) {
+				$this->_manifest->{$prop} = $value;
+			} elseif(is_array($this->_manifest->{$prop}) && is_array($value)) {
+				$this->_manifest->{$prop} = array_merge($this->_manifest->{$prop}, $value);
+			}
 		}
 	}
 }

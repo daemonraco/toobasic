@@ -12,7 +12,7 @@ if [ "$P_MODE" == "before" ] || [ "$P_MODE" == "after" ]; then
 	find $P_PLACES -type f > travis.files-status.${P_MODE};
 	find $P_PLACES -type d > travis.directories-status.${P_MODE};
 elif [ "$P_MODE" == "compare" ]; then
-	padding='BEGIN{x=0}/^(<|>)/{x++;print "\t"$0}END{if(x==0){print "\tNo difference"}}';
+	padding='BEGIN{x=0}/^(<|>)/{x++;print "\t"$0}END{if(x==0){print "\t\033[1;32mNo difference\033[0m"}}';
 	echo "Comparing files 'before' <-> 'after':";
 	diff travis.files-status.before travis.files-status.after | awk "$padding";
 	echo "Comparing directories 'before' <-> 'after':";
