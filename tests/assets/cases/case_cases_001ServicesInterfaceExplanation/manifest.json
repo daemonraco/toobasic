@@ -1,5 +1,6 @@
 {
 	"assets": [
+		"/modules/starterdoc/.inactive",
 		"/site/services/hello_world.php"
 	]
 }

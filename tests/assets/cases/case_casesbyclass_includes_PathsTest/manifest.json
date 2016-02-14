@@ -8,6 +8,7 @@
 	],
 	"assets": [
 		"/modules/mymodule/controllers/phpunit_ctrl.php",
+		"/modules/starterdoc/.inactive",
 		"/site/configs/config.php",
 		"/site/configs/phpunit_conf.json",
 		"/site/configs/phpunit_conf.php",

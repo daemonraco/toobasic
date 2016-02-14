@@ -1,5 +1,6 @@
 {
 	"assets": [
+		"/modules/starterdoc/.inactive",
 		"/site/configs/config.php",
 		"/site/configs/routes.json",
 		"/site/langs/en_us.json"
