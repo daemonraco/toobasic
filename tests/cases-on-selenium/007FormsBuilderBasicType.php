@@ -37,25 +37,11 @@ class FormsBuilderTest extends TooBasic_SeleniumTestCase {
 	}
 	public function testLoadingFormInCreateMode() {
 		$this->url("?action=test&form={$this->_formName}&form_mode=create");
-
-		$this->assertFormBuilderRender();
-		//
-		// Checking form tag
-		$form = $this->byId('test_form');
-		$this->assertTrue(boolval($form), 'Unable to point the built form.');
-
-		$this->validateCreateAndEditContents($form, true);
+		$this->validateCreateAndEditContents(true);
 	}
 	public function testLoadingFormInEditMode() {
 		$this->url("?action=test&form={$this->_formName}&form_mode=edit");
-
-		$this->assertFormBuilderRender();
-		//
-		// Checking form tag
-		$form = $this->byId('test_form');
-		$this->assertTrue(boolval($form), 'Unable to point the built form.');
-
-		$this->validateCreateAndEditContents($form);
+		$this->validateCreateAndEditContents();
 	}
 	public function testLoadingFormInRemoveMode() {
 		$this->url("?action=test&form={$this->_formName}&form_mode=remove");
@@ -80,7 +66,13 @@ class FormsBuilderTest extends TooBasic_SeleniumTestCase {
 		$output = $this->runCommand($command);
 		$this->assertRegExp("#{$expected}#m", $output, 'The command returned an unexpected value.');
 	}
-	protected function validateCreateAndEditContents($form, $isCreate = false) {
+	protected function validateCreateAndEditContents($isCreate = false) {
+		$this->assertFormBuilderRender();
+		//
+		// Checking form tag
+		$form = $this->byId('test_form');
+		$this->assertTrue(boolval($form), 'Unable to point the built form.');
+
 		//
 		// Checking form tag
 		$this->assertNotNull($form->attribute('action'), "Tag 'form' doesn't have the attribute 'action'.");
