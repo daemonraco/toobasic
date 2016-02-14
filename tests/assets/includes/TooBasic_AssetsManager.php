@@ -11,8 +11,10 @@ class TooBasic_AssetsManager {
 	// Protected properties.
 	protected $_assetDirectories = array();
 	protected $_assetFiles = array();
+	protected $_caseName = false;
 	protected $_generatedAssetFiles = array();
 	protected $_isLoaded = false;
+	protected $_manifest = false;
 	protected $_tearDownScripts = array();
 	//
 	// Public methods.
@@ -40,34 +42,35 @@ class TooBasic_AssetsManager {
 				'/\.([a-z]*)$/' => '',
 				'/_([_]+)/' => '_'
 			);
-			$caseName = 'case_'.substr($path, strlen(TOOBASIC_TESTS_DIR));
+			$this->_caseName = 'case_'.substr($path, strlen(TOOBASIC_TESTS_DIR));
 			foreach($nameReplacements as $k => $v) {
-				$caseName = preg_replace($k, $v, $caseName);
+				$this->_caseName = preg_replace($k, $v, $this->_caseName);
 			}
-			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$caseName}";
+			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$this->_caseName}";
 			$manifestPath = "{$caseFolder}/manifest.json";
 			if(self::$Verbose) {
-				echo "\nSetting up for '{$caseName}'... ";
+				echo "\n\e[1;34mSetting up for '{$this->_caseName}'.\e[0m\n";
 			}
 			$mainManifestPath = TOOBASIC_TESTS_ACASES_DIR."/manifest.json";
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
 				$manifest = json_decode(file_get_contents($manifestPath));
-				if(!$manifest) {
+				if($manifest) {
+					$this->appendManifest($manifest);
+				} else {
 					$ok = false;
 				}
 			} else {
-				if(self::$Verbose) {
-					echo "Done (No settings for it)\n";
-				}
 				$ok = false;
 			}
 			//
 			// Loading main manifest.
 			if($ok && is_readable($mainManifestPath)) {
 				$mainManifest = json_decode(file_get_contents($mainManifestPath));
-				if(!$mainManifest) {
+				if($mainManifest) {
+					$this->appendManifest($mainManifest);
+				} else {
 					$ok = false;
 				}
 			}
@@ -94,6 +97,9 @@ class TooBasic_AssetsManager {
 			if($ok) {
 				$this->_assetDirectories = array_unique($this->_assetDirectories);
 				foreach($this->_assetDirectories as $fullPath) {
+					if(self::$Verbose) {
+						echo "\t\e[1;34mCreating directory '{$fullPath}'\e[0m\n";
+					}
 					mkdir($fullPath, 0777, true);
 				}
 			}
@@ -129,9 +135,15 @@ class TooBasic_AssetsManager {
 					$toPath = TESTS_ROOTDIR.$asset;
 
 					if(is_file($toPath)) {
+						if(self::$Verbose) {
+							echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
+						}
 						rename($toPath, $toPath.self::BACKUP_SUFFIX);
 					}
 
+					if(self::$Verbose) {
+						echo "\t\e[1;34mCreating assset '{$toPath}' from '{$fromPath}'\e[0m\n";
+					}
 					file_put_contents($toPath, str_replace(array_keys($travisReplacements), array_values($travisReplacements), file_get_contents($fromPath)));
 
 					$this->_assetFiles[] = $toPath;
@@ -180,7 +192,7 @@ class TooBasic_AssetsManager {
 					}
 
 					chmod($scriptPath, 0755);
-					passthru($scriptPath);
+					TooBasic_Helper::RunCommand(null, $scriptPath);
 				}
 			}
 			// @}
@@ -214,26 +226,52 @@ class TooBasic_AssetsManager {
 				}
 			}
 			// @}
-
-			if($ok && self::$Verbose) {
-				echo "Done\n";
-			}
 		}
 	}
+	public function manifest() {
+		return $this->_manifest;
+	}
 	public function tearDown() {
+		if(self::$Verbose) {
+			echo "\n\e[1;34mTearing down for '{$this->_caseName}'.\e[0m\n";
+		}
 		foreach($this->_assetFiles as $path) {
 			if(is_file($path)) {
+				if(self::$Verbose) {
+					echo "\t\e[1;34mRemoving assset '{$path}'\e[0m\n";
+				}
 				unlink($path);
 				if(is_file($path.self::BACKUP_SUFFIX)) {
+					if(self::$Verbose) {
+						echo "\t\e[1;34mRestoring backup '{$path}".self::BACKUP_SUFFIX."'\e[0m\n";
+					}
 					rename($path.self::BACKUP_SUFFIX, $path);
 				}
 			}
 		}
 		foreach(array_reverse($this->_assetDirectories) as $path) {
+			if(self::$Verbose) {
+				echo "\t\e[1;34mRemoving directory '{$path}'\e[0m\n";
+			}
 			rmdir($path);
 		}
 		foreach($this->_tearDownScripts as $script) {
-			passthru($script);
+			TooBasic_Helper::RunCommand(null, $script);
+		}
+	}
+	//
+	// Protected methods.
+	protected function appendManifest(\stdClass $manifest) {
+		if($this->_manifest === false) {
+			$this->_manifest = new \stdClass();
+		}
+
+		foreach($manifest as $prop => $value) {
+			if(!isset($this->_manifest->{$prop})) {
+				$this->_manifest->{$prop} = $value;
+			} elseif(is_array($this->_manifest->{$prop}) && is_array($value)) {
+				$this->_manifest->{$prop} = array_merge($this->_manifest->{$prop}, $value);
+			}
 		}
 	}
 }

@@ -1,0 +1,10 @@
+{
+	"property": {
+		"value": "C",
+		"location": "mod2"
+	},
+	"mod2prop": {
+		"value": "C",
+		"location": "mod2"
+	}
+}

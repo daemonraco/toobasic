@@ -1,0 +1,15 @@
+{
+	"assets": [
+		"/site/config.php",
+		"/site/controllers/test.php",
+		"/site/db/tables.json",
+		"/site/models/Entries.php",
+		"/site/templates/action/test.html"
+	],
+	"setUpScripts": [
+		"G:mysql/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:mysql/removedatabase.sh"
+	]
+}

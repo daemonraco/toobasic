@@ -209,7 +209,7 @@ abstract class ItemsFactory {
 		//
 		// Generating a proper query to obtain a list of IDs.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*{$this->_CP_NameColumn}" => $pattern), $prefixes, $this->_CP_OrderBy);
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*:{$this->_CP_NameColumn}" => $pattern), $prefixes, $this->_CP_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.

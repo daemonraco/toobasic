@@ -280,7 +280,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Creating a query to search term.
 		$queryT = $this->_db->queryAdapter()->select('tb_search_terms', [
-			'*term' => '',
+			'*:term' => '',
 			], $termsPrefixes);
 		$stmtT = $this->_db->prepare($queryT[GC_AFIELD_QUERY]);
 		//

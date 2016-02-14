@@ -2,18 +2,9 @@
 
 class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	//
-	// Set up @{
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-	}
-	// @}
-	//
 	// Test cases.
 	public function testRequestingAFullInterfaceExplanation() {
 		$response = $this->getUrl('?explaininterface');
-
-		$this->assertTrue(boolval($response), "No response obtained.");
 
 		$json = json_decode($response);
 		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
@@ -27,7 +18,6 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	public function testCallingASpecificService() {
 		$response = $this->getUrl('?service=hello_world');
 
-		$this->assertTrue(boolval($response), "No response obtained.");
 		$json = json_decode($response);
 		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 
@@ -43,7 +33,6 @@ class ServicesInterfaceExplanationTest extends TooBasic_TestCase {
 	public function testExplainingASingleServiceInterface() {
 		$response = $this->getUrl('?service=hello_world&explaininterface');
 
-		$this->assertTrue(boolval($response), "No response obtained.");
 		$json = json_decode($response);
 		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
 

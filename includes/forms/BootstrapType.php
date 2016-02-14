@@ -98,7 +98,7 @@ class BootstrapType extends FormType {
 						$aux.= " value=\"".(isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue)."\"";
 					} else {
 						$value = isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue;
-						$trValue = $tr->{"select_option_{$value}"};
+						$trValue = boolval($value) ? $tr->{"select_option_{$value}"} : '';
 						$aux.= " value=\"{$trValue}\"";
 					}
 				}

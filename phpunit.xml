@@ -12,9 +12,13 @@
 		</testsuite>
 		<testsuite name="cases">
 			<directory suffix=".php">./tests/cases</directory>
+			<exclude>./tests/cases/XXXCacheOn.php</exclude>
+			<exclude>./tests/cases/XXXDBConnector.php</exclude>
+			<exclude>./tests/cases/XXXMultiTablesSelectsOn.php</exclude>
 		</testsuite>
 		<testsuite name="cases-on-selenium">
 			<directory suffix=".php">./tests/cases-on-selenium</directory>
+			<exclude>./tests/cases-on-selenium/XXXSystoolTableOn.php</exclude>
 		</testsuite>
 		<testsuite name="cases-by-issue">
 			<directory suffix=".php">./tests/cases-by-issue</directory>

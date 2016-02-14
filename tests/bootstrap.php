@@ -19,7 +19,7 @@ define('TESTS_ROOTURI', php_sapi_name() != 'cli' ? dirname($_SERVER['SCRIPT_NAME
 //
 // Page errors patterns
 define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '/TooBasic.([a-zA-Z]*)Exception/m');
-define('ASSERTION_PATTERN_PHP_ERROR', '/(Fatal error|Warning):/m');
+define('ASSERTION_PATTERN_PHP_ERROR', '/(Fatal error|Warning|Notice):/m');
 //
 // Loading composer autoload.
 require_once dirname(__DIR__).'/vendor/autoload.php';
@@ -53,3 +53,7 @@ require_once TESTS_ROOTDIR.'/includes/corefunctions.php';
 // Loading TooBasic main config file.
 // @TODO Remove this dependency.
 require_once TESTS_ROOTDIR.'/config/config.php';
+
+if(defined('TRAVISCI_VERBOSE')) {
+	TooBasic_AssetsManager::$Verbose = true;
+}

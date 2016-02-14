@@ -12,6 +12,7 @@
 	],
 	"generatedAssets": [
 		"/cache/travis_test.sqlite3",
+		"/modules/mymodule/configs/config.php",
 		"/modules/mymodule/configs/routes.json",
 		"/modules/mymodule/controllers/people.php",
 		"/modules/mymodule/controllers/person_add.php",
@@ -23,6 +24,8 @@
 		"/modules/mymodule/langs/en_us.json",
 		"/modules/mymodule/models/representations/PeopleFactory.php",
 		"/modules/mymodule/models/representations/PersonRepresentation.php",
+		"/modules/mymodule/scripts/person_predictive_name.js",
+		"/modules/mymodule/services/people_predictive.php",
 		"/modules/mymodule/templates/action/people.html",
 		"/modules/mymodule/templates/action/person_add.html",
 		"/modules/mymodule/templates/action/person_delete.html",
@@ -38,6 +41,8 @@
 		"/modules/mymodule/langs",
 		"/modules/mymodule/models",
 		"/modules/mymodule/models/representations",
+		"/modules/mymodule/scripts",
+		"/modules/mymodule/services",
 		"/modules/mymodule/templates",
 		"/modules/mymodule/templates/action"
 	]
