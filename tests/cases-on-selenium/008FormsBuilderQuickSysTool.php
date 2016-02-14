@@ -45,6 +45,12 @@ class FormsBuilderQuickSysToolTest extends TooBasic_SeleniumTestCase {
 	}
 	// @}
 	//
+	// Description @{
+	public function testDesribingForm() {
+		$this->runCommand("php shell.php sys forms --describe {$this->_formName}");
+	}
+	// @}
+	//
 	// Removal @{
 	public function testRemovingForm() {
 		$output = $this->runCommand("php shell.php sys forms rm {$this->_formName}");
