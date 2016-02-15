@@ -45,13 +45,14 @@ before_script:
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
   #
   # Setting fake sendmail configuration.
-  - export TRAVISCI_EMAIL_TMP=/tmp
+  - export TRAVISCI_EMAIL_TMP=$PWD
   - chmod +x ./tests/assets/travis.fakesendmail.sh
   - cp ./tests/assets/travis.php${TRAVISCI_PHPUNIT_CONF}.ini ./tests/assets/toobasic.ini
+  - sed -i "s:%TRAVISCI_EMAIL_TMP%:${TRAVISCI_EMAIL_TMP}:g" ./tests/assets/toobasic.ini
   - ls -l ./tests/assets/travis.fakesendmail.sh
   - echo $TRAVISCI_EMAIL_TMP
+  - echo $PWD
   - cat ./tests/assets/toobasic.ini
-  - sed -i "s:%TRAVISCI_EMAIL_TMP%:${TRAVISCI_EMAIL_TMP}:g" ./tests/assets/toobasic.ini
   #
   # Configuring PHP.
   - phpenv config-add ./tests/assets/toobasic.ini
@@ -92,3 +93,4 @@ after_script:
   # snapshot.
   - ./tests/assets/travis.save-files-status.sh after
   - ./tests/assets/travis.save-files-status.sh compare
+  - cat /home/travis/build/daemonraco/toobasic/fakemail.txt
