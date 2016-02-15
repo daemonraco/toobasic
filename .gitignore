@@ -18,3 +18,4 @@
 /vendor/
 /travis.files-status.*
 /travis.directories-status.*
+/cache/newcase_lastgen.txt
