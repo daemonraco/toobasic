@@ -31,37 +31,103 @@ class NewCase {
 	//
 	// Public methods.
 	public function run() {
-		$whatToDo = 'showHelp';
+		$whatToDo = false;
 
-		if(isset($this->_params[2])) {
+		if(isset($this->_params[1])) {
 			$matches = false;
-			if(preg_match('/^(?P<suite>cases|cases-on-selenium)$/', $this->_params[1], $matches)) {
-				$this->_suite = $matches['suite'];
-				$whatToDo = 'createBasic';
-			} elseif(preg_match('/^(?P<suite>cases-by-issue)$/', $this->_params[1], $matches)) {
-				$this->_suite = $matches['suite'];
+			if(isset($this->_params[2])) {
+				if(preg_match('/^(?P<suite>cases|cases-on-selenium)$/', $this->_params[1], $matches)) {
+					$this->_suite = $matches['suite'];
+					$whatToDo = 'createBasic';
+				} elseif(preg_match('/^(?P<suite>cases-by-issue)$/', $this->_params[1], $matches)) {
+					$this->_suite = $matches['suite'];
 
-				ob_start();
-				passthru("wget -nv 'https://api.github.com/repos/daemonraco/toobasic/issues/{$this->_params[2]}' -O - 2>/dev/null");
-				$output = ob_get_contents();
-				ob_end_clean();
-				$json = json_decode($output);
-				if($json && isset($json->title)) {
-					$this->_issue = $this->_params[2];
-					$this->_issueTitle = $json->title;
-					$this->_params[2] = sprintf('iss %03d %s', $this->_issue, $this->_issueTitle);
+					ob_start();
+					passthru("wget -nv 'https://api.github.com/repos/daemonraco/toobasic/issues/{$this->_params[2]}' -O - 2>/dev/null");
+					$output = ob_get_contents();
+					ob_end_clean();
+					$json = json_decode($output);
+					if($json && isset($json->title)) {
+						$this->_issue = $this->_params[2];
+						$this->_issueTitle = $json->title;
+						$this->_params[2] = sprintf('iss %03d %s', $this->_issue, $this->_issueTitle);
 
-					$whatToDo = 'createWithoutIndex';
-				} else {
-					throw new Exception("Unable to obtain information for issue '{$this->_params[2]}'.");
+						$whatToDo = 'createWithoutIndex';
+					} else {
+						throw new Exception("Unable to obtain information for issue '{$this->_params[2]}'.");
+					}
+				} elseif($this->_params[1] == 'add-test-ctrl') {
+					$whatToDo = 'addTestCtrl';
 				}
+			} elseif($this->_params[1] == 'help') {
+				$whatToDo = 'showHelp';
 			}
 		}
 
-		$this->{$whatToDo}();
+		if($whatToDo) {
+			$this->{$whatToDo}();
+		} else {
+			$this->showHelp();
+			echo "\n";
+			throw new Exception('Nothing to do.');
+		}
 	}
 	//
 	// Protected methods.
+	protected function addTestCtrl() {
+		file_put_contents(TOOBASIC_LAST_GENERATION, '');
+
+		if(is_dir($this->_params[2])) {
+			$ctrlPath = "/site/controllers/test.php";
+			$ctrlFullPath = "{$this->_params[2]}{$ctrlPath}";
+			$ctrlFullDir = dirname($ctrlFullPath);
+			if(!is_dir($ctrlFullDir)) {
+				echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating site directory '\e[1;36m{$ctrlFullDir}\e[0m': ");
+				mkdir($ctrlFullDir, 0777, true);
+				file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$ctrlFullDir}\n", FILE_APPEND);
+				echo "\e[1;32mDone\e[0m\n";
+			}
+
+
+			echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating class file '\e[1;36m{$ctrlFullPath}\e[0m': ");
+			if(!is_file($ctrlFullPath)) {
+				file_put_contents($ctrlFullPath, $this->render('test_ctrl.tpl'));
+				file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$ctrlFullPath}\n", FILE_APPEND);
+				echo "\e[1;32mDone\e[0m\n";
+			} else {
+				echo "\e[1;31mFailed\e[0m (already exists)\n";
+			}
+
+			$viewPath = "/site/templates/action/test.html";
+			$viewFullPath = "{$this->_params[2]}{$viewPath}";
+			$viewFullDir = dirname($viewFullPath);
+			if(!is_dir($viewFullDir)) {
+				echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating site directory '\e[1;36m{$viewFullDir}\e[0m': ");
+				mkdir($viewFullDir, 0777, true);
+				file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$viewFullDir}\n", FILE_APPEND);
+				echo "\e[1;32mDone\e[0m\n";
+			}
+			echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating class file '\e[1;36m{$viewFullPath}\e[0m': ");
+			if(!is_file($viewFullPath)) {
+				file_put_contents($viewFullPath, $this->render('test_view.tpl'));
+				file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$viewFullPath}\n", FILE_APPEND);
+				echo "\e[1;32mDone\e[0m\n";
+			} else {
+				echo "\e[1;31mFailed\e[0m (already exists)\n";
+			}
+
+			$manifestPath = "{$this->_params[2]}/manifest.json";
+			echo str_replace(TOOBASIC_ROOTDIR, '...', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
+			$this->updateManifest($manifestPath, [
+				"%%->assets[] = '{$ctrlPath}';",
+				"%%->assets[] = '{$viewPath}';",
+				"sort(%%->assets);"
+			]);
+			echo "\e[1;32mDone\e[0m\n";
+		} else {
+			throw new Exception("'{$this->_params[2]}' is not a directory.");
+		}
+	}
 	protected function assign($name, $value) {
 		$this->_assignment[$name] = $value;
 	}
@@ -127,14 +193,9 @@ class NewCase {
 		}
 		#
 		# Manifest.
-		echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
-		if(!is_file($manifestPath)) {
-			file_put_contents($manifestPath, $this->render('manifest.tpl'));
-			file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$manifestPath}\n", FILE_APPEND);
-			echo "\e[1;32mDone\e[0m\n";
-		} else {
-			echo "\e[1;31mFailed\e[0m (already exists)\n";
-		}
+		echo str_replace(TOOBASIC_ROOTDIR, '...', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
+		$this->updateManifest($manifestPath);
+		echo "\e[1;32mDone\e[0m\n";
 		#
 		# Basic config file.
 		$configPathDir = dirname($configPath);
@@ -208,7 +269,31 @@ class NewCase {
 			$this->_smarty->force_compile = true;
 		}
 	}
+	protected function updateManifest($path, $updateCommands = false) {
+		if(!is_array($updateCommands)) {
+			$updateCommands = [];
+		}
+
+		$json = false;
+		if(is_file($path)) {
+			$json = json_decode(file_get_contents($path));
+		}
+		if(!$json) {
+			$json = json_decode(file_get_contents(TOOBASIC_NEWCASE_TEMPLATES.'/manifest.json'));
+		}
+
+		foreach($updateCommands as $command) {
+			eval(str_replace('%%', '$json', $command));
+		}
+
+		file_put_contents($path, json_encode($json, JSON_PRETTY_PRINT));
+		file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$path}\n", FILE_APPEND);
+	}
 }
 
-$runner = new NewCase($argv);
-$runner->run();
+try {
+	$runner = new NewCase($argv);
+	$runner->run();
+} catch(Exception $e) {
+	echo "\e[1;31m{$e->getMessage()}\e[0m\n";
+}
