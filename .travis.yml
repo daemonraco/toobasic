@@ -94,3 +94,4 @@ after_script:
   - ./tests/assets/travis.save-files-status.sh after
   - ./tests/assets/travis.save-files-status.sh compare
   - cat /home/travis/build/daemonraco/toobasic/fakemail.txt
+  - tail /var/log/apache2/error.log
