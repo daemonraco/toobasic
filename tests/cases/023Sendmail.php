@@ -7,7 +7,7 @@ class SendmailTest extends TooBasic_TestCase {
 		$response = $this->getUrl("sendmail.php");
 		debugit([
 			'$response' => $response,
-			'mail' => file_get_contents(TRAVISCI_EMAIL_TMP.'/fake-mailbox/message_1.eml')
+			'mail' => file_get_contents('/tmp/fake-mailbox/message_1.eml')
 		]);
 	}
 	// @}
