@@ -49,7 +49,7 @@ before_script:
   - sudo mkdir -vpm 0777 ${TRAVISCI_EMAIL_TMP}/fake-mailbox
   - sudo chmod 0777 ./tests/assets/travis.fakesendmail.sh
   - cp ./tests/assets/travis.php${TRAVISCI_PHPUNIT_CONF}.ini ./tests/assets/toobasic.ini
-  - sed -i "s:%TRAVISCI_EMAIL_TMP%:${TRAVISCI_EMAIL_TMP}:g" ./tests/assets/toobasic.ini
+  - sed -i "s:%TRAVISCI_EMAIL_TMP%:${PWD}:g" ./tests/assets/toobasic.ini
   #
   # Configuring PHP.
   - phpenv config-add ./tests/assets/toobasic.ini
