@@ -45,7 +45,7 @@ before_script:
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
   #
   # Fake sendmail configurations.
-  - sudo mkdir -vpm 0777 /tmp/fake-mailbox
+  - sudo mkdir -pm 0777 /tmp/fake-mailbox
   - sudo chmod 0777 ./tests/assets/travis.fakesendmail.sh
   #
   # Configuring PHP.
@@ -83,7 +83,7 @@ before_script:
   - ./tests/assets/travis.save-files-status.sh before
 
 script:
-  - phpunit --configuration phpunit-sendmail.xml
+  - phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
 after_script:
   #
   # Getting a snapshot of current assets and comparing it against the previous
