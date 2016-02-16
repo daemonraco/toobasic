@@ -43,7 +43,15 @@ before_script:
   #
   # Basic configurations.
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
-  - phpenv config-add ./tests/assets/travis.php${TRAVISCI_PHPUNIT_CONF}.ini
+  #
+  # Fake sendmail configurations.
+  - sudo mkdir -pm 0777 /tmp/fake-mailbox
+  - sudo chmod 0777 ./tests/assets/travis.fakesendmail.sh
+  #
+  # Configuring PHP.
+  - cp ./tests/assets/travis.php${TRAVISCI_PHPUNIT_CONF}.ini ./tests/assets/toobasic.ini
+  - sed -i "s:%TRAVISCI_HOME%:${PWD}:g" ./tests/assets/toobasic.ini
+  - phpenv config-add ./tests/assets/toobasic.ini
   #
   # Installing Composer.
   - "mkdir -p ~/.composer"
@@ -73,6 +81,7 @@ before_script:
   # Getting a snapshot of current assets.
   - chmod +x ./tests/assets/travis.save-files-status.sh
   - ./tests/assets/travis.save-files-status.sh before
+
 script:
   - phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
 after_script:
