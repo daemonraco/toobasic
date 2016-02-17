@@ -14,7 +14,8 @@ use TooBasic\Shell\Option;
 
 /**
  * @class QformsSystool
- * @todo doc
+ * This system shell tool provides a quick mechanism to generate form
+ * specifications.
  */
 class QformsSystool extends TooBasic\Shell\ShellTool {
 	//
