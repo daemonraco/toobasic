@@ -44,8 +44,8 @@ $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_CONFIG_LOADERS] = array(
-	'multi' => '\\TooBasic\\Configs\\ConfigLoaderMulti',
-	'simple' => '\\TooBasic\\Configs\\ConfigLoaderSimple'
+	GC_CONFIG_MODE_MULTI => '\\TooBasic\\Configs\\ConfigLoaderMulti',
+	GC_CONFIG_MODE_SIMPLE => '\\TooBasic\\Configs\\ConfigLoaderSimple'
 );
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS] = array();
 $Defaults[GC_DEFAULTS_DISABLED_DEBUGS] = false;

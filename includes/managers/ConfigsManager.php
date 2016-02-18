@@ -37,13 +37,13 @@ class ConfigsManager extends Manager {
 	 * @throws \TooBasic\ConfigException
 	 */
 	public function __get($name) {
-		return $this->get($name, Config::ModeSimple, false);
+		return $this->get($name, GC_CONFIG_MODE_SIMPLE, false);
 	}
 	/**
 	 * This method is similar to '__get()' but it also allows to specify the
 	 * mechanism in which a file is loaded:
-	 * 	- Config::ModeSimple: The first one found with a certain name.
-	 * 	- Config::ModeMultiple: Each one found with a certain name.
+	 * 	- GC_CONFIG_MODE_SIMPLE: The first one found with a certain name.
+	 * 	- GC_CONFIG_MODE_MULTI: Each one found with a certain name.
 	 *
 	 * @param string $name JSON configuration file name.
 	 * @param mixed[] $args List of parameter given on the call. The first
@@ -52,7 +52,7 @@ class ConfigsManager extends Manager {
 	 * @throws \TooBasic\ConfigException
 	 */
 	public function __call($name, $args) {
-		$mode = isset($args[0]) ? $args[0] : Config::ModeSimple;
+		$mode = isset($args[0]) ? $args[0] : GC_CONFIG_MODE_SIMPLE;
 		$namespace = isset($args[1]) ? $args[1] : false;
 		return $this->get($name, $mode, $namespace);
 	}

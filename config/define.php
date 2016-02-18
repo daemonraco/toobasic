@@ -373,4 +373,9 @@ define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
 define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
 define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 // @}
+//
+// Config modes.
+define('GC_CONFIG_MODE_MULTI', 'multi');
+define('GC_CONFIG_MODE_SIMPLE', 'simple');
+// @}
 // @}

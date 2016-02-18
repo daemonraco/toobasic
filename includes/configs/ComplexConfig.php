@@ -43,7 +43,7 @@ abstract class ComplexConfig extends Config {
 	 * @param string $mode Mechanisme to use when loading.
 	 * @throws \TooBasic\ConfigException
 	 */
-	public function __construct($name, $mode = self::ModeSimple) {
+	public function __construct($name, $mode = GC_CONFIG_MODE_SIMPLE) {
 		parent::__construct($name, $mode);
 		//
 		// Global dependencies.

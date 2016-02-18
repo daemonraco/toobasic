@@ -23,10 +23,6 @@ class ConfigException extends Exception {
  */
 class Config extends \stdClass {
 	//
-	// Constants.
-	const ModeSimple = 'simple';
-	const ModeMultiple = 'multi';
-	//
 	// Protected core properties.
 	/**
 	 * @var \TooBasic\Configs\ConfigLoader Config files loader shortcut.
@@ -53,7 +49,7 @@ class Config extends \stdClass {
 	 * @param string $mode Mechanisme to use when loading.
 	 * @throws \TooBasic\ConfigException
 	 */
-	public function __construct($name, $mode = self::ModeSimple) {
+	public function __construct($name, $mode = GC_CONFIG_MODE_SIMPLE) {
 		//
 		// Global dependencies.
 		global $Defaults;
