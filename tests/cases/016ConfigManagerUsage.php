@@ -72,5 +72,53 @@ class ConfigManagerUsageTest extends TooBasic_TestCase {
 			}
 		}
 	}
+	public function testCheckingConfigLoadInMergeMode() {
+		$json = $this->getJSONUrl('?action=test&format=json');
+
+		$this->assertTrue(isset($json->merge), "Response doesn't have a field called 'merge'.");
+		$this->assertTrue(is_string($json->merge), "Response field 'merge' is not a string.");
+
+		$results = json_decode($json->merge);
+		$this->assertTrue(is_object($results), "Response field 'merge' is not an encoded object.");
+		//
+		// Basic field checks.
+		$this->assertTrue(isset($results->common), "JSON object doesn't have a field called 'common'.");
+		$this->assertTrue(isset($results->list), "JSON object doesn't have a field called 'list'.");
+		$this->assertTrue(isset($results->settings), "JSON object doesn't have a field called 'settings'.");
+
+		$this->assertTrue(is_string($results->common), "JSON field 'common' is not a string.");
+		$this->assertTrue(is_array($results->list), "JSON field 'list' is not an array.");
+		$this->assertTrue(is_object($results->settings), "JSON field 'settings' is not an object.");
+
+		$this->assertEquals('site', $results->common, "JSON field 'common' has an unexpected value.");
+		//
+		// Field 'list'.
+		$this->assertEquals(6, count($results->list), "JSON field 'list' has an unexpected amount of items.");
+		$this->assertEquals(5, count(array_unique($results->list)), "JSON field 'list' has an unexpected amount of unique items.");
+		$items = [
+			'value_1',
+			'value_2',
+			'value_3',
+			'value_4',
+			'value_5'
+		];
+		foreach($items as $value) {
+			$this->assertTrue(in_array($value, $results->list), "JSON field 'list' doesn't have the item '{$value}'.");
+		}
+		//
+		// Field 'settings'.
+		$this->assertEquals(5, count(get_object_vars($results->settings)), "JSON field 'settings' has an unexpected amount of properties.");
+		$items = [
+			'prop_1' => 'site',
+			'prop_2' => 'site',
+			'prop_3' => 'mod1',
+			'prop_4' => 'mod1',
+			'prop_5' => 'mod2'
+		];
+		foreach($items as $key => $value) {
+			$this->assertTrue(isset($results->settings->{$key}), "JSON field 'settings' doesn't have the property '{$key}'.");
+			$this->assertEquals($value, $results->settings->{$key}, "JSON field 'settings' property '{$key}' has an unexpected value.");
+		}
+	}
 	// @}
 }

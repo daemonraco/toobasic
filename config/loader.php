@@ -118,7 +118,7 @@ $SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRE
 $SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
 $SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoader'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoader.php";
-$SuperLoader['TooBasic\\Configs\\ConfigLoaderInterface'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoader.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderMerge'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMerge.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoaderMulti'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMulti.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderSimple.php";
 // @}
