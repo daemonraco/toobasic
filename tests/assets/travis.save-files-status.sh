@@ -18,5 +18,5 @@ elif [ "$P_MODE" == "compare" ]; then
 	echo "Comparing directories 'before' <-> 'after':";
 	diff travis.directories-status.before travis.directories-status.after | awk "$padding";
 else
-	echo "Unknown command, onli 'before', 'after' and 'compare' are available.";
+	echo "Unknown command, only 'before', 'after' and 'compare' are available.";
 fi;

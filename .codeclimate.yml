@@ -45,6 +45,8 @@ engines:
     - 8599ef8b2bd5e1860dbb451c0051c83e
     - 10b71b6cd38cf2292616e0ea1b2fbfb3
     - a8163ba5c2135cc131d973c9b5fb088b
+    - 342cecb9696f997f007433fb57617983
+    - 439ea62f4740425d816cf2a366c090c1
 ratings:
   paths:
   - "**.php"
@@ -56,6 +58,7 @@ exclude_paths:
 - site/**/*
 - libraries/**/*
 - tests/**/*
+- docs/**/*
 - "modules/starterdoc/scripts/strapdown.js"
 - "modules/starterdoc/scripts/strapdown.css"
 - "modules/starterdoc/styles/jquery.cssemoticons.css"

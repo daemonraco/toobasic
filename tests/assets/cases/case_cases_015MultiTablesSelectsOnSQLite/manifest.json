@@ -1,5 +1,6 @@
 {
 	"assets": [
+		"/modules/starterdoc/.inactive",
 		"/site/config.php",
 		"/site/controllers/test.php",
 		"/site/db/tables.json",

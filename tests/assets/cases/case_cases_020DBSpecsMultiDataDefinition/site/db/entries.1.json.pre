@@ -1,0 +1,14 @@
+{
+	"data": [
+		{
+			"table": "data",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"name": "Entry 1"
+				}
+			]
+		}
+	]
+}

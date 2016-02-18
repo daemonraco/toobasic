@@ -1,5 +1,6 @@
 {
 	"assets": [
+		"/modules/starterdoc/.inactive",
 		"/site/controllers/test.php",
 		"/site/controllers/subaction.php",
 		"/site/templates/action/test.html",

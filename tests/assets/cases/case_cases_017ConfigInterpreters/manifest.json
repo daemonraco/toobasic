@@ -2,6 +2,7 @@
 	"assets": [
 		"/modules/mod1/configs/my_config.json",
 		"/modules/mod2/configs/my_config.json",
+		"/modules/starterdoc/.inactive",
 		"/site/config.php",
 		"/site/configs/my_config.json",
 		"/site/controllers/test.php",
