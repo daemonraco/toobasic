@@ -16,10 +16,17 @@ use TooBasic\Paths;
  * This class holds the logic to load multiple config files in a simple way.
  */
 class ConfigLoaderSimple extends ConfigLoader {
-	public function paths($seed) {
+	//
+	// Protected methods.
+	/**
+	 * This method returns the list of config file paths to load.
+	 *
+	 * @return string[] Returns a list of absolute paths.
+	 */
+	protected function paths() {
 		$out = array();
 
-		$aux = Paths::Instance()->configPath($seed, Paths::ExtensionJSON);
+		$aux = Paths::Instance()->configPath($this->_config->name(), Paths::ExtensionJSON);
 		if($aux) {
 			$out[] = $aux;
 		}

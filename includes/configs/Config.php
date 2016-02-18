@@ -29,7 +29,7 @@ class Config extends \stdClass {
 	//
 	// Protected core properties.
 	/**
-	 * @var \TooBasic\Configs\ConfigLoader @TODO doc
+	 * @var \TooBasic\Configs\ConfigLoader Config files loader shortcut.
 	 */
 	protected $_CP_loader = false;
 	//
