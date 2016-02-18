@@ -162,7 +162,7 @@ for that you can write something like this:
 ```php
 . . .
 	protected function basicRun() {
-		print_r($this->config->boxes_types(\TooBasic\Config::ModeMultiple)->types);
+		print_r($this->config->boxes_types(GC_CONFIG_MODE_MULTI)->types);
 	}
 . . .
 ```

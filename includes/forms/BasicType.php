@@ -9,7 +9,7 @@ namespace TooBasic\Forms;
 
 /**
  * @class BasicType
- * @todo doc
+ * This class represents a form builder with some basic (not so fancy) styles.
  */
 class BasicType extends FormType {
 	/**

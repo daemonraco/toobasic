@@ -8,7 +8,7 @@ class MyModel extends \TooBasic\Model {
 		return $this->config->my_config;
 	}
 	public function multiConfig() {
-		return $this->config->my_config(\TooBasic\Config::ModeMultiple);
+		return $this->config->my_config(GC_CONFIG_MODE_MULTI);
 	}
 	protected function init() {
 		

@@ -9,7 +9,8 @@ namespace TooBasic\Forms;
 
 /**
  * @class TableType
- * @todo doc
+ * This class represents a form builder that uses HTML tables to organize labels
+ * and inputs.
  */
 class TableType extends FormType {
 	/**

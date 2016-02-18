@@ -14,7 +14,7 @@ use TooBasic\Shell\Option;
 
 /**
  * @class FormsSystool
- * @todo doc
+ * This system shell tool provides a mechanism to manage form specifications.
  */
 class FormsSystool extends TooBasic\Shell\ShellTool {
 	//

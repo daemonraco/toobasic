@@ -12,9 +12,20 @@ namespace TooBasic\Forms;
 use TooBasic\Paths;
 use TooBasic\Sanitizer;
 
+/**
+ * @class FormsManager
+ * @TODO doc
+ */
 class FormsManager extends \TooBasic\Managers\Manager {
 	//
 	// Public methods.
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $module @TODO doc
+	 * @return boolean @TODO doc
+	 */
 	public function createForm($name, $module = false) {
 		//
 		// Default values.
@@ -119,6 +130,12 @@ class FormsManager extends \TooBasic\Managers\Manager {
 
 		return $out;
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @return boolean @TODO doc
+	 */
 	public function removeForm($name) {
 		//
 		// Default values.
@@ -148,7 +165,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 			}
 		}
 		//
-		// Returning results
+		// Returning results.
 		return $out;
 	}
 }

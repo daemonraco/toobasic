@@ -5,7 +5,7 @@ class MyModel extends \TooBasic\Model {
 		return json_encode($json);
 	}
 	public function multiConfig() {
-		return $this->config->my_config(\TooBasic\Config::ModeMultiple, 'TestSpace');
+		return $this->config->my_config(GC_CONFIG_MODE_MULTI, 'TestSpace');
 	}
 	protected function init() {
 		

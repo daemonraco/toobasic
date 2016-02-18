@@ -28,6 +28,7 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_CONFIG_LOADERS', 'config-loaders');
 define('GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS', 'ctrl-exports-extensions');
 define('GC_DEFAULTS_DEBUG_PAGE', 'debug-page');
 define('GC_DEFAULTS_DISABLED_DEBUGS', 'disabled-debugs');
@@ -371,5 +372,10 @@ define('GC_FORMS_FIELDTYPE_TEXT', 'text');
 define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
 define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
 define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
+// @}
+//
+// Config modes.
+define('GC_CONFIG_MODE_MULTI', 'multi');
+define('GC_CONFIG_MODE_SIMPLE', 'simple');
 // @}
 // @}

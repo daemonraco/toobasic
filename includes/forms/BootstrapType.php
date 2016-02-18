@@ -9,7 +9,8 @@ namespace TooBasic\Forms;
 
 /**
  * @class BootstrapType
- * @todo doc
+ * This class represents a form builder that implements Twitter Bootstrap styles
+ * and HTML structures.
  */
 class BootstrapType extends FormType {
 	/**
