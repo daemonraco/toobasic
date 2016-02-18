@@ -27,6 +27,12 @@ class Config extends \stdClass {
 	const ModeSimple = 'simple';
 	const ModeMultiple = 'multi';
 	//
+	// Protected core properties.
+	/**
+	 * @var \TooBasic\Configs\ConfigLoader @TODO doc
+	 */
+	protected $_CP_loader = false;
+	//
 	// Protected properties.
 	/**
 	 * @var string This flag shows what mechanism was used to load a config
@@ -49,17 +55,22 @@ class Config extends \stdClass {
 	 */
 	public function __construct($name, $mode = self::ModeSimple) {
 		//
+		// Global dependencies.
+		global $Defaults;
+		//
 		// Storing basic values.
 		$this->_name = $name;
 		$this->_mode = $mode;
 		//
 		// Checking that the loading mechanism is a known one.
-		if(!in_array($this->_mode, [self::ModeSimple, self::ModeMultiple])) {
+		if(!in_array($this->mode(), array_keys($Defaults[GC_DEFAULTS_CONFIG_LOADERS]))) {
 			throw new ConfigException("Unknown mode '{$this->mode()}'");
 		}
 		//
 		// Loading physical files.
-		$this->load();
+		$loaderClass = $Defaults[GC_DEFAULTS_CONFIG_LOADERS][$this->mode()];
+		$this->_CP_loader = new $loaderClass($this);
+		$this->_CP_loader->load();
 	}
 	//
 	// Public methods.
@@ -78,73 +89,5 @@ class Config extends \stdClass {
 	 */
 	public function name() {
 		return $this->_name;
-	}
-	//
-	// Protected methods.
-	/**
-	 * This method is the one in charge of loading files using the proper
-	 * mechanism.
-	 * @throws \TooBasic\ConfigException
-	 */
-	protected function load() {
-		//
-		// Paths manager shortcut.
-		$pathsManager = Paths::Instance();
-		//
-		// Getting the list of files to load based on current mechanism.
-		$confPaths = [];
-		if($this->mode() == self::ModeSimple) {
-			$aux = $pathsManager->configPath($this->name(), Paths::ExtensionJSON);
-			if($aux) {
-				$confPaths[] = $aux;
-			}
-		} elseif($this->mode() == self::ModeMultiple) {
-			$confPaths = $pathsManager->configPath($this->name(), Paths::ExtensionJSON, true);
-		}
-		//
-		// Checking if there's at least one file to load.
-		if($confPaths) {
-			//
-			// Loading properties from each JSON file.
-			foreach($confPaths as $confPath) {
-				$this->loadProperties($confPath);
-			}
-		} else {
-			//
-			// If there are no file to load is a fatal error.
-			throw new ConfigException("Unable to find any configuration file named '{$this->name()}'");
-		}
-	}
-	/**
-	 * This method loads all properties on a JSON file as properties of the
-	 * current object.
-	 *
-	 * @param string $confPath Absolute path of a JSON file.
-	 * @throws \TooBasic\ConfigException
-	 */
-	protected function loadProperties($confPath) {
-		//
-		// Checking reading permissions.
-		if(is_readable($confPath)) {
-			//
-			// Loading file contents and decoding it.
-			$json = json_decode(file_get_contents($confPath));
-			//
-			// Checking JSON decoding.
-			if($json) {
-				//
-				// Loading parameters and overring those that
-				// already exist.
-				foreach($json as $k => $v) {
-					if(!preg_match('/^_mode$|^_name$|^_CP_.*/', $k)) {
-						$this->{$k} = $v;
-					}
-				}
-			} else {
-				throw new ConfigException("Wrong configuration file '{$confPath}' (".json_last_error_msg().')');
-			}
-		} else {
-			throw new ConfigException("Unable to find/read configuration file '{$confPath}'");
-		}
 	}
 }
