@@ -1,0 +1,27 @@
+{
+	"assets": [
+		"/site/config.php",
+		"/site/controllers/edit.php",
+		"/site/controllers/test.php",
+		"/site/db/filters.json",
+		"/site/models/representations/FilterRepresentation.php",
+		"/site/models/representations/FiltersFactory.php",
+		"/site/templates/action/edit.html",
+		"/site/templates/action/test.html"
+	],
+	"assetDirectories": [
+		"/site",
+		"/site/controllers",
+		"/site/db",
+		"/site/models",
+		"/site/models/representations",
+		"/site/templates",
+		"/site/templates/action"
+	],
+	"setUpScripts": [
+		"G:mysql/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:mysql/removedatabase.sh"
+	]
+}
