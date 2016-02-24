@@ -33,7 +33,6 @@ class FormsBuilderTableTypeTest extends TooBasic_SeleniumTestCase {
 	// Analysis @{
 	public function testLoadingFormInViewMode() {
 		$this->url("?action=test&form={$this->_formName}&form_mode=view");
-		debugit($this->source());
 		$this->validateViewAndRemove();
 	}
 	public function testLoadingFormInCreateMode() {
