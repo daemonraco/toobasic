@@ -226,6 +226,8 @@ define('GC_PATHS_LANGS', 'langs');
 define('GC_PATHS_LAYOUTS', 'layouts');
 define('GC_PATHS_MODELS', 'models');
 define('GC_PATHS_REPRESENTATIONS', 'representations');
+define('GC_PATHS_SAPIREADER', 'sapireader');
+define('GC_PATHS_SAPIREPORTS', 'sapireports');
 define('GC_PATHS_SERVICES', 'services');
 define('GC_PATHS_SHELL', 'shell');
 define('GC_PATHS_SHELL_CRONS', 'shell-crons');
@@ -339,6 +341,16 @@ define('GC_SAPIREADER_TYPES', 'types');
 define('GC_SAPIREADER_TYPE_BASIC', 'basic');
 define('GC_SAPIREADER_TYPE_JSON', 'json');
 define('GC_SAPIREADER_TYPE_XML', 'xml');
+
+define('GC_SAREPORT_TYPES', 'sareport-types');
+define('GC_SAREPORT_TYPE_BASIC', 'basic');
+define('GC_SAREPORT_TYPE_BOOTSTRAP', 'bootstrap');
+
+define('GC_SAREPORT_COLUMNTYPE_BUTTONLINK', 'button-link');
+define('GC_SAREPORT_COLUMNTYPE_CODE', 'code');
+define('GC_SAREPORT_COLUMNTYPE_IMAGE', 'image');
+define('GC_SAREPORT_COLUMNTYPE_LINK', 'link');
+define('GC_SAREPORT_COLUMNTYPE_TEXT', 'text');
 // @}
 //
 // TooBasic's search engine @{

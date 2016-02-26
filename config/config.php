@@ -182,6 +182,8 @@ $Paths[GC_PATHS_LANGS] = '/langs';
 $Paths[GC_PATHS_LAYOUTS] = '/layouts';
 $Paths[GC_PATHS_MODELS] = '/models';
 $Paths[GC_PATHS_REPRESENTATIONS] = '/models/representations';
+$Paths[GC_PATHS_SAPIREADER] = '/sapis';
+$Paths[GC_PATHS_SAPIREPORTS] = "/sapis/reports";
 $Paths[GC_PATHS_SERVICES] = '/services';
 $Paths[GC_PATHS_SHELL] = '/shell';
 $Paths[GC_PATHS_SHELL_CRONS] = '/shell/crons';
@@ -218,6 +220,11 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
+$SApiReader[GC_SAREPORT_TYPES] = [
+	GC_SAREPORT_TYPE_BASIC => '\\TooBasic\\SAReporterBasic',
+	GC_SAREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SAReporterBootstrap'
+];
+$Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['sapiReport'] = '\\TooBasic\\ctrlExports_sapiReport';
 //
 // Forms builder basic configuration.
 $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(

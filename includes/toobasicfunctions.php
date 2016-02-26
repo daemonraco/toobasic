@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\Managers\ManifestsManager;
+use TooBasic\SAReporter;
 
 //
 // Global constants for the generic debug message printer @{
@@ -85,6 +86,16 @@ function classname($simpleName) {
  */
 function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = array()) {
 	return \TooBasic\Forms\FormsManager::Instance()->formFor($formName, $item, $mode, $flags);
+}
+/**
+ * @TODO doc
+ *
+ * @param type $report @TODO doc
+ * @param type $renderType @TODO doc
+ * @return type @TODO doc
+ */
+function ctrlExports_sapiReport($report, $renderType = false) {
+	return SAReporter::Instance()->sareport($report, $renderType);
 }
 /**
  * This method prints in a basic but standard way some message.
