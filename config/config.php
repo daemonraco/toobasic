@@ -220,9 +220,9 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
-$SApiReader[GC_SAREPORT_TYPES] = [
-	GC_SAREPORT_TYPE_BASIC => '\\TooBasic\\SAReporterBasic',
-	GC_SAREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SAReporterBootstrap'
+$SApiReader[GC_SAPIREPORT_TYPES] = [
+	GC_SAPIREPORT_TYPE_BASIC => '\\TooBasic\\SAReporterBasic',
+	GC_SAPIREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SAReporterBootstrap'
 ];
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['sapiReport'] = '\\TooBasic\\ctrlExports_sapiReport';
 //

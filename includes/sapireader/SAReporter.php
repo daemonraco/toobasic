@@ -71,12 +71,12 @@ class SAReporter extends Singleton {
 		}
 		//
 		// Checking rendering type.
-		if(!isset($SApiReader[GC_SAREPORT_TYPES][$renderType])) {
+		if(!isset($SApiReader[GC_SAPIREPORT_TYPES][$renderType])) {
 			throw new SAReporterException("Unkwnon report render type '{$renderType}'.");
 		}
 		//
 		// Rendering.
-		$renderClass = $SApiReader[GC_SAREPORT_TYPES][$renderType];
+		$renderClass = $SApiReader[GC_SAPIREPORT_TYPES][$renderType];
 		$render = new $renderClass($conf);
 		$out.= $render->render($results);
 
@@ -98,7 +98,7 @@ class SAReporter extends Singleton {
 		//
 		// Checking and setting a default report type.
 		if(!isset($conf->type)) {
-			$conf->type = GC_SAREPORT_TYPE_BASIC;
+			$conf->type = GC_SAPIREPORT_TYPE_BASIC;
 		}
 		//
 		// Checking each column definition.
@@ -106,7 +106,7 @@ class SAReporter extends Singleton {
 			//
 			// Checking and setting a default column type.
 			if(!isset($column->type)) {
-				$column->type = GC_SAREPORT_COLUMNTYPE_TEXT;
+				$column->type = GC_SAPIREPORT_COLUMNTYPE_TEXT;
 			}
 			//
 			// Checking and setting a default list of excluded values

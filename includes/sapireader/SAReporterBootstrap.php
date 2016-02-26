@@ -28,7 +28,7 @@ class SAReporterBootstrap extends SAReporterType {
 	 */
 	public function render($results) {
 		//
-		// Defult values.
+		// Default values.
 		$out = '';
 		//
 		// Shortcuts.
@@ -67,27 +67,27 @@ class SAReporterBootstrap extends SAReporterType {
 
 				$entry.= "\t\t\t<td>";
 				switch($column->type) {
-					case GC_SAREPORT_COLUMNTYPE_IMAGE:
+					case GC_SAPIREPORT_COLUMNTYPE_IMAGE:
 						$entry.= "<img class=\"img-responsive\" src=\"{$value}\"{$this->extraAttributes($column)}/>";
 						break;
-					case GC_SAREPORT_COLUMNTYPE_LINK:
+					case GC_SAPIREPORT_COLUMNTYPE_LINK:
 						$label = $tr->go_to;
 						if(isset($column->extras->label)) {
 							$label = $tr->{$column->extras->label};
 						}
 						$entry.= "<a class=\"btn\" href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
 						break;
-					case GC_SAREPORT_COLUMNTYPE_BUTTONLINK:
+					case GC_SAPIREPORT_COLUMNTYPE_BUTTONLINK:
 						$label = $tr->go_to;
 						if(isset($column->extras->label)) {
 							$label = $tr->{$column->extras->label};
 						}
 						$entry.= "<a class=\"btn btn-link\" href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
 						break;
-					case GC_SAREPORT_COLUMNTYPE_CODE:
+					case GC_SAPIREPORT_COLUMNTYPE_CODE:
 						$entry.='<pre>'.htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value).'</pre>';
 						break;
-					case GC_SAREPORT_COLUMNTYPE_TEXT:
+					case GC_SAPIREPORT_COLUMNTYPE_TEXT:
 					default:
 						$entry.=htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
 						break;
