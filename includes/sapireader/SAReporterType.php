@@ -1,13 +1,46 @@
 <?php
 
+/**
+ * @file SAReporterType.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+/**
+ * @class SAReporterType
+ * @abstract
+ * This abstract class defines the basic logic for a Simple API Report renderer.
+ */
 abstract class SAReporterType {
+	//
+	// Protected properties.
+	/**
+	 * @var \stdClass Current report configuration shortcut.
+	 */
 	protected $_conf = false;
+	//
+	// Magic methods.
+	/**
+	 * Class constructor.
+	 *
+	 * @param \stdClass $conf Report configuration to work with.
+	 */
 	public function __construct($conf) {
 		$this->_conf = $conf;
 	}
+	//
+	// Public methods.
+	/**
+	 * This method renders resutls of an API call into a HTML table based on
+	 * a Simple API Report configurations.
+	 *
+	 * @param type $results API results on which to work.
+	 * @return string Returns a HTML piece of code.
+	 */
 	abstract public function render($results);
+	//
+	// Protected methods.
 	protected function extraCssClass($columnConf, $class = []) {
 		$out = '';
 

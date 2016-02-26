@@ -1,21 +1,46 @@
 <?php
 
+/**
+ * @file SAReporterBasic.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic;
 
+//
+// Class aliases
 use TooBasic\Translate;
 
+/**
+ * @class SAReporterBasic
+ * This class defines the logic to render a Simple API Report as a basic table.
+ */
 class SAReporterBasic extends SAReporterType {
+	//
+	// Public methods.
+	/**
+	 * This method renders resutls of an API call into a HTML table based on
+	 * a Simple API Report configurations.
+	 *
+	 * @param type $results API results on which to work.
+	 * @return string Returns a HTML piece of code.
+	 */
 	public function render($results) {
+		//
+		// Defult values.
 		$out = '';
-
+		//
+		// Shortcuts.
 		$tr = Translate::Instance();
-
+		//
+		// Getting a shortcut to the list of items inside into results.
 		if($this->_conf->listPath) {
 			eval("\$list=\$results->{$this->_conf->listPath};");
 		} else {
 			$list = $results;
 		}
-
+		//
+		// Table headers.
 		$out.= "<table>\n";
 		$out.= "\t<thead>\n";
 		foreach($this->_conf->columns as $column) {
@@ -23,14 +48,18 @@ class SAReporterBasic extends SAReporterType {
 			$out.= "\t\t\t<th>{$title}</th>\n";
 		}
 		$out.= "\t</thead>\n";
-
+		//
+		// Table bodies.
 		$out.= "\t<tbody>\n";
 		foreach($list as $item) {
+			//
+			// Checking this this row is excluded or not.
 			$entryOk = !$this->isRowExcluded($item);
 			if(!$entryOk) {
 				continue;
 			}
-
+			//
+			// Building current row.
 			$entry = "\t\t<tr>\n";
 			foreach($this->_conf->columns as $column) {
 				$path = implode('->', explode('/', $column->path));
