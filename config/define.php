@@ -375,6 +375,7 @@ define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 // @}
 //
 // Config modes.
+define('GC_CONFIG_MODE_MERGE', 'merge');
 define('GC_CONFIG_MODE_MULTI', 'multi');
 define('GC_CONFIG_MODE_SIMPLE', 'simple');
 // @}

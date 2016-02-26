@@ -170,6 +170,57 @@ Remember that when all these files are loaded, properties specified in more than
 one JSON configuration file will override properties with the same name loaded in
 a previous file.
 
+### Merged files
+A third option is to load multiple files with a basic merging policy writing
+something like this:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->my_config(GC_CONFIG_MODE_MERGE)->types);
+	}
+. . .
+```
+This mechanism makes these considerations:
+
+* Every top level property that has a list as value (an array) appends new values.
+* Every top level property that is an object absorbs new properties and replaces duplicates.
+* Other top level properties get replaced.
+
+For example, given this JSON:
+```json
+{
+	"common": "something",
+	"list": [1, 2],
+	"settings": {
+		"prop1": 1,
+		"prop2": 2
+	}
+}
+```
+And then this second JSON:
+```json
+{
+	"common": "something else",
+	"list": [2, 3],
+	"settings": {
+		"prop2": 22,
+		"prop3": 33
+	}
+}
+```
+The result of merging them will result in something like this:
+```json
+{
+	"common": "something else",
+	"list": [1, 2, 2, 3],
+	"settings": {
+		"prop1": 1,
+		"prop2": 22,
+		"prop3": 33
+	}
+}
+```
+
 ## Suggestions
 If you want you may visit these documentation pages:
 

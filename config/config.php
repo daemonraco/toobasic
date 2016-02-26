@@ -44,6 +44,7 @@ $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
 $Defaults[GC_DEFAULTS_CONFIG_LOADERS] = array(
+	GC_CONFIG_MODE_MERGE => '\\TooBasic\\Configs\\ConfigLoaderMerge',
 	GC_CONFIG_MODE_MULTI => '\\TooBasic\\Configs\\ConfigLoaderMulti',
 	GC_CONFIG_MODE_SIMPLE => '\\TooBasic\\Configs\\ConfigLoaderSimple'
 );
