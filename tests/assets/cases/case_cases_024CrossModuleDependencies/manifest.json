@@ -1,0 +1,17 @@
+{
+	"assets": [
+		"/modules/basic_module/manifest.json",
+		"/modules/dependant_module/manifest.json",
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/controllers/test.php",
+		"/site/templates/action/test.html"
+	],
+	"assetDirectories": [
+		"/modules/basic_module",
+		"/modules/dependant_module"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}
