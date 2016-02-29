@@ -95,7 +95,7 @@ function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = a
  * @return string Returns a HTML piece of code.
  */
 function ctrlExports_sapiReport($report, $renderType = false) {
-	return \TooBasic\SAReporter::Instance()->sareport($report, $renderType);
+	return \TooBasic\SApiReporter::Instance()->sareport($report, $renderType);
 }
 /**
  * This method prints in a basic but standard way some message.

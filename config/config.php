@@ -221,8 +221,8 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
 $SApiReader[GC_SAPIREPORT_TYPES] = [
-	GC_SAPIREPORT_TYPE_BASIC => '\\TooBasic\\SAReporterBasic',
-	GC_SAPIREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SAReporterBootstrap'
+	GC_SAPIREPORT_TYPE_BASIC => '\\TooBasic\\SApiReportBasic',
+	GC_SAPIREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SApiReportBootstrap'
 ];
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['sapiReport'] = '\\TooBasic\\ctrlExports_sapiReport';
 //

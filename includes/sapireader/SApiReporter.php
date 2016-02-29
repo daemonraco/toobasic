@@ -17,7 +17,7 @@ use TooBasic\Paths;
  * This type of exception is thrown whenever a error occurs with Simple API
  * Reporter.
  */
-class SAReporterException extends Exception {
+class SApiReportException extends Exception {
 	
 }
 
@@ -26,7 +26,7 @@ class SAReporterException extends Exception {
  * This class holds the logic to access, change and also render Simple API
  * Reports.
  */
-class SAReporter extends Singleton {
+class SApiReporter extends Singleton {
 	//
 	// Protected properties.
 	/**
@@ -43,7 +43,7 @@ class SAReporter extends Singleton {
 	 * @param string $renderType Name of the mechanism to use when rendering. FALSE
 	 * means default.
 	 * @return string Returns a HTML piece of code.
-	 * @throws \TooBasic\SAReporterException
+	 * @throws \TooBasic\SApiReportException
 	 */
 	public function sareport($report, $renderType = false) {
 		//
@@ -72,13 +72,16 @@ class SAReporter extends Singleton {
 		//
 		// Checking rendering type.
 		if(!isset($SApiReader[GC_SAPIREPORT_TYPES][$renderType])) {
-			throw new SAReporterException("Unkwnon report render type '{$renderType}'.");
+			throw new SApiReportException("Unkwnon report render type '{$renderType}'.");
 		}
+		//
+		// Filtering results.
+		$list = $this->filterResults($report, $results);
 		//
 		// Rendering.
 		$renderClass = $SApiReader[GC_SAPIREPORT_TYPES][$renderType];
 		$render = new $renderClass($conf);
-		$out.= $render->render($results);
+		$out.= $render->render($list);
 
 		return $out;
 	}
@@ -89,7 +92,7 @@ class SAReporter extends Singleton {
 	 * values.
 	 *
 	 * @param string $report Report name.
-	 * @throws \TooBasic\SAReporterException
+	 * @throws \TooBasic\SApiReportException
 	 */
 	protected function checkReportConf($report) {
 		//
@@ -122,11 +125,76 @@ class SAReporter extends Singleton {
 		}
 	}
 	/**
+	 * @TODO doc
+	 *
+	 * @param type $report @TODO doc
+	 * @param type $results @TODO doc
+	 * @return type @TODO doc
+	 * @throws \TooBasic\SApiReportException
+	 */
+	protected function filterResults($report, $results) {
+		//
+		// Default values.
+		$list = false;
+		//
+		// Shortcuts.
+		$conf = $this->_reports[$report];
+		//
+		// Getting a shortcut to the list of items inside into results.
+		if($conf->listPath) {
+			$list = self::GetPathValue($results, $conf->listPath);
+		} else {
+			$list = $results;
+		}
+		if(!is_array($list)) {
+			throw new SApiReportException("Result's path '->{$conf->listPath}' doesn't point to a list.");
+		}
+
+		foreach($list as $itemKey => $item) {
+			$exclude = false;
+
+			foreach($conf->exceptions as $exception) {
+				$path = slef::GetPathCleaned($exception->path);
+				$isset = self::GetPathIsset($item, $path);
+				if($isset) {
+					$value = self::GetPathValue($item, $path);
+				} else {
+					$value = false;
+				}
+
+				if(isset($exception->isset) && $isset == $exception->isset) {
+					$exclude = true;
+					break;
+				}
+				if(isset($exception->exclude) && $isset && in_array($value, $exception->exclude)) {
+					$exclude = true;
+					break;
+				}
+			}
+			if(!$exclude) {
+				foreach($conf->columns as $column) {
+					$value = self::GetPathValue($item, $column->path);
+
+					if(in_array($value, $column->exclude)) {
+						$exclude = true;
+						break;
+					}
+				}
+			}
+			if($exclude) {
+				unset($list[$itemKey]);
+				continue;
+			}
+		}
+
+		return $list;
+	}
+	/**
 	 * This method loads a report configuration, triggers checks on it and
 	 * avoids multiple loads.
 	 *
 	 * @param string $report Report name.
-	 * @throws \TooBasic\SAReporterException
+	 * @throws \TooBasic\SApiReportException
 	 */
 	protected function loadReport($report) {
 		//
@@ -155,11 +223,46 @@ class SAReporter extends Singleton {
 					// Checking configuration.
 					$this->checkReportConf($report);
 				} else {
-					throw new SAReporterException("Path '{$path}' is not a valid JSON (".json_last_error_msg().').');
+					throw new SApiReportException("Path '{$path}' is not a valid JSON (".json_last_error_msg().').');
 				}
 			} else {
-				throw new SAReporterException("Unable to find a definition for report '{$report}'.");
+				throw new SApiReportException("Unable to find a definition for report '{$report}'.");
 			}
 		}
+	}
+	//
+	// Public class methods.
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $path @TODO doc
+	 * @return type @TODO doc
+	 */
+	public static function GetPathCleaned($path) {
+		return implode('->', explode('/', $path));
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $item @TODO doc
+	 * @param type $path @TODO doc
+	 * @return type @TODO doc
+	 */
+	public static function GetPathIsset($item, $path) {
+		$path = self::GetPathCleaned($path);
+		eval("\$out=isset(\$item->{$path});");
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $item @TODO doc
+	 * @param type $path @TODO doc
+	 * @return type @TODO doc
+	 */
+	public static function GetPathValue($item, $path) {
+		$path = self::GetPathCleaned($path);
+		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
+		return $out;
 	}
 }

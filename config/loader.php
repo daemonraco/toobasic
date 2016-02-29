@@ -130,10 +130,11 @@ $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SA
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
 
-$SuperLoader['TooBasic\\SAReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SAReporter.php";
-$SuperLoader['TooBasic\\SAReporterBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SAReporterBasic.php";
-$SuperLoader["TooBasic\\SAReporterBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SAReporterBootstrap.php";
-$SuperLoader['TooBasic\\SAReporterType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SAReporterType.php";
+$SuperLoader['TooBasic\\SApiReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReporter.php";
+$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportException.php";
+$SuperLoader['TooBasic\\SApiReportBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBasic.php";
+$SuperLoader["TooBasic\\SApiReportBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBootstrap.php";
+$SuperLoader['TooBasic\\SApiReportType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportType.php";
 // @}
 //
 // Forms builder includes @{

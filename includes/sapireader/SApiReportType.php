@@ -12,7 +12,7 @@ namespace TooBasic;
  * @abstract
  * This abstract class defines the basic logic for a Simple API Report renderer.
  */
-abstract class SAReporterType {
+abstract class SApiReportType {
 	//
 	// Protected properties.
 	/**
@@ -35,12 +35,19 @@ abstract class SAReporterType {
 	 * This method renders resutls of an API call into a HTML table based on
 	 * a Simple API Report configurations.
 	 *
-	 * @param type $results API results on which to work.
+	 * @param type $list API results on which to work.
 	 * @return string Returns a HTML piece of code.
 	 */
-	abstract public function render($results);
+	abstract public function render($list);
 	//
 	// Protected methods.
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $class @TODO doc
+	 * @return string @TODO doc
+	 */
 	protected function extraCssClass($columnConf, $class = []) {
 		$out = '';
 
@@ -50,6 +57,12 @@ abstract class SAReporterType {
 
 		return $out;
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @return type @TODO doc
+	 */
 	protected function extraAttributes($columnConf) {
 		$out = '';
 
@@ -72,52 +85,5 @@ abstract class SAReporterType {
 		}
 
 		return $out;
-	}
-	protected function getPathCleaned($path) {
-		return implode('->', explode('/', $path));
-	}
-	protected function getPathIsset($item, $path) {
-		$path = $this->getPathCleaned($path);
-		eval("\$out=isset(\$item->{$path});");
-		return $out;
-	}
-	protected function getPathValue($item, $path) {
-		$path = $this->getPathCleaned($path);
-		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
-		return $out;
-	}
-	protected function isRowExcluded($item) {
-		$exclude = false;
-
-		foreach($this->_conf->exceptions as $exception) {
-			$path = $this->getPathCleaned($exception->path);
-			$isset = $this->getPathIsset($item, $path);
-			if($isset) {
-				$value = $this->getPathValue($item, $path);
-			} else {
-				$value = false;
-			}
-
-			if(isset($exception->isset) && $isset == $exception->isset) {
-				$exclude = true;
-				break;
-			}
-			if(isset($exception->exclude) && $isset && in_array($value, $exception->exclude)) {
-				$exclude = true;
-				break;
-			}
-		}
-		if(!$exclude) {
-			foreach($this->_conf->columns as $column) {
-				$value = $this->getPathValue($item, $column->path);
-
-				if(in_array($value, $column->exclude)) {
-					$exclude = true;
-					break;
-				}
-			}
-		}
-
-		return $exclude;
 	}
 }

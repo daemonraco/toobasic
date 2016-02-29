@@ -15,30 +15,23 @@ use TooBasic\Translate;
  * @class SAReporterBasic
  * This class defines the logic to render a Simple API Report as a basic table.
  */
-class SAReporterBasic extends SAReporterType {
+class SApiReportBasic extends SApiReportType {
 	//
 	// Public methods.
 	/**
 	 * This method renders resutls of an API call into a HTML table based on
 	 * a Simple API Report configurations.
 	 *
-	 * @param type $results API results on which to work.
+	 * @param type $list API results on which to work.
 	 * @return string Returns a HTML piece of code.
 	 */
-	public function render($results) {
+	public function render($list) {
 		//
 		// Default values.
 		$out = '';
 		//
 		// Shortcuts.
 		$tr = Translate::Instance();
-		//
-		// Getting a shortcut to the list of items inside into results.
-		if($this->_conf->listPath) {
-			eval("\$list=\$results->{$this->_conf->listPath};");
-		} else {
-			$list = $results;
-		}
 		//
 		// Table headers.
 		$out.= "<table>\n";
@@ -53,22 +46,16 @@ class SAReporterBasic extends SAReporterType {
 		$out.= "\t<tbody>\n";
 		foreach($list as $item) {
 			//
-			// Checking this this row is excluded or not.
-			$entryOk = !$this->isRowExcluded($item);
-			if(!$entryOk) {
-				continue;
-			}
-			//
 			// Building current row.
-			$entry = "\t\t<tr>\n";
+			$out.= "\t\t<tr>\n";
 			foreach($this->_conf->columns as $column) {
 				$path = implode('->', explode('/', $column->path));
-				$value = $this->getPathValue($item, $path);
+				$value = SApiReporter::GetPathValue($item, $path);
 
-				$entry.= "\t\t\t<td>";
+				$out.= "\t\t\t<td>";
 				switch($column->type) {
 					case GC_SAPIREPORT_COLUMNTYPE_IMAGE:
-						$entry.= "<img src=\"{$value}\"{$this->extraAttributes($column)}/>";
+						$out.= "<img src=\"{$value}\"{$this->extraAttributes($column)}/>";
 						break;
 					case GC_SAPIREPORT_COLUMNTYPE_LINK:
 					case GC_SAPIREPORT_COLUMNTYPE_BUTTONLINK:
@@ -76,27 +63,22 @@ class SAReporterBasic extends SAReporterType {
 						if(isset($column->extras->label)) {
 							$label = $tr->{$column->extras->label};
 						}
-						$entry.= "<a href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
+						$out.= "<a href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
 						break;
 					case GC_SAPIREPORT_COLUMNTYPE_CODE:
-						$entry.='<pre>'.htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value).'</pre>';
+						$out.='<pre>'.htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value).'</pre>';
 						break;
 					case GC_SAPIREPORT_COLUMNTYPE_TEXT:
 					default:
-						$entry.=htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
+						$out.=htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
 						break;
 				}
-				$entry.= "</td>\n";
+				$out.= "</td>\n";
 			}
-			$entry.= "\t\t</tr>\n";
-
-			if($entryOk) {
-				$out.= $entry;
-			}
+			$out.= "\t\t</tr>\n";
 		}
 		$out.= "\t</tbody>\n";
 		$out.= "</table>\n";
-
 
 		return $out;
 	}
