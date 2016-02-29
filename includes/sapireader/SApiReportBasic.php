@@ -96,7 +96,12 @@ class SApiReportBasic extends SApiReportType {
 	 * @return string Returns a HTML code.
 	 */
 	protected function buildCodeColumn($columnConf, $item, $spacer) {
-		return "{$spacer}<pre{$this->buildAttributes($columnConf)}>".SApiReporter::GetPathValue($item, $columnConf->path)."</pre>\n";
+		$value = SApiReporter::GetPathValue($item, $columnConf->path);
+		//
+		// Escaping tags.
+		$value = htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
+
+		return "{$spacer}<pre{$this->buildAttributes($columnConf)}>{$value}</pre>\n";
 	}
 	/**
 	 * This method reports certain value as an image using a 'IMG' tag.

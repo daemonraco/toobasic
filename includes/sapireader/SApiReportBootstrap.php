@@ -89,7 +89,7 @@ class SApiReportBootstrap extends SApiReportType {
 		return $out;
 	}
 	/**
-	 * This method reports certain value encased in a 'PRE' tag.
+	 * This method reports certain value encased in a 'CODE' tag.
 	 *
 	 * @param \stdClass $columnConf Current column configuration.
 	 * @param \stdClass $item Current row information.
@@ -97,7 +97,12 @@ class SApiReportBootstrap extends SApiReportType {
 	 * @return string Returns a HTML code.
 	 */
 	protected function buildCodeColumn($columnConf, $item, $spacer) {
-		return "{$spacer}<pre{$this->buildAttributes($columnConf)}>".SApiReporter::GetPathValue($item, $columnConf->path)."</pre>\n";
+		$value = SApiReporter::GetPathValue($item, $columnConf->path);
+		//
+		// Escaping tags.
+		$value = htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
+
+		return "{$spacer}<code{$this->buildAttributes($columnConf)}>{$value}</code>\n";
 	}
 	/**
 	 * This method reports certain value as an image using a 'IMG' tag.

@@ -100,7 +100,10 @@ class SApiReporter extends Singleton {
 		// Lists of required configuration fields and default values.
 		$fields = [
 			'attrs' => '+\stdClass',
+			'exceptions' => [],
+			'listPath' => '',
 			'name' => $report,
+			'params' => [],
 			'type' => GC_SAPIREPORT_TYPE_BASIC
 		];
 		//
@@ -110,9 +113,17 @@ class SApiReporter extends Singleton {
 		// Shortcut.
 		$conf = $this->_reports[$report];
 		//
-		// Checking and setting a default report type.
-		if(!isset($conf->type)) {
-			$conf->type = GC_SAPIREPORT_TYPE_BASIC;
+		// Checking required fields.
+		foreach(['api', 'service', 'columns'] as $field) {
+			if(!isset($conf->{$field})) {
+				throw new SApiReportException("Report '{$report}' lacks the required field '{$field}'.");
+			}
+		}
+		if(!is_array($conf->columns)) {
+			throw new SApiReportException("Report '{$report}' field 'columns' is not a list.");
+			if(!boolval(count($conf->columns))) {
+				throw new SApiReportException("Report '{$report}' field 'columns' has no entries.");
+			}
 		}
 		//
 		// Lists of required field by column type and default values.
@@ -178,11 +189,6 @@ class SApiReporter extends Singleton {
 					throw new SApiReportException(\TooBasic\ordinalToCardinal($columnPosition + 1)." column on report '{$report}' lacks the required field '{$field}'.");
 				}
 			}
-		}
-		//
-		// Checking and setting a default list of exceptions.
-		if(!isset($conf->exceptions)) {
-			$conf->exceptions = [];
 		}
 	}
 	/**

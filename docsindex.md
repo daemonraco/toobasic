@@ -339,6 +339,23 @@
 	* [POST parameters](docs/sapireader.md#post-parameters)
 * [Suggestions](docs/sapireader.md#suggestions)
 
+##  Simple API Reports (docs/sapireports.md):
+
+* [What is SApiReports?](docs/sapireports.md#what-is-sapireports)
+* [API configuration](docs/sapireports.md#api-configuration)
+* [Report configuration](docs/sapireports.md#report-configuration)
+* [Mandatory fields](docs/sapireports.md#mandatory-fields)
+* [Optional fields](docs/sapireports.md#optional-fields)
+	* [Field _listPath_](docs/sapireports.md#field-listpath)
+	* [Field _params_](docs/sapireports.md#field-params)
+	* [Field _type_](docs/sapireports.md#field-type)
+	* [Field _name_](docs/sapireports.md#field-name)
+	* [Field _attrs_](docs/sapireports.md#field-attrs)
+* [Column specifications](docs/sapireports.md#column-specifications)
+* [Exclusions](docs/sapireports.md#exclusions)
+* [Show the report](docs/sapireports.md#show-the-report)
+* [Suggestions](docs/sapireports.md#suggestions)
+
 ##  Search Engine (docs/searchengine.md):
 
 * [What is __TooBasic__'s Search Engine?](docs/searchengine.md#what-is-toobasic_s-search-engine)
