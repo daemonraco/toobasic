@@ -10,7 +10,7 @@ class SApiReportsAsBootstrapTypeTest extends TooBasic_SeleniumTestCase {
 		// Checking table.
 		$table = $this->byCssSelector('table#this_site_issues');
 		$this->assertTrue(boolval($table), "No table found with id '#this_site_issues'.");
-		$this->assertEquals('table table-striped InternalClass', $table->attribute('class'), "Table attribute 'class' has an unexpected value.");
+		$this->assertEquals('InternalClass', $table->attribute('class'), "Table attribute 'class' has an unexpected value.");
 		//
 		// Checking header.
 		$thead = $table->byTag('thead');
@@ -50,7 +50,6 @@ class SApiReportsAsBootstrapTypeTest extends TooBasic_SeleniumTestCase {
 		$anchors = $columns[0]->elements($this->using('css selector')->value('a'));
 		$this->assertEquals(1, count($anchors), "There are more/less 'a' tags than expected in the 1st column of 1st row.");
 		$this->assertEquals('117', $anchors[0]->text(), "1st column of 1st row has an unexpected value.");
-		$this->assertEquals('btn btn-link', $anchors[0]->attribute('class'), "Anchor in the 1st column of 1st row has an unexpected value for attribute 'class'.");
 		$this->assertEquals('_blank', $anchors[0]->attribute('target'), "Anchor in the 1st column of 1st row has an unexpected value for attribute 'target'.");
 		$this->assertEquals('https://github.com/daemonraco/toobasic/issues/117', $anchors[0]->attribute('href'), "Anchor in the 1st column of 1st row has an unexpected value for attribute 'href'.");
 		//
@@ -63,20 +62,19 @@ class SApiReportsAsBootstrapTypeTest extends TooBasic_SeleniumTestCase {
 		$buttons = $columns[2]->elements($this->using('css selector')->value('button'));
 		$this->assertEquals(1, count($buttons), "There are more/less 'button' tags than expected in the 3rd column of 1st row.");
 		$this->assertEquals('daemonraco', $buttons[0]->text(), "3rd column of 1st row has an unexpected value.");
-		$this->assertEquals('btn btn-xs btn-danger', $buttons[0]->attribute('class'), "Button in the 3rd column of 1st row has an unexpected value for attribute 'class'.");
+		$this->assertEquals('btn-xs btn-danger', $buttons[0]->attribute('class'), "Button in the 3rd column of 1st row has an unexpected value for attribute 'class'.");
 		$this->assertEquals("location.href='https://github.com/daemonraco';return false;", $buttons[0]->attribute('onclick'), "Button in the 3rd column of 1st row has an unexpected value for attribute 'onclick'.");
 		//
 		// Checking reporter column.
 		$buttons = $columns[3]->elements($this->using('css selector')->value('button'));
 		$this->assertEquals(1, count($buttons), "There are more/less 'button' tags than expected in the 4th column of 1st row.");
 		$this->assertEquals('daemonraco', $buttons[0]->text(), "4th column of 1st row has an unexpected value.");
-		$this->assertEquals('btn btn-xs btn-info', $buttons[0]->attribute('class'), "Button in the 4th column of 1st row has an unexpected value for attribute 'class'.");
+		$this->assertEquals('btn-xs btn-info', $buttons[0]->attribute('class'), "Button in the 4th column of 1st row has an unexpected value for attribute 'class'.");
 		$this->assertEquals("location.href='https://github.com/daemonraco';return false;", $buttons[0]->attribute('onclick'), "Button in the 4th column of 1st row has an unexpected value for attribute 'onclick'.");
 		//
 		// Checking avatar column.
 		$images = $columns[4]->elements($this->using('css selector')->value('img'));
 		$this->assertEquals(1, count($images), "There are more/less 'button' tags than expected in the 5th column of 1st row.");
-		$this->assertEquals('img-responsive', $images[0]->attribute('class'), "Image in the 5th column of 1st row has an unexpected value for attribute 'class'.");
 		$this->assertRegExp('~width:(.*)24px;~', $images[0]->attribute('style'), "Image in the 5th column of 1st row has an unexpected value for attribute 'style'.");
 		$this->assertEquals('https://avatars.githubusercontent.com/u/4871323?v=3', $images[0]->attribute('src'), "Image in the 5th column of 1st row has an unexpected value for attribute 'src'.");
 		//

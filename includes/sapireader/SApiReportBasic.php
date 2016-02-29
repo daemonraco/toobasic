@@ -30,10 +30,12 @@ class SApiReportBasic extends SApiReportType {
 		// Table headers.
 		$out.= "{$spacer}<table id=\"{$this->_conf->name}\"{$this->buildAttributes($this->_conf)}>\n";
 		$out.= "{$spacer}\t<thead>\n";
+		$out.= "{$spacer}\t\t<tr>\n";
 		foreach($this->_conf->columns as $column) {
 			$title = SApiReporter::TranslateLabel($column->title);
 			$out.= "\t\t\t<th>{$title}</th>\n";
 		}
+		$out.= "{$spacer}\t\t</tr>\n";
 		$out.= "{$spacer}\t</thead>\n";
 		//
 		// Table bodies.
