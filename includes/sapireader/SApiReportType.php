@@ -36,9 +36,10 @@ abstract class SApiReportType {
 	 * a Simple API Report configurations.
 	 *
 	 * @param type $list API results on which to work.
+	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML piece of code.
 	 */
-	abstract public function render($list);
+	abstract public function render($list, $spacer = '');
 	//
 	// Protected methods.
 	/**
@@ -90,36 +91,37 @@ abstract class SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return type @TODO doc
 	 */
-	protected function buildColumn($columnConf, $item) {
+	protected function buildColumn($columnConf, $item, $spacer) {
 		$method = 'build'.str_replace(' ', '', ucwords(str_replace('-', ' ', $columnConf->type))).'Column';
 		if(!method_exists($this, $method)) {
 			$method = 'buildTextColumn';
 		}
 
-		return $this->{$method}($columnConf, $item);
+		return $this->{$method}($columnConf, $item, $spacer);
 	}
 	/**
 	 * @TODO doc
 	 */
-	abstract protected function buildButtonLinkColumn($columnConf, $item);
+	abstract protected function buildButtonLinkColumn($columnConf, $item, $spacer);
 	/**
 	 * @TODO doc
 	 */
-	abstract protected function buildCodeColumn($columnConf, $item);
+	abstract protected function buildCodeColumn($columnConf, $item, $spacer);
 	/**
 	 * @TODO doc
 	 */
-	abstract protected function buildImageColumn($columnConf, $item);
+	abstract protected function buildImageColumn($columnConf, $item, $spacer);
 	/**
 	 * @TODO doc
 	 */
-	abstract protected function buildLinkColumn($columnConf, $item);
+	abstract protected function buildLinkColumn($columnConf, $item, $spacer);
 	/**
 	 * @TODO doc
 	 */
-	abstract protected function buildTextColumn($columnConf, $item);
+	abstract protected function buildTextColumn($columnConf, $item, $spacer);
 	/**
 	 * @TODO doc
 	 *

@@ -97,6 +97,16 @@ class SApiReporter extends Singleton {
 	 */
 	protected function checkReportConf($report) {
 		//
+		// Lists of required configuration fields and default values.
+		$fields = [
+			'attrs' => '+\stdClass',
+			'name' => $report,
+			'type' => GC_SAPIREPORT_TYPE_BASIC
+		];
+		//
+		// Checking and enforcing configuration.
+		$this->_reports[$report] = \TooBasic\objectCopyAndEnforce(array_keys($fields), new \stdClass(), $this->_reports[$report], $fields);
+		//
 		// Shortcut.
 		$conf = $this->_reports[$report];
 		//
@@ -139,8 +149,15 @@ class SApiReporter extends Singleton {
 		// List of accepted column types.
 		$knownTypes = array_keys($columnDefaults);
 		//
+		// List of accepted column types.
+		$requiredColumnFields = [
+			'title',
+			'path',
+			'type'
+		];
+		//
 		// Checking each column definition.
-		foreach($conf->columns as $column) {
+		foreach($conf->columns as $columnPosition => $column) {
 			//
 			// Checking and setting a default column type.
 			if(!isset($column->type)) {
@@ -154,6 +171,13 @@ class SApiReporter extends Singleton {
 			//
 			// Checking and enforcing column definition fileds.
 			$column = \TooBasic\objectCopyAndEnforce(array_keys($columnDefaults[$column->type]), new \stdClass(), $column, $columnDefaults[$column->type]);
+			//
+			// Checking required fields.
+			foreach($requiredColumnFields as $field) {
+				if(!isset($column->{$field})) {
+					throw new SApiReportException(\TooBasic\ordinalToCardinal($columnPosition + 1)." column on report '{$report}' lacks the required field '{$field}'.");
+				}
+			}
 		}
 		//
 		// Checking and setting a default list of exceptions.
@@ -180,11 +204,14 @@ class SApiReporter extends Singleton {
 		// Getting a shortcut to the list of items inside into results.
 		if($conf->listPath) {
 			$list = self::GetPathValue($results, $conf->listPath);
+			if(!is_array($list)) {
+				throw new SApiReportException("Result's path '->".self::GetPathCleaned($conf->listPath)."' doesn't point to a list.");
+			}
 		} else {
 			$list = $results;
-		}
-		if(!is_array($list)) {
-			throw new SApiReportException("Result's path '->{$conf->listPath}' doesn't point to a list.");
+			if(!is_array($list)) {
+				throw new SApiReportException("Result is not a list.");
+			}
 		}
 
 		foreach($list as $itemKey => $item) {

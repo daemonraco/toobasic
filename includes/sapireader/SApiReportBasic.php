@@ -19,37 +19,38 @@ class SApiReportBasic extends SApiReportType {
 	 * a Simple API Report configurations.
 	 *
 	 * @param type $list API results on which to work.
+	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML piece of code.
 	 */
-	public function render($list) {
+	public function render($list, $spacer = '') {
 		//
 		// Default values.
 		$out = '';
 		//
 		// Table headers.
-		$out.= "<table>\n";
-		$out.= "\t<thead>\n";
+		$out.= "{$spacer}<table id=\"{$this->_conf->name}\"{$this->buildAttributes($this->_conf)}>\n";
+		$out.= "{$spacer}\t<thead>\n";
 		foreach($this->_conf->columns as $column) {
 			$title = SApiReporter::TranslateLabel($column->title);
 			$out.= "\t\t\t<th>{$title}</th>\n";
 		}
-		$out.= "\t</thead>\n";
+		$out.= "{$spacer}\t</thead>\n";
 		//
 		// Table bodies.
-		$out.= "\t<tbody>\n";
+		$out.= "{$spacer}\t<tbody>\n";
 		foreach($list as $item) {
 			//
 			// Building current row.
-			$out.= "\t\t<tr>\n";
+			$out.= "{$spacer}\t\t<tr>\n";
 			foreach($this->_conf->columns as $column) {
-				$out.= "\t\t\t<td>";
-				$out.= $this->buildColumn($column, $item);
-				$out.= "</td>\n";
+				$out.= "{$spacer}\t\t\t<td>\n";
+				$out.= $this->buildColumn($column, $item, "{$spacer}\t\t\t\t");
+				$out.= "{$spacer}</td>\n";
 			}
-			$out.= "\t\t</tr>\n";
+			$out.= "{$spacer}\t\t</tr>\n";
 		}
-		$out.= "\t</tbody>\n";
-		$out.= "</table>\n";
+		$out.= "{$spacer}\t</tbody>\n";
+		$out.= "{$spacer}</table>\n";
 
 		return $out;
 	}
@@ -60,9 +61,10 @@ class SApiReportBasic extends SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return string @TODO doc
 	 */
-	protected function buildButtonLinkColumn($columnConf, $item) {
+	protected function buildButtonLinkColumn($columnConf, $item, $spacer) {
 		$value = '';
 		if(isset($columnConf->link->prefix)) {
 			$value.= $columnConf->link->prefix;
@@ -72,9 +74,9 @@ class SApiReportBasic extends SApiReportType {
 			$value.= $columnConf->link->suffix;
 		}
 
-		$out = "<button{$this->buildAttributes($columnConf)} onclick=\"location.href='{$value}';return false;\">";
+		$out = "{$spacer}<button{$this->buildAttributes($columnConf)} onclick=\"location.href='{$value}';return false;\">";
 		$out.= $this->guessLabel($columnConf, $item, $value);
-		$out.= "</button>";
+		$out.= "</button>\n";
 
 		return $out;
 	}
@@ -83,12 +85,13 @@ class SApiReportBasic extends SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return type @TODO doc
 	 */
-	protected function buildCodeColumn($columnConf, $item) {
+	protected function buildCodeColumn($columnConf, $item, $spacer) {
 		$value = SApiReporter::GetPathValue($item, $columnConf->path);
 
-		$out = "<pre{$this->buildAttributes($columnConf)}>{$value}</pre>";
+		$out = "{$spacer}<pre{$this->buildAttributes($columnConf)}>{$value}</pre>\n";
 
 		return $out;
 	}
@@ -97,9 +100,10 @@ class SApiReportBasic extends SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return type @TODO doc
 	 */
-	protected function buildImageColumn($columnConf, $item) {
+	protected function buildImageColumn($columnConf, $item, $spacer) {
 		$value = '';
 		if(isset($columnConf->src->prefix)) {
 			$value.= $columnConf->src->prefix;
@@ -109,7 +113,7 @@ class SApiReportBasic extends SApiReportType {
 			$value.= $columnConf->src->suffix;
 		}
 
-		$out = "<img src=\"{$value}\"{$this->buildAttributes($columnConf)}/>";
+		$out = "{$spacer}<img src=\"{$value}\"{$this->buildAttributes($columnConf)}/>\n";
 
 		return $out;
 	}
@@ -118,9 +122,10 @@ class SApiReportBasic extends SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return string @TODO doc
 	 */
-	protected function buildLinkColumn($columnConf, $item) {
+	protected function buildLinkColumn($columnConf, $item, $spacer) {
 		$value = '';
 		if(isset($columnConf->link->prefix)) {
 			$value.= $columnConf->link->prefix;
@@ -130,9 +135,9 @@ class SApiReportBasic extends SApiReportType {
 			$value.= $columnConf->link->suffix;
 		}
 
-		$out = "<a href=\"{$value}\"{$this->buildAttributes($columnConf)}>";
+		$out = "{$spacer}<a href=\"{$value}\"{$this->buildAttributes($columnConf)}>";
 		$out.= $this->guessLabel($columnConf, $item, $value);
-		$out.= "</a>";
+		$out.= "</a>\n";
 
 		return $out;
 	}
@@ -141,14 +146,13 @@ class SApiReportBasic extends SApiReportType {
 	 *
 	 * @param type $columnConf @TODO doc
 	 * @param type $item @TODO doc
+	 * @param string $spacer String to prefix on each line.
 	 * @return type @TODO doc
 	 */
-	protected function buildTextColumn($columnConf, $item) {
-		$out = '';
-
+	protected function buildTextColumn($columnConf, $item, $spacer) {
 		$value = SApiReporter::GetPathValue($item, $columnConf->path);
-		$out.=htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
+		$value = htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
 
-		return $out;
+		return "{$spacer}<span{$this->buildAttributes($columnConf)}>{$value}</span>\n";
 	}
 }
