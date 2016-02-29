@@ -11,6 +11,7 @@ namespace TooBasic;
 // Class aliases
 use TooBasic\Managers\SApiManager;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class SAReporterException
@@ -104,6 +105,40 @@ class SApiReporter extends Singleton {
 			$conf->type = GC_SAPIREPORT_TYPE_BASIC;
 		}
 		//
+		// Lists of required field by column type and default values.
+		$columnDefaults = [
+			GC_SAPIREPORT_COLUMNTYPE_BUTTONLINK => [
+				'attrs' => '+\stdClass',
+				'exclude' => [],
+				'label' => false,
+				'label_field' => false,
+				'link' => '+\stdClass'
+			],
+			GC_SAPIREPORT_COLUMNTYPE_CODE => [
+				'attrs' => '+\stdClass',
+				'exclude' => []
+			],
+			GC_SAPIREPORT_COLUMNTYPE_IMAGE => [
+				'attrs' => '+\stdClass',
+				'exclude' => [],
+				'src' => '+\stdClass'
+			],
+			GC_SAPIREPORT_COLUMNTYPE_LINK => [
+				'attrs' => '+\stdClass',
+				'exclude' => [],
+				'label' => false,
+				'label_field' => false,
+				'link' => '+\stdClass'
+			],
+			GC_SAPIREPORT_COLUMNTYPE_TEXT => [
+				'attrs' => '+\stdClass',
+				'exclude' => []
+			]
+		];
+		//
+		// List of accepted column types.
+		$knownTypes = array_keys($columnDefaults);
+		//
 		// Checking each column definition.
 		foreach($conf->columns as $column) {
 			//
@@ -112,11 +147,13 @@ class SApiReporter extends Singleton {
 				$column->type = GC_SAPIREPORT_COLUMNTYPE_TEXT;
 			}
 			//
-			// Checking and setting a default list of excluded values
-			// for this column.
-			if(!isset($column->exclude)) {
-				$column->exclude = [];
+			// Checking type.
+			if(!in_array($column->type, $knownTypes)) {
+				throw new SApiReportException("Unknown column type '{$column->type}'.");
 			}
+			//
+			// Checking and enforcing column definition fileds.
+			$column = \TooBasic\objectCopyAndEnforce(array_keys($columnDefaults[$column->type]), new \stdClass(), $column, $columnDefaults[$column->type]);
 		}
 		//
 		// Checking and setting a default list of exceptions.
@@ -154,7 +191,7 @@ class SApiReporter extends Singleton {
 			$exclude = false;
 
 			foreach($conf->exceptions as $exception) {
-				$path = slef::GetPathCleaned($exception->path);
+				$path = self::GetPathCleaned($exception->path);
 				$isset = self::GetPathIsset($item, $path);
 				if($isset) {
 					$value = self::GetPathValue($item, $path);
@@ -263,6 +300,29 @@ class SApiReporter extends Singleton {
 	public static function GetPathValue($item, $path) {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @staticvar boolean $tr @TODO doc
+	 * @param type $label @TODO doc
+	 * @return type @TODO doc
+	 */
+	public static function TranslateLabel($label) {
+		static $tr = false;
+		if($tr === false) {
+			$tr = Translate::Instance();
+		}
+
+		$out = $label;
+		if(is_string($label)) {
+			$matches = false;
+			if(preg_match('~@(?P<key>(.*))~', $label, $matches)) {
+				$out = $tr->{$matches['key']};
+			}
+		}
+
 		return $out;
 	}
 }

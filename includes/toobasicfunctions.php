@@ -621,7 +621,18 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 		if(isset($origin->{$field})) {
 			$destination->{$field} = $origin->{$field};
 		} elseif(!isset($destination->{$field})) {
-			$destination->{$field} = isset($default[$field]) ? $default[$field] : '';
+			$defaultValue = '';
+			if(isset($default[$field])) {
+				$matches = false;
+				if(is_string($default[$field]) && preg_match('~\+(?P<class>.*+)~', $default[$field], $matches) && class_exists($matches['class'])) {
+					$className = $matches['class'];
+					$defaultValue = new $className();
+				} else {
+					$defaultValue = $default[$field];
+				}
+			}
+
+			$destination->{$field} = $defaultValue;
 		}
 	}
 	//

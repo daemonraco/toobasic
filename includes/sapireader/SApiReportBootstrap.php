@@ -7,10 +7,6 @@
 
 namespace TooBasic;
 
-//
-// Class aliases
-use TooBasic\Translate;
-
 /**
  * @class SAReporterBootstrap
  * This class defines the logic to render a Simple API Report as a table using
@@ -31,14 +27,11 @@ class SApiReportBootstrap extends SApiReportType {
 		// Default values.
 		$out = '';
 		//
-		// Shortcuts.
-		$tr = Translate::Instance();
-		//
 		// Table headers.
 		$out.= "<table class=\"table table-striped\">\n";
 		$out.= "\t<thead>\n";
 		foreach($this->_conf->columns as $column) {
-			$title = $tr->{$column->title};
+			$title = SApiReporter::TranslateLabel($column->title);
 			$out.= "\t\t\t<th>{$title}</th>\n";
 		}
 		$out.= "\t</thead>\n";
@@ -50,35 +43,8 @@ class SApiReportBootstrap extends SApiReportType {
 			// Building current row.
 			$out.= "\t\t<tr>\n";
 			foreach($this->_conf->columns as $column) {
-				$value = SApiReporter::GetPathValue($item, $column->path);
-
 				$out.= "\t\t\t<td>";
-				switch($column->type) {
-					case GC_SAPIREPORT_COLUMNTYPE_IMAGE:
-						$out.= "<img class=\"img-responsive\" src=\"{$value}\"{$this->extraAttributes($column)}/>";
-						break;
-					case GC_SAPIREPORT_COLUMNTYPE_LINK:
-						$label = $tr->go_to;
-						if(isset($column->extras->label)) {
-							$label = $tr->{$column->extras->label};
-						}
-						$out.= "<a class=\"btn\" href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
-						break;
-					case GC_SAPIREPORT_COLUMNTYPE_BUTTONLINK:
-						$label = $tr->go_to;
-						if(isset($column->extras->label)) {
-							$label = $tr->{$column->extras->label};
-						}
-						$out.= "<a class=\"btn btn-link\" href=\"{$value}\"{$this->extraAttributes($column)}>{$label}</a>";
-						break;
-					case GC_SAPIREPORT_COLUMNTYPE_CODE:
-						$out.='<pre>'.htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value).'</pre>';
-						break;
-					case GC_SAPIREPORT_COLUMNTYPE_TEXT:
-					default:
-						$out.=htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
-						break;
-				}
+				$out.= $this->buildColumn($column, $item);
 				$out.= "</td>\n";
 			}
 			$out.= "\t\t</tr>\n";
@@ -87,5 +53,101 @@ class SApiReportBootstrap extends SApiReportType {
 		$out.= "</table>\n";
 
 		return $out;
+	}
+	//
+	// Protected methods.
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return string @TODO doc
+	 */
+	protected function buildButtonLinkColumn($columnConf, $item) {
+		$value = '';
+		if(isset($columnConf->link->prefix)) {
+			$value.= $columnConf->link->prefix;
+		}
+		$value.= SApiReporter::GetPathValue($item, $columnConf->path);
+		if(isset($columnConf->link->suffix)) {
+			$value.= $columnConf->link->suffix;
+		}
+
+		$out = "<button{$this->buildAttributes($columnConf, ['btn'])} onclick=\"location.href='{$value}';return false;\">";
+		$out.= $this->guessLabel($columnConf, $item, $value);
+		$out.= "</button>";
+
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return type @TODO doc
+	 */
+	protected function buildCodeColumn($columnConf, $item) {
+		$value = SApiReporter::GetPathValue($item, $columnConf->path);
+
+		$out = "<pre{$this->buildAttributes($columnConf)}>{$value}</pre>";
+
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return type @TODO doc
+	 */
+	protected function buildImageColumn($columnConf, $item) {
+		$value = '';
+		if(isset($columnConf->src->prefix)) {
+			$value.= $columnConf->src->prefix;
+		}
+		$value.= SApiReporter::GetPathValue($item, $columnConf->path);
+		if(isset($columnConf->src->suffix)) {
+			$value.= $columnConf->src->suffix;
+		}
+
+		$out = "<img src=\"{$value}\"{$this->buildAttributes($columnConf, ['img-responsive'])}/>";
+
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return string @TODO doc
+	 */
+	protected function buildLinkColumn($columnConf, $item) {
+		$value = '';
+		if(isset($columnConf->link->prefix)) {
+			$value.= $columnConf->link->prefix;
+		}
+		$value.= SApiReporter::GetPathValue($item, $columnConf->path);
+		if(isset($columnConf->link->suffix)) {
+			$value.= $columnConf->link->suffix;
+		}
+
+		$out = "<a href=\"{$value}\"{$this->buildAttributes($columnConf, ['btn', 'btn-link'])}>";
+		$out.= $this->guessLabel($columnConf, $item, $value);
+		$out.= "</a>";
+
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return type @TODO doc
+	 */
+	protected function buildTextColumn($columnConf, $item) {
+		$value = SApiReporter::GetPathValue($item, $columnConf->path);
+		$value = htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
+
+		return "<span{$this->buildAttributes($columnConf)}>{$value}</span>";
 	}
 }

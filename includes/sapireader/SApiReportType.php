@@ -48,27 +48,12 @@ abstract class SApiReportType {
 	 * @param type $class @TODO doc
 	 * @return string @TODO doc
 	 */
-	protected function extraCssClass($columnConf, $class = []) {
+	protected function buildAttributes($columnConf, $class = []) {
 		$out = '';
 
-		if(isset($columnConf->extras)) {
-			
-		}
-
-		return $out;
-	}
-	/**
-	 * @TODO doc
-	 *
-	 * @param type $columnConf @TODO doc
-	 * @return type @TODO doc
-	 */
-	protected function extraAttributes($columnConf) {
-		$out = '';
-
-		if(isset($columnConf->extras)) {
-			$exceptions = ['class', 'label'];
-			foreach(get_object_vars($columnConf->extras) as $name => $value) {
+		if(isset($columnConf->attrs)) {
+			$exceptions = ['class', 'id'];
+			foreach(get_object_vars($columnConf->attrs) as $name => $value) {
 				if(in_array($name, $exceptions)) {
 					continue;
 				}
@@ -82,6 +67,80 @@ abstract class SApiReportType {
 					$out.= " {$name}=\"{$value}\"";
 				}
 			}
+
+			if(!is_array($class)) {
+				$class = [];
+			}
+			if(isset($columnConf->attrs->class)) {
+				if(!is_array($columnConf->attrs->class)) {
+					$columnConf->attrs->class = explode(' ', $columnConf->attrs->class);
+				}
+
+				$class = array_merge($class, $columnConf->attrs->class);
+			}
+			if($class) {
+				$out.= ' class="'.implode(' ', $class).'"';
+			}
+		}
+
+		return $out;
+	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @return type @TODO doc
+	 */
+	protected function buildColumn($columnConf, $item) {
+		$method = 'build'.str_replace(' ', '', ucwords(str_replace('-', ' ', $columnConf->type))).'Column';
+		if(!method_exists($this, $method)) {
+			$method = 'buildTextColumn';
+		}
+
+		return $this->{$method}($columnConf, $item);
+	}
+	/**
+	 * @TODO doc
+	 */
+	abstract protected function buildButtonLinkColumn($columnConf, $item);
+	/**
+	 * @TODO doc
+	 */
+	abstract protected function buildCodeColumn($columnConf, $item);
+	/**
+	 * @TODO doc
+	 */
+	abstract protected function buildImageColumn($columnConf, $item);
+	/**
+	 * @TODO doc
+	 */
+	abstract protected function buildLinkColumn($columnConf, $item);
+	/**
+	 * @TODO doc
+	 */
+	abstract protected function buildTextColumn($columnConf, $item);
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $columnConf @TODO doc
+	 * @param type $item @TODO doc
+	 * @param type $default @TODO doc
+	 * @return type @TODO doc
+	 */
+	protected function guessLabel($columnConf, $item, $default) {
+		$out = '';
+
+		if($columnConf->label_field) {
+			$out = SApiReporter::GetPathValue($item, $columnConf->label_field);
+		}
+
+		if(!$out && $columnConf->label) {
+			$out = SApiReporter::TranslateLabel($columnConf->label);
+		}
+
+		if(!$out) {
+			$out = $default;
 		}
 
 		return $out;
