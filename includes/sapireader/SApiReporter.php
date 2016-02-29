@@ -186,11 +186,12 @@ class SApiReporter extends Singleton {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method takes a full result of a Simple API Reader call and extract
+	 * only the information that can be shown based on configuration.
 	 *
-	 * @param type $report @TODO doc
-	 * @param type $results @TODO doc
-	 * @return type @TODO doc
+	 * @param string $report Name of a report to use as configuration.
+	 * @param \stdClass $results Full API result.
+	 * @return \stdClass[] Returns a filtered list.
 	 * @throws \TooBasic\SApiReportException
 	 */
 	protected function filterResults($report, $results) {
@@ -213,11 +214,15 @@ class SApiReporter extends Singleton {
 				throw new SApiReportException("Result is not a list.");
 			}
 		}
-
+		//
+		// Checking each entry and excluding by configuration.
 		foreach($list as $itemKey => $item) {
 			$exclude = false;
-
+			//
+			// Checking each global exclusion for current entry.
 			foreach($conf->exceptions as $exception) {
+				//
+				// Retieving values.
 				$path = self::GetPathCleaned($exception->path);
 				$isset = self::GetPathIsset($item, $path);
 				if($isset) {
@@ -225,16 +230,21 @@ class SApiReporter extends Singleton {
 				} else {
 					$value = false;
 				}
-
+				//
+				// Checking 'isset' exception.
 				if(isset($exception->isset) && $isset == $exception->isset) {
 					$exclude = true;
 					break;
 				}
+				//
+				// Checking excluded values.
 				if(isset($exception->exclude) && $isset && in_array($value, $exception->exclude)) {
 					$exclude = true;
 					break;
 				}
 			}
+			//
+			// Checking value exclusions configured on each column.
 			if(!$exclude) {
 				foreach($conf->columns as $column) {
 					$value = self::GetPathValue($item, $column->path);
@@ -245,6 +255,8 @@ class SApiReporter extends Singleton {
 					}
 				}
 			}
+			//
+			// If it's excluded, it's removed from the list.
 			if($exclude) {
 				unset($list[$itemKey]);
 				continue;
@@ -297,20 +309,22 @@ class SApiReporter extends Singleton {
 	//
 	// Public class methods.
 	/**
-	 * @TODO doc
+	 * This class method takes a configured path and convert it into an
+	 * evaluable object sub-path.
 	 *
-	 * @param type $path @TODO doc
-	 * @return type @TODO doc
+	 * @param string $path Path to be clean.
+	 * @return string Returns a path like 'prop->subprop'.
 	 */
 	public static function GetPathCleaned($path) {
 		return implode('->', explode('/', $path));
 	}
 	/**
-	 * @TODO doc
+	 * This class method checks if certain object path is set inside certain
+	 * object.
 	 *
-	 * @param type $item @TODO doc
-	 * @param type $path @TODO doc
-	 * @return type @TODO doc
+	 * @param \stdClass $item Object to be analyzed.
+	 * @param string $path Path to be clean.
+	 * @return boolean Returns TRUE when it's set.
 	 */
 	public static function GetPathIsset($item, $path) {
 		$path = self::GetPathCleaned($path);
@@ -318,11 +332,11 @@ class SApiReporter extends Singleton {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This class method retieves certain object path inside a given object.
 	 *
-	 * @param type $item @TODO doc
-	 * @param type $path @TODO doc
-	 * @return type @TODO doc
+	 * @param \stdClass $item Object to be analyzed.
+	 * @param string $path Path to be clean.
+	 * @return mixed Returns it's value or FALSE when it's not set.
 	 */
 	public static function GetPathValue($item, $path) {
 		$path = self::GetPathCleaned($path);
@@ -330,21 +344,29 @@ class SApiReporter extends Singleton {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This mehtod takes a label string and checks if it's flagged to be
+	 * translated (in other words, if it has an at-sign at the beginning.
 	 *
-	 * @staticvar boolean $tr @TODO doc
-	 * @param type $label @TODO doc
-	 * @return type @TODO doc
+	 * @param string $label Label to be analyzed.
+	 * @return string Returns a clean label.
 	 */
 	public static function TranslateLabel($label) {
+		//
+		// Shortcut to avoid multiple singleton searches.
 		static $tr = false;
 		if($tr === false) {
 			$tr = Translate::Instance();
 		}
-
+		//
+		// Default values.
 		$out = $label;
+		//
+		// Analyzing it only if it's a string.
 		if(is_string($label)) {
 			$matches = false;
+			//
+			// Checking if it's flagged, otherwise it stays as
+			// default.
 			if(preg_match('~@(?P<key>(.*))~', $label, $matches)) {
 				$out = $tr->{$matches['key']};
 			}

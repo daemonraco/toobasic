@@ -43,21 +43,34 @@ abstract class SApiReportType {
 	//
 	// Protected methods.
 	/**
-	 * @TODO doc
+	 * This method builds a list of attributes based configurations and
+	 * returns it as a piece of HTML that can be inserted inside a HTML tag.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $class @TODO doc
-	 * @return string @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param string[] $class List of classes to be prepend to those already
+	 * configured.
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildAttributes($columnConf, $class = []) {
+		//
+		// Default values.
 		$out = '';
-
+		//
+		// Checking if there's a configuration for attributes.
 		if(isset($columnConf->attrs)) {
+			//
+			// Attributs that cannot be built in a simple way.
 			$exceptions = ['class', 'id'];
+			//
+			// Building the HTML code based on configurations.
 			foreach(get_object_vars($columnConf->attrs) as $name => $value) {
+				//
+				// Avoiding exceptions.
 				if(in_array($name, $exceptions)) {
 					continue;
 				}
+				//
+				// Checking if it's a complex specification.
 				if(is_object($value)) {
 					$aux = '';
 					foreach(get_object_vars($value) as $k => $v) {
@@ -68,10 +81,13 @@ abstract class SApiReportType {
 					$out.= " {$name}=\"{$value}\"";
 				}
 			}
-
+			//
+			// Checking parameter '$class' validity.
 			if(!is_array($class)) {
 				$class = [];
 			}
+			//
+			// Merging classes list.
 			if(isset($columnConf->attrs->class)) {
 				if(!is_array($columnConf->attrs->class)) {
 					$columnConf->attrs->class = explode(' ', $columnConf->attrs->class);
@@ -79,6 +95,8 @@ abstract class SApiReportType {
 
 				$class = array_merge($class, $columnConf->attrs->class);
 			}
+			//
+			// Appending 'class' attribute.
 			if($class) {
 				$out.= ' class="'.implode(' ', $class).'"';
 			}
@@ -87,60 +105,98 @@ abstract class SApiReportType {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This proxy method forwards the call to build column values based on
+	 * their types and current values.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return type @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildColumn($columnConf, $item, $spacer) {
+		//
+		// Guessing the proper method name.
 		$method = 'build'.str_replace(' ', '', ucwords(str_replace('-', ' ', $columnConf->type))).'Column';
+		//
+		// Checking mehtod existence.
 		if(!method_exists($this, $method)) {
 			$method = 'buildTextColumn';
 		}
-
+		//
+		// Forwarding call.
 		return $this->{$method}($columnConf, $item, $spacer);
 	}
 	/**
-	 * @TODO doc
+	 * This method reports certain value as a button.
+	 *
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $spacer String to prefix on each line.
+	 * @return string Returns a HTML code.
 	 */
 	abstract protected function buildButtonLinkColumn($columnConf, $item, $spacer);
 	/**
-	 * @TODO doc
+	 * This method reports certain value encased in a 'PRE' tag.
+	 *
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $spacer String to prefix on each line.
+	 * @return string Returns a HTML code.
 	 */
 	abstract protected function buildCodeColumn($columnConf, $item, $spacer);
 	/**
-	 * @TODO doc
+	 * This method reports certain value as an image using a 'IMG' tag.
+	 *
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $spacer String to prefix on each line.
+	 * @return string Returns a HTML code.
 	 */
 	abstract protected function buildImageColumn($columnConf, $item, $spacer);
 	/**
-	 * @TODO doc
+	 * This method reports certain value as an anchor.
+	 *
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $spacer String to prefix on each line.
+	 * @return string Returns a HTML code.
 	 */
 	abstract protected function buildLinkColumn($columnConf, $item, $spacer);
 	/**
-	 * @TODO doc
+	 * This method reports certain value simple escaped string encased in
+	 * 'SPAN' tags.
+	 *
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $spacer String to prefix on each line.
+	 * @return string Returns a HTML code.
 	 */
 	abstract protected function buildTextColumn($columnConf, $item, $spacer);
 	/**
-	 * @TODO doc
+	 * This method tries to guess the proper label for a link based on its
+	 * configuration.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
-	 * @param type $default @TODO doc
-	 * @return type @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
+	 * @param string $default Default value to use in case failure.
+	 * @return string Returns a printable label.
 	 */
 	protected function guessLabel($columnConf, $item, $default) {
+		//
+		// Default values.
 		$out = '';
-
+		//
+		// Checking labels based on other field value.
 		if($columnConf->label_field) {
 			$out = SApiReporter::GetPathValue($item, $columnConf->label_field);
 		}
-
+		//
+		// Checking basic lable definition.
 		if(!$out && $columnConf->label) {
 			$out = SApiReporter::TranslateLabel($columnConf->label);
 		}
-
+		//
+		// If no valid label was assigned, the given default is used.
 		if(!$out) {
 			$out = $default;
 		}

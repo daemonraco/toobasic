@@ -60,15 +60,19 @@ class SApiReportBootstrap extends SApiReportType {
 	//
 	// Protected methods.
 	/**
-	 * @TODO doc
+	 * This method reports certain value as a button.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return string @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildButtonLinkColumn($columnConf, $item, $spacer) {
+		//
+		// Default values.
 		$value = '';
+		//
+		// Building URL.
 		if(isset($columnConf->link->prefix)) {
 			$value.= $columnConf->link->prefix;
 		}
@@ -76,7 +80,8 @@ class SApiReportBootstrap extends SApiReportType {
 		if(isset($columnConf->link->suffix)) {
 			$value.= $columnConf->link->suffix;
 		}
-
+		//
+		// Building HTML.
 		$out = "{$spacer}<button{$this->buildAttributes($columnConf, ['btn'])} onclick=\"location.href='{$value}';return false;\">";
 		$out.= $this->guessLabel($columnConf, $item, $value);
 		$out.= "</button>\n";
@@ -84,30 +89,30 @@ class SApiReportBootstrap extends SApiReportType {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This method reports certain value encased in a 'PRE' tag.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return type @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildCodeColumn($columnConf, $item, $spacer) {
-		$value = SApiReporter::GetPathValue($item, $columnConf->path);
-
-		$out = "{$spacer}<pre{$this->buildAttributes($columnConf)}>{$value}</pre>\n";
-
-		return $out;
+		return "{$spacer}<pre{$this->buildAttributes($columnConf)}>".SApiReporter::GetPathValue($item, $columnConf->path)."</pre>\n";
 	}
 	/**
-	 * @TODO doc
+	 * This method reports certain value as an image using a 'IMG' tag.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return type @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildImageColumn($columnConf, $item, $spacer) {
+		//
+		// Default values.
 		$value = '';
+		//
+		// Building URL.
 		if(isset($columnConf->src->prefix)) {
 			$value.= $columnConf->src->prefix;
 		}
@@ -116,20 +121,22 @@ class SApiReportBootstrap extends SApiReportType {
 			$value.= $columnConf->src->suffix;
 		}
 
-		$out = "{$spacer}<img src=\"{$value}\"{$this->buildAttributes($columnConf, ['img-responsive'])}/>\n";
-
-		return $out;
+		return "{$spacer}<img src=\"{$value}\"{$this->buildAttributes($columnConf, ['img-responsive'])}/>\n";
 	}
 	/**
-	 * @TODO doc
+	 * This method reports certain value as an anchor.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return string @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildLinkColumn($columnConf, $item, $spacer) {
+		//
+		// Default values.
 		$value = '';
+		//
+		// Building URL.
 		if(isset($columnConf->link->prefix)) {
 			$value.= $columnConf->link->prefix;
 		}
@@ -137,7 +144,8 @@ class SApiReportBootstrap extends SApiReportType {
 		if(isset($columnConf->link->suffix)) {
 			$value.= $columnConf->link->suffix;
 		}
-
+		//
+		// Building HTML.
 		$out = "{$spacer}<a href=\"{$value}\"{$this->buildAttributes($columnConf, ['btn', 'btn-link'])}>";
 		$out.= $this->guessLabel($columnConf, $item, $value);
 		$out.= "</a>\n";
@@ -145,15 +153,18 @@ class SApiReportBootstrap extends SApiReportType {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This method reports certain value simple escaped string encased in
+	 * 'SPAN' tags.
 	 *
-	 * @param type $columnConf @TODO doc
-	 * @param type $item @TODO doc
+	 * @param \stdClass $columnConf Current column configuration.
+	 * @param \stdClass $item Current row information.
 	 * @param string $spacer String to prefix on each line.
-	 * @return type @TODO doc
+	 * @return string Returns a HTML code.
 	 */
 	protected function buildTextColumn($columnConf, $item, $spacer) {
 		$value = SApiReporter::GetPathValue($item, $columnConf->path);
+		//
+		// Escaping tags.
 		$value = htmlentities(is_object($value) || is_array($value) ? serialize($value) : $value);
 
 		return "{$spacer}<span{$this->buildAttributes($columnConf)}>{$value}</span>\n";
