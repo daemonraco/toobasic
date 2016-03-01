@@ -1,6 +1,6 @@
 <?php
 
-class SApiReportsAsBootstrapTypeTest extends TooBasic_SeleniumTestCase {
+class SApiReportsAsBasicTypeTest extends TooBasic_SeleniumTestCase {
 	//
 	// Test cases @{
 	public function testCheckingTableRendering() {

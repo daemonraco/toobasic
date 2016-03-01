@@ -651,7 +651,7 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 function ordinalToCardinal($number) {
 	$ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
 
-	return (($number % 100) >= 11 && ($number % 100) <= 13) ? $abbreviation = $number.'th' : $number.$ends[$number % 10];
+	return (($number % 100) >= 11 && ($number % 100) <= 13) ? $number.'th' : $number.$ends[$number % 10];
 }
 /**
  * This function allows to properly set a current language name into session.
