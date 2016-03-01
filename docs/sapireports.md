@@ -201,13 +201,147 @@ behavior for this attribute.
 generated in a different way.
 
 ## Column specifications
-@TODO
+Every configuration file requires the field `columns` in which all printable
+columns are shown. In the next section we are going to explain how to specify each
+column type following our example.
+
+### Required properties
+Each column specification requires these properties:
+
+* `title`: The text to be shown as column header.
+* `path`: The object path inside each item where a cell value can be found.
+
+In this case, `path` follows the same rules of expansion we mentioned before for
+field _listPath_.
+Also, the field `title` may have two kind of values:
+
+* If the text starts with `@` (at sign) it will consider the rest of the text as a
+translation key.
+* Otherwise, it will be shown as it is.
+
+### Optional properties
+Each column may specify a field call `attrs` following the same rules we explained
+before for the main configuration.
+
+### Column type _text_
+A column of type `text` is the most simple and also the default type:
+It takes the value of certain field specified in `path` and shows it as is
+escaping special character to avoid problems with HTML tags.
+
+### Column type _code_
+This type of column is similar to `text` in the way it works but it puts the
+content inside a tag that shows the information using mono-spaced characters and
+preserves tabs and new line characters.
+
+### Column type _image_
+This column type takes a value and uses it as the URL for a `<img/>` tag.
+
+By default it uses the value without modifications, but in some cases that may not
+be enough. For example, if your image is given by a username, you will need to add
+an extension and the full URL where the image is expected to be, for those cases
+you can do something like this:
+```json
+{
+	"type": "image",
+	"title": "Avatar",
+	"path": "user/username",
+	"src": {
+		"prefix": "http://www.example.com/images/avatars/",
+		"suffix": ".png"
+	}
+}
+```
+In this way you specify how to modify the value to generate a valid URL.
+
+In our example, we're not using this, because the thumbnail path is being returned
+as a full URL.
+
+### Column type _link_
+This column type generates an anchor based on certain value, in other words, a
+`<a>` HTML tag.
+It allows these fields in it's specification:
+
+* `link`: This field works in the same way than `src` for columns of type `image`.
+	* `prefix`: Text to be prepended when generating the attribute `href`.
+	* `suffix`: Text to be appended when generating the attribute `href`.
+* `label_field`: Specifies the path of another field from which to take the
+anchor's text. It follows the same rules of object path expansion we explained
+before.
+* `label`: Specifies a text to using inside the anchor.
+	* It won't be shown if `label_field` is specified and has valid value.
+	* Also, it may start with `@` to specify a translation key.
+
+### Column type _button-link_
+This type works in the same way than `link` but it generates a `<button>` HTML tag
+instead.
+It allows the same fields with the same behavior.
 
 ## Exclusions
-@TODO
+In many cases there are row that should be excluded from being listed inside a
+report due to wrong or simply unwanted information.
+For example, if you are querying an API for a list of software bugs, but it
+doesn't allow you to filter out solved bug, you will need to use this
+functionality.
+
+_Simple API Reports_ provides two ways to do this and the next section will
+explain them.
+
+### Exclusion by column
+Each column specification allows the use of a field called `exclude` where you can
+specify a list of values you don't want to see in your report.
+Let's say we follow the example of a software bugs API, we can have this for the
+state column.
+```json
+{
+	"title": "@title_state",
+	"path": "state/name",
+	"exclude": [
+		"solved",
+		"closed"
+	]
+}
+```
+
+### Global exclusions
+An obvious problem with the previous section is that you cannot avoid entries if
+the filtering condition doesn't depend on a field that is not shown as a column.
+For those cases you can add a main configuration field called `exceptions` and
+specify a list of conditions to ignore entries when they match any of these rules.
+
+Each condition requires a field called `path` to target a value inside an entry,
+and one of the next:
+
+* `isset`: This field takes `true` or `false` as value and check whether `path`
+exists or not, respectively.
+* `exclude`: This field takes a list of value that cannot be present in `path`.
+
+In our example where are using this mechanism to exclude any row with the id
+`1882`.
+
+_But, I see IDs in a column?_
+Yes, but perhaps we should explain something else here.
+The column _ID_ we are displaying is a link that takes its value from a URL field,
+so adding something like `"exclude":[1882]` won't do much because it's the value
+of its _label_. In other words, _Simple API Reports_ is not showing the column
+`id` directly and the only way to filter it is using _global exclusions_.
 
 ## Show the report
-@TODO
+The last piece of this puzzle how we actually display this report.
+For that you can create a view file at
+`ROOTDIR/site/templates/action/onepiece_popular.html` and write something like
+this inside it:
+```html
+{$ctrl->sapiReport('onepiece_popular')}
+```
+This will call the API and render your report inside your view using the default
+type or the one specified inside the report configuration file (that's not the
+case of our example).
+
+On the other hand, if you want to force the type to be `bootstrap`, you can do
+something like this:
+```html
+{$ctrl->sapiReport('onepiece_popular', 'bootstrap')}
+```
 
 ## Suggestions
 If you want or need it, you may visit these documentation pages:
