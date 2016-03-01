@@ -81,8 +81,8 @@ class SApiReportsAsBootstrapTypeTest extends TooBasic_SeleniumTestCase {
 		$this->assertEquals('https://avatars.githubusercontent.com/u/4871323?v=3', $images[0]->attribute('src'), "Image in the 5th column of 1st row has an unexpected value for attribute 'src'.");
 		//
 		// Checking avatar column.
-		$codes = $columns[5]->elements($this->using('css selector')->value('pre'));
-		$this->assertEquals(1, count($codes), "There are more/less 'pre' tags than expected in the 6th column of 1st row.");
+		$codes = $columns[5]->elements($this->using('css selector')->value('code'));
+		$this->assertEquals(1, count($codes), "There are more/less 'code' tags than expected in the 6th column of 1st row.");
 		$this->assertRegExp('~## What to do~m', $codes[0]->text(), "6th column of 1st row has an unexpected value.");
 		$this->assertEquals('value', $codes[0]->attribute('data-some'), "Code in the 6th column of 1st row has an unexpected value for attribute 'data-some'.");
 	}
