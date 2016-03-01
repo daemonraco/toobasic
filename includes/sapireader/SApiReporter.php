@@ -60,12 +60,6 @@ class SApiReporter extends Singleton {
 		// Shortcut.
 		$conf = $this->_reports[$report];
 		//
-		// Loading the associated API reader.
-		$api = SApiManager::Instance()->{$conf->api};
-		//
-		// Requesting information to build the report.
-		$results = $api->call($conf->service, $conf->params);
-		//
 		// Checking if a specific type of render should be used.
 		if($renderType === false) {
 			$renderType = $conf->type;
@@ -75,6 +69,12 @@ class SApiReporter extends Singleton {
 		if(!isset($SApiReader[GC_SAPIREPORT_TYPES][$renderType])) {
 			throw new SApiReportException("Unkwnon report render type '{$renderType}'.");
 		}
+		//
+		// Loading the associated API reader.
+		$api = SApiManager::Instance()->{$conf->api};
+		//
+		// Requesting information to build the report.
+		$results = $api->call($conf->service, $conf->params);
 		//
 		// Filtering results.
 		$list = $this->filterResults($report, $results);
