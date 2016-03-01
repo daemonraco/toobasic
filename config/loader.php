@@ -129,6 +129,12 @@ $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]
 $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
+
+$SuperLoader['TooBasic\\SApiReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReporter.php";
+$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportException.php";
+$SuperLoader['TooBasic\\SApiReportBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBasic.php";
+$SuperLoader["TooBasic\\SApiReportBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBootstrap.php";
+$SuperLoader['TooBasic\\SApiReportType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportType.php";
 // @}
 //
 // Forms builder includes @{

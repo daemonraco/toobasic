@@ -87,6 +87,17 @@ function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = a
 	return \TooBasic\Forms\FormsManager::Instance()->formFor($formName, $item, $mode, $flags);
 }
 /**
+ * This function is an alias for method '\TooBasic\SAReporter::sareport()'.
+ *
+ * @param string $report Name of the report to be rendered.
+ * @param string $renderType Name of the mechanism to use when rendering. FALSE
+ * means default.
+ * @return string Returns a HTML piece of code.
+ */
+function ctrlExports_sapiReport($report, $renderType = false) {
+	return \TooBasic\SApiReporter::Instance()->sareport($report, $renderType);
+}
+/**
  * This method prints in a basic but standard way some message.
  *
  * @param mixed $thing Thing to be shown.
@@ -610,12 +621,37 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 		if(isset($origin->{$field})) {
 			$destination->{$field} = $origin->{$field};
 		} elseif(!isset($destination->{$field})) {
-			$destination->{$field} = isset($default[$field]) ? $default[$field] : '';
+			$defaultValue = '';
+			//
+			// Checking if there's a default value to use.
+			if(isset($default[$field])) {
+				$matches = false;
+				//
+				// Checking if the default value has a special
+				// behavior.
+				if(is_string($default[$field]) && preg_match('~\+(?P<class>.*+)~', $default[$field], $matches) && class_exists($matches['class'])) {
+					//
+					// The default value requires the creation
+					// of a new specifc object.
+					$className = $matches['class'];
+					$defaultValue = new $className();
+				} else {
+					$defaultValue = $default[$field];
+				}
+			}
+			//
+			// Setting a default value.
+			$destination->{$field} = $defaultValue;
 		}
 	}
 	//
 	// Returning the destination object with fields copied and enforced.
 	return $destination;
+}
+function ordinalToCardinal($number) {
+	$ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
+
+	return (($number % 100) >= 11 && ($number % 100) <= 13) ? $number.'th' : $number.$ends[$number % 10];
 }
 /**
  * This function allows to properly set a current language name into session.
