@@ -104,7 +104,9 @@ Don't worry if you don't understand it because where are going to explain it in
 detail in further sections.
 In the mean time, this is how it may look like 
 
-<center>![One Piece Wiki: Popular Articles](images/sapis/sapireports.png)</center>
+<center>
+![One Piece Wiki: Popular Articles](images/sapis/sapireports.png)
+</center>
 
 ## Mandatory fields
 Each specification requires some fields to be present in order to render a report.
