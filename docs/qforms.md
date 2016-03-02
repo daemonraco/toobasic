@@ -28,7 +28,7 @@ image:
 {$ctrl->formFor('login')}
 ```
 
-<center>![](images/forms/login_plain.png)</center>
+<center>![Basic login form](images/forms/login_plain.png)</center>
 
 __Note__: Remember that you'll need to define those translation keys in order to
 get proper texts.
@@ -42,7 +42,7 @@ $ php shell.php sys forms -f login -sba sign_up -n class -v 'btn-info'
 ```
 That should change your form into something like this:
 
-<center>![](images/forms/login_colored.png)</center>
+<center>![Colored login form](images/forms/login_colored.png)</center>
 
 Now your buttons have the colors we wanted.
 
