@@ -2,6 +2,7 @@
 	"language": "en",
 	"title": "TooBasic 2.0",
 	"author": "Alejandro Darío Simi",
+	"plugins": ["autocover"],
 	"pluginsConfig": {
 		"autocover": {
 			"font": {
