@@ -41,6 +41,7 @@
 	* [MagicProp](docs/magicprop.md)
 	* [Using Redirections](docs/redirections.md)
 	* [Adapters](docs/tech/adapters.md)
+	* [Modules](docs/tech/modules.md)
 * Appendix
 	* [Troubleshooting](docs/troubleshooting.md)
 	* [Author's Note](docs/authorsnote.md)
