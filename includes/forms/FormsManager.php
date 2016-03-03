@@ -14,17 +14,21 @@ use TooBasic\Sanitizer;
 
 /**
  * @class FormsManager
- * @TODO doc
+ * This class holds all the main logic to manage form specifications.
  */
 class FormsManager extends \TooBasic\Managers\Manager {
 	//
 	// Public methods.
 	/**
-	 * @TODO doc
+	 * This method attepmts to create a basic from specification file based on
+	 * a name.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $module @TODO doc
-	 * @return boolean @TODO doc
+	 * @param string $name Name to use when creating the form's specification
+	 * file.
+	 * @param string $module Specifies a module name for cases where the
+	 * specification has to be created inside a module.
+	 * @return mixed[string] Returns a strucutre with information about the
+	 * operation.
 	 */
 	public function createForm($name, $module = false) {
 		//
@@ -63,7 +67,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 				// Creating directory.
 				mkdir($dir, 0755, true);
 				//
-				// Rechecking
+				// Rechecking.
 				if(!is_dir($dir)) {
 					$out[GC_AFIELD_ERROR] = "Unable to create directory '{$dir}'";
 					$out[GC_AFIELD_STATUS] = false;
@@ -77,7 +81,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 			$out[GC_AFIELD_STATUS] = false;
 		}
 		//
-		// Generating basic structure and saving
+		// Generating basic structure and saving.
 		if($out[GC_AFIELD_STATUS]) {
 			$contents = new \stdClass();
 			$contents->form = new \stdClass();
@@ -90,7 +94,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 			}
 		}
 		//
-		// Returning results
+		// Returning results.
 		return $out;
 	}
 	/**
@@ -131,10 +135,12 @@ class FormsManager extends \TooBasic\Managers\Manager {
 		return $out;
 	}
 	/**
-	 * @TODO doc
+	 * This method attepmts to delete a from specification file based on its
+	 * name.
 	 *
-	 * @param type $name @TODO doc
-	 * @return boolean @TODO doc
+	 * @param string $name Specification file name.
+	 * @return mixed[string] Returns a strucutre with information about the
+	 * operation.
 	 */
 	public function removeForm($name) {
 		//

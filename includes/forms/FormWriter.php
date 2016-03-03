@@ -9,7 +9,8 @@ namespace TooBasic\Forms;
 
 /**
  * @class FormWriter
- * @TODO doc
+ * This class holds almost all the logic to modify a form specification file in a
+ * controlled way.
  */
 class FormWriter {
 	//
@@ -57,13 +58,14 @@ class FormWriter {
 	//
 	// Public methods.
 	/**
-	 * @TODO doc
+	 * This method appends a button definition to a form specification file.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $type @TODO doc
-	 * @param type $mode @TODO doc
-	 * @param type $error @TODO doc
-	 * @return boolean @TODO doc
+	 * @param string $name Button name.
+	 * @param string $type Button type.
+	 * @param string $mode Mode in which the button should appear.
+	 * @param string $error In case of failure, this parameter will have the
+	 * error message.
+	 * @return boolean Returns TRUE if no error was found.
 	 */
 	public function addButton($name, $type, $mode = false, &$error = false) {
 		$ok = true;
@@ -110,12 +112,13 @@ class FormWriter {
 		return $ok;
 	}
 	/**
-	 * @TODO doc
+	 * This method appends a field specification to a form specification file.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $type @TODO doc
-	 * @param type $error @TODO doc
-	 * @return boolean @TODO doc
+	 * @param string $name Field name.
+	 * @param string $type Field type.
+	 * @param string $error In case of failure, this parameter will have the
+	 * error message.
+	 * @return boolean Returns TRUE if no error was found.
 	 */
 	public function addField($name, $type, &$error = false) {
 		$ok = true;
@@ -150,19 +153,21 @@ class FormWriter {
 		return $ok;
 	}
 	/**
-	 * @TODO doc
+	 * This method allows to know if the form specification has been changed
+	 * and have not been saved yet.
 	 *
-	 * @return type @TODO doc
+	 * @return boolean Returns TRUE if there are changes waiting to be saved.
 	 */
 	public function dirty() {
 		return $this->_dirty;
 	}
 	/**
-	 * @TODO doc
+	 * This method adds a list of excluded modes for certain field.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param array $modes @TODO doc
-	 * @param type $error @TODO doc
+	 * @param string $fieldName Field name.
+	 * @param string[] $modes List of excluded mode names.
+	 * @param string $error In case of failure, this parameter will have the
+	 * error message.
 	 */
 	public function excludeFieldFrom($fieldName, $modes, &$error = false) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -176,18 +181,19 @@ class FormWriter {
 		}
 	}
 	/**
-	 *  @TODO doc
+	 * This method removes the 'action' configuration of a form specification
+	 * file.
 	 *
-	 * @param type $mode @TODO doc
+	 * @param string $mode Remove the specification from certain mode.
 	 */
 	public function removeAction($mode = false) {
 		$this->removeMainValue('action', $mode);
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a form attribute specification.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $name HTML attribute name.
+	 * @param string $mode Mode on which this operation has to be performed.
 	 */
 	public function removeAttribute($name, $mode = false) {
 		//
@@ -212,10 +218,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a button from a form specification.
 	 *
-	 * @param type $buttonName @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $buttonName Button name.
+	 * @param string $mode Mode on which this operation has to be performed.
 	 */
 	public function removeButton($buttonName, $mode = false) {
 		//
@@ -233,11 +239,11 @@ class FormWriter {
 		}
 	}
 	/**
-	 *  @TODO doc
+	 * This method removes a button's attribute specification.
 	 *
-	 * @param type $buttonName @TODO doc
-	 * @param type $attrName @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param type $buttonName Button name.
+	 * @param type $attrName HTML attribute name.
+	 * @param string $mode Mode on which this operation has to be performed.
 	 */
 	public function removeButtonAttribute($buttonName, $attrName, $mode = false) {
 		//
@@ -257,10 +263,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a button's label setting.
 	 *
-	 * @param type $buttonName @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param type $buttonName Button name.
+	 * @param string $mode Mode on which this operation has to be performed.
 	 */
 	public function removeButtonLabel($buttonName, $mode = false) {
 		//
@@ -280,9 +286,9 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes certain field from a form specification file.
 	 *
-	 * @param type $fieldName @TODO doc
+	 * @param string $fieldName Field name.
 	 */
 	public function removeField($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -291,10 +297,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a field's attribute specification.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param type $attrName @TODO doc
+	 * @param string $fieldName Field name.
+	 * @param type $attrName HTML attribute name.
 	 */
 	public function removeFieldAttribute($fieldName, $attrName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -302,9 +308,9 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes all exclusion specifications of certain field.
 	 *
-	 * @param type $fieldName @TODO doc
+	 * @param string $fieldName Field name.
 	 */
 	public function removeFieldExcludedModes($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName}->excludedModes)) {
@@ -313,9 +319,9 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a field's label setting.
 	 *
-	 * @param type $fieldName @TODO doc
+	 * @param string $fieldName Field name.
 	 */
 	public function removeFieldLabel($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -323,30 +329,34 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes the 'method' configuration of a form specification
+	 * file.
 	 *
-	 * @param type $mode @TODO doc
+	 * @param string $mode Remove the specification from certain mode.
 	 */
 	public function removeMethod($mode = false) {
 		$this->removeMainValue('method', $mode);
 	}
 	/**
-	 * @TODO doc
+	 * This method removes the 'name' configuration of a form specification
+	 * file.
 	 */
 	public function removeName() {
 		$this->removeMainValue('name', false);
 	}
 	/**
-	 * @TODO doc
+	 * This method removes the 'name' configuration of a form specification
+	 * file.
 	 */
 	public function removeType() {
 		$this->removeMainValue('type', false);
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the 'action' configuration to a form specification
+	 * file.
 	 *
-	 * @param type $action @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $action URL to be set as 'action'.
+	 * @param string $mode Adss the specification to certain mode.
 	 */
 	public function setAction($action, $mode = false) {
 		$this->setMainValue('action', $action, $mode);
@@ -490,27 +500,28 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the 'method' configuration of a form specification
+	 * file.
 	 *
-	 * @param type $method @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $method Method to be set.
+	 * @param string $mode Adds the specification to certain mode.
 	 */
 	public function setMethod($method, $mode = false) {
 		$this->setMainValue('method', $method, $mode);
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the 'name' of a form specification file.
 	 *
-	 * @param type $name @TODO doc
+	 * @param string $name Name to be set.
 	 */
 	public function setName($name) {
 		$this->setMainValue('name', $name);
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the 'type' of a form specification file.
 	 *
-	 * @param type $type @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $type Type name to be set.
+	 * @param string $mode Mode on which this operation has to be performed.
 	 */
 	public function setType($type, $mode = false) {
 		$this->setMainValue('type', $type, $mode);
