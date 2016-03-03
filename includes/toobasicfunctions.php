@@ -448,6 +448,12 @@ function getConfigurationFilesList() {
 				//
 				// Associating requirements.
 				foreach($requirements as $subManifest) {
+					//
+					// Avoiding broken modules.
+					if(!$subManifest) {
+						continue;
+					}
+
 					$aux = $subManifest->modulePath();
 					$requirementLinks[$path][] = $aux;
 				}

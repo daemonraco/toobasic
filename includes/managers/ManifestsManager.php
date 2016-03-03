@@ -210,7 +210,8 @@ class ManifestsManager extends Manager {
 						$matches = false;
 						if(preg_match('/^mod:(?P<ucode>.+)$/', $field, $matches)) {
 							$manifest = ManifestsManager::Instance()->manifestByUCode($matches['ucode']);
-							echo "<li><strong>{$manifest->information()->name}</strong> <sup>ucode:{$matches['ucode']}</sup>: {$reqVersion}</li>";
+							$dependencyName = $manifest ? $manifest->information()->name : "<Unknown-{$field}>";
+							echo "<li><strong>{$dependencyName}</strong> <sup>ucode:{$matches['ucode']}</sup>: {$reqVersion}</li>";
 						}
 					}
 

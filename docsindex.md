@@ -504,9 +504,13 @@
 * [What are modules?](docs/tech/modules.md#what-are-modules)
 * [An example](docs/tech/modules.md#an-example)
 	* [Folders](docs/tech/modules.md#folders)
-	* [_Gravatar_ API](docs/tech/modules.md#gravatar-api)
+	* [Gravatar API](docs/tech/modules.md#gravatar-api)
 	* [Model](docs/tech/modules.md#model)
 	* [Controller exports](docs/tech/modules.md#controller-exports)
+* [Manifests](docs/tech/modules.md#manifests)
+	* [UCode](docs/tech/modules.md#ucode)
+	* [Basic manifest](docs/tech/modules.md#basic-manifest)
+	* [Required versions](docs/tech/modules.md#required-versions)
 * [Suggestions](docs/tech/modules.md#suggestions)
 
 ##  Query Adapter (docs/tech/queryadapter.md):
