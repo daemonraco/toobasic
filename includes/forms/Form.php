@@ -149,10 +149,25 @@ class Form {
 		// Building form.
 		return $builder->buildFor($item, $mode, $flags);
 	}
+	/**
+	 * This method provides access to the list of attributes of certain
+	 * button.
+	 *
+	 * @param string $buttonName Name of the button to look for.
+	 * @param string $mode Looks for in the specifics of certain mode.
+	 * @return \stdClass Returns a list of attributes with their values.
+	 */
 	public function buttonAttributes($buttonName, $mode = false) {
 		$config = $this->buttonConfigFor($buttonName, $mode);
 		return $config->attrs;
 	}
+	/**
+	 * This method provides access to the configuration of certain button.
+	 *
+	 * @param string $buttonName Name of the button to look for.
+	 * @param string $mode Looks for in the specifics of certain mode.
+	 * @return \stdClass Returns a configuration object.
+	 */
 	public function buttonConfigFor($buttonName, $mode = false) {
 		//
 		// Loading all required settings.
@@ -174,10 +189,23 @@ class Form {
 
 		return $out;
 	}
+	/**
+	 * This method generates a proper button id for certain name.
+	 *
+	 * @param string $buttonName Name to use when generating.
+	 * @return string Returns a proper button id.
+	 */
 	public function buttonId($buttonName) {
 		$name = $this->virtualName();
 		return $name ? "{$name}_{$buttonName}" : $buttonName;
 	}
+	/**
+	 * This method provides access to the label of certain button.
+	 *
+	 * @param string $buttonName Name of the button to look for.
+	 * @param string $mode Looks for in the specifics of certain mode.
+	 * @return string Returns a buttons label.
+	 */
 	public function buttonLabel($buttonName, $mode = false) {
 		$config = $this->buttonConfigFor($buttonName, $mode);
 		return $config->label;
@@ -204,6 +232,13 @@ class Form {
 
 		return array_keys(get_object_vars($out));
 	}
+	/**
+	 * This method provides access to the type of certain button.
+	 *
+	 * @param string $buttonName Name of the button to look for.
+	 * @param string $mode Looks for in the specifics of certain mode.
+	 * @return string Returns a buttons type.
+	 */
 	public function buttonType($buttonName, $mode = false) {
 		$config = $this->buttonConfigFor($buttonName, $mode);
 		return $config->type;
@@ -217,45 +252,115 @@ class Form {
 		$this->load();
 		return $this->_config;
 	}
+	/**
+	 * This method provides access to the list of attributes of certain field.
+	 *
+	 * @param type $fieldName Name of the field to look for.
+	 * @return \stdClass Returns a field attributes list.
+	 */
 	public function fieldAttributes($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->attrs : false;
 	}
+	/**
+	 * This method provides access to certain field's configuration for the
+	 * empty option. This applies only to 'enum' fieds.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return \stdClass Returns a field attributes list.
+	 */
 	public function fieldEmptyOption($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->emptyOption) ? $this->_config->form->fields->{$fieldName}->emptyOption : false;
 	}
+	/**
+	 * This method provides access to certain field's list of modes in which
+	 * it does not appear.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string[] Returns a field attributes list.
+	 */
 	public function fieldExcludedModes($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) ? $this->_config->form->fields->{$fieldName}->excludedModes : array();
 	}
+	/**
+	 * This method provides access to certain field's proper id.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string Returns an id.
+	 */
 	public function fieldId($fieldName) {
 		$name = $this->virtualName();
 		return $name ? "{$name}_{$fieldName}" : $fieldName;
 	}
+	/**
+	 * This method provides access to certain field's proper label translation
+	 * key.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string Returns a translation key.
+	 */
 	public function fieldLabel($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->label : '';
 	}
+	/**
+	 * This method provides access to list of field names.
+	 *
+	 * @return string[] Returns a list of names.
+	 */
 	public function fields() {
 		$this->load();
 		return array_keys(get_object_vars($this->_config->form->fields));
 	}
+	/**
+	 * This method provides access to certain field's type.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string Returns a type name.
+	 */
 	public function fieldType($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->type : false;
 	}
+	/**
+	 * This method provides access to certain field's default value.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string Returns a default value.
+	 */
 	public function fieldValue($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) ? $this->_config->form->fields->{$fieldName}->value : '';
 	}
+	/**
+	 * This method provides access to certain field's list of value. This
+	 * method will always return an empty array unless it's an 'enum' field.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @return string[] Returns a list of value.
+	 */
 	public function fieldValues($fieldName) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) && $this->_config->form->fields->{$fieldName}->type == GC_FORMS_FIELDTYPE_ENUM ? $this->_config->form->fields->{$fieldName}->values : array();
 	}
+	/**
+	 * This method provides access to a proper id for this form.
+	 *
+	 * @return string Returns an id.
+	 */
 	public function id() {
 		return $this->virtualName();
 	}
+	/**
+	 * This method allow to know if some field should not be shown in certain
+	 * mode.
+	 *
+	 * @param string $fieldName Name of the field to look for.
+	 * @param string $mode Mode in to chec.
+	 * @return boolean Returns TRUE when the field should not be shown.
+	 */
 	public function isFieldExcluded($fieldName, $mode) {
 		$this->load();
 		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) && in_array($mode, $this->_config->form->fields->{$fieldName}->excludedModes);
@@ -269,7 +374,8 @@ class Form {
 	 */
 	public function isReadOnly($mode = false) {
 		$out = $this->_config->form->readonly || $mode == GC_FORMS_BUILDMODE_VIEW || $mode == GC_FORMS_BUILDMODE_REMOVE;
-
+		//
+		// Checking if the mode is configured to be readonly.
 		if($mode && !$out && isset($this->_config->form->modes->{$mode}->readonly)) {
 			$out = $this->_config->form->modes->{$mode}->readonly;
 		}
@@ -287,15 +393,22 @@ class Form {
 		//
 		// Loading all required settings.
 		$this->load();
-
+		//
+		// Default value.
 		$out = $this->_config->form->method;
-
+		//
+		// Mode specific value.
 		if($mode && isset($this->_config->form->modes->{$mode}) && isset($this->_config->form->modes->{$mode}->method)) {
 			$out = $this->_config->form->modes->{$mode}->method;
 		}
 
 		return $out;
 	}
+	/**
+	 * This method returns a list of configured modes.
+	 *
+	 * @return string[] Returns a list of names.
+	 */
 	public function modes() {
 		//
 		// Loading all required settings.
@@ -328,6 +441,11 @@ class Form {
 		$this->load();
 		return $this->_status;
 	}
+	/**
+	 * This method provides access to current form's type.
+	 *
+	 * @return string Returns a type name.
+	 */
 	public function type() {
 		//
 		// Global dependencies.
@@ -338,6 +456,12 @@ class Form {
 
 		return isset($this->_config->form->type) ? $this->_config->form->type : $Defaults[GC_DEFAULTS_FORMS_TYPE];
 	}
+	/**
+	 * This method returns the name set for current form base on its
+	 * configuration.
+	 *
+	 * @return string Returns a name.
+	 */
 	public function virtualName() {
 		//
 		// Loading all required settings.

@@ -130,10 +130,11 @@ abstract class ItemsFactory {
 		$out = false;
 		//
 		// Generating a proper query to insert an empty entry.
+		$prefixes = $this->queryAdapterPrefixes();
 		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
 			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
 			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
-			), $this->queryAdapterPrefixes());
+			), $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Attepting to create an entry.
@@ -166,7 +167,8 @@ abstract class ItemsFactory {
 		}
 		//
 		// Generating a proper query to obtain a full list of IDs.
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $prefixes, $this->_CP_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.
@@ -206,7 +208,8 @@ abstract class ItemsFactory {
 		}
 		//
 		// Generating a proper query to obtain a list of IDs.
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*{$this->_CP_NameColumn}" => $pattern), $this->queryAdapterPrefixes(), $this->_CP_OrderBy);
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*:{$this->_CP_NameColumn}" => $pattern), $prefixes, $this->_CP_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.

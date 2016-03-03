@@ -353,7 +353,7 @@ class ActionsManager extends UrlManager {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
-				$errorControllerClass->setErrorMessage("Unable to find {$whatIsIt} '{$actionName}'");
+				throw new Exception("Unable to find {$whatIsIt} '{$actionName}', neither controller for error '{$errorActionName}'");
 			}
 			//
 			// Loading layout name used by the error page.

@@ -129,8 +129,10 @@ abstract class DB extends Adapter {
 		//
 		// Binding parameters. This msut be done in this way and not with
 		// a simple array to avoid problems with BLOB fields.
-		$stmt->bindParam(':key', $this->fullKey($prefix, $key), \PDO::PARAM_STR);
-		$stmt->bindParam(':data', gzcompress(serialize($data), $this->_compressionRate), \PDO::PARAM_LOB);
+		$fullKey = $this->fullKey($prefix, $key);
+		$stmt->bindParam(':key', $fullKey, \PDO::PARAM_STR);
+		$compressedData = gzcompress(serialize($data), $this->_compressionRate);
+		$stmt->bindParam(':data', $compressedData, \PDO::PARAM_LOB);
 
 		$stmt->execute();
 	}

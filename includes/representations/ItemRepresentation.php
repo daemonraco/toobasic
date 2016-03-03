@@ -322,7 +322,8 @@ abstract class ItemRepresentation {
 		$data = false;
 		//
 		// Generating a proper query.
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $this->queryAdapterPrefixes());
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Retrieving information.
@@ -373,7 +374,8 @@ abstract class ItemRepresentation {
 		if($this->_CP_NameColumn) {
 			//
 			// Generating a proper query.
-			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $this->queryAdapterPrefixes());
+			$prefixes = $this->queryAdapterPrefixes();
+			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Retrieving information based on a name.
@@ -427,7 +429,8 @@ abstract class ItemRepresentation {
 			}
 			//
 			// Generating the proper query to update the entry.
-			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
+			$prefixes = $this->queryAdapterPrefixes();
+			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Attemptting to update.
@@ -455,7 +458,8 @@ abstract class ItemRepresentation {
 	public function remove() {
 		//
 		// Generating a proper query to erase an entry based on its id.
-		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $this->queryAdapterPrefixes());
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Attemptting to remove it.

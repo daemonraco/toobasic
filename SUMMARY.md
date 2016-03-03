@@ -32,6 +32,7 @@
 	* [Cache](docs/cache.md)
 * Tools
 	* [Simple API Reader](docs/sapireader.md)
+	* [Simple API Reports](docs/sapireports.md)
 	* [Search Engine](docs/searchengine.md)
 * Mailing
 	* [Emails](docs/emails.md)

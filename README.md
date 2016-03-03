@@ -1,4 +1,4 @@
-# TooBasic 1.1.0
+# TooBasic 2.0.0-mamba
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 

@@ -86,11 +86,14 @@ class SApiManager extends \TooBasic\Managers\Manager {
 		// Default values.
 		$json = false;
 		//
+		// Global dependencies.
+		global $Paths;
+		//
 		// Shortcuts.
 		$pathsMgr = Paths::Instance();
 		//
 		// Searching main files.
-		$path = $pathsMgr->customPaths('/sapis', $name, Paths::ExtensionJSON);
+		$path = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $name, Paths::ExtensionJSON);
 		if($path) {
 			//
 			// Global dependencies.
@@ -129,7 +132,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 				foreach($extends as $subName) {
 					//
 					// Searching extension file.
-					$exPath = $pathsMgr->customPaths('/sapis', $subName, Paths::ExtensionJSON);
+					$exPath = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $subName, Paths::ExtensionJSON);
 					//
 					// Saving track.
 					$json->extended[$subName] = $exPath;
@@ -177,6 +180,8 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			if(!isset($SApiReader[GC_SAPIREADER_TYPES][$json->type])) {
 				throw new SApiReaderException("Unable to handle API type '{$json->type}'.");
 			}
+		} else {
+			throw new SApiReaderException("Unable to find configuration '{$name}'.");
 		}
 		return $json;
 	}

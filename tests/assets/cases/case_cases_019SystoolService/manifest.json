@@ -1,0 +1,17 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php"
+	],
+	"assetDirectories": [
+		"/modules/mymodule",
+		"/modules/mymodule",
+		"/modules/mymodule/configs",
+		"/modules/mymodule/langs",
+		"/modules/mymodule/services"
+	],
+	"generatedAssets": [
+		"/modules/mymodule/configs/routes.json",
+		"/modules/mymodule/services/test.php"
+	]
+}

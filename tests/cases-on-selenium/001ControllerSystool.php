@@ -9,7 +9,7 @@ class Selenium_ControllerSystoolTest extends TooBasic_SeleniumTestCase {
 	}
 	// @}
 	public function testCreateController() {
-		passthru('php shell.php sys controller new hello_world');
+		$this->runCommand('php shell.php sys controller new hello_world');
 
 		$this->assertTrue(is_file(TESTS_ROOTDIR."/site/controllers/hello_world.php"), 'Controller file was not created');
 		$this->assertTrue(is_file(TESTS_ROOTDIR."/site/templates/action/hello_world.html"), 'View file was not created');

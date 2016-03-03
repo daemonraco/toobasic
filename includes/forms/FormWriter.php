@@ -9,7 +9,7 @@ namespace TooBasic\Forms;
 
 /**
  * @class FormWriter
- * @todo doc
+ * @TODO doc
  */
 class FormWriter {
 	//
@@ -56,6 +56,15 @@ class FormWriter {
 	}
 	//
 	// Public methods.
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $type @TODO doc
+	 * @param type $mode @TODO doc
+	 * @param type $error @TODO doc
+	 * @return boolean @TODO doc
+	 */
 	public function addButton($name, $type, $mode = false, &$error = false) {
 		$ok = true;
 		//
@@ -100,6 +109,14 @@ class FormWriter {
 
 		return $ok;
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $type @TODO doc
+	 * @param type $error @TODO doc
+	 * @return boolean @TODO doc
+	 */
 	public function addField($name, $type, &$error = false) {
 		$ok = true;
 		//
@@ -132,9 +149,21 @@ class FormWriter {
 
 		return $ok;
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @return type @TODO doc
+	 */
 	public function dirty() {
 		return $this->_dirty;
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param array $modes @TODO doc
+	 * @param type $error @TODO doc
+	 */
 	public function excludeFieldFrom($fieldName, $modes, &$error = false) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			if(!is_array($modes)) {
@@ -146,9 +175,20 @@ class FormWriter {
 			$error = "Field '{$fieldName}' doesn't exist";
 		}
 	}
+	/**
+	 *  @TODO doc
+	 *
+	 * @param type $mode @TODO doc
+	 */
 	public function removeAction($mode = false) {
 		$this->removeMainValue('action', $mode);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function removeAttribute($name, $mode = false) {
 		//
 		// Choosing the right object.
@@ -171,6 +211,12 @@ class FormWriter {
 			$this->removeAttributeFrom($name, $obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $buttonName @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function removeButton($buttonName, $mode = false) {
 		//
 		// Choosing the right object.
@@ -186,6 +232,13 @@ class FormWriter {
 			}
 		}
 	}
+	/**
+	 *  @TODO doc
+	 *
+	 * @param type $buttonName @TODO doc
+	 * @param type $attrName @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function removeButtonAttribute($buttonName, $attrName, $mode = false) {
 		//
 		// Choosing the right object.
@@ -203,6 +256,12 @@ class FormWriter {
 			$this->removeAttributeFrom($attrName, $obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $buttonName @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function removeButtonLabel($buttonName, $mode = false) {
 		//
 		// Choosing the right object.
@@ -220,40 +279,85 @@ class FormWriter {
 			$this->removeLabelFrom($obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 */
 	public function removeField($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			unset($this->_config->form->fields->{$fieldName});
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param type $attrName @TODO doc
+	 */
 	public function removeFieldAttribute($fieldName, $attrName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->removeAttributeFrom($attrName, $this->_config->form->fields->{$fieldName});
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 */
 	public function removeFieldExcludedModes($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName}->excludedModes)) {
 			unset($this->_config->form->fields->{$fieldName}->excludedModes);
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 */
 	public function removeFieldLabel($fieldName) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->removeLabelFrom($this->_config->form->fields->{$fieldName});
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $mode @TODO doc
+	 */
 	public function removeMethod($mode = false) {
 		$this->removeMainValue('method', $mode);
 	}
+	/**
+	 * @TODO doc
+	 */
 	public function removeName() {
 		$this->removeMainValue('name', false);
 	}
+	/**
+	 * @TODO doc
+	 */
 	public function removeType() {
 		$this->removeMainValue('type', false);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $action @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setAction($action, $mode = false) {
 		$this->setMainValue('action', $action, $mode);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $value @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setAttribute($name, $value, $mode = false) {
 		//
 		// Choosing the right object.
@@ -276,6 +380,14 @@ class FormWriter {
 			$this->setAttributeTo($name, $value, $obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $buttonName @TODO doc
+	 * @param type $attrName @TODO doc
+	 * @param type $value @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setButtonAttribute($buttonName, $attrName, $value, $mode = false) {
 		//
 		// Choosing the right object.
@@ -293,6 +405,13 @@ class FormWriter {
 			$this->setAttributeTo($attrName, $value, $obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $buttonName @TODO doc
+	 * @param type $value @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setButtonLabel($buttonName, $value, $mode = false) {
 		//
 		// Choosing the right object.
@@ -310,16 +429,36 @@ class FormWriter {
 			$this->setLabelTo($value, $obj);
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param type $attrName @TODO doc
+	 * @param type $value @TODO doc
+	 */
 	public function setFieldAttribute($fieldName, $attrName, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->setAttributeTo($attrName, $value, $this->_config->form->fields->{$fieldName});
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $value @TODO doc
+	 */
 	public function setFieldDefault($name, $value) {
 		if(isset($this->_config->form->fields->{$name})) {
 			$this->_config->form->fields->{$name}->value = $value;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param type $label @TODO doc
+	 * @param type $value @TODO doc
+	 */
 	public function setFieldEmptyOption($fieldName, $label, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->_config->form->fields->{$fieldName}->emptyOption = new \stdClass();
@@ -327,33 +466,67 @@ class FormWriter {
 			$this->_config->form->fields->{$fieldName}->emptyOption->value = $value;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param type $modes @TODO doc
+	 */
 	public function setFieldExcludedModes($fieldName, $modes) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->_config->form->fields->{$fieldName}->excludedModes = $modes;
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $fieldName @TODO doc
+	 * @param type $value @TODO doc
+	 */
 	public function setFieldLabel($fieldName, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			$this->setLabelTo($value, $this->_config->form->fields->{$fieldName});
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $method @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setMethod($method, $mode = false) {
 		$this->setMainValue('method', $method, $mode);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 */
 	public function setName($name) {
 		$this->setMainValue('name', $name);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $type @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	public function setType($type, $mode = false) {
 		$this->setMainValue('type', $type, $mode);
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @return type @TODO doc
+	 */
 	public function save() {
 		return $this->dirty() ? \boolval(file_put_contents($this->_path, json_encode($this->_config, JSON_PRETTY_PRINT))) : false;
 	}
 	//
 	// Protected methods.
 	/**
-	 * @todo doc
+	 * @TODO doc
 	 *
 	 * @throws \TooBasic\Forms\FormsException
 	 */
@@ -377,6 +550,12 @@ class FormWriter {
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param \stdClass $object @TODO doc
+	 */
 	protected function removeAttributeFrom($name, \stdClass &$object) {
 		if(!isset($object->attrs)) {
 			$object->attrs = new \stdClass();
@@ -387,12 +566,23 @@ class FormWriter {
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param \stdClass $object @TODO doc
+	 */
 	protected function removeLabelFrom(\stdClass &$object) {
 		if(isset($object->label)) {
 			unset($object->label);
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	protected function removeMainValue($name, $mode = false) {
 		if($mode) {
 			if(isset($this->_config->form->modes->{$mode}->{$name})) {
@@ -406,6 +596,13 @@ class FormWriter {
 			}
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $value @TODO doc
+	 * @param \stdClass $object @TODO doc
+	 */
 	protected function setAttributeTo($name, $value, \stdClass &$object) {
 		if(!isset($object->attrs)) {
 			$object->attrs = new \stdClass();
@@ -416,12 +613,25 @@ class FormWriter {
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $value @TODO doc
+	 * @param \stdClass $object @TODO doc
+	 */
 	protected function setLabelTo($value, \stdClass &$object) {
 		if(!isset($object->label) || $object->label != $value) {
 			$object->label = $value;
 			$this->_dirty = true;
 		}
 	}
+	/**
+	 * @TODO doc
+	 *
+	 * @param type $name @TODO doc
+	 * @param type $value @TODO doc
+	 * @param type $mode @TODO doc
+	 */
 	protected function setMainValue($name, $value, $mode = false) {
 		if($mode) {
 			if(!isset($this->_config->form->modes)) {

@@ -7,13 +7,23 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	 * @var TooBasic_AssetsManager
 	 */
 	protected static $_AssetsManager = false;
-	protected function loadAssetsOf($path) {
-		self::$_AssetsManager->loadAssetsOf($path);
+	protected function loadAssetsOf($path = false) {
+		$filePath = $path;
+		if($path === false) {
+			$reflector = new ReflectionClass(get_called_class());
+			$filePath = $reflector->getFileName();
+		}
+
+		self::$_AssetsManager->loadAssetsOf($filePath);
 	}
 	public static function setUpBeforeClass() {
 		if(!self::$_AssetsManager) {
 			self::$_AssetsManager = new TooBasic_AssetsManager();
 		}
+	}
+	public function setUp() {
+		$this->loadAssetsOf();
+		parent::setUp();
 	}
 	public static function tearDownAfterClass() {
 		self::$_AssetsManager->tearDown();
@@ -22,26 +32,14 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	// @}
 	//
 	// Internal methods @{
-	protected function getUrl($subUrl, $assertExceptions = true) {
-		$url = TRAVISCI_URL_SCHEME.'://localhost';
-		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
-		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
-		$url.= $subUrl;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		$response = curl_exec($ch);
-		curl_close($ch);
-
-		if($assertExceptions) {
-			$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
-			$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
-		}
-
-		return $response;
+	protected function getUrl($subUrl, $assertIt = true) {
+		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
+	}
+	protected function getJSONUrl($subUrl, $assertIt = true) {
+		return TooBasic_Helper::GetJSONUrl($this, $subUrl, $assertIt);
+	}
+	protected function runCommand($command, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
+		return TooBasic_Helper::RunCommand($this, $command, $assertResult, $assertReturnValue, $promptResult);
 	}
 	// @}
 }

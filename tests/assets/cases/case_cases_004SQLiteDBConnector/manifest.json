@@ -1,10 +1,8 @@
 {
 	"assets": [
-		"/site/configs/config.php",
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
 		"/site/services/test.php"
-	],
-	"generatedAssets": [
-		"/cache/system/config-priorities.json"
 	],
 	"generatedAssets": [
 		"/cache/travis_test.sqlite3"

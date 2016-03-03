@@ -43,6 +43,11 @@ $Defaults[GC_DEFAULTS_ALLOW_ROUTES] = false;
 $Defaults[GC_DEFAULTS_CACHE_ADAPTER] = '\\TooBasic\\Adapters\\Cache\\File';
 $Defaults[GC_DEFAULTS_CACHE_EXPIRATION] = 3600;
 $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS] = 0777;
+$Defaults[GC_DEFAULTS_CONFIG_LOADERS] = array(
+	GC_CONFIG_MODE_MERGE => '\\TooBasic\\Configs\\ConfigLoaderMerge',
+	GC_CONFIG_MODE_MULTI => '\\TooBasic\\Configs\\ConfigLoaderMulti',
+	GC_CONFIG_MODE_SIMPLE => '\\TooBasic\\Configs\\ConfigLoaderSimple'
+);
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS] = array();
 $Defaults[GC_DEFAULTS_DISABLED_DEBUGS] = false;
 $Defaults[GC_DEFAULTS_DISABLED_PATHS] = array();
@@ -177,6 +182,8 @@ $Paths[GC_PATHS_LANGS] = '/langs';
 $Paths[GC_PATHS_LAYOUTS] = '/layouts';
 $Paths[GC_PATHS_MODELS] = '/models';
 $Paths[GC_PATHS_REPRESENTATIONS] = '/models/representations';
+$Paths[GC_PATHS_SAPIREADER] = '/sapis';
+$Paths[GC_PATHS_SAPIREPORTS] = "/sapis/reports";
 $Paths[GC_PATHS_SERVICES] = '/services';
 $Paths[GC_PATHS_SHELL] = '/shell';
 $Paths[GC_PATHS_SHELL_CRONS] = '/shell/crons';
@@ -213,6 +220,11 @@ $SApiReader[GC_SAPIREADER_TYPES] = array(
 	GC_SAPIREADER_TYPE_JSON => '\\TooBasic\\SApiReaderJSON',
 	GC_SAPIREADER_TYPE_XML => '\\TooBasic\\SApiReaderXML'
 );
+$SApiReader[GC_SAPIREPORT_TYPES] = [
+	GC_SAPIREPORT_TYPE_BASIC => '\\TooBasic\\SApiReportBasic',
+	GC_SAPIREPORT_TYPE_BOOTSTRAP => '\\TooBasic\\SApiReportBootstrap'
+];
+$Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['sapiReport'] = '\\TooBasic\\ctrlExports_sapiReport';
 //
 // Forms builder basic configuration.
 $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(

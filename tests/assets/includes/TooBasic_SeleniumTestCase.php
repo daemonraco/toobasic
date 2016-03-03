@@ -7,8 +7,14 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 	 * @var TooBasic_AssetsManager
 	 */
 	protected static $_AssetsManager = false;
-	protected function loadAssetsOf($path) {
-		self::$_AssetsManager->loadAssetsOf($path);
+	protected function loadAssetsOf($path = false) {
+		$filePath = $path;
+		if($path === false) {
+			$reflector = new ReflectionClass(get_called_class());
+			$filePath = $reflector->getFileName();
+		}
+
+		self::$_AssetsManager->loadAssetsOf($filePath);
 	}
 	public static function setUpBeforeClass() {
 		if(!self::$_AssetsManager) {
@@ -16,6 +22,7 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 		}
 	}
 	public function setUp() {
+		$this->loadAssetsOf();
 		//
 		// Selenium settings.
 		$this->setHost('localhost');
@@ -38,6 +45,15 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 	protected function checkCurrentSource() {
 		$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $this->source(), "Response to '{$this->url()}' seems to have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $this->source(), "Response to '{$this->url()}' seems to have a PHP error.");
+	}
+	protected function getBasicUrl($subUrl, $assertIt = true) {
+		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
+	}
+	protected function getJSONUrl($subUrl, $assertIt = true) {
+		return TooBasic_Helper::GetJSONUrl($this, $subUrl, $assertIt);
+	}
+	protected function runCommand($command, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
+		return TooBasic_Helper::RunCommand($this, $command, $assertResult, $assertReturnValue, $promptResult);
 	}
 	// @}
 }

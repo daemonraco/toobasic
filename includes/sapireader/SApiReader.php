@@ -239,8 +239,12 @@ class SApiReader {
 		//
 		// Setting cURL options.
 		\curl_setopt($ch, CURLOPT_URL, $url);
-		\curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		\curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		\curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		\curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+		/** @FIXME CURLOPT_SSL_VERIFYHOST and CURLOPT_SSL_VERIFYPEER should not be used unless configured in the api JSON file. */
+		\curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		\curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		//
 		// Selecting the method.
 		switch($method) {
@@ -254,23 +258,31 @@ class SApiReader {
 			default:
 		}
 		//
+		// Rerieving output.
+		$out = \curl_exec($ch);
+		//
 		// Debugging call.
 		if($this->_debug) {
-			$info = array(
+			$info = [
 				'url' => $url,
-				'method' => $method
-			);
+				'method' => $method,
+				'curl' => [
+					'errno' => \curl_errno($ch),
+					'error' => \curl_error($ch)
+				],
+				'response-code' => \curl_getinfo($ch, CURLINFO_HTTP_CODE),
+				'response-headers' => \curl_getinfo($ch, CURLINFO_HEADER_OUT)
+			];
 			if($headers) {
 				$info['headers'] = $headers;
 			}
 			if($method != 'GET') {
 				$info['params'] = $sendParams;
 			}
+
 			\TooBasic\debugThing($info);
 		}
-		//
-		// Rerieving output.
-		$out = \curl_exec($ch);
+		/** @TODO check http errors based on configuration per service. \curl_getinfo($ch, CURLINFO_HTTP_CODE) */
 		//
 		// Closing cURL resource to free up system resources.
 		\curl_close($ch);

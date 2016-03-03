@@ -243,6 +243,7 @@ protected function basicRun() {
 ## Suggestions
 If you want or need it, you may visit these documentation pages:
 
+* [Simple API Reports](sapireports.md)
 * [Representations](representations.md)
 
 <!--:GBSUMMARY:Tools:1:Simple API Reader:-->

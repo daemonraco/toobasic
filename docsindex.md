@@ -51,6 +51,7 @@
 	* [Summary](docs/configs.md#summary)
 * [Easier with JSON](docs/configs.md#easier-with-json)
 	* [Multiple files](docs/configs.md#multiple-files)
+	* [Merged files](docs/configs.md#merged-files)
 * [Suggestions](docs/configs.md#suggestions)
 
 ##  Controller Exports (docs/controllerexports.md):
@@ -337,6 +338,32 @@
 * [Methods](docs/sapireader.md#methods)
 	* [POST parameters](docs/sapireader.md#post-parameters)
 * [Suggestions](docs/sapireader.md#suggestions)
+
+##  Simple API Reports (docs/sapireports.md):
+
+* [What is SApiReports?](docs/sapireports.md#what-is-sapireports)
+* [API configuration](docs/sapireports.md#api-configuration)
+* [Report configuration](docs/sapireports.md#report-configuration)
+* [Mandatory fields](docs/sapireports.md#mandatory-fields)
+* [Optional fields](docs/sapireports.md#optional-fields)
+	* [Field _listPath_](docs/sapireports.md#field-listpath)
+	* [Field _params_](docs/sapireports.md#field-params)
+	* [Field _type_](docs/sapireports.md#field-type)
+	* [Field _name_](docs/sapireports.md#field-name)
+	* [Field _attrs_](docs/sapireports.md#field-attrs)
+* [Column specifications](docs/sapireports.md#column-specifications)
+	* [Required properties](docs/sapireports.md#required-properties)
+	* [Optional properties](docs/sapireports.md#optional-properties)
+	* [Column type _text_](docs/sapireports.md#column-type-text)
+	* [Column type _code_](docs/sapireports.md#column-type-code)
+	* [Column type _image_](docs/sapireports.md#column-type-image)
+	* [Column type _link_](docs/sapireports.md#column-type-link)
+	* [Column type _button-link_](docs/sapireports.md#column-type-button-link)
+* [Exclusions](docs/sapireports.md#exclusions)
+	* [Exclusion by column](docs/sapireports.md#exclusion-by-column)
+	* [Global exclusions](docs/sapireports.md#global-exclusions)
+* [Show the report](docs/sapireports.md#show-the-report)
+* [Suggestions](docs/sapireports.md#suggestions)
 
 ##  Search Engine (docs/searchengine.md):
 

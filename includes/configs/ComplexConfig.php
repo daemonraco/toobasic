@@ -43,7 +43,7 @@ abstract class ComplexConfig extends Config {
 	 * @param string $mode Mechanisme to use when loading.
 	 * @throws \TooBasic\ConfigException
 	 */
-	public function __construct($name, $mode = self::ModeSimple) {
+	public function __construct($name, $mode = GC_CONFIG_MODE_SIMPLE) {
 		parent::__construct($name, $mode);
 		//
 		// Global dependencies.
@@ -73,31 +73,33 @@ abstract class ComplexConfig extends Config {
 		foreach($this->_CP_RequiredPaths as $path => $type) {
 			//
 			// Checking existence.
-			if(isset($this->{$path})) {
+			$exists = false;
+			eval("\$exists=isset(\$this->{$path});");
+			if($exists) {
 				//
 				// Checking property's type.
 				$rightType = null;
 				switch($type) {
 					case self::PathTypeList:
-						$rightType = is_array($this->{$path});
+						eval("\$rightType=is_array(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a list");
 						}
 						break;
 					case self::PathTypeNumeric:
-						$rightType = is_numeric($this->{$path});
+						eval("\$rightType=is_numeric(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not numeric");
 						}
 						break;
 					case self::PathTypeObject:
-						$rightType = is_object($this->{$path});
+						eval("\$rightType=is_object(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not an object");
 						}
 						break;
 					case self::PathTypeString:
-						$rightType = is_string($this->{$path});
+						eval("\$rightType=is_string(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a string");
 						}

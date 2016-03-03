@@ -6,8 +6,8 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '1.1.0');
-define('TOOBASIC_VERSION_NAME', 'serpent');
+define('TOOBASIC_VERSION', '2.0.0');
+define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
 // HTTP errors @{
@@ -28,6 +28,7 @@ define('GC_DEFAULTS_ALLOW_ROUTES', 'allow-routes');
 define('GC_DEFAULTS_CACHE_ADAPTER', 'cache-adapter');
 define('GC_DEFAULTS_CACHE_EXPIRATION', 'cache-expiration');
 define('GC_DEFAULTS_CACHE_PERMISSIONS', 'cache-permissions');
+define('GC_DEFAULTS_CONFIG_LOADERS', 'config-loaders');
 define('GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS', 'ctrl-exports-extensions');
 define('GC_DEFAULTS_DEBUG_PAGE', 'debug-page');
 define('GC_DEFAULTS_DISABLED_DEBUGS', 'disabled-debugs');
@@ -225,6 +226,8 @@ define('GC_PATHS_LANGS', 'langs');
 define('GC_PATHS_LAYOUTS', 'layouts');
 define('GC_PATHS_MODELS', 'models');
 define('GC_PATHS_REPRESENTATIONS', 'representations');
+define('GC_PATHS_SAPIREADER', 'sapireader');
+define('GC_PATHS_SAPIREPORTS', 'sapireports');
 define('GC_PATHS_SERVICES', 'services');
 define('GC_PATHS_SHELL', 'shell');
 define('GC_PATHS_SHELL_CRONS', 'shell-crons');
@@ -338,6 +341,16 @@ define('GC_SAPIREADER_TYPES', 'types');
 define('GC_SAPIREADER_TYPE_BASIC', 'basic');
 define('GC_SAPIREADER_TYPE_JSON', 'json');
 define('GC_SAPIREADER_TYPE_XML', 'xml');
+
+define('GC_SAPIREPORT_TYPES', 'sareport-types');
+define('GC_SAPIREPORT_TYPE_BASIC', 'basic');
+define('GC_SAPIREPORT_TYPE_BOOTSTRAP', 'bootstrap');
+
+define('GC_SAPIREPORT_COLUMNTYPE_BUTTONLINK', 'button-link');
+define('GC_SAPIREPORT_COLUMNTYPE_CODE', 'code');
+define('GC_SAPIREPORT_COLUMNTYPE_IMAGE', 'image');
+define('GC_SAPIREPORT_COLUMNTYPE_LINK', 'link');
+define('GC_SAPIREPORT_COLUMNTYPE_TEXT', 'text');
 // @}
 //
 // TooBasic's search engine @{
@@ -371,5 +384,11 @@ define('GC_FORMS_FIELDTYPE_TEXT', 'text');
 define('GC_FORMS_BUTTONTYPE_BUTTON', 'button');
 define('GC_FORMS_BUTTONTYPE_RESET', 'reset');
 define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
+// @}
+//
+// Config modes.
+define('GC_CONFIG_MODE_MERGE', 'merge');
+define('GC_CONFIG_MODE_MULTI', 'multi');
+define('GC_CONFIG_MODE_SIMPLE', 'simple');
 // @}
 // @}

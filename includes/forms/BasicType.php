@@ -9,7 +9,7 @@ namespace TooBasic\Forms;
 
 /**
  * @class BasicType
- * @todo doc
+ * This class represents a form builder with some basic (not so fancy) styles.
  */
 class BasicType extends FormType {
 	/**
@@ -90,7 +90,7 @@ class BasicType extends FormType {
 						$aux.= " value=\"".(isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue)."\"";
 					} else {
 						$value = isset($item[$fieldName]) ? $item[$fieldName] : $fieldValue;
-						$trValue = $tr->{"select_option_{$value}"};
+						$trValue = boolval($value) ? $tr->{"select_option_{$value}"} : '';
 						$aux.= " value=\"{$trValue}\"";
 					}
 				}

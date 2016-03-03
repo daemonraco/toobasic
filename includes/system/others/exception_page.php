@@ -37,8 +37,12 @@
 				<pre>
 <?php
 	$position = 0;
-	foreach($exceptionTrace as $entry) { 
-		echo "#{$position}  ".(isset($entry['class'])?"{$entry['class']}::":'')."{$entry['function']}() called at [{$entry['file']}:{$entry['line']}]\n";
+	foreach($exceptionTrace as $entry) {
+		$fileInfo = ' [...]';
+		if(isset($entry['file'])) {
+			$fileInfo = " [{$entry['file']}:{$entry['line']}]";
+		}
+		echo "#{$position}  ".(isset($entry['class']) ? "{$entry['class']}::" : '')."{$entry['function']}() called at{$fileInfo}\n";
 		$position++;
 	}
 ?>

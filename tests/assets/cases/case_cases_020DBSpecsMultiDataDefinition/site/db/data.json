@@ -1,0 +1,56 @@
+{
+    "tables": [
+        {
+            "name": "data",
+            "prefix": "dat_",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": {
+                        "type": "int",
+                        "precision": 11
+                    },
+                    "null": false,
+                    "autoincrement": true
+                },
+                {
+                    "name": "name",
+                    "type": {
+                        "type": "varchar",
+                        "precision": 256
+                    },
+                    "default": "",
+                    "null": false
+                },
+                {
+                    "name": "create_date",
+                    "type": {
+                        "type": "timestamp",
+                        "precision": false
+                    },
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                {
+                    "name": "indexed",
+                    "type": {
+                        "type": "varchar",
+                        "precision": 1
+                    },
+                    "null": false,
+                    "default": "N"
+                }
+            ]
+        }
+    ],
+    "indexes": [
+        {
+            "name": "dat_id",
+            "table": "data",
+            "type": "primary",
+            "fields": [
+                "id"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+	"assets": [
+		"/modules/mod1/configs/my_config.json",
+		"/modules/mod2/configs/my_config.json",
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/configs/my_config.json",
+		"/site/controllers/test.php",
+		"/site/includes/MyConfigInterpreter.php",
+		"/site/models/MyModel.php",
+		"/site/templates/action/test.html"
+	],
+	"assetDirectories": [
+		"/modules",
+		"/modules/mod1",
+		"/modules/mod1/configs",
+		"/modules/mod2",
+		"/modules/mod2/configs",
+		"/site/includes"
+	]
+}

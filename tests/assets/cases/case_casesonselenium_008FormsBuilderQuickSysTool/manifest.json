@@ -1,0 +1,22 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/configs/config_http.php",
+		"/site/controllers/layout.php",
+		"/site/controllers/layout_nav.php",
+		"/site/controllers/test.php",
+		"/site/scripts/script.js",
+		"/site/styles/style.css",
+		"/site/templates/action/layout.html",
+		"/site/templates/action/layout_nav.html",
+		"/site/templates/action/test.html"
+	],
+	"assetDirectories": [
+		"/modules/mymodule",
+		"/modules/mymodule/forms"
+	],
+	"generatedAssets": [
+		"/modules/mymodule/forms/myform.json"
+	]
+}

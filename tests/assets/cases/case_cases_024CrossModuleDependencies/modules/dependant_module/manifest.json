@@ -1,0 +1,6 @@
+{
+	"name": "Dependant Module",
+	"required_versions": {
+		"mod:someucode": "1.7"
+	}
+}

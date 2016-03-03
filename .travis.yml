@@ -7,6 +7,21 @@ php:
   - '5.6'
   - '7.0'
   - nightly
+env:
+  - TRAVISCI_PHPUNIT_CONF=''
+  - TRAVISCI_PHPUNIT_CONF='-7.0'
+matrix:
+  exclude:
+    - php: '7.0'
+      env: TRAVISCI_PHPUNIT_CONF=''
+    - php: nightly
+      env: TRAVISCI_PHPUNIT_CONF=''
+    - php: '5.4'
+      env: TRAVISCI_PHPUNIT_CONF='-7.0'
+    - php: '5.5'
+      env: TRAVISCI_PHPUNIT_CONF='-7.0'
+    - php: '5.6'
+      env: TRAVISCI_PHPUNIT_CONF='-7.0'
 #
 # Required services.
 services:
@@ -28,7 +43,15 @@ before_script:
   #
   # Basic configurations.
   - "sh -e ./tests/assets/travis.directorypermissions.sh"
-  - phpenv config-add ./tests/assets/travis.php.ini
+  #
+  # Fake sendmail configurations.
+  - sudo mkdir -pm 0777 /tmp/fake-mailbox
+  - sudo chmod 0777 ./tests/assets/travis.fakesendmail.sh
+  #
+  # Configuring PHP.
+  - cp ./tests/assets/travis.php${TRAVISCI_PHPUNIT_CONF}.ini ./tests/assets/toobasic.ini
+  - sed -i "s:%TRAVISCI_HOME%:${PWD}:g" ./tests/assets/toobasic.ini
+  - phpenv config-add ./tests/assets/toobasic.ini
   #
   # Installing Composer.
   - "mkdir -p ~/.composer"
@@ -52,12 +75,15 @@ before_script:
   #
   # Installing and starting Selenium 2 server.
   - "wget http://selenium-release.storage.googleapis.com/${TRAVISCI_SELENIUM_VERSION}/selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar"
-  - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar > /dev/null &"
+  - "java -jar selenium-server-standalone-${TRAVISCI_SELENIUM_FULLVERSION}.jar >/dev/null 2>&1 &"
   - sleep 5
   #
   # Getting a snapshot of current assets.
   - chmod +x ./tests/assets/travis.save-files-status.sh
   - ./tests/assets/travis.save-files-status.sh before
+
+script:
+  - phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
 after_script:
   #
   # Getting a snapshot of current assets and comparing it against the previous

@@ -13,7 +13,6 @@ $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLU
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapters\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
 $SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
-$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Config.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
 $SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
@@ -117,6 +116,11 @@ $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_
 // Config interpreters includes @{
 $SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
 $SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
+$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoader'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoader.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderMerge'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMerge.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderMulti'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMulti.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderSimple.php";
 // @}
 //
 // Simple API Reader includes @{
@@ -125,6 +129,12 @@ $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]
 $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
+
+$SuperLoader['TooBasic\\SApiReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReporter.php";
+$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportException.php";
+$SuperLoader['TooBasic\\SApiReportBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBasic.php";
+$SuperLoader["TooBasic\\SApiReportBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBootstrap.php";
+$SuperLoader['TooBasic\\SApiReportType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportType.php";
 // @}
 //
 // Forms builder includes @{
