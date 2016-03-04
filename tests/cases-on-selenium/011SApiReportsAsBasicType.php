@@ -4,7 +4,7 @@ class SApiReportsAsBasicTypeTest extends TooBasic_SeleniumTestCase {
 	//
 	// Test cases @{
 	public function testCheckingTableRendering() {
-		$this->url('?action=this_site_issues');
+		$this->url('?action=this_site_basic_issues');
 		$this->checkCurrentSource();
 		//
 		// Checking table.
