@@ -117,6 +117,7 @@ related)
 	* [Forms Builder Specifications](docs/tech/forms.md)
 	* [Query Adapter](docs/tech/queryadapter.md)
 	* [Adapters](docs/tech/adapters.md)
+	* [Modules](docs/tech/modules.md)
 
 Also:
 
