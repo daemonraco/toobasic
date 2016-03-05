@@ -14,7 +14,7 @@
 		"\/site\/styles\/style.css",
 		"\/site\/templates\/action\/layout.html",
 		"\/site\/templates\/action\/layout_nav.html",
-		"\/site\/templates\/action\/this_site_issues.html"
+		"\/site\/templates\/action\/this_site_basic_issues.html"
 	],
 	"assetDirectories": [
 		"\/site",
