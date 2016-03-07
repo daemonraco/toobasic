@@ -2,16 +2,6 @@
 
 class TooBasic_PathsTest extends TooBasic_TestCase {
 	//
-	// Set up @{
-	protected $_paths = false;
-	public function setUp() {
-		$this->loadAssetsOf(__FILE__);
-		parent::setUp();
-
-		$this->_paths = \TooBasic\Paths::Instance();
-	}
-	// @}
-	//
 	// Configuration files searches @{
 	public function testConfigurationFileSearches() {
 		$path = $this->getPathFor(__FUNCTION__);

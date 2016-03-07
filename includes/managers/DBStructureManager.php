@@ -922,7 +922,7 @@ class DBStructureManager extends Manager {
 		// Adding default configuration. It allways is the first one.
 		global $Database;
 		array_unshift($this->_specFiles, $Database[GC_DATABASE_DEFAULT_SPECS]);
-		/** @fixme this should be automatically solve placing the file on 'ROOTDIR/includes/system'. */
+		/** @FIXME this should be automatically solve placing the file on 'ROOTDIR/includes/system'. */
 	}
 	/**
 	 * This method takes a specification file, loads its data and triggers all
