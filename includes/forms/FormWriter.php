@@ -362,11 +362,12 @@ class FormWriter {
 		$this->setMainValue('action', $action, $mode);
 	}
 	/**
-	 * @TODO doc
+	 * This method sets an attribute to be used the HTML tag '<form>'.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $value @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $name Attribute name.
+	 * @param mixed $value Attribute value to be set.
+	 * @param string $mode In case the attributes affects only a specific form
+	 * mode.
 	 */
 	public function setAttribute($name, $value, $mode = false) {
 		//
@@ -391,12 +392,13 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets a button's attribute to be used when it's rendered.
 	 *
-	 * @param type $buttonName @TODO doc
-	 * @param type $attrName @TODO doc
-	 * @param type $value @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $buttonName Button name.
+	 * @param string $attrName Attribute name.
+	 * @param mixed $value Attribute value to be set.
+	 * @param string $mode In case the attributes affects only a specific form
+	 * mode.
 	 */
 	public function setButtonAttribute($buttonName, $attrName, $value, $mode = false) {
 		//
@@ -416,11 +418,12 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets a button's label to be used when it's rendered.
 	 *
-	 * @param type $buttonName @TODO doc
-	 * @param type $value @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $buttonName Button name.
+	 * @param string $value Label value to be set.
+	 * @param string $mode In case the attributes affects only a specific form
+	 * mode.
 	 */
 	public function setButtonLabel($buttonName, $value, $mode = false) {
 		//
@@ -440,11 +443,11 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets a field's attribute to be used when it's rendered.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param type $attrName @TODO doc
-	 * @param type $value @TODO doc
+	 * @param type $fieldName Field name.
+	 * @param type $attrName Attribute name.
+	 * @param type $value Attribute value to be set.
 	 */
 	public function setFieldAttribute($fieldName, $attrName, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -452,10 +455,11 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the default value to be shown when a field is
+	 * displayed without a particular value.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $value @TODO doc
+	 * @param string $name Field name.
+	 * @param string $value Value to be shown.
 	 */
 	public function setFieldDefault($name, $value) {
 		if(isset($this->_config->form->fields->{$name})) {
@@ -463,11 +467,12 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the first option of a HTML tag '<select>'. Such option
+	 * is considered as extra and it'll be used as default.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param type $label @TODO doc
-	 * @param type $value @TODO doc
+	 * @param string $fieldName Field name.
+	 * @param string $label Extra option label.
+	 * @param string $value Extra option value.
 	 */
 	public function setFieldEmptyOption($fieldName, $label, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -477,10 +482,11 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the list of mode names in which certain field should
+	 * not be shown.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param type $modes @TODO doc
+	 * @param string $fieldName Field name.
+	 * @param string[] $modes List of mode names.
 	 */
 	public function setFieldExcludedModes($fieldName, $modes) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -489,10 +495,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets the label to be rendered beside certain field.
 	 *
-	 * @param type $fieldName @TODO doc
-	 * @param type $value @TODO doc
+	 * @param string $fieldName Field name.
+	 * @param string $value Label value.
 	 */
 	public function setFieldLabel($fieldName, $value) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
@@ -527,9 +533,10 @@ class FormWriter {
 		$this->setMainValue('type', $type, $mode);
 	}
 	/**
-	 * @TODO doc
+	 * This method updates the physical configuration file with all changes.
+	 * If no change was made, the file will remain untouched.
 	 *
-	 * @return type @TODO doc
+	 * @return boolean Return TRUE if the file was modified without problems.
 	 */
 	public function save() {
 		return $this->dirty() ? \boolval(file_put_contents($this->_path, json_encode($this->_config, JSON_PRETTY_PRINT))) : false;
@@ -537,7 +544,7 @@ class FormWriter {
 	//
 	// Protected methods.
 	/**
-	 * @TODO doc
+	 * This method loads a form configuration file.
 	 *
 	 * @throws \TooBasic\Forms\FormsException
 	 */
@@ -562,10 +569,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes an attribute from certain configuration structure.
 	 *
-	 * @param type $name @TODO doc
-	 * @param \stdClass $object @TODO doc
+	 * @param string $name Attribute name.
+	 * @param \stdClass $object Configuration structure to modify.
 	 */
 	protected function removeAttributeFrom($name, \stdClass &$object) {
 		if(!isset($object->attrs)) {
@@ -578,9 +585,9 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a label from certain configuration structure.
 	 *
-	 * @param \stdClass $object @TODO doc
+	 * @param \stdClass $object Configuration structure to modify.
 	 */
 	protected function removeLabelFrom(\stdClass &$object) {
 		if(isset($object->label)) {
@@ -589,10 +596,12 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method removes a property's value used to build the HTML tag
+	 * '<form>'.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $name Property's name.
+	 * @param string $mode In case the property affects only a specific form
+	 * mode.
 	 */
 	protected function removeMainValue($name, $mode = false) {
 		if($mode) {
@@ -608,11 +617,11 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets an attribute inside certain configuration structure.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $value @TODO doc
-	 * @param \stdClass $object @TODO doc
+	 * @param string $name Attribute name.
+	 * @param mixed $value Attribute value to be set.
+	 * @param \stdClass $object Configuration structure to modify.
 	 */
 	protected function setAttributeTo($name, $value, \stdClass &$object) {
 		if(!isset($object->attrs)) {
@@ -625,10 +634,10 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets a label inside certain configuration structure.
 	 *
-	 * @param type $value @TODO doc
-	 * @param \stdClass $object @TODO doc
+	 * @param string $value Label value.
+	 * @param \stdClass $object Configuration structure to modify.
 	 */
 	protected function setLabelTo($value, \stdClass &$object) {
 		if(!isset($object->label) || $object->label != $value) {
@@ -637,11 +646,13 @@ class FormWriter {
 		}
 	}
 	/**
-	 * @TODO doc
+	 * This method sets a property's value used to build the HTML tag
+	 * '<form>'.
 	 *
-	 * @param type $name @TODO doc
-	 * @param type $value @TODO doc
-	 * @param type $mode @TODO doc
+	 * @param string $name Property's name.
+	 * @param mixed $value Value to be set.
+	 * @param string $mode In case the property affects only a specific form
+	 * mode.
 	 */
 	protected function setMainValue($name, $value, $mode = false) {
 		if($mode) {
