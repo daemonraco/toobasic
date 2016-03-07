@@ -62,7 +62,7 @@ abstract class Controller extends Exporter {
 		//
 		// It doesn't matter what it's set for the current class, there
 		// are rules first.
-		if(isset($this->params->debugnolayout)) {
+		if(isset($this->params->nolayout)) {
 			//
 			// Removing layout setting.
 			$this->_layout = false;

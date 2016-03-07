@@ -3,7 +3,6 @@
 		"debugwithoutcache": "",
 		"debugresetcache": "Avoids current cache an regenerates it.",
 		"debugnolang": "Disables all translations and prints keys.",
-		"debugnolayout": "Disables current layout if any.",
 		"debugmemcached": "Prompts in HTML comments cache keys used by memcached.",
 		"debugforcedbinstall": "When system is flagged as installed or given conditions avoid database installation, this debug forces it.",
 		"debugdbemulation": "Generates every DDL and DML query to upgrade the database and displays them, but runs nothing.",

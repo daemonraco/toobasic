@@ -159,7 +159,7 @@ class NewCase {
 		}
 
 		$matches = false;
-		$className = trim(str_replace(' ', '', ucwords(strtolower(preg_replace('/([A-Z])/', ' $1', preg_replace('/([ \._-])/', ' ', $this->_params[2]))))));
+		$className = trim(str_replace(' ', '', ucwords(strtolower(preg_replace('/([A-Z])/', ' $1', preg_replace('/([ \'\\._-])/', ' ', $this->_params[2]))))));
 		$className = preg_match('/^Iss([0-9]+)(.*)/', $className, $matches) ? 'I'.$matches[1].'_'.$matches[2] : $className;
 
 		switch($this->_suite) {
