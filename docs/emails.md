@@ -25,7 +25,7 @@ Let's write the next code and save it at __ROOTDIR/site/emails/basic_layout.php_
 <?php
 class BasicLayoutEmail extends \TooBasic\EmailLayout {
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		return true;
@@ -76,7 +76,7 @@ code at __ROOTDIR/site/emails/hello.php__:
 class HelloEmail extends \TooBasic\Email {
 	protected $_layout = 'basic_layout';
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		return true;
@@ -121,7 +121,7 @@ class HelloEmail extends \TooBasic\Email {
 		$manager = $this->model->users;
 		$user = $manager->currentUser();
 		$this->assign('name', $user->name);
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		$this->assign('name', 'Some User');
@@ -174,7 +174,7 @@ class HelloEmail extends \TooBasic\Email {
 	protected $_layout = 'basic_layout';
 	protected function basicRun() {
 		$this->assign('name', $this->_payload->name);
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		$this->assign('name', 'Some User');

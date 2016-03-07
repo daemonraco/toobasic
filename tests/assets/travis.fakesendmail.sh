@@ -3,6 +3,7 @@
 # Create a fake mail-box folder.
 mailbox="/tmp/fake-mailbox";
 
+mkdir -p "$mailbox";
 if [ ! -f "${mailbox}/counter" ]; then
 	echo '0' > "${mailbox}/counter";
 fi;

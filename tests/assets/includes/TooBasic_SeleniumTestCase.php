@@ -46,6 +46,12 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $this->source(), "Response to '{$this->url()}' seems to have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $this->source(), "Response to '{$this->url()}' seems to have a PHP error.");
 	}
+	protected function clearEmails($assertResult = true, $assertReturnValue = true, $promptResult = true) {
+		return TooBasic_Helper::ClearEmails($this, $assertResult, $assertReturnValue, $promptResult);
+	}
+	public function getEmail($index, $assertIt = true) {
+		return TooBasic_Helper::GetEmail($this, $index, $assertIt);
+	}
 	protected function getBasicUrl($subUrl, $assertIt = true) {
 		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
 	}

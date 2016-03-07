@@ -8,6 +8,29 @@ class TooBasic_Helper {
 	}
 	//
 	// Tools @{
+	public static function ClearEmails($case, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
+		self::RunCommand($case, TOOBASIC_TESTS_ASSETS_DIR.'/cases/scripts/clearemails.sh', $assertResult, $assertReturnValue, $promptResult);
+	}
+	public static function GetEmail($case, $index, $assertIt = true) {
+		$path = "/tmp/fake-mailbox/message_{$index}.eml";
+
+		if($case && $assertIt) {
+			$case->assertTrue(is_file($path), "Unable to find message 'message_{$index}.eml'.");
+		}
+
+		$contents = false;
+		if(is_file($path)) {
+			$contents = file_get_contents($path);
+		}
+
+		if($case && $assertIt) {
+			$case->assertTrue(boolval($contents), "No content obtained for message 'message_{$index}.eml'.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $contents, "Content of message 'message_{$index}.eml' seems to have a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $contents, "Content of message 'message_{$index}.eml' seems to have a PHP error.");
+		}
+
+		return $contents;
+	}
 	public static function GetUrl($case, $subUrl, $assertIt = true) {
 		$url = TRAVISCI_URL_SCHEME.'://localhost';
 		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';

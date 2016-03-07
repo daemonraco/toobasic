@@ -32,6 +32,12 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	// @}
 	//
 	// Internal methods @{
+	protected function clearEmails($assertResult = true, $assertReturnValue = true, $promptResult = true) {
+		return TooBasic_Helper::ClearEmails($this, $assertResult, $assertReturnValue, $promptResult);
+	}
+	public function getEmail($index, $assertIt = true) {
+		return TooBasic_Helper::GetEmail($this, $index, $assertIt);
+	}
 	protected function getUrl($subUrl, $assertIt = true) {
 		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
 	}

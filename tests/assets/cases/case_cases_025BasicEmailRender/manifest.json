@@ -1,0 +1,21 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/controllers\/send.php",
+		"\/site\/emails\/basic_layout.php",
+		"\/site\/emails\/hello.php",
+		"\/site\/models\/EmailFiller.php",
+		"\/site\/templates\/action\/send.html",
+		"\/site\/templates\/email\/basic_layout.html",
+		"\/site\/templates\/email\/hello.html"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [],
+	"setUpScripts": [
+		"G:clearemails.sh"
+	],
+	"tearDownScripts": [
+		"G:clearemails.sh"
+	]
+}
