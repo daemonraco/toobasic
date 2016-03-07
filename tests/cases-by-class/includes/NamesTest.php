@@ -56,26 +56,26 @@ class TooBasic_NamesTest extends TooBasic_TestCase {
 		$this->myBasicFilenameTester('EmailControllerFilename');
 	}
 	public function testItemRepresentationFilename() {
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my_file'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('MyFile'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my-file'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my file'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my_file'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'MyFile'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my-file'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my file'));
 
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my_file_representation'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('MyFileRepresentation'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my-file-representation'));
-		$this->assertEquals('MyFileRepresentation', TooBasic\Names::ItemRepresentationFilename('my file representation'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my_file_representation'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'MyFileRepresentation'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my-file-representation'));
+		$this->assertEquals('MyFileRepresentation', $this->parseByService('ItemRepresentationFilename', 'my file representation'));
 	}
 	public function testItemsFactoryFilename() {
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my_file'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('MyFile'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my-file'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my file'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my_file'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'MyFile'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my-file'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my file'));
 
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my_file_factory'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('MyFileFactory'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my-file-factory'));
-		$this->assertEquals('MyFileFactory', TooBasic\Names::ItemsFactoryFilename('my file factory'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my_file_factory'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'MyFileFactory'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my-file-factory'));
+		$this->assertEquals('MyFileFactory', $this->parseByService('ItemsFactoryFilename', 'my file factory'));
 	}
 	public function testModelFilename() {
 		$this->myUpperFilenameTester('ModelFilename');
@@ -100,18 +100,18 @@ class TooBasic_NamesTest extends TooBasic_TestCase {
 	}
 	public function testClassNameWithSuffix() {
 		$expected = 'MyClassSuffix';
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MyClass', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my_class', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my class', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my-class', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('My Class', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'MyClass', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my_class', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my class', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my-class', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'My Class', 'Suffix'));
 
 		$expected = 'MySuffix';
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('MySuffix', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my_suffix', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my suffix', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('my-suffix', 'Suffix'));
-		$this->assertEquals($expected, TooBasic\Names::ClassNameWithSuffix('My Suffix', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'MySuffix', 'Suffix'), "Method 'TooBasic\Names::ClassNameWithSuffix()' affects values that should stay the same.");
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my_suffix', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my suffix', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'my-suffix', 'Suffix'));
+		$this->assertEquals($expected, $this->parseBySuffixedService('ClassNameWithSuffix', 'My Suffix', 'Suffix'));
 	}
 	public function testFilename() {
 		$this->myUpperFilenameTester('Filename');
@@ -123,23 +123,43 @@ class TooBasic_NamesTest extends TooBasic_TestCase {
 	//
 	// Internal methods @{
 	protected function myClassTester($expected, $func, $suffixName = 'class') {
-		$this->assertEquals($expected, TooBasic\Names::$func($expected), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
-		$this->assertEquals($expected, TooBasic\Names::$func("my_{$suffixName}"));
-		$this->assertEquals($expected, TooBasic\Names::$func("my {$suffixName}"));
-		$this->assertEquals($expected, TooBasic\Names::$func("my-{$suffixName}"));
-		$this->assertEquals($expected, TooBasic\Names::$func(ucwords("my {$suffixName}")));
+		$this->assertEquals($expected, $this->parseByService($func, $expected), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
+		$this->assertEquals($expected, $this->parseByService($func, "my_{$suffixName}"), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals($expected, $this->parseByService($func, "my {$suffixName}"), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals($expected, $this->parseByService($func, "my-{$suffixName}"), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals($expected, $this->parseByService($func, ucwords("my {$suffixName}")), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
 	}
 	protected function myBasicFilenameTester($func) {
-		$this->assertEquals('my_file', TooBasic\Names::{$func}('my_file'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
-		$this->assertEquals('my_file', TooBasic\Names::{$func}('MyFile'));
-		$this->assertEquals('my-file', TooBasic\Names::{$func}('my-file'));
-		$this->assertEquals('my-file', TooBasic\Names::{$func}('my file'));
+		$this->assertEquals('my_file', $this->parseByService($func, 'my_file'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
+		$this->assertEquals('my_file', $this->parseByService($func, 'MyFile'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals('my-file', $this->parseByService($func, 'my-file'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals('my-file', $this->parseByService($func, 'my file'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
 	}
 	protected function myUpperFilenameTester($func) {
-		$this->assertEquals('MyFile', TooBasic\Names::{$func}('MyFile'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
-		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my_file'));
-		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my-file'));
-		$this->assertEquals('MyFile', TooBasic\Names::{$func}('my file'));
+		$this->assertEquals('MyFile', $this->parseByService($func, 'MyFile'), "Method 'TooBasic\Names::{$func}()' affects values that should stay the same.");
+		$this->assertEquals('MyFile', $this->parseByService($func, 'my_file'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals('MyFile', $this->parseByService($func, 'my-file'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+		$this->assertEquals('MyFile', $this->parseByService($func, 'my file'), "Method 'TooBasic\Names::{$func}()' made a wrong calculation.");
+	}
+	protected function parseByService($func, $source) {
+		$parsing = $this->getJSONUrl('?service=names&func='.urlencode($func).'&source='.urlencode($source));
+
+		$this->assertTrue(isset($parsing->status), "Call to service 'names' didn't return a status flag.");
+		$this->assertTrue($parsing->status, "Call to service 'names' returned a bad status.");
+
+		$this->assertTrue(isset($parsing->data->result), "Call to service 'names' didn't return a parsing result value.");
+
+		return $parsing->data->result;
+	}
+	protected function parseBySuffixedService($func, $source, $suffix) {
+		$parsing = $this->getJSONUrl('?service=names_suffixed&func='.urlencode($func).'&source='.urlencode($source).'&suffix='.urlencode($suffix));
+
+		$this->assertTrue(isset($parsing->status), "Call to service 'names_suffixed' didn't return a status flag.");
+		$this->assertTrue($parsing->status, "Call to service 'names_suffixed' returned a bad status.");
+
+		$this->assertTrue(isset($parsing->data->result), "Call to service 'names_suffixed' didn't return a parsing result value.");
+
+		return $parsing->data->result;
 	}
 	// @}
 }
