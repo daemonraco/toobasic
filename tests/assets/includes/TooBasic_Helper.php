@@ -26,6 +26,7 @@ class TooBasic_Helper {
 		if($case && $assertIt) {
 			$case->assertTrue(boolval($contents), "No content obtained for message 'message_{$index}.eml'.");
 			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $contents, "Content of message 'message_{$index}.eml' seems to have a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $contents, "Content of message 'message_{$index}.eml' seems to have a Smarty exception.");
 			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $contents, "Content of message 'message_{$index}.eml' seems to have a PHP error.");
 		}
 
@@ -48,6 +49,7 @@ class TooBasic_Helper {
 		if(boolval($case) && $assertIt) {
 			$case->assertTrue(boolval($response), "No response obtained for '{$subUrl}'.");
 			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a Smarty exception.");
 			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
 		}
 
@@ -74,6 +76,7 @@ class TooBasic_Helper {
 		}
 		if(boolval($case) && $assertResult) {
 			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $output, "The executed command seems to have returned a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $output, "The executed command seems to have returned a Smarty exception.");
 			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $output, "The executed command seems to have returned a PHP error.");
 		}
 		if($promptResult) {

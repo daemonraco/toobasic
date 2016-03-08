@@ -349,7 +349,7 @@ class ActionsManager extends UrlManager {
 			$errorControllerClass = self::FetchController($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName]);
 			//
 			// Adding more information about the error.
-			if($controllerClass !== false) {
+			if($errorControllerClass !== false) {
 				$errorControllerClass->setFailingController($controllerClass);
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');

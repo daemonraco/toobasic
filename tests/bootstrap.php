@@ -18,8 +18,9 @@ define('TESTS_ROOTDIR', dirname(__DIR__));
 define('TESTS_ROOTURI', php_sapi_name() != 'cli' ? dirname($_SERVER['SCRIPT_NAME']) : false);
 //
 // Page errors patterns
-define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '/TooBasic.([a-zA-Z]*)Exception/m');
-define('ASSERTION_PATTERN_PHP_ERROR', '/(Fatal error|Warning|Notice):/m');
+define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '~TooBasic.([a-zA-Z]*)Exception~m');
+define('ASSERTION_PATTERN_SMARTY_EXCEPTION', '~SmartyException~m');
+define('ASSERTION_PATTERN_PHP_ERROR', '~(Fatal error|Warning|Notice):~m');
 //
 // Loading composer autoload.
 require_once dirname(__DIR__).'/vendor/autoload.php';
