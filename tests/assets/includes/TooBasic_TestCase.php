@@ -32,8 +32,14 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	// @}
 	//
 	// Internal methods @{
+	protected function activatePreAsset($subpath) {
+		self::$_AssetsManager->activatePreAsset($subpath);
+	}
 	protected function clearEmails($assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		return TooBasic_Helper::ClearEmails($this, $assertResult, $assertReturnValue, $promptResult);
+	}
+	protected function deactivatePreAsset($subpath) {
+		self::$_AssetsManager->deactivatePreAsset($subpath);
 	}
 	public function getEmail($index, $assertIt = true) {
 		return TooBasic_Helper::GetEmail($this, $index, $assertIt);

@@ -42,12 +42,18 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 	// @}
 	//
 	// Internal methods @{
+	protected function activatePreAsset($subpath) {
+		self::$_AssetsManager->activatePreAsset($subpath);
+	}
 	protected function checkCurrentSource() {
 		$this->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $this->source(), "Response to '{$this->url()}' seems to have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $this->source(), "Response to '{$this->url()}' seems to have a PHP error.");
 	}
 	protected function clearEmails($assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		return TooBasic_Helper::ClearEmails($this, $assertResult, $assertReturnValue, $promptResult);
+	}
+	protected function deactivatePreAsset($subpath) {
+		self::$_AssetsManager->deactivatePreAsset($subpath);
 	}
 	public function getEmail($index, $assertIt = true) {
 		return TooBasic_Helper::GetEmail($this, $index, $assertIt);

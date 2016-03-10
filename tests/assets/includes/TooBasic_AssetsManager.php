@@ -22,7 +22,7 @@ class TooBasic_AssetsManager {
 	//
 	// Public methods.
 	public function activatePreAsset($subpath) {
-		if($this->isLoaded) {
+		if($this->_isLoaded) {
 			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
 			$prePath = "{$path}.pre";
 			if(is_file($prePath) || is_dir($prePath)) {
@@ -41,8 +41,8 @@ class TooBasic_AssetsManager {
 	public function assetFiles() {
 		return $this->_assetFiles;
 	}
-	public function diactivatePreAsset($subpath) {
-		if($this->isLoaded) {
+	public function deactivatePreAsset($subpath) {
+		if($this->_isLoaded) {
 			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
 			$prePath = "{$path}.pre";
 			if(is_file($path) || is_dir($path)) {

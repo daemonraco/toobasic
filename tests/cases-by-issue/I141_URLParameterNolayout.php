@@ -18,8 +18,7 @@ class I141_URLParameterNolayoutTest extends TooBasic_TestCase {
 		$this->assertNotRegExp('~debugnolayout~m', $result, 'Debug flag to disable layouts is still listed.');
 	}
 	public function testCallingAControllerWithoutLayoutAndDisabledDebug() {
-		$nodebugsPath = TESTS_ROOTDIR.'/site/configs/nodebugs.php';
-		$this->runCommand("mv '{$nodebugsPath}.pre' '{$nodebugsPath}'");
+		$this->activatePreAsset('/site/configs/nodebugs.php');
 
 		$result = $this->getUrl('?action=test&nolayout');
 		$this->assertNotRegExp('~MAIN CONTENT~m', $result, 'Layout content found.');
