@@ -9,7 +9,7 @@ class TooBasic_Helper {
 	//
 	// Tools @{
 	public static function ClearEmails($case, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
-		self::RunCommand($case, TOOBASIC_TESTS_ASSETS_DIR.'/cases/scripts/clearemails.sh', $assertResult, $assertReturnValue, $promptResult);
+		self::RunCommand($case, TESTS_TESTS_ASSETS_DIR.'/cases/scripts/clearemails.sh', $assertResult, $assertReturnValue, $promptResult);
 	}
 	public static function GetEmail($case, $index, $assertIt = true) {
 		$path = "/tmp/fake-mailbox/message_{$index}.eml";

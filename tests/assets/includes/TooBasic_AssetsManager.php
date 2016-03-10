@@ -11,18 +11,49 @@ class TooBasic_AssetsManager {
 	// Protected properties.
 	protected $_assetDirectories = array();
 	protected $_assetFiles = array();
+	protected $_caseAssetsPath = false;
 	protected $_caseName = false;
+	protected $_casePath = false;
+	protected $_caseType = false;
 	protected $_generatedAssetFiles = array();
 	protected $_isLoaded = false;
 	protected $_manifest = false;
 	protected $_tearDownScripts = array();
 	//
 	// Public methods.
+	public function activatePreAsset($subpath) {
+		if($this->isLoaded) {
+			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
+			$prePath = "{$path}.pre";
+			if(is_file($prePath) || is_dir($prePath)) {
+				if(self::$Verbose) {
+					echo "\n\e[1;34mActivating asset '{$path}'.\e[0m\n";
+				}
+				rename($prePath, $path);
+			} else {
+				echo "\n\e[1;31mAsset '{$path}' cannot be activated.\e[0m\n";
+			}
+		}
+	}
 	public function assetDirectories() {
 		return $this->_assetDirectories;
 	}
 	public function assetFiles() {
 		return $this->_assetFiles;
+	}
+	public function diactivatePreAsset($subpath) {
+		if($this->isLoaded) {
+			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
+			$prePath = "{$path}.pre";
+			if(is_file($path) || is_dir($path)) {
+				if(self::$Verbose) {
+					echo "\n\e[1;34mDiactivating asset '{$path}'.\e[0m\n";
+				}
+				rename($path, $prePath);
+			} else {
+				echo "\n\e[1;31mAsset '{$path}' cannot be diactivated.\e[0m\n";
+			}
+		}
 	}
 	public function generatedAssetFiles() {
 		return $this->_generatedAssetFiles;
@@ -31,27 +62,22 @@ class TooBasic_AssetsManager {
 		if(!$this->_isLoaded) {
 			$this->_isLoaded = true;
 
+			$pathGuessing = self::GuessAssetsPaths($path);
+
 			$ok = true;
 			$manifest = false;
 			$mainManifest = false;
 			//
 			// Guessing names.
-			$nameReplacements = array(
-				'%-%' => '',
-				'%/%' => '_',
-				'/\.([a-z]*)$/' => '',
-				'/_([_]+)/' => '_'
-			);
-			$this->_caseName = 'case_'.substr($path, strlen(TOOBASIC_TESTS_DIR));
-			foreach($nameReplacements as $k => $v) {
-				$this->_caseName = preg_replace($k, $v, $this->_caseName);
-			}
-			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$this->_caseName}";
-			$manifestPath = "{$caseFolder}/manifest.json";
+			$this->_caseName = $pathGuessing['case-name'];
+			$this->_casePath = $pathGuessing['case-path'];
+			$this->_caseType = $pathGuessing['case-type'];
+			$this->_caseAssetsPath = $pathGuessing['assets-path'];
+			$manifestPath = $pathGuessing['manifest-path'];
+			$mainManifestPath = $pathGuessing['main-manifest-path'];
 			if(self::$Verbose) {
 				echo "\n\e[1;34mSetting up for '{$this->_caseName}'.\e[0m\n";
 			}
-			$mainManifestPath = TOOBASIC_TESTS_ACASES_DIR."/manifest.json";
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
@@ -131,11 +157,11 @@ class TooBasic_AssetsManager {
 				$assets = array_unique($assets);
 
 				foreach($assets as $asset) {
-					$fromPath = $caseFolder.$asset;
+					$fromPath = $this->_caseAssetsPath.$asset;
 					$toPath = TESTS_ROOTDIR.$asset;
 
 					if(!is_file($fromPath)) {
-						$fromPath = TOOBASIC_TESTS_ACASES_DIR.$asset;
+						$fromPath = TESTS_TESTS_ACASES_DIR.$asset;
 					}
 					if(is_file($toPath)) {
 						if(self::$Verbose) {
@@ -189,9 +215,9 @@ class TooBasic_AssetsManager {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
-						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+						$scriptPath = TESTS_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
 					} else {
-						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+						$scriptPath = "{$this->_caseAssetsPath}/{$scriptParts[0]}";
 					}
 
 					chmod($scriptPath, 0755);
@@ -219,9 +245,9 @@ class TooBasic_AssetsManager {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
-						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+						$scriptPath = TESTS_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
 					} else {
-						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+						$scriptPath = "{$this->_caseAssetsPath}/{$scriptParts[0]}";
 					}
 
 					chmod($scriptPath, 0755);
@@ -261,6 +287,11 @@ class TooBasic_AssetsManager {
 		foreach($this->_tearDownScripts as $script) {
 			TooBasic_Helper::RunCommand(null, $script);
 		}
+
+		$this->_caseName = false;
+		$this->_casePath = false;
+		$this->_caseAssetsPath = false;
+		$this->_isLoaded = false;
 	}
 	//
 	// Protected methods.
@@ -276,5 +307,25 @@ class TooBasic_AssetsManager {
 				$this->_manifest->{$prop} = array_merge($this->_manifest->{$prop}, $value);
 			}
 		}
+	}
+	//
+	// Public class methods.
+	public static function GuessAssetsPaths($path) {
+		//
+		// Default values.
+		$out = [
+			'case-path' => $path
+		];
+		//
+		// Guessing names.
+		$pathPieces = array_filter(explode('/', preg_replace('~^'.TESTS_TESTS_DIR.'~', '', $path)));
+		$out['case-type'] = array_shift($pathPieces);
+		$out['case-name'] = preg_replace('~\.php$~', '', array_pop($pathPieces));
+		$pathPieces[] = $out['case-name'];
+		$out['assets-path'] = TESTS_TESTS_ACASES_DIR."/{$out['case-type']}/".implode('_', $pathPieces);
+		$out['manifest-path'] = "{$out['assets-path']}/manifest.json";
+		$out['main-manifest-path'] = TESTS_TESTS_ACASES_DIR."/manifest.json";
+
+		return $out;
 	}
 }

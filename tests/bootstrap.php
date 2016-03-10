@@ -25,7 +25,7 @@ define('ASSERTION_PATTERN_PHP_ERROR', '~(Fatal error|Warning|Notice):~m');
 // Loading composer autoload.
 require_once dirname(__DIR__).'/vendor/autoload.php';
 //
-// Loading TooBasic test assets assets
+// Loading TooBasic test assets assets.
 require_once __DIR__.'/assets/autoload.php';
 //
 // Global dependencies.
