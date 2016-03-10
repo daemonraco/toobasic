@@ -69,12 +69,12 @@ class TooBasic_AssetsManager {
 			$mainManifest = false;
 			//
 			// Guessing names.
-			$this->_caseName = $pathGuessing['case-name'];
-			$this->_casePath = $pathGuessing['case-path'];
-			$this->_caseType = $pathGuessing['case-type'];
-			$this->_caseAssetsPath = $pathGuessing['assets-path'];
-			$manifestPath = $pathGuessing['manifest-path'];
-			$mainManifestPath = $pathGuessing['main-manifest-path'];
+			$this->_caseName = $pathGuessing[TEST_AFIELD_CASE_NAME];
+			$this->_casePath = $pathGuessing[TEST_AFIELD_CASE_PATH];
+			$this->_caseType = $pathGuessing[TEST_AFIELD_CASE_TYPE];
+			$this->_caseAssetsPath = $pathGuessing[TEST_AFIELD_ASSETS_PATH];
+			$manifestPath = $pathGuessing[TEST_AFIELD_MANIFEST_PATH];
+			$mainManifestPath = $pathGuessing[TEST_AFIELD_MAIN_MANIFEST_PATH];
 			if(self::$Verbose) {
 				echo "\n\e[1;34mSetting up for '{$this->_caseName}'.\e[0m\n";
 			}
@@ -314,17 +314,17 @@ class TooBasic_AssetsManager {
 		//
 		// Default values.
 		$out = [
-			'case-path' => $path
+			TEST_AFIELD_CASE_PATH => $path
 		];
 		//
 		// Guessing names.
 		$pathPieces = array_filter(explode('/', preg_replace('~^'.TESTS_TESTS_DIR.'~', '', $path)));
-		$out['case-type'] = array_shift($pathPieces);
-		$out['case-name'] = preg_replace('~\.php$~', '', array_pop($pathPieces));
-		$pathPieces[] = $out['case-name'];
-		$out['assets-path'] = TESTS_TESTS_ACASES_DIR."/{$out['case-type']}/".implode('_', $pathPieces);
-		$out['manifest-path'] = "{$out['assets-path']}/manifest.json";
-		$out['main-manifest-path'] = TESTS_TESTS_ACASES_DIR."/manifest.json";
+		$out[TEST_AFIELD_CASE_TYPE] = array_shift($pathPieces);
+		$out[TEST_AFIELD_CASE_NAME] = preg_replace('~\.php$~', '', array_pop($pathPieces));
+		$pathPieces[] = $out[TEST_AFIELD_CASE_NAME];
+		$out[TEST_AFIELD_ASSETS_PATH] = TESTS_TESTS_ACASES_DIR."/{$out[TEST_AFIELD_CASE_TYPE]}/".implode('_', $pathPieces);
+		$out[TEST_AFIELD_MANIFEST_PATH] = "{$out[TEST_AFIELD_ASSETS_PATH]}/manifest.json";
+		$out[TEST_AFIELD_MAIN_MANIFEST_PATH] = TESTS_TESTS_ACASES_DIR."/manifest.json";
 
 		return $out;
 	}

@@ -172,8 +172,8 @@ class NewCase {
 		$classPath = TESTS_TESTS_DIR."/{$this->_suite}/${idx}${className}.php";
 		$pathGuessing = TooBasic_AssetsManager::GuessAssetsPaths($classPath);
 
-		$assetsDirectory = $pathGuessing['assets-path'];
-		$manifestPath = $pathGuessing['manifest-path'];
+		$assetsDirectory = $pathGuessing[TEST_AFIELD_ASSETS_PATH];
+		$manifestPath = $pathGuessing[TEST_AFIELD_MANIFEST_PATH];
 		$configPath = "{$assetsDirectory}/site/config.php";
 
 		$this->_assignment['className'] = $className;

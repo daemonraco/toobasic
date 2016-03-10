@@ -13,3 +13,10 @@ define('TESTS_CACHE_DIR', TESTS_ROOTDIR.'/cache');
 define('TESTS_SMARTY_DIR', TESTS_ROOTDIR.'/cache/smarty');
 
 define('TESTS_LAST_GENERATION', TESTS_CACHE_DIR.'/newcase_lastgen.txt');
+
+define('TEST_AFIELD_ASSETS_PATH', 'assets-path');
+define('TEST_AFIELD_MAIN_MANIFEST_PATH', 'main-manifest-path');
+define('TEST_AFIELD_MANIFEST_PATH', 'manifest-path');
+define('TEST_AFIELD_CASE_NAME', 'case-name');
+define('TEST_AFIELD_CASE_PATH', 'case-path');
+define('TEST_AFIELD_CASE_TYPE', 'case-type');
