@@ -1,0 +1,3 @@
+<?php
+
+$Defaults[GC_DEFAULTS_LAYOUT] = 'unknown_layout';

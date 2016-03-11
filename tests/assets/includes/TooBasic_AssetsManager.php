@@ -27,11 +27,16 @@ class TooBasic_AssetsManager {
 			$prePath = "{$path}.pre";
 			if(is_file($prePath) || is_dir($prePath)) {
 				if(self::$Verbose) {
-					echo "\n\e[1;34mActivating asset '{$path}'.\e[0m\n";
+					echo "\e[1;34mActivating asset '{$path}'.\e[0m\n";
+				}
+				if(is_file($prePath)) {
+					$this->_generatedAssetFiles[] = $prePath;
+					$this->_generatedAssetFiles[] = $path;
+					$this->_generatedAssetFiles = array_unique($this->_generatedAssetFiles);
 				}
 				rename($prePath, $path);
 			} else {
-				echo "\n\e[1;31mAsset '{$path}' cannot be activated.\e[0m\n";
+				echo "\e[1;31mAsset '{$path}' cannot be activated.\e[0m\n";
 			}
 		}
 	}
@@ -47,11 +52,12 @@ class TooBasic_AssetsManager {
 			$prePath = "{$path}.pre";
 			if(is_file($path) || is_dir($path)) {
 				if(self::$Verbose) {
-					echo "\n\e[1;34mDiactivating asset '{$path}'.\e[0m\n";
+					echo "\e[1;34mDiactivating asset '{$path}'.\e[0m\n";
 				}
 				rename($path, $prePath);
-			} else {
-				echo "\n\e[1;31mAsset '{$path}' cannot be diactivated.\e[0m\n";
+				if(is_file($path) || is_dir($path)) {
+					echo "\e[1;31mAsset '{$path}' cannot be diactivated.\e[0m\n";
+				}
 			}
 		}
 	}
@@ -61,6 +67,8 @@ class TooBasic_AssetsManager {
 	public function loadAssetsOf($path) {
 		if(!$this->_isLoaded) {
 			$this->_isLoaded = true;
+
+			$this->pointOutFixes($path);
 
 			$pathGuessing = self::GuessAssetsPaths($path);
 
@@ -163,19 +171,23 @@ class TooBasic_AssetsManager {
 					if(!is_file($fromPath)) {
 						$fromPath = TESTS_TESTS_ACASES_DIR.$asset;
 					}
-					if(is_file($toPath)) {
-						if(self::$Verbose) {
-							echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
+					if(is_file($fromPath)) {
+						if(is_file($toPath)) {
+							if(self::$Verbose) {
+								echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
+							}
+							rename($toPath, $toPath.self::BACKUP_SUFFIX);
 						}
-						rename($toPath, $toPath.self::BACKUP_SUFFIX);
-					}
 
-					if(self::$Verbose) {
-						echo "\t\e[1;34mCreating assset '{$toPath}' from '{$fromPath}'\e[0m\n";
-					}
-					file_put_contents($toPath, str_replace(array_keys($travisReplacements), array_values($travisReplacements), file_get_contents($fromPath)));
+						if(self::$Verbose) {
+							echo "\t\e[1;34mCreating assset '{$toPath}'\n\t\tfrom '{$fromPath}'\e[0m\n";
+						}
+						file_put_contents($toPath, str_replace(array_keys($travisReplacements), array_values($travisReplacements), file_get_contents($fromPath)));
 
-					$this->_assetFiles[] = $toPath;
+						$this->_assetFiles[] = $toPath;
+					} else {
+						echo "\t\e[1;31mUnable to find assset '{$asset}'\e[0m\n";
+					}
 				}
 			}
 			//
@@ -306,6 +318,36 @@ class TooBasic_AssetsManager {
 			} elseif(is_array($this->_manifest->{$prop}) && is_array($value)) {
 				$this->_manifest->{$prop} = array_merge($this->_manifest->{$prop}, $value);
 			}
+		}
+	}
+	protected function pointOutFixes($path) {
+		$fixes = [
+			'FIXME' => [],
+			'TODO' => []
+		];
+		$hasMessages = false;
+		foreach(file($path) as $position => $line) {
+			$matches = false;
+			if(preg_match('~/\*\*(.*)@(?P<type>fixme|todo) (?P<message>.*)\*/~i', $line, $matches)) {
+				$fixes[strtoupper($matches['type'])][] = [
+					'message' => $matches['message'],
+					'line' => $position
+				];
+				$hasMessages = true;
+			}
+		}
+
+		if($hasMessages) {
+			echo "\n\e[1;33mPending fixes:\n";
+			foreach($fixes as $type => $messages) {
+				if(boolval($messages)) {
+					echo "\t{$type}:\n";
+					foreach($messages as $message) {
+						echo sprintf("\t\t[line: % 3d] %s\n", $message['line'], $message['message']);
+					}
+				}
+			}
+			echo "\e[0m\n";
 		}
 	}
 	//

@@ -1,5 +1,10 @@
 <?php
 
+//
+// Basic constants.
+define('TESTS_ROOTDIR', dirname(dirname(__DIR__)));
+define('TESTS_ROOTURI', php_sapi_name() != 'cli' ? dirname($_SERVER['SCRIPT_NAME']) : false);
+
 define('TESTS_TESTS_ASSETS_DIR', __DIR__);
 define('TESTS_TESTS_DIR', dirname(TESTS_TESTS_ASSETS_DIR));
 
@@ -20,3 +25,8 @@ define('TEST_AFIELD_MANIFEST_PATH', 'manifest-path');
 define('TEST_AFIELD_CASE_NAME', 'case-name');
 define('TEST_AFIELD_CASE_PATH', 'case-path');
 define('TEST_AFIELD_CASE_TYPE', 'case-type');
+//
+// Page errors patterns
+define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '~TooBasic.([a-zA-Z]*)Exception~m');
+define('ASSERTION_PATTERN_SMARTY_EXCEPTION', '~SmartyException~m');
+define('ASSERTION_PATTERN_PHP_ERROR', '~(Fatal error|Warning|Notice):~m');
