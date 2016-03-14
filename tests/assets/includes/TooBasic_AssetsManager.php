@@ -331,14 +331,14 @@ class TooBasic_AssetsManager {
 			if(preg_match('~/\*\*(.*)@(?P<type>fixme|todo) (?P<message>.*)\*/~i', $line, $matches)) {
 				$fixes[strtoupper($matches['type'])][] = [
 					'message' => $matches['message'],
-					'line' => $position
+					'line' => $position + 1
 				];
 				$hasMessages = true;
 			}
 		}
 
 		if($hasMessages) {
-			echo "\n\e[1;33mPending fixes:\n";
+			echo "\n\e[1;33mPending fixes (Reporter: '{$path}'):\n";
 			foreach($fixes as $type => $messages) {
 				if(boolval($messages)) {
 					echo "\t{$type}:\n";

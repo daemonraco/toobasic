@@ -6,7 +6,7 @@ class ControllersAndServicesExceptionsTest extends TooBasic_TestCase {
 	public function testRequestingAWrongController() {
 		$response = $this->getUrl('?action=unknown_action');
 		$this->assertRegExp('~404 - Not found~m', $response, "The response doesn't inform about a HTTP-404 error.");
-		/** @FIXME response should mention the page name. */
+		$this->assertRegExp('~Unknown action .unknown_action.~m', $response, "The response doesn't mention the failing controller.");
 	}
 	public function testRequestingAWrongClassController() {
 		$url = '?action=wrong_class';
