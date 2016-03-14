@@ -1,0 +1,7 @@
+{
+	"routes": [
+		{
+			"action": "some_action"
+		}
+	]
+}

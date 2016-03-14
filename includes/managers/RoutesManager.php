@@ -562,12 +562,27 @@ class RoutesManager extends Manager {
 		// Checking if there are routes specified.
 		if(isset($json->routes)) {
 			//
+			// Route fields and defaults.
+			$routeFields = [
+				'action' => false,
+				'params' => array(),
+				'route' => false,
+				'service' => false
+			];
+			//
 			// Loading each route.
 			foreach($json->routes as $route) {
 				//
 				// Copying only useful field and enforcing those
 				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'service', 'params'), $route, new \stdClass(), array('params' => array(), 'action' => false, 'service' => false));
+				$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
+				//
+				// Checking action/service.
+				if($auxRoute->route === false) {
+					throw new Exception("Wrong route specification in '{$path}'. No field 'route' given.");
+				} elseif(!$auxRoute->action && !$auxRoute->service) {
+					throw new Exception("Wrong route specification in '{$path}'. A route should have either an 'action' or a 'service'.");
+				}
 				//
 				// Expanding route's pattern.
 				$this->buildPattern($auxRoute);
