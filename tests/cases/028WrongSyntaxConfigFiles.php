@@ -57,7 +57,6 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 
 		$url = '?action=test_report';
 		$response = $this->getURL($url, false);
-		debugit($response);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -76,9 +75,10 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$response = $this->getURL($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
+		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~FormsException: Unable to load form 'broken_form'~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~Unable to load form 'broken_form'.~", $response, "Response to '{$url}' doesn't mention the broken file.");
 
 		$this->deactivatePreAsset($asset);
 	}

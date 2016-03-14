@@ -3,12 +3,18 @@ Usage:
 	<%$program%> <task-name>  [options]
 
 Suites:
-	- cases-by-class
 	- cases
-	- cases-on-selenium
+	- cases-by-class
 	- cases-by-issue
+	- cases-on-selenium
 Tasks:
 	- help
+		Show this help text.
+
 	- add-test-ctrl
-		Requires a second parameters specifying the assets directory.
+		Creates a test controller inside a case directory. Usage:
+		<%$program%> <case-full-path>
+
 	- add-asset
+		Creates an empty asset for certain case. Usage:
+		<%$program%> <suite-name> <case-index> <asset-path> [<asset-type>]

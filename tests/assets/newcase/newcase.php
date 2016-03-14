@@ -83,6 +83,13 @@ class NewCase {
 			'cases-by-issue',
 			'cases-on-selenium'
 		];
+		$types = [
+			'controller',
+			'empty',
+			'json',
+			'php',
+			'view'
+		];
 		if(!isset($this->_params[2]) || !in_array($this->_params[2], $suites)) {
 			echo "\e[1;31mYou must specify a valid suite.\e[0m\n";
 			echo "Available options are:\n";
@@ -108,18 +115,35 @@ class NewCase {
 				$assetFullPath = "{$pathGuessing[TEST_AFIELD_ASSETS_PATH]}{$assetPath}";
 
 				$assetPathInfo = pathinfo($assetFullPath);
-
-				$contents = false;
-				switch(strtolower($assetPathInfo['extension'])) {
-					case 'json':
-						$contents = "{\n}\n";
-						break;
-					case 'php':
-						$contents = "<?php\n\n";
-						break;
-					default:
-						$contents = '';
+				//
+				// Guessing type.
+				$type = false;
+				if(isset($this->_params[5])) {
+					$type = in_array($this->_params[5], $types) ? $this->_params[5] : 'empty';
+				} else {
+					switch(strtolower($assetPathInfo['extension'])) {
+						case 'json':
+							$type = 'json';
+							break;
+						case 'php':
+							$type = 'php';
+							break;
+						default:
+							$type = 'empty';
+					}
 				}
+				//
+				// Loading contents.
+				$assignments = [];
+				switch($type) {
+					case 'controller':
+						$info = pathinfo(preg_replace('~\.pre$~', '', $assetPath));
+						$className = ucwords(str_replace(['_', '-'], ' ', $info['filename'])).'Controller';
+						$className = str_replace(' ', '', preg_replace('~((Controller)+)$~', 'Controller', $className));
+						$assignments['controllerClass'] = $className;
+						break;
+				}
+				$contents = $this->render("atype_{$type}.tpl", $assignments);
 
 				$possibleDirectory = '';
 				$possibleDirectories = [];

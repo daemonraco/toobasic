@@ -138,7 +138,7 @@ class Form {
 			$className = $Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type];
 			$builder = new $className($this);
 		} else {
-			throw new FormsException("Unknown form type '{$this->_config->form->type}' at path '///form/type'.");
+			throw new FormsException("Unknown form type '{$this->_config->form->type}' at path '///form/type' (form '{$this->name()}').");
 		}
 		//
 		// Fixing mode.
@@ -485,10 +485,10 @@ class Form {
 		//
 		// Checking required fields.
 		if(!isset($this->_config->form)) {
-			throw new FormsException("Wrong form specification, unable to find path '///form'.");
+			throw new FormsException("Wrong form specification, unable to find path '///form' (form '{$this->name()}').");
 		}
 		if(!isset($this->_config->form->fields) || !count(get_object_vars($this->_config->form->fields))) {
-			throw new FormsException("Wrong form specification, unable to find path '///form/fields' or maybe empty.");
+			throw new FormsException("Wrong form specification, unable to find path '///form/fields' or maybe empty (form '{$this->name()}').");
 		}
 		//
 		// Checking and expanding default form values.
@@ -543,17 +543,26 @@ class Form {
 			}
 			//
 			// Special checks for 'enum' fields.
-			if($config->type == 'enum' && isset($config->emptyOption)) {
-				if(!is_object($config->emptyOption)) {
-					$aux = new \stdClass();
-					$aux->label = $config->emptyOption;
-					$config->emptyOption = $aux;
+			if($config->type == GC_FORMS_FIELDTYPE_ENUM) {
+				//
+				// Checking options.
+				if(!boolval($config->values)) {
+					throw new FormsException("Type '".GC_FORMS_FIELDTYPE_ENUM."' at path '///form/fields/{$name}' has no values (form '{$this->name()}').");
 				}
-				if(!isset($config->emptyOption->label)) {
-					$config->emptyOption->label = 'select_option_NOOPTION';
-				}
-				if(!isset($config->emptyOption->value)) {
-					$config->emptyOption->value = '';
+				//
+				// Checking empty option configuration.
+				if(isset($config->emptyOption)) {
+					if(!is_object($config->emptyOption)) {
+						$aux = new \stdClass();
+						$aux->label = $config->emptyOption;
+						$config->emptyOption = $aux;
+					}
+					if(!isset($config->emptyOption->label)) {
+						$config->emptyOption->label = 'select_option_NOOPTION';
+					}
+					if(!isset($config->emptyOption->value)) {
+						$config->emptyOption->value = '';
+					}
 				}
 			}
 			//
