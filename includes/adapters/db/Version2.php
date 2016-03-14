@@ -10,7 +10,7 @@ namespace TooBasic\Adapters\DB;
 //
 // Class aliases.
 use TooBasic\Managers\DBStructureManager;
-use TooBasic\Managers\DBStructureManagerExeption;
+use TooBasic\Managers\DBStructureManagerException;
 
 /**
  * @class Version2
@@ -35,7 +35,7 @@ class Version2 extends VersionAdapter {
 	 * manager. This method will use it to merge it with its own list.
 	 * @return mixed[string] Returns a list of values required by the manager
 	 * to analyse and accept the parsing.
-	 * @throws DBStructureManagerExeption
+	 * @throws DBStructureManagerException
 	 */
 	public function parseTable($table, $callbacks) {
 		$out = $this->parseTableStartResponse($table, $callbacks);
@@ -240,7 +240,7 @@ class Version2 extends VersionAdapter {
 					//
 					// Checking multiple primary keys.
 					if($indexType == 'primary' && count($out[GC_AFIELD_SPECS]->{$indexType}) > 1) {
-						throw new DBStructureManagerExeption("More than one primary key specified");
+						throw new DBStructureManagerException("More than one primary key specified");
 					}
 					//
 					// Checking each index specification.

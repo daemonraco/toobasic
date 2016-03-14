@@ -27,6 +27,6 @@ define('TEST_AFIELD_CASE_PATH', 'case-path');
 define('TEST_AFIELD_CASE_TYPE', 'case-type');
 //
 // Page errors patterns
-define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '~TooBasic.([a-zA-Z]*)Exception~m');
+define('ASSERTION_PATTERN_TOOBASIC_EXCEPTION', '~TooBasic.([a-zA-Z\\\\]*)Exception~m');
 define('ASSERTION_PATTERN_SMARTY_EXCEPTION', '~SmartyException~m');
 define('ASSERTION_PATTERN_PHP_ERROR', '~(Fatal error|Warning|Notice):~m');

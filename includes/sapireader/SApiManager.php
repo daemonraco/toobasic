@@ -200,7 +200,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 		//
 		// Checking for errors.
 		if(!$json) {
-			throw new SApiReaderException("Unable to load path '{$path}' (".json_last_error_msg().").");
+			throw new SApiReaderException("Unable to load path '{$path}'".(json_last_error() != JSON_ERROR_NONE ? ' ('.json_last_error_msg().').' : ''));
 		}
 
 		return $json;
