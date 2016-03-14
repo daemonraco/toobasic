@@ -4,14 +4,14 @@
  * @file index.php
  * @author Alejandro Dario Simi
  */
-include __DIR__.'/config/config.php';
-
-use \TooBasic\Params;
-use \TooBasic\Managers\ServicesManager;
-use \TooBasic\Managers\ActionsManager;
-use \TooBasic\Managers\EmailsManager;
+use TooBasic\Params;
+use TooBasic\Managers\ServicesManager;
+use TooBasic\Managers\ActionsManager;
+use TooBasic\Managers\EmailsManager;
 
 try {
+	include __DIR__.'/config/config.php';
+
 	if(isset(Params::Instance()->debugphpinfo)) {
 		\TooBasic\debugThingInPage('phpinfo', 'PHP Sites Information');
 	}

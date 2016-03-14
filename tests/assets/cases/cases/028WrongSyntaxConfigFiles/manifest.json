@@ -1,0 +1,26 @@
+{
+    "assets": [
+        "\/modules\/starterdoc\/.inactive",
+        "\/site\/config.php",
+        "\/site\/configs\/routes.json.pre",
+        "\/site\/controllers\/test.php",
+        "\/site\/db\/broken_table.json.pre",
+        "\/site\/forms\/broken_form.json.pre",
+        "\/site\/langs\/en_us.json.pre",
+        "\/site\/sapis\/broken_api.json.pre",
+        "\/site\/sapis\/reports\/broken_api.json.pre",
+        "\/site\/templates\/action\/test.html"
+    ],
+    "assetDirectories": [
+        "\/site",
+        "\/site\/configs",
+        "\/site\/db",
+        "\/site\/forms",
+        "\/site\/langs",
+        "\/site\/sapis",
+        "\/site\/sapis\/reports"
+    ],
+    "generatedAssets": [],
+    "setUpScripts": [],
+    "tearDownScripts": []
+}

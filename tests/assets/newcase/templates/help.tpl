@@ -11,3 +11,4 @@ Tasks:
 	- help
 	- add-test-ctrl
 		Requires a second parameters specifying the assets directory.
+	- add-asset
