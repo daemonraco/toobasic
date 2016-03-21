@@ -2,6 +2,9 @@
 
 class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 	//
+	// Internal properties.
+	protected $_autocleanDynamicAssets = true;
+	//
 	// Test cases @{
 	public function testCheckingBrokenRoutesSpecification() {
 		$asset = '/site/configs/routes.json';
@@ -15,11 +18,8 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~Unable to parse file (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	public function testCheckingBrokenTranslationSpecification() {
-		$this->deactivatePreAsset('/site/configs/routes.json');
 		$asset = '/site/langs/en_us.json';
 		$this->activatePreAsset($asset);
 
@@ -31,11 +31,8 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~Unable to parse file (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	public function testCheckingBrokenSapiReaderSpecification() {
-		$this->deactivatePreAsset('/site/langs/en_us.json');
 		$asset = '/site/sapis/broken_api.json';
 		$this->activatePreAsset($asset);
 
@@ -47,11 +44,8 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~Unable to load path (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	public function testCheckingBrokenSapiReportSpecification() {
-		$this->deactivatePreAsset('/site/sapis/broken_api.json');
 		$asset = '/site/sapis/reports/broken_report.json';
 		$this->activatePreAsset($asset);
 
@@ -63,11 +57,8 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~Path '(.*){$asset}' is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	public function testCheckingBrokenFormsSpecification() {
-		$this->deactivatePreAsset('/site/sapis/reports/broken_report.json');
 		$asset = '/site/forms/broken_form.json';
 		$this->activatePreAsset($asset);
 
@@ -79,11 +70,8 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~Unable to load form 'broken_form'.~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	public function testCheckingBrokenDbSpecification() {
-		$this->deactivatePreAsset('/site/forms/broken_form.json');
 		$asset = '/site/db/broken_table.json';
 		$this->activatePreAsset($asset);
 
@@ -95,8 +83,6 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
 		$this->assertRegExp("~JSON spec at '(.*){$asset}' is broken~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset($asset);
 	}
 	// @}
 }

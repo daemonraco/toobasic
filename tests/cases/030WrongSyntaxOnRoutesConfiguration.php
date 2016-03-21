@@ -2,6 +2,9 @@
 
 class WrongSyntaxOnRoutesConfigurationTest extends TooBasic_TestCase {
 	//
+	// Internal properties.
+	protected $_autocleanDynamicAssets = true;
+	//
 	// Test cases @{
 	public function testNoActionOrServiceConfigured() {
 		$this->activatePreAsset('/modules/no_action_or_service/configs/routes.json');
@@ -15,11 +18,8 @@ class WrongSyntaxOnRoutesConfigurationTest extends TooBasic_TestCase {
 
 		$this->assertRegExp("~Wrong route specification in(.*). A route should have either an 'action' or a 'service'.~", $response, "Response to '{$url}' doesn't mention the error.");
 		$this->assertRegExp("~Wrong route specification in(.*)/modules/no_action_or_service/configs/routes.json~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset('/modules/no_action_or_service/configs/routes.json');
 	}
 	public function testNoRouteFieldConfigured() {
-		$this->deactivatePreAsset('/modules/no_action_or_service/configs/routes.json');
 		$this->activatePreAsset('/modules/no_route_field/configs/routes.json');
 
 		$url = "/unknown_action";
@@ -31,8 +31,6 @@ class WrongSyntaxOnRoutesConfigurationTest extends TooBasic_TestCase {
 
 		$this->assertRegExp("~Wrong route specification in(.*). No field 'route' given.~", $response, "Response to '{$url}' doesn't mention the error.");
 		$this->assertRegExp("~Wrong route specification in(.*)/modules/no_route_field/configs/routes.json~", $response, "Response to '{$url}' doesn't mention the broken file.");
-
-		$this->deactivatePreAsset('/modules/no_route_field/configs/routes.json');
 	}
 	// @}
 }

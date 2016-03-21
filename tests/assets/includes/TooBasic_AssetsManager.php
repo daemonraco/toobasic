@@ -46,6 +46,16 @@ class TooBasic_AssetsManager {
 	public function assetFiles() {
 		return $this->_assetFiles;
 	}
+	public function deactivateAllPreAsset() {
+		if($this->_isLoaded) {
+			foreach($this->_assetFiles as $path) {
+				if(preg_match('~.pre$~', $path)) {
+					$subpath = preg_replace('~^'.TESTS_ROOTDIR.'~', '', $path);
+					$this->deactivatePreAsset($subpath);
+				}
+			}
+		}
+	}
 	public function deactivatePreAsset($subpath) {
 		if($this->_isLoaded) {
 			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
@@ -276,7 +286,7 @@ class TooBasic_AssetsManager {
 		if(self::$Verbose) {
 			echo "\n\e[1;34mTearing down for '{$this->_caseName}'.\e[0m\n";
 		}
-		foreach($this->_assetFiles as $path) {
+		foreach(array_merge($this->_assetFiles, $this->_generatedAssetFiles) as $path) {
 			if(is_file($path)) {
 				if(self::$Verbose) {
 					echo "\t\e[1;34mRemoving assset '{$path}'\e[0m\n";

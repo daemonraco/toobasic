@@ -2,20 +2,14 @@
 
 class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	//
+	// Internal properties.
+	protected $_autocleanDynamicAssets = false;
+	//
 	// Set up @{
 	/**
 	 * @var TooBasic_AssetsManager
 	 */
 	protected static $_AssetsManager = false;
-	protected function loadAssetsOf($path = false) {
-		$filePath = $path;
-		if($path === false) {
-			$reflector = new ReflectionClass(get_called_class());
-			$filePath = $reflector->getFileName();
-		}
-
-		self::$_AssetsManager->loadAssetsOf($filePath);
-	}
 	public static function setUpBeforeClass() {
 		if(!self::$_AssetsManager) {
 			self::$_AssetsManager = new TooBasic_AssetsManager();
@@ -23,6 +17,7 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	}
 	public function setUp() {
 		$this->loadAssetsOf();
+		$this->deactivateAllPreAsset();
 		parent::setUp();
 	}
 	public static function tearDownAfterClass() {
@@ -38,6 +33,11 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	protected function clearEmails($assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		return TooBasic_Helper::ClearEmails($this, $assertResult, $assertReturnValue, $promptResult);
 	}
+	protected function deactivateAllPreAsset() {
+		if($this->_autocleanDynamicAssets) {
+			self::$_AssetsManager->deactivateAllPreAsset();
+		}
+	}
 	protected function deactivatePreAsset($subpath) {
 		self::$_AssetsManager->deactivatePreAsset($subpath);
 	}
@@ -49,6 +49,15 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	}
 	protected function getJSONUrl($subUrl, $assertIt = true) {
 		return TooBasic_Helper::GetJSONUrl($this, $subUrl, $assertIt);
+	}
+	protected function loadAssetsOf($path = false) {
+		$filePath = $path;
+		if($path === false) {
+			$reflector = new ReflectionClass(get_called_class());
+			$filePath = $reflector->getFileName();
+		}
+
+		self::$_AssetsManager->loadAssetsOf($filePath);
 	}
 	protected function runCommand($command, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		return TooBasic_Helper::RunCommand($this, $command, $assertResult, $assertReturnValue, $promptResult);
