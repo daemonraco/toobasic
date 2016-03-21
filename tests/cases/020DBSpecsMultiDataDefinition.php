@@ -14,7 +14,7 @@ class DBSpecsMultiDataDefinitionTest extends TooBasic_TestCase {
 		$this->assertEquals(0, count($json->items), "Response field 'items' has an unexpected amount of items.");
 	}
 	public function testAddingSomeDataFileAndChecking() {
-		$this->runCommand('cp '.TESTS_ROOTDIR.'/site/db/entries.1.json.pre '.TESTS_ROOTDIR.'/site/db/entries.1.json');
+		$this->activatePreAsset('/site/db/entries.1.json');
 		$json = $this->getJSONUrl('?action=test&format=json');
 
 		$this->assertTrue(isset($json->count), "Response field 'count' is not present.");
@@ -31,7 +31,7 @@ class DBSpecsMultiDataDefinitionTest extends TooBasic_TestCase {
 		$this->assertEquals('Entry 1', $json->items[0]->name, "First item's name has an unexpected value.");
 	}
 	public function testAddingAnotherDataFilesAndChecking() {
-		$this->runCommand('cp '.TESTS_ROOTDIR.'/site/db/entries.2.json.pre '.TESTS_ROOTDIR.'/site/db/entries.2.json');
+		$this->activatePreAsset('/site/db/entries.2.json');
 		$json = $this->getJSONUrl('?action=test&format=json');
 
 		$this->assertTrue(isset($json->count), "Response field 'count' is not present.");

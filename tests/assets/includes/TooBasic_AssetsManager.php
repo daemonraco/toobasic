@@ -11,18 +11,65 @@ class TooBasic_AssetsManager {
 	// Protected properties.
 	protected $_assetDirectories = array();
 	protected $_assetFiles = array();
+	protected $_caseAssetsPath = false;
 	protected $_caseName = false;
+	protected $_casePath = false;
+	protected $_caseType = false;
 	protected $_generatedAssetFiles = array();
 	protected $_isLoaded = false;
 	protected $_manifest = false;
 	protected $_tearDownScripts = array();
 	//
 	// Public methods.
+	public function activatePreAsset($subpath) {
+		if($this->_isLoaded) {
+			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
+			$prePath = "{$path}.pre";
+			if(is_file($prePath) || is_dir($prePath)) {
+				if(self::$Verbose) {
+					echo "\e[1;34mActivating asset '{$path}'.\e[0m\n";
+				}
+				if(is_file($prePath)) {
+					$this->_generatedAssetFiles[] = $prePath;
+					$this->_generatedAssetFiles[] = $path;
+					$this->_generatedAssetFiles = array_unique($this->_generatedAssetFiles);
+				}
+				rename($prePath, $path);
+			} else {
+				echo "\e[1;31mAsset '{$path}' cannot be activated.\e[0m\n";
+			}
+		}
+	}
 	public function assetDirectories() {
 		return $this->_assetDirectories;
 	}
 	public function assetFiles() {
 		return $this->_assetFiles;
+	}
+	public function deactivateAllPreAsset() {
+		if($this->_isLoaded) {
+			foreach($this->_assetFiles as $path) {
+				if(preg_match('~.pre$~', $path)) {
+					$subpath = preg_replace('~^'.TESTS_ROOTDIR.'~', '', $path);
+					$this->deactivatePreAsset($subpath);
+				}
+			}
+		}
+	}
+	public function deactivatePreAsset($subpath) {
+		if($this->_isLoaded) {
+			$path = preg_replace('~.pre$~', '', TESTS_ROOTDIR.$subpath);
+			$prePath = "{$path}.pre";
+			if(is_file($path) || is_dir($path)) {
+				if(self::$Verbose) {
+					echo "\e[1;34mDiactivating asset '{$path}'.\e[0m\n";
+				}
+				rename($path, $prePath);
+				if(is_file($path) || is_dir($path)) {
+					echo "\e[1;31mAsset '{$path}' cannot be diactivated.\e[0m\n";
+				}
+			}
+		}
 	}
 	public function generatedAssetFiles() {
 		return $this->_generatedAssetFiles;
@@ -31,27 +78,24 @@ class TooBasic_AssetsManager {
 		if(!$this->_isLoaded) {
 			$this->_isLoaded = true;
 
+			$this->pointOutFixes($path);
+
+			$pathGuessing = self::GuessAssetsPaths($path);
+
 			$ok = true;
 			$manifest = false;
 			$mainManifest = false;
 			//
 			// Guessing names.
-			$nameReplacements = array(
-				'%-%' => '',
-				'%/%' => '_',
-				'/\.([a-z]*)$/' => '',
-				'/_([_]+)/' => '_'
-			);
-			$this->_caseName = 'case_'.substr($path, strlen(TOOBASIC_TESTS_DIR));
-			foreach($nameReplacements as $k => $v) {
-				$this->_caseName = preg_replace($k, $v, $this->_caseName);
-			}
-			$caseFolder = TOOBASIC_TESTS_ACASES_DIR."/{$this->_caseName}";
-			$manifestPath = "{$caseFolder}/manifest.json";
+			$this->_caseName = $pathGuessing[TEST_AFIELD_CASE_NAME];
+			$this->_casePath = $pathGuessing[TEST_AFIELD_CASE_PATH];
+			$this->_caseType = $pathGuessing[TEST_AFIELD_CASE_TYPE];
+			$this->_caseAssetsPath = $pathGuessing[TEST_AFIELD_ASSETS_PATH];
+			$manifestPath = $pathGuessing[TEST_AFIELD_MANIFEST_PATH];
+			$mainManifestPath = $pathGuessing[TEST_AFIELD_MAIN_MANIFEST_PATH];
 			if(self::$Verbose) {
 				echo "\n\e[1;34mSetting up for '{$this->_caseName}'.\e[0m\n";
 			}
-			$mainManifestPath = TOOBASIC_TESTS_ACASES_DIR."/manifest.json";
 			//
 			// Loading manifest.
 			if($ok && is_readable($manifestPath)) {
@@ -131,25 +175,29 @@ class TooBasic_AssetsManager {
 				$assets = array_unique($assets);
 
 				foreach($assets as $asset) {
-					$fromPath = $caseFolder.$asset;
+					$fromPath = $this->_caseAssetsPath.$asset;
 					$toPath = TESTS_ROOTDIR.$asset;
 
 					if(!is_file($fromPath)) {
-						$fromPath = TOOBASIC_TESTS_ACASES_DIR.$asset;
+						$fromPath = TESTS_TESTS_ACASES_DIR.$asset;
 					}
-					if(is_file($toPath)) {
-						if(self::$Verbose) {
-							echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
+					if(is_file($fromPath)) {
+						if(is_file($toPath)) {
+							if(self::$Verbose) {
+								echo "\t\e[1;34mBacking up '{$toPath}' into '{$toPath}".self::BACKUP_SUFFIX."'\e[0m\n";
+							}
+							rename($toPath, $toPath.self::BACKUP_SUFFIX);
 						}
-						rename($toPath, $toPath.self::BACKUP_SUFFIX);
-					}
 
-					if(self::$Verbose) {
-						echo "\t\e[1;34mCreating assset '{$toPath}' from '{$fromPath}'\e[0m\n";
-					}
-					file_put_contents($toPath, str_replace(array_keys($travisReplacements), array_values($travisReplacements), file_get_contents($fromPath)));
+						if(self::$Verbose) {
+							echo "\t\e[1;34mCreating assset '{$toPath}'\n\t\tfrom '{$fromPath}'\e[0m\n";
+						}
+						file_put_contents($toPath, str_replace(array_keys($travisReplacements), array_values($travisReplacements), file_get_contents($fromPath)));
 
-					$this->_assetFiles[] = $toPath;
+						$this->_assetFiles[] = $toPath;
+					} else {
+						echo "\t\e[1;31mUnable to find assset '{$asset}'\e[0m\n";
+					}
 				}
 			}
 			//
@@ -189,9 +237,9 @@ class TooBasic_AssetsManager {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
-						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+						$scriptPath = TESTS_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
 					} else {
-						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+						$scriptPath = "{$this->_caseAssetsPath}/{$scriptParts[0]}";
 					}
 
 					chmod($scriptPath, 0755);
@@ -219,9 +267,9 @@ class TooBasic_AssetsManager {
 					$scriptParts = explode(':', $script);
 					$scriptPath = false;
 					if($scriptParts[0] == 'G') {
-						$scriptPath = TOOBASIC_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
+						$scriptPath = TESTS_TESTS_ACASES_DIR."/scripts/{$scriptParts[1]}";
 					} else {
-						$scriptPath = "{$caseFolder}/{$scriptParts[0]}";
+						$scriptPath = "{$this->_caseAssetsPath}/{$scriptParts[0]}";
 					}
 
 					chmod($scriptPath, 0755);
@@ -238,7 +286,7 @@ class TooBasic_AssetsManager {
 		if(self::$Verbose) {
 			echo "\n\e[1;34mTearing down for '{$this->_caseName}'.\e[0m\n";
 		}
-		foreach($this->_assetFiles as $path) {
+		foreach(array_merge($this->_assetFiles, $this->_generatedAssetFiles) as $path) {
 			if(is_file($path)) {
 				if(self::$Verbose) {
 					echo "\t\e[1;34mRemoving assset '{$path}'\e[0m\n";
@@ -261,6 +309,11 @@ class TooBasic_AssetsManager {
 		foreach($this->_tearDownScripts as $script) {
 			TooBasic_Helper::RunCommand(null, $script);
 		}
+
+		$this->_caseName = false;
+		$this->_casePath = false;
+		$this->_caseAssetsPath = false;
+		$this->_isLoaded = false;
 	}
 	//
 	// Protected methods.
@@ -276,5 +329,55 @@ class TooBasic_AssetsManager {
 				$this->_manifest->{$prop} = array_merge($this->_manifest->{$prop}, $value);
 			}
 		}
+	}
+	protected function pointOutFixes($path) {
+		$fixes = [
+			'FIXME' => [],
+			'TODO' => []
+		];
+		$hasMessages = false;
+		foreach(file($path) as $position => $line) {
+			$matches = false;
+			if(preg_match('~/\*\*(.*)@(?P<type>fixme|todo) (?P<message>.*)\*/~i', $line, $matches)) {
+				$fixes[strtoupper($matches['type'])][] = [
+					'message' => $matches['message'],
+					'line' => $position + 1
+				];
+				$hasMessages = true;
+			}
+		}
+
+		if($hasMessages) {
+			echo "\n\e[1;33mPending fixes (Reporter: '{$path}'):\n";
+			foreach($fixes as $type => $messages) {
+				if(boolval($messages)) {
+					echo "\t{$type}:\n";
+					foreach($messages as $message) {
+						echo sprintf("\t\t[line: % 3d] %s\n", $message['line'], $message['message']);
+					}
+				}
+			}
+			echo "\e[0m\n";
+		}
+	}
+	//
+	// Public class methods.
+	public static function GuessAssetsPaths($path) {
+		//
+		// Default values.
+		$out = [
+			TEST_AFIELD_CASE_PATH => $path
+		];
+		//
+		// Guessing names.
+		$pathPieces = array_filter(explode('/', preg_replace('~^'.TESTS_TESTS_DIR.'~', '', $path)));
+		$out[TEST_AFIELD_CASE_TYPE] = array_shift($pathPieces);
+		$out[TEST_AFIELD_CASE_NAME] = preg_replace('~\.php$~', '', array_pop($pathPieces));
+		$pathPieces[] = $out[TEST_AFIELD_CASE_NAME];
+		$out[TEST_AFIELD_ASSETS_PATH] = TESTS_TESTS_ACASES_DIR."/{$out[TEST_AFIELD_CASE_TYPE]}/".implode('_', $pathPieces);
+		$out[TEST_AFIELD_MANIFEST_PATH] = "{$out[TEST_AFIELD_ASSETS_PATH]}/manifest.json";
+		$out[TEST_AFIELD_MAIN_MANIFEST_PATH] = TESTS_TESTS_ACASES_DIR."/manifest.json";
+
+		return $out;
 	}
 }

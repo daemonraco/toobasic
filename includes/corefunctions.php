@@ -70,6 +70,14 @@ if(!function_exists('boolval')) {
 		return $var == true;
 	}
 }
+//
+// Defining function 'json_last_error_msg()' in case the current PHP version
+// doesn't have it.
+if(!function_exists('json_last_error_msg')) {
+	function json_last_error_msg() {
+		return "Function 'json_last_error_msg()' is not supported in your PHP version";
+	}
+}
 /**
  * Prompt an object in a pretty way and adding some useful info like where it is
  * being called from.

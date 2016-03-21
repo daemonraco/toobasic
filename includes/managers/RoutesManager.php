@@ -9,9 +9,10 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Params;
-use \TooBasic\Paths;
-use \TooBasic\Sanitizer;
+use TooBasic\Exception;
+use TooBasic\Params;
+use TooBasic\Paths;
+use TooBasic\Sanitizer;
 
 /**
  * @class RoutesManager
@@ -554,17 +555,34 @@ class RoutesManager extends Manager {
 		// Checking for parsing errors.
 		if(json_last_error() != JSON_ERROR_NONE) {
 			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
+		} elseif(get_class($json) != 'stdClass') {
+			throw new Exception("Unable to parse file '{$path}'.");
 		}
 		//
 		// Checking if there are routes specified.
 		if(isset($json->routes)) {
+			//
+			// Route fields and defaults.
+			$routeFields = [
+				'action' => false,
+				'params' => array(),
+				'route' => false,
+				'service' => false
+			];
 			//
 			// Loading each route.
 			foreach($json->routes as $route) {
 				//
 				// Copying only useful field and enforcing those
 				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array('route', 'action', 'service', 'params'), $route, new \stdClass(), array('params' => array(), 'action' => false, 'service' => false));
+				$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
+				//
+				// Checking action/service.
+				if($auxRoute->route === false) {
+					throw new Exception("Wrong route specification in '{$path}'. No field 'route' given.");
+				} elseif(!$auxRoute->action && !$auxRoute->service) {
+					throw new Exception("Wrong route specification in '{$path}'. A route should have either an 'action' or a 'service'.");
+				}
 				//
 				// Expanding route's pattern.
 				$this->buildPattern($auxRoute);

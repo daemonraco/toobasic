@@ -112,6 +112,7 @@ related)
 	* [Conditional Redirections](docs/redirections.md)
 	* [Forms Builder](docs/forms.md)
 	* [Simple API Reader](docs/sapireader.md)
+	* [Emails](docs/emails.md)
 	* [Search Engine](docs/searchengine.md)
 * Even heavier stuff:
 	* [Forms Builder Specifications](docs/tech/forms.md)

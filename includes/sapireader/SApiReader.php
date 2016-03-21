@@ -184,29 +184,31 @@ class SApiReader {
 		}
 		//
 		// Expanding each service specification.
-		foreach($this->_config->services as &$srv) {
-			//
-			// 'method' must exist and be a string.
-			if(!isset($srv->method) || !is_string($srv->method)) {
-				$srv->method = 'GET';
-			}
-			//
-			// ... also upper-case.
-			$srv->method = strtoupper($srv->method);
-			//
-			// 'params' must exist and be a list.
-			if(!isset($srv->params) || !is_array($srv->params)) {
-				$srv->params = array();
-			}
-			//
-			// 'sendParams' must exist and be an object.
-			if(!isset($srv->sendParams) || !is_object($srv->sendParams)) {
-				$srv->sendParams = new \stdClass();
-			}
-			//
-			// 'defaults' must exist and be an object.
-			if(!isset($srv->defaults) || !is_object($srv->defaults)) {
-				$srv->defaults = new \stdClass();
+		if(isset($this->_config->services) && is_object($this->_config->services)) {
+			foreach($this->_config->services as &$srv) {
+				//
+				// 'method' must exist and be a string.
+				if(!isset($srv->method) || !is_string($srv->method)) {
+					$srv->method = 'GET';
+				}
+				//
+				// ... also upper-case.
+				$srv->method = strtoupper($srv->method);
+				//
+				// 'params' must exist and be a list.
+				if(!isset($srv->params) || !is_array($srv->params)) {
+					$srv->params = array();
+				}
+				//
+				// 'sendParams' must exist and be an object.
+				if(!isset($srv->sendParams) || !is_object($srv->sendParams)) {
+					$srv->sendParams = new \stdClass();
+				}
+				//
+				// 'defaults' must exist and be an object.
+				if(!isset($srv->defaults) || !is_object($srv->defaults)) {
+					$srv->defaults = new \stdClass();
+				}
 			}
 		}
 	}
@@ -302,16 +304,24 @@ class SApiReader {
 		// Checking main fields presence.
 		foreach(array('services', 'url', 'name', 'description') as $field) {
 			if(!isset($this->_config->{$field})) {
-				throw new SApiReaderException("Configuration field '{$field}' not present.");
+				throw new SApiReaderException("Configuration field '{$field}' is not present.");
 			}
 		}
 		//
 		// Checking services.
-		$fields = array('uri');
+		if(!is_object($this->_config->services)) {
+			throw new SApiReaderException("Configuration field 'services' is not an object.");
+		}
+		if(!boolval(get_object_vars($this->_config->services))) {
+			throw new SApiReaderException("Configuration field 'services' is empty.");
+		}
+		//
+		// Checking each service.
+		$requiredFields = ['uri'];
 		foreach($this->_config->services as $name => $srv) {
 			//
 			// Checking required fields.
-			foreach($fields as $field) {
+			foreach($requiredFields as $field) {
 				if(!isset($srv->{$field})) {
 					throw new SApiReaderException("Configuration of service '{$name}' lacks field '{$field}'.");
 				}

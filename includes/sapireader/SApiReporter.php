@@ -305,7 +305,7 @@ class SApiReporter extends Singleton {
 					// Checking configuration.
 					$this->checkReportConf($report);
 				} else {
-					throw new SApiReportException("Path '{$path}' is not a valid JSON (".json_last_error_msg().').');
+					throw new SApiReportException("Path '{$path}' is not a valid JSON".(json_last_error() != JSON_ERROR_NONE ? ' ('.json_last_error_msg().')' : '').'.');
 				}
 			} else {
 				throw new SApiReportException("Unable to find a definition for report '{$report}'.");

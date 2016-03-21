@@ -9,15 +9,15 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Params;
-use \TooBasic\Paths;
+use TooBasic\Params;
+use TooBasic\Paths;
 
 /**
  * @class DBStructureManagerExeption
  * This is a specific exception class for fatal errors found on a database
  * structure check and update.
  */
-class DBStructureManagerExeption extends \TooBasic\DBException {
+class DBStructureManagerException extends \TooBasic\DBException {
 	
 }
 
@@ -744,7 +744,7 @@ class DBStructureManager extends Manager {
 	 * retrive. Also the database connection name.
 	 * @return \TooBasic\Adapters\DB\Adapter Returns a database structure
 	 * adapter.
-	 * @throws \TooBasic\Managers\DBStructureManagerExeption
+	 * @throws \TooBasic\Managers\DBStructureManagerException
 	 */
 	protected function getAdapter($connectionName) {
 		//
@@ -766,13 +766,13 @@ class DBStructureManager extends Manager {
 				//
 				// If it's an unknown connection it's a fatal
 				// configuration error.
-				throw new DBStructureManagerExeption("Unable to obtain connection '{$connectionName}' configuration");
+				throw new DBStructureManagerException("Unable to obtain connection '{$connectionName}' configuration");
 			}
 			//
 			// Checking if there's a proper database structure adapter
 			// configured.
 			if(!isset($Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine])) {
-				throw new DBStructureManagerExeption("There's no adapter for engine '{$engine}'");
+				throw new DBStructureManagerException("There's no adapter for engine '{$engine}'");
 			}
 			//
 			// Loading a proper database connection adapter.
@@ -784,7 +784,7 @@ class DBStructureManager extends Manager {
 				$this->_dbAdapters[$connectionName] = new $adapterName($db);
 				$out = $this->_dbAdapters[$connectionName];
 			} else {
-				throw new DBStructureManagerExeption("Unable to obtaing a connetion to '{$connectionName}'");
+				throw new DBStructureManagerException("Unable to obtaing a connetion to '{$connectionName}'");
 			}
 		} else {
 			//
@@ -811,7 +811,7 @@ class DBStructureManager extends Manager {
 				$this->_dbVersionAdapters[$version] = new $class($this);
 				$out = $this->_dbVersionAdapters[$version];
 			} else {
-				throw new DBStructureManagerExeption("Unable to handle version '{$version}'");
+				throw new DBStructureManagerException("Unable to handle version '{$version}'");
 			}
 		} else {
 			//
@@ -928,7 +928,7 @@ class DBStructureManager extends Manager {
 	 * This method takes a specification file, loads its data and triggers all
 	 *
 	 * @param string $path Absolute specification file path.
-	 * @throws \TooBasic\Managers\DBStructureManagerExeption
+	 * @throws \TooBasic\Managers\DBStructureManagerException
 	 */
 	protected function parseSpec($path) {
 		//
@@ -941,7 +941,7 @@ class DBStructureManager extends Manager {
 		// Loading and checking file.
 		$json = json_decode(file_get_contents($path));
 		if(!$json) {
-			throw new DBStructureManagerExeption("JSON spec at '{$path}' is broken. [".json_last_error().'] '.json_last_error_msg());
+			throw new DBStructureManagerException("JSON spec at '{$path}' is broken".(json_last_error() != JSON_ERROR_NONE ? ' ('.json_last_error_msg().')' : '').'.');
 		}
 		//
 		// Triggering parsings.

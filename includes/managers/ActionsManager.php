@@ -59,7 +59,37 @@ class ActionsManager extends UrlManager {
 			//
 			// Running layout's controller.
 			if($layoutName) {
-				$layoutLastRun = self::ExecuteAction($layoutName, $actionLastRun);
+				//
+				// Default values.
+				$errorLayout = false;
+				$errored = false;
+				//
+				// Loading layout.
+				$result = self::ExecuteAction($layoutName, $actionLastRun, $errorLayout, $errored);
+				//
+				// Checking if the layout failed and was built
+				// using an error controller.
+				if($errored) {
+					//
+					// If it failed, the result is considered
+					// to be an action result and it's
+					// sub-layout is check.
+					$actionLastRun = $result;
+					//
+					// Running error controller's layout.
+					if($errorLayout) {
+						$layoutLastRun = self::ExecuteAction($errorLayout, $actionLastRun, $errorLayout, $errored);
+						//
+						// At this point, the layout
+						// should not fail, if it does
+						// it's a fatal exception.
+						if($errored) {
+							throw new Exception("Layout '{$errorLayout}' for current error page failed on its execution.");
+						}
+					}
+				} else {
+					$layoutLastRun = $result;
+				}
 			}
 			//
 			// Displaying if required.
@@ -256,15 +286,19 @@ class ActionsManager extends UrlManager {
 	 * previous controller, useful for layouts.
 	 * @param string $layoutName Returns the name of the layout used by the
 	 * controller.
+	 * @param boolean $errorTriggered Returns TRUE when the result was build
+	 * by an error controller.
 	 * @return mixed[string] Returns an execution result structure.
 	 * @throws \TooBasic\Exception
 	 */
-	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false) {
+	public static function ExecuteAction($actionName, $previousActionRun = null, &$layoutName = false, &$errorTriggered = false) {
 		//
 		// Default values.
 		$redirector = false;
 		$status = true;
 		$lastRun = false;
+		$layoutName = false;
+		$errorTriggered = false;
 		//
 		// Loading controller based on current action's name.
 		$controllerClass = self::FetchController($actionName);
@@ -349,8 +383,12 @@ class ActionsManager extends UrlManager {
 			$errorControllerClass = self::FetchController($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName]);
 			//
 			// Adding more information about the error.
-			if($controllerClass !== false) {
-				$errorControllerClass->setFailingController($controllerClass);
+			if($errorControllerClass !== false) {
+				if($controllerClass) {
+					$errorControllerClass->setFailingController($controllerClass);
+				} else {
+					$errorControllerClass->setErrorMessage("Unknown action '{$actionName}'");
+				}
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
 				throw new Exception("Unable to find {$whatIsIt} '{$actionName}', neither controller for error '{$errorActionName}'");
@@ -364,6 +402,10 @@ class ActionsManager extends UrlManager {
 			//
 			// Fetching controller's execution result.
 			$lastRun = $errorControllerClass->lastRun();
+			//
+			// Indicating that this run was build base on an error
+			// controller.
+			$errorTriggered = true;
 		}
 
 		return $lastRun;

@@ -1,0 +1,30 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/controllers\/test_api.php",
+		"\/site\/sapis\/broken.json.pre",
+		"\/site\/sapis\/empty.json.pre",
+		"\/site\/sapis\/empty_services.json.pre",
+		"\/site\/sapis\/no_description.json.pre",
+		"\/site\/sapis\/no_name.json.pre",
+		"\/site\/sapis\/no_services.json.pre",
+		"\/site\/sapis\/no_uri_services.json.pre",
+		"\/site\/sapis\/no_url.json.pre",
+		"\/site\/sapis\/services_as_string.json.pre",
+		"\/site\/sapis\/wrong_headers.json.pre",
+		"\/site\/sapis\/wrong_send_params.json.pre",
+		"\/site\/sapis\/wrong_syntax.json.pre",
+		"\/site\/templates\/action\/test_api.html"
+	],
+	"assetDirectories": [
+		"\/site",
+		"\/site\/controllers",
+		"\/site\/sapis",
+		"\/site\/templates",
+		"\/site\/templates\/action"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

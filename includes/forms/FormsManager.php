@@ -113,23 +113,17 @@ class FormsManager extends \TooBasic\Managers\Manager {
 		// Default values
 		$out = '';
 		//
-		// Trying to load and build the for.
-		try {
+		// Loading the requested form.
+		$form = FormsFactory::Instance()->{$formName};
+		//
+		// Checking form an its status.
+		if(!$form || !$form->status()) {
+			$out = "Unable to obtain form '{$formName}'";
+			$out.= $form ? ' (status: '.($form->status() ? 'Ok' : 'Failed').').' : '.';
+		} else {
 			//
-			// Loading the requested form.
-			$form = FormsFactory::Instance()->{$formName};
-			//
-			// Checking form an its status.
-			if(!$form || !$form->status()) {
-				$out = "Unable to obtain form '{$formName}'";
-				$out.= $form ? ' (status: '.($form->status() ? 'Ok' : 'Failed').').' : '.';
-			} else {
-				//
-				// Building a HTML to be shown.
-				$out = $form->buildFor($item, $mode, $flags);
-			}
-		} catch(FormsException $e) {
-			$out = "FormsException: {$e->getMessage()}";
+			// Building a HTML to be shown.
+			$out = $form->buildFor($item, $mode, $flags);
 		}
 
 		return $out;

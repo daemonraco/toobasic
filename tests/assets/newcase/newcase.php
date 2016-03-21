@@ -34,8 +34,14 @@ class NewCase {
 		$whatToDo = false;
 
 		if(isset($this->_params[1])) {
-			$matches = false;
-			if(isset($this->_params[2])) {
+			if($this->_params[1] == 'help') {
+				$whatToDo = 'showHelp';
+			} elseif($this->_params[1] == 'add-asset') {
+				$whatToDo = 'addAssetFile';
+			} elseif($this->_params[1] == 'add-test-ctrl') {
+				$whatToDo = 'addTestCtrl';
+			} elseif(isset($this->_params[2])) {
+				$matches = false;
 				if(preg_match('/^(?P<suite>cases|cases-on-selenium)$/', $this->_params[1], $matches)) {
 					$this->_suite = $matches['suite'];
 					$whatToDo = 'createBasic';
@@ -56,11 +62,7 @@ class NewCase {
 					} else {
 						throw new Exception("Unable to obtain information for issue '{$this->_params[2]}'.");
 					}
-				} elseif($this->_params[1] == 'add-test-ctrl') {
-					$whatToDo = 'addTestCtrl';
 				}
-			} elseif($this->_params[1] == 'help') {
-				$whatToDo = 'showHelp';
 			}
 		}
 
@@ -74,25 +76,151 @@ class NewCase {
 	}
 	//
 	// Protected methods.
+	protected function addAssetFile() {
+		$suites = [
+			'cases',
+			'cases-by-class',
+			'cases-by-issue',
+			'cases-on-selenium'
+		];
+		$types = [
+			'controller',
+			'empty',
+			'json',
+			'php',
+			'view'
+		];
+		if(!isset($this->_params[2]) || !in_array($this->_params[2], $suites)) {
+			echo "\e[1;31mYou must specify a valid suite.\e[0m\n";
+			echo "Available options are:\n";
+			foreach($suites as $suite) {
+				echo"\t- '{$suite}'\n";
+			}
+		} elseif(!isset($this->_params[3]) || !preg_match('~([i]?)([0-9]+)~i', $this->_params[3])) {
+			echo "bananas\n";
+		} elseif(!isset($this->_params[4]) || !preg_match('~^\/(.+)$~i', $this->_params[4])) {
+			echo "\e[1;31mYou must specify an asset path (for example '/site/my_config.php').\e[0m\n";
+		} else {
+			file_put_contents(TESTS_LAST_GENERATION, '');
+
+			$suite = $this->_params[2];
+			$index = strtoupper($this->_params[3]);
+			$assetPath = $this->_params[4];
+
+			$paths = glob(TESTS_TESTS_DIR."/{$suite}/{$index}*");
+			$pathsCount = count($paths);
+			if($pathsCount == 1) {
+				$path = $paths[0];
+				$pathGuessing = TooBasic_AssetsManager::GuessAssetsPaths($path);
+				$assetFullPath = "{$pathGuessing[TEST_AFIELD_ASSETS_PATH]}{$assetPath}";
+
+				$assetPathInfo = pathinfo($assetFullPath);
+				//
+				// Guessing type.
+				$type = false;
+				if(isset($this->_params[5])) {
+					$type = in_array($this->_params[5], $types) ? $this->_params[5] : 'empty';
+				} else {
+					switch(strtolower($assetPathInfo['extension'])) {
+						case 'json':
+							$type = 'json';
+							break;
+						case 'php':
+							$type = 'php';
+							break;
+						default:
+							$type = 'empty';
+					}
+				}
+				//
+				// Loading contents.
+				$assignments = [];
+				switch($type) {
+					case 'controller':
+						$info = pathinfo(preg_replace('~\.pre$~', '', $assetPath));
+						$className = ucwords(str_replace(['_', '-'], ' ', $info['filename'])).'Controller';
+						$className = str_replace(' ', '', preg_replace('~((Controller)+)$~', 'Controller', $className));
+						$assignments['controllerClass'] = $className;
+						break;
+				}
+				$contents = $this->render("atype_{$type}.tpl", $assignments);
+
+				$possibleDirectory = '';
+				$possibleDirectories = [];
+				foreach(array_filter(explode('/', $assetPath)) as $pieces) {
+					$possibleDirectory = "{$possibleDirectory}/{$pieces}";
+					if($possibleDirectory != $assetPath) {
+						$possibleDirectories[] = $possibleDirectory;
+					}
+				}
+				//
+				// Creating directory.
+				if(!is_dir($assetPathInfo['dirname'])) {
+					echo str_replace(TESTS_ROOTDIR.'/', '', "Creating asset's directory '\e[1;36m{$assetPathInfo['dirname']}\e[0m': ");
+					mkdir($assetPathInfo['dirname'], 0777, true);
+					file_put_contents(TESTS_LAST_GENERATION, "D:{$assetPathInfo['dirname']}\n", FILE_APPEND);
+					echo "\e[1;32mDone\e[0m\n";
+				}
+				//
+				// Creating asset.
+				if(!is_file($assetPath)) {
+					echo str_replace(TESTS_ROOTDIR.'/', '', "Creating asset '\e[1;36m{$assetFullPath}\e[0m': ");
+					file_put_contents($assetFullPath, $contents);
+					file_put_contents(TESTS_LAST_GENERATION, "F:{$assetFullPath}\n", FILE_APPEND);
+					echo "\e[1;32mDone\e[0m\n";
+				}
+				//
+				// Updating manifest.
+				if(!is_file($assetPath)) {
+					echo str_replace(TESTS_ROOTDIR.'/', '', "Updating manifest '\e[1;36m{$pathGuessing[TEST_AFIELD_MANIFEST_PATH]}\e[0m': ");
+					$json = json_decode(file_get_contents($pathGuessing[TEST_AFIELD_MANIFEST_PATH]));
+					//
+					// Inserting asset path.
+					$aux = isset($json->assets) ? $json->assets : [];
+					$aux[] = $assetPath;
+					$aux = array_unique($aux);
+					sort($aux);
+					$json->assets = $aux;
+					//
+					// Inserting possible sub-directories
+					// paths.
+
+					$aux = isset($json->assetDirectories) ? $json->assetDirectories : [];
+					$aux = array_merge($aux, $possibleDirectories);
+					$aux = array_unique($aux);
+					sort($aux);
+					$json->assetDirectories = $aux;
+
+					file_put_contents($pathGuessing[TEST_AFIELD_MANIFEST_PATH], json_encode($json, JSON_PRETTY_PRINT));
+					file_put_contents(TESTS_LAST_GENERATION, "F:{$pathGuessing[TEST_AFIELD_MANIFEST_PATH]}\n", FILE_APPEND);
+					echo "\e[1;32mDone\e[0m\n";
+				}
+			} elseif($pathsCount > 1) {
+				echo "\e[1;31mTo many cases found for index '{$index}' inside suite '{$suite}'\e[0m\n";
+			} else {
+				echo "\e[1;31mNo case found for index '{$index}' inside suite '{$suite}'\e[0m\n";
+			}
+		}
+	}
 	protected function addTestCtrl() {
-		file_put_contents(TOOBASIC_LAST_GENERATION, '');
+		file_put_contents(TESTS_LAST_GENERATION, '');
 
 		if(is_dir($this->_params[2])) {
 			$ctrlPath = "/site/controllers/test.php";
 			$ctrlFullPath = "{$this->_params[2]}{$ctrlPath}";
 			$ctrlFullDir = dirname($ctrlFullPath);
 			if(!is_dir($ctrlFullDir)) {
-				echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating site directory '\e[1;36m{$ctrlFullDir}\e[0m': ");
+				echo str_replace(TESTS_ROOTDIR.'/', '', "Creating site directory '\e[1;36m{$ctrlFullDir}\e[0m': ");
 				mkdir($ctrlFullDir, 0777, true);
-				file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$ctrlFullDir}\n", FILE_APPEND);
+				file_put_contents(TESTS_LAST_GENERATION, "D:{$ctrlFullDir}\n", FILE_APPEND);
 				echo "\e[1;32mDone\e[0m\n";
 			}
 
 
-			echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating class file '\e[1;36m{$ctrlFullPath}\e[0m': ");
+			echo str_replace(TESTS_ROOTDIR.'/', '', "Creating class file '\e[1;36m{$ctrlFullPath}\e[0m': ");
 			if(!is_file($ctrlFullPath)) {
 				file_put_contents($ctrlFullPath, $this->render('test_ctrl.tpl'));
-				file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$ctrlFullPath}\n", FILE_APPEND);
+				file_put_contents(TESTS_LAST_GENERATION, "F:{$ctrlFullPath}\n", FILE_APPEND);
 				echo "\e[1;32mDone\e[0m\n";
 			} else {
 				echo "\e[1;31mFailed\e[0m (already exists)\n";
@@ -102,22 +230,22 @@ class NewCase {
 			$viewFullPath = "{$this->_params[2]}{$viewPath}";
 			$viewFullDir = dirname($viewFullPath);
 			if(!is_dir($viewFullDir)) {
-				echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating site directory '\e[1;36m{$viewFullDir}\e[0m': ");
+				echo str_replace(TESTS_ROOTDIR.'/', '', "Creating site directory '\e[1;36m{$viewFullDir}\e[0m': ");
 				mkdir($viewFullDir, 0777, true);
-				file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$viewFullDir}\n", FILE_APPEND);
+				file_put_contents(TESTS_LAST_GENERATION, "D:{$viewFullDir}\n", FILE_APPEND);
 				echo "\e[1;32mDone\e[0m\n";
 			}
-			echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating class file '\e[1;36m{$viewFullPath}\e[0m': ");
+			echo str_replace(TESTS_ROOTDIR.'/', '', "Creating class file '\e[1;36m{$viewFullPath}\e[0m': ");
 			if(!is_file($viewFullPath)) {
 				file_put_contents($viewFullPath, $this->render('test_view.tpl'));
-				file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$viewFullPath}\n", FILE_APPEND);
+				file_put_contents(TESTS_LAST_GENERATION, "F:{$viewFullPath}\n", FILE_APPEND);
 				echo "\e[1;32mDone\e[0m\n";
 			} else {
 				echo "\e[1;31mFailed\e[0m (already exists)\n";
 			}
 
 			$manifestPath = "{$this->_params[2]}/manifest.json";
-			echo str_replace(TOOBASIC_ROOTDIR, '...', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
+			echo str_replace(TESTS_ROOTDIR.'/', '', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
 			$this->updateManifest($manifestPath, [
 				"%%->assets[] = '{$ctrlPath}';",
 				"%%->assets[] = '{$viewPath}';",
@@ -133,16 +261,13 @@ class NewCase {
 	}
 	protected function createBasic($useIndex = true) {
 		$idx = false;
-		$className = false;
 		$parentClassName = false;
-		$assetsDirectory = false;
 		$classPath = false;
-		$manifestPath = false;
 
-		file_put_contents(TOOBASIC_LAST_GENERATION, '');
+		file_put_contents(TESTS_LAST_GENERATION, '');
 
 		if($useIndex) {
-			$knownCases = array_filter(glob(TOOBASIC_TESTS_DIR."/{$this->_suite}/*"), function($path) {
+			$knownCases = array_filter(glob(TESTS_TESTS_DIR."/{$this->_suite}/*"), function($path) {
 				return !preg_match('~^/(.*)/XXX(.*)\.php$~', $path);
 			});
 			$max = 0;
@@ -172,9 +297,11 @@ class NewCase {
 				break;
 		}
 
-		$assetsDirectory = TOOBASIC_TESTS_ASSETS_DIR."/cases/case_".str_replace('-', '', $this->_suite)."_{$idx}{$className}";
-		$classPath = TOOBASIC_TESTS_DIR."/{$this->_suite}/${idx}${className}.php";
-		$manifestPath = "{$assetsDirectory}/manifest.json";
+		$classPath = TESTS_TESTS_DIR."/{$this->_suite}/${idx}${className}.php";
+		$pathGuessing = TooBasic_AssetsManager::GuessAssetsPaths($classPath);
+
+		$assetsDirectory = $pathGuessing[TEST_AFIELD_ASSETS_PATH];
+		$manifestPath = $pathGuessing[TEST_AFIELD_MANIFEST_PATH];
 		$configPath = "{$assetsDirectory}/site/config.php";
 
 		$this->_assignment['className'] = $className;
@@ -183,42 +310,42 @@ class NewCase {
 		$this->_assignment['issueTitle'] = $this->_issueTitle;
 		#
 		# Assets directory.
-		echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating directory '\e[1;36m{$assetsDirectory}\e[0m': ");
+		echo str_replace(TESTS_ROOTDIR.'/', '', "Creating directory '\e[1;36m{$assetsDirectory}\e[0m': ");
 		if(!is_dir($assetsDirectory)) {
 			mkdir($assetsDirectory, 0777, true);
-			file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$assetsDirectory}\n", FILE_APPEND);
+			file_put_contents(TESTS_LAST_GENERATION, "D:{$assetsDirectory}\n", FILE_APPEND);
 			echo "\e[1;32mDone\e[0m\n";
 		} else {
 			echo "\e[1;31mFailed\e[0m (already exists)\n";
 		}
 		#
 		# Manifest.
-		echo str_replace(TOOBASIC_ROOTDIR, '...', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
+		echo str_replace(TESTS_ROOTDIR.'/', '', "Updating manifest file '\e[1;36m{$manifestPath}\e[0m': ");
 		$this->updateManifest($manifestPath);
 		echo "\e[1;32mDone\e[0m\n";
 		#
 		# Basic config file.
 		$configPathDir = dirname($configPath);
 		if(!is_dir($configPathDir)) {
-			echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating site directory '\e[1;36m{$configPathDir}\e[0m': ");
+			echo str_replace(TESTS_ROOTDIR.'/', '', "Creating site directory '\e[1;36m{$configPathDir}\e[0m': ");
 			mkdir($configPathDir, 0777, true);
-			file_put_contents(TOOBASIC_LAST_GENERATION, "D:{$configPathDir}\n", FILE_APPEND);
+			file_put_contents(TESTS_LAST_GENERATION, "D:{$configPathDir}\n", FILE_APPEND);
 			echo "\e[1;32mDone\e[0m\n";
 		}
-		echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating config file '\e[1;36m{$configPath}\e[0m': ");
+		echo str_replace(TESTS_ROOTDIR.'/', '', "Creating config file '\e[1;36m{$configPath}\e[0m': ");
 		if(!is_file($configPath)) {
 			file_put_contents($configPath, $this->render('config.tpl'));
-			file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$configPath}\n", FILE_APPEND);
+			file_put_contents(TESTS_LAST_GENERATION, "F:{$configPath}\n", FILE_APPEND);
 			echo "\e[1;32mDone\e[0m\n";
 		} else {
 			echo "\e[1;31mFailed\e[0m (already exists)\n";
 		}
 		#
 		# Case class.
-		echo str_replace(TOOBASIC_ROOTDIR, '...', "Creating class file '\e[1;36m{$classPath}\e[0m': ");
+		echo str_replace(TESTS_ROOTDIR.'/', '', "Creating class file '\e[1;36m{$classPath}\e[0m': ");
 		if(!is_file($classPath)) {
 			file_put_contents($classPath, $this->render('class.tpl'));
-			file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$classPath}\n", FILE_APPEND);
+			file_put_contents(TESTS_LAST_GENERATION, "F:{$classPath}\n", FILE_APPEND);
 			echo "\e[1;32mDone\e[0m\n";
 		} else {
 			echo "\e[1;31mFailed\e[0m (already exists)\n";
@@ -248,10 +375,10 @@ class NewCase {
 			$this->_smarty = new Smarty();
 
 			$smartyDirs = [
-				TOOBASIC_SMARTY_DIR,
-				TOOBASIC_SMARTY_DIR.'/compile',
-				TOOBASIC_SMARTY_DIR.'/cache',
-				TOOBASIC_SMARTY_DIR.'/configs'
+				TESTS_SMARTY_DIR,
+				TESTS_SMARTY_DIR.'/compile',
+				TESTS_SMARTY_DIR.'/cache',
+				TESTS_SMARTY_DIR.'/configs'
 			];
 			foreach($smartyDirs as $dir) {
 				if(!is_dir($dir)) {
@@ -259,10 +386,10 @@ class NewCase {
 				}
 			}
 
-			$this->_smarty->setTemplateDir(TOOBASIC_NEWCASE_TEMPLATES);
-			$this->_smarty->setCompileDir(TOOBASIC_SMARTY_DIR.'/compile');
-			$this->_smarty->setConfigDir(TOOBASIC_SMARTY_DIR.'/configs');
-			$this->_smarty->setCacheDir(TOOBASIC_SMARTY_DIR.'/cache');
+			$this->_smarty->setTemplateDir(TESTS_NEWCASE_TEMPLATES);
+			$this->_smarty->setCompileDir(TESTS_SMARTY_DIR.'/compile');
+			$this->_smarty->setConfigDir(TESTS_SMARTY_DIR.'/configs');
+			$this->_smarty->setCacheDir(TESTS_SMARTY_DIR.'/cache');
 
 			$this->_smarty->left_delimiter = '<%';
 			$this->_smarty->right_delimiter = '%>';
@@ -279,7 +406,7 @@ class NewCase {
 			$json = json_decode(file_get_contents($path));
 		}
 		if(!$json) {
-			$json = json_decode(file_get_contents(TOOBASIC_NEWCASE_TEMPLATES.'/manifest.json'));
+			$json = json_decode(file_get_contents(TESTS_NEWCASE_TEMPLATES.'/manifest.json'));
 		}
 
 		foreach($updateCommands as $command) {
@@ -287,7 +414,7 @@ class NewCase {
 		}
 
 		file_put_contents($path, json_encode($json, JSON_PRETTY_PRINT));
-		file_put_contents(TOOBASIC_LAST_GENERATION, "F:{$path}\n", FILE_APPEND);
+		file_put_contents(TESTS_LAST_GENERATION, "F:{$path}\n", FILE_APPEND);
 	}
 }
 

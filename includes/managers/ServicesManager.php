@@ -285,17 +285,13 @@ class ServicesManager extends UrlManager {
 	 */
 	public static function ExecuteService($serviceName) {
 		//
-		// Default values.
-		$status = true;
-		//
 		// Generating a basic result with an unknown error.
 		$lastRun = array(
-			GC_AFIELD_ERROR => array(
-				GC_AFIELD_CODE => self::ErrorUnknown,
-				GC_AFIELD_MESSAGE => 'Unknown error'
-			),
-			GC_AFIELD_HEADERS => array(),
-			GC_AFIELD_DATA => null
+			GC_AFIELD_STATUS => false,
+			GC_AFIELD_DATA => null,
+			GC_AFIELD_ERROR => false,
+			GC_AFIELD_ERRORS => array(),
+			GC_AFIELD_HEADERS => array()
 		);
 		//
 		// Loading serivce file and obtaining its class.
@@ -304,19 +300,23 @@ class ServicesManager extends UrlManager {
 		// Checking if the load was a success.
 		if($serviceClass !== false) {
 			//
-			// Actally runing the service.
-			$status = $serviceClass->run();
+			// Actually running the service.
+			$serviceClass->run();
 			//
 			// Getting its results.
 			$lastRun = $serviceClass->lastRun();
 		} else {
-			$status = false;
 			//
 			// Setting the right error information.
-			$lastRun[GC_AFIELD_ERROR][GC_AFIELD_CODE] = self::ErrorUnknownService;
-			$lastRun[GC_AFIELD_ERROR][GC_AFIELD_MESSAGE] = "Service '{$serviceName}' not found";
+			$aux = array(
+				GC_AFIELD_CODE => self::ErrorUnknownService,
+				GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found"
+			);
+			$lastRun[GC_AFIELD_ERROR] = $aux;
+			$lastRun[GC_AFIELD_ERRORS][] = $aux;
 			$lastRun[GC_AFIELD_HEADERS] = array();
 			$lastRun[GC_AFIELD_DATA] = null;
+			$lastRun[GC_AFIELD_STATUS] = false;
 		}
 
 		return $lastRun;
