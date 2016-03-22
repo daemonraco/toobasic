@@ -2,6 +2,8 @@
 	"assets": [
 		"/modules/starterdoc/.inactive",
 		"/site/config.php",
+		"/site/case_config.php",
+		"/site/sqlite_config.php",
 		"/site/configs/config_http.php",
 		"/site/controllers/layout_nav.php",
 		"/site/controllers/layout.php",
@@ -11,7 +13,6 @@
 		"/site/templates/action/layout_nav.html"
 	],
 	"generatedAssets": [
-		"/cache/travis_test.sqlite3",
 		"/modules/mymodule/configs/config.php",
 		"/modules/mymodule/configs/routes.json",
 		"/modules/mymodule/controllers/people.php",
