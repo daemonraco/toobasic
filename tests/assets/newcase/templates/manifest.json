@@ -1,7 +1,9 @@
 {
 	"assets": [
-		"/modules/starterdoc/.inactive",
-		"/site/config.php"
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/case_config.php",
+		"\/site\/installed_config.php.pre"
 	],
 	"assetDirectories": [
 	],

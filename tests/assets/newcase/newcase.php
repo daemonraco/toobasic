@@ -302,7 +302,7 @@ class NewCase {
 
 		$assetsDirectory = $pathGuessing[TEST_AFIELD_ASSETS_PATH];
 		$manifestPath = $pathGuessing[TEST_AFIELD_MANIFEST_PATH];
-		$configPath = "{$assetsDirectory}/site/config.php";
+		$configPath = "{$assetsDirectory}/site/case_config.php";
 
 		$this->_assignment['className'] = $className;
 		$this->_assignment['parentClassName'] = $parentClassName;
