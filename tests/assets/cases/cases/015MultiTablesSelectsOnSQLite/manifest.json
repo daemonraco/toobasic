@@ -2,12 +2,10 @@
 	"assets": [
 		"/modules/starterdoc/.inactive",
 		"/site/config.php",
+		"/site/sqlite_config.php",
 		"/site/controllers/test.php",
 		"/site/db/tables.json",
 		"/site/models/Entries.php",
 		"/site/templates/action/test.html"
-	],
-	"generatedAssets": [
-		"/cache/travis_test.sqlite3"
 	]
 }
