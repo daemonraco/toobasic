@@ -2,6 +2,7 @@
 	"assets": [
 		"/modules/starterdoc/.inactive",
 		"/site/config.php",
+		"/site/pgsql_config.php",
 		"/site/services/test.php"
 	],
 	"setUpScripts": [
