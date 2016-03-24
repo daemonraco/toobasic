@@ -88,6 +88,7 @@ class NewCase {
 			'empty',
 			'json',
 			'php',
+			'service',
 			'view'
 		];
 		if(!isset($this->_params[2]) || !in_array($this->_params[2], $suites)) {
@@ -140,6 +141,12 @@ class NewCase {
 						$info = pathinfo(preg_replace('~\.pre$~', '', $assetPath));
 						$className = ucwords(str_replace(['_', '-'], ' ', $info['filename'])).'Controller';
 						$className = str_replace(' ', '', preg_replace('~((Controller)+)$~', 'Controller', $className));
+						$assignments['controllerClass'] = $className;
+						break;
+					case 'service':
+						$info = pathinfo(preg_replace('~\.pre$~', '', $assetPath));
+						$className = ucwords(str_replace(['_', '-'], ' ', $info['filename'])).'Service';
+						$className = str_replace(' ', '', preg_replace('~((Service)+)$~', 'Service', $className));
 						$assignments['controllerClass'] = $className;
 						break;
 				}

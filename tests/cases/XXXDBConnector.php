@@ -3,10 +3,7 @@
 abstract class DBConnectorTest extends TooBasic_TestCase {
 	protected $_assertCounts = true;
 	public function testDatabaseConnection() {
-		$response = $this->getUrl('?service=test');
-
-		$json = json_decode($response);
-		$this->assertTrue(boolval($json), 'Response is not a JSON string.');
+		$json = $this->getJSONUrl('?service=test');
 
 		$this->assertTrue(isset($json->status), 'Response has no status indicator.');
 		$this->assertTrue($json->status, 'Response status indicator is false.');
