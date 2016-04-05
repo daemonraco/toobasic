@@ -8,7 +8,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 	// Broken file cases @{
 	public function testLoadingAnUnknownConfiguration() {
 		$url = "?action=test_api&api=unknown";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -20,7 +20,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/broken.json');
 
 		$url = "?action=test_api&api=broken";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -32,7 +32,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/wrong_syntax.json');
 
 		$url = "?action=test_api&api=wrong_syntax";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -48,7 +48,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/empty.json');
 
 		$url = "?action=test_api&api=empty";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -63,7 +63,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/no_services.json');
 
 		$url = "?action=test_api&api=no_services";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -75,7 +75,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/no_url.json');
 
 		$url = "?action=test_api&api=no_url";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -87,7 +87,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/no_name.json');
 
 		$url = "?action=test_api&api=no_name";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -99,7 +99,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/no_description.json');
 
 		$url = "?action=test_api&api=no_description";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -114,7 +114,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/services_as_string.json');
 
 		$url = "?action=test_api&api=services_as_string";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -126,7 +126,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/empty_services.json');
 
 		$url = "?action=test_api&api=empty_services";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -138,7 +138,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/no_uri_services.json');
 
 		$url = "?action=test_api&api=no_uri_services";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -150,7 +150,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/wrong_send_params.json');
 
 		$url = "?action=test_api&api=wrong_send_params";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -165,7 +165,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/wrong_headers.json');
 
 		$url = "?action=test_api&api=wrong_headers";
-		$this->getURL($url);
+		$this->getUrl($url);
 	}
 	// @}
 }

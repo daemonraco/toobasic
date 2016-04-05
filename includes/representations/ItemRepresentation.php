@@ -163,6 +163,11 @@ abstract class ItemRepresentation {
 			// Field filter class shortcut.
 			$filterClass = $Database[GC_DATABASE_FIELD_FILTERS][$filter];
 			//
+			// Checking field filter class.
+			if(!class_exists($filterClass)) {
+				throw new FieldFilterException("Undefined class '{$filterClass}' for field filter '{$filter}' required by field '{$field}'.");
+			}
+			//
 			// Checking forced persistence.
 			$this->_forcedPersistence = $this->_forcedPersistence || $filterClass ::ForcePersistence();
 		}
