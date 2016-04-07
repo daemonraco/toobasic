@@ -10,7 +10,7 @@ class WrongSyntaxOnRoutesConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/modules/no_action_or_service/configs/routes.json');
 
 		$url = "/unknown_action";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
@@ -23,7 +23,7 @@ class WrongSyntaxOnRoutesConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/modules/no_route_field/configs/routes.json');
 
 		$url = "/unknown_action";
-		$response = $this->getURL($url, false);
+		$response = $this->getUrl($url, false);
 
 		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
