@@ -38,6 +38,10 @@ addons:
 notifications:
   irc: "irc.freenode.org#TooBasic"
 #
+# Pre-installation steps.
+before_install:
+  - composer self-update
+#
 # Execution flow.
 before_script:
   #
