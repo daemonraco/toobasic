@@ -61,7 +61,7 @@ before_script:
   - "mkdir -p ~/.composer"
   - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json
-  - composer require phpunit/phpunit-selenium
+  - composer require phpunit/phpunit-selenium:2.0.2
   #
   # Installing and configuring Apache 2.
   - sudo apt-get update > /dev/null
