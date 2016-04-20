@@ -43,7 +43,6 @@ notifications:
 # Pre-installation steps.
 before_install:
   - composer self-update
-  - pear uninstall phpunit/PHPUnit
   - composer require phpunit/phpunit
 #
 # Execution flow.
@@ -91,7 +90,7 @@ before_script:
   - ./tests/assets/travis.save-files-status.sh before
 
 script:
-  - phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
+  - ./vendor/phpunit/phpunit/phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
 after_script:
   #
   # Getting a snapshot of current assets and comparing it against the previous
