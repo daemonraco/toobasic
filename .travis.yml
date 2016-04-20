@@ -43,6 +43,8 @@ notifications:
 # Pre-installation steps.
 before_install:
   - composer self-update
+  - pear uninstall phpunit/PHPUnit
+  - pear install phpunit/PHPUnit-5.2.10
 #
 # Execution flow.
 before_script:
