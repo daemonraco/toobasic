@@ -80,6 +80,9 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		//
 		// Checking that all expected assets where generated.
 		foreach(self::$_AssetsManager->generatedAssetFiles() as $path) {
+			if(preg_match('~\.sqlite3~', $path)) {
+				continue;
+			}
 			$this->assertTrue(is_file($path), "Asset '{$path}' was not generated.");
 		}
 	}
@@ -505,6 +508,9 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		// Checking that all expected assets where removed except those
 		// that are generic.
 		foreach(self::$_AssetsManager->generatedAssetFiles() as $path) {
+			if(preg_match('~\.sqlite3~', $path)) {
+				continue;
+			}
 			if(in_array($path, $this->_acceptableAssets)) {
 				continue;
 			}

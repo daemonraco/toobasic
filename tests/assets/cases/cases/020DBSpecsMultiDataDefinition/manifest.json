@@ -2,6 +2,7 @@
 	"assets": [
 		"/modules/starterdoc/.inactive",
 		"/site/config.php",
+		"/site/mysql_config.php",
 		"/site/controllers/test.php",
 		"/site/db/data.json",
 		"/site/db/entries.1.json.pre",
@@ -10,10 +11,6 @@
 		"/site/models/representations/DataFactory.php",
 		"/site/models/representations/DatumRepresentation.php",
 		"/site/templates/action/test.html"
-	],
-	"generatedAssets": [
-		"/site/db/entries.1.json",
-		"/site/db/entries.2.json"
 	],
 	"setUpScripts": [
 		"G:mysql/createdatabase.sh"

@@ -2,6 +2,7 @@
 	"assets": [
 		"\/modules\/starterdoc\/.inactive",
 		"\/site\/config.php",
+		"\/site\/sqlite_config.php",
 		"\/site\/configs\/routes.json.pre",
 		"\/site\/controllers\/test.php",
 		"\/site\/controllers\/test_sapis.php",
@@ -23,8 +24,5 @@
 		"\/site\/langs",
 		"\/site\/sapis",
 		"\/site\/sapis\/reports"
-	],
-	"generatedAssets": [
-		"\/cache\/travis_test.sqlite3"
 	]
 }

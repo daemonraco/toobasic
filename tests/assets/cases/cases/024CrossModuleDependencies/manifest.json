@@ -1,15 +1,19 @@
 {
 	"assets": [
-		"/modules/basic_module/manifest.json",
-		"/modules/dependant_module/manifest.json",
-		"/modules/starterdoc/.inactive",
-		"/site/config.php",
-		"/site/controllers/test.php",
-		"/site/templates/action/test.html"
+		"\/modules\/basic_module\/manifest.json",
+		"\/modules\/dependant_module\/manifest.json",
+		"\/modules\/wrong_dependant_module\/manifest.json.pre",
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/case_config.php",
+		"\/site\/installed_config.php.pre",
+		"\/site\/controllers\/test.php",
+		"\/site\/templates\/action\/test.html"
 	],
 	"assetDirectories": [
-		"/modules/basic_module",
-		"/modules/dependant_module"
+		"\/modules\/basic_module",
+		"\/modules\/dependant_module",
+		"\/modules\/wrong_dependant_module"
 	],
 	"generatedAssets": [],
 	"setUpScripts": [],

@@ -1,5 +1,6 @@
 {
 	"generatedAssets": [
-		"/cache/system/config-priorities.json"
+		"/cache/system/config-priorities.json",
+		"/cache/travis_test.sqlite3"
 	]
 }

@@ -2,6 +2,7 @@
 	"assets": [
 		"\/modules\/starterdoc\/.inactive",
 		"\/site\/config.php",
+		"\/site\/installed_config.php.pre",
 		"\/site\/controllers\/test_api.php",
 		"\/site\/sapis\/broken.json.pre",
 		"\/site\/sapis\/empty.json.pre",

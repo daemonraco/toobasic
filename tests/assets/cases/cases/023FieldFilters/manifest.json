@@ -2,6 +2,7 @@
 	"assets": [
 		"/modules/starterdoc/.inactive",
 		"/site/config.php",
+		"/site/mysql_config.php",
 		"/site/controllers/edit.php",
 		"/site/controllers/test.php",
 		"/site/db/filters.json",

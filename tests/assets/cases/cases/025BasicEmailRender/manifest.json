@@ -1,21 +1,33 @@
 {
-	"assets": [
-		"\/modules\/starterdoc\/.inactive",
-		"\/site\/config.php",
-		"\/site\/controllers\/send.php",
-		"\/site\/emails\/basic_layout.php",
-		"\/site\/emails\/hello.php",
-		"\/site\/models\/EmailFiller.php",
-		"\/site\/templates\/action\/send.html",
-		"\/site\/templates\/email\/basic_layout.html",
-		"\/site\/templates\/email\/hello.html"
-	],
-	"assetDirectories": [],
-	"generatedAssets": [],
-	"setUpScripts": [
-		"G:clearemails.sh"
-	],
-	"tearDownScripts": [
-		"G:clearemails.sh"
-	]
+    "assets": [
+        "\/modules\/starterdoc\/.inactive",
+        "\/site\/config.php",
+        "\/site\/controllers\/send.php",
+        "\/site\/emails\/basic_layout.php",
+        "\/site\/emails\/hello.php",
+        "\/site\/emails\/no_view.php",
+        "\/site\/emails\/wrong_class.php",
+        "\/site\/emails\/wrong_layout.php",
+        "\/site\/models\/EmailFiller.php",
+        "\/site\/templates\/action\/send.html",
+        "\/site\/templates\/email\/basic_layout.html",
+        "\/site\/templates\/email\/hello.html",
+        "\/site\/templates\/email\/wrong_layout.html"
+    ],
+    "assetDirectories": [
+        "\/site",
+        "\/site\/controllers",
+        "\/site\/emails",
+        "\/site\/models",
+        "\/site\/templates",
+        "\/site\/templates\/action",
+        "\/site\/templates\/email"
+    ],
+    "generatedAssets": [],
+    "setUpScripts": [
+        "G:clearemails.sh"
+    ],
+    "tearDownScripts": [
+        "G:clearemails.sh"
+    ]
 }

@@ -22,6 +22,8 @@ matrix:
       env: TRAVISCI_PHPUNIT_CONF='-7.0'
     - php: '5.6'
       env: TRAVISCI_PHPUNIT_CONF='-7.0'
+  allow_failures:
+    - php: nightly
 #
 # Required services.
 services:
@@ -37,6 +39,10 @@ addons:
 # Notifications.
 notifications:
   irc: "irc.freenode.org#TooBasic"
+#
+# Pre-installation steps.
+before_install:
+  - composer require phpunit/phpunit:4.8.24
 #
 # Execution flow.
 before_script:
@@ -57,7 +63,7 @@ before_script:
   - "mkdir -p ~/.composer"
   - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json
-  - composer require phpunit/phpunit-selenium
+  - composer require phpunit/phpunit-selenium:2.0.2
   #
   # Installing and configuring Apache 2.
   - sudo apt-get update > /dev/null
@@ -83,7 +89,7 @@ before_script:
   - ./tests/assets/travis.save-files-status.sh before
 
 script:
-  - phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
+  - ./vendor/phpunit/phpunit/phpunit --configuration phpunit${TRAVISCI_PHPUNIT_CONF}.xml
 after_script:
   #
   # Getting a snapshot of current assets and comparing it against the previous
