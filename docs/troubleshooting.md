@@ -48,6 +48,7 @@ Your site shows no errors and your browser is an empty white page.
 Well this doesn't mean there are no errors, perhaps they're been shown in a file
 you haven't checked yet.
 If you are under a standard *nix installation using apache, check these files:
+
 >/var/log/apache2/error.log
 
 >/var/log/apache2/access.log
@@ -121,3 +122,5 @@ recreate it automatically when it's required.
 If you want, you may visit these documentation pages:
 
 * [Author's Note](authorsnote.md)
+
+<!--:GBSUMMARY:Appendix:1:Troubleshooting:-->

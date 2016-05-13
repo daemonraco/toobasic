@@ -15,23 +15,43 @@ engines:
   phpmd:
     enabled: true
     checks:
-      Controversial/Superglobals:
-        enabled: false
       CleanCode/BooleanArgumentFlag:
-        enabled: false
-      Naming/ShortVariable:
-        enabled: false
-      Design/TooManyMethods:
-        enabled: false
-      Controversial/CamelCasePropertyName:
         enabled: false
       CleanCode/ElseExpression:
         enabled: false
       CleanCode/StaticAccess:
         enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      Controversial/CamelCaseVariableName:
+        enabled: false
+      Controversial/CamelCaseMethodName:
+        enabled: false
+      Controversial/Superglobals:
+        enabled: false
+      CyclomaticComplexity:
+        enabled: false
+      Design/TooManyMethods:
+        enabled: false
+      Naming/BooleanGetMethodName:
+        enabled: false
+      Naming/ConstantNamingConventions:
+        enabled: false
+      Naming/LongVariable:
+        enabled: false
+      Naming/ShortMethodName:
+        enabled: false
+      Naming/ShortVariable:
+        enabled: false
     exclude_fingerprints:
     - 8599ef8b2bd5e1860dbb451c0051c83e
     - 10b71b6cd38cf2292616e0ea1b2fbfb3
+    - a8163ba5c2135cc131d973c9b5fb088b
+    - 342cecb9696f997f007433fb57617983
+    - 439ea62f4740425d816cf2a366c090c1
+    - ee56e3d73abf3af3bc257a0d4d26ba6d
+    - ca7a9bf5da93e0bfb90641b535fae781
+    - 619bd9fa3af8b1fc6bd323a0b14a9aeb
 ratings:
   paths:
   - "**.php"
@@ -42,6 +62,8 @@ exclude_paths:
 - cache/**/*
 - site/**/*
 - libraries/**/*
+- tests/**/*
+- docs/**/*
 - "modules/starterdoc/scripts/strapdown.js"
 - "modules/starterdoc/scripts/strapdown.css"
 - "modules/starterdoc/styles/jquery.cssemoticons.css"

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>layout</title>
+
+		<meta charset="utf-8">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
+
+{$ctrl->htmlAllScripts(false,"\t\t")}
+
+{$ctrl->htmlAllStyles(false,"\t\t")}
+	</head>
+	<body class="container Action_{$action}">
+		<header>
+{$ctrl->insert('layout_nav')}
+		</header>
+		<div id="MainContents">
+<!-- MAIN CONTENT @{ -->
+%TOO_BASIC_ACTION_CONTENT%
+<!-- @} /MAIN CONTENT -->
+		</div>
+		<footer>
+
+		</footer>
+	</body>
+</html>

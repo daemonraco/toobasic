@@ -1,0 +1,11 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/configs/routes.json",
+		"/site/controllers/enroute.php",
+		"/site/controllers/route.php",
+		"/site/templates/action/enroute.html",
+		"/site/templates/action/route.html"
+	]
+}

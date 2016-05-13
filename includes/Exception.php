@@ -9,7 +9,8 @@ namespace TooBasic;
 
 /**
  * @class Exception
- * @todo doc
+ * This is the basic representation of any exception thrown by TooBasic
+ * components.
  */
 class Exception extends \Exception {
 	//

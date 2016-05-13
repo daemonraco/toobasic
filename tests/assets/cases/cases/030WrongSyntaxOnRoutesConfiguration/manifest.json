@@ -1,0 +1,18 @@
+{
+	"assets": [
+		"\/modules\/no_action_or_service\/configs\/routes.json.pre",
+		"\/modules\/no_route_field\/configs\/routes.json.pre",
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php"
+	],
+	"assetDirectories": [
+		"\/modules",
+		"\/modules\/no_action_or_service",
+		"\/modules\/no_action_or_service\/configs",
+		"\/modules\/no_route_field",
+		"\/modules\/no_route_field\/configs"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

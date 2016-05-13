@@ -83,3 +83,5 @@ Here you have a few links you may want to visit:
 * [Services](services.md)
 * [Representations](representations.md)
 * [Magic Properties](magicprop.md)
+
+<!--:GBSUMMARY:MVC:4:Models:-->

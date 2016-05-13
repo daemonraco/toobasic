@@ -1,0 +1,11 @@
+{
+	"common": "mod2",
+	"list": [
+		"value_5",
+		"value_2"
+	],
+	"settings": {
+		"prop_5": "mod2",
+		"prop_2": "mod2"
+	}
+}

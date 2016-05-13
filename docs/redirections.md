@@ -107,3 +107,5 @@ $Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
 With this a user may end up at:
 
 >http://www.example.com/mysite/?action=login&layout=errorlayout&showmessage=reasons&redirectedfrom=%2Fmysite%2F%3Faction%3Dmy_profile
+
+<!--:GBSUMMARY:Others:3:Using Redirections:-->

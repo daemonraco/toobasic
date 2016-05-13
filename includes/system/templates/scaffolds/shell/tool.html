@@ -1,6 +1,6 @@
 <?php
 
-use TooBasic\Shell\Option as TBS_Option;
+use TooBasic\Shell\Option;
 
 class <%$tool%> extends TooBasic\Shell\<%$toolParent%> {
 <%if count($options) > 0%>
@@ -18,7 +18,7 @@ class <%$tool%> extends TooBasic\Shell\<%$toolParent%> {
 <%foreach from=$options item=option%>
 
                 $text = "TODO help text for: '<%"', '"|implode:$option.triggers%>'.";
-		$this->_options->addOption(TBS_Option::EasyFactory(self::Option<%$option.name%>, array('<%"', '"|implode:$option.triggers%>'), TBS_Option::<%$option.type%>, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::Option<%$option.name%>, array('<%"', '"|implode:$option.triggers%>'), Option::<%$option.type%>, $text, 'value'));
 <%/foreach%>
 <%/if%>
 	}

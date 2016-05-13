@@ -1,0 +1,12 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/services\/dir_path.php",
+		"\/site\/services\/uri_path.php"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

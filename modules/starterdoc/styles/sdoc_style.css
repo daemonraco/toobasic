@@ -1,15 +1,13 @@
 html {
-	background: url(../images/sdoc-background-html.png) #303030 no-repeat fixed;
-	background-position-y: -200px;
-	/*background-size: cover;*/
+	background: url(../images/sdoc-background-html.png) #303030 no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }
 
 body {
 	background-color: rgba(0, 0, 0, 0.6);
-	/*background: url(../images/sdoc-background-body2.png) black no-repeat fixed;*/
-	/*background-position-x: -200px;*/
-	/*background-position-y: -200px;*/
-	/*background-size: contain;*/
 	color: white;
 }
 
@@ -35,4 +33,12 @@ hr {
 	background-image:    -moz-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 	background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 	background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+}
+
+a, a:visited {
+	color: #d0e0d0;
+}
+
+a:hover {
+	color: #d0f0d0;
 }

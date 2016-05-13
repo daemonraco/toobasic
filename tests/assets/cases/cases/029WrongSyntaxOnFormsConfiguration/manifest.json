@@ -1,0 +1,22 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/controllers\/form_tester.php",
+		"\/site\/forms\/broken_enum.json",
+		"\/site\/forms\/empty_fields.json",
+		"\/site\/forms\/no_fields.json",
+		"\/site\/forms\/no_form.json",
+		"\/site\/templates\/action\/form_tester.html"
+	],
+	"assetDirectories": [
+		"\/site",
+		"\/site\/controllers",
+		"\/site\/forms",
+		"\/site\/templates",
+		"\/site\/templates\/action"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

@@ -1,0 +1,17 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/controllers\/no_view.php",
+		"\/site\/controllers\/wrong_params.php",
+		"\/site\/controllers\/wrong_class.php",
+		"\/site\/services\/wrong_class.php",
+		"\/site\/services\/wrong_params.php",
+		"\/site\/templates\/action\/wrong_params.html",
+		"\/site\/templates\/action\/wrong_class.html"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

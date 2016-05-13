@@ -20,6 +20,16 @@ class <%$deleteActionController%> extends \TooBasic\Controller {
 			$this->setError(HTTPERROR_BAD_REQUEST, "Unknown <%$singularName%> with id '{$this->params->get->id}'");
 		}
 
+<%if $formBuilder%>
+		$this->assign('formFlags', array(
+<%if $templatesStyle == 'bootstrap'%>
+			GC_FORMS_BUILDFLAG_SPACER => "\t\t"
+<%else%>
+			GC_FORMS_BUILDFLAG_SPACER => ""
+<%/if%>
+		));
+
+<%/if%>
 		return $this->status();
 	}
 	protected function init() {

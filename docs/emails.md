@@ -25,7 +25,7 @@ Let's write the next code and save it at __ROOTDIR/site/emails/basic_layout.php_
 <?php
 class BasicLayoutEmail extends \TooBasic\EmailLayout {
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		return true;
@@ -76,7 +76,7 @@ code at __ROOTDIR/site/emails/hello.php__:
 class HelloEmail extends \TooBasic\Email {
 	protected $_layout = 'basic_layout';
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		return true;
@@ -96,6 +96,7 @@ Now we have a mail and its layout, but how do I know if it's well created or if
 I'm missing something?
 For this purpose you'll need to use a debug parameter on your site, something like
 this:
+
 >http://www.example.com/mysite/?debugemail=hello
 
 This won't show a normal page on your browser, instead it will render and display
@@ -120,7 +121,7 @@ class HelloEmail extends \TooBasic\Email {
 		$manager = $this->model->users;
 		$user = $manager->currentUser();
 		$this->assign('name', $user->name);
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		$this->assign('name', 'Some User');
@@ -173,7 +174,7 @@ class HelloEmail extends \TooBasic\Email {
 	protected $_layout = 'basic_layout';
 	protected function basicRun() {
 		$this->assign('name', $this->_payload->name);
-		return true;
+		return $this->status();
 	}
 	protected function simulation() {
 		$this->assign('name', 'Some User');
@@ -259,6 +260,7 @@ can alter your _email payload_ in this way:
 		. . .
 ```
 And you can debug it calling to an URL like this one:
+
 >http://www.example.com/mysite/?debugemail=hello&debugemailstriptags
 
 ## Origin
@@ -281,3 +283,5 @@ If you want, you may visit these links:
 
 * [Basic Controllers Layouts](layout.md)
 * [Models](models.md)
+
+<!--:GBSUMMARY:Mailing:7:Emails:-->

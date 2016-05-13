@@ -6,8 +6,18 @@
 // Checking if jQuery was previously included.
 if (window.jQuery) {
 	//
+	// Generic functions used by TooBasic components.
+	window.TooBasic = {
+		split: function (val) {
+			return val.split(/,\s*/);
+		},
+		extractLast: function (term) {
+			return window.TooBasic.split(term).pop();
+		}
+	};
+	//
 	// Adding a new metod to reload ajax insertion.
-	$.fn.tooBasicReload = function() {
+	$.fn.tooBasicReload = function () {
 		//
 		// Obtaining target URL.
 		var uri = $(this).attr('data-toobasic-insert');
@@ -25,7 +35,7 @@ if (window.jQuery) {
 			var mthis = $(this);
 			//
 			// Requesting the data to insert.
-			$.get(uri, function(data) {
+			$.get(uri, function (data) {
 				//
 				// The actual data insertion.
 				mthis.html(data);
@@ -40,7 +50,7 @@ if (window.jQuery) {
 	};
 	//
 	// Triggering ajax insertions after the document is fully loaded.
-	$(document).ready(function() {
+	$(document).ready(function () {
 		$('div[data-toobasic-insert]').tooBasicReload();
 	});
 } else {

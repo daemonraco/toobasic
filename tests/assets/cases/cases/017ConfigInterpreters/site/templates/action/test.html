@@ -1,0 +1,1 @@
+use it as '?action=test&format=json'

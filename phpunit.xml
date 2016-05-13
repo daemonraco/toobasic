@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php"
+	 colors="true"
+	 convertErrorsToExceptions="true"
+	 convertNoticesToExceptions="true"
+	 convertWarningsToExceptions="true"
+	 stopOnFailures="false"
+	 syntaxCheck="false">
+	<testsuites>
+		<testsuite name="cases-by-class">
+			<directory suffix=".php">./tests/cases-by-class</directory>
+		</testsuite>
+		<testsuite name="cases">
+			<directory suffix=".php">./tests/cases</directory>
+			<exclude>./tests/cases/XXXCacheOn.php</exclude>
+			<exclude>./tests/cases/XXXDBConnector.php</exclude>
+			<exclude>./tests/cases/XXXMultiTablesSelectsOn.php</exclude>
+		</testsuite>
+		<testsuite name="cases-on-selenium">
+			<directory suffix=".php">./tests/cases-on-selenium</directory>
+			<exclude>./tests/cases-on-selenium/XXXSystoolTableOn.php</exclude>
+		</testsuite>
+		<testsuite name="cases-by-issue">
+			<directory suffix=".php">./tests/cases-by-issue</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
