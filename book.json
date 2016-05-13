@@ -1,10 +1,10 @@
 {
 	"language": "en",
-	"title": "TooBasic 2.0",
-	"author": "Alejandro Darío Simi",
 	"plugins": ["autocover"],
 	"pluginsConfig": {
 		"autocover": {
+			"title": "TooBasic 2.0: Mamba",
+			"author": "Alejandro Darío Simi",
 			"font": {
 				"size": null,
 				"family": "Impact",
@@ -15,7 +15,7 @@
 				"h": 2360
 			},
 			"background": {
-				"color": "#EBF1F5"
+				"color": "#F6FFDB"
 			}
 		}
 	}
