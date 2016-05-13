@@ -9,7 +9,7 @@ namespace TooBasic\Shell;
 
 //
 // Class aliases.
-use \TooBasic\Shell\Option;
+use TooBasic\Shell\Option;
 
 /**
  * @class Options

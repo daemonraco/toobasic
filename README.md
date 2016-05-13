@@ -1,4 +1,4 @@
-# TooBasic 1.0.4-serpent
+# TooBasic 2.0.0-mamba
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 
@@ -17,6 +17,19 @@ reading.
 ## Basic features?
 __TooBasic__ provides some sort of solution to features like:
 
+* __MVC__: Provides model-view-controller mechanism (visit
+[Controllers](docs/controller.md) and [Models](docs/models.md)).
+* __Skins__: Provides different ways of displaying your sites (visit
+[Skins](docs/skins.md)).
+* __Scaffolds__: Also provides a basic set of tools to create artifacts in a
+faster way (visit [Facilities](docs/facilities.md)).
+* __Forms Builder__: A mechanism to define and administrate forms through JSON
+specification files (visit [Forms Builder](docs/forms.md) and [Quick
+Forms](docs/qforms.md)).
+* __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
+* __Database Wrapping__: Provides a simple way access tables in a database by
+representations (visit [Databases](docs/databases.md) and
+[Representations](docs/representations.md)).
 * __Services__: Controllers that only return a JSON result avoiding presentation
 logics (visit [Services](docs/services.md)).
 * __Plugins (modules)__: A simple mechanism to expand your site through plugins.
@@ -26,193 +39,67 @@ tasks, __TooBasic__ provides a way to define and manage this tools (visit
 	* __Crons__: Something like tools, but restricted to cron-type executions.
 * __Cache__: It provides a simple way to cache controller result avoiding its
 logic on a second request (visit [Cache](docs/cache.md)).
-* __Database Wrapping__: Provides a simple way access tables in a database by
-representations (visit [Databases](docs/databases.md) and
-[Representations](docs/representations.md)).
-* __Routes__: Pretty and clean urls (visit [Routes](docs/routes.md)).
-* __Skins__: Provides different ways of displaying your sites (visit
-[Skins](docs/skins.md)).
-* __Scaffolds__: Also provides a basic set of tools to create artifacts in a
-faster way (visit [Facilities](docs/facilities.md)).
+* __APIs Wrapping__: Provides a simple mechanism to access external APIs (visit
+[Simple API Reader](docs/sapireader.md)).
+* __Language Translations__: Provides a way to show your sites in different
+languages (visit [Languages](docs/language.md)).
 
-## Folders
-__TooBasic__ has many folders and we're not going to list them all here, Just a
-few you may need to know.
+## Installation
+Installation is not that complicated and you can find how to do it following [this
+link](docs/install.md).
 
-* `ROOTDIR`
-    * `site`: Mainly, all your site's stuff goes somewhere inside this folder.
-        * `controllers`: Here you store all your PHP files with controller
-        specifications.
-        * `templates`: Here your store all your templates separated by the way you
-        show them.
-            * `action`: here you store the way your controllers are seen by
-            default.
-            * `modal`: and here the way your controllers are seen when they're
-            used as modals.
-        * `config`: Specific configuration for your site goes here.
-        * `models`: Well, this are a bunch of classes that represent your real
-        site's logic. Remember, your controllers shouldn't have complex logics.
-        * `langs`: Translations.
-    * `modules`: Consider these as plugins.
-    * `cache`: All the dynamic stuff of your site like cache files, Smarty
-    compilations, etc. will be stored here.
+## Start up
+To show you how easy it could be, once you installed __TooBasic__ in a directory
+(let's say named `mysite`), follow these three steps:
 
-## How to create a basic page
-In order to create a basic page you need to create two files, a controller and a
-template, and one name. 
-The name must be a lower-case string without spaces or special characters (geeky
-info: `/([a-z0-9_]+)/`).
-
-Why a name? well, this name will become the name of your action, your controller,
-your template and also the parameter to use in your browser, so, its an important
-name.
-For our examples we'll use __myaction__ as our _chosen one_.
-
-### Controller
-The controller will be a simple PHP class where you assign values to a set of
-names, trigger models calls, perform basic logics, etc.
-Basically, this new controller will look like this:
-```php
-<?php
-class MyactionController extends \TooBasic\Controller {
-	protected function basicRun() {
-		return $this->status();
-	}
-}
+* Go to your __TooBasic__ directory (the one called `mysite`).
+* Run this command:
+```text
+php shell.php sys controller new my_controller
 ```
-Such class must be saved into a file called __myaction.php__ inside
-__ROOTDIR/site/controllers/__.
-Also, the class must be name based on the action name:
-> Take your chosen name, change its first letter to upper-case and append
-__Controller__.
-Then inherit __Controller__ and define a protected method called __basicRun()__
+* Access your newly created controller with your browser at an URL similar to
+this:
 
-Something to have in mind is to return _true_ or _false_ at the end of
-__basicRun()__.
-Why? well, __TooBasic__ uses this status to show errors and avoid features like
-_cache_.
-### Template
-Now that you have a controller, you need a template to specify the way your new
-action is displayed when it's called. You may write something like this:
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello World!</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h4>Hello World!</h4>
-    </body>
-</html>
-```
-Now you save this code into a file called __myaction.html__ inside
-__ROOTDIR/site/templates/action/__.
-### Is that it?
-Well, yes, that's all you need, now go to your browser, and enter your URL using
-the name of your action.
-Something like this:
-> http://www.example.com/?action=myaction
+> http://localhost/mysite/?action=my_controller
 
-### But?
-Ya ya ya, I know, this seems to be too complicated to build just a HTML, where is
-the magic? well, suppose your controller looks like this:
-```php
-<?php
-class MyactionController extends \TooBasic\Controller {
-    protected $_cached = true;
-	protected function basicRun() {
-	    $this->assign("hello", "Hello World!");
-		return $this->status();
-	}
-}
-```
-And your template looks like this:
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{$hello}</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h4>{$hello}</h4>
-    </body>
-</html>
-```
-The result may be the same, but now you are using names previously set in your
-controller and also you're saving a cache file of what you've seen in your browser
-(for an hour), so the next time you refresh your page, the method __basicRun()__
-won't be called, its logic won't be used and a cached result will be returned.
+And just to let you know:
 
-Also, you may create a file called __en_us.json__ inside __ROOTDIR/site/langs/__
-with something like:
-```json
-{
-	"keys": [
-		{
-			"key": "hello",
-			"value": "Hello World!"
-		}
-	]
-}
-```
-Modify your controller:
-```php
-<?php
-class MyactionController extends \TooBasic\Controller {
-    protected function basicRun() {
-	    $this->assign("hello", $this->translate->hello);
-		return $this->status();
-	}
-}
-```
-And your template:
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{$hello}</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h4>{$tr->hello}</h4>
-    </body>
-</html>
-```
-Now you're also using translations, both inside your template and your controller.
+* this already gave you a controller and a separated view rendered using _Smarty_.
+* and it's already using a really basic files based cache system.
 
-## Even more basic
-How about we make things even simpler, let's say you just want to put some content
-under some action name and not worry about its controller and its settings and
-assignments and bla bla bla.
-Well there's is a solition for that, just create the HTML file as we explained
-before and let __TooBasic__ use its own _virtual controller_ to render your page.
-__TooBasic__ will take care of applying the layout when it's set and using the
-cache system to keep it fast.
-And in the future, if you think you need it, you can create a controller for that
-action and modify it as you please.
+Of course, if you want you can write controllers and views manually as explained
+in [this link](docs/controller.md).
 
-## Even easier?!
-So, you're not satisfied and you want something more simple, well, visit [this
-link](docs/facilities.md) and you may find what you want.
+## Suggested modules (plugins)
+If you are already using __TooBasic__ and you want to expand your possibilities,
+we suggest you visit this plugins:
 
-## Suggestions
-After all we said you should visit these documentation pages:
+* [__Logger__](https://github.com/daemonraco/toobasic-logger): To generate and
+manage log files in your site.
+* [__Workflows__](https://github.com/daemonraco/toobasic-workflows): If items in
+your site have to follow a intricate process with different stages and status and
+you're thinking about a _work flow_, well, check this module.
+* [__ZFieldFilters__](https://github.com/daemonraco/toobasic-zfieldfilters): This
+is a simple extention of complex fields in your representation that allows you to
+use some columns as zipped data.
+
+## Documentation
+These are some documentation pages we suggest you to visit to get more knowledge
+of how __TooBasic__ works:
 
 * If you're having problems:
 	* [Troubleshooting](docs/troubleshooting.md)
 	* [Author's Note](docs/authorsnote.md) (yes, it's somehow problems
 related)
 * If you want to know more:
-	* [Using Layouts](docs/layout.md)
+	* [Controllers](docs/controller.md)
+	* [Layouts](docs/layout.md)
 	* [Controller Exports](docs/controllerexports.md)
-	* [Using Languages](docs/language.md)
 	* [Models](docs/models.md)
-	* [Using Configs](docs/configs.md)
+	* [Scaffolds](docs/facilities.md)
+	* [Quick Forms](docs/qforms.md) form __Forms Builder__
+	* [Languages](docs/language.md)
+	* [Configs](docs/configs.md)
 	* [Services](docs/services.md)
 	* [Cache](docs/cache.md)
 * If you want the heavy stuff:
@@ -223,6 +110,15 @@ related)
 	* [Routes](docs/routes.md)
 	* [MagicProp](docs/magicprop.md)
 	* [Conditional Redirections](docs/redirections.md)
+	* [Forms Builder](docs/forms.md)
+	* [Simple API Reader](docs/sapireader.md)
+	* [Emails](docs/emails.md)
+	* [Search Engine](docs/searchengine.md)
+* Even heavier stuff:
+	* [Forms Builder Specifications](docs/tech/forms.md)
+	* [Query Adapter](docs/tech/queryadapter.md)
+	* [Adapters](docs/tech/adapters.md)
+	* [Modules](docs/tech/modules.md)
 
 Also:
 
@@ -236,7 +132,7 @@ You should visit its documentation at
 [smarty.net Documentation](http://www.smarty.net/documentation).
 
 Of course, if you want to use a different template interpreter, you may visit the
-[Adapters Doc](docs/adapters.md) to find an alternative.
+[Adapters Doc](docs/tech/adapters.md) to find an alternative.
 Nonetheless, [_sys-tools_](docs/facilities.md) use _Smarty_ to generate scaffolds.
 
 __Home Page__: http://www.smarty.net/
@@ -251,3 +147,5 @@ __Home Page__: http://getbootstrap.com/
 Who doesn't use jQuery?
 
 __Home Page__: https://jquery.com/
+
+<!--:GBSUMMARY:::Introduction:-->

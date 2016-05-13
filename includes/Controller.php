@@ -62,7 +62,7 @@ abstract class Controller extends Exporter {
 		//
 		// It doesn't matter what it's set for the current class, there
 		// are rules first.
-		if(isset($this->params->debugnolayout)) {
+		if(isset($this->params->nolayout)) {
 			//
 			// Removing layout setting.
 			$this->_layout = false;
@@ -102,7 +102,7 @@ abstract class Controller extends Exporter {
 	 */
 	public function insert($actionName) {
 		$lastRun = ActionsManager::ExecuteAction($actionName);
-		return $lastRun[GC_AFIELD_RENDER];
+		return isset($lastRun[GC_AFIELD_RENDER]) ? $lastRun[GC_AFIELD_RENDER] : '';
 	}
 	/**
 	 * Allows to know which layout is to be used when this controller is

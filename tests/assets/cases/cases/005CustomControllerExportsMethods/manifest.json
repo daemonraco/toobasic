@@ -1,0 +1,8 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/controllers/test.php",
+		"/site/templates/action/test.html"
+	]
+}

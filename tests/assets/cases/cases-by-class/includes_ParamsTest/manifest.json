@@ -1,0 +1,13 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/services\/debugs.php",
+		"\/site\/services\/internal.php",
+		"\/site\/services\/set_tester.php"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

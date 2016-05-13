@@ -1,0 +1,49 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"name": "filters",
+			"prefix": "fil_",
+			"fields": {
+				"id": {
+					"type": "int",
+					"autoincrement": true
+				},
+				"props": "text",
+				"status": "varchar:1",
+				"create_date": {
+					"type": "timestamp",
+					"null": false,
+					"default": "CURRENT_TIMESTAMP"
+				},
+				"indexed": {
+					"type": "varchar:1",
+					"null": false,
+					"default": "N"
+				}
+			},
+			"primary": {
+				"id": [
+					"id"
+				]
+			}
+		}
+	],
+	"data": [
+		{
+			"table": "filters",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"props": "{}",
+					"status": "Y"
+				}, {
+					"id": 2,
+					"props": "{\"hello\":\"world!\"}",
+					"status": "N"
+				}
+			]
+		}
+	]
+}

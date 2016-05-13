@@ -42,6 +42,11 @@ abstract class Service extends Exporter {
 	 * @var string[] List of attended methods.
 	 */
 	protected $_methods = false;
+	/**
+	 * @var mixed This is a parameter that avoids cache and is useful to track
+	 * multiple calls.
+	 */
+	protected $_transaction = false;
 	//
 	// Public methods.
 	/**
@@ -111,6 +116,9 @@ abstract class Service extends Exporter {
 				GC_AFIELD_ERRORS => $this->errors()
 			);
 		}
+		//
+		// Setting current transaction ID.
+		$this->_lastRun[GC_AFIELD_TRANSACTION] = $this->_transaction;
 		//
 		// Returning las run results
 		return $this->_lastRun;
@@ -244,6 +252,17 @@ abstract class Service extends Exporter {
 		$this->_headers['Access-Control-Allow-Origin'] = $allowOrigin;
 		$this->_headers['Access-Control-Allow-Headers'] = implode(',', $specs[GC_AFIELD_HEADERS]);
 		$this->_headers['Access-Control-Allow-Methods'] = implode(',', $specs[GC_AFIELD_METHODS]);
+	}
+	/**
+	 * Class initializer.
+	 */
+	protected function init() {
+		//
+		// Forwarding call.
+		parent::init();
+		//
+		// Catching transaction id.
+		$this->_transaction = isset($this->params->get->transaction) ? $this->params->get->transaction : false;
 	}
 	/**
 	 * This method is always present because it is used by CORS policies.

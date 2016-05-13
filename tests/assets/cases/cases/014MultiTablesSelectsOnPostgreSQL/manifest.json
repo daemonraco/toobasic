@@ -1,0 +1,16 @@
+{
+	"assets": [
+		"/site/config.php",
+		"/site/pgsql_config.php",
+		"/site/controllers/test.php",
+		"/site/db/tables.json",
+		"/site/models/Entries.php",
+		"/site/templates/action/test.html"
+	],
+	"setUpScripts": [
+		"G:pgsql/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:pgsql/removedatabase.sh"
+	]
+}

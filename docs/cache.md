@@ -224,3 +224,5 @@ Available constants are:
 Any other value will be considered as
 `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge`, including the boolean `true` used
 in versions before 0.3.0.
+
+<!--:GBSUMMARY:Cache:1:Cache:-->

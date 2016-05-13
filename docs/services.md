@@ -10,6 +10,7 @@ format with a standard structure, something like this:
 ```json
 {
 	"status": true,
+	"transaction": false,
 	"data": {
 		"service": "login",
 		"name": "login"
@@ -22,6 +23,7 @@ Or this when there's an error:
 ```json
 {
 	"status": false,
+	"transaction": false,
 	"data": [],
 	"error": {
 		"code": "400",
@@ -86,6 +88,7 @@ Possible answer:
 ```json
 {
 	"status": true,
+	"transaction": false,
 	"data": {
 		"service": "login",
 		"name": "login",
@@ -292,3 +295,12 @@ class LoginService extends \TooBasic\Service {
 	}
 }
 ```
+
+## Transaction Tracking
+In any service call you can specify a parameter called `transaction` with whatever
+value you prefer and it will be returned as a first level parameter with the same
+value.
+This may seem pointless but it could be useful to track your current transaction
+when you are running multiple calls to the same service.
+
+<!--:GBSUMMARY:Services:1:Services:-->

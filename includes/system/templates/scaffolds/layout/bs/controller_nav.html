@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @class <%$controller_nav%>
+ *
+ * Accessible adding '&action=<%$name_nav%>'
+ */
+class <%$controller_nav%> extends \TooBasic\Controller {
+	//
+	// Protected properties
+	protected $_cached = <%$cached%>;
+	protected $_layout = false;
+	//
+	// Protected methods.
+	protected function basicRun() {
+		return $this->status();
+	}
+	protected function init() {
+		parent::init();
+
+//		$this->_cacheParams['GET'][] = 'someparam';
+	}
+}

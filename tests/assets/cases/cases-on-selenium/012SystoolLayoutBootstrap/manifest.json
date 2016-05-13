@@ -1,0 +1,19 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/images\/favicon.png"
+	],
+	"generatedAssets": [
+		"\/site\/configs\/config_http.php",
+		"\/site\/configs\/routes.json",
+		"\/site\/controllers\/home.php",
+		"\/site\/controllers\/basic.php",
+		"\/site\/controllers\/basic_nav.php",
+		"\/site\/scripts\/script.js",
+		"\/site\/styles\/style.css",
+		"\/site\/templates\/action\/home.html",
+		"\/site\/templates\/action\/basic.html",
+		"\/site\/templates\/action\/basic_nav.html"
+	]
+}

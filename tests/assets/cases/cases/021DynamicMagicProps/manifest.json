@@ -1,0 +1,13 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/controllers/test.php",
+		"/site/includes/MySingleton.php",
+		"/site/models/MyModel.php",
+		"/site/templates/action/test.html"
+	],
+	"assetDirectories": [
+		"/site/includes"
+	]
+}

@@ -67,6 +67,45 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 				}
 			}
+			//
+			// Checking bootstrap option.
+			$opt = $this->_options->option(self::OptionType);
+			if($opt->activated() && $opt->value() == self::TypeBootstrap) {
+				$this->_assignments['name_nav'] = $this->_names['name-nav'];
+				$this->_assignments['controller_nav'] = $this->_names['layout-name-nav'];
+			}
+		}
+	}
+	protected function genConfigLines() {
+		$this->genNames();
+		if($this->_configLines === false) {
+			//
+			// Parent standards.
+			parent::genConfigLines();
+			//
+			// Global depdendencies.
+			global $Paths;
+
+			$path = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/config_http.php");
+			$this->_requiredDirectories[] = dirname($path);
+
+			if(!isset($this->_configLines[$path])) {
+				$this->_configLines[$path] = array();
+			}
+
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-2.1.3.min.js';";
+
+			if(isset($this->_names['templates-type']) && $this->_names['templates-type'] == self::TypeBootstrap) {
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap.min.css';";
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap-theme.min.css';";
+
+				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:bootstrap/js/bootstrap.min.js';";
+			}
+
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'style';";
+
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'toobasic_asset';";
+			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'script';";
 		}
 	}
 	protected function genNames() {
@@ -80,18 +119,22 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$this->_names['templates-prefix'] = '';
 			//
 			// Checking bootstrap option.
+			$serparatedBSNav = false;
 			$opt = $this->_options->option(self::OptionType);
 			if($opt->activated()) {
+				$this->_names['templates-type'] = $opt->value();
 				switch($opt->value()) {
 					case self::TypeTable:
 						$this->_names['templates-prefix'] = 'table/';
 						break;
 					case self::TypeBootstrap:
 						$this->_names['templates-prefix'] = 'bs/';
+						$serparatedBSNav = true;
 						break;
 					case self::TypeBasic:
 					default:
-						$this->_names['templates-prefix'] = 'table/';
+						$this->_names['templates-prefix'] = '/';
+						$this->_names['templates-type'] = self::TypeBasic;
 				}
 			}
 			//
@@ -116,6 +159,21 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}style.html",
 				GC_AFIELD_DESCRIPTION => 'basic CSS file'
 			);
+			if($serparatedBSNav) {
+				$this->_names['name-nav'] = "{$this->_names[GC_AFIELD_NAME]}_nav";
+				$this->_names['layout-name-nav'] = Names::ControllerClass($this->_names['name-nav']);
+
+				$this->_files[] = array(
+					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name-nav']}.php"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}controller_nav.html",
+					GC_AFIELD_DESCRIPTION => 'nav controller file'
+				);
+				$this->_files[] = array(
+					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name-nav']}.html"),
+					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view_nav.html",
+					GC_AFIELD_DESCRIPTION => 'nav view file'
+				);
+			}
 		}
 	}
 	protected function setOptions() {

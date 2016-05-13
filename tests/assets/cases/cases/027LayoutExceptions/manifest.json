@@ -1,0 +1,21 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/controllers\/broken_layout.php",
+		"\/site\/controllers\/failing_layout.php",
+		"\/site\/controllers\/fixed_broken_layout.php",
+		"\/site\/controllers\/fixed_failing_layout.php",
+		"\/site\/controllers\/fixed_unknown_layout.php",
+		"\/site\/controllers\/layout_tester.php",
+		"\/site\/templates\/action\/broken_layout.html",
+		"\/site\/templates\/action\/failing_layout.html",
+		"\/site\/templates\/action\/fixed_broken_layout.html",
+		"\/site\/templates\/action\/fixed_failing_layout.html",
+		"\/site\/templates\/action\/fixed_unknown_layout.html",
+		"\/site\/templates\/action\/layout_tester.html",
+		"\/site\/broken_layout.php.pre",
+		"\/site\/config.php",
+		"\/site\/failing_layout.php.pre",
+		"\/site\/unknown_layout.php.pre"
+	]
+}

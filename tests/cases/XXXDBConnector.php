@@ -1,0 +1,22 @@
+<?php
+
+abstract class DBConnectorTest extends TooBasic_TestCase {
+	protected $_assertCounts = true;
+	public function testDatabaseConnection() {
+		$json = $this->getJSONUrl('?service=test');
+
+		$this->assertTrue(isset($json->status), 'Response has no status indicator.');
+		$this->assertTrue($json->status, 'Response status indicator is false.');
+
+		$this->assertTrue(isset($json->data), 'Response has no data section.');
+		$this->assertTrue(is_object($json->data), 'Response data section is not an object.');
+
+		$this->assertTrue(isset($json->data->executed) && isset($json->data->results), "Response data section doesn't all required fields.");
+
+		$this->assertTrue($json->data->executed, "SQL execution didn't work.");
+		$this->assertTrue(is_array($json->data->results), "Result is not a list.");
+		if($this->_assertCounts) {
+			$this->assertTrue(count($json->data->results) > 0, "No databases found when at least 1 should exist.");
+		}
+	}
+}

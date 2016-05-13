@@ -44,7 +44,7 @@ abstract class ErrorController extends Controller {
 	 * 
 	 * @param \TooBasic\Controller $controller Controller with issues.
 	 */
-	public function setFailingController(Controller $controller) {
+	public function setFailingController($controller) {
 		$this->_failingController = $controller;
 	}
 	//

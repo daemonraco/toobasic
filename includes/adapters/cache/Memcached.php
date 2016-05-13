@@ -54,7 +54,7 @@ class Memcached extends Adapter {
 	 */
 	public function delete($prefix, $key) {
 		$fullKey = $this->fullKey($prefix, $key);
-		$data = $this->_conn->delete($fullKey);
+		$this->_conn->delete($fullKey);
 
 		if(isset(Params::Instance()->get->debugmemcached)) {
 			echo "<!-- memcached delete: {$fullKey} [NOT FOUND]-->\n";
@@ -70,7 +70,6 @@ class Memcached extends Adapter {
 	 * or NULL if none found.
 	 */
 	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
-		$data = null;
 		$fullKey = $this->fullKey($prefix, $key);
 
 		$data = $this->_conn->get($fullKey);
