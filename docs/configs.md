@@ -131,7 +131,99 @@ So, how is it again?
 And if it doesn't find any of these files, it won't say a thing and do as if there
 were no problems.
 
+## Easier with JSON
+If you decide to use JSON files for your configurations, there's an easier way to
+access then and use their properties.
+
+Let's say we go back to that example of __ROOTDIR/site/configs/boxes_types.json__
+and we want to use it, you can write something like this:
+```php
+. . .
+print_r(\TooBasic\Managers\ConfigsManager::Instance()->boxes_types->types);
+. . .
+```
+This example shows that accessing the singleton `ConfigsManager` you can load your
+JSON configuration file and use its properties the same way you do with any basic
+object. Also, if you're writing inside a controller or a model, you can write
+something like this using _magic properties_:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->boxes_types->types);
+	}
+. . .
+```
+
+### Multiple files
+Let's say you created two or more of these files, all with the same name and
+scattered across your plugins, each one with different properties.
+Now let's say you want to load them all as if they where one configuration file,
+for that you can write something like this:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->boxes_types(GC_CONFIG_MODE_MULTI)->types);
+	}
+. . .
+```
+Remember that when all these files are loaded, properties specified in more than
+one JSON configuration file will override properties with the same name loaded in
+a previous file.
+
+### Merged files
+A third option is to load multiple files with a basic merging policy writing
+something like this:
+```php
+. . .
+	protected function basicRun() {
+		print_r($this->config->my_config(GC_CONFIG_MODE_MERGE)->types);
+	}
+. . .
+```
+This mechanism makes these considerations:
+
+* Every top level property that has a list as value (an array) appends new values.
+* Every top level property that is an object absorbs new properties and replaces duplicates.
+* Other top level properties get replaced.
+
+For example, given this JSON:
+```json
+{
+	"common": "something",
+	"list": [1, 2],
+	"settings": {
+		"prop1": 1,
+		"prop2": 2
+	}
+}
+```
+And then this second JSON:
+```json
+{
+	"common": "something else",
+	"list": [2, 3],
+	"settings": {
+		"prop2": 22,
+		"prop3": 33
+	}
+}
+```
+The result of merging them will result in something like this:
+```json
+{
+	"common": "something else",
+	"list": [1, 2, 2, 3],
+	"settings": {
+		"prop1": 1,
+		"prop2": 22,
+		"prop3": 33
+	}
+}
+```
+
 ## Suggestions
 If you want you may visit these documentation pages:
 
 * [MagicProp](magicprop.md)
+
+<!--:GBSUMMARY:Configs:1:Using Config Files:-->

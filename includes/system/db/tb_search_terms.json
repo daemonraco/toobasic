@@ -1,0 +1,23 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"name": "tb_search_terms",
+			"prefix": "ste_",
+			"fields": {
+				"id": {
+					"type": "int",
+					"autoincrement": true
+				},
+				"term": "varchar:100",
+				"count": "int"
+			},
+			"primary": {
+				"id": ["id"]
+			},
+			"keys": {
+				"term": ["term"]
+			}
+		}
+	]
+}

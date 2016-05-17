@@ -41,9 +41,10 @@ $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/T
 //
 // Managers @{
 $SuperLoader['TooBasic\\Managers\\ActionsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ActionsManager.php";
+$SuperLoader['TooBasic\\Managers\\ConfigsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ConfigsManager.php";
 $SuperLoader['TooBasic\\Managers\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
 $SuperLoader['TooBasic\\Managers\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
-$SuperLoader['TooBasic\\Managers\\DBStructureManagerExeption'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
+$SuperLoader['TooBasic\\Managers\\DBStructureManagerException'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
 $SuperLoader['TooBasic\\Managers\\EmailsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/EmailsManager.php";
 $SuperLoader['TooBasic\\Managers\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
 $SuperLoader['TooBasic\\Managers\\ManifestsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ManifestsManager.php";
@@ -76,6 +77,9 @@ $SuperLoader['TooBasic\\Adapters\\DB\\SpecAdapter'] = "{$Directories[GC_DIRECTOR
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecMySQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecMySQL.php";
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecPostgreSQL'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecPostgreSQL.php";
 $SuperLoader['TooBasic\\Adapters\\DB\\SpecSQLite'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/SpecSQLite.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Version1'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/Version1.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\Version2'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/Version2.php";
+$SuperLoader['TooBasic\\Adapters\\DB\\VersionAdapter'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_DB]}/VersionAdapter.php";
 // @}
 //
 // View adapters @{
@@ -90,6 +94,10 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 // @}
 //
 // Representations @{
+$SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
+$SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
@@ -99,9 +107,54 @@ $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories
 $SuperLoader['TooBasic\\Shell\\Color'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Color.php";
 $SuperLoader['TooBasic\\Shell\\Option'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Option.php";
 $SuperLoader['TooBasic\\Shell\\Options'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Options.php";
+$SuperLoader['TooBasic\\Shell\\OptionsStack'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/OptionsStack.php";
 $SuperLoader['TooBasic\\Shell\\ShellCron'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellCron.php";
 $SuperLoader['TooBasic\\Shell\\ShellTool'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ShellTool.php";
 $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Scaffold.php";
+// @}
+//
+// Config interpreters includes @{
+$SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
+$SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
+$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoader'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoader.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderMerge'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMerge.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderMulti'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMulti.php";
+$SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderSimple.php";
+// @}
+//
+// Simple API Reader includes @{
+$SuperLoader['TooBasic\\Managers\\SApiManager'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiManager.php";
+$SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
+$SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
+
+$SuperLoader['TooBasic\\SApiReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReporter.php";
+$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportException.php";
+$SuperLoader['TooBasic\\SApiReportBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBasic.php";
+$SuperLoader["TooBasic\\SApiReportBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBootstrap.php";
+$SuperLoader['TooBasic\\SApiReportType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportType.php";
+// @}
+//
+// Forms builder includes @{
+$SuperLoader['TooBasic\\Forms\\BasicType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/BasicType.php";
+$SuperLoader['TooBasic\\Forms\\BootstrapType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/BootstrapType.php";
+$SuperLoader['TooBasic\\Forms\\Form'] = "{$Directories[GC_DIRECTORIES_FORMS]}/Form.php";
+$SuperLoader['TooBasic\\Forms\\FormsException'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsException.php";
+$SuperLoader['TooBasic\\Forms\\FormsFactory'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsFactory.php";
+$SuperLoader['TooBasic\\Forms\\FormsManager'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormsManager.php";
+$SuperLoader['TooBasic\\Forms\\FormType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormType.php";
+$SuperLoader['TooBasic\\Forms\\FormWriter'] = "{$Directories[GC_DIRECTORIES_FORMS]}/FormWriter.php";
+$SuperLoader['TooBasic\\Forms\\TableType'] = "{$Directories[GC_DIRECTORIES_FORMS]}/TableType.php";
+// @}
+//
+// TooBasic's search engine @{
+$SuperLoader['TooBasic\\Managers\\SearchManager'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchManager.php";
+$SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableFactory.php";
+$SuperLoader['TooBasic\\Search\\SearchableItem'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItem.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemRepresentation.php";
+$SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
 // @}
 //
 // Known librearies @{
@@ -119,6 +172,7 @@ $SuperLoader['Predis\\Client'] = array(
 // This is the function in charge of loading TooBasic clases when they are
 // required.
 spl_autoload_register(function($class) {
+	global $Defaults;
 	global $SuperLoader;
 
 	if(isset($SuperLoader[$class])) {
@@ -137,12 +191,12 @@ spl_autoload_register(function($class) {
 		}
 
 		if($path) {
-			if(isset($_REQUEST['debugloader']) || isset($_ENV['debugloader'])) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && (isset($_REQUEST['debugloader']) || isset($_ENV['debugloader']))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from '{$path}'.");
 			}
 			require_once $path;
 		} else {
-			if((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || ( isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy')) {
+			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && ((isset($_REQUEST['debugloader']) && $_REQUEST['debugloader'] == 'heavy') || (isset($_ENV['debugloader']) && $_ENV['debugloader'] == 'heavy'))) {
 				\TooBasic\debugThing("TooBasic SuperLoader: Loading class '{$class}' from: '".implode("', '", $SuperLoader[$class])."'.");
 			}
 		}

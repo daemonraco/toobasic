@@ -4,3 +4,4 @@ Remember, this directory must have writting permissions, something like 0775. In
 * `cache/filecache`
 * `cache/langs`
 * `cache/shellflags`
+* `cache/system`

@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\Shell\OptionsStack;
+
 /**
  * @class Params
  * This class is an abstract way to represent all major global arrays like
@@ -19,6 +23,7 @@ class Params extends Singleton {
 	const TypeENV = 'env';
 	const TypeGET = 'get';
 	const TypeHEADERS = 'headers';
+	const TypeOPTIONS = 'opt';
 	const TypePOST = 'post';
 	const TypeSERVER = 'server';
 	const TypeINTERNAL = 'internal';
@@ -228,16 +233,13 @@ class Params extends Singleton {
 	 * This method loads all params stacks.
 	 */
 	protected function loadParams() {
+		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack(array()) : new ParamsStack(array());
 		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
 		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
 		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
-		if(!defined('__SHELL__')) {
-			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(\getallheaders());
-		} else {
-			$this->_paramsStacks[self::TypeHEADERS] = new ParamsStack(array());
-		}
+		$this->_paramsStacks[self::TypeHEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack(array());
 		//
 		// Internal stack for custom purposes.
 		$this->_paramsStacks[self::TypeINTERNAL] = new ParamsStack(array());

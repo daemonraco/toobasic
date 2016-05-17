@@ -1,0 +1,32 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/configs\/config_http.php",
+		"\/site\/controllers\/layout_nav.php",
+		"\/site\/controllers\/layout.php",
+		"\/site\/langs\/en_us.json",
+		"\/site\/sapis\/this_site.json",
+		"\/site\/sapis\/reports\/this_site_issues.json",
+		"\/site\/scripts\/script.js",
+		"\/site\/services\/githubresult.json",
+		"\/site\/services\/githubresult.php",
+		"\/site\/styles\/style.css",
+		"\/site\/templates\/action\/layout.html",
+		"\/site\/templates\/action\/layout_nav.html",
+		"\/site\/templates\/action\/this_site_basic_issues.html"
+	],
+	"assetDirectories": [
+		"\/site",
+		"\/site\/configs",
+		"\/site\/controllers",
+		"\/site\/langs",
+		"\/site\/sapis",
+		"\/site\/sapis\/reports",
+		"\/site\/scripts",
+		"\/site\/services",
+		"\/site\/styles",
+		"\/site\/templates",
+		"\/site\/templates\/action"
+	]
+}

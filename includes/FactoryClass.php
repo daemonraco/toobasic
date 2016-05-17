@@ -15,7 +15,7 @@ abstract class FactoryClass {
 	 * Prevent users from directly creating a factory's instance.
 	 */
 	protected function __constructor() {
-		// It is a factory.		
+		// It is a factory.
 	}
 	/**
 	 * Prevent users from clonining a factory's instance if they found how to

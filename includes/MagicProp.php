@@ -7,11 +7,13 @@
 
 namespace TooBasic;
 
-use TooBasic\Representations\ItemsFactoryProvider;
+//
+// Class aliases.
+use TooBasic\Adapters\Adapter;
 
 /**
  * @class MagicPropException
- * This exeption is thrown whenever 'MagicProp' founds a halting error.
+ * This exeption is thrown whenever 'MagicProp' finds a halting error.
  */
 class MagicPropException extends Exception {
 	
@@ -34,30 +36,13 @@ class MagicProp extends Singleton {
 	//
 	// Protected properties.
 	/**
+	 * @var \TooBasic\Singleton[string] List of loaded properties.
+	 */
+	protected $_properties = array();
+	/**
 	 * @var \TooBasic\CacheAdatper Current cache adapter's singleton.
 	 */
 	protected $_cache = false;
-	/**
-	 * @var \TooBasic\ModelsFactory Models factory singleton.
-	 */
-	protected $_modelsFactory = false;
-	/**
-	 * @var \TooBasic\Params Parameters manager singleton.
-	 */
-	protected $_params = false;
-	/**
-	 * @var \TooBasic\Paths Paths manager singleton.
-	 */
-	protected $_paths = false;
-	/**
-	 * @var \TooBasic\Representations\ItemsFactoryProvider Item
-	 * representations factory singleton.
-	 */
-	protected $_representations = false;
-	/**
-	 * @var \TooBasic\Translate Translations manager singleton.
-	 */
-	protected $_translate = false;
 	//
 	// Magic methods.
 	/**
@@ -80,23 +65,30 @@ class MagicProp extends Singleton {
 		// Default values.
 		$out = null;
 		//
+		// Solving alias names.
+		$cleanProp = $this->solveAliases($prop);
+		//
 		// Looking for the requested property.
-		if($prop == 'model') {
-			$out = $this->modelsFactory();
-		} elseif($prop == 'representation') {
-			$out = $this->representations();
-		} elseif($prop == 'tr' || $prop == 'translate') {
-			$out = $this->translate();
-		} elseif($prop == 'params') {
-			$out = $this->params();
-		} elseif($prop == 'cache') {
-			$out = $this->cache();
-		} elseif($prop == 'paths') {
-			$out = $this->paths();
-		} else {
+		$out = $this->getProperty($cleanProp);
+		//
+		// Checking the loaded property.
+		if($out === null) {
+			//
+			// Loading not so dynamic properties.
+			if($cleanProp == GC_MAGICPROP_PROP_CACHE) {
+				$out = $this->cache();
+			}
+		}
+		//
+		// Checking that something was found, otherwise it's an error.
+		if($out === null) {
 			//
 			// If it was not found an exception is thrown.
-			throw new MagicPropException("Unhandled propoerty '{$prop}'");
+			$message = "Unhandled property '{$cleanProp}'";
+			if($prop != $cleanProp) {
+				$message.= " given as '{$prop}'";
+			}
+			throw new MagicPropException($message);
 		}
 		//
 		// Returning the found singleton.
@@ -113,74 +105,75 @@ class MagicProp extends Singleton {
 	protected function cache() {
 		if($this->_cache === false) {
 			global $Defaults;
-			$this->_cache = \TooBasic\Adapters\Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
+			$this->_cache = Adapter::Factory($Defaults[GC_DEFAULTS_CACHE_ADAPTER]);
 		}
 
 		return $this->_cache;
 	}
 	/**
-	 * This method return a models factory singleton. If it's not yet
-	 * contructed it creates it.
+	 * This method takes a property name and returns the proper singleton.
 	 *
-	 * @return \TooBasic\ModelsFactory Returns a factory.
+	 * @param string $prop Property name.
+	 * @return \TooBasic\Singleton Returns the requested property or NULL when
+	 * not found.
 	 */
-	protected function modelsFactory() {
-		if($this->_modelsFactory === false) {
-			$this->_modelsFactory = ModelsFactory::Instance();
+	protected function getProperty($prop) {
+		//
+		// Default values.
+		$out = null;
+		//
+		// Global dependecies.
+		global $MagicProps;
+		//
+		// Is it a known property?
+		if(isset($MagicProps[GC_MAGICPROP_PROPERTIES][$prop])) {
+			//
+			// Was it already loaded?
+			if(!isset($this->_properties[$prop])) {
+				$aux = $MagicProps[GC_MAGICPROP_PROPERTIES][$prop];
+				$this->_properties[$prop] = $aux::Instance();
+			}
+			//
+			// Setting the return property.
+			$out = $this->_properties[$prop];
 		}
 
-		return $this->_modelsFactory;
+		return $out;
 	}
 	/**
-	 * This method return a parameters manager singleton. If it's not yet
-	 * contructed it creates it.
+	 * This method takes a property name and if it's an alias name, it tries
+	 * to change it into a non-alias property name.
 	 *
-	 * @return \TooBasic\Translate Returns a manager singleton.
+	 * @param string $prop Property name.
+	 * @return string Returns a property name.
 	 */
-	protected function params() {
-		if($this->_params === false) {
-			$this->_params = Params::Instance();
+	protected function solveAliases($prop) {
+		//
+		// Default values.
+		$out = $prop;
+		//
+		// Global dependencies.
+		global $MagicProps;
+		//
+		// Swapping names until it's not an alias.
+		$done = false;
+		while(!$done) {
+			//
+			// If it's not an alias it's assumed to be found. If it's
+			// an alias it's value is used for the next try.
+			// Otherwise, it's left with it's last value and then
+			// returned.
+			if(isset($MagicProps[GC_MAGICPROP_PROPERTIES][$out])) {
+				$done = true;
+			} elseif(isset($MagicProps[GC_MAGICPROP_ALIASES][$out])) {
+				$out = $MagicProps[GC_MAGICPROP_ALIASES][$out];
+			} else {
+				//
+				// Not found.
+				$done = true;
+			}
 		}
 
-		return $this->_params;
-	}
-	/**
-	 * This method return a paths manager singleton. If it's not yet
-	 * contructed it creates it.
-	 *
-	 * @return \TooBasic\Translate Returns a manager singleton.
-	 */
-	protected function paths() {
-		if($this->_paths === false) {
-			$this->_paths = Paths::Instance();
-		}
-
-		return $this->_paths;
-	}
-	/**
-	 * This method return a item representations factory singleton. If it's
-	 * not yet contructed it creates it.
-	 *
-	 * @return \TooBasic\ModelsFactory Returns a factory.
-	 */
-	protected function representations() {
-		if($this->_representations === false) {
-			$this->_representations = ItemsFactoryProvider::Instance();
-		}
-
-		return $this->_representations;
-	}
-	/**
-	 * This method return a translations manager singleton. If it's not yet
-	 * contructed it creates it.
-	 *
-	 * @return \TooBasic\Translate Returns a manager singleton.
-	 */
-	protected function translate() {
-		if($this->_translate === false) {
-			$this->_translate = Translate::Instance();
-		}
-
-		return $this->_translate;
+		return $out;
 	}
 }

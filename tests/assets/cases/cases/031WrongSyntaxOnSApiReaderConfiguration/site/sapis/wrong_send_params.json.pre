@@ -1,0 +1,13 @@
+{
+	"name": "Some Name",
+	"description": "Some description",
+	"url": "http://example.com",
+	"services": {
+		"someService": {
+			"uri": "/someapi.json",
+			"sendParams": {
+				"param": ":value"
+			}
+		}
+	}
+}

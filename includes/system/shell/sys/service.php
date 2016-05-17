@@ -88,6 +88,23 @@ class ServiceSystool extends TooBasic\Shell\Scaffold {
 			);
 		}
 	}
+	protected function genRoutes() {
+		if($this->_routes === false) {
+			parent::genRoutes();
+			//
+			// Controller's route.
+			$route = new \stdClass();
+			$route->route = "srv/{$this->_names[GC_AFIELD_NAME]}";
+			$opt = $this->_options->option(self::OptionParam);
+			if($opt->activated()) {
+				foreach($opt->value() as $param) {
+					$route->route .= "/:{$param}:";
+				}
+			}
+			$route->service = $this->_names[GC_AFIELD_NAME];
+			$this->_routes[] = $route;
+		}
+	}
 	protected function setOptions() {
 		$this->_options->setHelpText('This tool allows you to manage your services.');
 

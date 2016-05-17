@@ -1,0 +1,65 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"name": "master",
+			"prefix": "mas_",
+			"fields": {
+				"id": "int",
+				"name": "varchar"
+			},
+			"primary": {
+				"id": ["id"]
+			}
+		}, {
+			"version": 2,
+			"name": "children",
+			"prefix": "chl_",
+			"fields": {
+				"id": "int",
+				"parent": "int",
+				"name": "varchar"
+			},
+			"primary": {
+				"id": ["id"]
+			}
+		}
+	],
+	"data": [
+		{
+			"table": "master",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"name": "Frederik"
+				}, {
+					"id": 2,
+					"name": "Rupert"
+				}
+			]
+		}, {
+			"table": "children",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"parent": 2,
+					"name": "George"
+				}, {
+					"id": 2,
+					"parent": 1,
+					"name": "Mike"
+				}, {
+					"id": 3,
+					"parent": 1,
+					"name": "John"
+				}, {
+					"id": 4,
+					"parent": 7,
+					"name": "ORPHAN"
+				}
+			]
+		}
+	]
+}

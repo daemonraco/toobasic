@@ -1,0 +1,17 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"name": "tb_search_items",
+			"prefix": "sit_",
+			"fields": {
+				"term": "int",
+				"type": "varchar:10",
+				"id": "int"
+			},
+			"primary": {
+				"item": ["term", "type", "id"]
+			}
+		}
+	]
+}

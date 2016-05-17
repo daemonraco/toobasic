@@ -1,0 +1,10 @@
+{
+	"assets": [
+		"/modules/starterdoc/.inactive",
+		"/site/config.php",
+		"/site/case_config.php",
+		"/site/sqlite_config.php",
+		"/site/controllers/test_cache.php",
+		"/site/templates/action/test_cache.html"
+	]
+}

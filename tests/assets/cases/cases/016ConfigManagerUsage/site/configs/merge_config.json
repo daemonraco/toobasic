@@ -1,0 +1,11 @@
+{
+	"common": "site",
+	"list": [
+		"value_1",
+		"value_2"
+	],
+	"settings": {
+		"prop_1": "site",
+		"prop_2": "site"
+	}
+}

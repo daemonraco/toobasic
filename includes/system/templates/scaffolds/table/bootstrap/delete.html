@@ -1,25 +1,29 @@
-<div class="container">
+<div class="col-xs-10">
 	<h4 class="text-center">{$tr->title_delete_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
 
 	<div class="well well-sm">
+<%if $formBuilder%>
+{$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'remove', $formFlags)}
+<%else%>
 		<form id="<%$singularName%>_form" method="post" href="#" role="form" onsubmit="return confirm('{$tr->message_remove_table_item_confirm('name','<%$singularName%>')}')" ng-non-bindable>
 			<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' || $field.type.type == 'float' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control" readonly="readonly"/>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" class="form-control input-sm" readonly="readonly"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
 				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
-				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
 			</div>
 <%/if%>
 <%/if%><%/foreach%>
 			<input type="submit" value="{$tr->btn_delete_TYPE('type','<%$singularName%>')}" class="btn btn-sm btn-danger"/>
 		</form>
+<%/if%>
 	</div>
 
 	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-sm btn-default pull-right">{$tr->btn_back_to_list}</a>

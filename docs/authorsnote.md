@@ -74,3 +74,18 @@ Enough!, let's change the topic already.
 As you may noticed, English is not my mother language, that's the reason way you
 will find some many mistakes. Believe me, I'm trying to get better at it, but s**t
 happens :D
+
+## _Why query adapter is so complicated?_
+I know I know, I wasn't expecting it to become so complicated and weird and I'll
+try address this in the future, it is a pain even for me.
+
+## PHPUnit
+Yes, we have some [PHPUnit](https://phpunit.de/) test-cases stored in our
+repository, but there may not be as many cases as you expect
+_Why?_
+Well the answer is rather simple, I don't have a testing team checking on every
+thing that exist inside __TooBasic__ so I have to write every case.
+But I can guarantee that I'll try to write as many cases as I can, it may take a
+while and they may not be present in your current version, but at least I'll try.
+
+<!--:GBSUMMARY:Appendix:2:Author's Note:-->
