@@ -94,7 +94,6 @@ $Defaults[GC_DEFAULTS_MODES] = array(
 $Defaults[GC_DEFAULTS_REDIRECTIONS] = array();
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 $Defaults[GC_DEFAULTS_MEMCACHE] = array();
-$Defaults[GC_DEFAULTS_REDIS] = array();
 $Defaults[GC_DEFAULTS_SKIN] = false;
 $Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] = '';
 //

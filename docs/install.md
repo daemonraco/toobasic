@@ -11,7 +11,6 @@ are going to build.
 
 * _Memcache_ or [_Memcached_](http://memcached.org/) server
 	* and their PHP libraries.
-* [_Redis_](http://redis.io/)
 * [_MariaDB_](https://mariadb.org/) or [_MySQL_](https://www.mysql.com/)
 	* and MySQL libraries for PHP.
 	* perhaps [_phpMyAdmin_](https://www.phpmyadmin.net/) too.
@@ -91,8 +90,7 @@ This may take some time depending on your connection.
 
 ### Step 3: git submodules
 The last instalation step will be to download some required submodules, in this
-case [_Smarty_](http://www.smarty.net/) and
-[_Predis_](https://github.com/nrk/predis).
+case [_Smarty_](http://www.smarty.net/).
 But don't worry, just run these two commands and wait until they finish (the
 second one takes some time):
 ```text

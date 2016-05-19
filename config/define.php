@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.0.0');
+define('TOOBASIC_VERSION', '2.1.0');
 define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
@@ -304,14 +304,6 @@ define('GC_DEFAULTS_MEMCACHE_SERVER', 'server');
 define('GC_DEFAULTS_MEMCACHE_PORT', 'port');
 define('GC_DEFAULTS_MEMCACHE_PREFIX', 'prefix');
 define('GC_DEFAULTS_MEMCACHE_COMPRESSED', 'compressed');
-// @}
-//
-// Redis parameters @{
-define('GC_DEFAULTS_REDIS', 'redis');
-define('GC_DEFAULTS_REDIS_SCHEME', 'scheme');
-define('GC_DEFAULTS_REDIS_HOST', 'host');
-define('GC_DEFAULTS_REDIS_PORT', 'port');
-define('GC_DEFAULTS_REDIS_PREFIX', 'prefix');
 // @}
 //
 // Database query adapters prefixes @{

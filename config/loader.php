@@ -64,7 +64,6 @@ $SuperLoader['TooBasic\\Adapters\\Cache\\File'] = "{$Directories[GC_DIRECTORIES_
 $SuperLoader['TooBasic\\Adapters\\Cache\\Memcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcache.php";
 $SuperLoader['TooBasic\\Adapters\\Cache\\Memcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcached.php";
 $SuperLoader['TooBasic\\Adapters\\Cache\\NoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/NoCache.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Redis.php";
 // @}
 //
 // Database adapters @{
@@ -161,11 +160,6 @@ $SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIR
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
-);
-$SuperLoader['Predis\\Client'] = array(
-//$SuperLoader['\\Predis\\Autoloader'] = array(
-	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis/autoload.php",
-	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis.git/autoload.php"
 );
 // @}
 //
