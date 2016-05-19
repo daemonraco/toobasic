@@ -1,0 +1,27 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/case_config.php",
+		"\/site\/installed_config.php.pre"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [
+		"\/site\/configs\/config_http.php",
+		"\/site\/configs\/routes.json",
+		"\/site\/controllers\/deflayout.php",
+		"\/site\/controllers\/hello.php",
+		"\/site\/controllers\/deflayout_nav.php",
+		"\/site\/scripts\/script.js",
+		"\/site\/styles\/style.css",
+		"\/site\/templates\/action\/deflayout.html",
+		"\/site\/templates\/action\/deflayout_nav.html",
+		"\/site\/templates\/action\/hello.html"
+	],
+	"setUpScripts": [
+		"G:cleansmarty.sh"
+	],
+	"tearDownScripts": [
+		"G:cleansmarty.sh"
+	]
+}
