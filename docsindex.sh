@@ -3,18 +3,19 @@
 CURRENTDIR=$(echo $PWD);
 PROGRAM="$0";
 #
-F_GENERATE="";
-F_SHOWHELP="";
-F_SUMMARY="";
+F_GENERATE='';
+F_GENERATE_ALL='';
+F_SHOWHELP='';
+F_SUMMARY='';
 P_FILES="README.md docs/ docs/tech/";
-F_FILES_LOADED="";
+F_FILES_LOADED='';
 P_GLOSSARY_PATH="docsindex.md";
 P_SUMMARY_PATH="SUMMARY.md";
 P_SUMMARY_SECTIONS="$(cat docs/summary-section.txt|grep -v '^$')";
 #
-TORUN="";
-ERROR="";
-ERRORAPPEND="";
+TORUN='';
+ERROR='';
+ERRORAPPEND='';
 #
 ################################################################################
 # Errors
@@ -24,6 +25,7 @@ ERR0002="Needs more parameters";
 #################################################################################
 # Functions
 #	- Generate()
+#	- GenerateAll()
 #	- GenerateSummary()
 #	- GenerateSummarySection(string section, string config)
 #	- LoadFiles()
@@ -49,7 +51,7 @@ function Generate() {
 		echo;
 		while read line; do
 			if [ -n "$line" ]; then
-				prefix="";
+				prefix='';
 				subTitle="$line";
 				if [ -n "$(echo "$line" | grep '^###')" ]; then
 					prefix="	* ";
@@ -72,6 +74,11 @@ $(cat "${p}" | grep '^##')
 __ENDL__
 		echo;
 	done | tee -a "$P_GLOSSARY_PATH";
+}
+#
+function GenerateAll() {
+	Generate;
+	GenerateSummary;
 }
 #
 function GenerateSummary() {
@@ -134,7 +141,7 @@ __ENDL__
 #
 function LoadFiles() {
 	if [ -z "$F_FILES_LOADED" ]; then
-		aux="";
+		aux='';
 		for p in $P_FILES; do
 			if [ -n "$(echo "${p}"|grep '\/$')" ]; then
 				aux="${aux} $(find $p -maxdepth 1 -type f|grep '\.md$'|sort|grep -v "${P_GLOSSARY_PATH}")";
@@ -170,6 +177,9 @@ Options:
 	-s, --generate-summary
 		Generates the docsindex at '${P_SUMMARY_PATH}'.
 
+	-a, --generate-all
+		Generates docsindexes at '${P_SUMMARY_PATH}' and '${P_GLOSSARY_PATH}'.
+
 	-h, --help
 		Shows this help text.
 __END_HELP__
@@ -179,15 +189,15 @@ __END_HELP__
 # Main
 #
 # Getting parameters.
-needmore="";
-addmore="";
+needmore='';
+addmore='';
 while [ -n "$1" ]; do
 	if [ -n "$needmore" ]; then
 		eval "$needmore='$1'";
-		needmore="";
+		needmore='';
 	elif [ -n "$addmore" ]; then
 		eval "$addmore=\"\$$addmore\$(echo)$1\"";
-		addmore="";
+		addmore='';
 	else
 		if  [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 			F_SHOWHELP="F_SHOWHELP";
@@ -195,6 +205,8 @@ while [ -n "$1" ]; do
 			F_GENERATE="F_GENERATE";
 		elif  [ "$1" = "-s" ] || [ "$1" = "--generate-summary" ]; then
 			F_SUMMARY="F_SUMMARY";
+		elif  [ "$1" = "-a" ] || [ "$1" = "--generate-all" ]; then
+			F_GENERATE_ALL="F_GENERATE_ALL";
 		fi;
 	fi;
  
@@ -210,6 +222,8 @@ elif [ -n "$F_GENERATE" ]; then
 	TORUN="Generate";
 elif [ -n "$F_SUMMARY" ]; then
 	TORUN="GenerateSummary";
+elif [ -n "$F_GENERATE_ALL" ]; then
+	TORUN="GenerateAll";
 elif [ -n "$F_SHOWHELP" ]; then
 	TORUN="ShowHelp";
 else
@@ -220,7 +234,7 @@ fi;
 $TORUN;
  
 if [ -n "$ERROR" ]; then
-	b="";
+	b='';
 	for a in $ERROR; do
 		b="echo \"Error [$a]: \$$a\"";
 		eval "$b" >&2;

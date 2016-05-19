@@ -83,18 +83,6 @@ $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] = 11211;
 $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX] = '';
 ```
 
-### Redis adapter
-An alternative to __Memcached__ is [__Redis__
-](https://en.wikipedia.org/wiki/Redis) and you can make use of it by using a cache
-adapter called __\TooBasic\Adapters\Cache\Redis__ and settings these values:
-```php
-<?php
-$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_SCHEME] = 'tcp';
-$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_HOST] = 'localhost';
-$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PORT] = 6379;
-$Defaults[GC_DEFAULTS_REDIS][GC_DEFAULTS_REDIS_PREFIX] = '';
-```
-
 ## Setting an adapter
 We've been talking about cache adapter classes but we haven't said how to use
 them, well, that's the easy part, you just need to set something like the next

@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.0.0');
+define('TOOBASIC_VERSION', '2.1.0');
 define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
