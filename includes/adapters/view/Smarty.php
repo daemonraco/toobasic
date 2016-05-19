@@ -53,7 +53,7 @@ class Smarty extends Adapter {
 		$this->_smarty = new \Smarty();
 		//
 		// Setting specific delimiters.
-		if($Defaults[GC_SMARTY_LEFT_DELIMITER] !== false && $Defaults[GC_SMARTY_RIGHT_DELIMITER] != false) {
+		if($Defaults[GC_SMARTY_LEFT_DELIMITER] !== false && $Defaults[GC_SMARTY_RIGHT_DELIMITER] !== false) {
 			$this->_smarty->left_delimiter = $Defaults[GC_SMARTY_LEFT_DELIMITER];
 			$this->_smarty->right_delimiter = $Defaults[GC_SMARTY_RIGHT_DELIMITER];
 		}
