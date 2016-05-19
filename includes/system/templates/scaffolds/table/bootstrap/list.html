@@ -1,34 +1,34 @@
 <div class="col-xs-12">
-	<h4 class="text-center">{$tr->title_table_items('tablename', '<%$pluralName%>')}</h4>
+	<h4 class="text-center">%STYLEFT%$tr->title_table_items('tablename', '<%$pluralName%>')%STYRIGHT%</h4>
 
 	<div class="well well-sm">
 		<table class="table table-striped table-condensed table-hover">
 			<thead>
 				<tr>
-					<th class="text-center">{$tr->label_id}</th>
+					<th class="text-center">%STYLEFT%$tr->label_id%STYRIGHT%</th>
 <%foreach from=$tableFields item=field%>
-					<th class="text-center">{$tr->table_column_<%$field.name%>}</th>
+					<th class="text-center">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</th>
 <%/foreach%>
-					<th class="text-center">{$tr->label_actions}</th>
+					<th class="text-center">%STYLEFT%$tr->label_actions%STYRIGHT%</th>
 				</tr>
 			</thead>
 			<tbody>
-{foreach from=$items item=item}
+%STYLEFT%foreach from=$items item=item%STYRIGHT%
 				<tr>
-					<td class="text-center">{$item.id}</td>
+					<td class="text-center">%STYLEFT%$item.id%STYRIGHT%</td>
 <%foreach from=$tableFields item=field%>
-					<td>{$item.<%$field.name%>}</td>
+					<td>%STYLEFT%$item.<%$field.name%>%STYRIGHT%</td>
 <%/foreach%>
 					<td class="text-center">
-						<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_view}</a>
-						<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_edit}</a>
-						<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}" class="btn btn-xs btn-info">{$tr->btn_remove}</a>
+						<a href="%STYLEFT%$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")%STYRIGHT%" class="btn btn-xs btn-info">%STYLEFT%$tr->btn_view%STYRIGHT%</a>
+						<a href="%STYLEFT%$ctrl->link("?action=<%$editAction%>&id=`$item.id`")%STYRIGHT%" class="btn btn-xs btn-info">%STYLEFT%$tr->btn_edit%STYRIGHT%</a>
+						<a href="%STYLEFT%$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")%STYRIGHT%" class="btn btn-xs btn-info">%STYLEFT%$tr->btn_remove%STYRIGHT%</a>
 					</td>
 				</tr>
-{/foreach}
+%STYLEFT%/foreach%STYRIGHT%
 			</tbody>
 		</table>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$addAction%>')}" class="btn btn-sm btn-success pull-left">{$tr->btn_add_new_item}</a>
+	<a href="%STYLEFT%$ctrl->link('?action=<%$addAction%>')%STYRIGHT%" class="btn btn-sm btn-success pull-left">%STYLEFT%$tr->btn_add_new_item%STYRIGHT%</a>
 </div>

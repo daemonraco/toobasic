@@ -67,6 +67,13 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected $_scaffoldName = '';
 	/**
+	 * @var string[string] Smarty delimiters to use on generated scaffolds.
+	 */
+	protected $_smartyDelimiters = [
+		GC_AFIELD_LEFT => false,
+		GC_AFIELD_RIGHT => false
+	];
+	/**
 	 * @var \stdClass[] List of language translations to be added as
 	 * configuration for the current language.
 	 */
@@ -585,8 +592,15 @@ abstract class Scaffold extends ShellTool {
 			// Assignments.
 			$this->genAssignments();
 			//
-			// Generating file content.
-			$output = $this->_render->render($this->_assignments, $template);
+			// Generating file content and replacing delimiters for
+			// the proper value.
+			$output = str_replace([
+				'%STYLEFT%',
+				'%STYRIGHT%'
+				], [
+				$this->_smartyDelimiters[GC_AFIELD_LEFT],
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT]
+				], $this->_render->render($this->_assignments, $template));
 			//
 			// Generating a file.
 			$result = file_put_contents($path, $output);
@@ -751,6 +765,9 @@ abstract class Scaffold extends ShellTool {
 		// Checking that it hasn't been loaded before.
 		if(!$this->_render) {
 			//
+			// Global dependencies.
+			global $Defaults;
+			//
 			// Creating a proper view adapter.
 			$this->_render = \TooBasic\Adapters\Adapter::Factory('\\TooBasic\\Adapters\\View\\Smarty');
 			//
@@ -760,6 +777,15 @@ abstract class Scaffold extends ShellTool {
 			$engine->left_delimiter = '<%';
 			$engine->right_delimiter = '%>';
 			$engine->force_compile = true;
+			//
+			// Loading delimiter replacements.
+			if($Defaults[GC_SMARTY_LEFT_DELIMITER] !== false && $Defaults[GC_SMARTY_RIGHT_DELIMITER] !== false) {
+				$this->_smartyDelimiters[GC_AFIELD_LEFT] = $Defaults[GC_SMARTY_LEFT_DELIMITER];
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT] = $Defaults[GC_SMARTY_RIGHT_DELIMITER];
+			} else {
+				$this->_smartyDelimiters[GC_AFIELD_LEFT] = '{';
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT] = '}';
+			}
 		}
 	}
 	/**

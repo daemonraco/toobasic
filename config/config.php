@@ -234,6 +234,10 @@ $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
 $Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = '\\TooBasic\\ctrlExports_formFor';
 //
+// Default Smarty delimiters configuration.
+$Defaults[GC_SMARTY_LEFT_DELIMITER] = false;
+$Defaults[GC_SMARTY_RIGHT_DELIMITER] = false;
+//
 // TooBasic's search engine configuration.
 $Search = array();
 $Search[GC_SEARCH_ENGINE_FACTORIES] = array();

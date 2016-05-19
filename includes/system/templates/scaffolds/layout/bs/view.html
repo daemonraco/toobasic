@@ -6,15 +6,15 @@
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
+		<link rel="icon" type="image/png" href="%STYLEFT%$ctrl->img('favicon','png')%STYRIGHT%"/>
 
-{$ctrl->htmlAllScripts(false,"\t\t")}
+%STYLEFT%$ctrl->htmlAllScripts(false,"\t\t")%STYRIGHT%
 
-{$ctrl->htmlAllStyles(false,"\t\t")}
+%STYLEFT%$ctrl->htmlAllStyles(false,"\t\t")%STYRIGHT%
 	</head>
-	<body class="<%if !$containerFluid %>container <%/if%>Action_{$action}">
+	<body class="<%if !$containerFluid %>container <%/if%>Action_%STYLEFT%$action%STYRIGHT%">
 		<header>
-{$ctrl->insert('<%$name_nav%>')}
+%STYLEFT%$ctrl->insert('<%$name_nav%>')%STYRIGHT%
 		</header>
 		<div id="MainContents"<%if $containerFluid %> class="container-fluid"<%/if%>>
 <!-- MAIN CONTENT @{ -->

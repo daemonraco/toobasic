@@ -1,31 +1,31 @@
-<h4>{$tr->title_table_items('tablename', '<%$pluralName%>')}</h4>
+<h4>%STYLEFT%$tr->title_table_items('tablename', '<%$pluralName%>')%STYRIGHT%</h4>
 
 <table>
 	<thead>
 		<tr>
-			<th>{$tr->label_id}</th>
+			<th>%STYLEFT%$tr->label_id%STYRIGHT%</th>
 <%foreach from=$tableFields item=field%>
-			<th>{$tr->table_column_<%$field.name%>}</th>
+			<th>%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</th>
 <%/foreach%>
-			<th>{$tr->label_actions}</th>
+			<th>%STYLEFT%$tr->label_actions%STYRIGHT%</th>
 		</tr>
 	</thead>
 	<tbody>
-{foreach from=$items item=item}
+%STYLEFT%foreach from=$items item=item%STYRIGHT%
 		<tr>
-			<td>{$item.id}</td>
+			<td>%STYLEFT%$item.id%STYRIGHT%</td>
 <%foreach from=$tableFields item=field%>
-			<td>{$item.<%$field.name%>}</td>
+			<td>%STYLEFT%$item.<%$field.name%>%STYRIGHT%</td>
 <%/foreach%>
 			<td>
-				<a href="{$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")}">{$tr->btn_view}</a>
-				<a href="{$ctrl->link("?action=<%$editAction%>&id=`$item.id`")}">{$tr->btn_edit}</a>
-				<a href="{$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")}">{$tr->btn_remove}</a>
+				<a href="%STYLEFT%$ctrl->link("?action=<%$viewAction%>&id=`$item.id`")%STYRIGHT%">%STYLEFT%$tr->btn_view%STYRIGHT%</a>
+				<a href="%STYLEFT%$ctrl->link("?action=<%$editAction%>&id=`$item.id`")%STYRIGHT%">%STYLEFT%$tr->btn_edit%STYRIGHT%</a>
+				<a href="%STYLEFT%$ctrl->link("?action=<%$deleteAction%>&id=`$item.id`")%STYRIGHT%">%STYLEFT%$tr->btn_remove%STYRIGHT%</a>
 			</td>
 		</tr>
-{/foreach}
+%STYLEFT%/foreach%STYRIGHT%
 	</tbody>
 </table>
 	
 <br/>
-<a href="{$ctrl->link('?action=<%$addAction%>')}">{$tr->btn_add_new_item}</a>
+<a href="%STYLEFT%$ctrl->link('?action=<%$addAction%>')%STYRIGHT%">%STYLEFT%$tr->btn_add_new_item%STYRIGHT%</a>

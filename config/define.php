@@ -115,6 +115,7 @@ define('GC_AFIELD_LANGS', 'langs');
 define('GC_AFIELD_LANGS_PATH', 'langs-path');
 define('GC_AFIELD_LASTERROR', 'lasterror');
 define('GC_AFIELD_LAYOUT', 'layout');
+define('GC_AFIELD_LEFT', 'left');
 define('GC_AFIELD_LINE', 'line');
 define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
@@ -134,6 +135,7 @@ define('GC_AFIELD_REDIRECTOR', 'redirector');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
 define('GC_AFIELD_RESULT', 'result');
+define('GC_AFIELD_RIGHT', 'right');
 define('GC_AFIELD_ROUTES_PATH', 'routes-path');
 define('GC_AFIELD_SEQNAME', 'seqname');
 define('GC_AFIELD_SERVICES', 'services');
@@ -382,5 +384,10 @@ define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 define('GC_CONFIG_MODE_MERGE', 'merge');
 define('GC_CONFIG_MODE_MULTI', 'multi');
 define('GC_CONFIG_MODE_SIMPLE', 'simple');
+// @}
+//
+// Smarty specifics.
+define('GC_SMARTY_LEFT_DELIMITER', 'smarty-left-delimiter');
+define('GC_SMARTY_RIGHT_DELIMITER', 'smarty-right-delimiter');
 // @}
 // @}
