@@ -82,6 +82,8 @@ you're thinking about a _work flow_, well, check this module.
 * [__ZFieldFilters__](https://github.com/daemonraco/toobasic-zfieldfilters): This
 is a simple extention of complex fields in your representation that allows you to
 use some columns as zipped data.
+* [__Redis__](https://github.com/daemonraco/toobasic-redis): To use
+[Redis](http://redis.io) as cache adapter.
 
 ## Documentation
 These are some documentation pages we suggest you to visit to get more knowledge
