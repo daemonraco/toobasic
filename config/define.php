@@ -306,14 +306,6 @@ define('GC_DEFAULTS_MEMCACHE_PREFIX', 'prefix');
 define('GC_DEFAULTS_MEMCACHE_COMPRESSED', 'compressed');
 // @}
 //
-// Redis parameters @{
-define('GC_DEFAULTS_REDIS', 'redis');
-define('GC_DEFAULTS_REDIS_SCHEME', 'scheme');
-define('GC_DEFAULTS_REDIS_HOST', 'host');
-define('GC_DEFAULTS_REDIS_PORT', 'port');
-define('GC_DEFAULTS_REDIS_PREFIX', 'prefix');
-// @}
-//
 // Database query adapters prefixes @{
 define('GC_DBQUERY_NAMES_COLUMN_ID', 'column-id');
 define('GC_DBQUERY_NAMES_COLUMN_NAME', 'column-name');
