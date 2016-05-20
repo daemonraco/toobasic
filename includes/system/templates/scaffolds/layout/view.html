@@ -6,13 +6,13 @@
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-		<link rel="icon" type="image/png" href="{$ctrl->img('favicon','png')}"/>
+		<link rel="icon" type="image/png" href="%STYLEFT%$ctrl->img('favicon','png')%STYRIGHT%"/>
 
-{$ctrl->htmlAllScripts(false,"\t\t")}
+%STYLEFT%$ctrl->htmlAllScripts(false,"\t\t")%STYRIGHT%
 
-{$ctrl->htmlAllStyles(false,"\t\t")}
+%STYLEFT%$ctrl->htmlAllStyles(false,"\t\t")%STYRIGHT%
 	</head>
-	<body class="Action_{$action}">
+	<body class="Action_%STYLEFT%$action%STYRIGHT%">
 		<div id="MainContents">
 <!-- MAIN CONTENT @{ -->
 %TOO_BASIC_ACTION_CONTENT%

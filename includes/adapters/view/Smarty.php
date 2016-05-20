@@ -46,10 +46,17 @@ class Smarty extends Adapter {
 		$this->checkDirectories();
 		//
 		// Global dependencies.
+		global $Defaults;
 		global $Directories;
 		//
 		// Creating a Smarty's object and saving a shortcut to it.
 		$this->_smarty = new \Smarty();
+		//
+		// Setting specific delimiters.
+		if($Defaults[GC_SMARTY_LEFT_DELIMITER] !== false && $Defaults[GC_SMARTY_RIGHT_DELIMITER] !== false) {
+			$this->_smarty->left_delimiter = $Defaults[GC_SMARTY_LEFT_DELIMITER];
+			$this->_smarty->right_delimiter = $Defaults[GC_SMARTY_RIGHT_DELIMITER];
+		}
 		//
 		// Setting template directories.
 		foreach($this->_templateDirs as $path) {
