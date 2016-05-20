@@ -3,20 +3,37 @@
 		"\/modules\/starterdoc\/.inactive",
 		"\/site\/config.php",
 		"\/site\/case_config.php",
-		"\/site\/installed_config.php.pre"
+		"\/site\/installed_config.php.pre",
+		"\/site\/sqlite_config.php"
 	],
-	"assetDirectories": [],
 	"generatedAssets": [
 		"\/site\/configs\/config_http.php",
 		"\/site\/configs\/routes.json",
 		"\/site\/controllers\/deflayout.php",
 		"\/site\/controllers\/hello.php",
 		"\/site\/controllers\/deflayout_nav.php",
+		"\/site\/controllers\/people.php",
+		"\/site\/controllers\/person.php",
+		"\/site\/controllers\/person_add.php",
+		"\/site\/controllers\/person_delete.php",
+		"\/site\/controllers\/person_edit.php",
+		"\/site\/db\/people.json",
+		"\/site\/forms\/table_people.json",
+		"\/site\/langs\/en_us.json",
+		"\/site\/models\/representations\/PeopleFactory.php",
+		"\/site\/models\/representations\/PersonRepresentation.php",
+		"\/site\/scripts\/person_predictive_name.js",
 		"\/site\/scripts\/script.js",
+		"\/site\/services\/people_predictive.php",
 		"\/site\/styles\/style.css",
 		"\/site\/templates\/action\/deflayout.html",
 		"\/site\/templates\/action\/deflayout_nav.html",
-		"\/site\/templates\/action\/hello.html"
+		"\/site\/templates\/action\/hello.html",
+		"\/site\/templates\/action\/people.html",
+		"\/site\/templates\/action\/person.html",
+		"\/site\/templates\/action\/person_add.html",
+		"\/site\/templates\/action\/person_delete.html",
+		"\/site\/templates\/action\/person_edit.html"
 	],
 	"setUpScripts": [
 		"G:cleansmarty.sh"
