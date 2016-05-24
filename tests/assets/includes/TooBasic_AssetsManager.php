@@ -371,10 +371,16 @@ class TooBasic_AssetsManager {
 		//
 		// Guessing names.
 		$pathPieces = array_filter(explode('/', preg_replace('~^'.TESTS_TESTS_DIR.'~', '', $path)));
-		$out[TEST_AFIELD_CASE_TYPE] = array_shift($pathPieces);
-		$out[TEST_AFIELD_CASE_NAME] = preg_replace('~\.php$~', '', array_pop($pathPieces));
-		$pathPieces[] = $out[TEST_AFIELD_CASE_NAME];
-		$out[TEST_AFIELD_ASSETS_PATH] = TESTS_TESTS_ACASES_DIR."/{$out[TEST_AFIELD_CASE_TYPE]}/".implode('_', $pathPieces);
+		if(preg_match('~/modules/~', $path)) {
+			$out[TEST_AFIELD_CASE_NAME] = preg_replace('~\.php$~', '', array_pop($pathPieces));
+			$out[TEST_AFIELD_CASE_TYPE] = array_pop($pathPieces);
+			$out[TEST_AFIELD_ASSETS_PATH] = '/'.implode('/', $pathPieces)."/assets/cases/{$out[TEST_AFIELD_CASE_TYPE]}/{$out[TEST_AFIELD_CASE_NAME]}";
+		} else {
+			$out[TEST_AFIELD_CASE_TYPE] = array_shift($pathPieces);
+			$out[TEST_AFIELD_CASE_NAME] = preg_replace('~\.php$~', '', array_pop($pathPieces));
+			$pathPieces[] = $out[TEST_AFIELD_CASE_NAME];
+			$out[TEST_AFIELD_ASSETS_PATH] = TESTS_TESTS_ACASES_DIR."/{$out[TEST_AFIELD_CASE_TYPE]}/".implode('_', $pathPieces);
+		}
 		$out[TEST_AFIELD_MANIFEST_PATH] = "{$out[TEST_AFIELD_ASSETS_PATH]}/manifest.json";
 		$out[TEST_AFIELD_MAIN_MANIFEST_PATH] = TESTS_TESTS_ACASES_DIR."/manifest.json";
 
