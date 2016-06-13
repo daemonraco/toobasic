@@ -227,7 +227,10 @@ class SApiReader {
 		//
 		// Checking library.
 		if(!function_exists('curl_init')) {
-			throw new SApiReaderException(__CLASS__." requires cURL library to be installed.");
+			throw new SApiReaderException($this->_magic->tr->EX_class_requires_library([
+				'class' => __CLASS__,
+				'requirement' => 'cURL'
+			]));
 		}
 		//
 		// Generating headers.

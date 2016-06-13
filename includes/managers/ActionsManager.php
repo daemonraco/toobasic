@@ -376,7 +376,7 @@ class ActionsManager extends UrlManager {
 			//
 			// Checking error page handlers.
 			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
-				throw new \TooBasic\Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
+				throw new Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
 			}
 			//
 			// Loading a proper error page controller.

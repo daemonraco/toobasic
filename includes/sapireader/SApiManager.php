@@ -11,6 +11,7 @@ namespace TooBasic\Managers;
 // Class aliases.
 use TooBasic\Paths;
 use TooBasic\SApiReaderException;
+use TooBasic\Translate;
 
 /**
  * @class SApiManager
@@ -178,7 +179,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			//
 			// Checking type.
 			if(!isset($SApiReader[GC_SAPIREADER_TYPES][$json->type])) {
-				throw new SApiReaderException("Unable to handle API type '{$json->type}'.");
+				throw new SApiReaderException($this->tr->EX_unhandled_api_type(['type' => $json->type]));
 			}
 		} else {
 			throw new SApiReaderException("Unable to find configuration '{$name}'.");
@@ -200,7 +201,11 @@ class SApiManager extends \TooBasic\Managers\Manager {
 		//
 		// Checking for errors.
 		if(!$json) {
-			throw new SApiReaderException("Unable to load path '{$path}'".(json_last_error() != JSON_ERROR_NONE ? ' ('.json_last_error_msg().').' : ''));
+			throw new SApiReaderException(Translate::Instance()->EX_JSON_invalid_file([
+				'path' => $path,
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		}
 
 		return $json;

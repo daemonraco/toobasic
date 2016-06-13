@@ -11,6 +11,7 @@ namespace TooBasic\Configs;
 // Class aliases.
 use TooBasic\ConfigException;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ConfigLoaderMulti
@@ -46,12 +47,12 @@ class ConfigLoaderMerge extends ConfigLoader {
 							$this->_config->{$key} = $value;
 						} elseif(is_array($this->_config->{$key})) {
 							if(!is_array($value)) {
-								throw new ConfigException('Type mismatch. Array expected but '.gettype($value).' was given.');
+								throw new ConfigException(Translate::Instance()->EX_array_expected_but_type(['type' => gettype($value)]));
 							}
 							$this->_config->{$key} = array_merge($this->_config->{$key}, $value);
 						} elseif(is_object($this->_config->{$key})) {
 							if(!is_object($value)) {
-								throw new ConfigException('Type mismatch. Object expected but '.gettype($value).' was given.');
+								throw new ConfigException(Translate::Instance()->EX_object_expected_but_type(['type' => gettype($value)]));
 							}
 							foreach($value as $subKey => $subValue) {
 								$this->_config->{$key}->{$subKey} = $subValue;
@@ -62,7 +63,11 @@ class ConfigLoaderMerge extends ConfigLoader {
 					}
 				}
 			} else {
-				throw new ConfigException("Wrong configuration file '{$confPath}' (".json_last_error_msg().')');
+				throw new ConfigException(Translate::Instance()->EX_JSON_invalid_file([
+					'path' => $confPath,
+					'errorcode' => json_last_error(),
+					'error' => json_last_error_msg()
+				]));
 			}
 		} else {
 			throw new ConfigException("Unable to find/read configuration file '{$confPath}'");

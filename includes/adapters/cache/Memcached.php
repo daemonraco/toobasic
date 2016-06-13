@@ -9,7 +9,9 @@ namespace TooBasic\Adapters\Cache;
 
 //
 // Class aliases.
+use TooBasic\CacheException;
 use TooBasic\Params;
+use TooBasic\Translate;
 
 /**
  * @class Memcached
@@ -32,12 +34,20 @@ class Memcached extends Adapter {
 	public function __construct() {
 		parent::__construct();
 		//
+		// Checking libraries.
+		if(!class_exists('Memcached')) {
+			throw new CacheException(Translate::Instance()->EX_class_requires_class([
+				'class' => __CLASS__,
+				'requirement' => 'Memcached'
+			]));
+		}
+		//
 		// Global dependencies.
 		global $Defaults;
 		//
 		// Checking configuration.
 		if(!isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT]) || !isset($Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX])) {
-			throw new \TooBasic\CacheException("Memcached is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX].");
+			throw new CacheException("Memcached is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX].");
 		}
 		//
 		// Connection to 'Memcached' server.

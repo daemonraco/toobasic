@@ -81,6 +81,63 @@
 		}, {
 			"key": "title_delete_item_of_table",
 			"value": "Removing item with id '%id%' from table '%tablename%'"
+		}, {
+			"key": "EX_array_expected_but_type",
+			"value": "Type mismatch. Array expected but '%type%' was given."
+		}, {
+			"key": "EX_broken_module_manifest",
+			"value": "Unable to parse manifest of module '%module%'"
+		}, {
+			"key": "EX_cannot_open_model_file",
+			"value": "Cannot load model file '%filename%'."
+		}, {
+			"key": "EX_class_requires_class",
+			"value": "%class% requires class '%requirement%' to be available."
+		}, {
+			"key": "EX_class_requires_function",
+			"value": "%class% requires function '%requirement%' to be available."
+		}, {
+			"key": "EX_class_requires_library",
+			"value": "%class% requires '%requirement%' library to be installed."
+		}, {
+			"key": "EX_global_timer_already_started",
+			"value": "Global timer already started"
+		}, {
+			"key": "EX_global_timer_is_not_started",
+			"value": "global timer is not started"
+		}, {
+			"key": "EX_global_timer_never_used",
+			"value": "Global timer was never used"
+		}, {
+			"key": "EX_JSON_invalid_file",
+			"value": "Path '%path%' is not a valid JSON ([%errorcode%] %error%)"
+		}, {
+			"key": "EX_JSON_invalid_response",
+			"value": "Unable to parse response ([%errorcode%] %error%)."
+		}, {
+			"key": "EX_JSON_wrong_field",
+			"value": "Unable to decode field value ([%errorcode%] %error%)."
+		}, {
+			"key": "EX_language_file_not_found",
+			"value": "Unable to find translation files for language '%lang%'"
+		}, {
+			"key": "EX_object_expected_but_type",
+			"value": "Type mismatch. Object expected but '%type%' was given."
+		}, {
+			"key": "EX_timer_not_running",
+			"value": "Timer '%id%' in not running"
+		}, {
+			"key": "EX_timer_not_started",
+			"value": "Timer '%id%' was never started"
+		}, {
+			"key": "EX_timer_running",
+			"value": "Timer '%id%' in already running"
+		}, {
+			"key": "EX_unhandled_api_type",
+			"value": "Unable to handle API type '%type%'."
+		}, {
+			"key": "EX_wrong_file",
+			"value": "Unable to parse file '%path%'."
 		}
 	]
 }

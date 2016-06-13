@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Params;
 use TooBasic\Paths;
 use TooBasic\Sanitizer;
+use TooBasic\Translate;
 
 /**
  * @class RoutesManager
@@ -554,9 +555,13 @@ class RoutesManager extends Manager {
 		//
 		// Checking for parsing errors.
 		if(json_last_error() != JSON_ERROR_NONE) {
-			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
+			throw new Exception(Translate::Instance()->EX_JSON_invalid_file([
+				'path' => $path,
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception("Unable to parse file '{$path}'.");
+			throw new Exception(Translate::Instance()->EX_wrong_file(['path' => $path]));
 		}
 		//
 		// Checking if there are routes specified.

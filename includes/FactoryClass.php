@@ -2,6 +2,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\Exception;
+
 /**
  * @abstract
  * @class FactoryClass
@@ -22,6 +26,6 @@ abstract class FactoryClass {
 	 * create one.
 	 */
 	final public function __clone() {
-		throw new \TooBasic\Exception('Clone is not allowed');
+		throw new Exception('Clone is not allowed');
 	}
 }

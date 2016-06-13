@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
+use TooBasic\DBException;
+
 /**
  * @class QuerySQLite
  */
@@ -26,7 +30,7 @@ class QuerySQLite extends QueryAdapter {
 	 */
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
-			throw new \TooBasic\DBException("No name set for id column");
+			throw new DBException("No name set for id column");
 		}
 		return $this->insert($table, array($data[GC_DBQUERY_NAMES_COLUMN_ID] => null), $prefixes);
 	}

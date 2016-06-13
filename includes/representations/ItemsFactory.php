@@ -102,7 +102,7 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		throw new \TooBasic\Exception('Clone is not allowed');
+		throw new Exception('Clone is not allowed');
 	}
 	//
 	// Public methods.
@@ -196,7 +196,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception('This representation has no name field defined meaning it does not support this method');
 		}
 		//
 		// Default values.
@@ -240,7 +240,7 @@ abstract class ItemsFactory {
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_IDColumn) {
-			throw new \TooBasic\Exception('This representation has no ID field defined meaning it does not support this method');
+			throw new Exception('This representation has no ID field defined meaning it does not support this method');
 		}
 		//
 		// Obtaining an object to hold the represented entry.
@@ -270,7 +270,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception('This representation has no name field defined meaning it does not support this method');
 		}
 		//
 		// Obtaining an object to hold the represented entry.
@@ -428,10 +428,10 @@ abstract class ItemsFactory {
 						// Setting class as loaded.
 						self::$_LoadedClasses[] = $className;
 					} else {
-						throw new \TooBasic\Exception("Class '{$className}' is not defined");
+						throw new Exception("Class '{$className}' is not defined");
 					}
 				} else {
-					throw new \TooBasic\Exception("Cannot load item representation '{$className}'");
+					throw new Exception("Cannot load item representation '{$className}'");
 				}
 			}
 		}

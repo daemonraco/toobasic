@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
+use TooBasic\DBException;
+
 /**
  * @class QueryAdapter
  * @abstract
@@ -202,7 +206,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 */
 	public function update($table, $data, $where, &$prefixes = array()) {
 		if(!count($data)) {
-			throw new \TooBasic\DBException("No data to be set given");
+			throw new DBException("No data to be set given");
 		}
 		//
 		// Creating a response structure and generating some of its

@@ -9,6 +9,7 @@ namespace TooBasic\Representations;
 
 //
 // Class aliases.
+use TooBasic\Exception;
 use TooBasic\Names;
 use TooBasic\Paths;
 
@@ -134,10 +135,10 @@ class ItemsFactoryProvider extends \TooBasic\Singleton {
 						$this->_loadedClases[$name] = $className;
 						$out = $className;
 					} else {
-						throw new \TooBasic\Exception("Class '{$className}' is not defined.");
+						throw new Exception("Class '{$className}' is not defined.");
 					}
 				} else {
-					throw new \TooBasic\Exception("Cannot load items representation factory '{$className}'.");
+					throw new Exception("Cannot load items representation factory '{$className}'.");
 				}
 			}
 		} else {

@@ -10,6 +10,7 @@ namespace TooBasic\Configs;
 //
 // Class aliases.
 use TooBasic\Config;
+use TooBasic\Translate;
 
 /**
  * @class ConfigLoader
@@ -89,7 +90,11 @@ abstract class ConfigLoader {
 					}
 				}
 			} else {
-				throw new ConfigException("Wrong configuration file '{$confPath}' (".json_last_error_msg().')');
+				throw new ConfigException(Translate::Instance()->EX_JSON_invalid_file([
+					'path' => $confPath,
+					'errorcode' => json_last_error(),
+					'error' => json_last_error_msg()
+				]));
 			}
 		} else {
 			throw new ConfigException("Unable to find/read configuration file '{$confPath}'");

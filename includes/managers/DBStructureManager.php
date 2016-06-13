@@ -11,6 +11,7 @@ namespace TooBasic\Managers;
 // Class aliases.
 use TooBasic\Params;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class DBStructureManagerExeption
@@ -941,7 +942,11 @@ class DBStructureManager extends Manager {
 		// Loading and checking file.
 		$json = json_decode(file_get_contents($path));
 		if(!$json) {
-			throw new DBStructureManagerException("JSON spec at '{$path}' is broken".(json_last_error() != JSON_ERROR_NONE ? ' ('.json_last_error_msg().')' : '').'.');
+			throw new DBStructureManagerException(Translate::Instance()->EX_JSON_invalid_file([
+				'path' => $path,
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		}
 		//
 		// Triggering parsings.

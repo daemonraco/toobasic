@@ -289,6 +289,9 @@ if(isset($auxParamsManager->debugdebugs)) {
 	}, 'Debugs');
 }
 //
+// Necessary globals.
+$LanguageName = \TooBasic\guessLanguage();
+//
 // Routes
 \TooBasic\Managers\RoutesManager::Instance()->load();
 if(isset($auxParamsManager->debugroutes)) {
@@ -304,12 +307,11 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 	\TooBasic\checkBasicPermissions();
 }
 //
-// Necessary globals.
+// More necessary globals.
 $ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
 $ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->{GC_REQUEST_SERVICE} : false;
 $ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
 $SkinName = \TooBasic\guessSkin();
-$LanguageName = \TooBasic\guessLanguage();
 
 unset($auxParamsManager);

@@ -2,7 +2,6 @@ language: php
 #
 # Required test environments.
 php:
-  - '5.4'
   - '5.5'
   - '5.6'
   - '7.0'
@@ -16,8 +15,6 @@ matrix:
       env: TRAVISCI_PHPUNIT_CONF=''
     - php: nightly
       env: TRAVISCI_PHPUNIT_CONF=''
-    - php: '5.4'
-      env: TRAVISCI_PHPUNIT_CONF='-7.0'
     - php: '5.5'
       env: TRAVISCI_PHPUNIT_CONF='-7.0'
     - php: '5.6'

@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\Translate;
+
 /**
  * @class ModelsFactory
  * This class is the one int charge of constructing all model classes and
@@ -134,7 +138,7 @@ class ModelsFactory extends Singleton {
 			//
 			// If the requested class has no file, it is considered a
 			// fatal exception.
-			throw new Exception("Cannot load model file '{$classFileName}'.");
+			throw new Exception(Translate::Instance()->EX_cannot_open_model_file(['filename' => $classFileName]));
 		}
 		//
 		// Retruning what was found.
