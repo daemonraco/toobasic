@@ -340,10 +340,8 @@ class Translate extends Singleton {
 		$json = json_decode(file_get_contents($path));
 		//
 		// Checking JSON errors.
-		if(json_last_error() != JSON_ERROR_NONE) {
+		if(!$json || get_class($json) != 'stdClass') {
 			throw new Exception("Path '{$path}' is not a valid JSON ([".json_last_error()."] ".json_last_error_msg().")");
-		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception("Unable to parse file '{$path}'.");
 		}
 		//
 		// If there were no errors, it loads each translation key.

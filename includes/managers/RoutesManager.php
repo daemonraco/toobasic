@@ -554,14 +554,12 @@ class RoutesManager extends Manager {
 		$json = json_decode(file_get_contents($path));
 		//
 		// Checking for parsing errors.
-		if(json_last_error() != JSON_ERROR_NONE) {
+		if(!$json || get_class($json) != 'stdClass') {
 			throw new Exception(Translate::Instance()->EX_JSON_invalid_file([
 				'path' => $path,
 				'errorcode' => json_last_error(),
 				'error' => json_last_error_msg()
 			]));
-		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception(Translate::Instance()->EX_wrong_file(['path' => $path]));
 		}
 		//
 		// Checking if there are routes specified.
