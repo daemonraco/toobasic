@@ -16,7 +16,7 @@ class ControllersAndServicesExceptionsTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp('~WrongClassController(.*)not defined~m', $response, "The response doesn't inform about an undefined class.");
+		$this->assertRegExp('~Class \'WrongClassController\' is not defined.~m', $response, "The response doesn't inform about an undefined class.");
 	}
 	public function testRequestingAControllerWithoutView() {
 		$url = '?action=no_view';
@@ -52,7 +52,7 @@ class ControllersAndServicesExceptionsTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp('~WrongClassService(.*)not found~m', $response, "The response doesn't inform about an undefined class.");
+		$this->assertRegExp('~Class \'WrongClassService\' is not defined~m', $response, "The response doesn't inform about an undefined class.");
 	}
 	public function testRequestingAServiceWithWrongParams() {
 		$json = $this->getJSONUrl('?service=wrong_params');

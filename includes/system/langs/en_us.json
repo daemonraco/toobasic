@@ -85,8 +85,17 @@
 			"key": "EX_array_expected_but_type",
 			"value": "Type mismatch. Array expected but '%type%' was given."
 		}, {
+			"key": "EX_array_expected",
+			"value": "Type mismatch. Array expected."
+		}, {
 			"key": "EX_broken_module_manifest",
 			"value": "Unable to parse manifest of module '%module%'"
+		}, {
+			"key": "EX_cannot_load_representation_class",
+			"value": "Cannot load item representation '%name%'."
+		}, {
+			"key": "EX_cannot_load_representation_factory_class",
+			"value": "Cannot load items representation factory '%name%'."
 		}, {
 			"key": "EX_cannot_open_model_file",
 			"value": "Cannot load model file '%filename%'."
@@ -99,6 +108,18 @@
 		}, {
 			"key": "EX_class_requires_library",
 			"value": "%class% requires '%requirement%' library to be installed."
+		}, {
+			"key": "EX_DB_error_message",
+			"value": "[%type%-%code%] %message%"
+		}, {
+			"key": "EX_DB_has_spec_errors",
+			"value": "There are database errors specs."
+		}, {
+			"key": "EX_DB_unable_to_upgrade",
+			"value": "Database couldn't be upgraded."
+		}, {
+			"key": "EX_DB_unknown_connection",
+			"value": "There's no database connection configuration named '%name%'."
 		}, {
 			"key": "EX_global_timer_already_started",
 			"value": "Global timer already started"
@@ -124,6 +145,18 @@
 			"key": "EX_object_expected_but_type",
 			"value": "Type mismatch. Object expected but '%type%' was given."
 		}, {
+			"key": "EX_report_field_has_no_entries",
+			"value": "Report '%report%' field '%field%' has no entries."
+		}, {
+			"key": "EX_report_field_is_not_a_list",
+			"value": "Report '%report%' field '%field%' is not a list."
+		}, {
+			"key": "EX_route_file_without_action",
+			"value": "Wrong route specification in '%path%'. A route should have either an 'action' or a 'service'."
+		}, {
+			"key": "EX_route_file_without_main_field",
+			"value": "Wrong route specification in '%path%'. No field 'route' given."
+		}, {
 			"key": "EX_timer_not_running",
 			"value": "Timer '%id%' in not running"
 		}, {
@@ -133,8 +166,23 @@
 			"key": "EX_timer_running",
 			"value": "Timer '%id%' in already running"
 		}, {
+			"key": "EX_undefined_class_on_file",
+			"value": "Class '%name%' is not defined. File '%path%' doesn't seem to load the right object."
+		}, {
+			"key": "EX_undefined_class",
+			"value": "Class '%name%' is not defined."
+		}, {
 			"key": "EX_unhandled_api_type",
 			"value": "Unable to handle API type '%type%'."
+		}, {
+			"key": "EX_unhandled_HTTP_error",
+			"value": "There's no page/controller set to handle the HTTP error '%code%'"
+		}, {
+			"key": "EX_unknown_column_type",
+			"value": "Unknown column type '%type%'."
+		}, {
+			"key": "EX_unknown_report_type",
+			"value": "Unknown report render type '%type%'."
 		}, {
 			"key": "EX_wrong_file",
 			"value": "Unable to parse file '%path%'."

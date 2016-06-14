@@ -582,9 +582,9 @@ class RoutesManager extends Manager {
 				//
 				// Checking action/service.
 				if($auxRoute->route === false) {
-					throw new Exception("Wrong route specification in '{$path}'. No field 'route' given.");
+					throw new Exception(Translate::Instance()->EX_route_file_without_main_field(['path' => $path]));
 				} elseif(!$auxRoute->action && !$auxRoute->service) {
-					throw new Exception("Wrong route specification in '{$path}'. A route should have either an 'action' or a 'service'.");
+					throw new Exception(Translate::Instance()->EX_route_file_without_action(['path' => $path]));
 				}
 				//
 				// Expanding route's pattern.

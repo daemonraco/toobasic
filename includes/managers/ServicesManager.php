@@ -9,11 +9,12 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Exception;
-use \TooBasic\MagicProp;
-use \TooBasic\Names;
-use \TooBasic\Params;
-use \TooBasic\Paths;
+use TooBasic\Exception;
+use TooBasic\MagicProp;
+use TooBasic\Names;
+use TooBasic\Params;
+use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ServicesManager
@@ -183,7 +184,10 @@ class ServicesManager extends UrlManager {
 				//
 				// Checking class existence.
 				if(!class_exists($service[GC_AFIELD_CLASS])) {
-					throw new Exception("Class '{$service[GC_AFIELD_CLASS]}' is not defined. File '{$service[GC_AFIELD_PATH]}' doesn't seem to load the right object.");
+					throw new Exception(Translate::Instance()->EX_undefined_class_on_file([
+						'name' => $service[GC_AFIELD_CLASS],
+						'path' => $service[GC_AFIELD_PATH]
+					]));
 				}
 				//
 				// Creating the service class.
@@ -361,7 +365,7 @@ class ServicesManager extends UrlManager {
 				} else {
 					//
 					// No specification is a fatal error.
-					throw new Exception("Class '{$serviceClassName}' not found");
+					throw new Exception(Translate::Instance()->EX_undefined_class(['name' => $serviceClassName]));
 				}
 			}
 		}

@@ -67,7 +67,7 @@ class SApiReporter extends Singleton {
 		//
 		// Checking rendering type.
 		if(!isset($SApiReader[GC_SAPIREPORT_TYPES][$renderType])) {
-			throw new SApiReportException("Unkwnon report render type '{$renderType}'.");
+			throw new SApiReportException(Translate::Instance()->EX_unknown_report_type(['type' => $renderType]));
 		}
 		//
 		// Loading the associated API reader.
@@ -120,10 +120,16 @@ class SApiReporter extends Singleton {
 			}
 		}
 		if(!is_array($conf->columns)) {
-			throw new SApiReportException("Report '{$report}' field 'columns' is not a list.");
-			if(!boolval(count($conf->columns))) {
-				throw new SApiReportException("Report '{$report}' field 'columns' has no entries.");
-			}
+			throw new SApiReportException(Translate::Instance()->EX_report_field_is_not_a_list([
+				'report' => $report,
+				'field' => 'columns'
+			]));
+		}
+		if(!boolval(count($conf->columns))) {
+			throw new SApiReportException(Translate::Instance()->EX_report_field_has_no_entries([
+				'report' => $report,
+				'field' => 'columns'
+			]));
 		}
 		//
 		// Lists of required field by column type and default values.
@@ -177,7 +183,7 @@ class SApiReporter extends Singleton {
 			//
 			// Checking type.
 			if(!in_array($column->type, $knownTypes)) {
-				throw new SApiReportException("Unknown column type '{$column->type}'.");
+				throw new SApiReportException(Translate::Instance()->EX_array_expected(['type' => $column->type]));
 			}
 			//
 			// Checking and enforcing column definition fileds.
@@ -217,7 +223,7 @@ class SApiReporter extends Singleton {
 		} else {
 			$list = $results;
 			if(!is_array($list)) {
-				throw new SApiReportException("Result is not a list.");
+				throw new SApiReportException(Translate::Instance()->EX_array_expected);
 			}
 		}
 		//

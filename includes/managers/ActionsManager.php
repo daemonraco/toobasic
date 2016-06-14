@@ -15,6 +15,7 @@ use TooBasic\Managers\DBStructureManager;
 use TooBasic\Managers\ManifestsManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ActionsManager
@@ -260,16 +261,20 @@ class ActionsManager extends UrlManager {
 					$code = sprintf('%03d', $code);
 				}
 
-				throw new Exception("[DB-{$code}] {$error[GC_AFIELD_MESSAGE]}");
+				throw new Exception($this->tr->EX_DB_error_message([
+					'type' => 'DB',
+					'code' => $code,
+					'message' => $error[GC_AFIELD_MESSAGE]
+				]));
 			}
-			throw new Exception('There are database errors specs');
+			throw new Exception($this->tr->EX_DB_has_spec_errors);
 		} else {
 			//
 			// Checing if the structure is correct. Otherwise, an
 			// upgrade is attempted.
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
-					throw new Exception('Database couldn\'t be upgraded');
+					throw new Exception($this->tr->EX_DB_unable_to_upgrade);
 				}
 			}
 		}
@@ -376,7 +381,7 @@ class ActionsManager extends UrlManager {
 			//
 			// Checking error page handlers.
 			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
-				throw new Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
+				throw new Exception(Translate::Instance()->EX_unhandled_HTTP_error(['code' => $errorActionName]));
 			}
 			//
 			// Loading a proper error page controller.
@@ -440,7 +445,10 @@ class ActionsManager extends UrlManager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($actionName);
 			} else {
-				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
+				throw new Exception(Translate::Instance()->EX_undefined_class_on_file([
+					'name' => $controllerClassName,
+					'path' => $controllerPath
+				]));
 			}
 		} elseif(!$recursive) {
 			//

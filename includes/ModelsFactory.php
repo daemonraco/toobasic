@@ -132,7 +132,7 @@ class ModelsFactory extends Singleton {
 				//
 				// If the requested class was not defined, it is
 				// considered a fatal exception.
-				throw new Exception("Class '{$className}' is not defined.");
+				throw new Exception(Translate::Instance()->EX_undefined_class(['name' => $className]));
 			}
 		} else {
 			//
