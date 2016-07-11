@@ -13,6 +13,7 @@ use TooBasic\MagicProp;
 use TooBasic\Managers\RoutesManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class Form
@@ -134,7 +135,11 @@ class Form {
 			$className = $Defaults[GC_DEFAULTS_FORMS_TYPES][$this->_config->form->type];
 			$builder = new $className($this);
 		} else {
-			throw new FormsException("Unknown form type '{$this->_config->form->type}' at path '///form/type' (form '{$this->name()}').");
+			throw new FormsException(Translate::Instance()->EX_unknown_type_at_path_on_form([
+				'type' => $this->_config->form->type,
+				'path' => '/form/type',
+				'form' => $this->name()
+			]));
 		}
 		//
 		// Fixing mode.
@@ -495,10 +500,16 @@ class Form {
 		//
 		// Checking required fields.
 		if(!isset($this->_config->form)) {
-			throw new FormsException("Wrong form specification, unable to find path '///form' (form '{$this->name()}').");
+			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_on_form([
+				'path' => '/form',
+				'form' => $this->name()
+			]));
 		}
 		if(!isset($this->_config->form->fields) || !count(get_object_vars($this->_config->form->fields))) {
-			throw new FormsException("Wrong form specification, unable to find path '///form/fields' or maybe empty (form '{$this->name()}').");
+			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_or_empty_on_form([
+				'path' => '/form/fields',
+				'form' => $this->name()
+			]));
 		}
 		//
 		// Checking and expanding default form values.
@@ -557,7 +568,11 @@ class Form {
 				//
 				// Checking options.
 				if(!boolval($config->values)) {
-					throw new FormsException("Type '".GC_FORMS_FIELDTYPE_ENUM."' at path '///form/fields/{$name}' has no values (form '{$this->name()}').");
+					throw new FormsException(Translate::Instance()->EX_type_at_path_has_no_values_on_form([
+						'type' => GC_FORMS_FIELDTYPE_ENUM,
+						'path' => "/form/fields/{$name}",
+						'form' => $this->name()
+					]));
 				}
 				//
 				// Checking empty option configuration.
@@ -655,9 +670,9 @@ class Form {
 					$this->checkConfig();
 				}
 			} elseif(!$this->path()) {
-				throw new FormsException("Unknown form '{$this->name()}'.");
+				throw new FormsException(Translate::Instance()->EX_unknown_form(['name' => $this->name()]));
 			} else {
-				throw new FormsException("Unable to read form path '{$this->path()}'.");
+				throw new FormsException(Translate::Instance()->EX_unable_to_read_form_path(['path' => $this->path()]));
 			}
 		}
 	}

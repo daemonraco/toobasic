@@ -119,7 +119,7 @@
 			"value": "Configuration field '%field%' is not an object."
 		}, {
 			"key": "EX_conf_field_is_not_present",
-			"value": "Configuration field '%$field%' is not present."
+			"value": "Configuration field '%field%' is not present."
 		}, {
 			"key": "EX_DB_error_message",
 			"value": "[%type%-%code%] %message%"
@@ -162,6 +162,9 @@
 		}, {
 			"key": "EX_language_file_not_found",
 			"value": "Unable to find translation files for language '%lang%'"
+		}, {
+			"key": "EX_no_configuration_for_format",
+			"value": "There's no configuration for format '%format%'"
 		}, {
 			"key": "EX_no_data_to_be_set_given",
 			"value": "No data to be set given"
@@ -223,14 +226,26 @@
 			"key": "EX_timer_running",
 			"value": "Timer '%id%' in already running"
 		}, {
+			"key": "EX_type_at_path_has_no_values_on_form",
+			"value": "Type '%type%' at path '//%path%' has no values (form '%form%')."
+		}, {
 			"key": "EX_unable_to_find_action_with_error",
 			"value": "Unable to find %type% '%action%', neither controller for error '%error%'"
+		}, {
+			"key": "EX_unable_to_find_path_on_form",
+			"value": "Wrong form specification, unable to find path '//%path%' (form '%form%')."
+		}, {
+			"key": "EX_unable_to_find_path_or_empty_on_form",
+			"value": "Wrong form specification, unable to find path '//%path%' or maybe empty (form '%form%')."
 		}, {
 			"key": "EX_unable_to_load_form",
 			"value": "Unable to load form '%name%'."
 		}, {
 			"key": "EX_unable_to_modify_column",
 			"value": "It was not possible to change column '%name%' vaule."
+		}, {
+			"key": "EX_unable_to_read_form_path",
+			"value": "Unable to read form path '%path%'."
 		}, {
 			"key": "EX_undefined_adapter_for_engine",
 			"value": "There's no define adapter for a '%engine%' connection."
@@ -256,8 +271,14 @@
 			"key": "EX_unknown_field_type_at_opath",
 			"value": "Unknown field type '%type%' at path '%opath%'."
 		}, {
+			"key": "EX_unknown_form",
+			"value": "Unknown form '%name%'."
+		}, {
 			"key": "EX_unknown_report_type",
 			"value": "Unknown report render type '%type%'."
+		}, {
+			"key": "EX_unknown_type_at_path_on_form",
+			"value": "Unknown form type '%type%' at path '//%path%' (form '%form%')."
 		}, {
 			"key": "EX_wrong_file",
 			"value": "Unable to parse file '%path%'."
