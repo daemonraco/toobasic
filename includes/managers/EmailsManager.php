@@ -9,11 +9,12 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Email;
-use \TooBasic\EmailPayload;
-use \TooBasic\Exception;
-use \TooBasic\Names;
-use \TooBasic\Paths;
+use TooBasic\Email;
+use TooBasic\EmailPayload;
+use TooBasic\Exception;
+use TooBasic\Names;
+use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class EmailsManager
@@ -275,7 +276,10 @@ class EmailsManager extends Manager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($emailPayload);
 			} else {
-				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
+				throw new Exception(Translate::Instance()->EX_undefined_class_on_file([
+					'name' => $controllerClassName,
+					'path' => $controllerPath
+				]));
 			}
 		} elseif(!$recursive) {
 			//

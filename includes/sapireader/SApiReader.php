@@ -307,16 +307,16 @@ class SApiReader {
 		// Checking main fields presence.
 		foreach(array('services', 'url', 'name', 'description') as $field) {
 			if(!isset($this->_config->{$field})) {
-				throw new SApiReaderException("Configuration field '{$field}' is not present.");
+				throw new SApiReaderException($this->_magic->tr->EX_conf_field_is_not_present(['field' => $field]));
 			}
 		}
 		//
 		// Checking services.
 		if(!is_object($this->_config->services)) {
-			throw new SApiReaderException("Configuration field 'services' is not an object.");
+			throw new SApiReaderException($this->_magic->tr->EX_conf_field_is_not_object(['field' => 'services']));
 		}
 		if(!boolval(get_object_vars($this->_config->services))) {
-			throw new SApiReaderException("Configuration field 'services' is empty.");
+			throw new SApiReaderException($this->_magic->tr->EX_conf_field_is_empty(['field' => 'services']));
 		}
 		//
 		// Checking each service.

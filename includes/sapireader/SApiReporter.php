@@ -116,7 +116,7 @@ class SApiReporter extends Singleton {
 		// Checking required fields.
 		foreach(['api', 'service', 'columns'] as $field) {
 			if(!isset($conf->{$field})) {
-				throw new SApiReportException("Report '{$report}' lacks the required field '{$field}'.");
+				throw new SApiReportException(Translate::Instance()->EX_report_no_required_field(['report' => $report, 'field' => $field]));
 			}
 		}
 		if(!is_array($conf->columns)) {
@@ -192,7 +192,11 @@ class SApiReporter extends Singleton {
 			// Checking required fields.
 			foreach($requiredColumnFields as $field) {
 				if(!isset($column->{$field})) {
-					throw new SApiReportException(\TooBasic\ordinalToCardinal($columnPosition + 1)." column on report '{$report}' lacks the required field '{$field}'.");
+					throw new SApiReportException(Translate::Instance()->EX_report_column_no_required_field([
+						'position' => \TooBasic\ordinalToCardinal($columnPosition + 1),
+						'report' => $report,
+						'field' => $field
+					]));
 				}
 			}
 		}
@@ -218,7 +222,7 @@ class SApiReporter extends Singleton {
 		if($conf->listPath) {
 			$list = self::GetPathValue($results, $conf->listPath);
 			if(!is_array($list)) {
-				throw new SApiReportException("Result's path '->".self::GetPathCleaned($conf->listPath)."' doesn't point to a list.");
+				throw new SApiReportException(Translate::Instance()->EX_result_path_is_not_list(['path' => self::GetPathCleaned($conf->listPath)]));
 			}
 		} else {
 			$list = $results;
@@ -318,7 +322,7 @@ class SApiReporter extends Singleton {
 					]));
 				}
 			} else {
-				throw new SApiReportException("Unable to find a definition for report '{$report}'.");
+				throw new SApiReportException(Translate::Instance()->EX_no_report_definition(['report' => $report]));
 			}
 		}
 	}

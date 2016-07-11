@@ -153,7 +153,7 @@ class TableType extends FormType {
 
 				$fields[] = $aux;
 			} else {
-				throw new FormsException("Unknown field type '{$fieldType}' at path '///form/fields/{$fieldName}'.");
+				throw new FormsException($tr->EX_unknown_field_type_at_opath(['type' => $fieldType, 'opath' => "///form/fields/{$fieldName}"]));
 			}
 		}
 		//

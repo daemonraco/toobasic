@@ -5,6 +5,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\Exception;
+use TooBasic\Translate;
 
 /**
  * @abstract
@@ -26,6 +27,6 @@ abstract class FactoryClass {
 	 * create one.
 	 */
 	final public function __clone() {
-		throw new Exception('Clone is not allowed');
+		throw new Exception(Translate::Instance()->EX_obj_clone_forbidden);
 	}
 }

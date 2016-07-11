@@ -30,10 +30,6 @@ class Form {
 	 */
 	protected $_name = false;
 	/**
-	 * @var \TooBasic\MagicProp MagicProp shortcut.
-	 */
-	protected $_magic = false;
-	/**
 	 * @var string Current form configuration file path.
 	 */
 	protected $_path = false;
@@ -383,6 +379,20 @@ class Form {
 		return $out;
 	}
 	/**
+	 * This method provides access to the MagicProp singleton.
+	 *
+	 * @return \TooBasic\MagicProp returns a singleton pointer.
+	 */
+	public function magic() {
+		static $magic = false;
+
+		if($magic === false) {
+			$magic = MagicProp::Instance();
+		}
+
+		return $magic;
+	}
+	/**
 	 * This method returns the proper form method based on its defaults and
 	 * specific values for certain mode.
 	 *
@@ -650,17 +660,5 @@ class Form {
 				throw new FormsException("Unable to read form path '{$this->path()}'.");
 			}
 		}
-	}
-	/**
-	 * This method provides access to a MagicProp instance shortcut.
-	 *
-	 * @return \TooBasic\MagicProp Returns the shortcut.
-	 */
-	protected function magic() {
-		if($this->_magic === false) {
-			$this->_magic = MagicProp::Instance();
-		}
-
-		return $this->_magic;
 	}
 }

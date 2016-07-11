@@ -396,7 +396,11 @@ class ActionsManager extends UrlManager {
 				}
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
-				throw new Exception("Unable to find {$whatIsIt} '{$actionName}', neither controller for error '{$errorActionName}'");
+				throw new Exception(Translate::Instance()->EX_unable_to_find_action_with_error([
+					'type' => $whatIsIt,
+					'action' => $actionName,
+					'error' => $errorActionName
+				]));
 			}
 			//
 			// Loading layout name used by the error page.

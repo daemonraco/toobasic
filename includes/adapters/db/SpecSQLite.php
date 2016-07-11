@@ -8,6 +8,7 @@
 namespace TooBasic\Adapters\DB;
 
 use TooBasic\Managers\DBStructureManager;
+use TooBasic\Translate;
 
 /**
  * @class SpecSQLite
@@ -190,7 +191,7 @@ class SpecSQLite extends SpecAdapter {
 		return $this->exec($query);
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
-		throw new Exception('Operation not supported by SQLite (DROP COLUMN)');
+		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'DROP COLUMN']));
 		$query = "alter table {$table->fullname} \n";
 		$query.= "        drop column {$columnName}";
 
@@ -240,7 +241,7 @@ class SpecSQLite extends SpecAdapter {
 		return $this->dropIndex($index->fullname) && $this->createIndex($index);
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
-		throw new Exception('Operation not supported by SQLite (MODIFY COLUMN)');
+		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'MODIFY COLUMN']));
 		$query = "alter table {$table->fullname} \n";
 
 		$field = $table->fields[$columnName];

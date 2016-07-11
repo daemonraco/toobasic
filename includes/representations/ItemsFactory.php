@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ItemsFactory
@@ -102,7 +103,7 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		throw new Exception('Clone is not allowed');
+		throw new Exception(Translate::Instance()->EX_obj_clone_forbidden);
 	}
 	//
 	// Public methods.
@@ -428,10 +429,10 @@ abstract class ItemsFactory {
 						// Setting class as loaded.
 						self::$_LoadedClasses[] = $className;
 					} else {
-						throw new Exception("Class '{$className}' is not defined");
+						throw new Exception(Translate::Instance()->EX_undefined_class(['name' => $className]));
 					}
 				} else {
-					throw new Exception("Cannot load item representation '{$className}'");
+					throw new Exception(Translate::Instance()->EX_cannot_load_representation_class(['name' => $className]));
 				}
 			}
 		}

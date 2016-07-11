@@ -109,17 +109,38 @@
 			"key": "EX_class_requires_library",
 			"value": "%class% requires '%requirement%' library to be installed."
 		}, {
+			"key": "EX_cmd_opts_cannot_change",
+			"value": "Options given in a command line can't be changed."
+		}, {
+			"key": "EX_conf_field_is_empty",
+			"value": "Configuration field '%field%' is empty."
+		}, {
+			"key": "EX_conf_field_is_not_object",
+			"value": "Configuration field '%field%' is not an object."
+		}, {
+			"key": "EX_conf_field_is_not_present",
+			"value": "Configuration field '%$field%' is not present."
+		}, {
 			"key": "EX_DB_error_message",
 			"value": "[%type%-%code%] %message%"
 		}, {
 			"key": "EX_DB_has_spec_errors",
 			"value": "There are database errors specs."
 		}, {
+			"key": "EX_DB_no_id_column_set",
+			"value": "No name set for id column"
+		}, {
+			"key": "EX_DB_no_name_column_set_for",
+			"value": "No name column set for table '%name%'"
+		}, {
 			"key": "EX_DB_unable_to_upgrade",
 			"value": "Database couldn't be upgraded."
 		}, {
 			"key": "EX_DB_unknown_connection",
 			"value": "There's no database connection configuration named '%name%'."
+		}, {
+			"key": "EX_extended_column_without_factory",
+			"value": "Extended column '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
 		}, {
 			"key": "EX_global_timer_already_started",
 			"value": "Global timer already started"
@@ -142,8 +163,35 @@
 			"key": "EX_language_file_not_found",
 			"value": "Unable to find translation files for language '%lang%'"
 		}, {
+			"key": "EX_no_data_to_be_set_given",
+			"value": "No data to be set given"
+		}, {
+			"key": "EX_no_email_name_given",
+			"value": "No email name given, try '?debugemail=my_email'"
+		}, {
+			"key": "EX_no_report_definition",
+			"value": "Unable to find a definition for report '%report%'."
+		}, {
+			"key": "EX_not_connected",
+			"value": "Not connected"
+		}, {
+			"key": "EX_obj_clone_forbidden",
+			"value": "Clone is not allowed"
+		}, {
 			"key": "EX_object_expected_but_type",
 			"value": "Type mismatch. Object expected but '%type%' was given."
+		}, {
+			"key": "EX_PDO_unable_to_connect",
+			"value": "Unable to connect to database. [PDO-%code%] %message%}"
+		}, {
+			"key": "EX_PDO_unable_to_prepate_query",
+			"value": "Unable to prepate query: %query%. %engine% Error: [%code%] %info0%-%info1%-%info2%"
+		}, {
+			"key": "EX_PDO_unable_to_run_query",
+			"value": "Unable to run query: %query%. %engine% Error: [%code%] %info0%-%info1%-%info2%"
+		}, {
+			"key": "EX_report_column_no_required_field",
+			"value": "%position% column on report '%report%' lacks the required field '%field%'."
 		}, {
 			"key": "EX_report_field_has_no_entries",
 			"value": "Report '%report%' field '%field%' has no entries."
@@ -151,11 +199,20 @@
 			"key": "EX_report_field_is_not_a_list",
 			"value": "Report '%report%' field '%field%' is not a list."
 		}, {
+			"key": "EX_report_no_required_field",
+			"value": "Report '%report%' lacks the required field '%field%'."
+		}, {
+			"key": "EX_result_path_is_not_list",
+			"value": "Result's path '->%path%' doesn't point to a list."
+		}, {
 			"key": "EX_route_file_without_action",
 			"value": "Wrong route specification in '%path%'. A route should have either an 'action' or a 'service'."
 		}, {
 			"key": "EX_route_file_without_main_field",
 			"value": "Wrong route specification in '%path%'. No field 'route' given."
+		}, {
+			"key": "EX_SQLite_not_supported",
+			"value": "Operation not supported by SQLite (%operation%)"
 		}, {
 			"key": "EX_timer_not_running",
 			"value": "Timer '%id%' in not running"
@@ -165,6 +222,18 @@
 		}, {
 			"key": "EX_timer_running",
 			"value": "Timer '%id%' in already running"
+		}, {
+			"key": "EX_unable_to_find_action_with_error",
+			"value": "Unable to find %type% '%action%', neither controller for error '%error%'"
+		}, {
+			"key": "EX_unable_to_load_form",
+			"value": "Unable to load form '%name%'."
+		}, {
+			"key": "EX_unable_to_modify_column",
+			"value": "It was not possible to change column '%name%' vaule."
+		}, {
+			"key": "EX_undefined_adapter_for_engine",
+			"value": "There's no define adapter for a '%engine%' connection."
 		}, {
 			"key": "EX_undefined_class_on_file",
 			"value": "Class '%name%' is not defined. File '%path%' doesn't seem to load the right object."
@@ -180,6 +249,12 @@
 		}, {
 			"key": "EX_unknown_column_type",
 			"value": "Unknown column type '%type%'."
+		}, {
+			"key": "EX_unknown_column",
+			"value": "Unknown column '%name%'."
+		}, {
+			"key": "EX_unknown_field_type_at_opath",
+			"value": "Unknown field type '%type%' at path '%opath%'."
 		}, {
 			"key": "EX_unknown_report_type",
 			"value": "Unknown report render type '%type%'."

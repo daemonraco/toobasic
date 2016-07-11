@@ -177,7 +177,7 @@ abstract class ItemRepresentation {
 			//
 			// Checking representation field.
 			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
-				throw new Exception("Extended column '{$name}' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY').");
+				throw new Exception($this->magic()->tr->EX_extended_column_without_factory(['name' => $name]));
 			}
 			//
 			// Checking which method should attend this column.
@@ -399,7 +399,7 @@ abstract class ItemRepresentation {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
 		} else {
-			throw new DBException("No name column set for table '{$this->_CP_Table}'");
+			throw new DBException($this->magic()->tr->EX_DB_no_name_column_set_for(['name' => $this->_CP_Table]));
 		}
 
 		return $this->exists();
@@ -531,7 +531,7 @@ abstract class ItemRepresentation {
 		//
 		// Checking column existence.
 		if(!array_key_exists($this->_CP_ColumnsPerfix.$column, $this->_properties)) {
-			throw new Exception("Unknown column '{$column}'.");
+			throw new Exception($this->magic()->tr->EX_unknown_column(['name' => $column]));
 		}
 		//
 		// Cheching if this is a call to change current object.
@@ -551,7 +551,7 @@ abstract class ItemRepresentation {
 			//
 			// Checking the actual change.
 			if($this->{$column} != $newItem->id()) {
-				throw new Exception("It was not possible to change column '{$column}' vaule.");
+				throw new Exception($this->magic()->tr->EX_unable_to_modify_column(['name' => $column]));
 			}
 		}
 		//
