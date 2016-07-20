@@ -10,6 +10,7 @@ namespace TooBasic\Representations;
 //
 // Class aliases.
 use TooBasic\Representations\FieldFilterException;
+use TooBasic\Translate;
 
 /**
  * @class JSONFilter
@@ -34,7 +35,10 @@ class JSONFilter extends FieldFilter {
 		} else {
 			$out = json_decode($in);
 			if(!$out) {
-				throw new FieldFilterException("Unable to decode field value (".json_last_error_msg().").");
+				throw new FieldFilterException(Translate::Instance()->EX_JSON_wrong_field([
+					'errorcode' => json_last_error(),
+					'error' => json_last_error_msg()
+				]));
 			}
 		}
 
@@ -55,7 +59,10 @@ class JSONFilter extends FieldFilter {
 
 		$out = json_encode($in);
 		if(!$out) {
-			throw new FieldFilterException("Unable to encode field value (".json_last_error_msg().").");
+			throw new FieldFilterException(Translate::Instance()->EX_JSON_wrong_field([
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		}
 
 		return $out;

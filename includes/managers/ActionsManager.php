@@ -15,6 +15,7 @@ use TooBasic\Managers\DBStructureManager;
 use TooBasic\Managers\ManifestsManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ActionsManager
@@ -84,7 +85,7 @@ class ActionsManager extends UrlManager {
 						// should not fail, if it does
 						// it's a fatal exception.
 						if($errored) {
-							throw new Exception("Layout '{$errorLayout}' for current error page failed on its execution.");
+							throw new Exception(Translate::Instance()->EX_error_layout_failed_execution(['layout' => $errorLayout]));
 						}
 					}
 				} else {
@@ -149,14 +150,14 @@ class ActionsManager extends UrlManager {
 				//
 				// Checking configuration for parameter 'action'.
 				if(!isset($redirConf[GC_AFIELD_ACTION])) {
-					throw new Exception("Wrong redirection configuration '{$redirector}'. No configuration found for parameter '".GC_AFIELD_ACTION."'");
+					throw new Exception(Translate::Instance()->EX_wrong_redirection_conf_param_conf_not_found(['redirector' => $redirector, 'param' => GC_AFIELD_ACTION]));
 				}
 				//
 				// Checking configuration for parameter 'params'.
 				if(!isset($redirConf[GC_AFIELD_PARAMS])) {
 					$redirConf[GC_AFIELD_PARAMS] = array();
 				} elseif(!is_array($redirConf[GC_AFIELD_PARAMS])) {
-					throw new Exception("Wrong redirection configuration '{$redirector}'. Parameter '".GC_AFIELD_PARAMS."' is not an array");
+					throw new Exception(Translate::Instance()->EX_wrong_redirection_conf_parameter_is_not_array(['redirector' => $redirector, 'param' => GC_AFIELD_PARAMS]));
 				}
 				//
 				// Checking configuration for parameter 'layout'.
@@ -217,7 +218,7 @@ class ActionsManager extends UrlManager {
 				die;
 			}
 		} else {
-			throw new Exception("Redirection code '{$redirector}' is not configured");
+			throw new Exception(Translate::Instance()->EX_redirection_code_not_configured(['code' => $redirector]));
 		}
 	}
 	/**
@@ -260,16 +261,20 @@ class ActionsManager extends UrlManager {
 					$code = sprintf('%03d', $code);
 				}
 
-				throw new Exception("[DB-{$code}] {$error[GC_AFIELD_MESSAGE]}");
+				throw new Exception($this->tr->EX_DB_error_message([
+					'type' => 'DB',
+					'code' => $code,
+					'message' => $error[GC_AFIELD_MESSAGE]
+				]));
 			}
-			throw new Exception('There are database errors specs');
+			throw new Exception($this->tr->EX_DB_has_spec_errors);
 		} else {
 			//
 			// Checing if the structure is correct. Otherwise, an
 			// upgrade is attempted.
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
-					throw new Exception('Database couldn\'t be upgraded');
+					throw new Exception($this->tr->EX_DB_unable_to_upgrade);
 				}
 			}
 		}
@@ -376,7 +381,7 @@ class ActionsManager extends UrlManager {
 			//
 			// Checking error page handlers.
 			if(!isset($Defaults[GC_DEFAULTS_ERROR_PAGES][$errorActionName])) {
-				throw new \TooBasic\Exception("There's no page/controller set to handle the HTTP error '{$errorActionName}'");
+				throw new Exception(Translate::Instance()->EX_unhandled_HTTP_error(['code' => $errorActionName]));
 			}
 			//
 			// Loading a proper error page controller.
@@ -391,7 +396,11 @@ class ActionsManager extends UrlManager {
 				}
 			} else {
 				$whatIsIt = (is_array($previousActionRun) ? 'action layout' : 'action');
-				throw new Exception("Unable to find {$whatIsIt} '{$actionName}', neither controller for error '{$errorActionName}'");
+				throw new Exception(Translate::Instance()->EX_unable_to_find_action_with_error([
+					'type' => $whatIsIt,
+					'action' => $actionName,
+					'error' => $errorActionName
+				]));
 			}
 			//
 			// Loading layout name used by the error page.
@@ -440,7 +449,10 @@ class ActionsManager extends UrlManager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($actionName);
 			} else {
-				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
+				throw new Exception(Translate::Instance()->EX_undefined_class_on_file([
+					'name' => $controllerClassName,
+					'path' => $controllerPath
+				]));
 			}
 		} elseif(!$recursive) {
 			//

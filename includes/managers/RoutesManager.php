@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Params;
 use TooBasic\Paths;
 use TooBasic\Sanitizer;
+use TooBasic\Translate;
 
 /**
  * @class RoutesManager
@@ -553,10 +554,12 @@ class RoutesManager extends Manager {
 		$json = json_decode(file_get_contents($path));
 		//
 		// Checking for parsing errors.
-		if(json_last_error() != JSON_ERROR_NONE) {
-			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
-		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception("Unable to parse file '{$path}'.");
+		if(!$json || get_class($json) != 'stdClass') {
+			throw new Exception(Translate::Instance()->EX_JSON_invalid_file([
+				'path' => $path,
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		}
 		//
 		// Checking if there are routes specified.
@@ -579,9 +582,9 @@ class RoutesManager extends Manager {
 				//
 				// Checking action/service.
 				if($auxRoute->route === false) {
-					throw new Exception("Wrong route specification in '{$path}'. No field 'route' given.");
+					throw new Exception(Translate::Instance()->EX_route_file_without_main_field(['path' => $path]));
 				} elseif(!$auxRoute->action && !$auxRoute->service) {
-					throw new Exception("Wrong route specification in '{$path}'. A route should have either an 'action' or a 'service'.");
+					throw new Exception(Translate::Instance()->EX_route_file_without_action(['path' => $path]));
 				}
 				//
 				// Expanding route's pattern.

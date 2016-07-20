@@ -7,6 +7,11 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
+use TooBasic\DBException;
+use TooBasic\Translate;
+
 /**
  * @class QueryMySQL
  */
@@ -26,7 +31,7 @@ class QueryMySQL extends QueryAdapter {
 	 */
 	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
-			throw new \TooBasic\DBException("No name set for id column");
+			throw new DBException(Translate::Instance()->EX_DB_no_id_column_set);
 		}
 		return $this->insert($table, array($data[GC_DBQUERY_NAMES_COLUMN_ID] => null), $prefixes);
 	}

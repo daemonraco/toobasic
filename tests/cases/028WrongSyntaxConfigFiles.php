@@ -17,7 +17,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Unable to parse file (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingBrokenTranslationSpecification() {
 		$asset = '/site/langs/en_us.json';
@@ -30,7 +30,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Unable to parse file (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingBrokenSapiReaderSpecification() {
 		$asset = '/site/sapis/broken_api.json';
@@ -43,7 +43,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Unable to load path (.*){$asset}~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingBrokenSapiReportSpecification() {
 		$asset = '/site/sapis/reports/broken_report.json';
@@ -56,7 +56,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Path '(.*){$asset}' is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingBrokenFormsSpecification() {
 		$asset = '/site/forms/broken_form.json';
@@ -82,7 +82,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~JSON spec at '(.*){$asset}' is broken~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	// @}
 }

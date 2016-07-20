@@ -7,7 +7,11 @@
 
 namespace TooBasic\Adapters\DB;
 
+//
+// Class aliases.
+use TooBasic\DBException;
 use TooBasic\Params;
+use TooBasic\Translate;
 
 /**
  * @class Adapter
@@ -62,7 +66,10 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 				//
 				// If there is a database connection exception, it is
 				// caught and a user exception is raised.
-				throw new \TooBasic\DBException("Unable to connect to database. [PDO-{$e->getCode()}] {$e->getMessage()}", $e->getCode(), $e);
+				throw new DBException(Translate::Instance()->EX_PDO_unable_to_connect([
+					'code' => $e->getCode(),
+					'message' => $e->getMessage()
+				]), $e->getCode(), $e);
 			}
 			//
 			// Creating a shortcut for database tables prefix
@@ -138,9 +145,16 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+				throw new DBException(Translate::Instance()->EX_PDO_unable_to_run_query([
+					'query' => $query,
+					'engine' => $this->_engine,
+					'code' => $this->_dblink->errorCode(),
+					'info0' => $info[0],
+					'info1' => $info[1],
+					'info2' => $info[2]
+				]));
 			} else {
-				throw new \TooBasic\DBException('Not connected');
+				throw new DBException(Translate::Instance()->EX_not_connected);
 			}
 		}
 		//
@@ -185,7 +199,14 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 			$out->setFetchMode(\PDO::FETCH_ASSOC);
 		} elseif($dieOnError) {
 			$info = $this->_dblink->errorInfo();
-			throw new \TooBasic\DBException("Unable to prepate query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+			throw new DBException(Translate::Instance()->EX_PDO_unable_to_prepate_query([
+				'query' => $query,
+				'engine' => $this->_engine,
+				'code' => $this->_dblink->errorCode(),
+				'info0' => $info[0],
+				'info1' => $info[1],
+				'info2' => $info[2]
+			]));
 		}
 		//
 		// Returning requested statement.
@@ -232,9 +253,16 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 		if($dieOnError && $result === false) {
 			if($this->connected()) {
 				$info = $this->_dblink->errorInfo();
-				throw new \TooBasic\DBException("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_dblink->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}");
+				throw new DBException(Translate::Instance()->EX_PDO_unable_to_run_query([
+					'query' => $query,
+					'engine' => $this->_engine,
+					'code' => $this->_dblink->errorCode(),
+					'info0' => $info[0],
+					'info1' => $info[1],
+					'info2' => $info[2]
+				]));
 			} else {
-				throw new \TooBasic\DBException('Not connected');
+				throw new DBException(Translate::Instance()->EX_not_connected);
 			}
 		}
 		//
@@ -261,7 +289,7 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 			// Obtaining the right adapter.
 			$out = \TooBasic\Adapters\Adapter::Factory($Database[GC_DATABASE_DB_QUERY_ADAPTERS][$this->engine()]);
 		} else {
-			throw new \TooBasic\DBException("There's no define adapter for a '{$this->engine()}' connection");
+			throw new DBException(Translate::Instance()->EX_undefined_adapter_for_engine(['engine' => $this->engine()]));
 		}
 
 		return $out;

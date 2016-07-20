@@ -33,6 +33,10 @@ class Manifest {
 	 */
 	protected $_information = false;
 	/**
+	 * @var \TooBasic\MagicProp Magic properties shortcut.
+	 */
+	protected $_magic = false;
+	/**
 	 * @var string Name of the module represented.
 	 */
 	protected $_moduleName = false;
@@ -55,6 +59,9 @@ class Manifest {
 	public function __construct($moduleName) {
 		$this->_moduleName = $moduleName;
 		//
+		// Shortcuts.
+		$this->_magic = \TooBasic\MagicProp::Instance();
+		//
 		// Global dependencies.
 		global $Directories;
 		//
@@ -62,6 +69,21 @@ class Manifest {
 		$this->_modulePath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_moduleName}");
 
 		$this->load();
+	}
+	/**
+	 * Quick access to magic properties.
+	 *
+	 * @param string $prop Property name.
+	 * @return mixed Returns the requested property value or FALSE.
+	 */
+	public function __get($prop) {
+		$out = false;
+		try {
+			$out = $this->_magic->{$prop};
+		} catch(\TooBasic\MagicPropException $ex) {
+			
+		}
+		return $out;
 	}
 	//
 	// Public methods.
@@ -196,7 +218,7 @@ class Manifest {
 			if(is_readable($path)) {
 				$json = json_decode(file_get_contents($path));
 				if(!$json) {
-					throw new Exception("Unable to parse manifest of module '{$this->_moduleName}'");
+					throw new Exception($this->tr->EX_broken_module_manifest(['module' => $this->_moduleName]));
 				}
 			} else {
 				$json = new \stdClass();

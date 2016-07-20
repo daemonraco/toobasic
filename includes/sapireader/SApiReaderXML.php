@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\SApiReaderException;
+use TooBasic\Translate;
 
 /**
  * @class SApiReaderXML
@@ -40,7 +41,7 @@ class SApiReaderXML extends SApiReader {
 			//
 			// Checking error.
 			if($response === false) {
-				throw new SApiReaderException("Unable to parse response.");
+				throw new SApiReaderException(Translate::Instance()->EX_unable_to_parse_response);
 			}
 		} else {
 			$response = false;

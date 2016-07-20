@@ -66,7 +66,7 @@ class DBManager extends Manager {
 					$this->_connections[$dbname] = new \TooBasic\Adapters\DB\Adapter($dbname);
 				}
 			} else {
-				throw new DBException("There's no database connection configuration named '{$dbname}'");
+				throw new DBException($this->tr->EX_DB_unknown_connection(['name' => $dbname]));
 			}
 		}
 		//

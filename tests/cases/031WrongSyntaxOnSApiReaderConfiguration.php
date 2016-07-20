@@ -26,7 +26,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Unable to load path '(.*)/site/sapis/broken.json'~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~(.*)/site/sapis/broken.json(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithWrongJsonSyntax() {
 		$this->activatePreAsset('/site/sapis/wrong_syntax.json');
@@ -38,8 +38,8 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Unable to load path '(.*)/site/sapis/wrong_syntax.json' \((.*)\)~", $response, "Response to '{$url}' doesn't mention the error.");
-		$this->assertRegExp("~Unable to load path '(.*)/site/sapis/wrong_syntax.json'~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~(.*)/site/sapis/wrong_syntax.json(.*)is not a valid JSON \((.*)\)~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~(.*)/site/sapis/wrong_syntax.json(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	// @}
 	//

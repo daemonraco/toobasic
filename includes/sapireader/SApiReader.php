@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\MagicProp;
+use TooBasic\Translate;
 
 /**
  * @class SApiReaderException
@@ -140,7 +141,7 @@ class SApiReader {
 			//
 			// Checking parameters count.
 			if(count($methConf->params) > count($callParams)) {
-				throw new SApiReaderException("Not all required parameters where given.");
+				throw new SApiReaderException(Translate::Instance()->EX_missing_required_parameters);
 			}
 			//
 			// Building params to send on POST.
@@ -149,7 +150,7 @@ class SApiReader {
 				//
 				// Checking that it's been given.
 				if(!isset($callParams[$from])) {
-					throw new SApiReaderException("POST parameter '{$name}' requires parameter {$from} but it was not specified.");
+					throw new SApiReaderException(Translate::Instance()->EX_post_parameter_requires_another_parameter(['param' => $name, 'another' => $from]));
 				}
 				$sendParams[$name] = $callParams[$from];
 			}
@@ -160,7 +161,7 @@ class SApiReader {
 			// Requesting data.
 			$response = $this->getContent($methConf->method, $url, $sendParams);
 		} else {
-			throw new SApiReaderException("Unknown service called '{$method}'.");
+			throw new SApiReaderException(Translate::Instance()->EX_unknown_service(['name' => $method]));
 		}
 
 		return $response;
@@ -227,7 +228,10 @@ class SApiReader {
 		//
 		// Checking library.
 		if(!function_exists('curl_init')) {
-			throw new SApiReaderException(__CLASS__." requires cURL library to be installed.");
+			throw new SApiReaderException(Translate::Instance()->EX_class_requires_library([
+				'class' => __CLASS__,
+				'requirement' => 'cURL'
+			]));
 		}
 		//
 		// Generating headers.
@@ -304,16 +308,16 @@ class SApiReader {
 		// Checking main fields presence.
 		foreach(array('services', 'url', 'name', 'description') as $field) {
 			if(!isset($this->_config->{$field})) {
-				throw new SApiReaderException("Configuration field '{$field}' is not present.");
+				throw new SApiReaderException(Translate::Instance()->EX_conf_field_is_not_present(['field' => $field]));
 			}
 		}
 		//
 		// Checking services.
 		if(!is_object($this->_config->services)) {
-			throw new SApiReaderException("Configuration field 'services' is not an object.");
+			throw new SApiReaderException(Translate::Instance()->EX_conf_field_is_not_object(['field' => 'services']));
 		}
 		if(!boolval(get_object_vars($this->_config->services))) {
-			throw new SApiReaderException("Configuration field 'services' is empty.");
+			throw new SApiReaderException(Translate::Instance()->EX_conf_field_is_empty(['field' => 'services']));
 		}
 		//
 		// Checking each service.
@@ -323,7 +327,7 @@ class SApiReader {
 			// Checking required fields.
 			foreach($requiredFields as $field) {
 				if(!isset($srv->{$field})) {
-					throw new SApiReaderException("Configuration of service '{$name}' lacks field '{$field}'.");
+					throw new SApiReaderException(Translate::Instance()->EX_service_config_requires_field(['service' => $name, 'field' => $field]));
 				}
 			}
 			//
@@ -331,7 +335,7 @@ class SApiReader {
 			// request is required.
 			foreach($srv->sendParams as $name => $from) {
 				if(!in_array($from, $srv->params)) {
-					throw new SApiReaderException("POST Parameter '{$name}' takes its value from a non required parameter called '{$from}'.");
+					throw new SApiReaderException(Translate::Instance()->EX_post_parameter_uses_another_non_required_parameter(['param' => $name, 'another' => $from]));
 				}
 			}
 		}

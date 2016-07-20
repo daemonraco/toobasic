@@ -25,7 +25,6 @@ $SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/E
 $SuperLoader['TooBasic\\Exporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exporter.php";
 $SuperLoader['TooBasic\\FactoryClass'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/FactoryClass.php";
 $SuperLoader['TooBasic\\Layout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Layout.php";
-$SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 $SuperLoader['TooBasic\\Manifest'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Manifest.php";
 $SuperLoader['TooBasic\\Model'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Model.php";
 $SuperLoader['TooBasic\\ModelsFactory'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ModelsFactory.php";
@@ -37,6 +36,11 @@ $SuperLoader['TooBasic\\Service'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Ser
 $SuperLoader['TooBasic\\Singleton'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Singleton.php";
 $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer.php";
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";
+// @}
+//
+// MagicProps @{
+$SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
+$SuperLoader['TooBasic\\MagicPropException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 // @}
 //
 // Managers @{
