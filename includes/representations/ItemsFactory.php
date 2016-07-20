@@ -121,9 +121,9 @@ abstract class ItemsFactory {
 		// Checking if this method is disabled.
 		if(\boolval($this->_CP_DisableCreate)) {
 			if(is_string($this->_CP_DisableCreate)) {
-				throw new Exception("Method 'create()' cannot be called directly. Use '{$this->_CP_DisableCreate}()' instead.");
+				throw new Exception(Translate::Instance()->EX_create_cannot_be_called_use(['method' => $this->_CP_DisableCreate]));
 			} else {
-				throw new Exception("Method 'create()' cannot be called directly.");
+				throw new Exception(Translate::Instance()->EX_create_cannot_be_called);
 			}
 		}
 		//
@@ -197,7 +197,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Default values.
@@ -241,7 +241,7 @@ abstract class ItemsFactory {
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_IDColumn) {
-			throw new Exception('This representation has no ID field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_ID_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.
@@ -271,7 +271,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.

@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use TooBasic\ConfigException;
+use TooBasic\Translate;
 
 /**
  * @class ComplexConfig
@@ -83,25 +84,25 @@ abstract class ComplexConfig extends Config {
 					case self::PathTypeList:
 						eval("\$rightType=is_array(\$this->{$path});");
 						if(!$rightType) {
-							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a list");
+							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_a_list(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
 					case self::PathTypeNumeric:
 						eval("\$rightType=is_numeric(\$this->{$path});");
 						if(!$rightType) {
-							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not numeric");
+							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_numeric(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
 					case self::PathTypeObject:
 						eval("\$rightType=is_object(\$this->{$path});");
 						if(!$rightType) {
-							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not an object");
+							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_an_object(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
 					case self::PathTypeString:
 						eval("\$rightType=is_string(\$this->{$path});");
 						if(!$rightType) {
-							throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not a string");
+							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_a_string(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
 					case self::PathTypeAny:
@@ -109,10 +110,10 @@ abstract class ComplexConfig extends Config {
 						// No controls here.
 						break;
 					default:
-						throw new ConfigException("{$basicErrorMessage}Unhandled path type '{$type}'");
+						throw new ConfigException(Translate::Instance()->EX_MSG_unhandled_obj_path_type(['message' => $basicErrorMessage, 'type' => $type]));
 				}
 			} else {
-				throw new ConfigException("{$basicErrorMessage}Path '->{$path}' is not present");
+				throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_present(['message' => $basicErrorMessage, 'path' => $path]));
 			}
 		}
 	}

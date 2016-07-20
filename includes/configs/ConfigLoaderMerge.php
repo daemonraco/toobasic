@@ -70,7 +70,7 @@ class ConfigLoaderMerge extends ConfigLoader {
 				]));
 			}
 		} else {
-			throw new ConfigException("Unable to find/read configuration file '{$confPath}'");
+			throw new ConfigException(Translate::Instance()->EX_unable_to_find_config_file(['path' => $confPath]));
 		}
 	}
 	/**

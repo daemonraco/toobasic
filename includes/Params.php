@@ -150,7 +150,7 @@ class Params extends Singleton {
 			// Debugs may have changed.
 			$this->_debugs = false;
 		} else {
-			throw new Exception("Unknown parameters stack called '{$type}'");
+			throw new Exception(Translate::Instance()->EX_unknown_parameters_stack(['type' => $type]));
 		}
 	}
 	/**
@@ -171,7 +171,7 @@ class Params extends Singleton {
 			// Requesting all values from the stack,
 			$out = $this->_paramsStacks[$type]->all();
 		} else {
-			throw new Exception("Unknown parameters stack called '{$type}'");
+			throw new Exception(Translate::Instance()->EX_unknown_parameters_stack(['type' => $type]));
 		}
 		//
 		// Returning what was found.

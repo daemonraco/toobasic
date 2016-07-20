@@ -767,13 +767,13 @@ class DBStructureManager extends Manager {
 				//
 				// If it's an unknown connection it's a fatal
 				// configuration error.
-				throw new DBStructureManagerException("Unable to obtain connection '{$connectionName}' configuration");
+				throw new DBStructureManagerException(Translate::Instance()->EX_unable_to_get_connection_conf(['connetion' => $connectionName]));
 			}
 			//
 			// Checking if there's a proper database structure adapter
 			// configured.
 			if(!isset($Database[GC_DATABASE_DB_SPEC_ADAPTERS][$engine])) {
-				throw new DBStructureManagerException("There's no adapter for engine '{$engine}'");
+				throw new DBStructureManagerException(Translate::Instance()->EX_no_adapter_for_engine(['engine' => $engine]));
 			}
 			//
 			// Loading a proper database connection adapter.
@@ -785,7 +785,7 @@ class DBStructureManager extends Manager {
 				$this->_dbAdapters[$connectionName] = new $adapterName($db);
 				$out = $this->_dbAdapters[$connectionName];
 			} else {
-				throw new DBStructureManagerException("Unable to obtaing a connetion to '{$connectionName}'");
+				throw new DBStructureManagerException(Translate::Instance()->EX_unable_to_connet_to(['connetion' => $connectionName]));
 			}
 		} else {
 			//
@@ -812,7 +812,7 @@ class DBStructureManager extends Manager {
 				$this->_dbVersionAdapters[$version] = new $class($this);
 				$out = $this->_dbVersionAdapters[$version];
 			} else {
-				throw new DBStructureManagerException("Unable to handle version '{$version}'");
+				throw new DBStructureManagerException(Translate::Instance()->EX_unhandled_version(['version' => $version]));
 			}
 		} else {
 			//

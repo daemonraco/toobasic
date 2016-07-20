@@ -121,6 +121,12 @@
 			"key": "EX_conf_field_is_not_present",
 			"value": "Configuration field '%field%' is not present."
 		}, {
+			"key": "EX_create_cannot_be_called_use",
+			"value": "Method 'create()' cannot be called directly. Use '%method%()' instead."
+		}, {
+			"key": "EX_create_cannot_be_called",
+			"value": "Method 'create()' cannot be called directly."
+		}, {
 			"key": "EX_DB_error_message",
 			"value": "[%type%-%code%] %message%"
 		}, {
@@ -139,8 +145,26 @@
 			"key": "EX_DB_unknown_connection",
 			"value": "There's no database connection configuration named '%name%'."
 		}, {
+			"key": "EX_email_payload_is_not_valid",
+			"value": "Email payload is not valid, check email name, recipients and subject"
+		}, {
+			"key": "EX_email_payload_structure_not_valid",
+			"value": "Email payload structure is not valid"
+		}, {
+			"key": "EX_email_was_not_rendered_yet",
+			"value": "Email was not rendered yet"
+		}, {
+			"key": "EX_error_layout_failed_execution",
+			"value": "Layout '%layout%' for current error page failed on its execution."
+		}, {
 			"key": "EX_extended_column_without_factory",
 			"value": "Extended column '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
+		}, {
+			"key": "EX_form_has_no_specification",
+			"value": "Given form has no specification."
+		}, {
+			"key": "EX_funciton_is_not_defined",
+			"value": "Funciton '%name%()' is not defined"
 		}, {
 			"key": "EX_global_timer_already_started",
 			"value": "Global timer already started"
@@ -163,6 +187,39 @@
 			"key": "EX_language_file_not_found",
 			"value": "Unable to find translation files for language '%lang%'"
 		}, {
+			"key": "EX_MEMCACHE_not_properly_set",
+			"value": "Memcache is not properly set. Check constants $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER], $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] and $Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX]."
+		}, {
+			"key": "EX_MEMCACHED_not_properly_set",
+			"value": "Memcached is not properly set. Check constants $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_SERVER], $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PORT] and $Defaults[GC_DEFAULTS_MEMCACHED][GC_DEFAULTS_MEMCACHED_PREFIX]."
+		}, {
+			"key": "EX_missing_required_parameters",
+			"value": "Not all required parameters where given."
+		}, {
+			"key": "EX_more_than_one_primary_key",
+			"value": "More than one primary key specified."
+		}, {
+			"key": "EX_MSG_obj_path_is_not_a_list",
+			"value": "%message%Path '->%path%' is not a list."
+		}, {
+			"key": "EX_MSG_obj_path_is_not_a_string",
+			"value": "%message%Path '->%path%' is not a string."
+		}, {
+			"key": "EX_MSG_obj_path_is_not_an_object",
+			"value": "%message%Path '->%path%' is not an object."
+		}, {
+			"key": "EX_MSG_obj_path_is_not_numeric",
+			"value": "%message%Path '->%path%' is not numeric."
+		}, {
+			"key": "EX_MSG_obj_path_is_not_present",
+			"value": "%message%Path '->%path%' is not present."
+		}, {
+			"key": "EX_MSG_unhandled_obj_path_type",
+			"value": "%message%Unhandled path type '%type%'."
+		}, {
+			"key": "EX_no_adapter_for_engine",
+			"value": "There's no adapter for engine '%engine%'"
+		}, {
 			"key": "EX_no_configuration_for_format",
 			"value": "There's no configuration for format '%format%'"
 		}, {
@@ -171,6 +228,9 @@
 		}, {
 			"key": "EX_no_email_name_given",
 			"value": "No email name given, try '?debugemail=my_email'"
+		}, {
+			"key": "EX_no_email_payload_set",
+			"value": "No email payload set, use 'EmailsManager::Instance()->setEmailPayload()'"
 		}, {
 			"key": "EX_no_report_definition",
 			"value": "Unable to find a definition for report '%report%'."
@@ -184,6 +244,12 @@
 			"key": "EX_object_expected_but_type",
 			"value": "Type mismatch. Object expected but '%type%' was given."
 		}, {
+			"key": "EX_parameter_is_not_instances_of",
+			"value": "Given parameter is not an instances of '%type%'."
+		}, {
+			"key": "EX_path_extends_unexisting_type",
+			"value": "Path '%path%' extends '%father%' but it doesn't exist."
+		}, {
 			"key": "EX_PDO_unable_to_connect",
 			"value": "Unable to connect to database. [PDO-%code%] %message%}"
 		}, {
@@ -192,6 +258,15 @@
 		}, {
 			"key": "EX_PDO_unable_to_run_query",
 			"value": "Unable to run query: %query%. %engine% Error: [%code%] %info0%-%info1%-%info2%"
+		}, {
+			"key": "EX_post_parameter_requires_another_parameter",
+			"value": "POST parameter '%param%' requires parameter %another% but it was not specified."
+		}, {
+			"key": "EX_post_parameter_uses_another_non_required_parameter",
+			"value": "POST Parameter '%param%' takes its value from a non required parameter called '%another%'."
+		}, {
+			"key": "EX_redirection_code_not_configured",
+			"value": "Redirection code '%code%' is not configured"
 		}, {
 			"key": "EX_report_column_no_required_field",
 			"value": "%position% column on report '%report%' lacks the required field '%field%'."
@@ -205,6 +280,12 @@
 			"key": "EX_report_no_required_field",
 			"value": "Report '%report%' lacks the required field '%field%'."
 		}, {
+			"key": "EX_representation_has_no_ID_field_defined",
+			"value": "This representation has no ID field defined meaning it does not support this method"
+		}, {
+			"key": "EX_representation_has_no_name_field_defined",
+			"value": "This representation has no name field defined meaning it does not support this method"
+		}, {
 			"key": "EX_result_path_is_not_list",
 			"value": "Result's path '->%path%' doesn't point to a list."
 		}, {
@@ -213,6 +294,9 @@
 		}, {
 			"key": "EX_route_file_without_main_field",
 			"value": "Wrong route specification in '%path%'. No field 'route' given."
+		}, {
+			"key": "EX_service_config_requires_field",
+			"value": "Configuration of service '%service%' lacks field '%field%'."
 		}, {
 			"key": "EX_SQLite_not_supported",
 			"value": "Operation not supported by SQLite (%operation%)"
@@ -229,8 +313,20 @@
 			"key": "EX_type_at_path_has_no_values_on_form",
 			"value": "Type '%type%' at path '//%path%' has no values (form '%form%')."
 		}, {
+			"key": "EX_unable_to_connet_to",
+			"value": "Unable to obtaing a connetion to '%connection%'"
+		}, {
 			"key": "EX_unable_to_find_action_with_error",
 			"value": "Unable to find %type% '%action%', neither controller for error '%error%'"
+		}, {
+			"key": "EX_unable_to_find_config_file_named",
+			"value": "Unable to find any configuration file named '%name%'"
+		}, {
+			"key": "EX_unable_to_find_config_file",
+			"value": "Unable to find/read configuration file '%path%'"
+		}, {
+			"key": "EX_unable_to_find_configuration",
+			"value": "Unable to find configuration '%name%'."
 		}, {
 			"key": "EX_unable_to_find_path_on_form",
 			"value": "Wrong form specification, unable to find path '//%path%' (form '%form%')."
@@ -238,11 +334,20 @@
 			"key": "EX_unable_to_find_path_or_empty_on_form",
 			"value": "Wrong form specification, unable to find path '//%path%' or maybe empty (form '%form%')."
 		}, {
+			"key": "EX_unable_to_get_connection_conf",
+			"value": "Unable to obtain connection '%connection%' configuration"
+		}, {
+			"key": "EX_unable_to_load_config_file",
+			"value": "Unable to load configuration at '%path%'"
+		}, {
 			"key": "EX_unable_to_load_form",
 			"value": "Unable to load form '%name%'."
 		}, {
 			"key": "EX_unable_to_modify_column",
 			"value": "It was not possible to change column '%name%' vaule."
+		}, {
+			"key": "EX_unable_to_parse_response",
+			"value": "Unable to parse response."
 		}, {
 			"key": "EX_unable_to_read_form_path",
 			"value": "Unable to read form path '%path%'."
@@ -256,11 +361,20 @@
 			"key": "EX_undefined_class",
 			"value": "Class '%name%' is not defined."
 		}, {
+			"key": "EX_undefined_field_filter_class",
+			"value": "Undefined class '%class%' for field filter '%filter%' required by field '%field%'."
+		}, {
+			"key": "EX_undefined_field_filter",
+			"value": "Undefined field filter for '%filter%' required by field '%field%'."
+		}, {
 			"key": "EX_unhandled_api_type",
 			"value": "Unable to handle API type '%type%'."
 		}, {
 			"key": "EX_unhandled_HTTP_error",
 			"value": "There's no page/controller set to handle the HTTP error '%code%'"
+		}, {
+			"key": "EX_unhandled_version",
+			"value": "Unable to handle version '%version%'"
 		}, {
 			"key": "EX_unknown_column_type",
 			"value": "Unknown column type '%type%'."
@@ -274,14 +388,32 @@
 			"key": "EX_unknown_form",
 			"value": "Unknown form '%name%'."
 		}, {
+			"key": "EX_Unknown_method",
+			"value": "Unknown method called '%method%'."
+		}, {
+			"key": "EX_unknown_mode",
+			"value": "Unknown mode '%mode%'"
+		}, {
+			"key": "EX_unknown_parameters_stack",
+			"value": "Unknown parameters stack called '%type%'"
+		}, {
 			"key": "EX_unknown_report_type",
 			"value": "Unknown report render type '%type%'."
+		}, {
+			"key": "EX_unknown_service",
+			"value": "Unknown service called '%name%'."
 		}, {
 			"key": "EX_unknown_type_at_path_on_form",
 			"value": "Unknown form type '%type%' at path '//%path%' (form '%form%')."
 		}, {
 			"key": "EX_wrong_file",
 			"value": "Unable to parse file '%path%'."
+		}, {
+			"key": "EX_wrong_redirection_conf_param_conf_not_found",
+			"value": "Wrong redirection configuration '%redirector%'. No configuration found for parameter '%param%'"
+		}, {
+			"key": "EX_wrong_redirection_conf_parameter_is_not_array",
+			"value": "Wrong redirection configuration '%redirector%'. Parameter '%param%' is not an array."
 		}
 	]
 }

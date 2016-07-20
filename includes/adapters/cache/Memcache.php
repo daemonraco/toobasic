@@ -52,7 +52,7 @@ class Memcache extends Adapter {
 		//
 		// Checking configuration.
 		if(!isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER]) || !isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT]) || !isset($Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX])) {
-			throw new CacheException("Memcache is not properly set. Check constants \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_SERVER], \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PORT] and \$Defaults[GC_DEFAULTS_MEMCACHE][GC_DEFAULTS_MEMCACHE_PREFIX].");
+			throw new CacheException(Translate::Instance()->EX_MEMCACHE_not_properly_set);
 		}
 		//
 		// Checking compression configuration.

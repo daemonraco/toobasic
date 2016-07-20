@@ -85,7 +85,7 @@ class ActionsManager extends UrlManager {
 						// should not fail, if it does
 						// it's a fatal exception.
 						if($errored) {
-							throw new Exception("Layout '{$errorLayout}' for current error page failed on its execution.");
+							throw new Exception(Translate::Instance()->EX_error_layout_failed_execution(['layout' => $errorLayout]));
 						}
 					}
 				} else {
@@ -150,14 +150,14 @@ class ActionsManager extends UrlManager {
 				//
 				// Checking configuration for parameter 'action'.
 				if(!isset($redirConf[GC_AFIELD_ACTION])) {
-					throw new Exception("Wrong redirection configuration '{$redirector}'. No configuration found for parameter '".GC_AFIELD_ACTION."'");
+					throw new Exception(Translate::Instance()->EX_wrong_redirection_conf_param_conf_not_found(['redirector' => $redirector, 'param' => GC_AFIELD_ACTION]));
 				}
 				//
 				// Checking configuration for parameter 'params'.
 				if(!isset($redirConf[GC_AFIELD_PARAMS])) {
 					$redirConf[GC_AFIELD_PARAMS] = array();
 				} elseif(!is_array($redirConf[GC_AFIELD_PARAMS])) {
-					throw new Exception("Wrong redirection configuration '{$redirector}'. Parameter '".GC_AFIELD_PARAMS."' is not an array");
+					throw new Exception(Translate::Instance()->EX_wrong_redirection_conf_parameter_is_not_array(['redirector' => $redirector, 'param' => GC_AFIELD_PARAMS]));
 				}
 				//
 				// Checking configuration for parameter 'layout'.
@@ -218,7 +218,7 @@ class ActionsManager extends UrlManager {
 				die;
 			}
 		} else {
-			throw new Exception("Redirection code '{$redirector}' is not configured");
+			throw new Exception(Translate::Instance()->EX_redirection_code_not_configured(['code' => $redirector]));
 		}
 	}
 	/**

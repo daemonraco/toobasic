@@ -60,7 +60,7 @@ class Config extends \stdClass {
 		//
 		// Checking that the loading mechanism is a known one.
 		if(!in_array($this->mode(), array_keys($Defaults[GC_DEFAULTS_CONFIG_LOADERS]))) {
-			throw new ConfigException("Unknown mode '{$this->mode()}'");
+			throw new ConfigException(Translate::Instance()->EX_unknown_mode(['mode' => $this->mode()]));
 		}
 		//
 		// Loading physical files.

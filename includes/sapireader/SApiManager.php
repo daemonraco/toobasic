@@ -167,7 +167,10 @@ class SApiManager extends \TooBasic\Managers\Manager {
 							}
 						}
 					} else {
-						throw new SApiReaderException("Path '{$path}' extends '{$subName}' but it doesn't exist.");
+						throw new SApiReaderException(Translate::Instance()->EX_path_extends_unexisting_type([
+							'path' => $path,
+							'father' => $subName
+						]));
 					}
 				}
 			}
@@ -179,10 +182,10 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			//
 			// Checking type.
 			if(!isset($SApiReader[GC_SAPIREADER_TYPES][$json->type])) {
-				throw new SApiReaderException($this->tr->EX_unhandled_api_type(['type' => $json->type]));
+				throw new SApiReaderException(Translate::Instance()->EX_unhandled_api_type(['type' => $json->type]));
 			}
 		} else {
-			throw new SApiReaderException("Unable to find configuration '{$name}'.");
+			throw new SApiReaderException(Translate::Instance()->EX_unable_to_find_configuration(['name' => $name]));
 		}
 		return $json;
 	}

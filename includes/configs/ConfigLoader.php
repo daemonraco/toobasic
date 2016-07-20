@@ -58,7 +58,7 @@ abstract class ConfigLoader {
 		} else {
 			//
 			// If there are no file to load is a fatal error.
-			throw new ConfigException("Unable to find any configuration file named '{$this->name()}'");
+			throw new ConfigException(Translate::Instance()->EX_unable_to_find_config_file_named(['name' => $this->name()]));
 		}
 	}
 	//
@@ -97,7 +97,7 @@ abstract class ConfigLoader {
 				]));
 			}
 		} else {
-			throw new ConfigException("Unable to find/read configuration file '{$confPath}'");
+			throw new ConfigException(Translate::Instance()->EX_unable_to_find_config_file(['path' => $confPath]));
 		}
 	}
 	/**
