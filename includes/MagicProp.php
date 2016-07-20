@@ -65,6 +65,43 @@ class MagicProp extends Singleton {
 		// Default values.
 		$out = null;
 		//
+		// Global dependecies.
+		global $Defaults;
+		//
+		// Showing debug infromation, if required, about configured magic
+		// properties.
+		if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS] && isset($_REQUEST['debugmagicprop'])) {
+			\TooBasic\debugThingInPage(function() {
+				//
+				// Global dependecies.
+				global $MagicProps;
+				//
+				// Sorting information.
+				ksort($MagicProps[GC_MAGICPROP_PROPERTIES]);
+				ksort($MagicProps[GC_MAGICPROP_ALIASES]);
+
+				echo '<div class="panel panel-default">';
+				echo '<div class="panel-heading">MagicProp</div>';
+				echo '<div class="panel-body">';
+
+				echo '<h4>Properties:</h4>';
+				echo '<dl class="dl-horizontal">';
+				foreach($MagicProps[GC_MAGICPROP_PROPERTIES] as $prop => $singleton) {
+					echo "<dt>{$prop}</dt><dd>{$singleton}</dd>";
+				}
+				echo '</dl>';
+
+				echo '<h4>Aliases:</h4>';
+				echo '<dl class="dl-horizontal">';
+				foreach($MagicProps[GC_MAGICPROP_ALIASES] as $alias => $prop) {
+					echo "<dt>{$alias}</dt><dd>{$prop}</dd>";
+				}
+				echo '</dl>';
+
+				echo '</div></div>';
+			});
+		}
+		//
 		// Solving alias names.
 		$cleanProp = $this->solveAliases($prop);
 		//
