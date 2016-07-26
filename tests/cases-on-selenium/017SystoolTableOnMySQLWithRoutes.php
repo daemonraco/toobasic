@@ -1,6 +1,6 @@
 <?php
 
-abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTestCase {
+class Selenium_SystoolTableOnMySQLWithRoutes extends TooBasic_SeleniumTestCase {
 	//
 	// Internal Properties.
 	protected $_acceptableAssets = array();
@@ -117,7 +117,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		//
 		// Clicking the 'Add' button.
 		$addButton->click();
-		$this->assertRegExp("/\?action={$this->_singurlarName}_add$/", $this->url(), "There's no button to add a new entry.");
+		$this->assertRegExp("/{$this->_singurlarName}_add$/", $this->url(), "There's no button to add a new entry.");
 	}
 	// @}
 	//
@@ -168,7 +168,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->checkCurrentSource();
 		//
 		// Checking URL.
-		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "The page didn't return to the main table.");
+		$this->assertRegExp("/{$this->_pluralName}([#]?)$/", $this->url(), "The page didn't return to the main table.");
 	}
 	// @}
 	//
@@ -202,9 +202,9 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 
 		$actions = $actionsColumn[8]->elements($this->using('css selector')->value('a.btn'));
 		$this->assertEquals(3, count($actions), "There are more/less action buttons in the last column than expected.");
-		$this->assertRegExp("/\?action={$this->_singurlarName}&id=1$/", $actions[0]->attribute('href'), "The 'view' button points to the wrong direction.");
-		$this->assertRegExp("/\?action={$this->_singurlarName}_edit&id=1$/", $actions[1]->attribute('href'), "The 'edit' button points to the wrong direction.");
-		$this->assertRegExp("/\?action={$this->_singurlarName}_delete&id=1$/", $actions[2]->attribute('href'), "The 'delete' button points to the wrong direction.");
+		$this->assertRegExp("~{$this->_singurlarName}/1$~", $actions[0]->attribute('href'), "The 'view' button points to the wrong direction.");
+		$this->assertRegExp("~{$this->_singurlarName}_edit/1$~", $actions[1]->attribute('href'), "The 'edit' button points to the wrong direction.");
+		$this->assertRegExp("~{$this->_singurlarName}_delete/1$~", $actions[2]->attribute('href'), "The 'delete' button points to the wrong direction.");
 	}
 	// @}
 	//
@@ -236,7 +236,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->checkCurrentSource();
 		//
 		// Checking current URL.
-		$this->assertRegExp("/\?action={$this->_singurlarName}&id=1$/", $this->url(), "This is not the view page for entry with id '1'.");
+		$this->assertRegExp("~{$this->_singurlarName}/1$~", $this->url(), "This is not the view page for entry with id '1'.");
 		//
 		// Checking buttons.
 		$backButton = $this->byCssSelector("#MainContents a.btn[href*=\"{$this->_pluralName}\"]");
@@ -256,7 +256,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		// Going back.
 		$backButton->click();
 		$this->checkCurrentSource();
-		$this->assertRegExp("/\?action={$this->_pluralName}$/", $this->url(), "Page didn't go back to the right place.");
+		$this->assertRegExp("~{$this->_pluralName}$~", $this->url(), "Page didn't go back to the right place.");
 	}
 	// @}
 	//
@@ -288,7 +288,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->checkCurrentSource();
 		//
 		// Checking current URL.
-		$this->assertRegExp("/\?action={$this->_singurlarName}_edit&id=1$/", $this->url(), "This is not the edit page for entry with id '1'.");
+		$this->assertRegExp("~{$this->_singurlarName}_edit/1$~", $this->url(), "This is not the edit page for entry with id '1'.");
 		//
 		// Checking buttons.
 		$submitButton = $this->byId("{$this->_singurlarName}_form_save");
@@ -331,7 +331,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		}
 		$submitButton->click();
 		$this->checkCurrentSource();
-		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "Page didn't go back to the right place.");
+		$this->assertRegExp("~{$this->_pluralName}([#]?)$~", $this->url(), "Page didn't go back to the right place.");
 	}
 	// @}
 	//
@@ -439,7 +439,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->checkCurrentSource();
 		//
 		// Checking current URL.
-		$this->assertRegExp("/\?action={$this->_singurlarName}_delete&id=1$/", $this->url(), "This is not the delete page for entry with id '1'.");
+		$this->assertRegExp("~{$this->_singurlarName}_delete/1$~", $this->url(), "This is not the delete page for entry with id '1'.");
 		//
 		// Checking buttons.
 		$submitButton = $this->byId("{$this->_singurlarName}_form_delete");
@@ -458,13 +458,13 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		// Submitting the form but canceling in the confirm window.
 		$submitButton->click();
 		$this->dismissAlert();
-		$this->assertRegExp("/\?action={$this->_singurlarName}_delete&id=1$/", $this->url(), "The page changes when it shouldn't.");
+		$this->assertRegExp("~{$this->_singurlarName}_delete/1$~", $this->url(), "The page changes when it shouldn't.");
 		//
 		// Submitting the form and acception in the confirm window.
 		$submitButton->click();
 		$this->acceptAlert();
 		$this->checkCurrentSource();
-		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "Page didn't go back to the right place.");
+		$this->assertRegExp("~{$this->_pluralName}([#]?)$~", $this->url(), "Page didn't go back to the right place.");
 	}
 	// @}
 	//
