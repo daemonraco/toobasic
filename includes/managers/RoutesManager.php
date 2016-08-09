@@ -601,13 +601,6 @@ class RoutesManager extends Manager {
 				if(!is_object($json->tables)) {
 					throw new Exception(Translate::Instance()->EX_conf_field_is_not_object(['field' => 'tables']));
 				}
-				/*
-				  "person":{
-				  "plural": "people",
-				  "searchable": true,
-				  "predictive": false
-				  }
-				 */
 				//
 				// Table fields and defaults.
 				$tableFields = [

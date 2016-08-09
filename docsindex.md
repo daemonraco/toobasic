@@ -324,6 +324,7 @@
 	* [Final result](docs/routes.md#final-result)
 * [Modules?](docs/routes.md#modules)
 * [Services](docs/routes.md#services)
+* [Tables](docs/routes.md#tables)
 * [Suggestions](docs/routes.md#suggestions)
 
 ##  Simple API Reader (docs/sapireader.md):
