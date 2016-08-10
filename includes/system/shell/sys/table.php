@@ -301,7 +301,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				// Actions.
 				$this->_names['list-action'] = $this->_names['plural-name'];
 				$this->_names['list-action-controller'] = Names::ControllerClass($this->_names['list-action']);
-				$this->_names['view-action'] = "{$this->_names['singular-name']}";
+				$this->_names['view-action'] = $this->_names['singular-name'];
 				$this->_names['view-action-controller'] = Names::ControllerClass($this->_names['view-action']);
 				$this->_names['edit-action'] = "{$this->_names['singular-name']}_edit";
 				$this->_names['edit-action-controller'] = Names::ControllerClass($this->_names['edit-action']);
@@ -420,35 +420,13 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			if(!$this->hasErrors()) {
 				if(!$this->isRaw()) {
 					//
-					// List table items route.
-					$route = new \stdClass();
-					$route->route = $this->_names['list-action'];
-					$route->action = $this->_names['list-action'];
-					$this->_routes[] = $route;
-					//
-					// View table item route.
-					$route = new \stdClass();
-					$route->route = "{$this->_names['view-action']}/:id:";
-					$route->action = $this->_names['view-action'];
-					$this->_routes[] = $route;
-					//
-					// Edit table item route.
-					$route = new \stdClass();
-					$route->route = "{$this->_names['edit-action']}/:id:";
-					$route->action = $this->_names['edit-action'];
-					$this->_routes[] = $route;
-					//
-					// Add table item route.
-					$route = new \stdClass();
-					$route->route = "{$this->_names['add-action']}";
-					$route->action = $this->_names['add-action'];
-					$this->_routes[] = $route;
-					//
-					// Delete table item route.
-					$route = new \stdClass();
-					$route->route = "{$this->_names['delete-action']}/:id:";
-					$route->action = $this->_names['delete-action'];
-					$this->_routes[] = $route;
+					// Setting table routes.
+					$tableRoute = new \stdClass();
+					$tableRoute->singularName = $this->_names['singular-name'];
+					$tableRoute->pluralName = $this->_names['plural-name'];
+					$tableRoute->searchable = isset($this->_names['search-code']) ? $this->_names['search-code'] : false;
+					$tableRoute->predictive = isset($this->_names['predictive-service']) ? $this->_names['predictive-service'] : false;
+					$this->_tableRoutes[] = $tableRoute;
 				}
 			}
 		}

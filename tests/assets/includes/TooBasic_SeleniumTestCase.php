@@ -18,10 +18,13 @@ class TooBasic_SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase {
 	public function setUp() {
 		$this->loadAssetsOf();
 		//
+		// Driver?
+		$driver = defined('TRAVISCI_PHPUNIT_DRIVER') ? TRAVISCI_PHPUNIT_DRIVER : 'firefox';
+		//
 		// Selenium settings.
 		$this->setHost('localhost');
 		$this->setPort(4444);
-		$this->setBrowser('firefox');
+		$this->setBrowser($driver);
 
 		$url = TRAVISCI_URL_SCHEME.'://localhost';
 		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';

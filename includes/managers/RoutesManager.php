@@ -562,8 +562,8 @@ class RoutesManager extends Manager {
 			]));
 		}
 		//
-		// Checking if there are routes specified.
-		if(isset($json->routes)) {
+		// Checking if there are routes and/or tables specified.
+		if(isset($json->routes) || isset($json->tables)) {
 			//
 			// Route fields and defaults.
 			$routeFields = [
@@ -573,23 +573,104 @@ class RoutesManager extends Manager {
 				'service' => false
 			];
 			//
-			// Loading each route.
-			foreach($json->routes as $route) {
+			// Checking if there are routes specified.
+			if(isset($json->routes)) {
 				//
-				// Copying only useful field and enforcing those
-				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
-				//
-				// Checking action/service.
-				if($auxRoute->route === false) {
-					throw new Exception(Translate::Instance()->EX_route_file_without_main_field(['path' => $path]));
-				} elseif(!$auxRoute->action && !$auxRoute->service) {
-					throw new Exception(Translate::Instance()->EX_route_file_without_action(['path' => $path]));
+				// Loading each route.
+				foreach($json->routes as $route) {
+					//
+					// Copying only useful field and enforcing
+					// those that are required.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
+					//
+					// Checking action/service.
+					if($auxRoute->route === false) {
+						throw new Exception(Translate::Instance()->EX_route_file_without_main_field(['path' => $path]));
+					} elseif(!$auxRoute->action && !$auxRoute->service) {
+						throw new Exception(Translate::Instance()->EX_route_file_without_action(['path' => $path]));
+					}
+					//
+					// Expanding route's pattern.
+					$this->buildPattern($auxRoute);
+					$this->_routes[] = $auxRoute;
+				}
+			}
+			//
+			// Checking if there are tables specified.
+			if(isset($json->tables)) {
+				if(!is_object($json->tables)) {
+					throw new Exception(Translate::Instance()->EX_conf_field_is_not_object(['field' => 'tables']));
 				}
 				//
-				// Expanding route's pattern.
-				$this->buildPattern($auxRoute);
-				$this->_routes[] = $auxRoute;
+				// Table fields and defaults.
+				$tableFields = [
+					'plural' => false,
+					'searchable' => false,
+					'predictive' => false
+				];
+				//
+				// Loading each table.
+				foreach($json->tables as $singularName => $conf) {
+					//
+					// Copying only useful field and enforcing
+					// those that are required.
+					$auxTable = \TooBasic\objectCopyAndEnforce(array_keys($tableFields), $conf, new \stdClass(), $tableFields);
+					//
+					// Guessing plural name.
+					$pluralName = $auxTable->plural ? $auxTable->plural : "{$singularName}s";
+					//
+					// Building routes @{
+					$routes = [];
+					//
+					// List table items route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$auxRoute->action = $pluralName;
+					$auxRoute->route = $pluralName;
+					$routes[] = $auxRoute;
+					//
+					// View table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$auxRoute->action = $singularName;
+					$auxRoute->route = "{$singularName}/:id:";
+					$routes[] = $auxRoute;
+					//
+					// Edit table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_edit";
+					$auxRoute->action = $name;
+					$auxRoute->route = "{$name}/:id:";
+					$routes[] = $auxRoute;
+					//
+					// Add table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_add";
+					$auxRoute->action = $name;
+					$auxRoute->route = $name;
+					$routes[] = $auxRoute;
+					//
+					// Delete table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_delete";
+					$auxRoute->action = $name;
+					$auxRoute->route = "{$name}/:id:";
+					$routes[] = $auxRoute;
+					// @}
+					//
+					// Predictive service route.
+					if($auxTable->predictive) {
+						$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+						$auxRoute->service = $auxTable->predictive;
+						$auxRoute->route = "srv/{$auxTable->predictive}";
+						$routes[] = $auxRoute;
+					}
+					// @}
+					//
+					// Expanding routes' pattern.
+					foreach($routes as $auxRoute) {
+						$this->buildPattern($auxRoute);
+						$this->_routes[] = $auxRoute;
+					}
+				}
 			}
 		}
 	}
