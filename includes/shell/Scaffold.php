@@ -392,13 +392,17 @@ abstract class Scaffold extends ShellTool {
 			// already a similar route it should not be replaced.
 			foreach($config->routes as $route) {
 				if(isset($newRoute->action) && isset($route->action) && $route->action == $newRoute->action) {
-					$ok = false;
-					$error = "there's another rule for this controller";
-					break;
+					if($route->route == $newRoute->route) {
+						$ok = false;
+						$error = "there's another rule for this controller";
+						break;
+					}
 				} elseif(isset($newRoute->service) && isset($route->service) && $route->service == $newRoute->service) {
-					$ok = false;
-					$error = "there's another rule for this service";
-					break;
+					if($route->route == $newRoute->route) {
+						$ok = false;
+						$error = "there's another rule for this service";
+						break;
+					}
 				}
 			}
 		}

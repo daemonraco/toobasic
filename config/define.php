@@ -85,6 +85,8 @@ define('GC_AFIELD_CONNECTION', 'connection');
 define('GC_AFIELD_CORS', 'CORS');
 define('GC_AFIELD_COUNTS', 'counts');
 define('GC_AFIELD_DATA', 'data');
+define('GC_AFIELD_DEFAULT', 'default');
+define('GC_AFIELD_DEFAULTS', 'defaults');
 define('GC_AFIELD_DISABLED', 'disabled');
 define('GC_AFIELD_DB', 'db');
 define('GC_AFIELD_DESCRIPTION', 'description');

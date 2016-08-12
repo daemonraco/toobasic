@@ -13,13 +13,14 @@ use TooBasic\Shell\Option;
 /**
  * @class ServiceSystool
  */
-class ServiceSystool extends TooBasic\Shell\Scaffold {
+class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 	//
 	// Constants.
 	const OptionCached = 'Cached';
-	const OptionParam = 'Param';
 	//
 	// Protected properties.
+	protected $_genRoutePrefix = 'srv/';
+	protected $_genRouteType = 'service';
 	protected $_scaffoldName = 'service';
 	protected $_version = TOOBASIC_VERSION;
 	//
@@ -86,23 +87,6 @@ class ServiceSystool extends TooBasic\Shell\Scaffold {
 				GC_AFIELD_TEMPLATE => 'service.html',
 				GC_AFIELD_DESCRIPTION => 'service file'
 			);
-		}
-	}
-	protected function genRoutes() {
-		if($this->_routes === false) {
-			parent::genRoutes();
-			//
-			// Controller's route.
-			$route = new \stdClass();
-			$route->route = "srv/{$this->_names[GC_AFIELD_NAME]}";
-			$opt = $this->_options->option(self::OptionParam);
-			if($opt->activated()) {
-				foreach($opt->value() as $param) {
-					$route->route .= "/:{$param}:";
-				}
-			}
-			$route->service = $this->_names[GC_AFIELD_NAME];
-			$this->_routes[] = $route;
 		}
 	}
 	protected function setOptions() {

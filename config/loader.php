@@ -108,6 +108,7 @@ $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories
 //
 // Shell includes @{
 $SuperLoader['TooBasic\\Shell\\Color'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Color.php";
+$SuperLoader['TooBasic\\Shell\\ExporterScaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ExporterScaffold.php";
 $SuperLoader['TooBasic\\Shell\\Option'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Option.php";
 $SuperLoader['TooBasic\\Shell\\Options'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Options.php";
 $SuperLoader['TooBasic\\Shell\\OptionsStack'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/OptionsStack.php";
