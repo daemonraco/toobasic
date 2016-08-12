@@ -8,7 +8,14 @@
 class I115_ScaffoldsWithDefaultValuesInRoutesTest extends TooBasic_TestCase {
 	//
 	// Internal properties.
-	protected $_routesPath = TESTS_ROOTDIR.'/site/configs/routes.json';
+	protected $_routesPath = '';
+	//
+	// Set up
+	public function setUp() {
+		parent::setUp();
+
+		$this->_routesPath = TESTS_ROOTDIR.'/site/configs/routes.json';
+	}
 	//
 	// Test cases @{
 	public function testCreateController() {
