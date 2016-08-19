@@ -97,5 +97,5 @@ after_script:
   # snapshot.
   - ./tests/assets/travis.save-files-status.sh after
   - ./tests/assets/travis.save-files-status.sh compare
-after_failure:
-  - cat selenium.log
+#after_failure:
+#  - cat selenium.log
