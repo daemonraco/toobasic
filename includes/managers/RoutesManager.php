@@ -379,9 +379,9 @@ class RoutesManager extends Manager {
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		} else {
-			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			if(!$Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
 				$debugInfo['no-analysis'] = 'Routes are disabled';
-			} elseif(isset($this->_params->{GC_REQUEST_ROUTE})) {
+			} elseif(!isset($this->_params->{GC_REQUEST_ROUTE})) {
 				$debugInfo['no-analysis'] = "Parameter '".GC_REQUEST_ROUTE."' given by '.htaccess' is not present";
 			} else {
 				$debugInfo['no-analysis'] = 'Unknown reason';
