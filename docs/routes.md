@@ -42,8 +42,8 @@ Also, if you have __TooBasic__ up and running you can use the debug parameter
 `?debugphpinfo` and it will show you such information.
 
 ### Allow override
-Check you _Apache_ configuration file (probably at __/etc/apache2/apache2.conf__
-on *nix systems).
+Check your _Apache_ configuration file (probably at __/etc/apache2/apache2.conf__
+on *nix systems) if you use _Apache_.
 Inside it look for something looking like this:
 ```
 <Directory /var/www/>
@@ -68,7 +68,7 @@ this instead:
 Make sure your web user has reading permission for the __.htaccess__ file.
 
 ### The right name
-To avoid assuming a default name that may be wrong, check you _Apache_
+To avoid assuming a default name that may be wrong, check your _Apache_
 configuration file and look for the tag __AccessFileName__, if it's not
 __.htaccess__ you have to take one of these options:
 

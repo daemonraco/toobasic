@@ -1,0 +1,17 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/config.php",
+		"\/site\/case_config.php",
+		"\/site\/installed_config.php.pre"
+	],
+	"assetDirectories": [],
+	"generatedAssets": [
+		"\/site\/controllers\/hello_world.php",
+		"\/site\/services\/hello_world.php",
+		"\/site\/templates\/action\/hello_world.html",
+		"\/site\/configs\/routes.json"
+	],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}
