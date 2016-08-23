@@ -166,6 +166,15 @@ class SApiReader {
 
 		return $response;
 	}
+	/**
+	 * This method provides access to the current configuration of this Simple
+	 * API representation.
+	 *
+	 * @return \stdClass Retuns a configuration object.
+	 */
+	public function config() {
+		return $this->_config;
+	}
 	//
 	// Protected methods.
 	/**
