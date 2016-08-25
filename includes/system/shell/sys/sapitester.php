@@ -8,25 +8,109 @@ use TooBasic\SApiReaderException;
 class SapitesterSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
-	const OptionList = 'List';
-	const OptionCheck = 'Check';
 	const OptionCall = 'Call';
+	const OptionCheck = 'Check';
+	const OptionList = 'List';
+	const OptionSpecific = 'Specific';
 	//
 	// Protected methods.
 	protected function setOptions() {
 		$this->_options->setHelpText("TODO tool summary");
 
-		$text = "TODO help text for: '--call', '-C'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCall, array('--call', '-C'), Option::TypeNoValue, $text, 'value'));
+		$text = "TODO help text for: '--call', '-c'.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionCall, array('--call', '-c'), Option::TypeNoValue, $text, 'value'));
 
-		$text = "TODO help text for: '--check', '-c'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, array('--check', '-c'), Option::TypeValue, $text, 'value'));
+		$text = "TODO help text for: '--check', '-C'.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, array('--check', '-C'), Option::TypeValue, $text, 'value'));
 
 		$text = "This option prompts a detailed list of available SimpleAPI configurations.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionList, array('--list', '-l'), Option::TypeNoValue, $text));
+
+		$text = "This option can be used along with '--call' to prompt a more detailed result dump.\n";
+		$text = "Basically 'var_dump()' instead of 'print_r()'.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionSpecific, array('--specific', '-s'), Option::TypeNoValue, $text));
 	}
 	protected function taskCall($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		$ok = true;
+		$error = '';
+
+		$params = $this->_options->unknownParams();
+		$api = false;
+		$apiConfig = false;
+		$apiName = false;
+		$apiMethod = false;
+
+		if($ok) {
+			if(isset($params[0])) {
+				$apiName = array_shift($params);
+			} else {
+				$ok = false;
+				$error = 'No Simple API code specified';
+			}
+		}
+		if($ok) {
+			try {
+				$api = $this->sapireader->{$apiName};
+				$apiConfig = $api->config();
+			} catch(SApiReaderException $e) {
+				$ok = false;
+				$error = $e->getMessage();
+			}
+		}
+		if($ok) {
+			if(isset($params[0])) {
+				$apiMethod = array_shift($params);
+			} else {
+				$ok = false;
+				$error = 'No Simple API method specified';
+			}
+		}
+		if($ok) {
+			if(!isset($apiConfig->services->{$apiMethod})) {
+				$ok = false;
+				$error = "Method '{$apiMethod}()' for Simple API configuration '{$apiName}' is not defined";
+			}
+		}
+
+		if($ok) {
+			$virtualCmd = "{$apiName}->{$apiMethod}(";
+			if($params) {
+				$virtualCmd.= "'".implode("', '", $params)."'";
+			}
+			$virtualCmd.= ")";
+
+			echo "{$spacer}Running '".Color::Green($virtualCmd)."':\n";
+
+			try {
+				eval("\$result=\$this->sapireader->{$virtualCmd};");
+
+				ob_start();
+				if($this->_options->option(self::OptionSpecific)->activated()) {
+					var_dump($result);
+				} else {
+					print_r($result);
+				}
+				$out = ob_get_contents();
+				ob_end_clean();
+
+				$out = explode("\n", $out);
+				array_walk($out, function(&$item) {
+					$item = Color::Yellow("  > ").$item;
+				});
+				$out = implode("\n", $out)."\n";
+
+				echo $out;
+			} catch(SApiReaderException $e) {
+				$ok = false;
+				$error = $e->getMessage();
+			}
+		}
+
+		if(!$ok) {
+			echo Color::Red("{$spacer}{$error}\n");
+		}
+
+		return $ok;
 	}
 	protected function taskCheck($spacer = "") {
 		debugit("TODO write some valid code for this option.", true);
