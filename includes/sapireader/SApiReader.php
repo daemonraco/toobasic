@@ -20,6 +20,13 @@ class SApiReaderException extends \TooBasic\Exception {
 }
 
 /**
+ * @class SApiReaderAbstractException
+ */
+class SApiReaderAbstractException extends SApiReaderException {
+	
+}
+
+/**
  * @class SApiReader
  * This class is the basic representation of an API reader.
  * All the responses it can get are returned as they were read.
@@ -313,6 +320,9 @@ class SApiReader {
 	protected function validate() {
 		//
 		// Checking abstraction flag.
+		if($this->_config->abstract) {
+			throw new SApiReaderAbstractException(Translate::Instance()->EX_abstract_specification(['name' => $this->_config->name]));
+		}
 		//
 		// Checking main fields presence.
 		foreach(array('services', 'url', 'name', 'description') as $field) {

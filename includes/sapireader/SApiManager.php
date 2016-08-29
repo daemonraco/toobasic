@@ -114,6 +114,11 @@ class SApiManager extends \TooBasic\Managers\Manager {
 				$json->abstract = false;
 			}
 			//
+			// Setting default name.
+			if(!isset($json->name)) {
+				$json->name = $name;
+			}
+			//
 			// Loading extensions.
 			while(isset($json->extends)) {
 				//

@@ -82,6 +82,9 @@
 			"key": "title_delete_item_of_table",
 			"value": "Removing item with id '%id%' from table '%tablename%'"
 		}, {
+			"key": "EX_abstract_specification",
+			"value": "Specification '%name%' is abstract."
+		}, {
 			"key": "EX_array_expected_but_type",
 			"value": "Type mismatch. Array expected but '%type%' was given."
 		}, {

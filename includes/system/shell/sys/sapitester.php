@@ -3,6 +3,7 @@
 use TooBasic\Paths;
 use TooBasic\Shell\Option;
 use TooBasic\Shell\Color;
+use TooBasic\SApiReaderAbstractException;
 use TooBasic\SApiReaderException;
 
 class SapitesterSystool extends TooBasic\Shell\ShellTool {
@@ -127,18 +128,20 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 			foreach($paths as $path) {
 				$pathInfo = pathinfo($path);
 				$sapi = false;
+
+				echo "{$spacer}\t- '".Color::Green($pathInfo['filename'])."':\n";
+
 				try {
 					$sapi = $this->sapireader->{$pathInfo['filename']};
-				} catch(SApiReaderException $e) {
-					// . . .
+				} catch(SApiReaderAbstractException $e) {
+					$sapi = false;
+					echo "{$spacer}\t\t".Color::Yellow('abstract specification')."\n";
 				}
 
 				if($sapi) {
 					$config = $sapi->config();
 
-					echo "{$spacer}\t- '".Color::Green($config->name)."':\n";
-
-					echo "{$spacer}\t\t- Code:        ".Color::Green($pathInfo['filename'])."\n";
+					echo "{$spacer}\t\t- Name:        {$config->name}\n";
 					echo "{$spacer}\t\t- Description: {$config->description}\n";
 					echo "{$spacer}\t\t- Base URL:    ".Color::Yellow($config->url)."\n";
 					echo "{$spacer}\t\t- Type:        ".Color::Yellow($config->type)."\n";

@@ -130,6 +130,7 @@ $SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECT
 // Simple API Reader includes @{
 $SuperLoader['TooBasic\\Managers\\SApiManager'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiManager.php";
 $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderAbstractException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
