@@ -83,18 +83,6 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 
 		$this->assertRegExp("~Configuration field 'url' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
-	public function testLoadingAConfigurationWithNoNameField() {
-		$this->activatePreAsset('/site/sapis/no_name.json');
-
-		$url = "?action=test_api&api=no_name";
-		$response = $this->getUrl($url, false);
-
-		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
-		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
-		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
-
-		$this->assertRegExp("~Configuration field 'name' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
-	}
 	public function testLoadingAConfigurationWithNoDescriptionField() {
 		$this->activatePreAsset('/site/sapis/no_description.json');
 
