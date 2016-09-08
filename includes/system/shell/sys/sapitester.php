@@ -9,6 +9,7 @@ use TooBasic\SApiReaderException;
 class SapitesterSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
+	const ErrorWrongJson = 100;
 	const OptionCall = 'Call';
 	const OptionCheck = 'Check';
 	const OptionList = 'List';
@@ -16,13 +17,16 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Protected methods.
 	protected function setOptions() {
-		$this->_options->setHelpText("TODO tool summary");
+		$this->_options->setHelpText("This system tool provives a way to check Simple API Reader configurations.");
 
-		$text = "TODO help text for: '--call', '-c'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCall, array('--call', '-c'), Option::TypeNoValue, $text, 'value'));
+		$text = "This option loads a Simple API Reader configuration and uses it to actually\n";
+		$text.= "call the remote API.\n";
+		$text.= "To use it, at least 3 extra parameters must be given, the configuration\n";
+		$text.= "name, the virtual method to use and every parameter required by such method.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionCall, array('--call', '-c'), Option::TypeNoValue, $text));
 
-		$text = "TODO help text for: '--check', '-C'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, array('--check', '-C'), Option::TypeValue, $text, 'value'));
+//		$text = "TODO help text for: '--check', '-C'.";
+//		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, array('--check', '-C'), Option::TypeValue, $text, 'config-name'));
 
 		$text = "This option prompts a detailed list of available SimpleAPI configurations.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionList, array('--list', '-l'), Option::TypeNoValue, $text));
@@ -114,7 +118,47 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		return $ok;
 	}
 	protected function taskCheck($spacer = "") {
-		debugit("TODO write some valid code for this option.", true);
+		//
+		// Global dependencies.
+		global $Paths;
+		//
+		// Loading the configuration.
+		$sapiName = $this->_options->option(self::OptionCheck)->value();
+		$sapiPath = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], $sapiName, Paths::ExtensionJSON);
+		$sapiJSON = json_decode(file_get_contents($sapiPath));
+		$sapiOK = true;
+
+		echo "{$spacer}Checking configuration '".Color::Green($sapiName)."':\n";
+		//
+		// Checking main parameters.
+		if($sapiJSON) {
+			$isAbstract = isset($sapiJSON->abstract) && $sapiJSON->abstract;
+			$hasURL = Color::Green('Yes');
+			if(!isset($sapiJSON->url)) {
+				if($isAbstract) {
+					$hasURL = Color::Yellow('No');
+				} else {
+					$hasURL = Color::Red('No');
+					$sapiOK = false;
+				}
+			}
+
+			echo "{$spacer}\tIs abstract?: ".Color::Green($isAbstract ? 'Yes' : 'No')."\n";
+			echo "{$spacer}\tHas URL?:     {$hasURL}\n";
+
+			echo "\n{$spacer}Configuration check result: ".($sapiOK ? Color::Green('Ok') : Color::Red('Failed'))."\n";
+		} else {
+			$this->setError(self::ErrorWrongJson, $this->tr->EX_JSON_invalid_file([
+					'path' => $sapiPath,
+					'errorcode' => json_last_error(),
+					'error' => json_last_error_msg()
+			]));
+		}
+		debugit([
+			'$sapiName' => $sapiName,
+			'$sapiPath' => $sapiPath,
+			'$sapiJSON' => $sapiJSON
+			], false);
 	}
 	protected function taskList($spacer = "") {
 		//
