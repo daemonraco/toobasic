@@ -327,6 +327,7 @@ class KidsModel extends \TooBasic\Model {
 	}
 	protected function init() {}
 }
+```
 
 ### toArray()
 Something you need to have in mind is that every time you access an associated
