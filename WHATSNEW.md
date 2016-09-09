@@ -2,6 +2,26 @@
 
 This is a changes log based on issues and logic changes.
 
+## Version 2.1.0:
+
+* Simple API Tester ([#151](https://github.com/daemonraco/toobasic/issues/151))
+>Now it's possible to use things like:
+>```text
+>php shell.php sys sapitester
+>```
+* Scaffolds with default values in routes ([#115](https://github.com/daemonraco/toobasic/issues/115))
+>Controllers and services _sys-tools_ generate multiple routes depending on parameter defaults.
+* Keyword 'table' for routes ([#147](https://github.com/daemonraco/toobasic/issues/147))
+>Routes add the keyword `table`.
+* Debug Parameter for MagicProps ([#156](https://github.com/daemonraco/toobasic/issues/156))
+>New debug parameter called `debugmagicprop`.
+* Exception translations ([#145](https://github.com/daemonraco/toobasic/issues/145))
+>Almost all exception messages use translations.
+* Set Smarty Delimiters ([#153](https://github.com/daemonraco/toobasic/issues/153))
+>Smarty delimiters can be changed.
+* Move Redis Support Into A Module ([#118](https://github.com/daemonraco/toobasic/issues/118))
+>Redis support in no longer a required part of __TooBasic__.
+
 ## Version 2.0.0:
 
 * __Shell Tools Aliases ([#65](https://github.com/daemonraco/toobasic/issues/65))__
