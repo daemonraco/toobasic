@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class ItemsFactory
@@ -102,7 +103,7 @@ abstract class ItemsFactory {
 	 * Prevent users from clone the singleton's instance.
 	 */
 	final public function __clone() {
-		throw new \TooBasic\Exception('Clone is not allowed');
+		throw new Exception(Translate::Instance()->EX_obj_clone_forbidden);
 	}
 	//
 	// Public methods.
@@ -120,9 +121,9 @@ abstract class ItemsFactory {
 		// Checking if this method is disabled.
 		if(\boolval($this->_CP_DisableCreate)) {
 			if(is_string($this->_CP_DisableCreate)) {
-				throw new Exception("Method 'create()' cannot be called directly. Use '{$this->_CP_DisableCreate}()' instead.");
+				throw new Exception(Translate::Instance()->EX_create_cannot_be_called_use(['method' => $this->_CP_DisableCreate]));
 			} else {
-				throw new Exception("Method 'create()' cannot be called directly.");
+				throw new Exception(Translate::Instance()->EX_create_cannot_be_called);
 			}
 		}
 		//
@@ -196,7 +197,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Default values.
@@ -240,7 +241,7 @@ abstract class ItemsFactory {
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_IDColumn) {
-			throw new \TooBasic\Exception('This representation has no ID field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_ID_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.
@@ -270,7 +271,7 @@ abstract class ItemsFactory {
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
 		if(!$this->_CP_NameColumn) {
-			throw new \TooBasic\Exception('This representation has no name field defined meaning it does not support this method');
+			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.
@@ -428,10 +429,10 @@ abstract class ItemsFactory {
 						// Setting class as loaded.
 						self::$_LoadedClasses[] = $className;
 					} else {
-						throw new \TooBasic\Exception("Class '{$className}' is not defined");
+						throw new Exception(Translate::Instance()->EX_undefined_class(['name' => $className]));
 					}
 				} else {
-					throw new \TooBasic\Exception("Cannot load item representation '{$className}'");
+					throw new Exception(Translate::Instance()->EX_cannot_load_representation_class(['name' => $className]));
 				}
 			}
 		}

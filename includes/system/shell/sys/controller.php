@@ -13,14 +13,15 @@ use TooBasic\Shell\Option;
 /**
  * @class ControllerSystool
  */
-class ControllerSystool extends TooBasic\Shell\Scaffold {
+class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 	//
 	// Constants.
 	const OptionCached = 'Cached';
 	const OptionLayout = 'Layout';
-	const OptionParam = 'Param';
 	//
 	// Protected properties.
+	protected $_genRoutePrefix = '';
+	protected $_genRouteType = 'action';
 	protected $_scaffoldName = 'controller';
 	protected $_version = TOOBASIC_VERSION;
 	//
@@ -102,23 +103,6 @@ class ControllerSystool extends TooBasic\Shell\Scaffold {
 				GC_AFIELD_TEMPLATE => 'view.html',
 				GC_AFIELD_DESCRIPTION => 'view file'
 			);
-		}
-	}
-	protected function genRoutes() {
-		if($this->_routes === false) {
-			parent::genRoutes();
-			//
-			// Controller's route.
-			$route = new \stdClass();
-			$route->route = $this->_names[GC_AFIELD_NAME];
-			$opt = $this->_options->option(self::OptionParam);
-			if($opt->activated()) {
-				foreach($opt->value() as $param) {
-					$route->route .= "/:{$param}:";
-				}
-			}
-			$route->action = $this->_names[GC_AFIELD_NAME];
-			$this->_routes[] = $route;
 		}
 	}
 	protected function setOptions() {

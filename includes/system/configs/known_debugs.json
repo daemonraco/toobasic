@@ -29,6 +29,7 @@
 		"debugsar": "Prompts several debug entries with basic information.",
 		"debugsarconf": "Shows the configuration to be used.",
 		"debugconfigs": "Shows information about how system configs are loaded.",
-		"debugformconfig": "Displays loaded form builder configuration after sanitation."
+		"debugformconfig": "Displays loaded form builder configuration after sanitation.",
+		"debugmagicprop": "Displays information about currently configured magic properties."
 	}
 }

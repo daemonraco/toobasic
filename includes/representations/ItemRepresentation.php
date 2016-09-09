@@ -14,6 +14,7 @@ use TooBasic\Exception;
 use TooBasic\MagicProp;
 use TooBasic\Managers\DBManager;
 use TooBasic\Representations\FieldFilterException;
+use TooBasic\Translate;
 
 /**
  * @class ItemRepresentation
@@ -132,7 +133,7 @@ abstract class ItemRepresentation {
 		if(isset($this->_extendedColumnMethods[$method])) {
 			$out = $this->callSubRepresentation($this->_extendedColumnMethods[$method], $args);
 		} else {
-			throw new Exception("Unknown method called '{$method}'.");
+			throw new Exception(Translate::Instance()->EX_Unknown_method(['method' => $method]));
 		}
 
 		return $out;
@@ -157,7 +158,10 @@ abstract class ItemRepresentation {
 			//
 			// Checking field filter.
 			if(!isset($Database[GC_DATABASE_FIELD_FILTERS][$filter])) {
-				throw new FieldFilterException("Undefined field filter for '{$filter}' required by field '{$field}'.");
+				throw new FieldFilterException(Translate::Instance()->EX_undefined_field_filter([
+					'filter' => $filter,
+					'field' => $field
+				]));
 			}
 			//
 			// Field filter class shortcut.
@@ -165,7 +169,11 @@ abstract class ItemRepresentation {
 			//
 			// Checking field filter class.
 			if(!class_exists($filterClass)) {
-				throw new FieldFilterException("Undefined class '{$filterClass}' for field filter '{$filter}' required by field '{$field}'.");
+				throw new FieldFilterException(Translate::Instance()->EX_undefined_field_filter_class([
+					'class' => $filterClass,
+					'filter' => $filter,
+					'field' => $field
+				]));
 			}
 			//
 			// Checking forced persistence.
@@ -177,7 +185,7 @@ abstract class ItemRepresentation {
 			//
 			// Checking representation field.
 			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
-				throw new Exception("Extended column '{$name}' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY').");
+				throw new Exception(Translate::Instance()->EX_extended_column_without_factory(['name' => $name]));
 			}
 			//
 			// Checking which method should attend this column.
@@ -399,7 +407,7 @@ abstract class ItemRepresentation {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
 		} else {
-			throw new DBException("No name column set for table '{$this->_CP_Table}'");
+			throw new DBException(Translate::Instance()->EX_DB_no_name_column_set_for(['name' => $this->_CP_Table]));
 		}
 
 		return $this->exists();
@@ -531,7 +539,7 @@ abstract class ItemRepresentation {
 		//
 		// Checking column existence.
 		if(!array_key_exists($this->_CP_ColumnsPerfix.$column, $this->_properties)) {
-			throw new Exception("Unknown column '{$column}'.");
+			throw new Exception(Translate::Instance()->EX_unknown_column(['name' => $column]));
 		}
 		//
 		// Cheching if this is a call to change current object.
@@ -540,7 +548,7 @@ abstract class ItemRepresentation {
 			//
 			// Checking the right type.
 			if(!$newItem instanceof ItemRepresentation) {
-				throw new Exception("Given parameter is not an instances of 'ItemRepresentation'.");
+				throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of(['type' => 'ItemRepresentation']));
 			}
 			//
 			// Setting new values.
@@ -551,7 +559,7 @@ abstract class ItemRepresentation {
 			//
 			// Checking the actual change.
 			if($this->{$column} != $newItem->id()) {
-				throw new Exception("It was not possible to change column '{$column}' vaule.");
+				throw new Exception(Translate::Instance()->EX_unable_to_modify_column(['name' => $column]));
 			}
 		}
 		//

@@ -25,7 +25,6 @@ $SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/E
 $SuperLoader['TooBasic\\Exporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exporter.php";
 $SuperLoader['TooBasic\\FactoryClass'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/FactoryClass.php";
 $SuperLoader['TooBasic\\Layout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Layout.php";
-$SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 $SuperLoader['TooBasic\\Manifest'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Manifest.php";
 $SuperLoader['TooBasic\\Model'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Model.php";
 $SuperLoader['TooBasic\\ModelsFactory'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ModelsFactory.php";
@@ -37,6 +36,11 @@ $SuperLoader['TooBasic\\Service'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Ser
 $SuperLoader['TooBasic\\Singleton'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Singleton.php";
 $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer.php";
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";
+// @}
+//
+// MagicProps @{
+$SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
+$SuperLoader['TooBasic\\MagicPropException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 // @}
 //
 // Managers @{
@@ -64,7 +68,6 @@ $SuperLoader['TooBasic\\Adapters\\Cache\\File'] = "{$Directories[GC_DIRECTORIES_
 $SuperLoader['TooBasic\\Adapters\\Cache\\Memcache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcache.php";
 $SuperLoader['TooBasic\\Adapters\\Cache\\Memcached'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Memcached.php";
 $SuperLoader['TooBasic\\Adapters\\Cache\\NoCache'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/NoCache.php";
-$SuperLoader['TooBasic\\Adapters\\Cache\\Redis'] = "{$Directories[GC_DIRECTORIES_ADAPTERS_CACHE]}/Redis.php";
 // @}
 //
 // Database adapters @{
@@ -105,6 +108,7 @@ $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories
 //
 // Shell includes @{
 $SuperLoader['TooBasic\\Shell\\Color'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Color.php";
+$SuperLoader['TooBasic\\Shell\\ExporterScaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/ExporterScaffold.php";
 $SuperLoader['TooBasic\\Shell\\Option'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Option.php";
 $SuperLoader['TooBasic\\Shell\\Options'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/Options.php";
 $SuperLoader['TooBasic\\Shell\\OptionsStack'] = "{$Directories[GC_DIRECTORIES_SHELL_INCLUDES]}/OptionsStack.php";
@@ -126,6 +130,7 @@ $SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECT
 // Simple API Reader includes @{
 $SuperLoader['TooBasic\\Managers\\SApiManager'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiManager.php";
 $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
+$SuperLoader['TooBasic\\SApiReaderAbstractException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
@@ -161,11 +166,6 @@ $SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIR
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
-);
-$SuperLoader['Predis\\Client'] = array(
-//$SuperLoader['\\Predis\\Autoloader'] = array(
-	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis/autoload.php",
-	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/predis.git/autoload.php"
 );
 // @}
 //

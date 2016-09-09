@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Params;
 use TooBasic\Paths;
 use TooBasic\Sanitizer;
+use TooBasic\Translate;
 
 /**
  * @class RoutesManager
@@ -378,9 +379,9 @@ class RoutesManager extends Manager {
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		} else {
-			if($Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
+			if(!$Defaults[GC_DEFAULTS_ALLOW_ROUTES]) {
 				$debugInfo['no-analysis'] = 'Routes are disabled';
-			} elseif(isset($this->_params->{GC_REQUEST_ROUTE})) {
+			} elseif(!isset($this->_params->{GC_REQUEST_ROUTE})) {
 				$debugInfo['no-analysis'] = "Parameter '".GC_REQUEST_ROUTE."' given by '.htaccess' is not present";
 			} else {
 				$debugInfo['no-analysis'] = 'Unknown reason';
@@ -553,14 +554,16 @@ class RoutesManager extends Manager {
 		$json = json_decode(file_get_contents($path));
 		//
 		// Checking for parsing errors.
-		if(json_last_error() != JSON_ERROR_NONE) {
-			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
-		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception("Unable to parse file '{$path}'.");
+		if(!$json || get_class($json) != 'stdClass') {
+			throw new Exception(Translate::Instance()->EX_JSON_invalid_file([
+				'path' => $path,
+				'errorcode' => json_last_error(),
+				'error' => json_last_error_msg()
+			]));
 		}
 		//
-		// Checking if there are routes specified.
-		if(isset($json->routes)) {
+		// Checking if there are routes and/or tables specified.
+		if(isset($json->routes) || isset($json->tables)) {
 			//
 			// Route fields and defaults.
 			$routeFields = [
@@ -570,23 +573,104 @@ class RoutesManager extends Manager {
 				'service' => false
 			];
 			//
-			// Loading each route.
-			foreach($json->routes as $route) {
+			// Checking if there are routes specified.
+			if(isset($json->routes)) {
 				//
-				// Copying only useful field and enforcing those
-				// that are required.
-				$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
-				//
-				// Checking action/service.
-				if($auxRoute->route === false) {
-					throw new Exception("Wrong route specification in '{$path}'. No field 'route' given.");
-				} elseif(!$auxRoute->action && !$auxRoute->service) {
-					throw new Exception("Wrong route specification in '{$path}'. A route should have either an 'action' or a 'service'.");
+				// Loading each route.
+				foreach($json->routes as $route) {
+					//
+					// Copying only useful field and enforcing
+					// those that are required.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), $route, new \stdClass(), $routeFields);
+					//
+					// Checking action/service.
+					if($auxRoute->route === false) {
+						throw new Exception(Translate::Instance()->EX_route_file_without_main_field(['path' => $path]));
+					} elseif(!$auxRoute->action && !$auxRoute->service) {
+						throw new Exception(Translate::Instance()->EX_route_file_without_action(['path' => $path]));
+					}
+					//
+					// Expanding route's pattern.
+					$this->buildPattern($auxRoute);
+					$this->_routes[] = $auxRoute;
+				}
+			}
+			//
+			// Checking if there are tables specified.
+			if(isset($json->tables)) {
+				if(!is_object($json->tables)) {
+					throw new Exception(Translate::Instance()->EX_conf_field_is_not_object(['field' => 'tables']));
 				}
 				//
-				// Expanding route's pattern.
-				$this->buildPattern($auxRoute);
-				$this->_routes[] = $auxRoute;
+				// Table fields and defaults.
+				$tableFields = [
+					'plural' => false,
+					'searchable' => false,
+					'predictive' => false
+				];
+				//
+				// Loading each table.
+				foreach($json->tables as $singularName => $conf) {
+					//
+					// Copying only useful field and enforcing
+					// those that are required.
+					$auxTable = \TooBasic\objectCopyAndEnforce(array_keys($tableFields), $conf, new \stdClass(), $tableFields);
+					//
+					// Guessing plural name.
+					$pluralName = $auxTable->plural ? $auxTable->plural : "{$singularName}s";
+					//
+					// Building routes @{
+					$routes = [];
+					//
+					// List table items route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$auxRoute->action = $pluralName;
+					$auxRoute->route = $pluralName;
+					$routes[] = $auxRoute;
+					//
+					// View table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$auxRoute->action = $singularName;
+					$auxRoute->route = "{$singularName}/:id:";
+					$routes[] = $auxRoute;
+					//
+					// Edit table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_edit";
+					$auxRoute->action = $name;
+					$auxRoute->route = "{$name}/:id:";
+					$routes[] = $auxRoute;
+					//
+					// Add table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_add";
+					$auxRoute->action = $name;
+					$auxRoute->route = $name;
+					$routes[] = $auxRoute;
+					//
+					// Delete table item route.
+					$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+					$name = "{$singularName}_delete";
+					$auxRoute->action = $name;
+					$auxRoute->route = "{$name}/:id:";
+					$routes[] = $auxRoute;
+					// @}
+					//
+					// Predictive service route.
+					if($auxTable->predictive) {
+						$auxRoute = \TooBasic\objectCopyAndEnforce(array_keys($routeFields), new \stdClass(), new \stdClass(), $routeFields);
+						$auxRoute->service = $auxTable->predictive;
+						$auxRoute->route = "srv/{$auxTable->predictive}";
+						$routes[] = $auxRoute;
+					}
+					// @}
+					//
+					// Expanding routes' pattern.
+					foreach($routes as $auxRoute) {
+						$this->buildPattern($auxRoute);
+						$this->_routes[] = $auxRoute;
+					}
+				}
 			}
 		}
 	}

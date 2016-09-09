@@ -7,6 +7,10 @@
 
 namespace TooBasic\Forms;
 
+//
+// Class aliases.
+use TooBasic\Translate;
+
 /**
  * @class FormWriter
  * This class holds almost all the logic to modify a form specification file in a
@@ -47,7 +51,7 @@ class FormWriter {
 		//
 		// Checking form.
 		if(!$this->_form->path()) {
-			throw new FormsException('Given form has no specification.');
+			throw new FormsException(Translate::Instance()->EX_form_has_no_specification);
 		} else {
 			$this->_path = $this->_form->path();
 		}
@@ -555,7 +559,7 @@ class FormWriter {
 		//
 		// Checking configuration.
 		if(!$this->_config) {
-			throw new FormsException("Unable to load configuration at '{$this->_path}'.");
+			throw new FormsException(Translate::Instance()->EX_unable_to_load_config_file(['path' => $this->_path]));
 		}
 		//
 		// Expanding basic fields.

@@ -1,27 +1,27 @@
-<h4>{$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')}</h4>
+<h4>%STYLEFT%$tr->title_view_item_of_table('id', $<%$singularName%>.id, 'tablename', '<%$pluralName%>')%STYRIGHT%</h4>
 
 <%if $formBuilder%>
-{$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'view', $formFlags)}
+%STYLEFT%$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'view', $formFlags)%STYRIGHT%
 <%else%>
 <form id="<%$singularName%>_form" method="get" href="#" role="form" onsubmit="return false;" ng-non-bindable>
-	<input type="hidden" id="id" name="id" value="{$<%$singularName%>.id}"/>
+	<input type="hidden" id="id" name="id" value="%STYLEFT%$<%$singularName%>.id%STYRIGHT%"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'enum' || $field.type.type == 'float' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
+				<label for="<%$singularName%>_form_<%$field.name%>">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</label>
 			</td><td>
-				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="{$<%$singularName%>.<%$field.name%>}" readonly="readonly"/>
+				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="%STYLEFT%$<%$singularName%>.<%$field.name%>%STYRIGHT%" readonly="readonly"/>
 			</td>
 		</tr>
 <%/if%>
 <%if $field.type.type == 'text' %>
 		<tr>
 			<td>
-				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
+				<label for="<%$singularName%>_form_<%$field.name%>">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</label>
 			</td><td>
-				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" readonly="readonly">{$<%$singularName%>.<%$field.name%>}</textarea>
+				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" readonly="readonly">%STYLEFT%$<%$singularName%>.<%$field.name%>%STYRIGHT%</textarea>
 			</td>
 		</tr>
 <%/if%>
@@ -30,4 +30,4 @@
 </form>
 <%/if%>
 <br/>
-<a href="{$ctrl->link('?action=<%$listAction%>')}">{$tr->btn_back_to_list}</a>
+<a href="%STYLEFT%$ctrl->link('?action=<%$listAction%>')%STYRIGHT%">%STYLEFT%$tr->btn_back_to_list%STYRIGHT%</a>

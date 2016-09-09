@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\Exception;
+
 /**
  * @class Translate
  * This singleton class holds the logic to manage and interact with language
@@ -238,7 +242,7 @@ class Translate extends Singleton {
 				//
 				// Replacing each parameter.
 				foreach($params as $name => $value) {
-					$out = str_replace("%{$name}%", (string) $value, $out);
+					$out = str_replace("%{$name}%", (string)$value, $out);
 				}
 			}
 		}
@@ -291,7 +295,7 @@ class Translate extends Singleton {
 			// If there are no files and their are required, it
 			// aborts and displayes a error message.
 			if(!$langPaths && $required) {
-				throw new \TooBasic\Exception("Unable to find translation files for language '{$this->_currentLang}'");
+				throw new Exception("Unable to find translation files for language '{$this->_currentLang}'");
 			}
 			//
 			// Loading each file.
@@ -336,10 +340,8 @@ class Translate extends Singleton {
 		$json = json_decode(file_get_contents($path));
 		//
 		// Checking JSON errors.
-		if(json_last_error() != JSON_ERROR_NONE) {
-			throw new Exception("Unable to parse file '{$path}'. [".json_last_error().'] '.json_last_error_msg());
-		} elseif(get_class($json) != 'stdClass') {
-			throw new Exception("Unable to parse file '{$path}'.");
+		if(!$json || get_class($json) != 'stdClass') {
+			throw new Exception("Path '{$path}' is not a valid JSON ([".json_last_error()."] ".json_last_error_msg().")");
 		}
 		//
 		// If there were no errors, it loads each translation key.

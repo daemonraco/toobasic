@@ -40,7 +40,10 @@ class SApiReaderJSON extends SApiReader {
 			//
 			// Checking error.
 			if(!$json) {
-				throw new SApiReaderException("Unable to parse response (".json_last_error_msg().").");
+				throw new SApiReaderException($this->_magic->tr->EX_JSON_invalid_response([
+					'errorcode' => json_last_error(),
+					'error' => json_last_error_msg()
+				]));
 			} else {
 				$response = $json;
 			}

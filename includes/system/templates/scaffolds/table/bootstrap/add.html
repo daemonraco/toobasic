@@ -1,41 +1,41 @@
 <div class="col-xs-10">
-	<h4 class="text-center">{$tr->title_new_item_on_table('tablename', '<%$pluralName%>')}</h4>
+	<h4 class="text-center">%STYLEFT%$tr->title_new_item_on_table('tablename', '<%$pluralName%>')%STYRIGHT%</h4>
 
 	<div class="well well-sm">
 <%if $formBuilder%>
-{$ctrl->formFor('table_<%$pluralName%>', false, 'create', $formFlags)}
+%STYLEFT%$ctrl->formFor('table_<%$pluralName%>', false, 'create', $formFlags)%STYRIGHT%
 <%else%>
 		<form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
+				<label for="<%$singularName%>_form_<%$field.name%>">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</label>
 				<input type="text" id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" value="" class="form-control input-sm"/>
 			</div>
 <%/if%>
 <%if $field.type.type == 'text' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
+				<label for="<%$singularName%>_form_<%$field.name%>">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</label>
 				<textarea id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm"></textarea>
 			</div>
 <%/if%>
 <%if $field.type.type == 'enum' %>
 			<div class="form-group">
-				<label for="<%$singularName%>_form_<%$field.name%>">{$tr->table_column_<%$field.name%>}</label>
+				<label for="<%$singularName%>_form_<%$field.name%>">%STYLEFT%$tr->table_column_<%$field.name%>%STYRIGHT%</label>
 				<select id="<%$singularName%>_form_<%$field.name%>" name="<%$field.name%>" class="form-control input-sm">
-                                    <option value="">{$tr->select_option_NOOPTION}</option>
+                                    <option value="">%STYLEFT%$tr->select_option_NOOPTION%STYRIGHT%</option>
 <%foreach from=$field.type.values item=value%>
-					<option value="<%$value%>">{$tr->select_option_<%$value%>}</option>
+					<option value="<%$value%>">%STYLEFT%$tr->select_option_<%$value%>%STYRIGHT%</option>
 <%/foreach%>
 				</select>
 			</div>
 <%/if%>
 <%/if%><%/foreach%>
-			<input type="submit" value="{$tr->btn_add}" class="btn btn-sm btn-success"/>
-			<input type="reset" value="{$tr->btn_clear_fields}" class="btn btn-sm btn-default"/>
+			<input type="submit" value="%STYLEFT%$tr->btn_add%STYRIGHT%" class="btn btn-sm btn-success"/>
+			<input type="reset" value="%STYLEFT%$tr->btn_clear_fields%STYRIGHT%" class="btn btn-sm btn-default"/>
 		</form>
 <%/if%>
 	</div>
 
-	<a href="{$ctrl->link('?action=<%$listAction%>')}" class="btn btn-sm btn-default pull-right">{$tr->btn_back_to_list}</a>
+	<a href="%STYLEFT%$ctrl->link('?action=<%$listAction%>')%STYRIGHT%" class="btn btn-sm btn-default pull-right">%STYLEFT%$tr->btn_back_to_list%STYRIGHT%</a>
 </div>

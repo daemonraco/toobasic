@@ -66,7 +66,7 @@ abstract class AbstractExporter {
 		if(isset($Defaults[GC_DEFAULTS_FORMATS][$this->_format])) {
 			$this->_viewAdapter = new $Defaults[GC_DEFAULTS_FORMATS][$this->_format]();
 		} else {
-			throw new Exception("There's no configuration for format '{$this->_format}'");
+			throw new Exception(Translate::Instance()->EX_no_configuration_for_format(['format' => $this->_format]));
 		}
 	}
 	/**

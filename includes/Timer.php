@@ -7,6 +7,10 @@
 
 namespace TooBasic;
 
+//
+// Class aliases.
+use TooBasic\MagicProp;
+
 /**
  * @class Timer
  * This singleton class holds the logic to manage timers and impact
@@ -21,6 +25,10 @@ class Timer extends Singleton {
 	 * @var boolean This flag indicates if global stop-watch is running.
 	 */
 	protected $_globalTimerRunning = false;
+	/**
+	 * @var \TooBasic\MagicProp MagicProp singleton shortcut.
+	 */
+	protected $_magic = false;
 	/**
 	 * @var boolean This flag indicates if current execution is being done
 	 * from shell or from web.
@@ -40,6 +48,9 @@ class Timer extends Singleton {
 	 * Class constructor.
 	 */
 	protected function __construct() {
+		//
+		// Shortcuts.
+		$this->_magic = MagicProp::Instance();
 		//
 		// Is it a shell execution?
 		$this->_onShell = defined('__SHELL__');
@@ -72,7 +83,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			throw new Exception('Global timer was never used');
+			throw new Exception($this->_magic->tr->EX_global_timer_never_used);
 		}
 		//
 		// Returning current position.
@@ -99,7 +110,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			throw new Exception("Timer '{$id}' in already running");
+			throw new Exception($this->_magic->tr->EX_timer_running(['id' => $id]));
 		}
 	}
 	/**
@@ -121,7 +132,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			throw new Exception('Global timer already started');
+			throw new Exception($this->_magic->tr->EX_global_timer_already_started);
 		}
 	}
 	/**
@@ -146,11 +157,11 @@ class Timer extends Singleton {
 		} elseif(!isset($this->_timersRunning[$id])) {
 			//
 			// Triggering exception if it doesn't exists.
-			throw new Exception("Timer '{$id}' was never started");
+			throw new Exception($this->_magic->tr->EX_timer_not_started(['id' => $id]));
 		} else {
 			//
 			// Triggering exception if it's not running.
-			throw new Exception("Timer '{$id}' in not running");
+			throw new Exception($this->_magic->tr->EX_timer_not_running(['id' => $id]));
 		}
 		//
 		// Returning final count.
@@ -176,7 +187,7 @@ class Timer extends Singleton {
 		} else {
 			//
 			// Triggering exception.
-			throw new Exception('Global timer is not started');
+			throw new Exception($this->_magic->tr->EX_global_timer_is_not_started);
 		}
 		//
 		// Returning final count.

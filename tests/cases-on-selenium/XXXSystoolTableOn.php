@@ -168,7 +168,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->checkCurrentSource();
 		//
 		// Checking URL.
-		$this->assertRegExp("/\?action={$this->_pluralName}$/", $this->url(), "The page didn't return to the main table.");
+		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "The page didn't return to the main table.");
 	}
 	// @}
 	//
@@ -331,7 +331,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		}
 		$submitButton->click();
 		$this->checkCurrentSource();
-		$this->assertRegExp("/\?action={$this->_pluralName}$/", $this->url(), "Page didn't go back to the right place.");
+		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "Page didn't go back to the right place.");
 	}
 	// @}
 	//
@@ -464,7 +464,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$submitButton->click();
 		$this->acceptAlert();
 		$this->checkCurrentSource();
-		$this->assertRegExp("/\?action={$this->_pluralName}$/", $this->url(), "Page didn't go back to the right place.");
+		$this->assertRegExp("/\?action={$this->_pluralName}([#]?)$/", $this->url(), "Page didn't go back to the right place.");
 	}
 	// @}
 	//

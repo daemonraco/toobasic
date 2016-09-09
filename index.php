@@ -4,10 +4,13 @@
  * @file index.php
  * @author Alejandro Dario Simi
  */
-use TooBasic\Params;
-use TooBasic\Managers\ServicesManager;
+//
+// Class aliases.
 use TooBasic\Managers\ActionsManager;
 use TooBasic\Managers\EmailsManager;
+use TooBasic\Managers\ServicesManager;
+use TooBasic\Params;
+use TooBasic\Translate;
 
 try {
 	include __DIR__.'/config/config.php';
@@ -21,7 +24,7 @@ try {
 			$manager = EmailsManager::Instance();
 			$manager->run(true);
 		} else {
-			throw new \TooBasic\Exception("No email name given, try '?debugemail=my_email'");
+			throw new \TooBasic\Exception(Translate::Instance()->EX_no_email_name_given);
 		}
 	} elseif($ServiceName || isset(Params::Instance()->get->explaininterface)) {
 		ServicesManager::Instance()->run();

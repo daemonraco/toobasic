@@ -9,7 +9,8 @@ namespace TooBasic\Adapters\View;
 
 //
 // Class aliases.
-use \TooBasic\Exception;
+use TooBasic\Exception;
+use TooBasic\Translate;
 
 /**
  * @class XML
@@ -42,7 +43,7 @@ class XML extends BasicAdapter {
 		// Controling the existence of 'xmlrpc_encode()' because it's
 		// experimental on PHP 5.
 		if(!function_exists('xmlrpc_encode')) {
-			throw new Exception("Funciton 'xmlrpc_encode()' is not defined");
+			throw new Exception(Translate::Instance()->EX_funciton_is_not_defined(['name' => 'xmlrpc_encode']));
 		}
 		//
 		// Rendering a clean list of assignments and encoding it as XML.

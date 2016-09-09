@@ -34,7 +34,6 @@ Cache adapters provided by __TooBasic__ are:
 * `TooBasic\Adapters\Cache\Memcached`
 * `TooBasic\Adapters\Cache\Memcache`
 * `TooBasic\Adapters\Cache\NoCache`
-* `TooBasic\Adapters\Cache\Redis`
 
 If you want you can read more about them in the [cache documentation](../cache.md).
 

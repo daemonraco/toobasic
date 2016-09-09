@@ -13,6 +13,7 @@
 /modules/toobasic-um
 /modules/toobasic-zfieldfilters
 /modules/toobasic-logger
+/modules/toobasic-redis
 /modules/toobasic-workflows
 /composer.*
 /vendor/

@@ -255,7 +255,7 @@ class ShellManager extends Manager {
 			// upgrade is attempted.
 			if(!$dbStructureManager->check()) {
 				if(!$dbStructureManager->upgrade()) {
-					throw new Exception('Database couldn\'t be upgraded');
+					throw new Exception($this->tr->EX_DB_unable_to_upgrade);
 				}
 			}
 		}

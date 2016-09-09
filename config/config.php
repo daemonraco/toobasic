@@ -94,7 +94,6 @@ $Defaults[GC_DEFAULTS_MODES] = array(
 $Defaults[GC_DEFAULTS_REDIRECTIONS] = array();
 $Defaults[GC_DEFAULTS_MEMCACHED] = array();
 $Defaults[GC_DEFAULTS_MEMCACHE] = array();
-$Defaults[GC_DEFAULTS_REDIS] = array();
 $Defaults[GC_DEFAULTS_SKIN] = false;
 $Defaults[GC_DEFAULTS_SKIN_SESSIONSUFFIX] = '';
 //
@@ -235,6 +234,10 @@ $Defaults[GC_DEFAULTS_FORMS_TYPES] = array(
 $Defaults[GC_DEFAULTS_FORMS_TYPE] = GC_FORMS_BUILDTYPE_BASIC;
 $Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]['formFor'] = '\\TooBasic\\ctrlExports_formFor';
 //
+// Default Smarty delimiters configuration.
+$Defaults[GC_SMARTY_LEFT_DELIMITER] = false;
+$Defaults[GC_SMARTY_RIGHT_DELIMITER] = false;
+//
 // TooBasic's search engine configuration.
 $Search = array();
 $Search[GC_SEARCH_ENGINE_FACTORIES] = array();
@@ -286,6 +289,9 @@ if(isset($auxParamsManager->debugdebugs)) {
 	}, 'Debugs');
 }
 //
+// Necessary globals.
+$LanguageName = \TooBasic\guessLanguage();
+//
 // Routes
 \TooBasic\Managers\RoutesManager::Instance()->load();
 if(isset($auxParamsManager->debugroutes)) {
@@ -301,12 +307,11 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 	\TooBasic\checkBasicPermissions();
 }
 //
-// Necessary globals.
+// More necessary globals.
 $ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
 $ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->{GC_REQUEST_SERVICE} : false;
 $ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
 $SkinName = \TooBasic\guessSkin();
-$LanguageName = \TooBasic\guessLanguage();
 
 unset($auxParamsManager);

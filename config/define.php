@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.0.0');
+define('TOOBASIC_VERSION', '2.1.0');
 define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
@@ -85,6 +85,8 @@ define('GC_AFIELD_CONNECTION', 'connection');
 define('GC_AFIELD_CORS', 'CORS');
 define('GC_AFIELD_COUNTS', 'counts');
 define('GC_AFIELD_DATA', 'data');
+define('GC_AFIELD_DEFAULT', 'default');
+define('GC_AFIELD_DEFAULTS', 'defaults');
 define('GC_AFIELD_DISABLED', 'disabled');
 define('GC_AFIELD_DB', 'db');
 define('GC_AFIELD_DESCRIPTION', 'description');
@@ -115,6 +117,7 @@ define('GC_AFIELD_LANGS', 'langs');
 define('GC_AFIELD_LANGS_PATH', 'langs-path');
 define('GC_AFIELD_LASTERROR', 'lasterror');
 define('GC_AFIELD_LAYOUT', 'layout');
+define('GC_AFIELD_LEFT', 'left');
 define('GC_AFIELD_LINE', 'line');
 define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
@@ -134,6 +137,7 @@ define('GC_AFIELD_REDIRECTOR', 'redirector');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
 define('GC_AFIELD_RESULT', 'result');
+define('GC_AFIELD_RIGHT', 'right');
 define('GC_AFIELD_ROUTES_PATH', 'routes-path');
 define('GC_AFIELD_SEQNAME', 'seqname');
 define('GC_AFIELD_SERVICES', 'services');
@@ -306,14 +310,6 @@ define('GC_DEFAULTS_MEMCACHE_PREFIX', 'prefix');
 define('GC_DEFAULTS_MEMCACHE_COMPRESSED', 'compressed');
 // @}
 //
-// Redis parameters @{
-define('GC_DEFAULTS_REDIS', 'redis');
-define('GC_DEFAULTS_REDIS_SCHEME', 'scheme');
-define('GC_DEFAULTS_REDIS_HOST', 'host');
-define('GC_DEFAULTS_REDIS_PORT', 'port');
-define('GC_DEFAULTS_REDIS_PREFIX', 'prefix');
-// @}
-//
 // Database query adapters prefixes @{
 define('GC_DBQUERY_NAMES_COLUMN_ID', 'column-id');
 define('GC_DBQUERY_NAMES_COLUMN_NAME', 'column-name');
@@ -390,5 +386,10 @@ define('GC_FORMS_BUTTONTYPE_SUBMIT', 'submit');
 define('GC_CONFIG_MODE_MERGE', 'merge');
 define('GC_CONFIG_MODE_MULTI', 'multi');
 define('GC_CONFIG_MODE_SIMPLE', 'simple');
+// @}
+//
+// Smarty specifics.
+define('GC_SMARTY_LEFT_DELIMITER', 'smarty-left-delimiter');
+define('GC_SMARTY_RIGHT_DELIMITER', 'smarty-right-delimiter');
 // @}
 // @}

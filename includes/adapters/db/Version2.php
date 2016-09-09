@@ -11,6 +11,7 @@ namespace TooBasic\Adapters\DB;
 // Class aliases.
 use TooBasic\Managers\DBStructureManager;
 use TooBasic\Managers\DBStructureManagerException;
+use TooBasic\Translate;
 
 /**
  * @class Version2
@@ -240,7 +241,7 @@ class Version2 extends VersionAdapter {
 					//
 					// Checking multiple primary keys.
 					if($indexType == 'primary' && count($out[GC_AFIELD_SPECS]->{$indexType}) > 1) {
-						throw new DBStructureManagerException("More than one primary key specified");
+						throw new DBStructureManagerException(Translate::Instance()->EX_more_than_one_primary_key);
 					}
 					//
 					// Checking each index specification.

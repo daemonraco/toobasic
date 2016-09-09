@@ -9,11 +9,12 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use \TooBasic\Email;
-use \TooBasic\EmailPayload;
-use \TooBasic\Exception;
-use \TooBasic\Names;
-use \TooBasic\Paths;
+use TooBasic\Email;
+use TooBasic\EmailPayload;
+use TooBasic\Exception;
+use TooBasic\Names;
+use TooBasic\Paths;
+use TooBasic\Translate;
 
 /**
  * @class EmailsManager
@@ -65,12 +66,12 @@ class EmailsManager extends Manager {
 			//
 			// If it's not a simulation, there should be a payload
 			// set.
-			throw new Exception("No email payload set, use 'EmailsManager::Instance()->setEmailPayload()'");
+			throw new Exception(Translate::Instance()->EX_no_email_payload_set);
 		} elseif(!$this->_emailPayload->isValid()) {
 			//
 			// If it's not a simulation, there should be a valid
 			// payload set.
-			throw new Exception("Email payload is not valid, check email name, recipients and subject");
+			throw new Exception(Translate::Instance()->EX_email_payload_is_not_valid);
 		}
 		//
 		// Default values.
@@ -138,9 +139,9 @@ class EmailsManager extends Manager {
 			// Sending mail.
 			$ok = mail($this->_emailPayload->emails(), $this->_emailPayload->subject(), $this->lastRender(), $headers);
 		} elseif(!$this->lastRender()) {
-			throw new Exception('Email was not rendered yet');
+			throw new Exception(Translate::Instance()->EX_email_was_not_rendered_yet);
 		} else {
-			throw new Exception('Email payload structure is not valid');
+			throw new Exception(Translate::Instance()->EX_email_payload_structure_not_valid);
 		}
 
 		return $ok;
@@ -275,7 +276,10 @@ class EmailsManager extends Manager {
 			if(class_exists($controllerClassName)) {
 				$out = new $controllerClassName($emailPayload);
 			} else {
-				throw new Exception("Class '{$controllerClassName}' is not defined. File '{$controllerPath}' doesn't seem to load the right object.");
+				throw new Exception(Translate::Instance()->EX_undefined_class_on_file([
+					'name' => $controllerClassName,
+					'path' => $controllerPath
+				]));
 			}
 		} elseif(!$recursive) {
 			//

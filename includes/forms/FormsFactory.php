@@ -7,6 +7,10 @@
 
 namespace TooBasic\Forms;
 
+//
+// Class aliases.
+use TooBasic\Translate;
+
 /**
  * @class FormsFactory
  * This singleton class provides an easy access to any form.
@@ -59,7 +63,7 @@ class FormsFactory extends \TooBasic\Singleton {
 				// Storing its pointer for future calls.
 				$out = $this->_forms[$name];
 			} else {
-				throw new FormsException("Unable to load form '{$name}'.");
+				throw new FormsException(Translate::Instance()->EX_unable_to_load_form(['name' => $name]));
 			}
 		}
 

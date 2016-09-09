@@ -42,8 +42,8 @@ Also, if you have __TooBasic__ up and running you can use the debug parameter
 `?debugphpinfo` and it will show you such information.
 
 ### Allow override
-Check you _Apache_ configuration file (probably at __/etc/apache2/apache2.conf__
-on *nix systems).
+Check your _Apache_ configuration file (probably at __/etc/apache2/apache2.conf__
+on *nix systems) if you use _Apache_.
 Inside it look for something looking like this:
 ```
 <Directory /var/www/>
@@ -68,7 +68,7 @@ this instead:
 Make sure your web user has reading permission for the __.htaccess__ file.
 
 ### The right name
-To avoid assuming a default name that may be wrong, check you _Apache_
+To avoid assuming a default name that may be wrong, check your _Apache_
 configuration file and look for the tag __AccessFileName__, if it's not
 __.htaccess__ you have to take one of these options:
 
@@ -291,6 +291,39 @@ and it will be loaded.
 Services can also specify routes and they are very much the same with only one
 difference, instead of setting the parameter `action` you should use `service` and
 it will assume `?service=...` instead of  `?action=...`.
+
+## Tables
+There's an extra configuration structure that's used to define a set of routes
+related tables.
+This structure is usually used by internal tools but you can use if it fits your
+requirements.
+
+Basically, it looks like this:
+```json
+{
+	"routes": [],
+	"tables": {
+		"person": {
+			"plural": "people",
+			"searchable": "PERSON",
+			"predictive": "people_predictive"
+		}
+	}
+}
+```
+This example represents a table that called `people` where each entry is called
+`person`.
+Also, it tells that there's a service called `people_predictive` useful for
+predictive searches.
+
+In other words, this configuration internally assumes this list of routes:
+
+* `people`
+* `person/:id:`
+* `person_edit/:id:`
+* `person_add`
+* `person_delete/:id:`
+* `srv/people_predictive`
 
 ## Suggestions
 If you want, you may visit these documentation pages:

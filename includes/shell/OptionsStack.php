@@ -10,14 +10,16 @@ namespace TooBasic\Shell;
 //
 // Class aliases.
 use TooBasic\Exception;
+use TooBasic\ParamsStack;
 use TooBasic\Shell\Option;
 use TooBasic\Shell\Options;
+use TooBasic\Translate;
 
 /**
  * @class OptionsStack
  * This class is an addapter for shell options that can be used by 'Params'.
  */
-class OptionsStack extends \TooBasic\ParamsStack {
+class OptionsStack extends ParamsStack {
 	//
 	// Protected properties.
 	/**
@@ -88,7 +90,7 @@ class OptionsStack extends \TooBasic\ParamsStack {
 	 * This method should not be used.
 	 */
 	public function __set($key, $value) {
-		throw new Exception("Options given in a command line can't be changed.");
+		throw new Exception(Translate::Instance()->EX_cmd_opts_cannot_change);
 	}
 	//
 	// Public properties.
@@ -96,13 +98,13 @@ class OptionsStack extends \TooBasic\ParamsStack {
 	 * This method should not be used.
 	 */
 	public function addValue($key, $value) {
-		throw new Exception("Options given in a command line can't be changed.");
+		throw new Exception(Translate::Instance()->EX_cmd_opts_cannot_change);
 	}
 	/**
 	 * This method should not be used.
 	 */
 	public function addValues($values) {
-		throw new Exception("Options given in a command line can't be changed.");
+		throw new Exception(Translate::Instance()->EX_cmd_opts_cannot_change);
 	}
 	/**
 	 * This method allows access to all active options values.

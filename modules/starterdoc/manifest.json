@@ -14,6 +14,6 @@
 	"url_doc": "http://toobasic.daemonraco.com/?action=mddoc&doc=README.md",
 	"required_versions": {
 		"php": "5.4",
-		"toobasic": "1.0.0"
+		"toobasic": "2.0.0"
 	}
 }

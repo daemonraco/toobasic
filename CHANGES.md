@@ -1,6 +1,20 @@
 # TooBasic: Changes
 This is a changes log based on Git's log.
 
+## Version 2.1.0:
+
+* Simple API Tester ([#151](https://github.com/daemonraco/toobasic/issues/151)).
+* Controllers and services _sys-tool_ now generates routes considering default values ([#115](https://github.com/daemonraco/toobasic/issues/115)).
+* Routes now support the keyword 'table' and the table _sys-tool_ now generates routes considering this keyword ([#147](https://github.com/daemonraco/toobasic/issues/147)).
+* Almost all exception messages get translation configurations ([#145](https://github.com/daemonraco/toobasic/issues/145)).
+* Smarty delimiters can be changed ([#145](https://github.com/daemonraco/toobasic/issues/145)).
+* New debug parameter called 'debugmagicprop' ([#153](https://github.com/daemonraco/toobasic/issues/153)).
+* Redis support gets moved to a external plugin ([#118](https://github.com/daemonraco/toobasic/issues/118)).
+* Updating test cases.
+* Documentation bug fixes.
+* TravisCI tests now include PHP-7.1.
+	* Also support for PHP-5.4 gets removed.
+
 ## Version 2.0.0:
 
 * Adding a dummy function for `json_last_error_msg()` on PHP versions lower than

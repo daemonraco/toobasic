@@ -61,11 +61,22 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected $_routes = false;
 	/**
+	 * @var \stdClass[] List of table-routes to be added as configuration.
+	 */
+	protected $_tableRoutes = false;
+	/**
 	 *
 	 * @var string General name of the scaffold to be generated, it's used to
 	 * the proper set of templates.
 	 */
 	protected $_scaffoldName = '';
+	/**
+	 * @var string[string] Smarty delimiters to use on generated scaffolds.
+	 */
+	protected $_smartyDelimiters = [
+		GC_AFIELD_LEFT => false,
+		GC_AFIELD_RIGHT => false
+	];
 	/**
 	 * @var \stdClass[] List of language translations to be added as
 	 * configuration for the current language.
@@ -238,6 +249,37 @@ abstract class Scaffold extends ShellTool {
 					echo "\n";
 				}
 			}
+			//
+			// Checking if there's at least one table-route to be
+			// added.
+			if(count($this->_tableRoutes)) {
+				echo "{$spacer}Adding table-routes configuration:\n";
+				//
+				// Checking each route.
+				foreach($this->_tableRoutes as $table) {
+					echo "{$spacer}\t- '{$table->singularName}': ";
+					//
+					// Attempting to add a table-route.
+					$error = '';
+					$fatal = false;
+					if($this->addTableRoute($table, $error, $fatal)) {
+						echo Color::Green('Ok');
+					} else {
+						//
+						// Checking the severity of the
+						// error found.
+						if($fatal) {
+							echo Color::Red('Failed');
+							$ok = false;
+							break;
+						} else {
+							echo Color::Yellow('Ignored');
+						}
+						echo " ({$error})";
+					}
+					echo "\n";
+				}
+			}
 		}
 
 		return $ok;
@@ -341,17 +383,26 @@ abstract class Scaffold extends ShellTool {
 		}
 		if($ok) {
 			//
+			// Enforcing structure.
+			if(!isset($config->routes)) {
+				$config->routes = [];
+			}
+			//
 			// Checking each route to avoid duplicates. If there's
 			// already a similar route it should not be replaced.
 			foreach($config->routes as $route) {
 				if(isset($newRoute->action) && isset($route->action) && $route->action == $newRoute->action) {
-					$ok = false;
-					$error = "there's another rule for this controller";
-					break;
+					if($route->route == $newRoute->route) {
+						$ok = false;
+						$error = "there's another rule for this controller";
+						break;
+					}
 				} elseif(isset($newRoute->service) && isset($route->service) && $route->service == $newRoute->service) {
-					$ok = false;
-					$error = "there's another rule for this service";
-					break;
+					if($route->route == $newRoute->route) {
+						$ok = false;
+						$error = "there's another rule for this service";
+						break;
+					}
 				}
 			}
 		}
@@ -359,6 +410,95 @@ abstract class Scaffold extends ShellTool {
 			//
 			// Appending the new route.
 			$config->routes[] = $newRoute;
+			//
+			// Saving the configuration and checking it's successfully
+			// saved.
+			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], json_encode($config, JSON_PRETTY_PRINT))) {
+				$ok = false;
+				$error = 'something went wrong writing back routes file';
+				$fatal = true;
+				//
+				// Restoring back up.
+				file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], $backup);
+			}
+		}
+		//
+		// Retruning the final status of the whole operation.
+		return $ok;
+	}
+	/**
+	 * This method adds a single table-route into configuration.
+	 *
+	 * @param \stdClass $newRoute Route to be added.
+	 * @param string $error Error message given when something goes wrong.
+	 * @param boolean $fatal This flag indicats if it's a fatal error or not.
+	 * @return boolean Returns TRUE there were no errors.
+	 */
+	protected function addTableRoute(\stdClass $newRoute, &$error, &$fatal) {
+		//
+		// Defualt values.
+		$ok = !$this->hasErrors();
+		$backup = false;
+		$fatal = false;
+		$error = '';
+		$config = false;
+		//
+		// Checking if there's a route configuration file prensent in the
+		// system.
+		if($ok && !is_file($this->_names[GC_AFIELD_ROUTES_PATH])) {
+			//
+			// Attemptting to create a routes confifuration file with
+			// a basic JSON configuraion.
+			if(!file_put_contents($this->_names[GC_AFIELD_ROUTES_PATH], '{"tables":{}}')) {
+				$ok = false;
+				$error = "unable to create file '{$this->_names[GC_AFIELD_ROUTES_PATH]}'";
+				$fatal = true;
+			}
+		}
+		if($ok) {
+			//
+			// Backing up current configuration to avoid problems in
+			// further steps.
+			$backup = file_get_contents($this->_names[GC_AFIELD_ROUTES_PATH]);
+			//
+			// Loading current configuration.
+			$config = json_decode($backup);
+			//
+			// If the configuration was not loaded it's considered to
+			// be a fatal error.
+			if(!$config) {
+				$ok = false;
+				$error = 'unable to use routes file';
+				$fatal = true;
+			}
+		}
+		if($ok) {
+			//
+			// Enforcing structure.
+			if(!isset($config->tables)) {
+				$config->tables = new \stdClass();
+			}
+			//
+			// Checking table-routes to avoid duplicates. If there's
+			// already a similar table-route it should not be
+			// replaced.
+			if(isset($config->tables->{$newRoute->singularName})) {
+				$ok = false;
+				$error = "there's another rule for this table";
+			}
+		}
+		if($ok) {
+			//
+			// Object to append.
+			$aux = new \stdClass();
+			if(isset($newRoute->pluralName)) {
+				$aux->plural = $newRoute->pluralName;
+			}
+			$aux->predictive = isset($newRoute->predictive) ? $newRoute->predictive : false;
+			$aux->searchable = isset($newRoute->searchable) ? $newRoute->searchable : false;
+			//
+			// Appending the new table-route.
+			$config->tables->{$newRoute->singularName} = $aux;
 			//
 			// Saving the configuration and checking it's successfully
 			// saved.
@@ -585,8 +725,15 @@ abstract class Scaffold extends ShellTool {
 			// Assignments.
 			$this->genAssignments();
 			//
-			// Generating file content.
-			$output = $this->_render->render($this->_assignments, $template);
+			// Generating file content and replacing delimiters for
+			// the proper value.
+			$output = str_replace([
+				'%STYLEFT%',
+				'%STYRIGHT%'
+				], [
+				$this->_smartyDelimiters[GC_AFIELD_LEFT],
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT]
+				], $this->_render->render($this->_assignments, $template));
 			//
 			// Generating a file.
 			$result = file_put_contents($path, $output);
@@ -707,8 +854,13 @@ abstract class Scaffold extends ShellTool {
 	protected function genRoutes() {
 		//
 		// Avoiding multiple generations.
-		if(!$this->hasErrors() && $this->_routes === false) {
-			$this->_routes = array();
+		if(!$this->hasErrors()) {
+			if($this->_routes === false) {
+				$this->_routes = array();
+			}
+			if($this->_tableRoutes === false) {
+				$this->_tableRoutes = array();
+			}
 		}
 	}
 	/**
@@ -751,6 +903,9 @@ abstract class Scaffold extends ShellTool {
 		// Checking that it hasn't been loaded before.
 		if(!$this->_render) {
 			//
+			// Global dependencies.
+			global $Defaults;
+			//
 			// Creating a proper view adapter.
 			$this->_render = \TooBasic\Adapters\Adapter::Factory('\\TooBasic\\Adapters\\View\\Smarty');
 			//
@@ -760,6 +915,15 @@ abstract class Scaffold extends ShellTool {
 			$engine->left_delimiter = '<%';
 			$engine->right_delimiter = '%>';
 			$engine->force_compile = true;
+			//
+			// Loading delimiter replacements.
+			if($Defaults[GC_SMARTY_LEFT_DELIMITER] !== false && $Defaults[GC_SMARTY_RIGHT_DELIMITER] !== false) {
+				$this->_smartyDelimiters[GC_AFIELD_LEFT] = $Defaults[GC_SMARTY_LEFT_DELIMITER];
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT] = $Defaults[GC_SMARTY_RIGHT_DELIMITER];
+			} else {
+				$this->_smartyDelimiters[GC_AFIELD_LEFT] = '{';
+				$this->_smartyDelimiters[GC_AFIELD_RIGHT] = '}';
+			}
 		}
 	}
 	/**
