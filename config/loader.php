@@ -170,6 +170,7 @@ $SuperLoader['Smarty'] = array(
 foreach(['json-validator', 'json-validator.git'] as $aux) {
 	if(is_readable("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php")) {
 		require_once "{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php";
+		break;
 	}
 }
 unset($aux);
