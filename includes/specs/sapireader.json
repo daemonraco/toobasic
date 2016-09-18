@@ -1,0 +1,20 @@
+{
+	"root": "SAPIReader",
+	"types": {
+		"SAPIReader": {
+			"name": "string",
+			"description": "+string",
+			"url": "+string",
+			"headers": "object",
+			"services": "+Services",
+			"type": "string"
+		},
+		"Services": "Service{}",
+		"Service": {
+			"method": "+string",
+			"uri": "+string",
+			"params": "ParamsList"
+		},
+		"ParamsList": "string[]"
+	}
+}

@@ -117,6 +117,7 @@ $Directories[GC_DIRECTORIES_SEARCH] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/s
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/shell');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
+$Directories[GC_DIRECTORIES_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/specs');
 $Directories[GC_DIRECTORIES_SYSTEM] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system');
 $Directories[GC_DIRECTORIES_SYSTEM_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/system');
 //

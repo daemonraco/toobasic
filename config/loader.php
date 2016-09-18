@@ -167,6 +167,12 @@ $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
 );
+foreach(['json-validator', 'json-validator.git'] as $aux) {
+	if(is_readable("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php")) {
+		require_once "{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php";
+	}
+}
+unset($aux);
 // @}
 //
 // This is the function in charge of loading TooBasic clases when they are

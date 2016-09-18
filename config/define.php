@@ -175,6 +175,7 @@ define('GC_DIRECTORIES_SEARCH', 'search');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
+define('GC_DIRECTORIES_SPECS', 'specs');
 define('GC_DIRECTORIES_SYSTEM', 'system');
 define('GC_DIRECTORIES_SYSTEM_CACHE', 'system-cache');
 // @}
