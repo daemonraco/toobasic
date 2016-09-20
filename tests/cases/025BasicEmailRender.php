@@ -121,7 +121,7 @@ class BasicEmailRenderTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 		$this->assertRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$url}' doesn't have a Smarty exception.");
 
-		$this->assertRegExp("~Unable to load template file 'email/no_view.html'~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~Unable to load template '(.*)email/no_view.html'~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testRenderNoViewEmailAndSend() {
 		$url = '?action=send&template=no_view';
@@ -132,7 +132,7 @@ class BasicEmailRenderTest extends TooBasic_TestCase {
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 		$this->assertRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$url}' doesn't have a Smarty exception.");
 
-		$this->assertRegExp("~Unable to load template file 'email/no_view.html'~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~Unable to load template '(.*)email/no_view.html'~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	// @}
 }
