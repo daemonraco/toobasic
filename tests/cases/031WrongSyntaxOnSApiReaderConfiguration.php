@@ -108,7 +108,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'services' is not an object~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithEmptyServicesList() {
 		$this->activatePreAsset('/site/sapis/empty_services.json');
