@@ -2,12 +2,12 @@
 	"root": "SAPIReader",
 	"types": {
 		"SAPIReader": {
-			"abstract": "boolean",
+			"abstract": "+boolean",
 			"name": "string",
 			"description": "+string",
-			"url": "+string",
+			"url": "string",
 			"headers": "Headers",
-			"services": "Services",
+			"services": "+Services",
 			"type": "string",
 			"extends": "string"
 		},

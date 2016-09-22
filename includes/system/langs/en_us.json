@@ -417,6 +417,9 @@
 		}, {
 			"key": "EX_wrong_redirection_conf_parameter_is_not_array",
 			"value": "Wrong redirection configuration '%redirector%'. Parameter '%param%' is not an array."
+		}, {
+			"key": "EX_json_path_fail_specs",
+			"value": "JSON file at '%path%' doesn't match the specifications."
 		}
 	]
 }
