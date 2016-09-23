@@ -9,6 +9,7 @@ namespace TooBasic;
 
 //
 // Class aliases
+use JSONValidator;
 use TooBasic\Managers\SApiManager;
 use TooBasic\Paths;
 use TooBasic\Translate;
@@ -303,7 +304,15 @@ class SApiReporter extends Singleton {
 			if($path) {
 				//
 				// Loading JSON specification.
-				$json = json_decode(file_get_contents($path));
+				$jsonString = file_get_contents($path);
+				//
+				// Validating JSON strucutre.
+				if(!self::GetValidator()->validate($jsonString, $info)) {
+					throw new SApiReportException(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
+				}
+				//
+				// Decoding JSON specification.
+				$json = json_decode($jsonString);
 				//
 				// Checking the loaded object.
 				if($json) {
@@ -362,6 +371,25 @@ class SApiReporter extends Singleton {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
 		return $out;
+	}
+	/**
+	 * This class method provides access to a JSONValidator object loaded for
+	 * Simple API Reader Report specifications.
+	 *
+	 * @return \JSONValidator Returns a loaded validator.
+	 */
+	protected static function GetValidator() {
+		//
+		// Validators cache.
+		static $validator = false;
+		//
+		// Checking if the validators is loaded.
+		if(!$validator) {
+			global $Directories;
+			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/sapireport.json");
+		}
+
+		return $validator;
 	}
 	/**
 	 * This mehtod takes a label string and checks if it's flagged to be

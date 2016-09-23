@@ -21,7 +21,7 @@
 			"sendParams": "Params",
 			"defaults": "Params"
 		},
-		"Params": "string{}",
+		"Params": "mixed{}",
 		"ParamsList": "string[]"
 	}
 }
