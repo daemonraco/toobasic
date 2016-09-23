@@ -54,7 +54,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'services' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	// @}
 	//
@@ -69,7 +69,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'services' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~Configuration field 'services' is not present.~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithNoUrlField() {
 		$this->activatePreAsset('/site/sapis/no_url.json');
@@ -81,7 +81,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'url' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithNoDescriptionField() {
 		$this->activatePreAsset('/site/sapis/no_description.json');
@@ -93,7 +93,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'description' is not present~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	// @}
 	//
@@ -108,7 +108,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration field 'services' is not an object~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithEmptyServicesList() {
 		$this->activatePreAsset('/site/sapis/empty_services.json');
@@ -132,7 +132,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Configuration of service 'someService' lacks field 'uri'.~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	public function testLoadingAConfigurationWithAServicesWithWrongSendParams() {
 		$this->activatePreAsset('/site/sapis/wrong_send_params.json');
@@ -144,7 +144,7 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~POST Parameter 'param' takes its value from a non required parameter called ':value'.~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	// @}
 	//
@@ -153,7 +153,13 @@ class WrongSyntaxOnSApiReaderConfigurationTest extends TooBasic_TestCase {
 		$this->activatePreAsset('/site/sapis/wrong_headers.json');
 
 		$url = "?action=test_api&api=wrong_headers";
-		$this->getUrl($url);
+		$response = $this->getUrl($url, false);
+
+		$this->assertTrue(boolval($response), "No response obtained for '{$url}'.");
+		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
+		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
+
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
 	}
 	// @}
 }
