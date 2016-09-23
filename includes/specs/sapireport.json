@@ -1,0 +1,45 @@
+{
+	"root": "SAPIReport",
+	"types": {
+		"SAPIReport": {
+			"api": "+string",
+			"service": "+string",
+			"columns": "+Columns",
+			"type": "ReportType",
+			"listPath": "string",
+			"params": "MethodParams",
+			"exceptions": "Exceptions",
+			"attrs": "Attributes"
+		},
+		"ReportType": "/^(basic|bootstrap)$/",
+		"MethodParams": "mixed[]",
+		"Columns": "Column[]",
+		"Column": {
+			"title": "+string",
+			"path": "+string",
+			"attrs": "Attributes",
+			"type": "ColumnType",
+			"src": "ColumnImage",
+			"link": "ColumnLink",
+			"label_field": "string",
+			"label": "string"
+		},
+		"Attributes": "mixed{}",
+		"ColumnType": "/^(button-link|code|image|link|text)$/",
+		"ColumnImage": {
+			"prefix": "string",
+			"suffix": "string"
+		},
+		"ColumnLink": {
+			"prefix": "string",
+			"suffix": "string"
+		},
+		"Exceptions": "Exception[]",
+		"Exception": {
+			"path": "+string",
+			"exclude": "ExceptionExclusions",
+			"isset": "boolean"
+		},
+		"ExceptionExclusions": "mixed[]"
+	}
+}

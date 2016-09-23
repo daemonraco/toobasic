@@ -152,7 +152,7 @@ the limit of items returned.
 This field specifies how the report is rendered, and the possibilities are:
 
 * `basic`: A simple table without styles.
-* `Bootstrap`: A table using Twitter Bootstrap styles.
+* `bootstrap`: A table using Twitter Bootstrap styles.
 
 By default it's assumed to be `basic` but it can be change either by defining the
 field or specifying it when invoked from a view.

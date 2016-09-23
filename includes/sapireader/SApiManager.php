@@ -152,6 +152,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			if(!isset($json->abstract)) {
 				$json->abstract = false;
 			}
+			//
 			// Validating JSON strucutre.
 			$validator = $json->abstract ? self::GetAbstractValidator() : self::GetValidator();
 			if(!$validator->validate(json_encode($json),$info)) {
