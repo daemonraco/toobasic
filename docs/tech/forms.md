@@ -67,7 +67,7 @@ defined but they'll be ignored when generating the HTML tag, this is because
 they're already managed by other properties.
 
 ## Fields
-Each field can be defined in to ways.
+Each field can be defined in two ways.
 The easy one:
 ```json
 {
