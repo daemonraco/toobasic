@@ -12,8 +12,8 @@ class WrongSyntaxOnFormsConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Wrong form specification, unable to find path '///form'~", $response, "Response to '{$url}' doesn't mention the error.");
-		$this->assertRegExp("~Wrong form specification(.*)form '{$form}'~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~/site/forms/no_form\.json~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingConfigurationWithoutFieldsList() {
 		$form = 'no_fields';
@@ -24,8 +24,8 @@ class WrongSyntaxOnFormsConfigurationTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~Wrong form specification, unable to find path '///form/fields' or maybe empty~", $response, "Response to '{$url}' doesn't mention the error.");
-		$this->assertRegExp("~Wrong form specification(.*)form '{$form}'~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~JSON file at '/(.*)\.json' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the error.");
+		$this->assertRegExp("~/site/forms/no_fields\.json~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	public function testCheckingConfigurationEmptyFieldsList() {
 		$form = 'empty_fields';

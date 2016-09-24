@@ -9,6 +9,7 @@ namespace TooBasic\Forms;
 
 //
 // Class aliases.
+use JSONValidator;
 use TooBasic\MagicProp;
 use TooBasic\Managers\RoutesManager;
 use TooBasic\Names;
@@ -499,13 +500,7 @@ class Form {
 		global $Defaults;
 		//
 		// Checking required fields.
-		if(!isset($this->_config->form)) {
-			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_on_form([
-				'path' => '/form',
-				'form' => $this->name()
-			]));
-		}
-		if(!isset($this->_config->form->fields) || !count(get_object_vars($this->_config->form->fields))) {
+		if(!count(get_object_vars($this->_config->form->fields))) {
 			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_or_empty_on_form([
 				'path' => '/form/fields',
 				'form' => $this->name()
@@ -661,8 +656,16 @@ class Form {
 			// Checking path existence.
 			if($this->path() && is_readable($this->path())) {
 				//
+				// Loading configuration contents.
+				$jsonString = file_get_contents($this->path());
+				//
+				// Validating JSON strucutre.
+				if(!self::GetValidator()->validate($jsonString, $info)) {
+					throw new FormsException(Translate::Instance()->EX_json_path_fail_specs(['path' => $this->path()])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
+				}
+				//
 				// Loading configuration.
-				$this->_config = json_decode(file_get_contents($this->path()));
+				$this->_config = json_decode($jsonString);
 				//
 				// Checking configuration.
 				if($this->_config) {
@@ -675,5 +678,26 @@ class Form {
 				throw new FormsException(Translate::Instance()->EX_unable_to_read_form_path(['path' => $this->path()]));
 			}
 		}
+	}
+	//
+	// Protected class methods.
+	/**
+	 * This class method provides access to a JSONValidator object loaded for
+	 * Form Builder specifications.
+	 *
+	 * @return \JSONValidator Returns a loaded validator.
+	 */
+	protected static function GetValidator() {
+		//
+		// Validators cache.
+		static $validator = false;
+		//
+		// Checking if the validators is loaded.
+		if(!$validator) {
+			global $Directories;
+			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/formbuilder.json");
+		}
+
+		return $validator;
 	}
 }
