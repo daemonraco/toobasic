@@ -88,6 +88,7 @@ class File extends Adapter {
 		global $Directories;
 
 		$key = sha1($key);
+		$prefix = str_replace('/', '_', $prefix);
 		$prefix.= ($prefix ? '_' : '');
 		$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
 
