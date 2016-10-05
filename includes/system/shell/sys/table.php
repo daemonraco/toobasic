@@ -741,8 +741,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Adding unique index for name field.
 		if(isset($this->_assignments['nameField'])) {
-			$table->key = new \stdClass();
-			$table->key->{$this->_assignments['nameField']} = array(
+			$table->keys = new \stdClass();
+			$table->keys->{$this->_assignments['nameField']} = array(
 				$this->_assignments['nameField']
 			);
 		}
