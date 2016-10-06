@@ -34,12 +34,12 @@ abstract class ItemRepresentation {
 	 * @var string[string] Associative list of field names and the filter to
 	 * be applied on them.
 	 */
-	protected $_CP_ColumnFilters = array();
+	protected $_CP_ColumnFilters = [];
 	/**
 	 * @var mixed[string] Sub-representation associated columns
 	 * specifications.
 	 */
-	protected $_CP_ExtendedColumns = array();
+	protected $_CP_ExtendedColumns = [];
 	/**
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
@@ -51,7 +51,7 @@ abstract class ItemRepresentation {
 	/**
 	 * @var string[] List of fields that can't be alter by generic accessors.
 	 */
-	protected $_CP_ReadOnlyColumns = array();
+	protected $_CP_ReadOnlyColumns = [];
 	/**
 	 * @var string Represented table's name (without prefix).
 	 */
@@ -81,18 +81,18 @@ abstract class ItemRepresentation {
 	 * @var mixed[string] This is the list of loaded sub-representation
 	 * associated with certain column.
 	 */
-	protected $_extendedColumns = array();
+	protected $_extendedColumns = [];
 	/**
 	 * @var string[string] Reverse list of methods associated to extended
 	 * column names.
 	 */
-	protected $_extendedColumnMethods = array();
+	protected $_extendedColumnMethods = [];
 	/**
 	 * @var mixed[string] List of properties stored in this object that does
 	 * not represent real field on database. These can also be called volatile
 	 * properties.
 	 */
-	protected $_extraProperties = array();
+	protected $_extraProperties = [];
 	/**
 	 * @var boolean This flag gets active when a field filter used by this
 	 * class always requires presistance.
@@ -109,7 +109,7 @@ abstract class ItemRepresentation {
 	/**
 	 * @var mixed[string] List of properties/columns loaded from database.
 	 */
-	protected $_properties = array();
+	protected $_properties = [];
 	/**
 	 * @var string[string] List of prefixes used by query adapters.
 	 */
@@ -336,7 +336,7 @@ abstract class ItemRepresentation {
 		//
 		// Generating a proper query.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $prefixes);
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, [$this->_CP_IDColumn => $id], $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Retrieving information.
@@ -388,7 +388,7 @@ abstract class ItemRepresentation {
 			//
 			// Generating a proper query.
 			$prefixes = $this->queryAdapterPrefixes();
-			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $prefixes);
+			$query = $this->_db->queryAdapter()->select($this->_CP_Table, [$this->_CP_NameColumn => $name], $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Retrieving information based on a name.
@@ -433,7 +433,7 @@ abstract class ItemRepresentation {
 			//
 			// Building the list of values to store associated to
 			// their column names.
-			$data = array();
+			$data = [];
 			foreach($this->_properties as $key => $value) {
 				$shortKey = substr($key, strlen($this->_CP_ColumnsPerfix));
 				if($idName != $key && !in_array($shortKey, $this->_CP_ReadOnlyColumns)) {
@@ -443,7 +443,7 @@ abstract class ItemRepresentation {
 			//
 			// Generating the proper query to update the entry.
 			$prefixes = $this->queryAdapterPrefixes();
-			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $prefixes);
+			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, [$this->_CP_IDColumn => $this->id], $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Attemptting to update.
@@ -472,7 +472,7 @@ abstract class ItemRepresentation {
 		//
 		// Generating a proper query to erase an entry based on its id.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $prefixes);
+		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, [$this->_CP_IDColumn => $this->id], $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Attemptting to remove it.
@@ -494,9 +494,9 @@ abstract class ItemRepresentation {
 	public function reset() {
 		$this->_dirty = false;
 		$this->_exists = false;
-		$this->_extendedColumns = array();
-		$this->_extraProperties = array();
-		$this->_properties = array();
+		$this->_extendedColumns = [];
+		$this->_extraProperties = [];
+		$this->_properties = [];
 	}
 	/**
 	 * This method allows to access this representation as simple array.
@@ -688,10 +688,10 @@ abstract class ItemRepresentation {
 	 */
 	protected function queryAdapterPrefixes() {
 		if($this->_queryAdapterPrefixes === false) {
-			$this->_queryAdapterPrefixes = array(
+			$this->_queryAdapterPrefixes = [
 				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix
-			);
+			];
 		}
 		return $this->_queryAdapterPrefixes;
 	}
