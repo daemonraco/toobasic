@@ -30,6 +30,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionSearchable = 'Searchable';
 	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
+	const PrecisionNameField = 64;
+	const PrecisionVarchar = 256;
 	//
 	// Protected properties.
 	protected $_raw = null;
@@ -78,7 +80,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					foreach($opt->value() as $column) {
 						$columnParts = explode(':', $column);
 						$field = array();
-						$field['name'] = $columnParts[0];
+						$field[GC_AFIELD_NAME] = $columnParts[0];
 
 						if(!isset($columnParts[1])) {
 							$columnParts = 'varchar';
@@ -88,37 +90,37 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						switch($columnParts[1]) {
 							case 'int':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'int';
-								$field[GC_AFIELD_TYPE]['precision'] = 11;
-								$field['default'] = 0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = 11;
+								$field[GC_AFIELD_DEFAULT] = 0;
 								$field['inForm'] = true;
 								break;
 							case 'blob':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'blob';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = '';
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = false;
 								break;
 							case 'float':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
-								$field[GC_AFIELD_TYPE]['precision'] = 11;
-								$field['default'] = .0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = 11;
+								$field[GC_AFIELD_DEFAULT] = .0;
 								$field['inForm'] = true;
 								break;
 							case 'text':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'text';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = '';
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = true;
 								break;
 							case 'timestamp':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'timestamp';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = 0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = 0;
 								$field['inForm'] = false;
 								break;
 							case 'enum':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
 								$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = $columnParts;
 								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
@@ -128,14 +130,18 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0] = 'Y';
 									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][1] = 'N';
 								}
-								$field['default'] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
+								$field[GC_AFIELD_DEFAULT] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
 								$field['inForm'] = true;
 								break;
 							case 'varchar':
 							default:
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
-								$field[GC_AFIELD_TYPE]['precision'] = 256;
-								$field['default'] = '';
+								if(isset($this->_names['name-field']) && $this->_names['name-field'] == $field[GC_AFIELD_NAME]) {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionNameField;
+								} else {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionVarchar;
+								}
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = true;
 						}
 						$field['null'] = false;
@@ -173,7 +179,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					// Checking name field.
 					$found = false;
 					foreach($this->_assignments['tableFields'] as $field) {
-						if($field['name'] == $this->_names['name-field']) {
+						if($field[GC_AFIELD_NAME] == $this->_names['name-field']) {
 							//
 							// Checking type.
 							if($field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] != 'varchar') {
@@ -478,23 +484,23 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 							$type.= ':'.implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 						}
-						$writer->addField($column['name'], $type);
-						$writer->setFieldDefault($column['name'], '');
-						$writer->setFieldEmptyOption($column['name'], 'select_option_NOOPTION', '');
+						$writer->addField($column[GC_AFIELD_NAME], $type);
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], '');
+						$writer->setFieldEmptyOption($column[GC_AFIELD_NAME], 'select_option_NOOPTION', '');
 						break;
 					case 'text':
-						$writer->addField($column['name'], 'text');
-						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						$writer->addField($column[GC_AFIELD_NAME], 'text');
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], $column[GC_AFIELD_DEFAULT] ? $column[GC_AFIELD_DEFAULT] : '');
 						break;
 					case 'int':
 					case 'varchar':
 					default:
-						$writer->addField($column['name'], 'input');
-						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						$writer->addField($column[GC_AFIELD_NAME], 'input');
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], $column[GC_AFIELD_DEFAULT] ? $column[GC_AFIELD_DEFAULT] : '');
 				}
 
-				$writer->setFieldLabel($column['name'], "table_column_{$column['name']}");
-				$writer->setFieldAttribute($column['name'], 'class', 'input-sm');
+				$writer->setFieldLabel($column[GC_AFIELD_NAME], "table_column_{$column[GC_AFIELD_NAME]}");
+				$writer->setFieldAttribute($column[GC_AFIELD_NAME], 'class', 'input-sm');
 			}
 			//@}
 			//
@@ -585,16 +591,16 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
 			$field = new \stdClass();
-			$field->name = $column['name'];
+			$field->name = $column[GC_AFIELD_NAME];
 			$field->type = new \stdClass();
 			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 				$field->type->values = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
 			} else {
-				$field->type->precision = $column[GC_AFIELD_TYPE]['precision'];
+				$field->type->precision = $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION];
 			}
-			$field->default = $column['default'];
-			$field->null = $column['null'];
+			$field->default = $column[GC_AFIELD_DEFAULT];
+			$field->null = $column[GC_AFIELD_NULL];
 
 			$table->fields[] = $field;
 		}
@@ -703,14 +709,16 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+			} elseif($field->type == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PrecisionVarchar) {
+				$field->type = "{$field->type}:{$column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION]}";
 			}
-			if($column['default']) {
-				$field->default = $column['default'];
+			if($column[GC_AFIELD_DEFAULT]) {
+				$field->default = $column[GC_AFIELD_DEFAULT];
 			} else {
 				$field = $field->type;
 			}
 
-			$table->fields[$column['name']] = $field;
+			$table->fields[$column[GC_AFIELD_NAME]] = $field;
 		}
 		//
 		// Adding a creation date column.
@@ -776,8 +784,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 
 			foreach($this->_assignments['tableFields'] as $column) {
 				$auxTr = new \stdClass();
-				$auxTr->key = "table_column_{$column['name']}";
-				$auxTr->value = ucwords(str_replace('_', ' ', $column['name']));
+				$auxTr->key = "table_column_{$column[GC_AFIELD_NAME]}";
+				$auxTr->value = ucwords(str_replace('_', ' ', $column[GC_AFIELD_NAME]));
 				$this->_translations[] = $auxTr;
 
 				if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
