@@ -232,9 +232,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Expanding each result.
 		foreach($plainResult[GC_AFIELD_ITEMS] as $plainItem) {
 			//
+			// Shortcut.
+			$type = $plainItem[GC_AFIELD_TYPE];
+			//
 			// Expanding only those elements belonging to an existing
 			// factory.
-			if(isset($factories[$plainItem[GC_AFIELD_TYPE]])) {
+			if(isset($factories[$type])) {
 				$out[$type][] = $factories[$plainItem[GC_AFIELD_TYPE]]->searchableItem($plainItem[GC_AFIELD_ID]);
 			}
 		}
