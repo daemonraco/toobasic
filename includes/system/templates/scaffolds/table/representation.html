@@ -18,5 +18,8 @@ class <%$representationName%> extends <%if $isSearchable%>\TooBasic\Search\Searc
 	public function type() {
 		return '<%$searchCode%>';
 	}
+	public function viewLink() {
+		return \TooBasic\Managers\RoutesManager::Instance()->enroute(ROOTURI."?action=<%$singularName%>&id={$this->id()}");
+	}
 <%/if%>
 }
