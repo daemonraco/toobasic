@@ -9,7 +9,7 @@
 			"headers": "Headers",
 			"services": "+Services",
 			"type": "string",
-			"extends": "string"
+			"extends": "Extends"
 		},
 		"Headers": "Header{}",
 		"Header": "string",
@@ -22,6 +22,12 @@
 			"defaults": "Params"
 		},
 		"Params": "mixed{}",
-		"ParamsList": "string[]"
+		"ParamsList": "string[]",
+		"Extends": [
+			"ExtendName",
+			"ExtendNames"
+		],
+		"ExtendName": "string",
+		"ExtendNames": "ExtendName[]"
 	}
 }
