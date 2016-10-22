@@ -34,6 +34,7 @@ $SuperLoader['TooBasic\\ParamsStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}
 $SuperLoader['TooBasic\\Paths'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Paths.php";
 $SuperLoader['TooBasic\\Service'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Service.php";
 $SuperLoader['TooBasic\\Singleton'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Singleton.php";
+$SuperLoader['TooBasic\\SuperglobalStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/SuperglobalStack.php";
 $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer.php";
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";
 // @}
@@ -160,6 +161,12 @@ $SuperLoader['TooBasic\\Search\\SearchableFactory'] = "{$Directories[GC_DIRECTOR
 $SuperLoader['TooBasic\\Search\\SearchableItem'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItem.php";
 $SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemRepresentation.php";
 $SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
+// @}
+//
+// RESTful @{
+$SuperLoader['TooBasic\\Managers\\RestManager'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
+$SuperLoader['TooBasic\\Managers\\RestManagerException'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
+$SuperLoader['TooBasic\\RestConfig'] = "{$Directories[GC_DIRECTORIES_REST]}/RestConfig.php";
 // @}
 //
 // Known librearies @{

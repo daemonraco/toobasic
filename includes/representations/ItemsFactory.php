@@ -91,7 +91,7 @@ abstract class ItemsFactory {
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	final protected function __constructor() {
+	final protected function __construct() {
 		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support empty entries creation.

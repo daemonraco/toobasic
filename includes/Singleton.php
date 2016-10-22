@@ -17,7 +17,7 @@ abstract class Singleton {
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	protected function __constructor() {
+	protected function __construct() {
 		$this->init();
 	}
 	/**

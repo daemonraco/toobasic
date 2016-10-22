@@ -1,0 +1,27 @@
+{
+	"root": "RestConf",
+	"types": {
+		"RestConf": {
+			"resources": "+Resources"
+		},
+		"Resources": "Resource{}",
+		"Resource": [
+			"RestActionPolicy",
+			"ResourceConf"
+		],
+		"ResourceConf": {
+			"index": "RestActionPolicy",
+			"create": "RestActionPolicy",
+			"show": "RestActionPolicy",
+			"update": "RestActionPolicy",
+			"destroy": "RestActionPolicy",
+			"stat": "RestActionPolicy"
+		},
+		"RestActionPolicy": "/^(active|auth|blocked)$/"
+	},
+	"policies": {
+		"ResourceConf": {
+			"strict": true
+		}
+	}
+}

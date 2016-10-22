@@ -420,6 +420,54 @@
 		}, {
 			"key": "EX_json_path_fail_specs",
 			"value": "JSON file at '%path%' doesn't match the specifications."
+		}, {
+			"key": "EX_wrong_rest_path",
+			"value": "Badly form REST path."
+		}, {
+			"key": "EX_unknown_rest_type",
+			"value": "Unknown REST call type '%type%'."
+		}, {
+			"key": "EX_rest_resource_no_resource",
+			"value": "Resource REST call requires a resource name."
+		}, {
+			"key": "EX_rest_stats_no_resource",
+			"value": "Stats REST call requires a resource name."
+		}, {
+			"key": "EX_unknown_resource",
+			"value": "Unknown resource '%resource%'."
+		}, {
+			"key": "EX_unhandled_request_method",
+			"value": "Request method '%method%' is not handled."
+		}, {
+			"key": "EX_item_not_specified",
+			"value": "Item not specified."
+		}, {
+			"key": "EX_item_not_found",
+			"value": "Item '%id%' not found."
+		}, {
+			"key": "EX_unable_create_item",
+			"value": "Unable to create an item."
+		}, {
+			"key": "EX_bad_request_json_body",
+			"value": "Bad request JSON body."
+		}, {
+			"key": "EX_rest_config_broken",
+			"value": "The RESTful configuration is broken, check your 'rest.json' files."
+		}, {
+			"key": "EX_unknown_rest_action",
+			"value": "Unable to guess action name based on type '%type%' and method '%method%'."
+		}, {
+			"key": "EX_no_policies_for_type",
+			"value": "There are no policies for type '%type%'."
+		}, {
+			"key": "EX_unknown_rest_policy",
+			"value": "Unknown rest policy '%policy%'."
+		}, {
+			"key": "EX_rest_action_not_allowed",
+			"value": "Action '%action%' is not allow on resource '%resource%'."
+		}, {
+			"key": "EX_rest_action_not_authorized",
+			"value": "You are not authorized to use action '%action%' on resource '%resource%'."
 		}
 	]
 }

@@ -107,6 +107,7 @@ define('GC_AFIELD_HOST', 'host');
 define('GC_AFIELD_HOSTS', 'hosts');
 define('GC_AFIELD_ID', 'id');
 define('GC_AFIELD_INDEXES', 'indexes');
+define('GC_AFIELD_INFO', 'info');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
 define('GC_AFIELD_ITEMS', 'items');
@@ -138,6 +139,7 @@ define('GC_AFIELD_QUERY', 'query');
 define('GC_AFIELD_REDIRECTOR', 'redirector');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
+define('GC_AFIELD_RESOURCE', 'resource');
 define('GC_AFIELD_RESULT', 'result');
 define('GC_AFIELD_RIGHT', 'right');
 define('GC_AFIELD_ROUTES_PATH', 'routes-path');
@@ -172,6 +174,7 @@ define('GC_DIRECTORIES_ADAPTERS_CACHE', 'adapters-cache');
 define('GC_DIRECTORIES_ADAPTERS_DB', 'adapters-db');
 define('GC_DIRECTORIES_ADAPTERS_VIEW', 'adapters-view');
 define('GC_DIRECTORIES_MODULES', 'modules');
+define('GC_DIRECTORIES_REST', 'rest');
 define('GC_DIRECTORIES_SAPIREADER', 'sapireader');
 define('GC_DIRECTORIES_SEARCH', 'search');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
@@ -262,6 +265,7 @@ define('GC_REQUEST_LANGUAGE', 'lang');
 define('GC_REQUEST_LAYOUT', 'layout');
 define('GC_REQUEST_MODE', 'mode');
 define('GC_REQUEST_REDIRECTOR', 'redirectedfrom');
+define('GC_REQUEST_REST', 'rest');
 define('GC_REQUEST_ROUTE', 'route');
 define('GC_REQUEST_SERVICE', 'service');
 define('GC_REQUEST_SKIN', 'skin');
@@ -354,6 +358,14 @@ define('GC_SAPIREPORT_COLUMNTYPE_TEXT', 'text');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+// @}
+//
+// RESTful constants @{
+define('GC_REST_TYPE_RESOURCE', 'resource');
+define('GC_REST_TYPE_STAT', 'stat');
+define('GC_REST_POLICY_BLOCKED', 'blocked');
+define('GC_REST_POLICY_AUTH', 'auth');
+define('GC_REST_POLICY_ACTIVE', 'active');
 // @}
 //
 // Forms @{

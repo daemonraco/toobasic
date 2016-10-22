@@ -300,6 +300,22 @@ abstract class ItemRepresentation {
 		return $this->_exists;
 	}
 	/**
+	 * This method forces the expansion of extend columns.
+	 *
+	 * @param boolean $deep When TRUE forwards the expansion to expanded
+	 * columns.
+	 */
+	public function expandExtendedColumns($deep = false) {
+		foreach($this->_CP_ExtendedColumns as $method => $conf) {
+			$subItem = $this->{$method}();
+			//
+			// Forwarding.
+			if($deep && $subItem) {
+				$subItem->expandExtendedColumns(true);
+			}
+		}
+	}
+	/**
 	 * This simple method returns current object's id.
 	 *
 	 * @return mixed Returns an ID based on the core property that conigures

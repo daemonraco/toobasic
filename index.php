@@ -8,6 +8,7 @@
 // Class aliases.
 use TooBasic\Managers\ActionsManager;
 use TooBasic\Managers\EmailsManager;
+use TooBasic\Managers\RestManager;
 use TooBasic\Managers\ServicesManager;
 use TooBasic\Params;
 use TooBasic\Translate;
@@ -26,6 +27,8 @@ try {
 		} else {
 			throw new \TooBasic\Exception(Translate::Instance()->EX_no_email_name_given);
 		}
+	} elseif($RestPath) {
+		RestManager::Instance()->run();
 	} elseif($ServiceName || isset(Params::Instance()->get->explaininterface)) {
 		ServicesManager::Instance()->run();
 	} else {
