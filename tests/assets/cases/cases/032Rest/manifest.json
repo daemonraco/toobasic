@@ -1,0 +1,48 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/modules\/wrongfactory\/configs\/rest.json",
+		"\/site\/case_config.php",
+		"\/site\/config.php",
+		"\/site\/configs\/rest.json",
+		"\/site\/configs\/routes.json",
+		"\/site\/controllers\/test.php",
+		"\/site\/controllers\/test_add.php",
+		"\/site\/controllers\/test_delete.php",
+		"\/site\/controllers\/test_edit.php",
+		"\/site\/controllers\/tests.php",
+		"\/site\/db\/tests.json",
+		"\/site\/forms\/table_tests.json",
+		"\/site\/installed_config.php.pre",
+		"\/site\/models\/representations\/TestRepresentation.php",
+		"\/site\/models\/representations\/TestsFactory.php",
+		"\/site\/mysql_config.php",
+		"\/site\/services\/restauth.php",
+		"\/site\/templates\/action\/test.html",
+		"\/site\/templates\/action\/test_add.html",
+		"\/site\/templates\/action\/test_delete.html",
+		"\/site\/templates\/action\/test_edit.html",
+		"\/site\/templates\/action\/tests.html"
+	],
+	"assetDirectories": [
+		"\/modules",
+		"\/modules\/wrongfactory",
+		"\/modules\/wrongfactory\/configs",
+		"\/site\/configs",
+		"\/site\/controllers",
+		"\/site\/db",
+		"\/site\/forms",
+		"\/site\/models",
+		"\/site\/models\/representations",
+		"\/site\/services",
+		"\/site\/templates",
+		"\/site\/templates\/action"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [
+		"G:mysql\/createdatabase.sh"
+	],
+	"tearDownScripts": [
+		"G:mysql\/removedatabase.sh"
+	]
+}

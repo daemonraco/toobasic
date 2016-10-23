@@ -38,7 +38,7 @@ class RestManagerException extends Exception {
  * 	| resource/<resource-name>/<id> | GET    | show    |
  * 	| resource/<resource-name>/<id> | PUT    | update  |
  * 	| resource/<resource-name>/<id> | DELETE | destroy |
- * 	| stats/<resource-name>         | GET    | stat    |
+ * 	| stats/<resource-name>         | GET    | stats   |
  *
  */
 class RestManager extends Manager {
@@ -62,6 +62,10 @@ class RestManager extends Manager {
 	 * @var mixed[] @todo doc 
 	 */
 	protected $_errors = [];
+	/**
+	 * @var boolean @todo doc 
+	 */
+	protected $_hasErrors = false;
 	/**
 	 * @var mixed[string] @todo doc
 	 */
@@ -110,7 +114,7 @@ class RestManager extends Manager {
 	 * @return type @todo doc
 	 */
 	public function hasErrors() {
-		return !empty($this->_errors);
+		return $this->_hasErrors;
 	}
 	/**
 	 * @todo doc
@@ -130,7 +134,9 @@ class RestManager extends Manager {
 	public function run($autoDisplay = true) {
 		//
 		// Check security.
-		$this->checkPermissions();
+		if(!$this->hasErrors()) {
+			$this->checkPermissions();
+		}
 		//
 		// Forwarding calls.
 		if(!$this->hasErrors()) {
@@ -138,8 +144,8 @@ class RestManager extends Manager {
 				case GC_REST_TYPE_RESOURCE:
 					$response = $this->runResource();
 					break;
-				case GC_REST_TYPE_STAT:
-					$response = $this->runStat();
+				case GC_REST_TYPE_STATS:
+					$response = $this->runStats();
 					break;
 			}
 		}
@@ -187,7 +193,7 @@ class RestManager extends Manager {
 		$policy = GC_REST_POLICY_BLOCKED;
 		//
 		// Checking known policies.
-		if(in_array($this->_restPath[GC_AFIELD_TYPE], [GC_REST_TYPE_RESOURCE, GC_REST_TYPE_STAT])) {
+		if(in_array($this->_restPath[GC_AFIELD_TYPE], [GC_REST_TYPE_RESOURCE, GC_REST_TYPE_STATS])) {
 			if(isset($this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]})) {
 				$policy = $this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]};
 			}
@@ -258,23 +264,25 @@ class RestManager extends Manager {
 					$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
 					$this->_restPath[GC_AFIELD_PARAMS] = $path;
 				} else {
-					throw new RestManagerException($this->tr->EX_rest_resource_no_resource);
+					$this->setError($this->tr->EX_rest_resource_no_resource, HTTPERROR_BAD_REQUEST);
 				}
 				break;
-			case GC_REST_TYPE_STAT:
+			case GC_REST_TYPE_STATS:
 				if(!empty($path[0])) {
 					$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
 				} else {
-					throw new RestManagerException($this->tr->EX_rest_stats_no_resource);
+					$this->setError($this->tr->EX_rest_stats_no_resource, HTTPERROR_BAD_REQUEST);
 				}
 				break;
 			default:
-				throw new RestManagerException($this->tr->EX_unknown_rest_type([
-					'type' => $this->_restPath[GC_AFIELD_TYPE]
-				]));
+				$this->setError($this->tr->EX_unknown_rest_type([
+						'type' => $this->_restPath[GC_AFIELD_TYPE]
+					]), HTTPERROR_BAD_REQUEST);
 		}
 
-		$this->guessActionName();
+		if(!$this->hasErrors()) {
+			$this->guessActionName();
+		}
 	}
 	protected function guessActionName() {
 		$names = [
@@ -283,7 +291,7 @@ class RestManager extends Manager {
 			'resource-GET-PARAM' => 'show',
 			'resource-PUT-PARAM' => 'update',
 			'resource-DELETE-PARAM' => 'destroy',
-			'stats-GET' => 'stat'
+			'stats-GET' => 'stats'
 		];
 
 		$query = [$this->_restPath[GC_AFIELD_TYPE], $this->_restPath[GC_AFIELD_METHOD]];
@@ -522,7 +530,7 @@ class RestManager extends Manager {
 	 *
 	 * @return \stdClass @todo doc
 	 */
-	protected function runStat() {
+	protected function runStats() {
 		//
 		// Default values.
 		$response = new \stdClass();
@@ -570,7 +578,6 @@ class RestManager extends Manager {
 			$aux[GC_AFIELD_INFO] = $info;
 		}
 		$this->_errors[] = $aux;
+		$this->_hasErrors = true;
 	}
 }
-
-// https://en.wikipedia.org/wiki/Representational_state_transfer#Relationship_between_URL_and_HTTP_methods

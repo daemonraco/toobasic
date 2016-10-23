@@ -362,7 +362,7 @@ define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
 //
 // RESTful constants @{
 define('GC_REST_TYPE_RESOURCE', 'resource');
-define('GC_REST_TYPE_STAT', 'stat');
+define('GC_REST_TYPE_STATS', 'stats');
 define('GC_REST_POLICY_BLOCKED', 'blocked');
 define('GC_REST_POLICY_AUTH', 'auth');
 define('GC_REST_POLICY_ACTIVE', 'active');
