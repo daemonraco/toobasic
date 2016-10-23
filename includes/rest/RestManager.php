@@ -74,8 +74,6 @@ class RestManager extends Manager {
 	// Magic methods.
 	/**
 	 * Class constructor.
-	 *
-	 * @throws \TooBasic\Managers\RestManagerException
 	 */
 	protected function __construct() {
 		parent::__construct();
@@ -129,7 +127,6 @@ class RestManager extends Manager {
 	 * @todo doc
 	 *
 	 * @param boolean $autoDisplay @todo doc
-	 * @throws \TooBasic\Managers\RestManagerException
 	 */
 	public function run($autoDisplay = true) {
 		//
@@ -253,31 +250,34 @@ class RestManager extends Manager {
 
 		$path = explode('/', $RestPath);
 		if(empty($path[0])) {
-			throw new RestManagerException($this->tr->EX_wrong_rest_path);
+			$this->setError($this->tr->EX_wrong_rest_path, HTTPERROR_BAD_REQUEST);
 		}
-		$this->_restPath[GC_AFIELD_TYPE] = array_shift($path);
-		$this->_restPath[GC_AFIELD_METHOD] = $this->params->server->REQUEST_METHOD;
 
-		switch($this->_restPath[GC_AFIELD_TYPE]) {
-			case GC_REST_TYPE_RESOURCE:
-				if(!empty($path[0])) {
-					$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
-					$this->_restPath[GC_AFIELD_PARAMS] = $path;
-				} else {
-					$this->setError($this->tr->EX_rest_resource_no_resource, HTTPERROR_BAD_REQUEST);
-				}
-				break;
-			case GC_REST_TYPE_STATS:
-				if(!empty($path[0])) {
-					$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
-				} else {
-					$this->setError($this->tr->EX_rest_stats_no_resource, HTTPERROR_BAD_REQUEST);
-				}
-				break;
-			default:
-				$this->setError($this->tr->EX_unknown_rest_type([
-						'type' => $this->_restPath[GC_AFIELD_TYPE]
-					]), HTTPERROR_BAD_REQUEST);
+		if(!$this->hasErrors()) {
+			$this->_restPath[GC_AFIELD_TYPE] = array_shift($path);
+			$this->_restPath[GC_AFIELD_METHOD] = $this->params->server->REQUEST_METHOD;
+
+			switch($this->_restPath[GC_AFIELD_TYPE]) {
+				case GC_REST_TYPE_RESOURCE:
+					if(!empty($path[0])) {
+						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
+						$this->_restPath[GC_AFIELD_PARAMS] = $path;
+					} else {
+						$this->setError($this->tr->EX_rest_resource_no_resource, HTTPERROR_BAD_REQUEST);
+					}
+					break;
+				case GC_REST_TYPE_STATS:
+					if(!empty($path[0])) {
+						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
+					} else {
+						$this->setError($this->tr->EX_rest_stats_no_resource, HTTPERROR_BAD_REQUEST);
+					}
+					break;
+				default:
+					$this->setError($this->tr->EX_unknown_rest_type([
+							'type' => $this->_restPath[GC_AFIELD_TYPE]
+						]), HTTPERROR_BAD_REQUEST);
+			}
 		}
 
 		if(!$this->hasErrors()) {
@@ -303,10 +303,10 @@ class RestManager extends Manager {
 		if(isset($names[$query])) {
 			$this->_restPath[GC_AFIELD_ACTION] = $names[$query];
 		} else {
-			throw new RestManagerException($this->tr->EX_unknown_rest_action([
-				'type' => $this->_restPath[GC_AFIELD_TYPE],
-				'method' => $this->_restPath[GC_AFIELD_METHOD]
-			]));
+			$this->setError($this->tr->EX_unknown_rest_action([
+					'type' => $this->_restPath[GC_AFIELD_TYPE],
+					'method' => $this->_restPath[GC_AFIELD_METHOD]
+				]), HTTPERROR_BAD_REQUEST);
 		}
 	}
 	protected function isAuthorized() {

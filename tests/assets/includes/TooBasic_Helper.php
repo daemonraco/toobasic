@@ -33,36 +33,10 @@ class TooBasic_Helper {
 		return $contents;
 	}
 	public static function GetUrl($case, $subUrl, $assertIt = true) {
-		$url = TRAVISCI_URL_SCHEME.'://localhost';
-		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
-		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
-		$url.= $subUrl;
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		$response = curl_exec($ch);
-		curl_close($ch);
-
-		if(boolval($case) && $assertIt) {
-			$case->assertTrue(boolval($response), "No response obtained for '{$subUrl}'.");
-			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
-			$case->assertNotRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a Smarty exception.");
-			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
-		}
-
-		return $response;
+		return self::SendUrl($case, $subUrl, 'GET', null, $assertIt, false);
 	}
 	public static function GetJSONUrl($case, $subUrl, $assertIt = true) {
-		$json = json_decode(self::GetUrl($case, $subUrl, $assertIt));
-
-		if(boolval($case) && $assertIt) {
-			$case->assertTrue(boolval($json), 'Response is not a JSON string.');
-		}
-
-		return $json;
+		return self::SendJSONUrl($case, $subUrl, 'GET', null, $assertIt, false);
 	}
 	public static function RunCommand($case, $command, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		$retValue = false;
@@ -87,6 +61,51 @@ class TooBasic_Helper {
 		}
 
 		return $output;
+	}
+	public static function SendUrl($case, $subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
+		$url = TRAVISCI_URL_SCHEME.'://localhost';
+		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
+		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
+		$url.= $subUrl;
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+		if($body) {
+			if($jsonBody) {
+				$dataString = json_encode($body);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, [
+					'Content-Type: application/json',
+					'Content-Length: '.strlen($dataString)
+				]);
+			} else {
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+			}
+		}
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		if(boolval($case) && $assertIt) {
+			$case->assertTrue(boolval($response), "No response obtained for '{$subUrl}'.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a TooBasic exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$subUrl}' seems to have a Smarty exception.");
+			$case->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$subUrl}' seems to have a PHP error.");
+		}
+
+		return $response;
+	}
+	public static function SendJSONUrl($case, $subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
+		$json = json_decode(self::SendUrl($case, $subUrl, $method, $body, $assertIt));
+
+		if(boolval($case) && $assertIt) {
+			$case->assertTrue(boolval($json), 'Response is not a JSON string.');
+		}
+
+		return $json;
 	}
 	// @}
 }

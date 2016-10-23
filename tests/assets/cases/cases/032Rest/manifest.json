@@ -2,6 +2,7 @@
 	"assets": [
 		"\/modules\/starterdoc\/.inactive",
 		"\/modules\/wrongfactory\/configs\/rest.json",
+		"\/modules\/wrongfactory\/db\/tests-data.json.pre",
 		"\/site\/case_config.php",
 		"\/site\/config.php",
 		"\/site\/configs\/rest.json",
@@ -28,6 +29,7 @@
 		"\/modules",
 		"\/modules\/wrongfactory",
 		"\/modules\/wrongfactory\/configs",
+		"\/modules\/wrongfactory\/db",
 		"\/site\/configs",
 		"\/site\/controllers",
 		"\/site\/db",
