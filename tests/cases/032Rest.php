@@ -2,9 +2,10 @@
 
 // | URL                           | GET | PUT | POST | DELETE |
 // |:------------------------------|:---:|:---:|:----:|:------:|
-// | resource/<resource-name>      |  D  |     |  Y   |        |
-// | resource/<resource-name>/<id> |  D  |  Y  |      |   Y    |
-// | stats/<resource-name>         |     |     |      |        |
+// | resource/<resource-name>      |  D  |     |  D   |        |
+// | resource/<resource-name>/<id> |  D  |  D  |      |   D    |
+// | stats/<resource-name>         |  D  |     |      |        |
+// | search/<resource-name>        |  D  |     |      |        |
 class RestTest extends TooBasic_TestCase {
 	//
 	// Properties.
@@ -129,6 +130,12 @@ class RestTest extends TooBasic_TestCase {
 		$this->assertTrue(is_array($json), "Response is not as expected.");
 		$this->assertEquals(3, count($json), "Expected amount of items is not right.");
 		$this->checkNames($json, ['black berry', 'lime', 'mellon']);
+	}
+	public function testSearchForSomething() {
+		$json = $this->getJSONUrl('?rest=search/tests/name/jane%20doe');
+		$this->assertTrue(is_array($json), "Response is not as expected.");
+		$this->assertEquals(1, count($json), "Expected amount of items is not right.");
+		$this->checkJane($json[0], 1);
 	}
 	// @}
 	//

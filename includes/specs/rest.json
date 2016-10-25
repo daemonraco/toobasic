@@ -15,6 +15,7 @@
 			"show": "RestActionPolicy",
 			"update": "RestActionPolicy",
 			"destroy": "RestActionPolicy",
+			"search": "RestActionPolicy",
 			"stat": "RestActionPolicy"
 		},
 		"RestActionPolicy": "/^(active|auth|blocked)$/"

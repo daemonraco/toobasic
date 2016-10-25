@@ -433,6 +433,9 @@
 			"key": "EX_rest_stats_no_resource",
 			"value": "Stats REST call requires a resource name."
 		}, {
+			"key": "EX_rest_search_no_resource",
+			"value": "Search REST call requires a resource name."
+		}, {
 			"key": "EX_unknown_resource",
 			"value": "Unknown resource '%resource%'."
 		}, {

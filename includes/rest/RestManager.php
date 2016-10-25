@@ -23,14 +23,16 @@ class RestManagerException extends Exception {
 
 /**
  * @class RestManager
- * @todo doc
- *
+ * This manager interprets and solve rest calls.
+ * Allowed calls:
  * 	| URL                           | GET | PUT | POST | DELETE |
  * 	|:------------------------------|:---:|:---:|:----:|:------:|
  * 	| resource/<resource-name>      |  Y  |  N  |  Y   |   N    |
  * 	| resource/<resource-name>/<id> |  Y  |  Y  |  N   |   Y    |
  * 	| stats/<resource-name>         |  Y  |  N  |  N   |   N    |
+ * 	| search/<resource-name>        |  Y  |  N  |  N   |   N    |
  *
+ * Known actions:
  * 	| URL                           | Method | Name    |
  * 	|:------------------------------|:------:|:-------:|
  * 	| resource/<resource-name>      | GET    | index   |
@@ -38,6 +40,7 @@ class RestManagerException extends Exception {
  * 	| resource/<resource-name>/<id> | GET    | show    |
  * 	| resource/<resource-name>/<id> | PUT    | update  |
  * 	| resource/<resource-name>/<id> | DELETE | destroy |
+ * 	| search/<resource-name>        | GET    | search  |
  * 	| stats/<resource-name>         | GET    | stats   |
  *
  */
@@ -45,11 +48,12 @@ class RestManager extends Manager {
 	//
 	// Constants.
 	/**
-	 * @todo doc 
+	 * Default amount of items on action 'search'.
 	 */
 	const ListsLimit = 10;
 	/**
-	 * @todo doc 
+	 * Maximum limit on action 'search', it will never return more than this
+	 * amount.
 	 */
 	const ListsMaxLimit = 100;
 	//
@@ -59,15 +63,16 @@ class RestManager extends Manager {
 	 */
 	protected $_config = false;
 	/**
-	 * @var mixed[] @todo doc 
+	 * @var mixed[] Full list of errors.
 	 */
 	protected $_errors = [];
 	/**
-	 * @var boolean @todo doc 
+	 * @var boolean This flags indicates the presence of at least one error.
 	 */
 	protected $_hasErrors = false;
 	/**
-	 * @var mixed[string] @todo doc
+	 * @var mixed[string] This structure holds the inforamtion retrieve for
+	 * the current path.
 	 */
 	protected $_restPath = [];
 	//
@@ -80,6 +85,8 @@ class RestManager extends Manager {
 		//
 		// Global dependencies.
 		global $RestPath;
+		//
+		// Loading current path and configuration.
 		if(!empty($RestPath)) {
 			$this->loadConfiguration();
 			$this->expandRestPath();
@@ -91,9 +98,7 @@ class RestManager extends Manager {
 		$key = $this->authorizationKey();
 
 		if(!isset($this->params->session->{$key}) && $set) {
-			$length = 40;
-			$keyCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-			$this->params->session->{$key} = substr(str_shuffle(str_repeat($keyCharacters, ceil($length / strlen($keyCharacters)))), 1, $length);
+			$this->params->session->{$key} = self::GenHash();
 		}
 
 		return $this->params->session->{$key};
@@ -144,6 +149,9 @@ class RestManager extends Manager {
 				case GC_REST_TYPE_STATS:
 					$response = $this->runStats();
 					break;
+				case GC_REST_TYPE_SEARCH:
+					$response = $this->runSearch();
+					break;
 			}
 		}
 
@@ -190,7 +198,7 @@ class RestManager extends Manager {
 		$policy = GC_REST_POLICY_BLOCKED;
 		//
 		// Checking known policies.
-		if(in_array($this->_restPath[GC_AFIELD_TYPE], [GC_REST_TYPE_RESOURCE, GC_REST_TYPE_STATS])) {
+		if(in_array($this->_restPath[GC_AFIELD_TYPE], [GC_REST_TYPE_RESOURCE, GC_REST_TYPE_SEARCH, GC_REST_TYPE_STATS])) {
 			if(isset($this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]})) {
 				$policy = $this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]};
 			}
@@ -273,6 +281,14 @@ class RestManager extends Manager {
 						$this->setError($this->tr->EX_rest_stats_no_resource, HTTPERROR_BAD_REQUEST);
 					}
 					break;
+				case GC_REST_TYPE_SEARCH:
+					if(!empty($path[0])) {
+						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
+						$this->_restPath[GC_AFIELD_PARAMS] = $path;
+					} else {
+						$this->setError($this->tr->EX_rest_search_no_resource, HTTPERROR_BAD_REQUEST);
+					}
+					break;
 				default:
 					$this->setError($this->tr->EX_unknown_rest_type([
 							'type' => $this->_restPath[GC_AFIELD_TYPE]
@@ -291,6 +307,8 @@ class RestManager extends Manager {
 			'resource-GET-PARAM' => 'show',
 			'resource-PUT-PARAM' => 'update',
 			'resource-DELETE-PARAM' => 'destroy',
+			'search-GET' => 'search',
+			'search-GET-PARAM' => 'search',
 			'stats-GET' => 'stats'
 		];
 
@@ -525,6 +543,43 @@ class RestManager extends Manager {
 		// Returning results.
 		return $response;
 	}
+	protected function runSearch() {
+		//
+		// Default values.
+		$response = [];
+		//
+		// Trying to load the right factory.
+		if(!$this->hasErrors()) {
+			try {
+				$factory = $this->representation->{$this->_restPath[GC_AFIELD_RESOURCE]};
+			} catch(Exception $e) {
+				$this->setError($this->tr->EX_unknown_resource([
+						'resource' => $this->_restPath[GC_AFIELD_RESOURCE]
+					]), HTTPERROR_BAD_REQUEST, $e->getMessage());
+			}
+		}
+		//
+		// Building stats information.
+		if(!$this->hasErrors()) {
+			$query = [];
+			while(!empty($this->_restPath[GC_AFIELD_PARAMS])) {
+				$key = array_shift($this->_restPath[GC_AFIELD_PARAMS]);
+				$value = array_shift($this->_restPath[GC_AFIELD_PARAMS]);
+				$query[$key] = $value;
+			}
+
+			$expand = isset($this->params->get->expand);
+			foreach($factory->itemsBy($query) as $item) {
+				if($expand) {
+					$item->expandExtendedColumns();
+				}
+				$response[] = $item->toArray();
+			}
+		}
+		//
+		// Returning results.
+		return $response;
+	}
 	/**
 	 * @todo doc
 	 *
@@ -579,5 +634,11 @@ class RestManager extends Manager {
 		}
 		$this->_errors[] = $aux;
 		$this->_hasErrors = true;
+	}
+	//
+	// Protected class methods.
+	protected static function GenHash($length = 40) {
+		static $keyCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		return substr(str_shuffle(str_repeat($keyCharacters, ceil($length / strlen($keyCharacters)))), 1, $length);
 	}
 }
