@@ -16,9 +16,9 @@
 			"update": "RestActionPolicy",
 			"destroy": "RestActionPolicy",
 			"search": "RestActionPolicy",
-			"stat": "RestActionPolicy"
+			"stats": "RestActionPolicy"
 		},
-		"RestActionPolicy": "/^(active|auth|blocked)$/"
+		"RestActionPolicy": "/^(active|auth((:[0-9A-Za-z]+)*)|blocked)$/"
 	},
 	"policies": {
 		"ResourceConf": {

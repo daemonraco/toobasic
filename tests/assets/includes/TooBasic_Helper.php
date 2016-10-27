@@ -63,6 +63,11 @@ class TooBasic_Helper {
 		return $output;
 	}
 	public static function SendUrl($case, $subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
+		$cookiesJar = TESTS_ROOTDIR.'/cache/TESTCASES-COOKIES';
+		if(!is_file($cookiesJar)) {
+			file_put_contents($cookiesJar, null);
+		}
+
 		$url = TRAVISCI_URL_SCHEME.'://localhost';
 		$url.= TRAVISCI_URL_PORT ? ':'.TRAVISCI_URL_PORT : '';
 		$url.= (TRAVISCI_URI ? TRAVISCI_URI : '').'/';
@@ -86,6 +91,8 @@ class TooBasic_Helper {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiesJar);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiesJar);
 		$response = curl_exec($ch);
 		curl_close($ch);
 

@@ -16,7 +16,7 @@ class TooBasicVirtualController extends \TooBasic\Controller {
 	//
 	// Protected methods.
 	protected function basicRun() {
-		return true;
+		return $this->status();
 	}
 	/**
 	 * This metod generates a simple cache key prefix to prepend to every

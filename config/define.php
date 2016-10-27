@@ -101,6 +101,7 @@ define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
+define('GC_AFIELD_HASH', 'hash');
 define('GC_AFIELD_HEADERS', 'headers');
 define('GC_AFIELD_HITS', 'hits');
 define('GC_AFIELD_HOST', 'host');
@@ -361,6 +362,7 @@ define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
 // @}
 //
 // RESTful constants @{
+define('GC_REST_DEFAULT_KEY', '__DEFAULT__');
 define('GC_REST_TYPE_RESOURCE', 'resource');
 define('GC_REST_TYPE_SEARCH', 'search');
 define('GC_REST_TYPE_STATS', 'stats');

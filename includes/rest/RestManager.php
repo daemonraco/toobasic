@@ -94,14 +94,30 @@ class RestManager extends Manager {
 	}
 	//
 	// Public methods.
-	public function authorize($set = true) {
-		$key = $this->authorizationKey();
+	public function authorizationKey() {
+		$sKey = $this->sessionKey();
+		return isset($this->params->session->{$sKey}) ? $this->params->session->{$sKey}[GC_AFIELD_HASH] : false;
+	}
+	public function authorize($key = GC_REST_DEFAULT_KEY) {
+		$sKey = $this->sessionKey();
 
-		if(!isset($this->params->session->{$key}) && $set) {
-			$this->params->session->{$key} = self::GenHash();
+		$wallet = [];
+		if(!isset($this->params->session->{$sKey})) {
+			$wallet = [
+				GC_AFIELD_HASH => self::GenHash(),
+				GC_AFIELD_KEYS => []
+			];
+		} else {
+			$wallet = $this->params->session->{$sKey};
 		}
 
-		return $this->params->session->{$key};
+		if(!in_array($key, $wallet[GC_AFIELD_KEYS])) {
+			$wallet[GC_AFIELD_KEYS][] = $key;
+		}
+
+		$this->params->session->{$sKey} = $wallet;
+
+		return $this->params->session->{$sKey};
 	}
 	/**
 	 * @todo doc
@@ -172,26 +188,26 @@ class RestManager extends Manager {
 
 		return $response;
 	}
-	public function unauthorize($set = true) {
-		$key = $this->authorizationKey();
-
-		if(isset($this->params->session->{$key})) {
-			unset($this->params->session->{$key});
+	/**
+	 * This method removes all known hash keys from session.
+	 *
+	 * @return boolean Returns TRUE if there are no keys stored.
+	 */
+	public function unauthorize() {
+		//
+		// Default values.
+		$sKey = $this->sessionKey();
+		//
+		// Removing keys.
+		if(isset($this->params->session->{$sKey})) {
+			unset($this->params->session->{$sKey});
 		}
-
-		return !isset($this->params->session->{$key});
+		//
+		// Returning current status.
+		return !isset($this->params->session->{$sKey});
 	}
 	//
 	// Protected methods.
-	public function authorizationKey() {
-		static $key = false;
-
-		if($key === false) {
-			$key = 'K'.md5(strtoupper('REST-KEY-'.ROOTURI));
-		}
-
-		return $key;
-	}
 	protected function checkPermissions() {
 		//
 		// Default values.
@@ -205,7 +221,7 @@ class RestManager extends Manager {
 		} else {
 			$this->setError($this->tr->EX_no_policies_for_type([
 					'type' => $this->_restPath[GC_AFIELD_TYPE]
-					], HTTPERROR_FORBIDDEN));
+					]), HTTPERROR_FORBIDDEN);
 		}
 		//
 		// Analysing policies.
@@ -219,19 +235,21 @@ class RestManager extends Manager {
 		//
 		// Analysing policies.
 		if(!$this->hasErrors()) {
+			$policyParams = explode(':', $policy);
+			$policy = array_shift($policyParams);
 			switch($policy) {
 				case GC_REST_POLICY_BLOCKED:
 					$this->setError($this->tr->EX_rest_action_not_allowed([
 							'action' => $this->_restPath[GC_AFIELD_ACTION],
 							'resource' => $this->_restPath[GC_AFIELD_RESOURCE]
-							], HTTPERROR_FORBIDDEN));
+							]), HTTPERROR_FORBIDDEN);
 					break;
 				case GC_REST_POLICY_AUTH:
-					if(!$this->isAuthorized()) {
+					if(!$this->isAuthorized($policyParams)) {
 						$this->setError($this->tr->EX_rest_action_not_authorized([
 								'action' => $this->_restPath[GC_AFIELD_ACTION],
 								'resource' => $this->_restPath[GC_AFIELD_RESOURCE]
-								], HTTPERROR_UNAUTHORIZED));
+							]), HTTPERROR_UNAUTHORIZED);
 					}
 					break;
 				case GC_REST_POLICY_ACTIVE:
@@ -241,7 +259,7 @@ class RestManager extends Manager {
 				default:
 					$this->setError($this->tr->EX_unknown_rest_policy([
 							'policy' => $policy
-							], HTTPERROR_NOT_IMPLEMENTED));
+							]), HTTPERROR_NOT_IMPLEMENTED);
 					break;
 			}
 		}
@@ -327,11 +345,42 @@ class RestManager extends Manager {
 				]), HTTPERROR_BAD_REQUEST);
 		}
 	}
-	protected function isAuthorized() {
-		$key = $this->authorizationKey();
+	/**
+	 * This method checks the URL parameter 'authorize' against some session
+	 * stored hashes.
+	 *
+	 * @param string[] $checkKeys List of hash identifiers to check.
+	 * @return boolean Returns TRUE when it's authorized.
+	 */
+	protected function isAuthorized($checkKeys = false) {
+		//
+		// Default values.
+		$authorized = false;
+		$sKey = $this->sessionKey();
 		$authorize = $this->params->get->authorize;
-
-		return isset($this->params->session->{$key}) && $this->params->session->{$key} == $authorize;
+		//
+		// Ensuring parameter structure.
+		if(!$checkKeys || !is_array($checkKeys)) {
+			$checkKeys = [GC_REST_DEFAULT_KEY];
+		}
+		//
+		// Retrieving knwon keys from session.
+		$wallet = isset($this->params->session->{$sKey}) ? $this->params->session->{$sKey} : [GC_AFIELD_HASH => false];
+		//
+		// Checking hash.
+		if($wallet[GC_AFIELD_HASH] == $authorize) {
+			//
+			// Checking each key against those known until one matches.
+			foreach($checkKeys as $key) {
+				if(in_array($key, $wallet[GC_AFIELD_KEYS])) {
+					$authorized = true;
+					break;
+				}
+			}
+		}
+		//
+		// Returning authorization results.
+		return $authorized;
 	}
 	/**
 	 * @todo doc
@@ -616,6 +665,15 @@ class RestManager extends Manager {
 		//
 		// Returning results.
 		return $response;
+	}
+	protected function sessionKey() {
+		static $key = false;
+
+		if($key === false) {
+			$key = 'K'.md5(strtoupper('REST-KEY-'.ROOTURI));
+		}
+
+		return $key;
 	}
 	/**
 	 * This method adds an error to the internal errors queue.

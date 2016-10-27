@@ -137,6 +137,35 @@ class RestTest extends TooBasic_TestCase {
 		$this->assertEquals(1, count($json), "Expected amount of items is not right.");
 		$this->checkJane($json[0], 1);
 	}
+	public function testAuthorizedResources() {
+		//
+		// Logging out previous session.
+		$this->getJSONUrl('?service=restauth&auth=logout&type');
+		//
+		// Getting auth-keys.
+		$authJson = $this->getJSONUrl('?service=restauth&auth=login&type=admin');
+		$this->assertTrue(isset($authJson->data->auth_key), "No auth key returned.");
+		$authKey = $authJson->data->auth_key;
+
+		$json = $this->getJSONUrl("?rest=resource/auths/1&authorize={$authKey}");
+		$this->assertTrue(is_object($json), "Response is not as expected.");
+		$this->checkJohn($json);
+
+		$json = $this->getJSONUrl("?rest=resource/auths&authorize={$authKey}");
+		$this->assertTrue(is_array($json), "Response is not as expected.");
+		$this->assertEquals(7, count($json), "Expected amount of items is not right.");
+		$this->checkJohn($json[0]);
+
+		$json = $this->getJSONUrl("?rest=stats/auths&authorize={$authKey}");
+		$this->checkErrorResponse($json);
+		$this->assertEquals(401, $json->lasterror->code, "Error code is not as expected.");
+		$this->assertRegExp("~You are not authorized to use action 'stats' on resource 'auths'.~", $json->lasterror->message, "Error message is not as expected.");
+
+		$json = $this->getJSONUrl("?rest=search/auths/name/john%20doe&authorize={$authKey}");
+		$this->assertTrue(is_array($json), "Response is not as expected.");
+		$this->assertEquals(1, count($json), "Expected amount of items is not right.");
+		$this->checkJohn($json[0]);
+	}
 	// @}
 	//
 	// Internal methods @{

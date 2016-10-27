@@ -103,6 +103,7 @@ related)
 	* [Languages](docs/language.md)
 	* [Configs](docs/configs.md)
 	* [Services](docs/services.md)
+	* [RESTful](docs/restful.md)
 	* [Cache](docs/cache.md)
 * If you want the heavy stuff:
 	* [Databases](docs/databases.md)
