@@ -80,7 +80,7 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		//
 		// Checking that all expected assets where generated.
 		foreach(self::$_AssetsManager->generatedAssetFiles() as $path) {
-			if(preg_match('~\.sqlite3~', $path)) {
+			if(preg_match('~(\.sqlite3|testcases_curl\.cookies)~', $path)) {
 				continue;
 			}
 			$this->assertTrue(is_file($path), "Asset '{$path}' was not generated.");

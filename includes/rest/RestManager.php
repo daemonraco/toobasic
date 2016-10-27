@@ -221,7 +221,7 @@ class RestManager extends Manager {
 		} else {
 			$this->setError($this->tr->EX_no_policies_for_type([
 					'type' => $this->_restPath[GC_AFIELD_TYPE]
-					]), HTTPERROR_FORBIDDEN);
+				]), HTTPERROR_FORBIDDEN);
 		}
 		//
 		// Analysing policies.
@@ -242,7 +242,7 @@ class RestManager extends Manager {
 					$this->setError($this->tr->EX_rest_action_not_allowed([
 							'action' => $this->_restPath[GC_AFIELD_ACTION],
 							'resource' => $this->_restPath[GC_AFIELD_RESOURCE]
-							]), HTTPERROR_FORBIDDEN);
+						]), HTTPERROR_FORBIDDEN);
 					break;
 				case GC_REST_POLICY_AUTH:
 					if(!$this->isAuthorized($policyParams)) {
@@ -259,7 +259,7 @@ class RestManager extends Manager {
 				default:
 					$this->setError($this->tr->EX_unknown_rest_policy([
 							'policy' => $policy
-							]), HTTPERROR_NOT_IMPLEMENTED);
+						]), HTTPERROR_NOT_IMPLEMENTED);
 					break;
 			}
 		}

@@ -63,7 +63,7 @@ class TooBasic_Helper {
 		return $output;
 	}
 	public static function SendUrl($case, $subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
-		$cookiesJar = TESTS_ROOTDIR.'/cache/TESTCASES-COOKIES';
+		$cookiesJar = TESTS_ROOTDIR.'/cache/testcases_curl.cookies';
 		if(!is_file($cookiesJar)) {
 			file_put_contents($cookiesJar, null);
 		}
