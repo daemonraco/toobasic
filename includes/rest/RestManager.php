@@ -15,7 +15,6 @@ use TooBasic\Representations\ItemRepresentation;
 
 /**
  * @class RestManagerException
- * @todo doc
  */
 class RestManagerException extends Exception {
 	
@@ -59,7 +58,7 @@ class RestManager extends Manager {
 	//
 	// Protected properties.
 	/**
-	 * @var \TooBasic\RestConfig @todo doc
+	 * @var \TooBasic\RestConfig Current RESTful configuration.
 	 */
 	protected $_config = false;
 	/**
@@ -94,15 +93,34 @@ class RestManager extends Manager {
 	}
 	//
 	// Public methods.
+	/**
+	 * This method provides access to the current authorization key.
+	 *
+	 * @return string Returns a hash string or FALSE if it's not set.
+	 */
 	public function authorizationKey() {
 		$sKey = $this->sessionKey();
 		return isset($this->params->session->{$sKey}) ? $this->params->session->{$sKey}[GC_AFIELD_HASH] : false;
 	}
+	/**
+	 * This method creates an authorization key and associates certain level
+	 * to it. If the key is already created, it just makes the association.
+	 *
+	 * @param string $key Authorization key/level to set.
+	 * @return mixed[string] Returns the current autorization status.
+	 */
 	public function authorize($key = GC_REST_DEFAULT_KEY) {
+		//
+		// Default values.
 		$sKey = $this->sessionKey();
-
+		//
+		// Loading current authentication setting, it it's not present,
+		// it's generated.
 		$wallet = [];
 		if(!isset($this->params->session->{$sKey})) {
+			//
+			// Generating an emtpy authentication setting with a new
+			// hash-key.
 			$wallet = [
 				GC_AFIELD_HASH => self::GenHash(),
 				GC_AFIELD_KEYS => []
@@ -110,44 +128,52 @@ class RestManager extends Manager {
 		} else {
 			$wallet = $this->params->session->{$sKey};
 		}
-
+		//
+		// Appending the new key.
 		if(!in_array($key, $wallet[GC_AFIELD_KEYS])) {
 			$wallet[GC_AFIELD_KEYS][] = $key;
 		}
-
+		//
+		// Saving new settings on session.
 		$this->params->session->{$sKey} = $wallet;
-
+		//
+		// Returning current settings.
 		return $this->params->session->{$sKey};
 	}
 	/**
-	 * @todo doc
+	 * This method provides access to every found error.
 	 *
-	 * @return type @todo doc
+	 * @return mixed[] List of errors.
 	 */
 	public function errors() {
 		return $this->_errors;
 	}
 	/**
-	 * @todo doc
+	 * This method tells if there was at least one error, either when loading
+	 * or in execution.
 	 *
-	 * @return type @todo doc
+	 * @return boolean Returns TRUE when there's at least one error.
 	 */
 	public function hasErrors() {
 		return $this->_hasErrors;
 	}
 	/**
-	 * @todo doc
+	 * This method provides access to the last found error.
 	 *
-	 * @return type @todo doc
+	 * @return mixed[string] Returns the last error or FALSE if there was
+	 * none.
 	 */
 	public function lastErrors() {
 		$pos = count($this->_errors) - 1;
 		return $pos > -1 ? $this->_errors[$pos] : false;
 	}
 	/**
-	 * @todo doc
+	 * This is the main method of this manager and it tries to analyze and
+	 * execute a REST call.
 	 *
-	 * @param boolean $autoDisplay @todo doc
+	 * @param boolean $autoDisplay When TRUE, results are prompted, otherwise
+	 * is just returned.
+	 * @return \stdClass Returns a JSON containing the execution results.
 	 */
 	public function run($autoDisplay = true) {
 		//
@@ -170,13 +196,16 @@ class RestManager extends Manager {
 					break;
 			}
 		}
-
+		//
+		// If there's at least one error, the response is replace by an
+		// error response.
 		if($this->hasErrors()) {
 			$response = new \stdClass();
 			$response->{GC_AFIELD_LASTERROR} = $this->lastErrors();
 			$response->{GC_AFIELD_ERRORS} = $this->errors();
 		}
-
+		//
+		// Should it be prompted?
 		if($autoDisplay) {
 			//
 			// Every service response is a JSON object.
@@ -189,9 +218,9 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * This method removes all known hash keys from session.
+	 * This method drop current authentication settings.
 	 *
-	 * @return boolean Returns TRUE if there are no keys stored.
+	 * @return boolean Returns TRUE if it was successfully dropped.
 	 */
 	public function unauthorize() {
 		//
@@ -208,12 +237,15 @@ class RestManager extends Manager {
 	}
 	//
 	// Protected methods.
+	/**
+	 * This method analyzes current REST request against policies.
+	 */
 	protected function checkPermissions() {
 		//
 		// Default values.
 		$policy = GC_REST_POLICY_BLOCKED;
 		//
-		// Checking known policies.
+		// Checking known policies types.
 		if(in_array($this->_restPath[GC_AFIELD_TYPE], [GC_REST_TYPE_RESOURCE, GC_REST_TYPE_SEARCH, GC_REST_TYPE_STATS])) {
 			if(isset($this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]})) {
 				$policy = $this->_config->resources->{$this->_restPath[GC_AFIELD_RESOURCE]};
@@ -224,7 +256,7 @@ class RestManager extends Manager {
 				]), HTTPERROR_FORBIDDEN);
 		}
 		//
-		// Analysing policies.
+		// Analysing policy when specified by action.
 		if(!$this->hasErrors() && is_object($policy)) {
 			if(isset($policy->{$this->_restPath[GC_AFIELD_ACTION]})) {
 				$policy = $policy->{$this->_restPath[GC_AFIELD_ACTION]};
@@ -265,27 +297,37 @@ class RestManager extends Manager {
 		}
 	}
 	/**
-	 * @todo doc
-	 *
-	 * @throws \TooBasic\Managers\RestManagerException
+	 * This method parses the REST given URL and extracts from it all
+	 * parameters.
 	 */
 	protected function expandRestPath() {
 		//
 		// Global dependencies.
 		global $RestPath;
-
+		//
+		// Expanding the url and checking the first value (there should be
+		// at leas one).
 		$path = explode('/', $RestPath);
 		if(empty($path[0])) {
 			$this->setError($this->tr->EX_wrong_rest_path, HTTPERROR_BAD_REQUEST);
 		}
-
+		//
+		// Alalizing all pieces.
 		if(!$this->hasErrors()) {
+			//
+			// Extracting method and type of request.
 			$this->_restPath[GC_AFIELD_TYPE] = array_shift($path);
 			$this->_restPath[GC_AFIELD_METHOD] = $this->params->server->REQUEST_METHOD;
-
+			//
+			// Validating type and extrating further information.
 			switch($this->_restPath[GC_AFIELD_TYPE]) {
 				case GC_REST_TYPE_RESOURCE:
+					//
+					// There must be a resource name.
 					if(!empty($path[0])) {
+						//
+						// Extracting resource name and
+						// parameters.
 						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
 						$this->_restPath[GC_AFIELD_PARAMS] = $path;
 					} else {
@@ -293,14 +335,23 @@ class RestManager extends Manager {
 					}
 					break;
 				case GC_REST_TYPE_STATS:
+					//
+					// There must be a resource name.
 					if(!empty($path[0])) {
+						//
+						// Extracting resource name.
 						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
 					} else {
 						$this->setError($this->tr->EX_rest_stats_no_resource, HTTPERROR_BAD_REQUEST);
 					}
 					break;
 				case GC_REST_TYPE_SEARCH:
+					//
+					// There must be a resource name.
 					if(!empty($path[0])) {
+						//
+						// Extracting resource name and
+						// conditions.
 						$this->_restPath[GC_AFIELD_RESOURCE] = array_shift($path);
 						$this->_restPath[GC_AFIELD_PARAMS] = $path;
 					} else {
@@ -313,13 +364,20 @@ class RestManager extends Manager {
 						]), HTTPERROR_BAD_REQUEST);
 			}
 		}
-
+		//
+		// Gessing the right action.
 		if(!$this->hasErrors()) {
 			$this->guessActionName();
 		}
 	}
+	/**
+	 * This method tries to guess the current action based on request type,
+	 * method and parameters.
+	 */
 	protected function guessActionName() {
-		$names = [
+		//
+		// Known actions.
+		static $names = [
 			'resource-GET' => 'index',
 			'resource-POST' => 'create',
 			'resource-GET-PARAM' => 'show',
@@ -329,13 +387,15 @@ class RestManager extends Manager {
 			'search-GET-PARAM' => 'search',
 			'stats-GET' => 'stats'
 		];
-
+		//
+		// Building the action matcher.
 		$query = [$this->_restPath[GC_AFIELD_TYPE], $this->_restPath[GC_AFIELD_METHOD]];
 		if(isset($this->_restPath[GC_AFIELD_PARAMS]) && isset($this->_restPath[GC_AFIELD_PARAMS][0])) {
 			$query[] = 'PARAM';
 		}
 		$query = implode('-', $query);
-
+		//
+		// Is it known?
 		if(isset($names[$query])) {
 			$this->_restPath[GC_AFIELD_ACTION] = $names[$query];
 		} else {
@@ -383,15 +443,14 @@ class RestManager extends Manager {
 		return $authorized;
 	}
 	/**
-	 * @todo doc
-	 *
-	 * @throws \TooBasic\Managers\RestManagerException
+	 * This methods loads current RESTful configuration files.
 	 */
 	protected function loadConfiguration() {
 		$this->_config = $this->config->rest(GC_CONFIG_MODE_MERGE, 'TooBasic');
 	}
 	/**
-	 * @todo doc
+	 * This method analyzes and triggers the execution of actions 'index',
+	 * 'show', 'update', 'create' and 'destroy'.
 	 *
 	 * @return type @todo doc
 	 */
@@ -432,18 +491,24 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This removes an element from a representation factory using the third
+	 * parameter of the REST as item ID.
 	 *
-	 * @param ItemsFactory $factory @todo doc
-	 * @return \stdClass @todo doc
+	 * @param ItemsFactory $factory Representation factory to affect.
+	 * @return \stdClass Returns a simple JSON with a field called 'status'
+	 * that is TRUE when the operation was successful.
 	 */
 	protected function runResourceMethodDelete(ItemsFactory $factory) {
+		//
+		// Default values.
 		$response = new \stdClass();
-
+		//
+		// Checking third parameter presence.
 		if(empty($this->_restPath[GC_AFIELD_PARAMS][0])) {
 			$this->setError($this->tr->EX_item_not_specified, HTTPERROR_BAD_REQUEST);
 		}
-
+		//
+		// Retrieveing and removing the requested element.
 		if(!$this->hasErrors()) {
 			$item = $factory->item($this->_restPath[GC_AFIELD_PARAMS][0]);
 			if($item) {
@@ -459,39 +524,45 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method attends the action 'index' and 'show' on a REST call.
 	 *
-	 * @param ItemsFactory $factory @todo doc
-	 * @return type @todo doc
+	 * @param ItemsFactory $factory Representation factory to affect.
+	 * @return mixed Returns a found item or list of them in a way that can be
+	 * used as REST response.
 	 */
 	protected function runResourceMethodGet(ItemsFactory $factory) {
+		//
+		// Dafault values.
 		$response = [];
-
 		$expand = isset($this->params->get->expand);
 		//
 		// Is it a list request or a specific item request?
 		if(empty($this->_restPath[GC_AFIELD_PARAMS][0])) {
+			//
+			// Loading parameters
 			$offset = isset($this->params->get->offset) ? $this->params->get->offset : 0;
 			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::ListsLimit;
-
+			//
+			// Safe-guarding limits.
 			if($limit > self::ListsMaxLimit) {
 				$limit = self::ListsMaxLimit;
 			}
-
+			//
+			// Loading and trimming.
 			$ids = $factory->ids();
 			$ids = array_splice($ids, $offset, $limit);
-
-			$items = [];
+			//
+			// Loading each element.
 			foreach($ids as $id) {
 				$item = $factory->item($id);
 				if($expand) {
 					$item->expandExtendedColumns();
 				}
-				$items[] = $item->toArray();
+				$response[] = $item->toArray();
 			}
-
-			$response = $items;
 		} else {
+			//
+			// Loading the requested item.
 			$item = $factory->item($this->_restPath[GC_AFIELD_PARAMS][0]);
 			if($item) {
 				if($expand) {
@@ -509,12 +580,15 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method attends the action 'create' on a REST call.
 	 *
-	 * @param ItemsFactory $factory @todo doc
-	 * @return type @todo doc
+	 * @param ItemsFactory $factory Representation factory to affect.
+	 * @return mixed Returns an item in a way that can be used as REST
+	 * response.
 	 */
 	protected function runResourceMethodPost(ItemsFactory $factory) {
+		//
+		// Default values.
 		$response = false;
 		//
 		// Checking POST body.
@@ -526,15 +600,22 @@ class RestManager extends Manager {
 		// Creating...
 		if(!$this->hasErrors()) {
 			$newId = $factory->create();
+			//
+			// Checking creation.
 			if($newId) {
+				//
+				// Loading item.
 				$item = $factory->item($newId);
-
+				//
+				// Setting its values based on the posted body.
 				foreach($data as $field => $value) {
 					$item->{$field} = $value;
 				}
-
+				//
+				// Persisting changes.
 				$item->persist();
-
+				//
+				// Preparing it for response.
 				$item->expandExtendedColumns();
 				$response = $item->toArray();
 			} else {
@@ -549,10 +630,11 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method attends the action 'update' on a REST call.
 	 *
-	 * @param ItemsFactory $factory @todo doc
-	 * @return type @todo doc
+	 * @param ItemsFactory $factory Representation factory to affect.
+	 * @return mixed Returns an item in a way that can be used as REST
+	 * response.
 	 */
 	protected function runResourceMethodPut(ItemsFactory $factory) {
 		//
@@ -572,14 +654,20 @@ class RestManager extends Manager {
 		//
 		// Updating...
 		if(!$this->hasErrors()) {
+			//
+			// Loading item.
 			$item = $factory->item($this->_restPath[GC_AFIELD_PARAMS][0]);
 			if($item) {
+				//
+				// Setting its values based on the posted body.
 				foreach($data as $field => $value) {
 					$item->{$field} = $value;
 				}
-
+				//
+				// Persisting changes.
 				$item->persist();
-
+				//
+				// Preparing it for response.
 				$item->expandExtendedColumns();
 				$response = $item->toArray();
 			} else {
@@ -592,6 +680,11 @@ class RestManager extends Manager {
 		// Returning results.
 		return $response;
 	}
+	/**
+	 * @todo doc
+	 *
+	 * @return type @todo doc
+	 */
 	protected function runSearch() {
 		//
 		// Default values.
@@ -616,9 +709,24 @@ class RestManager extends Manager {
 				$value = array_shift($this->_restPath[GC_AFIELD_PARAMS]);
 				$query[$key] = $value;
 			}
-
+			//
+			// Loading parameters.
+			$offset = isset($this->params->get->offset) ? $this->params->get->offset : 0;
+			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::ListsLimit;
 			$expand = isset($this->params->get->expand);
-			foreach($factory->itemsBy($query) as $item) {
+			//
+			// Safe-guarding limits.
+			if($limit > self::ListsMaxLimit) {
+				$limit = self::ListsMaxLimit;
+			}
+			//
+			// Searching and trimming.
+			$ids = $factory->idsBy($query);
+			$ids = array_splice($ids, $offset, $limit);
+			//
+			// Loading each element.
+			foreach($ids as $id) {
+				$item = $factory->item($id);
 				if($expand) {
 					$item->expandExtendedColumns();
 				}
@@ -666,6 +774,11 @@ class RestManager extends Manager {
 		// Returning results.
 		return $response;
 	}
+	/**
+	 * @todo doc
+	 *
+	 * @return string @todo doc
+	 */
 	protected function sessionKey() {
 		static $key = false;
 
@@ -695,6 +808,12 @@ class RestManager extends Manager {
 	}
 	//
 	// Protected class methods.
+	/**
+	 * @todo doc
+	 *
+	 * @param type $length @todo doc
+	 * @return type @todo doc
+	 */
 	protected static function GenHash($length = 40) {
 		static $keyCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		return substr(str_shuffle(str_repeat($keyCharacters, ceil($length / strlen($keyCharacters)))), 1, $length);

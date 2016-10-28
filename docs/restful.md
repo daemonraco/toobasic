@@ -19,15 +19,15 @@ __TooBasic__ provides three ways to access database
 From different perspective, __TooBasic__ provides these actions to access
 representations:
 
-| URL                                       | Method | Name    |
-|:------------------------------------------|:------:|:-------:|
-| resource/&lt;resource-name&gt;            | GET    | index   |
-| resource/&lt;resource-name&gt;            | POST   | create  |
-| resource/&lt;resource-name&gt;/&lt;id&gt; | GET    | show    |
-| resource/&lt;resource-name&gt;/&lt;id&gt; | PUT    | update  |
-| resource/&lt;resource-name&gt;/&lt;id&gt; | DELETE | destroy |
-| search/&lt;resource-name&gt;              | GET    | search  |
-| stats/&lt;resource-name&gt;               | GET    | stats   |
+| URL                             | Method   |  Name     |
+|:--------------------------------|:--------:|:---------:|
+| `resource/<resource-name>`      | `GET`    | `index`   |
+| `resource/<resource-name>`      | `POST`   | `create`  |
+| `resource/<resource-name>/<id>` | `GET`    | `show`    |
+| `resource/<resource-name>/<id>` | `PUT`    | `update`  |
+| `resource/<resource-name>/<id>` | `DELETE` | `destroy` |
+| `search/<resource-name>`        | `GET`    | `search`  |
+| `stats/<resource-name>`         | `GET`    | `stats`   |
 
 ## How to use it
 Maybe the first question you would have would be _How do I access any of this
@@ -172,6 +172,9 @@ use this URL:
 This call to our action `search`, will return a list of items that match those two
 conditions.
 
+Have in mind that this action also uses parameters `expand`, `limit` and `offset`
+in the same way than action `index`.
+
 ## Statistics
 At the moment, the action `stats` is rather simple and it only returns the amount
 of items inside a table.
@@ -253,7 +256,7 @@ the rest.
 We're also specifying the action `destroy` as `blocked` and though it's not an
 error, it's not necessary because everything that is not specified is blocked.
 
-### Authorization.
+### Authorization
 If you want to give access only to logged in user and reject the rest you may
 follow these steps.
 
