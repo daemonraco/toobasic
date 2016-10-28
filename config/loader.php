@@ -216,3 +216,10 @@ spl_autoload_register(function($class) {
 		}
 	}
 });
+//
+// Including Composer loader from installations inside libraries.
+$aux = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/vendor/autoload.php");
+if(is_readable($aux)) {
+	require_once $aux;
+}
+unset($aux);

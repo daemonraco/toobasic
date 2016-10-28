@@ -323,6 +323,12 @@
 * [Statistics](docs/restful.md#statistics)
 * [Error messages](docs/restful.md#error-messages)
 * [Policies](docs/restful.md#policies)
+	* [Policies Types](docs/restful.md#policies-types)
+	* [Initial status](docs/restful.md#initial-status)
+	* [Full access to a representation](docs/restful.md#full-access-to-a-representation)
+	* [Partial access](docs/restful.md#partial-access)
+	* [Authorization.](docs/restful.md#authorization)
+	* [Authorization levels](docs/restful.md#authorization-levels)
 * [Suggestions](docs/restful.md#suggestions)
 
 ##  Routes (docs/routes.md):

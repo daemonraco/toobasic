@@ -204,12 +204,147 @@ Whenever an error appears, you'll get an error with an structure like this:
 ```
 
 ## Policies
-@TODO
+Perhaps policies is the most complicated part of this feature, but a necessary one
+to avoid some security issues.
+To make it easier, we'll try to explain it starting from the simples
+configuration.
+
+### Policies Types
+All policy configurations are separated in 3 types:
+
+* `active`: Anyone can use it
+* `blocked`: No one can use it.
+* `auth`: Only those with the right hash-code can use it.
+
+### Initial status
+By default, all your representations use the policy `blocked`, which means that no
+one can access them using RESTful connections, unless you provide some
+configuration for them.
+
+### Full access to a representation
+If you want to activate RESTful access to certain representation, you can edit the
+file saved at `ROOTDIR/site/configs/rest.json` (if it's not there you may create
+it) and write something like this:
+```json
+{
+	"people": "active",
+	"cities": "active"
+}
+```
+This configuration will activate full access to our representation from previous
+examples called `people` and also to another called `cities`.
+
+### Partial access
+If you want to give access only to list and read items you may write something
+like this:
+```json
+{
+	"people": {
+		"index": "active",
+		"show": "active",
+		"destroy": "blocked",
+		"search": "active",
+		"stats": "active"
+	}
+}
+```
+This will allow access to actions `index`, `show`, `search` and `stats` and block
+the rest.
+We're also specifying the action `destroy` as `blocked` and though it's not an
+error, it's not necessary because everything that is not specified is blocked.
+
+### Authorization.
+If you want to give access only to logged in user and reject the rest you may
+follow these steps.
+
+Let's assume you have the same representation called `people` and some model that
+performs all the setting required for a logged in user.
+
+First, we configure out policies:
+```json
+{
+	"people": "auth"
+}
+```
+And the we add some logic to our model:
+```php
+<?php
+class UsersManagerModel extends TooBasic\Model {
+	public function loginUser(UserRepresentation $user) {
+		// Setting user id on session.
+		$this->params->session->current_user = $user->id();
+		// Activating RESTful accesses.
+		TooBasic\RestManager::Instance()->authorize();
+		// Returning the authorization key for RESTful connections.
+		return TooBasic\RestManager::Instance()->authorizationKey();
+	}
+	. . .
+}
+```
+Function `loginUser()` uses the RESTful manager and runs its method `authorize()`
+creating an authorization key (unless it's already created) and then returns the
+current key so it can be later forwarded to a user's interface.
+As an example, let's suppose that returned key is
+`IZA5EMgtLBrv1fW0iDoPpkxO7KmQcnGCe9J4y8hS`.
+
+Now that we have this, we can call a URL like this:
+
+>http://www.myhost.com/mysite/rest/resource/people?authorize=IZA5EMgtLBrv1fW0iDoPpkxO7KmQcnGCe9J4y8hS
+
+If you don't use the right hash that has been assigned to your session, you'll get
+an _unauthorized_ error response.
+
+### Authorization levels
+_What if you have different types of user?_
+Let's say that a simple user can only read, but and administrator can do anything.
+If that's the case, you can set your policies in this way:
+```json
+{
+	"people": {
+		"index": "auth:admin:user",
+		"create": "auth:admin",
+		"show": "auth:admin:user",
+		"update": "auth:admin",
+		"destroy": "auth:admin",
+		"search": "auth:admin:user",
+		"stats": "auth"
+	}
+}
+```
+Now we have to slightly change our model:
+```php
+<?php
+class UsersManagerModel extends TooBasic\Model {
+	public function loginUser(UserRepresentation $user) {
+		// Setting user id on session.
+		$this->params->session->current_user = $user->id();
+
+		$restManager = TooBasic\RestManager::Instance();
+		// Activating RESTful default accesses.
+		$restManager->authorize();
+		// Activating RESTful accesses based on user role.
+		$restManager->authorize($user->role); // role is either 'user' or 'admin'.
+		// Returning the authorization key for RESTful connections.
+		return TooBasic\RestManager::Instance()->authorizationKey();
+	}
+	. . .
+}
+```
+Looking at all this we deduce that users with role `user` can access to actions
+`index`, `show` and `search`.
+On the other hand, role `admin` can access those and also `create`, `update` and
+`destroy`.
+
+The action `stats` is configured in a way that neither `user` nor `admin` can
+access it, but our model is still using the method `authorize()` without
+parameters and that gives our users the default access level, that way all our
+users can access it.
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
 * [Representations](representations.md)
 * [Routes](routes.md)
+* [Models](models.md)
 
 <!--:GBSUMMARY:Services:2:RESTful:-->
