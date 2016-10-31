@@ -1,15 +1,30 @@
+#
+# Internal files security: @{
 <FilesMatch "(config/.*\.(json|php)|.*\.md)$">
     Order Allow,Deny
     Deny from all
+    Require all denied
 </FilesMatch>
 
 Options -Indexes
-
+# @}
+#
+# Friendly routes: @{
 RewriteEngine On
+#
+# RESTfull path rules:
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
 
+RewriteRule ^rest/(.+)$ index.php?rest=$1 [QSA,L]
+RewriteRule ^index.php/rest/(.+)$ index.php?rest=$1 [QSA,L]
+#
+# RESTfull path rules:
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
 
 RewriteRule ^(.+)$ index.php?route=$1 [QSA,L]
 RewriteRule ^index.php/(.+)$ index.php?route=$1 [QSA,L]
+# @}

@@ -1,0 +1,27 @@
+{
+	"data": [{
+		"table": "tests",
+		"checkfields": ["id"],
+		"entries": [
+			{
+				"id": 3,
+				"name": "apple"
+			}, {
+				"id": 4,
+				"name": "banana"
+			}, {
+				"id": 5,
+				"name": "black berry"
+			}, {
+				"id": 6,
+				"name": "lime"
+			}, {
+				"id": 7,
+				"name": "mellon"
+			}, {
+				"id": 8,
+				"name": "watermellon"
+			}
+		]
+	}]
+}

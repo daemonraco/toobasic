@@ -53,6 +53,17 @@
 	* [Merged files](docs/configs.md#merged-files)
 * [Suggestions](docs/configs.md#suggestions)
 
+##  Controllers (docs/controller.md):
+
+* [How to create a basic page](docs/controller.md#how-to-create-a-basic-page)
+	* [Controller](docs/controller.md#controller)
+	* [View](docs/controller.md#view)
+	* [Is that it?](docs/controller.md#is-that-it)
+	* [But?](docs/controller.md#but)
+* [Language](docs/controller.md#language)
+* [Even more basic](docs/controller.md#even-more-basic)
+* [Suggestions](docs/controller.md#suggestions)
+
 ##  Controller Exports (docs/controllerexports.md):
 
 * [What are these?](docs/controllerexports.md#what-are-these)
@@ -76,17 +87,6 @@
 	* [Attributes](docs/controllerexports.md#attributes)
 	* [Reloading](docs/controllerexports.md#reloading)
 * [Suggestions](docs/controllerexports.md#suggestions)
-
-##  Controllers (docs/controller.md):
-
-* [How to create a basic page](docs/controller.md#how-to-create-a-basic-page)
-	* [Controller](docs/controller.md#controller)
-	* [View](docs/controller.md#view)
-	* [Is that it?](docs/controller.md#is-that-it)
-	* [But?](docs/controller.md#but)
-* [Language](docs/controller.md#language)
-* [Even more basic](docs/controller.md#even-more-basic)
-* [Suggestions](docs/controller.md#suggestions)
 
 ##  Databases (docs/databases.md):
 
@@ -306,6 +306,30 @@
 	* [toArray()](docs/representations.md#toarray)
 	* [Setter](docs/representations.md#setter)
 * [Suggestions](docs/representations.md#suggestions)
+
+##  RESTful (docs/restful.md):
+
+* [What it this?](docs/restful.md#what-it-this)
+* [Introduction](docs/restful.md#introduction)
+* [How to use it](docs/restful.md#how-to-use-it)
+* [Listing items](docs/restful.md#listing-items)
+	* [Limit and offset](docs/restful.md#limit-and-offset)
+	* [Expand](docs/restful.md#expand)
+* [Read an item](docs/restful.md#read-an-item)
+* [Update](docs/restful.md#update)
+* [Create](docs/restful.md#create)
+* [Delete](docs/restful.md#delete)
+* [Search](docs/restful.md#search)
+* [Statistics](docs/restful.md#statistics)
+* [Error messages](docs/restful.md#error-messages)
+* [Policies](docs/restful.md#policies)
+	* [Policies Types](docs/restful.md#policies-types)
+	* [Initial status](docs/restful.md#initial-status)
+	* [Full access to a representation](docs/restful.md#full-access-to-a-representation)
+	* [Partial access](docs/restful.md#partial-access)
+	* [Authorization](docs/restful.md#authorization)
+	* [Authorization levels](docs/restful.md#authorization-levels)
+* [Suggestions](docs/restful.md#suggestions)
 
 ##  Routes (docs/routes.md):
 

@@ -91,7 +91,7 @@ abstract class ItemsFactory {
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	final protected function __constructor() {
+	final protected function __construct() {
 		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support empty entries creation.
@@ -230,7 +230,7 @@ abstract class ItemsFactory {
 	/**
 	 * This method retrieves a list of IDs in the represented table based on a
 	 * set of conditions.
-	 * 
+	 *
 	 * Conditions is an associative array where keys are field names without
 	 * prefixes and associated values are values to look for.
 	 *
@@ -270,6 +270,20 @@ abstract class ItemsFactory {
 		}
 
 		return $out;
+	}
+	/**
+	 * This method retrieves an ID in the represented table based on a set of
+	 * conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @return int Returns the first ID that matches.
+	 */
+	public function idBy($conditions) {
+		$ids = $this->idsBy($conditions);
+		return array_shift($ids);
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -354,7 +368,7 @@ abstract class ItemsFactory {
 	/**
 	 * This method retrieves a list of representations in the represented
 	 * table based on a set of conditions.
-	 * 
+	 *
 	 * Conditions is an associative array where keys are field names without
 	 * prefixes and associated values are values to look for.
 	 *
@@ -374,6 +388,21 @@ abstract class ItemsFactory {
 		}
 
 		return $out;
+	}
+	/**
+	 * This method retrieves a representations in the represented table based
+	 * on a set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @return \TooBasic\Representations\ItemRepresentation Returns the first
+	 * representations that matches.
+	 */
+	public function itemBy($conditions) {
+		$items = $this->itemsBy($conditions);
+		return array_shift($items);
 	}
 	/**
 	 * This method provids access to the last database error found.

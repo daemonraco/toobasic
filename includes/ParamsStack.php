@@ -101,7 +101,6 @@ class ParamsStack {
 		// If the key is numerical, it is a mistake and therefore ignored.
 		if(!is_numeric($key)) {
 			$this->_params[$key] = $value;
-			$value = null;
 		}
 
 		return $value;

@@ -26,6 +26,7 @@ class Params extends Singleton {
 	const TypeOPTIONS = 'opt';
 	const TypePOST = 'post';
 	const TypeSERVER = 'server';
+	const TypeSESSION = 'session';
 	const TypeINTERNAL = 'internal';
 	//
 	// Protected properties.
@@ -237,8 +238,9 @@ class Params extends Singleton {
 		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
 		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
-		$this->_paramsStacks[self::TypeCOOKIE] = new ParamsStack($_COOKIE);
+		$this->_paramsStacks[self::TypeCOOKIE] = new SuperglobalStack('_COOKIE');
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
+		$this->_paramsStacks[self::TypeSESSION] = new SuperglobalStack('_SESSION');
 		$this->_paramsStacks[self::TypeHEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack(array());
 		//
 		// Internal stack for custom purposes.

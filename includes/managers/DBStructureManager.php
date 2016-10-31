@@ -420,10 +420,12 @@ class DBStructureManager extends Manager {
 		// Cleaning table callbacks.
 		foreach($this->_specs->tables as &$table) {
 			$table->realCallbacks = new \stdClass();
-			foreach($table->callbacks as $callbackType => $keys) {
-				$table->realCallbacks->{$callbackType} = $keys ? $keys[0] : false;
+			if(isset($table->callbacks)) {
+				foreach($table->callbacks as $callbackType => $keys) {
+					$table->realCallbacks->{$callbackType} = $keys ? $keys[0] : false;
+				}
+				unset($table->callbacks);
 			}
-			unset($table->callbacks);
 			//
 			// Cleaning table column callbacks.
 			foreach($table->fields as &$field) {

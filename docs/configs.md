@@ -221,6 +221,55 @@ The result of merging them will result in something like this:
 }
 ```
 
+## Interpreters
+Let's say that we need a way to get the widest box in our example and we want to
+OOP compliant.
+If we look at how our files are loaded will find that it a basic object and if we
+want to get the widest box, we need run some external function like:
+```php
+function widest() {
+	$boxes = \TooBasic\MagicProp::Instance()->config->boxes_types;
+	$result = false;
+	foreach($boxes->types as $box) {
+		if(!$result || $box->width > $result->width) {
+			$result = $box;
+		}
+	}
+
+	return $result;
+}
+```
+This would work, but nicest way would be to run `$boxes->widest()`.
+
+Here is where interpreters are useful.
+Basically, when you load a configuration file, instead of returning a simple
+object, __TooBasic__ can return an specific object type containing you logic.
+Following this example we'll create a folder `ROOTDIR/site/includes` at and a file
+at `ROOTDIR/site/includes/BoxesTypes.php` with this content:
+```php
+<?php
+class BoxesTypesConfig extends TooBasic\Config {
+	public function widest() {
+		$result = false;
+
+		foreach($this->types as $box) {
+			if(!$result || $box->width > $result->width) {
+				$result = $box;
+			}
+		}
+
+		return $result;
+	}
+}
+```
+Now we tell __TooBasic__ how to load this file by adding the next line at the end
+of `ROOTDIR/site/config.php`:
+```php
+$SuperLoader['BoxesTypesConfig'] = ROOTDIR.'/site/includes/BoxesTypes.php';
+```
+And that's it, now you can use it in the same way you've been using it and you may
+also use `$boxes->widest()`.
+
 ## Suggestions
 If you want you may visit these documentation pages:
 
