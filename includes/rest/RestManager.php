@@ -681,9 +681,10 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method attends the action 'search' on a REST call.
 	 *
-	 * @return type @todo doc
+	 * @return mixed Returns a list of found items in a way that can be used
+	 * as REST response.
 	 */
 	protected function runSearch() {
 		//
@@ -738,9 +739,10 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method attends the action 'search' on a REST call.
 	 *
-	 * @return \stdClass @todo doc
+	 * @return \stdClass Returns a object that can be used as REST response
+	 * with status values regarding certain representation.
 	 */
 	protected function runStats() {
 		//
@@ -775,9 +777,10 @@ class RestManager extends Manager {
 		return $response;
 	}
 	/**
-	 * @todo doc
+	 * This method builds the right key where current authorizations are
+	 * stored inside $_SESSION.
 	 *
-	 * @return string @todo doc
+	 * @return string Returns an array key.
 	 */
 	protected function sessionKey() {
 		static $key = false;
@@ -809,10 +812,10 @@ class RestManager extends Manager {
 	//
 	// Protected class methods.
 	/**
-	 * @todo doc
+	 * This class method is a random hash generator.
 	 *
-	 * @param type $length @todo doc
-	 * @return type @todo doc
+	 * @param int $length How long the hash must be.
+	 * @return string Returns an alphanumeric hash.
 	 */
 	protected static function GenHash($length = 40) {
 		static $keyCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
