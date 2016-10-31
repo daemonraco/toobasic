@@ -7,7 +7,7 @@ __Required libraries__:
 * [JSON Validator](https://github.com/daemonraco/json-validator)
 * [Smarty](http://www.smarty.net/download)
 
-__ Not so required libraries__:
+__Not so required libraries__:
 
 * [jQuery](https://jquery.com/download/)
 * [Bootstrap](http://getbootstrap.com/getting-started/#download)
