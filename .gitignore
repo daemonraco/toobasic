@@ -15,6 +15,7 @@
 /modules/toobasic-logger
 /modules/toobasic-redis
 /modules/toobasic-workflows
+/modules/toobasic-jsinject
 /composer.*
 /vendor/
 /travis.files-status.*

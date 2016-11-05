@@ -150,6 +150,7 @@ action and modify it as you please.
 If you want, you may visit these documentation pages:
 
 * [Layouts](layout.md)
+* [Controller Exports](controllerexports.md)
 * [Scaffolds](facilities.md)
 
 <!--:GBSUMMARY:MVC:1:Controllers:-->

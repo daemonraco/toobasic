@@ -13,7 +13,7 @@
 	"url": "http://toobasic.daemonraco.com/",
 	"url_doc": "http://toobasic.daemonraco.com/?action=mddoc&doc=README.md",
 	"required_versions": {
-		"php": "5.4",
-		"toobasic": "2.0.0"
+		"php": "5.5",
+		"toobasic": "2.2.0"
 	}
 }

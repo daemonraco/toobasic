@@ -480,6 +480,7 @@
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
+* [Strange configuration issue?](docs/troubleshooting.md#strange-configuration-issue)
 * [Suggestions](docs/troubleshooting.md#suggestions)
 
 ##  Adapters (docs/tech/adapters.md):
@@ -552,4 +553,16 @@
 * [Update](docs/tech/queryadapter.md#update)
 * [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
 * [Suggestions](docs/tech/queryadapter.md#suggestions)
+
+##  RESTful JavaScript Asset (docs/tech/restfull-asset.md):
+
+* [What is this?](docs/tech/restfull-asset.md#what-is-this)
+* [How do I activate it](docs/tech/restfull-asset.md#how-do-i-activate-it)
+* [How to use it](docs/tech/restfull-asset.md#how-to-use-it)
+	* [Wrong URL](docs/tech/restfull-asset.md#wrong-url)
+* [Get all entries](docs/tech/restfull-asset.md#get-all-entries)
+* [Get one item by id](docs/tech/restfull-asset.md#get-one-item-by-id)
+* [Search](docs/tech/restfull-asset.md#search)
+* [Going further](docs/tech/restfull-asset.md#going-further)
+* [Suggestions](docs/tech/restfull-asset.md#suggestions)
 

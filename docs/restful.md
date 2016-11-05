@@ -346,6 +346,7 @@ users can access it.
 ## Suggestions
 If you want or need, you may visit these documentation pages:
 
+* [RESTful Javascript Asset](tech/restful-asset.md)
 * [Representations](representations.md)
 * [Routes](routes.md)
 * [Models](models.md)
