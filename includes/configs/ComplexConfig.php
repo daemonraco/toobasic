@@ -34,7 +34,7 @@ abstract class ComplexConfig extends Config {
 	 * their types. For example:
 	 * 	'parent->subproperty->somevalue' => \TooBasic\ComplexConfig::PathTypeList
 	 */
-	protected $_CP_RequiredPaths = array();
+	protected $_CP_RequiredPaths = [];
 	//
 	// Magic methods.
 	/**

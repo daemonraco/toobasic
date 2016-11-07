@@ -44,7 +44,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	abstract public function createEmptyEntry($table, $data = array(), &$prefixes = array());
+	abstract public function createEmptyEntry($table, $data = [], &$prefixes = []);
 	/**
 	 * This method generates a proper query to remove certain entry and all
 	 * the assets required to execute it.
@@ -57,15 +57,15 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	public function delete($table, $where, &$prefixes = array()) {
+	public function delete($table, $where, &$prefixes = []) {
 		//
 		// Creating a response structure and generating some of its
 		// values.
-		$out = array(
+		$out = [
 			GC_AFIELD_ADAPTER => $this->_className,
 			GC_AFIELD_QUERY => $this->deletePrepare($table, array_keys($where), $prefixes),
-			GC_AFIELD_PARAMS => array()
-		);
+			GC_AFIELD_PARAMS => []
+		];
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($where as $key => $value) {
@@ -95,7 +95,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @param string[string] $prefixes List of prefixes used on queries.
 	 * @return string Returns a query useful to create a statmente.
 	 */
-	abstract public function deletePrepare($table, $whereFields, &$prefixes = array());
+	abstract public function deletePrepare($table, $whereFields, &$prefixes = []);
 	/**
 	 * This method generates a proper query to insert an entry and all the
 	 * assets required to execute it.
@@ -108,16 +108,16 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	public function insert($table, $data, &$prefixes = array()) {
+	public function insert($table, $data, &$prefixes = []) {
 		//
 		// Creating a response structure and generating some of its
 		// values.
-		$out = array(
+		$out = [
 			GC_AFIELD_ADAPTER => $this->_className,
 			GC_AFIELD_QUERY => $this->insertPrepare($table, array_keys($data), $prefixes),
-			GC_AFIELD_PARAMS => array(),
+			GC_AFIELD_PARAMS => [],
 			GC_AFIELD_SEQNAME => null
-		);
+		];
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($data as $key => $value) {
@@ -142,7 +142,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @param string[string] $prefixes List of prefixes used on queries.
 	 * @return string Returns a query useful to create a statmente.
 	 */
-	abstract public function insertPrepare($table, $fields, &$prefixes = array());
+	abstract public function insertPrepare($table, $fields, &$prefixes = []);
 	/**
 	 * @todo doc
 	 *
@@ -158,15 +158,15 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	public function select($table, $where, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false) {
+	public function select($table, $where, &$prefixes = [], $orderBy = [], $limit = false, $offset = false) {
 		//
 		// Creating a response structure and generating some of its
 		// values.
-		$out = array(
+		$out = [
 			GC_AFIELD_ADAPTER => $this->_className,
 			GC_AFIELD_QUERY => $this->selectPrepare($table, $where, $prefixes, $orderBy, $limit, $offset),
-			GC_AFIELD_PARAMS => array()
-		);
+			GC_AFIELD_PARAMS => []
+		];
 		//
 		// Building the list of params to use in a statement execution.
 		foreach($where as $key => $value) {
@@ -190,7 +190,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 
 		return $out;
 	}
-	abstract public function selectPrepare($table, $whereFields, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false);
+	abstract public function selectPrepare($table, $whereFields, &$prefixes = [], $orderBy = [], $limit = false, $offset = false);
 	/**
 	 * @todo doc
 	 *
@@ -205,18 +205,18 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	 * information about the query and the query itself.
 	 * @throws \TooBasic\DBException
 	 */
-	public function update($table, $data, $where, &$prefixes = array()) {
+	public function update($table, $data, $where, &$prefixes = []) {
 		if(!count($data)) {
 			throw new DBException(Translate::Instance()->EX_no_data_to_be_set_given);
 		}
 		//
 		// Creating a response structure and generating some of its
 		// values.
-		$out = array(
+		$out = [
 			GC_AFIELD_ADAPTER => $this->_className,
 			GC_AFIELD_QUERY => $this->updatePrepare($table, array_keys($data), array_keys($where), $prefixes),
-			GC_AFIELD_PARAMS => array()
-		);
+			GC_AFIELD_PARAMS => []
+		];
 		//
 		// Building the list of params to use in a statement execution @{
 		foreach($data as $key => $value) {
@@ -239,14 +239,14 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 
 		return $out;
 	}
-	abstract public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = array());
+	abstract public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = []);
 	//
 	// Protected methods.
 	protected function cleanPrefixes(&$prefixes) {
-		static $requiredPrefixes = array(
+		static $requiredPrefixes = [
 			GC_DBQUERY_PREFIX_COLUMN => '',
 			GC_DBQUERY_PREFIX_TABLE => ''
-		);
+		];
 		foreach($requiredPrefixes as $reqPfx => $defaultValue) {
 			if(!isset($prefixes[$reqPfx])) {
 				$prefixes[$reqPfx] = $defaultValue;
@@ -278,11 +278,11 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 	protected static function ExpandFieldName($name) {
 		//
 		// Response strucutre.
-		$out = array(
+		$out = [
 			GC_AFIELD_FLAG => '',
 			GC_AFIELD_NAME => $name,
 			GC_AFIELD_RESULT => false
-		);
+		];
 		//
 		// Expansion pattern.
 		$pattern = '/^((?P<flag>[*cC]{0,1}):)(?P<name>.*)$/';

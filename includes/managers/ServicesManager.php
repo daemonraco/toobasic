@@ -78,13 +78,13 @@ class ServicesManager extends UrlManager {
 			if(json_last_error() != JSON_ERROR_NONE) {
 				//
 				// Geneating a error response.
-				$out = json_encode(array(
-					GC_AFIELD_ERROR => array(
+				$out = json_encode([
+					GC_AFIELD_ERROR => [
 						GC_AFIELD_CODE => self::ErrorJSONEncode,
 						GC_AFIELD_MESSAGE => 'Unable to encode output'
-					),
+					],
 					GC_AFIELD_DATA => null
-				));
+				]);
 			}
 			//
 			// Displaying the output.
@@ -123,20 +123,20 @@ class ServicesManager extends UrlManager {
 		if(!$out) {
 			//
 			// Basic fields.
-			$out = array(
+			$out = [
 				GC_AFIELD_STATUS => true,
 				GC_AFIELD_INTERFACE => null,
-				GC_AFIELD_HEADERS => array(),
+				GC_AFIELD_HEADERS => [],
 				GC_AFIELD_ERROR => false,
-				GC_AFIELD_ERRORS => array()
-			);
+				GC_AFIELD_ERRORS => []
+			];
 			//
 			// Basic fields on a interface.
-			$out[GC_AFIELD_INTERFACE] = array(
+			$out[GC_AFIELD_INTERFACE] = [
 				GC_AFIELD_NAME => $serviceName,
 				GC_AFIELD_CACHED => false,
-				GC_AFIELD_METHODS => array()
-			);
+				GC_AFIELD_METHODS => []
+			];
 			//
 			// Looking for the service file.
 			$serviceFile = $this->paths->servicePath($serviceName);
@@ -149,24 +149,24 @@ class ServicesManager extends UrlManager {
 				//
 				// Generating information about the file where it
 				// is stored.
-				$service = array(
+				$service = [
 					GC_AFIELD_PATH => $serviceFile,
 					GC_AFIELD_NAME => $pathinfo['filename'],
 					GC_AFIELD_CLASS => Names::ServiceClass($pathinfo['filename'])
-				);
+				];
 			} else {
 				//
 				// GEnerating an error description for the fact
 				// that the service was not found.
-				$error = array(
+				$error = [
 					GC_AFIELD_CODE => self::ErrorUnknownService,
 					GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found",
-					GC_AFIELD_LOCATION => array(
+					GC_AFIELD_LOCATION => [
 						GC_AFIELD_METHOD => __CLASS__.'::'.__FUNCTION__.'()',
 						GC_AFIELD_FILE => __FILE__,
 						GC_AFIELD_LINE => __LINE__
-					)
-				);
+					]
+				];
 				//
 				// Changing a fiew result values and adding the
 				// error.
@@ -251,13 +251,13 @@ class ServicesManager extends UrlManager {
 		if(!$out) {
 			//
 			// Basic fields.
-			$out = array(
+			$out = [
 				GC_AFIELD_STATUS => true,
-				GC_AFIELD_SERVICES => array(),
-				GC_AFIELD_HEADERS => array(),
+				GC_AFIELD_SERVICES => [],
+				GC_AFIELD_HEADERS => [],
 				GC_AFIELD_ERROR => false,
-				GC_AFIELD_ERRORS => array()
-			);
+				GC_AFIELD_ERRORS => []
+			];
 			//
 			// Searching for all known services and generating a
 			// explanation for each one.
@@ -290,13 +290,13 @@ class ServicesManager extends UrlManager {
 	public static function ExecuteService($serviceName) {
 		//
 		// Generating a basic result with an unknown error.
-		$lastRun = array(
+		$lastRun = [
 			GC_AFIELD_STATUS => false,
 			GC_AFIELD_DATA => null,
 			GC_AFIELD_ERROR => false,
-			GC_AFIELD_ERRORS => array(),
-			GC_AFIELD_HEADERS => array()
-		);
+			GC_AFIELD_ERRORS => [],
+			GC_AFIELD_HEADERS => []
+		];
 		//
 		// Loading serivce file and obtaining its class.
 		$serviceClass = self::FetchService($serviceName);
@@ -312,13 +312,13 @@ class ServicesManager extends UrlManager {
 		} else {
 			//
 			// Setting the right error information.
-			$aux = array(
+			$aux = [
 				GC_AFIELD_CODE => self::ErrorUnknownService,
 				GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found"
-			);
+			];
 			$lastRun[GC_AFIELD_ERROR] = $aux;
 			$lastRun[GC_AFIELD_ERRORS][] = $aux;
-			$lastRun[GC_AFIELD_HEADERS] = array();
+			$lastRun[GC_AFIELD_HEADERS] = [];
 			$lastRun[GC_AFIELD_DATA] = null;
 			$lastRun[GC_AFIELD_STATUS] = false;
 		}

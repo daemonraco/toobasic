@@ -10,7 +10,7 @@ namespace TooBasic;
 class EmailPayload {
 	//
 	// Protected properties.
-	protected $_data = array();
+	protected $_data = [];
 	protected $_emails = false;
 	protected $_layout = null;
 	protected $_name = false;

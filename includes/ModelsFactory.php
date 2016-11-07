@@ -19,8 +19,8 @@ use TooBasic\Translate;
 class ModelsFactory extends Singleton {
 	//
 	// Protected properties.
-	protected $_loadedClasses = array();
-	protected $_singletons = array();
+	protected $_loadedClasses = [];
+	protected $_singletons = [];
 	//
 	// Magic methods.
 	/**

@@ -46,7 +46,7 @@ abstract class Singleton {
 		//
 		// List of all known single instances associated to their class
 		// name.
-		static $Instances = array();
+		static $Instances = [];
 		//
 		// Obtaining the current class name.
 		$c = get_called_class();

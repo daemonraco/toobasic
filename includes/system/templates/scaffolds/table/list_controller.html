@@ -14,7 +14,7 @@ class <%$listActionController%> extends \TooBasic\Controller {
 	protected function basicRun() {
 		$factory = $this->representation-><%$pluralName%>;
 
-		$items = array();
+		$items = [];
 		foreach($factory->items() as $item) {
 			$items[] = $item->toArray();
 		}

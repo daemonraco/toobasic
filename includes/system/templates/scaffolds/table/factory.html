@@ -7,9 +7,9 @@ class <%$factoryName%> extends <%if $isSearchable%>\TooBasic\Search\SearchableIt
 	protected $_CP_IDColumn = 'id';
 <%if isset($nameField)%>
 	protected $_CP_NameColumn = '<%$nameField%>';
-	protected $_CP_OrderBy = array(
+	protected $_CP_OrderBy = [
 		'<%$nameField%>' => 'asc'
-	);
+	];
 <%/if%>
 	protected $_CP_RepresentationClass = '<%$singularName%>';
 	protected $_CP_Table = '<%$pluralName%>';

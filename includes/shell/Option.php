@@ -55,7 +55,7 @@ class Option {
 	/**
 	 * @var string[] List of values that can activate this option.
 	 */
-	protected $_triggers = array();
+	protected $_triggers = [];
 	/**
 	 * @var string Indicates the way this option works.
 	 */
@@ -64,7 +64,7 @@ class Option {
 	 * @var string[] List of values given to this option on a command line.
 	 * Useful for options that allow more than one value.
 	 */
-	protected $_values = array();
+	protected $_values = [];
 	//
 	// Magic methods.
 	/**
@@ -130,10 +130,10 @@ class Option {
 			if(in_array($param, $this->_triggers)) {
 				//
 				// Internal list of options that require values.
-				static $needingMoreTypes = array(
+				static $needingMoreTypes = [
 					self::TypeValue,
 					self::TypeMultiValue
-				);
+				];
 				//
 				// Setting this option as activated.
 				$this->_activated = true;
@@ -171,7 +171,7 @@ class Option {
 			//
 			// Piece of text to expess how values are specified.
 			$values = '';
-			if(in_array($this->_type, array(self::TypeMultiValue, self::TypeValue))) {
+			if(in_array($this->_type, [self::TypeMultiValue, self::TypeValue])) {
 				$values = " <{$this->_helpValueName}>";
 			}
 			//
@@ -231,7 +231,7 @@ class Option {
 		$this->_activated = false;
 		$this->_lastValue = false;
 		$this->_needsMore = false;
-		$this->_values = array();
+		$this->_values = [];
 	}
 	/**
 	 * This method allows to set a help text for this option that explains its

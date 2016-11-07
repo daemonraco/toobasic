@@ -40,7 +40,7 @@ class Sanitizer {
 		//
 		// Replacing directory separators by the right one for the current
 		// O.S.
-		$out = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
+		$out = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path);
 		//
 		// Removing duplicates.
 		while(strpos($out, DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR) !== false) {
@@ -60,7 +60,7 @@ class Sanitizer {
 	static public function UriPath($uri) {
 		//
 		// Replacing path separators by the slash.
-		$out = str_replace(array('\\', '/'), '/', $uri);
+		$out = str_replace(['\\', '/'], '/', $uri);
 		//
 		// Removing duplicates.
 		while(strpos($out, '//') !== false) {

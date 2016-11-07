@@ -303,7 +303,7 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[] Returns a list of found items.
 	 */
 	public function queryData($query, $dieOnError = true) {
-		$out = array();
+		$out = [];
 
 		$result = $this->query($query, $dieOnError);
 		if($result) {

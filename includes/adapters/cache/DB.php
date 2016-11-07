@@ -67,9 +67,9 @@ abstract class DB extends Adapter {
 		$query.= "where       cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
+		$stmt->execute([
 			':key' => $this->fullKey($prefix, $key)
-		));
+		]);
 	}
 	/**
 	 * This method retieves a cache entry data.
@@ -95,7 +95,7 @@ abstract class DB extends Adapter {
 		$stmt = $this->_db->prepare($query);
 		//
 		// Requesting a specific entry.
-		if($stmt->execute(array(':key' => $this->fullKey($prefix, $key)))) {
+		if($stmt->execute([':key' => $this->fullKey($prefix, $key)])) {
 			$row = $stmt->fetch();
 			if($row) {
 				//

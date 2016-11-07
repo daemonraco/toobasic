@@ -27,7 +27,7 @@ class SApiReaderJSON extends SApiReader {
 	 * @return \stdClass Returns a decoded result of calling a service.
 	 * @throws SApiReaderException
 	 */
-	public function call($method, $params = array()) {
+	public function call($method, $params = []) {
 		//
 		// Forwarding the call.
 		$response = parent::call($method, $params);

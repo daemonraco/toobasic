@@ -21,7 +21,7 @@ use TooBasic\Translate;
 class SApiManager extends \TooBasic\Managers\Manager {
 	//
 	// Protected properties.
-	protected $_knownReaders = array();
+	protected $_knownReaders = [];
 	//
 	// Magic methods.
 	/**
@@ -146,7 +146,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			$json->path = $path;
 			//
 			// Extensions track.
-			$json->extended = array();
+			$json->extended = [];
 			//
 			// Setting default abstract state.
 			if(!isset($json->abstract)) {
@@ -155,7 +155,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			//
 			// Validating JSON strucutre.
 			$validator = $json->abstract ? self::GetAbstractValidator() : self::GetValidator();
-			if(!$validator->validate(json_encode($json),$info)) {
+			if(!$validator->validate(json_encode($json), $info)) {
 				throw new SApiReaderException(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
 			}
 			//
@@ -172,7 +172,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 				//
 				// Extension configuration must be an array.
 				if(!is_array($extends)) {
-					$extends = array($extends);
+					$extends = [$extends];
 				}
 				//
 				// Removing extensions configuration from the
@@ -202,7 +202,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 						}
 						//
 						// Extending one more level.
-						foreach(array('services', 'headers') as $lProp) {
+						foreach(['services', 'headers'] as $lProp) {
 							//
 							// Enforcing properties presence.
 							if(!isset($exJson->{$lProp})) {

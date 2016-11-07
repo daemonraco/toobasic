@@ -27,7 +27,7 @@ class Manifest {
 	/**
 	 * @var mixed[] List of found errors while checking.
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 	/**
 	 * @var \stdClass Information held by this manifest.
 	 */
@@ -47,7 +47,7 @@ class Manifest {
 	/**
 	 * @var string[] List of required TooBasic modules.
 	 */
-	protected $_requiredModules = array();
+	protected $_requiredModules = [];
 	//
 	// Magic methods.
 	/**
@@ -225,20 +225,20 @@ class Manifest {
 			}
 			//
 			// Enforcing main object.
-			\TooBasic\objectCopyAndEnforce(array('name', 'ucode', 'version', 'description', 'icon', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'), $json, $this->_information, array(
+			\TooBasic\objectCopyAndEnforce(['name', 'ucode', 'version', 'description', 'icon', 'author', 'copyright', 'license', 'url', 'url_doc', 'required_versions'], $json, $this->_information, [
 				'author' => new \stdClass(),
 				'required_versions' => new \stdClass(),
 				'icon' => false
-			));
+			]);
 			//
 			// Enforcing author's information.
-			\TooBasic\objectCopyAndEnforce(array('name', 'page'), $this->_information->author, $this->_information->author);
+			\TooBasic\objectCopyAndEnforce(['name', 'page'], $this->_information->author, $this->_information->author);
 			//
 			// Enforcing required versions information.
-			\TooBasic\objectCopyAndEnforce(array('php', 'toobasic'), $this->_information->required_versions, $this->_information->required_versions, array(
+			\TooBasic\objectCopyAndEnforce(['php', 'toobasic'], $this->_information->required_versions, $this->_information->required_versions, [
 				'php' => phpversion(),
 				'toobasic' => TOOBASIC_VERSION
-			));
+			]);
 			//
 			// Enforcing name, universal code and version number.
 			if(!$this->_information->name) {
@@ -265,10 +265,10 @@ class Manifest {
 	 * @param string $message Message explaining the error.
 	 */
 	protected function setError($code, $message) {
-		$this->_errors[] = array(
+		$this->_errors[] = [
 			GC_AFIELD_CODE => $code,
 			GC_AFIELD_MESSAGE => $message
-		);
+		];
 	}
 	//
 	// Protected class methods.

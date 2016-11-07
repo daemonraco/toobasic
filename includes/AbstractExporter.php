@@ -17,11 +17,11 @@ abstract class AbstractExporter {
 	/**
 	 * @var mixed[string] List of values to use inside templates.
 	 */
-	protected $_assignments = array();
+	protected $_assignments = [];
 	/**
 	 * @var mixed[] List of errors found while processing.
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 	/**
 	 * @var mixed[string] Last error found while processing.
 	 */
@@ -218,15 +218,15 @@ abstract class AbstractExporter {
 		$callerLine = array_shift($trace);
 		//
 		// Current error structure and data.
-		$error = array(
+		$error = [
 			GC_AFIELD_CODE => $code,
 			GC_AFIELD_MESSAGE => $message,
-			GC_AFIELD_LOCATION => array(
+			GC_AFIELD_LOCATION => [
 				GC_AFIELD_METHOD => (isset($callerLine['class']) ? "{$callerLine['class']}::" : '')."{$callerLine['function']}()",
 				GC_AFIELD_FILE => $callingLine['file'],
 				GC_AFIELD_LINE => $callingLine['line']
-			)
-		);
+			]
+		];
 		//
 		// Adding this error to the list.
 		$this->_errors[] = $error;

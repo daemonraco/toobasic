@@ -22,10 +22,10 @@ abstract class Controller extends Exporter {
 	/**
 	 * @var string[] List of assignment keys that cannot be stored in cache.
 	 */
-	protected $_cacheNoise = array(
+	protected $_cacheNoise = [
 		'tr',
 		'ctrl'
-	);
+	];
 	/**
 	 * @var string Name of the layout current controller uses. 'false' means
 	 * no layout and 'null' means default layout.
@@ -34,7 +34,7 @@ abstract class Controller extends Exporter {
 	/**
 	 * @var mixed[string] Assignments made for snippets.
 	 */
-	protected $_snippetAssignments = array();
+	protected $_snippetAssignments = [];
 	/**
 	 * @var string Current view template to render for this contorller.
 	 */
@@ -169,12 +169,12 @@ abstract class Controller extends Exporter {
 				$this->_status = $this->dryRun();
 				//
 				// Genering the last execution structure.
-				$this->_lastRun = array(
+				$this->_lastRun = [
 					GC_AFIELD_STATUS => $this->_status,
 					GC_AFIELD_ASSIGNMENTS => $this->_assignments,
 					GC_AFIELD_ERRORS => $this->_errors,
 					GC_AFIELD_LASTERROR => $this->_lastError
-				);
+				];
 				//
 				// Removing cache noise.
 				foreach($this->_cacheNoise as $noise) {
@@ -208,7 +208,7 @@ abstract class Controller extends Exporter {
 				$this->_lastRun[GC_AFIELD_HEADERS] = $dataBlock[GC_AFIELD_HEADERS];
 				$this->_lastRun[GC_AFIELD_RENDER] = $dataBlock[GC_AFIELD_RENDER];
 			} else {
-				$this->_lastRun[GC_AFIELD_HEADERS] = array();
+				$this->_lastRun[GC_AFIELD_HEADERS] = [];
 				$this->_lastRun[GC_AFIELD_RENDER] = false;
 			}
 			//
@@ -224,10 +224,10 @@ abstract class Controller extends Exporter {
 				//
 				// Storing a cache entry if it's active.
 				if($this->_cached) {
-					$this->cache->save($prefixRender, $key, array(
+					$this->cache->save($prefixRender, $key, [
 						GC_AFIELD_HEADERS => $this->_lastRun[GC_AFIELD_HEADERS],
 						GC_AFIELD_RENDER => $this->_lastRun[GC_AFIELD_RENDER]
-						), $this->_cached);
+						], $this->_cached);
 				}
 			}
 		}
@@ -290,7 +290,7 @@ abstract class Controller extends Exporter {
 			}
 		}
 
-		return (string) $output;
+		return (string)$output;
 	}
 	/**
 	 * Allows to access the view name of this controller.

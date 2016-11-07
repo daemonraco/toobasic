@@ -31,11 +31,11 @@ abstract class ShellTool {
 	/**
 	 * @var string[] List of options considered core to any tool.
 	 */
-	protected $_coreTasks = array();
+	protected $_coreTasks = [];
 	/**
 	 * @var mixed[] List of errors found.
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 	/**
 	 * @var \TooBasic\Shell\Options Options manager shortcut.
 	 */
@@ -223,14 +223,14 @@ abstract class ShellTool {
 		$callerLine = array_shift($trace);
 		//
 		// Generating a error entry.
-		$error = array(
+		$error = [
 			GC_AFIELD_CODE => "{$prefix}-{$code}",
 			GC_AFIELD_MESSAGE => $message,
 			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
 			GC_AFIELD_METHOD => $callerLine['function'],
 			GC_AFIELD_FILE => $callingLine['file'],
 			GC_AFIELD_LINE => $callingLine['line']
-		);
+		];
 		//
 		// Adding error to and internal list.
 		$this->_errors[] = $error;

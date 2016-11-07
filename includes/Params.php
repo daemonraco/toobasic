@@ -43,7 +43,7 @@ class Params extends Singleton {
 	 * @var \TooBasic\ParamsStack[string] List of parameters stacks managed by this
 	 * singleton.
 	 */
-	protected $_paramsStacks = array();
+	protected $_paramsStacks = [];
 	//
 	// Magic methods.
 	/**
@@ -164,7 +164,7 @@ class Params extends Singleton {
 	public function allOf($type) {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Checking if it's a valid params stack.
 		if(isset($this->_paramsStacks[$type])) {
@@ -190,7 +190,7 @@ class Params extends Singleton {
 		if($this->_debugs === false) {
 			//
 			// Default values.
-			$this->_debugs = array();
+			$this->_debugs = [];
 			//
 			// Checking every stack.
 			foreach($this->_paramsStacks as $stack) {
@@ -234,16 +234,16 @@ class Params extends Singleton {
 	 * This method loads all params stacks.
 	 */
 	protected function loadParams() {
-		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack(array()) : new ParamsStack(array());
+		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack([]) : new ParamsStack([]);
 		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
 		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
 		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
 		$this->_paramsStacks[self::TypeCOOKIE] = new SuperglobalStack('_COOKIE');
 		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
 		$this->_paramsStacks[self::TypeSESSION] = new SuperglobalStack('_SESSION');
-		$this->_paramsStacks[self::TypeHEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack(array());
+		$this->_paramsStacks[self::TypeHEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack([]);
 		//
 		// Internal stack for custom purposes.
-		$this->_paramsStacks[self::TypeINTERNAL] = new ParamsStack(array());
+		$this->_paramsStacks[self::TypeINTERNAL] = new ParamsStack([]);
 	}
 }

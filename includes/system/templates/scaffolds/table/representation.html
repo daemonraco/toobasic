@@ -5,9 +5,9 @@ class <%$representationName%> extends <%if $isSearchable%>\TooBasic\Search\Searc
 	// Protected core properties.
 	protected $_CP_ColumnsPerfix = '<%$tablePrefix%>';
 <%if !$isSearchable%>
-	protected $_CP_ColumnFilters = array(
+	protected $_CP_ColumnFilters = [
 		'indexed' => GC_DATABASE_FIELD_FILTER_BOOLEAN
-	);
+	];
 <%/if%>
 	protected $_CP_IDColumn = 'id';
 <%if isset($nameField)%>

@@ -31,17 +31,17 @@ class Options extends \TooBasic\Singleton {
 	 * @var string[] List of parameters that are always present at the
 	 * begining of a command line.
 	 */
-	protected $_mainOptions = array();
+	protected $_mainOptions = [];
 	/**
 	 * @var \TooBasic\Shell\Option[] List of options to check when analysing a
 	 * command line list of values.
 	 */
-	protected $_options = array();
+	protected $_options = [];
 	/**
 	 * @var string[] List of values that couldn't be associated with any knwon
 	 * option.
 	 */
-	protected $_unknownParams = array();
+	protected $_unknownParams = [];
 	//
 	// Magic methods.
 	/**
@@ -69,7 +69,7 @@ class Options extends \TooBasic\Singleton {
 		if($this->_activeOptions === false) {
 			//
 			// Default values.
-			$this->_activeOptions = array();
+			$this->_activeOptions = [];
 			//
 			// Checking each known option.
 			foreach($this->_options as $name => $option) {
@@ -227,8 +227,8 @@ class Options extends \TooBasic\Singleton {
 		//
 		// Resetting basic values.
 		$this->_activeOptions = false;
-		$this->_mainOptions = array();
-		$this->_unknownParams = array();
+		$this->_mainOptions = [];
+		$this->_unknownParams = [];
 		//
 		// Resetting options.
 		foreach($this->_options as $option) {

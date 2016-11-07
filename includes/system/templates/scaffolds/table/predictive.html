@@ -24,7 +24,7 @@ class <%$predictiveServiceController%> extends \TooBasic\Service {
 		$ids = $factory->idsByNamesLike($pattern);
 		$ids = array_slice($ids, 0, $limit);
 
-		$items = array();
+		$items = [];
 		foreach($ids as $id) {
 			$item = $factory->item($id);
 			$items[] = $item->toArray();

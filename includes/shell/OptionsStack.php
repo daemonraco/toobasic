@@ -114,7 +114,7 @@ class OptionsStack extends ParamsStack {
 	public function all() {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Checking each active option.
 		foreach($this->_options->activeOptions() as $optName) {
@@ -130,7 +130,7 @@ class OptionsStack extends ParamsStack {
 	 * This method should not be used.
 	 */
 	public function debugs() {
-		return array();
+		return [];
 	}
 	/**
 	 * This method should not be used.

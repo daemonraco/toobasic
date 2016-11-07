@@ -90,7 +90,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$this->_requiredDirectories[] = dirname($path);
 
 			if(!isset($this->_configLines[$path])) {
-				$this->_configLines[$path] = array();
+				$this->_configLines[$path] = [];
 			}
 
 			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-2.1.3.min.js';";
@@ -139,40 +139,40 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			}
 			//
 			// Files.
-			$this->_files[] = array(
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
 				GC_AFIELD_TEMPLATE => 'controller.html',
 				GC_AFIELD_DESCRIPTION => 'controller file'
-			);
-			$this->_files[] = array(
+			];
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
 				GC_AFIELD_DESCRIPTION => 'view file'
-			);
-			$this->_files[] = array(
+			];
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/script.js"),
 				GC_AFIELD_TEMPLATE => 'script.html',
 				GC_AFIELD_DESCRIPTION => 'basic JS script file'
-			);
-			$this->_files[] = array(
+			];
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CSS]}/style.css"),
 				GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}style.html",
 				GC_AFIELD_DESCRIPTION => 'basic CSS file'
-			);
+			];
 			if($serparatedBSNav) {
 				$this->_names['name-nav'] = "{$this->_names[GC_AFIELD_NAME]}_nav";
 				$this->_names['layout-name-nav'] = Names::ControllerClass($this->_names['name-nav']);
 
-				$this->_files[] = array(
+				$this->_files[] = [
 					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['name-nav']}.php"),
 					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}controller_nav.html",
 					GC_AFIELD_DESCRIPTION => 'nav controller file'
-				);
-				$this->_files[] = array(
+				];
+				$this->_files[] = [
 					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['name-nav']}.html"),
 					GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view_nav.html",
 					GC_AFIELD_DESCRIPTION => 'nav view file'
-				);
+				];
 			}
 		}
 	}
@@ -192,14 +192,14 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- 'bootstrap'\n";
 		$text.= "\t- 'table'\n";
 		$text.= "\t- other values are considered 'basic'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionType, ['--type', '-t'], Option::TypeValue, $text, 'value'));
 
 		$text = 'When using Twitter Bootstrap, main containers are fluid.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionFluid, array('--fluid', '-f'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionFluid, ['--fluid', '-f'], Option::TypeNoValue, $text));
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCached, array('--cached', '-c'), Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCached, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

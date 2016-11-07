@@ -47,9 +47,9 @@ abstract class SpecAdapter extends \TooBasic\Adapters\Adapter {
 	abstract public function dropTableColumn(\stdClass $table, $columnName);
 	public function executeCallback($callback) {
 		$data = file_get_contents($callback[GC_AFIELD_PATH]);
-		$replacements = array(
+		$replacements = [
 			':tb_table_prefix:' => $this->_db->prefix()
-		);
+		];
 		foreach($replacements as $key => $replacement) {
 			$data = preg_replace("/({$key})/", $replacement, $data);
 		}

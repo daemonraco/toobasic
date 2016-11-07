@@ -29,7 +29,7 @@ class QueryPostgreSQL extends QueryAdapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
+	public function createEmptyEntry($table, $data = [], &$prefixes = []) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
 			throw new DBException(Translate::Instance()->EX_DB_no_id_column_set);
 		}
@@ -37,12 +37,12 @@ class QueryPostgreSQL extends QueryAdapter {
 		$this->cleanPrefixes($prefixes);
 
 
-		$out = array(
+		$out = [
 			GC_AFIELD_ADAPTER => $this->_className,
 			GC_AFIELD_QUERY => '',
-			GC_AFIELD_PARAMS => array(),
+			GC_AFIELD_PARAMS => [],
 			GC_AFIELD_SEQNAME => "{$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}_{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}_seq"
-		);
+		];
 		$out[GC_AFIELD_QUERY] = "insert \n";
 		$out[GC_AFIELD_QUERY].= "        into {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table}({$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$data[GC_DBQUERY_NAMES_COLUMN_ID]}) \n";
 		$out[GC_AFIELD_QUERY].= "        values (default) \n";
@@ -60,10 +60,10 @@ class QueryPostgreSQL extends QueryAdapter {
 	 * @param string[string] $prefixes List of prefixes used on queries.
 	 * @return string Returns a query useful to create a statmente.
 	 */
-	public function deletePrepare($table, $whereFields, &$prefixes = array()) {
+	public function deletePrepare($table, $whereFields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$where = array();
+		$where = [];
 		foreach($whereFields as $key) {
 			$xKey = self::ExpandFieldName($key);
 			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
@@ -80,11 +80,11 @@ class QueryPostgreSQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function insertPrepare($table, $fields, &$prefixes = array()) {
+	public function insertPrepare($table, $fields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$columns = array();
-		$values = array();
+		$columns = [];
+		$values = [];
 		foreach($fields as $key) {
 			$columns[] = $prefixes[GC_DBQUERY_PREFIX_COLUMN].$key;
 			$values[] = ":{$key}";
@@ -96,7 +96,7 @@ class QueryPostgreSQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function selectPrepare($table, $whereFields, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false) {
+	public function selectPrepare($table, $whereFields, &$prefixes = [], $orderBy = [], $limit = false, $offset = false) {
 		$this->cleanPrefixes($prefixes);
 		//
 		// Default values.
@@ -119,7 +119,7 @@ class QueryPostgreSQL extends QueryAdapter {
 			$query.= implode(", \n", $auxList)." \n";
 			//
 			// Building 'where' sentence pieces.
-			$where = array();
+			$where = [];
 			foreach($whereFields as $key => $value) {
 				$xKey = self::ExpandFieldName($key);
 				if($xKey[GC_AFIELD_RESULT]) {
@@ -142,7 +142,7 @@ class QueryPostgreSQL extends QueryAdapter {
 			$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
 			//
 			// Building 'where' sentence pieces.
-			$where = array();
+			$where = [];
 			foreach($whereFields as $key => $value) {
 				$xKey = self::ExpandFieldName($key);
 				if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
@@ -159,7 +159,7 @@ class QueryPostgreSQL extends QueryAdapter {
 		}
 		//
 		// Building 'order by' sentence.
-		$order = array();
+		$order = [];
 		foreach($orderBy as $field => $way) {
 			$order[] = "{$fieldPrefix}{$field} {$way}";
 		}
@@ -180,14 +180,14 @@ class QueryPostgreSQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = array()) {
+	public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$sets = array();
+		$sets = [];
 		foreach($dataFields as $key) {
 			$sets[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :d_{$key}";
 		}
-		$where = array();
+		$where = [];
 		foreach($whereFields as $key) {
 			$xKey = self::ExpandFieldName($key);
 			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {

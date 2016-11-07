@@ -47,14 +47,14 @@ class ControllerExports extends AbstractExports {
 	}
 	//
 	// Public methods.
-	public function ajaxInsert($actionName, $params = array(), $attrs = array()) {
+	public function ajaxInsert($actionName, $params = [], $attrs = []) {
 		//
 		// Enforcing parameters.
 		if(!is_array($params)) {
-			$params = array();
+			$params = [];
 		}
 		if(!is_array($attrs)) {
-			$attrs = array();
+			$attrs = [];
 		}
 		//
 		// Generation action uri.
@@ -247,15 +247,15 @@ class ControllerExports extends AbstractExports {
 		}
 		//
 		// Required fields.
-		$enforce = array(
+		$enforce = [
 			GC_DEFAULTS_HTMLASSETS_SCRIPTS,
 			GC_DEFAULTS_HTMLASSETS_STYLES
-		);
+		];
 		//
 		// Enforcing fields.
 		foreach($enforce as $e) {
 			if(!isset($htmlAssets[$e])) {
-				$htmlAssets[$e] = array();
+				$htmlAssets[$e] = [];
 			}
 		}
 		//

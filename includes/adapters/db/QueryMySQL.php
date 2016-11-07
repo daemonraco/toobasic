@@ -29,11 +29,11 @@ class QueryMySQL extends QueryAdapter {
 	 * @return mixed[string] Returns an associative array containing
 	 * information about the query and the query itself.
 	 */
-	public function createEmptyEntry($table, $data = array(), &$prefixes = array()) {
+	public function createEmptyEntry($table, $data = [], &$prefixes = []) {
 		if(!isset($data[GC_DBQUERY_NAMES_COLUMN_ID])) {
 			throw new DBException(Translate::Instance()->EX_DB_no_id_column_set);
 		}
-		return $this->insert($table, array($data[GC_DBQUERY_NAMES_COLUMN_ID] => null), $prefixes);
+		return $this->insert($table, [$data[GC_DBQUERY_NAMES_COLUMN_ID] => null], $prefixes);
 	}
 	/**
 	 * This method builds a query that can be use to create a deletion
@@ -46,10 +46,10 @@ class QueryMySQL extends QueryAdapter {
 	 * @param string[string] $prefixes List of prefixes used on queries.
 	 * @return string Returns a query useful to create a statmente.
 	 */
-	public function deletePrepare($table, $whereFields, &$prefixes = array()) {
+	public function deletePrepare($table, $whereFields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$where = array();
+		$where = [];
 		foreach($whereFields as $key) {
 			$xKey = self::ExpandFieldName($key);
 			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
@@ -66,11 +66,11 @@ class QueryMySQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function insertPrepare($table, $fields, &$prefixes = array()) {
+	public function insertPrepare($table, $fields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$columns = array();
-		$values = array();
+		$columns = [];
+		$values = [];
 		foreach($fields as $key) {
 			$columns[] = $prefixes[GC_DBQUERY_PREFIX_COLUMN].$key;
 			$values[] = ":{$key}";
@@ -82,7 +82,7 @@ class QueryMySQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function selectPrepare($table, $whereFields, &$prefixes = array(), $orderBy = array(), $limit = false, $offset = false) {
+	public function selectPrepare($table, $whereFields, &$prefixes = [], $orderBy = [], $limit = false, $offset = false) {
 		$this->cleanPrefixes($prefixes);
 		//
 		// Default values.
@@ -105,7 +105,7 @@ class QueryMySQL extends QueryAdapter {
 			$query.= implode(", \n", $auxList)." \n";
 			//
 			// Building 'where' sentence pieces.
-			$where = array();
+			$where = [];
 			foreach($whereFields as $key => $value) {
 				$xKey = self::ExpandFieldName($key);
 				if($xKey[GC_AFIELD_RESULT]) {
@@ -128,7 +128,7 @@ class QueryMySQL extends QueryAdapter {
 			$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
 			//
 			// Building 'where' sentence pieces.
-			$where = array();
+			$where = [];
 			foreach($whereFields as $key => $value) {
 				$xKey = self::ExpandFieldName($key);
 				if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
@@ -145,7 +145,7 @@ class QueryMySQL extends QueryAdapter {
 		}
 		//
 		// Building 'order by' sentence.
-		$order = array();
+		$order = [];
 		foreach($orderBy as $field => $way) {
 			$order[] = "{$fieldPrefix}{$field} {$way}";
 		}
@@ -166,14 +166,14 @@ class QueryMySQL extends QueryAdapter {
 
 		return $query;
 	}
-	public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = array()) {
+	public function updatePrepare($table, $dataFields, $whereFields, &$prefixes = []) {
 		$this->cleanPrefixes($prefixes);
 
-		$sets = array();
+		$sets = [];
 		foreach($dataFields as $key) {
 			$sets[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :d_{$key}";
 		}
-		$where = array();
+		$where = [];
 		foreach($whereFields as $key) {
 			$xKey = self::ExpandFieldName($key);
 			if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {

@@ -24,7 +24,7 @@ abstract class VersionAdapter extends \TooBasic\Adapters\Adapter {
 	/**
 	 * @var string[] List of known and allowed column types.
 	 */
-	protected static $_AllowedColumnTypes = array(
+	protected static $_AllowedColumnTypes = [
 		DBStructureManager::ColumnTypeBlob,
 		DBStructureManager::ColumnTypeEnum,
 		DBStructureManager::ColumnTypeFloat,
@@ -32,17 +32,17 @@ abstract class VersionAdapter extends \TooBasic\Adapters\Adapter {
 		DBStructureManager::ColumnTypeText,
 		DBStructureManager::ColumnTypeTimestamp,
 		DBStructureManager::ColumnTypeVarchar
-	);
+	];
 	/**
 	 * @var string[] List of known column types that doesn't require a size
 	 * specification.
 	 */
-	protected static $_ColumnTypesWithoutPrecisions = array(
+	protected static $_ColumnTypesWithoutPrecisions = [
 		DBStructureManager::ColumnTypeBlob,
 		DBStructureManager::ColumnTypeEnum,
 		DBStructureManager::ColumnTypeText,
 		DBStructureManager::ColumnTypeTimestamp,
-	);
+	];
 	//
 	// Protected properties
 	/**
@@ -96,13 +96,13 @@ abstract class VersionAdapter extends \TooBasic\Adapters\Adapter {
 	 * to analyse and accept the parsing.
 	 */
 	public function parseTableStartResponse($table, $callbacks) {
-		return array(
-			GC_AFIELD_ERRORS => array(),
+		return [
+			GC_AFIELD_ERRORS => [],
 			GC_AFIELD_IGNORED => false,
 			GC_AFIELD_CALLBACKS => $callbacks,
 			GC_AFIELD_KEY => false,
 			GC_AFIELD_SPECS => false,
-			GC_AFIELD_INDEXES => array()
-		);
+			GC_AFIELD_INDEXES => []
+		];
 	}
 }

@@ -40,7 +40,7 @@ abstract class Scaffold extends ShellTool {
 	/**
 	 * @var string[] List of files to be created.
 	 */
-	protected $_files = array();
+	protected $_files = [];
 	/**
 	 * @var boolean This flag indicates if existing files have to be
 	 * overwritten.
@@ -55,7 +55,7 @@ abstract class Scaffold extends ShellTool {
 	 * @var \TooBasic\Adapters\View\Smarty Shortcut to a Smarty view adapter.
 	 */
 	protected $_render = false;
-	protected $_requiredDirectories = array();
+	protected $_requiredDirectories = [];
 	/**
 	 * @var \stdClass[] List of routes to be added as configuration.
 	 */
@@ -113,11 +113,11 @@ abstract class Scaffold extends ShellTool {
 			foreach($this->_configLines as $path => $confLines) {
 				//
 				// Default values.
-				$sections = array(
-					GC_AFIELD_START => array(),
-					GC_AFIELD_MIDDLE => array(),
-					GC_AFIELD_END => array()
-				);
+				$sections = [
+					GC_AFIELD_START => [],
+					GC_AFIELD_MIDDLE => [],
+					GC_AFIELD_END => []
+				];
 				//
 				// Adding required end of line;
 				foreach($confLines as $pos => $confLine) {
@@ -176,7 +176,7 @@ abstract class Scaffold extends ShellTool {
 				}
 				//
 				// Re-building file
-				$builtLines = array();
+				$builtLines = [];
 				foreach($sections[GC_AFIELD_START] as $line) {
 					$builtLines[] = $line;
 				}
@@ -639,7 +639,7 @@ abstract class Scaffold extends ShellTool {
 		if(!$this->hasErrors() && $this->_assignments === false) {
 			//
 			// Default values.
-			$this->_assignments = array();
+			$this->_assignments = [];
 		}
 	}
 	/**
@@ -655,7 +655,7 @@ abstract class Scaffold extends ShellTool {
 		if(!$this->hasErrors() && $this->_configLines === false) {
 			//
 			// Default values.
-			$this->_configLines = array();
+			$this->_configLines = [];
 		}
 	}
 	/**
@@ -762,7 +762,7 @@ abstract class Scaffold extends ShellTool {
 			global $Paths;
 			//
 			// Default values.
-			$this->_names = array();
+			$this->_names = [];
 			//
 			// Base name.
 			$baseName = '';
@@ -816,7 +816,7 @@ abstract class Scaffold extends ShellTool {
 			$this->_requiredDirectories = array_unique($this->_requiredDirectories);
 			//
 			// Checking which directories have to be created.
-			$toGen = array();
+			$toGen = [];
 			foreach($this->_requiredDirectories as $dirPath) {
 				if(!is_dir($dirPath)) {
 					$toGen[] = $dirPath;
@@ -856,10 +856,10 @@ abstract class Scaffold extends ShellTool {
 		// Avoiding multiple generations.
 		if(!$this->hasErrors()) {
 			if($this->_routes === false) {
-				$this->_routes = array();
+				$this->_routes = [];
 			}
 			if($this->_tableRoutes === false) {
-				$this->_tableRoutes = array();
+				$this->_tableRoutes = [];
 			}
 		}
 	}
@@ -877,7 +877,7 @@ abstract class Scaffold extends ShellTool {
 		if(!$this->hasErrors() && $this->_translations === false) {
 			//
 			// Default values.
-			$this->_translations = array();
+			$this->_translations = [];
 		}
 	}
 	/**
@@ -1058,11 +1058,11 @@ abstract class Scaffold extends ShellTool {
 				}
 				//
 				// Default values.
-				$sections = array(
-					GC_AFIELD_START => array(),
-					GC_AFIELD_MIDDLE => array(),
-					GC_AFIELD_END => array()
-				);
+				$sections = [
+					GC_AFIELD_START => [],
+					GC_AFIELD_MIDDLE => [],
+					GC_AFIELD_END => []
+				];
 				//
 				// Adding required end of line;
 				foreach($confLines as $pos => $confLine) {
@@ -1115,7 +1115,7 @@ abstract class Scaffold extends ShellTool {
 				}
 				//
 				// Re-building file
-				$builtLines = array();
+				$builtLines = [];
 				foreach($sections[GC_AFIELD_START] as $line) {
 					$builtLines[] = $line;
 				}
@@ -1341,16 +1341,16 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function setOptions() {
 		$text = 'Use: $this->_options->option(self::OptionCreate)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, ['create', 'new', 'add'], Option::TypeValue, $text, 'name'));
 
 		$text = 'Use: $this->_options->option(self::OptionRemove)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'name'));
 
 		$text = 'Generate files inside a module.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-m'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionModule, ['--module', '-m'], Option::TypeValue, $text, 'name'));
 
 		$text = 'Overwrite files when they exist (routes are excluded).';
-		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionForced, ['--forced'], Option::TypeNoValue, $text));
 	}
 	/**
 	 * This is the main task in charge of creating scaffold assets.

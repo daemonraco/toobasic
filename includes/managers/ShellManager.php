@@ -37,7 +37,7 @@ class ShellManager extends Manager {
 	/**
 	 * @var mixed[] List of error found on a execution.
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 	/**
 	 * @var string This flag indicates what type of tool is been executed.
 	 */
@@ -162,8 +162,8 @@ class ShellManager extends Manager {
 			$param = $argv[1];
 			//
 			// Checking if there's an alias avoiding core values.
-			if(!in_array($param, array(self::ModeAlias, self::ModeCron, self::ModeProfile, self::ModeTool, self::ModeSys)) && isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
-				$aux = array();
+			if(!in_array($param, [self::ModeAlias, self::ModeCron, self::ModeProfile, self::ModeTool, self::ModeSys]) && isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
+				$aux = [];
 				//
 				// Copying each value.
 				foreach($argv as $k => $v) {
@@ -372,11 +372,11 @@ class ShellManager extends Manager {
 					//
 					// Generating a list of required
 					// parameters.
-					$mainParams = array(
+					$mainParams = [
 						$this->_script,
 						self::ModeCron,
 						$this->_tool
-					);
+					];
 					//
 					// Forwarding execution to a single tool,
 					// giving as parameters:
@@ -580,14 +580,14 @@ class ShellManager extends Manager {
 		$callerLine = array_shift($trace);
 		//
 		// Generating a error entry.
-		$error = array(
+		$error = [
 			GC_AFIELD_CODE => "SM-{$code}",
 			GC_AFIELD_MESSAGE => $message,
 			GC_AFIELD_CLASS => isset($callerLine['class']) ? $callerLine['class'] : false,
 			GC_AFIELD_METHOD => $callerLine['function'],
 			GC_AFIELD_FILE => $callingLine['file'],
 			GC_AFIELD_LINE => $callingLine['line']
-		);
+		];
 		//
 		// Adding error to and internal list.
 		$this->_errors[] = $error;

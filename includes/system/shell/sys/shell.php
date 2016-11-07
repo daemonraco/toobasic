@@ -39,15 +39,15 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 			// Assignments.
 			$this->_assignments['tool'] = $this->_names['tool-name'];
 			$this->_assignments['toolParent'] = $this->_names['tool-parent'];
-			$this->_assignments['options'] = array();
-			$this->_assignments['masterOptions'] = array();
+			$this->_assignments['options'] = [];
+			$this->_assignments['masterOptions'] = [];
 
 			$mpOpt = $this->_options->option(self::OptionMasterParam);
-			$mpNames = $mpOpt->activated() ? $mpOpt->value() : array();
+			$mpNames = $mpOpt->activated() ? $mpOpt->value() : [];
 			$pOpt = $this->_options->option(self::OptionParam);
-			$pNames = array_merge($mpNames, $pOpt->activated() ? $pOpt->value() : array());
-			$triggers = array();
-			$fullOption = array();
+			$pNames = array_merge($mpNames, $pOpt->activated() ? $pOpt->value() : []);
+			$triggers = [];
+			$fullOption = [];
 			//
 			// Cleaning master option names.
 			foreach($mpNames as &$mpName) {
@@ -61,9 +61,9 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 
 				$fullName = "--{$p}";
 				if(!in_array($fullName, $triggers)) {
-					$fullOption[$name] = array(
+					$fullOption[$name] = [
 						$fullName
-					);
+					];
 				} else {
 					$this->setError(self::ErrorParameters, "Trigger '{$fullName}' seems to be duplicated");
 				}
@@ -88,10 +88,10 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 				}
 				$name = $name[0];
 
-				$aux = array(
+				$aux = [
 					'name' => str_replace(' ', '', ucwords(implode(' ', explode('-', $name)))),
 					'triggers' => $optTriggers
-				);
+				];
 				switch($paramType) {
 					case 'M':
 						$aux[GC_AFIELD_TYPE] = 'TypeMultiValue';
@@ -139,11 +139,11 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 					$this->_names['tool-path'] = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SHELL_TOOLS]}/{$this->_names[GC_AFIELD_NAME]}.php");
 					break;
 			}
-			$this->_files[] = array(
+			$this->_files[] = [
 				GC_AFIELD_PATH => $this->_names['tool-path'],
 				GC_AFIELD_TEMPLATE => 'tool.html',
 				GC_AFIELD_DESCRIPTION => 'tool file'
-			);
+			];
 		}
 	}
 	protected function guessType() {
@@ -176,7 +176,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 
 		$text = 'This option allows you to select which type of tool you want to create. ';
 		$text.= 'Options are: cron or tool';
-		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'tool-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionType, ['--type', '-t'], Option::TypeValue, $text, 'tool-type'));
 
 		$text = 'Adds a param to be use in command line. ';
 		$text.= 'You can specify a type by writing something like \'--param name:V\'. ';
@@ -184,10 +184,10 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- 'N' for simple parameters (default).\n";
 		$text.= "\t- 'V' for options with one value.\n";
 		$text.= "\t- 'M' for options with multiple values.\n";
-		$this->_options->addOption(Option::EasyFactory(self::OptionParam, array('--param', '-p'), Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionParam, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
 
 		$text = 'Adds a param that triggers a method.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionMasterParam, array('--master-param', '-mp'), Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionMasterParam, ['--master-param', '-mp'], Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$ok = true;

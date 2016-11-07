@@ -55,7 +55,7 @@ class RoutesManager extends Manager {
 		//
 		// Default values.
 		$out = $path;
-		$debugInfo = array();
+		$debugInfo = [];
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -67,14 +67,14 @@ class RoutesManager extends Manager {
 			$this->parseConfigs();
 			//
 			// Variable to store the path pieces.
-			$newPath = array();
+			$newPath = [];
 			//
 			// Loading required information of the URL
-			$url = array(
+			$url = [
 				GC_AFIELD_QUERY => explode('&', parse_url($path, PHP_URL_QUERY)),
 				GC_AFIELD_HOST => parse_url($path, PHP_URL_HOST),
 				GC_AFIELD_PATH => parse_url($path, PHP_URL_PATH)
-			);
+			];
 			//
 			// Exploding each query parameter.
 			foreach($url[GC_AFIELD_QUERY] as $key => $value) {
@@ -90,7 +90,7 @@ class RoutesManager extends Manager {
 			$debugInfo['url-info'] = $url;
 			//
 			// Tring to match a suitable route.
-			$matchingRoutes = array();
+			$matchingRoutes = [];
 			//
 			// This works if there's not host set and if there's an
 			// action name given in the parameters.
@@ -133,10 +133,10 @@ class RoutesManager extends Manager {
 				unset($url[GC_AFIELD_QUERY][GC_REQUEST_SERVICE]);
 				//
 				// Checking each matching route.
-				$debugInfo['ignored-routes'] = array();
+				$debugInfo['ignored-routes'] = [];
 				foreach($matchingRoutes as $route) {
 					$wrong = false;
-					$newPath = array();
+					$newPath = [];
 					$auxQuery = $url[GC_AFIELD_QUERY];
 					//
 					// Checking routes pattern.
@@ -204,7 +204,7 @@ class RoutesManager extends Manager {
 				// If there are some unkwon parameters, they are
 				// given as query parameters.
 				if($url[GC_AFIELD_QUERY]) {
-					$aux = array();
+					$aux = [];
 					foreach($url[GC_AFIELD_QUERY] as $key => $value) {
 						$aux[] = "{$key}={$value}";
 					}
@@ -243,7 +243,7 @@ class RoutesManager extends Manager {
 		global $Defaults;
 		//
 		// Stack for debug information.
-		$debugInfo = array();
+		$debugInfo = [];
 		//
 		// This method works only when routes are active and there is a
 		// route in the URL query.
@@ -254,10 +254,10 @@ class RoutesManager extends Manager {
 			//
 			// Expanding given route for analysis.
 			$path = explode('/', $this->_params->{GC_REQUEST_ROUTE});
-			$debugInfo['route-parameter'] = array(
+			$debugInfo['route-parameter'] = [
 				'value' => $this->_params->{GC_REQUEST_ROUTE},
 				'exploded' => $path
-			);
+			];
 
 			$matches = false;
 			$matchingRoute = false;
@@ -265,10 +265,10 @@ class RoutesManager extends Manager {
 			$settings = false;
 			//
 			// Checking each configured route a matching one.
-			$debugInfo['ignored-routes'] = array();
+			$debugInfo['ignored-routes'] = [];
 			foreach($this->routes() as $route) {
 				$matches = true;
-				$settings = array();
+				$settings = [];
 				//
 				// Checking each piece.
 				$len = count($route->pattern);
@@ -346,36 +346,36 @@ class RoutesManager extends Manager {
 					// if they were not given by the URL query
 					// section.
 					if(!isset($this->_params->{$key})) {
-						$this->_params->addValues(Params::TypeGET, array($key => $value));
+						$this->_params->addValues(Params::TypeGET, [$key => $value]);
 					}
 				}
 				//
 				// Setting parameters found in the URL associated
 				// with the route.
 				foreach($settings as $key => $value) {
-					$this->_params->addValues(Params::TypeGET, array($key => $value));
+					$this->_params->addValues(Params::TypeGET, [$key => $value]);
 				}
 				//
 				// If there's an extra piece that was not
 				// consumed, it is readed as '_route'.
 				if($extraRoute) {
-					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_EXTRA_ROUTE => $extraRoute));
+					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_EXTRA_ROUTE => $extraRoute]);
 				}
 				//
 				// Setting the action/controller to exectute (or
 				// service).
 				if(boolval($matchingRoute->service)) {
-					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_SERVICE => $matchingRoute->service));
+					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_SERVICE => $matchingRoute->service]);
 				} else {
-					$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => $matchingRoute->action));
+					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_ACTION => $matchingRoute->action]);
 				}
 				//
 				// Adding route specs as a '$_SERVER' value.
-				$this->_params->addValues(Params::TypeSERVER, array(GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route));
+				$this->_params->addValues(Params::TypeSERVER, [GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route]);
 
 				$debugInfo['parameters'] = $this->_params->get->all();
 			} else {
-				$this->_params->addValues(Params::TypeGET, array(GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND));
+				$this->_params->addValues(Params::TypeGET, [GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND]);
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		} else {
@@ -416,7 +416,7 @@ class RoutesManager extends Manager {
 	protected function buildPattern(&$route) {
 		//
 		// Default values.
-		$pattern = array();
+		$pattern = [];
 		//
 		// Expanding an checking each piece on the route.
 		foreach(explode('/', $route->route) as $piece) {
@@ -446,7 +446,7 @@ class RoutesManager extends Manager {
 						$patPiece->valueType = self::ValueTypeString;
 						break;
 					case 'enum':
-						$vdata = isset($matches['vtypedata']) ? explode(',', $matches['vtypedata']) : array();
+						$vdata = isset($matches['vtypedata']) ? explode(',', $matches['vtypedata']) : [];
 						if($vdata) {
 							$patPiece->valueType = self::ValueTypeEnumerative;
 							$patPiece->values = $vdata;
@@ -568,7 +568,7 @@ class RoutesManager extends Manager {
 			// Route fields and defaults.
 			$routeFields = [
 				'action' => false,
-				'params' => array(),
+				'params' => [],
 				'route' => false,
 				'service' => false
 			];
@@ -684,7 +684,7 @@ class RoutesManager extends Manager {
 		if($this->_routes === false) {
 			//
 			// Default values.
-			$this->_routes = array();
+			$this->_routes = [];
 			//
 			// Global dependencies.
 			global $Defaults;
