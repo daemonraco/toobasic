@@ -554,19 +554,19 @@
 * [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
 * [Suggestions](docs/tech/queryadapter.md#suggestions)
 
-##  RESTful JavaScript Asset (docs/tech/restfull-asset.md):
+##  RESTful JavaScript Asset (docs/tech/restful-asset.md):
 
-* [What is this?](docs/tech/restfull-asset.md#what-is-this)
-* [How do I activate it](docs/tech/restfull-asset.md#how-do-i-activate-it)
-* [How to use it](docs/tech/restfull-asset.md#how-to-use-it)
-	* [Wrong URL](docs/tech/restfull-asset.md#wrong-url)
-* [Get all entries](docs/tech/restfull-asset.md#get-all-entries)
-* [Get one item by id](docs/tech/restfull-asset.md#get-one-item-by-id)
-* [Search](docs/tech/restfull-asset.md#search)
-* [Stats](docs/tech/restfull-asset.md#stats)
-* [Create](docs/tech/restfull-asset.md#create)
-* [Update](docs/tech/restfull-asset.md#update)
-* [Delete](docs/tech/restfull-asset.md#delete)
-* [Going further](docs/tech/restfull-asset.md#going-further)
-* [Suggestions](docs/tech/restfull-asset.md#suggestions)
+* [What is this?](docs/tech/restful-asset.md#what-is-this)
+* [How do I activate it](docs/tech/restful-asset.md#how-do-i-activate-it)
+* [How to use it](docs/tech/restful-asset.md#how-to-use-it)
+	* [Wrong URL](docs/tech/restful-asset.md#wrong-url)
+* [Get all entries](docs/tech/restful-asset.md#get-all-entries)
+* [Get one item by id](docs/tech/restful-asset.md#get-one-item-by-id)
+* [Search](docs/tech/restful-asset.md#search)
+* [Stats](docs/tech/restful-asset.md#stats)
+* [Create](docs/tech/restful-asset.md#create)
+* [Update](docs/tech/restful-asset.md#update)
+* [Delete](docs/tech/restful-asset.md#delete)
+* [Going further](docs/tech/restful-asset.md#going-further)
+* [Suggestions](docs/tech/restful-asset.md#suggestions)
 
