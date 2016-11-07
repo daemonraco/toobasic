@@ -58,9 +58,11 @@ if (window.jQuery) {
 		//
 		// Actions.
 		/**
-		 * This method uses the RESTful path 'resource/<resource-name>' (on
-		 * method GET).
+		 * This method uses the RESTful path 'resource/<resource-name>'
+		 * (on method GET).
 		 *
+		 * @param {type} params List of extra parameters to add on the
+		 * URL (optional).
 		 * @param {type} successFunc Success callback function.
 		 * @param {type} errorFunc Error callback function.
 		 * @returns {jqXHR}
@@ -82,7 +84,8 @@ if (window.jQuery) {
 			// Building URL.
 			var url = this.url + 'resource/' + this.resourceName + paramsToString(params);
 			this.logUrl(url);
-
+			//
+			// Calling RESful service.
 			return $.ajax({
 				dataType: 'json',
 				url: url,
@@ -91,7 +94,15 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | resource/<resource-name>      | POST   |
+		/**
+		 * This method uses the RESTful path 'resource/<resource-name>'
+		 * (on method POST).
+		 *
+		 * @param {type} Initilization values.
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.create = function (data, successFunc, errorFunc) {
 			//
 			// Fixing callbacks.
@@ -112,7 +123,17 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | resource/<resource-name>/<id> | GET    |
+		/**
+		 * This method uses the RESTful path
+		 * 'resource/<resource-name>/<id>' (on method GET).
+		 *
+		 * @param {type} id Items identifier.
+		 * @param {type} params List of extra parameters to add on the
+		 * URL (optional).
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.show = function (id, params, successFunc, errorFunc) {
 			//
 			// Fixing parameters.
@@ -129,7 +150,8 @@ if (window.jQuery) {
 			// Building URL.
 			var url = this.url + 'resource/' + this.resourceName + '/' + id + paramsToString(params);
 			this.logUrl(url);
-
+			//
+			// Calling RESful service.
 			return $.ajax({
 				dataType: 'json',
 				url: url,
@@ -138,7 +160,16 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | resource/<resource-name>/<id> | PUT    |
+		/**
+		 * This method uses the RESTful path
+		 * 'resource/<resource-name>/<id>' (on method PUT).
+		 *
+		 * @param {type} id Items identifier.
+		 * @param {type} Values to update.
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.update = function (id, data, successFunc, errorFunc) {
 			//
 			// Fixing callbacks.
@@ -159,7 +190,15 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | resource/<resource-name>/<id> | DELETE |
+		/**
+		 * This method uses the RESTful path
+		 * 'resource/<resource-name>/<id>' (on method DELETE).
+		 *
+		 * @param {type} id Items identifier.
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.destroy = function (id, successFunc, errorFunc) {
 			//
 			// Fixing callbacks.
@@ -169,7 +208,8 @@ if (window.jQuery) {
 			// Building URL.
 			var url = this.url + 'resource/' + this.resourceName + '/' + id;
 			this.logUrl(url);
-
+			//
+			// Calling RESful service.
 			return $.ajax({
 				url: url,
 				type: 'DELETE',
@@ -179,7 +219,17 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | search/<resource-name>        | GET    |
+		/**
+		 * This method uses the RESTful path 'search/<resource-name>' (on
+		 * method GET).
+		 *
+		 * @param {type} conditions Conditions to apply on search.
+		 * @param {type} params List of extra parameters to add on the
+		 * URL (optional).
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.search = function (conditions, params, successFunc, errorFunc) {
 			//
 			// Fixing parameters.
@@ -193,17 +243,19 @@ if (window.jQuery) {
 			successFunc = fixCallback(successFunc);
 			errorFunc = fixCallback(errorFunc);
 			//
-			// Building URL.
+			// Building conditions string.
 			var conditionsStr = [];
 			$.each(conditions, function (k, v) {
 				conditionsStr.push(k);
 				conditionsStr.push(v);
 			});
 			conditionsStr = conditionsStr.join('/');
-
+			//
+			// Building URL.
 			var url = this.url + 'search/' + this.resourceName + '/' + conditionsStr + paramsToString(params);
 			this.logUrl(url);
-
+			//
+			// Calling RESful service.
 			return $.ajax({
 				dataType: 'json',
 				url: url,
@@ -212,7 +264,14 @@ if (window.jQuery) {
 				error: errorFunc
 			});
 		};
-		// | stats/<resource-name>         | GET    |
+		/**
+		 * This method uses the RESTful path 'stats/<resource-name>' (on
+		 * method GET).
+		 *
+		 * @param {type} successFunc Success callback function.
+		 * @param {type} errorFunc Error callback function.
+		 * @returns {jqXHR}
+		 */
 		this.stats = function (successFunc, errorFunc) {
 			//
 			// Fixing callbacks.
@@ -222,7 +281,8 @@ if (window.jQuery) {
 			// Building URL.
 			var url = this.url + 'stats/' + this.resourceName;
 			this.logUrl(url);
-
+			//
+			// Calling RESful service.
 			return $.ajax({
 				dataType: 'json',
 				url: url,
@@ -233,6 +293,11 @@ if (window.jQuery) {
 		};
 		//
 		// Methods.
+		/**
+		 * This method simply logs a url in the console.
+		 *
+		 * @param {type} url Url to log.
+		 */
 		this.logUrl = function (url) {
 			console.log('RestManager[' + this.resourceName + '] call: ' + url);
 		};
@@ -244,12 +309,27 @@ if (window.jQuery) {
 		var dummyFunc = function () {
 			// Nothing to do here.
 		};
+		/**
+		 * This method take a parameter that shoud be a function and
+		 * returns it or a dummy one if it's not.
+		 *
+		 * @param {type} callback Value to check,
+		 * @returns {function}
+		 */
 		var fixCallback = function (callback) {
 			if (typeof callback !== 'function') {
 				callback = dummyFunc;
 			}
 			return callback;
 		}
+		/**
+		 * This method converts an object into a URL list of parameters.
+		 * @note: it assumes there's going to be another parameter before
+		 * it.
+		 *
+		 * @param {type} params Parameters to analyze.
+		 * @returns {String}
+		 */
 		var paramsToString = function (params) {
 			out = [];
 

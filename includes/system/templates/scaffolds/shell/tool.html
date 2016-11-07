@@ -18,7 +18,7 @@ class <%$tool%> extends TooBasic\Shell\<%$toolParent%> {
 <%foreach from=$options item=option%>
 
                 $text = "TODO help text for: '<%"', '"|implode:$option.triggers%>'.";
-		$this->_options->addOption(Option::EasyFactory(self::Option<%$option.name%>, array('<%"', '"|implode:$option.triggers%>'), Option::<%$option.type%>, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::Option<%$option.name%>, ['<%"', '"|implode:$option.triggers%>'], Option::<%$option.type%>, $text, 'value'));
 <%/foreach%>
 <%/if%>
 	}

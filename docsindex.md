@@ -563,6 +563,10 @@
 * [Get all entries](docs/tech/restfull-asset.md#get-all-entries)
 * [Get one item by id](docs/tech/restfull-asset.md#get-one-item-by-id)
 * [Search](docs/tech/restfull-asset.md#search)
+* [Stats](docs/tech/restfull-asset.md#stats)
+* [Create](docs/tech/restfull-asset.md#create)
+* [Update](docs/tech/restfull-asset.md#update)
+* [Delete](docs/tech/restfull-asset.md#delete)
 * [Going further](docs/tech/restfull-asset.md#going-further)
 * [Suggestions](docs/tech/restfull-asset.md#suggestions)
 

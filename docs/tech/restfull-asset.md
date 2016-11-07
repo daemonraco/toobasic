@@ -43,6 +43,18 @@ before and give a callback function that it's going to be run when the _ajax_ ca
 finishes.
 You can even give a second callback function to execute if something goes wrong.
 
+There's another way in which you can call this action:
+```javascript
+people_interface.index({
+	limit: 50,
+	offset: 150
+}, function(response) {
+	console.log('Full List:', response);
+});
+```
+In this way you'll be specifying _limit_ and _offset_ along giving you a way to
+change the position of the entries you require.
+
 ## Get one item by id
 To use the action `show` and get one item, you can do:
 ```javascript
@@ -54,17 +66,73 @@ people_interface.show(id, function(response) {
 Again, you can give a callback function as third parameter to do something on
 errors.
 
-## Search
-To use the action `show` and get one item, you can do:
+This action also provides a way to use it like this:
 ```javascript
 var id = 125;
-people_interface.show(id, function(response) {
+people_interface.show(id, {
+	expand: true
+}, function(response) {
 	console.log('Item with id ' + id + ' data:', response);
 });
 ```
 
+## Search
+To use the action `search` try this:
+```javascript
+people_interface.search({
+	name: 'John Doe',
+	age: 34
+}, {
+	expand: true,
+	limit: 5
+}, function(response) {
+	console.log('Found items:', response);
+});
+```
+If you want, you can avoid the second parameter and let it use defaults.
 
+## Stats
+To use the action `stats` try this:
+```javascript
+people_interface.stats(function(response) {
+	console.log('Found items:', response);
+});
+```
+If you want, you can avoid the second parameter and let it use defaults.
 
+## Create
+If you need to insert a new element you may use the action `create` in this way:
+```javascript
+people_interface.create({
+	name: 'Jane Doe',
+	age: 27,
+	height: 1.68
+}, function(response) {
+	console.log('Created item:', response);
+});
+```
+
+## Update
+Action `update` is similar to `create`, but it requires an id:
+```javascript
+var id = 329;
+people_interface.create(id, {
+	name: 'Jane Doe',
+	age: 28,
+	height: 1.67
+}, function(response) {
+	console.log('Item with id ' + id + ' updated. Data:', response);
+});
+```
+
+## Delete
+And yes, if you want to remove an item, you may use the action `destroy` in this
+way:
+```javascript
+people_interface.destroy(329, function(response) {
+	console.log('Item with id ' + id + ' updated. Data:', response);
+});
+```
 
 ## Going further
 If you want to go a bit further, you can expect that each called action return a
