@@ -9,6 +9,7 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
+use JSONValidator;
 use TooBasic\Params;
 use TooBasic\Paths;
 use TooBasic\Translate;
@@ -941,8 +942,16 @@ class DBStructureManager extends Manager {
 			$this->_specs = new \stdClass();
 		}
 		//
-		// Loading and checking file.
-		$json = json_decode(file_get_contents($path));
+		// Loading file contents.
+		$jsonString = file_get_contents($path);
+		//
+		// Validating JSON strucutre.
+		if(!self::GetValidator()->validate($jsonString, $info)) {
+			throw new DBStructureManagerException(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
+		}
+		//
+		// Checking file contents.
+		$json = json_decode($jsonString);
 		if(!$json) {
 			throw new DBStructureManagerException(Translate::Instance()->EX_JSON_invalid_file([
 				'path' => $path,
@@ -1340,5 +1349,26 @@ class DBStructureManager extends Manager {
 			// Triggering the index update.
 			$adapter->updateIndex($index);
 		}
+	}
+	//
+	// Protected class methods.
+	/**
+	 * This class method provides access to a JSONValidator object loaded for
+	 * Database structure specifications.
+	 *
+	 * @return \JSONValidator Returns a loaded validator.
+	 */
+	protected static function GetValidator() {
+		//
+		// Validators cache.
+		static $validator = false;
+		//
+		// Checking if the validators is loaded.
+		if(!$validator) {
+			global $Directories;
+			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/db.json");
+		}
+
+		return $validator;
 	}
 }

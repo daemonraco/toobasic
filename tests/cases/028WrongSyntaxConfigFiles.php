@@ -84,7 +84,7 @@ class WrongSyntaxConfigFilesTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_TOOBASIC_EXCEPTION, $response, "Response to '{$url}' doesn't have a TooBasic exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp("~(.*){$asset}(.*)is not a valid JSON~", $response, "Response to '{$url}' doesn't mention the broken file.");
+		$this->assertRegExp("~JSON file at '(.*){$asset}' doesn't match the specifications~", $response, "Response to '{$url}' doesn't mention the broken file.");
 	}
 	// @}
 }

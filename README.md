@@ -74,6 +74,8 @@ in [this link](docs/controller.md).
 If you are already using __TooBasic__ and you want to expand your possibilities,
 we suggest you visit this plugins:
 
+* [__JSInject__](https://github.com/daemonraco/toobasic-jsinject): Your PHP
+variables in your JS.
 * [__Logger__](https://github.com/daemonraco/toobasic-logger): To generate and
 manage log files in your site.
 * [__Workflows__](https://github.com/daemonraco/toobasic-workflows): If items in
