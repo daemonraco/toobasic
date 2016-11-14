@@ -53,6 +53,11 @@ abstract class ItemRepresentation {
 	 */
 	protected $_CP_ReadOnlyColumns = [];
 	/**
+	 * @var mixed[string] List of other representations that use current one
+	 * as grouping item.
+	 */
+	protected $_CP_SubLists = [];
+	/**
 	 * @var string Represented table's name (without prefix).
 	 */
 	protected $_CP_Table = '';
@@ -114,6 +119,11 @@ abstract class ItemRepresentation {
 	 * @var string[string] List of prefixes used by query adapters.
 	 */
 	protected $_queryAdapterPrefixes = false;
+	/**
+	 * @var mixed[string] This is the list of loaded sub-listing associated
+	 * with current representation.
+	 */
+	protected $_subListsMethods = [];
 	//
 	// Magic methods.
 	/**
@@ -132,6 +142,8 @@ abstract class ItemRepresentation {
 
 		if(isset($this->_extendedColumnMethods[$method])) {
 			$out = $this->callSubRepresentation($this->_extendedColumnMethods[$method], $args);
+		} elseif(isset($this->_subListsMethods[$method])) {
+			$out = $this->callSubList($method, $args);
 		} else {
 			throw new Exception(Translate::Instance()->EX_Unknown_method(['method' => $method]));
 		}
@@ -196,6 +208,35 @@ abstract class ItemRepresentation {
 			// Caching a reverse list of methods.
 			$this->_extendedColumnMethods[$specs[GC_REPRESENTATIONS_METHOD]] = $name;
 		}
+		//
+		// Checking sub lists.
+		foreach($this->_CP_SubLists as $name => &$specs) {
+			//
+			// Checking supposed fields.
+			if(!isset($specs[GC_REPRESENTATIONS_PLURAL])) {
+				$specs[GC_REPRESENTATIONS_PLURAL] = "{$name}s";
+			}
+			$specs[GC_REPRESENTATIONS_FACTORY_SHORTCUT] = false;
+			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
+				$specs[GC_REPRESENTATIONS_FACTORY] = $specs[GC_REPRESENTATIONS_PLURAL];
+			}
+			//
+			// Checking specs.
+			if(!isset($specs[GC_REPRESENTATIONS_COLUMN])) {
+				throw new Exception(Translate::Instance()->EX_sub_list_without_column(['name' => $name]));
+			}
+			//
+			// Generating known method names.
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_IDS])) {
+				$specs[GC_REPRESENTATIONS_METHOD_IDS] = "{$name}Ids";
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_IDS]] = $name;
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_ITEMS])) {
+				$specs[GC_REPRESENTATIONS_METHOD_ITEMS] = $specs[GC_REPRESENTATIONS_PLURAL];
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_ITEMS]] = $name;
+		}
+		unset($specs);
 	}
 	/**
 	 * This magic method allows to directly print a representation.
@@ -541,7 +582,64 @@ abstract class ItemRepresentation {
 	//
 	// Protected methods.
 	/**
-	 * This method attends calles for sub-representation, either to get or set
+	 * This method attends calls items that have current one as groupping
+	 * criteria.
+	 *
+	 * @param string string Called method name.
+	 * @param mixed[] $args Parameters given when a method of this kind was
+	 * called.
+	 * @return mixed Return the proper result to the requested method.
+	 * @throws \TooBasic\Exception
+	 */
+	protected function callSubList($method, $args) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Spec name shortcut.
+		$specsName = $this->_subListsMethods[$method];
+		//
+		// Factory shortcut.
+		if(!$this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]) {
+			//
+			// Expanding factory name and namespace.
+			$parts = explode('\\', $this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY]);
+			$factoryName = array_pop($parts);
+			$factoryNamespace = count($parts) > 0 ? implode('\\', $parts) : false;
+			//
+			// Trying to load the factory shortcut.
+			// @warning: This will always force the default database.
+			$this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT] = $this->magic()->representation->{$factoryName}(false, $factoryNamespace);
+			if(!$this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]) {
+				throw new Exception(Translate::Instance()->EX_cannot_load_representation_factory_class([
+					'name' => $this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY]
+				]));
+			}
+		}
+		//
+		// IDs method.
+		if($this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_METHOD_IDS] == $method) {
+			$conditions = isset($args[0]) && is_array($args[0]) ? $args[0] : [];
+			$order = isset($args[1]) && is_array($args[1]) ? $args[1] : [];
+			$out = $this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->idsBy(array_merge($conditions, [
+				$this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_COLUMN] => $this->id()
+				]), $order);
+		}
+		//
+		// Items method.
+		if($this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_METHOD_ITEMS] == $method) {
+			$conditions = isset($args[0]) && is_array($args[0]) ? $args[0] : [];
+			$order = isset($args[1]) && is_array($args[1]) ? $args[1] : [];
+			$out = $this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->itemsBy(array_merge($conditions, [
+				$this->_CP_SubLists[$specsName][GC_REPRESENTATIONS_COLUMN] => $this->id()
+				]), $order);
+		}
+		//
+		// Returning results.
+		return $out;
+	}
+	/**
+	 * This method attends calls for sub-representation, either to get or set
 	 * them.
 	 *
 	 * @param string $column Name of the column associated with such call.
@@ -564,7 +662,10 @@ abstract class ItemRepresentation {
 			//
 			// Checking the right type.
 			if(!$newItem instanceof ItemRepresentation) {
-				throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of(['type' => 'ItemRepresentation']));
+				throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+					'name' => '$args[0]',
+					'type' => 'ItemRepresentation'
+				]));
 			}
 			//
 			// Setting new values.

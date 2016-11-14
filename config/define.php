@@ -215,8 +215,13 @@ define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // @}
 //
 // Representations @{
+define('GC_REPRESENTATIONS_COLUMN', 'column');
 define('GC_REPRESENTATIONS_FACTORY', 'factory');
+define('GC_REPRESENTATIONS_FACTORY_SHORTCUT', 'factory-shortcut');
 define('GC_REPRESENTATIONS_METHOD', 'method');
+define('GC_REPRESENTATIONS_METHOD_IDS', 'id-method');
+define('GC_REPRESENTATIONS_METHOD_ITEMS', 'items-method');
+define('GC_REPRESENTATIONS_PLURAL', 'plural');
 // @}
 //
 // URIs @{

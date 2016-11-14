@@ -235,26 +235,39 @@ abstract class ItemsFactory {
 	 * prefixes and associated values are values to look for.
 	 *
 	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
 	 * @return int[] Returns a list of IDs.
 	 */
-	public function idsBy($conditions) {
+	public function idsBy($conditions, $order = []) {
 		//
 		// Default values.
 		$out = [];
 		//
 		// Checking conditions.
 		if(!is_array($conditions)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of(['type' => 'array']));
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$conditions',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Checking order.
+		if(!is_array($order)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$order',
+				'type' => 'array'
+			]));
 		}
 		//
 		// Enforcing order configuration.
 		if(!is_array($this->_CP_OrderBy)) {
 			$this->_CP_OrderBy = [];
 		}
+		$order = $order ? $order : $this->_CP_OrderBy;
 		//
 		// Generating a proper query to obtain a list of IDs.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, $conditions, $prefixes, $this->_CP_OrderBy);
+		$query = $this->_db->queryAdapter()->select($this->_CP_Table, $conditions, $prefixes, $order);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.
@@ -279,10 +292,11 @@ abstract class ItemsFactory {
 	 * prefixes and associated values are values to look for.
 	 *
 	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
 	 * @return int Returns the first ID that matches.
 	 */
-	public function idBy($conditions) {
-		$ids = $this->idsBy($conditions);
+	public function idBy($conditions, $order = []) {
+		$ids = $this->idsBy($conditions, $order);
 		return array_shift($ids);
 	}
 	/**
@@ -373,17 +387,18 @@ abstract class ItemsFactory {
 	 * prefixes and associated values are values to look for.
 	 *
 	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
 	 * @return \TooBasic\Representations\ItemRepresentation[] Returns a list
 	 * of representations.
 	 */
-	public function itemsBy($conditions) {
+	public function itemsBy($conditions, $order = []) {
 		//
 		// Default values.
 		$out = [];
 		//
 		// Fetching all available dis and creating a representation for
 		// each one of them.
-		foreach($this->idsBy($conditions) as $id) {
+		foreach($this->idsBy($conditions, $order) as $id) {
 			$out[$id] = $this->item($id);
 		}
 
@@ -397,11 +412,12 @@ abstract class ItemsFactory {
 	 * prefixes and associated values are values to look for.
 	 *
 	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
 	 * @return \TooBasic\Representations\ItemRepresentation Returns the first
 	 * representations that matches.
 	 */
-	public function itemBy($conditions) {
-		$items = $this->itemsBy($conditions);
+	public function itemBy($conditions, $order = []) {
+		$items = $this->itemsBy($conditions, $order);
 		return array_shift($items);
 	}
 	/**

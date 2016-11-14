@@ -163,6 +163,12 @@
 			"key": "EX_extended_column_without_factory",
 			"value": "Extended column '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
 		}, {
+			"key": "EX_sub_list_without_factory",
+			"value": "Representation sub-list '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
+		}, {
+			"key": "EX_sub_list_without_column",
+			"value": "Representation sub-list '%name%' has not column assigned (param 'GC_REPRESENTATIONS_COLUMN')."
+		}, {
 			"key": "EX_form_has_no_specification",
 			"value": "Given form has no specification."
 		}, {
@@ -248,7 +254,7 @@
 			"value": "Type mismatch. Object expected but '%type%' was given."
 		}, {
 			"key": "EX_parameter_is_not_instances_of",
-			"value": "Given parameter is not an instances of '%type%'."
+			"value": "Given parameter '%name%' is not an instances of '%type%'."
 		}, {
 			"key": "EX_path_extends_unexisting_type",
 			"value": "Path '%path%' extends '%father%' but it doesn't exist."
