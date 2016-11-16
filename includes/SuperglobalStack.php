@@ -16,7 +16,7 @@ class SuperglobalStack extends ParamsStack {
 	//
 	// Protected properties.
 	/**
-	 * @var string @todo doc
+	 * @var string Name of the superglobal being affected.
 	 */
 	protected $_paramName = false;
 	//

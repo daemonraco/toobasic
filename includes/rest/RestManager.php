@@ -452,7 +452,7 @@ class RestManager extends Manager {
 	 * This method analyzes and triggers the execution of actions 'index',
 	 * 'show', 'update', 'create' and 'destroy'.
 	 *
-	 * @return type @todo doc
+	 * @return mixed Returns the proper response for the request method.
 	 */
 	protected function runResource() {
 		//
@@ -794,8 +794,8 @@ class RestManager extends Manager {
 	/**
 	 * This method adds an error to the internal errors queue.
 	 *
-	 * @param type $message @todo doc
-	 * @param type $code @todo doc
+	 * @param string $message Message to attach to an error.
+	 * @param int $code Numeric error code.
 	 * @param mixed $info Extra information to attach.
 	 */
 	protected function setError($message, $code = HTTPERROR_INTERNAL_SERVER_ERROR, $info = false) {

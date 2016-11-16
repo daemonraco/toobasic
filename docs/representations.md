@@ -65,7 +65,7 @@ class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation 
 	protected $_CP_ColumnsPerfix = 'ppl_';
 	protected $_CP_Table = 'people';
 	protected $_CP_NameColumn = 'username';
-	protected $_CP_ReadOnlyColumns = array('age');
+	protected $_CP_ReadOnlyColumns = ['age'];
 }
 ```
 ### CP?
@@ -93,7 +93,7 @@ example, the right value would be __person__ and it will translate into
 __PersonRepresentation__ as a class name.
 * `$_CP_OrderBy`: It's a list of fields to use as sorting condition associated to
 a sorting direction. In our example, it may by
-`protected $_CP_OrderBy = array('fullname'=>'asc','username'=>'asc');`.
+`protected $_CP_OrderBy = ['fullname'=>'asc','username'=>'asc'];`.
 
 ## Let's use it
 Now, for the sake of our example, we'll create a model that updates the amount of
@@ -228,11 +228,11 @@ class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation 
 	protected $_CP_ColumnsPerfix = 'ppl_';
 	protected $_CP_Table = 'people';
 	protected $_CP_NameColumn = 'username';
-	protected $_CP_ReadOnlyColumns = array('age');
-	protected $_CP_ColumnFilters = array(
+	protected $_CP_ReadOnlyColumns = ['age'];
+	protected $_CP_ColumnFilters = [
 		'active' => GC_DATABASE_FIELD_FILTER_BOOLEAN,
 		'info' => GC_DATABASE_FIELD_FILTER_JSON
-	);
+	];
 }
 ```
 This simple modification tells __TooBasic__ to manage these fields the way we need
@@ -270,7 +270,7 @@ For example, let's suppose these two tables:
 |   3    | Findland  |
 
 A simple thing may want to do here is to get a person's entry and access its
-related country object without writting a lot of code.
+related country object without writing a lot of code.
 
 ### Representation definition
 To achieve this relationship we need to write a few specification in our person
@@ -281,11 +281,11 @@ class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation 
 	protected $_CP_IDColumn = 'id';
 	protected $_CP_ColumnsPerfix = 'ppl_';
 	protected $_CP_Table = 'people';
-	protected $_CP_ExtendedColumns = array(
-		'country' => array(
+	protected $_CP_ExtendedColumns = [
+		'country' => [
 			GC_REPRESENTATIONS_FACTORY => 'countries'
-		)
-	);
+		]
+	];
 }
 ```
 If you look at the _core property_ `$_CP_ExtendedColumns` you'll find a list with
@@ -317,10 +317,10 @@ class KidsModel extends \TooBasic\Model {
 	public function promptCountry($personId) {
 		$person = $this->representation->people->item($personId);
 		if($person) {
-			debugit(array(
+			debugit([
 				'ID only' => $person->country,
 				'full object' => $person->country()
-			), true);
+			], true);
 		} else {
 			debugit("Unknown id '{$personId}'.", true);
 		}
@@ -339,6 +339,59 @@ filter through its `toArray()` method.
 Yes, you can use these _magic methods_ to set new values with something like
 `$person->country($otherCountry)`, but remember to give a valid representation
 object as parameter (in our case a valid country).
+
+## Sub-lists
+Based on the previous example for _sub-representations_ we may want to reach all
+people of certain country.
+If that's the case we may use another _core property_ called `$_CP_SubLists` and
+write something like this inside our country representation, probably at
+`ROOTDIR/site/models/representations/CountryRepresentation.php`:
+```php
+<?php
+class CountryRepresentation extends \TooBasic\Representations\ItemRepresentation {
+	protected $_CP_IDColumn = 'id';
+	protected $_CP_ColumnsPerfix = 'cou_';
+	protected $_CP_Table = 'countries';
+	protected $_CP_NameColumn = 'name';
+	protected $_CP_SubLists = [
+		'person' => [
+			GC_REPRESENTATIONS_COLUMN => 'country',
+			GC_REPRESENTATIONS_PLURAL => 'people'
+		]
+	];
+}
+```
+This configuration provides two methods inside our _country_ representation that
+can be used in this way:
+```php
+<?php
+public function basicRun() {
+	$country = $this->representation->countries->item(1);
+	debugit([
+		'people ids'   => $country->personIds(),
+		'people items' => $country->people()
+	], true);
+. . .
+```
+Yes, that configuration created two methods called `personIds()` and `people()`
+that will interact with our _people_ representation factory and return a list of
+ids or even fully loaded items.
+
+Such configuration allows these fields:
+
+* `GC_REPRESENTATIONS_COLUMN`<sup>required</sup>: Name of the column where this
+representation is referred in the other table.
+* `GC_REPRESENTATIONS_PLURAL`: By default, __TooBasic__ assumes the sub-list name
+plus a `s` as plural name, but if it's something different this parameter allows
+the change.
+* `GC_REPRESENTATIONS_FACTORY`: When the factory does not match the plural name,
+this option let's you specify it.
+* `GC_REPRESENTATIONS_METHOD_IDS`: By default, __TooBasic__ assumes the sub-list
+name plus `Ids` as method name to retrieve a list of ids, but if you want
+something else, you may use this option.
+* `GC_REPRESENTATIONS_METHOD_ITEMS`: By default, __TooBasic__ assumes the plural
+name as method name to retrieve a list of fully loaded items, but if you want
+something else, you may use this option.
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:
