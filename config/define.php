@@ -217,10 +217,10 @@ define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // Representations @{
 define('GC_REPRESENTATIONS_COLUMN', 'column');
 define('GC_REPRESENTATIONS_FACTORY', 'factory');
-define('GC_REPRESENTATIONS_FACTORY_SHORTCUT', 'factory-shortcut');
+define('GC_REPRESENTATIONS_FACTORY_SHORTCUT', 'factory_shortcut');
 define('GC_REPRESENTATIONS_METHOD', 'method');
-define('GC_REPRESENTATIONS_METHOD_IDS', 'id-method');
-define('GC_REPRESENTATIONS_METHOD_ITEMS', 'items-method');
+define('GC_REPRESENTATIONS_METHOD_IDS', 'id_method');
+define('GC_REPRESENTATIONS_METHOD_ITEMS', 'items_method');
 define('GC_REPRESENTATIONS_PLURAL', 'plural');
 // @}
 //
@@ -284,6 +284,7 @@ define('GC_SERVER_TOOBASIC_ROUTE', 'TOOBASIC_ROUTE');
 // Class Suffixes @{
 define('GC_CLASS_SUFFIX_CONFIG', 'Config');
 define('GC_CLASS_SUFFIX_CONTROLLER', 'Controller');
+define('GC_CLASS_SUFFIX_CORE_PROPS', 'CoreProps');
 define('GC_CLASS_SUFFIX_CRON', 'Cron');
 define('GC_CLASS_SUFFIX_EMAIL_CONTROLLER', 'Email');
 define('GC_CLASS_SUFFIX_FACTORY', 'Factory');

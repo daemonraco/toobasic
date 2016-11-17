@@ -99,6 +99,8 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 //
 // Representations @{
 $SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\CoreProps'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CoreProps.php";
+$SuperLoader['TooBasic\\Representations\\CorePropsJSON'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CorePropsJSON.php";
 $SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
 $SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
 $SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";

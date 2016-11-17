@@ -1,0 +1,46 @@
+{
+	"root": "Representation",
+	"types": {
+		"Representation": {
+			"table": "+string",
+			"representation_class": "+string",
+			"columns_perfix": "+string",
+			"columns": "+Columns",
+			"order_by": "OrderBy",
+			"read_only_columns": "ReadOnlyColumns",
+			"disable_create": "string",
+			"column_filters": "ColumnFilters",
+			"extended_columns": "ExtendedColumns",
+			"sub_lists": "SubLists"
+		},
+		"Columns": {
+			"id": "+string",
+			"name": "string"
+		},
+		"ReadOnlyColumns": "string[]",
+		"OrderBy": "OrderByPattern{}",
+		"OrderByPattern": "/^(asc|desc)$/",
+		"ColumnFilters": "string{}",
+		"ExtendedColumns": "ExtendedColumn{}",
+		"ExtendedColumn": {
+			"factory": "+string",
+			"method": "string"
+		},
+		"SubLists": "SubList{}",
+		"SubList": {
+			"column": "+string",
+			"plural": "string",
+			"factory": "string",
+			"id_method": "string",
+			"items_method": "string"
+		}
+	},
+	"policies": {
+		"ExtendedColumn": {
+			"strict": true
+		},
+		"SubList": {
+			"strict": true
+		}
+	}
+}
