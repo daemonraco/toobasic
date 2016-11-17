@@ -276,7 +276,7 @@ class Translate extends Singleton {
 		global $LanguageName;
 		//
 		// Catching current language.
-		$this->_currentLang = $LanguageName;
+		$this->_currentLang = $LanguageName ? $LanguageName : \TooBasic\guessLanguage();
 	}
 	/**
 	 * This method loads configurated translation for the current language.

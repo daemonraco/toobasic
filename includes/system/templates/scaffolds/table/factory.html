@@ -3,14 +3,5 @@
 class <%$factoryName%> extends <%if $isSearchable%>\TooBasic\Search\SearchableItemsFactory<%else%>\TooBasic\Representations\ItemsFactory<%/if%> {
 	//
 	// Protected core properties.
-	protected $_CP_ColumnsPerfix = '<%$tablePrefix%>';
-	protected $_CP_IDColumn = 'id';
-<%if isset($nameField)%>
-	protected $_CP_NameColumn = '<%$nameField%>';
-	protected $_CP_OrderBy = [
-		'<%$nameField%>' => 'asc'
-	];
-<%/if%>
-	protected $_CP_RepresentationClass = '<%$singularName%>';
-	protected $_CP_Table = '<%$pluralName%>';
+	protected $_cp_pointer = '<%$pluralName%>';
 }

@@ -339,6 +339,11 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						];
 					}
 					$this->_files[] = [
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['plural-name']}.json"),
+						GC_AFIELD_GENERATOR => 'genCorePropsFile',
+						GC_AFIELD_DESCRIPTION => 'core properties file'
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
 						GC_AFIELD_TEMPLATE => 'representation.html',
 						GC_AFIELD_DESCRIPTION => 'representations file'
@@ -436,6 +441,54 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				}
 			}
 		}
+	}
+	protected function genCorePropsFile($path, $template, &$error) {
+		//
+		// Default values.
+		$out = true;
+		//
+		// Assignments.
+		$this->genAssignments();
+		//
+		// Main specs structure.
+		$specs = [
+			'table' => $this->_assignments['pluralName'],
+			'representation_class' => $this->_assignments['singularName'],
+			'columns_perfix' => $this->_assignments['tablePrefix'],
+			'columns' => [
+				'id' => 'id'
+			],
+			'read_only_columns' => [],
+			'column_filters' => new \stdClass(),
+			'extended_columns' => new \stdClass(),
+			'sub_lists' => new \stdClass()
+		];
+		//
+		// Name field.
+		if(isset($this->_assignments['nameField'])) {
+			$specs['columns']['name'] = $this->_assignments['nameField'];
+			$specs['order_by'] = [
+				$this->_assignments['nameField'] => 'asc'
+			];
+		}
+		//
+		// Searchable configurations.
+		if($this->_assignments['isSearchable']) {
+			$specs['column_filters'] = [
+				'indexed' => GC_DATABASE_FIELD_FILTER_BOOLEAN
+			];
+		}
+		//
+		// Generating file content.
+		$output = json_encode($specs, JSON_PRETTY_PRINT);
+
+		$result = file_put_contents($path, $output);
+		if($result === false) {
+			$error = "Unable to write file '{$path}'";
+			$out = false;
+		}
+
+		return $out;
 	}
 	protected function genFormBuilderFile($path, $template, &$error) {
 		//
