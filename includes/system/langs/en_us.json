@@ -94,6 +94,9 @@
 			"key": "EX_broken_module_manifest",
 			"value": "Unable to parse manifest of module '%module%'"
 		}, {
+			"key": "EX_cannot_load_core_props_class",
+			"value": "Cannot load core properties class '%name%'."
+		}, {
 			"key": "EX_cannot_load_representation_class",
 			"value": "Cannot load item representation '%name%'."
 		}, {

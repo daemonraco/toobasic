@@ -17,6 +17,12 @@ class Names extends FactoryClass {
 	public static function ControllerFilename($seed) {
 		return self::SnakeFilename($seed);
 	}
+	public static function CorePropsClass($seed) {
+		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_CORE_PROPS);
+	}
+	public static function CorePropsFilename($seed) {
+		return self::Filename(self::CorePropsClass($seed));
+	}
 	public static function EmailControllerClass($seed) {
 		return self::ClassNameWithSuffix($seed, GC_CLASS_SUFFIX_EMAIL_CONTROLLER);
 	}

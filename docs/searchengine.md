@@ -59,16 +59,32 @@ for something.
 Notice the addition of field `ppl_indexed`, this is a requirement of __TooBasic__
 Search Engine.
 
+### Core properties
+The first thing to create is a _core properties_ specification at
+`ROOTDIR/site/models/representations/people.json` with this content:
+```json
+{
+	"table": "people",
+	"representation_class": "person",
+	"columns_perfix": "ppl_",
+	"columns": {
+		"id": "id",
+		"name": "username"
+	},
+	"read_only_columns": [
+		"age"
+	]
+}
+```
+
 ### Representation
-The first thing to create is a representation class, but this time we are going to
-use a different parent class:
+The second thing to create is a representation class, but this time we are going
+to use a different parent class:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Search\SearchableItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
-	
+	protected $_corePropsHolder = 'people';
+
 	public function terms() {
 		return "{$this->fullname} {$this->username}";
 	}
@@ -99,11 +115,7 @@ factory in this way:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Search\SearchableItemsFactory {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
-	protected $_CP_NameColumn = 'username';
-	protected $_CP_ReadOnlyColumns = array('age');
+	protected $_corePropsHolder = 'people';
 }
 ```
 `TooBasic\Search\SearchableItemsFactory` is also a special class that takes care

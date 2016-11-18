@@ -462,12 +462,14 @@ class Paths extends Singleton {
 	 * (extension is assumed 'php').
 	 * @param boolean $full Indicates if all found files has to be retunred or
 	 * only one.
+	 * @param string $extension Extention of the file to look for. By default
+	 * '*.php'.
 	 * @return mixed Returns an array with every path found or just one string
 	 * when it's not set as full. All paths are absolute.
 	 */
-	public function representationPath($representationName, $full = false) {
+	public function representationPath($representationName, $full = false, $extension = self::ExtensionPHP) {
 		global $Paths;
-		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, self::ExtensionPHP, $full);
+		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, $extension, $full);
 	}
 	/**
 	 * This method resets all status forcing this class to reaload all of them

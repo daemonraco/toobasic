@@ -291,8 +291,8 @@
 
 * [What it this?](docs/representations.md#what-it-this)
 * [A table](docs/representations.md#a-table)
+* [Core properties](docs/representations.md#core-properties)
 * [Row representation](docs/representations.md#row-representation)
-	* [CP?](docs/representations.md#cp)
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
@@ -306,6 +306,7 @@
 	* [Usage](docs/representations.md#usage)
 	* [toArray()](docs/representations.md#toarray)
 	* [Setter](docs/representations.md#setter)
+* [Sub-lists](docs/representations.md#sub-lists)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  RESTful (docs/restful.md):
@@ -399,6 +400,7 @@
 	* [Searchable items](docs/searchengine.md#searchable-items)
 	* [Searchable item factories](docs/searchengine.md#searchable-item-factories)
 * [Examples](docs/searchengine.md#examples)
+	* [Core properties](docs/searchengine.md#core-properties)
 	* [Representation](docs/searchengine.md#representation)
 	* [Factory](docs/searchengine.md#factory)
 	* [Configuration?](docs/searchengine.md#configuration)

@@ -7,8 +7,8 @@ If you are not familiar with this it may seem heavy stuff, but it's not. Let's g
 through an example and see if it helps.
 
 ## A table
-Let's suppose you have a table in your database called __ss_people__ (__ss__ is
-the prefix for all your tables) and it has these fields on each row:
+Let's suppose you have a table in your database called `ss_people` (`ss_` is the
+prefix for all your tables) and it has these fields on each row:
 
 * `ppl_id`: Numeric unique identifier, also primary key.
 * `ppl_fullname`: Characters string.
@@ -24,81 +24,76 @@ Now let's suppose you have these rows inside your table:
 |   2    | Juan Perez   |   46    | hulk         |            2 |
 |   3    | Jane Doe     |   27    | ironman      |            1 |
 
+## Core properties
+Each table representation is given by three artifacts:
+
+* And a container that holds all properties that define a representation.
+* A class that may represent each row.
+* A class that represents the table.
+
+The first one is what we call _core properties_ and it is a JSON file in which we
+define all configurations for our representation.
+
+Following the example, we can create a file at
+`ROOTDIR/site/models/representations/people.json` with this content:
+```json
+{
+	"table": "people",
+	"representation_class": "person",
+	"columns_perfix": "ppl_",
+	"columns": {
+		"id": "id",
+		"name": "username"
+	},
+	"order_by": {
+		"fullname": "asc",
+		"username": "asc"
+	},
+	"read_only_columns": [
+		"age"
+	]
+}
+```
+
+This specification configures a table called `people` where each column has the
+prefix `ppl_`.
+Also it configures the to get get ids from column `ppl_id` and names from column
+`ppl_username`.
+Plus, whenever rows are retrieve, they'll be returned order by column
+`ppl_fullname` and then by `ppl_usename`, both in ascending order.
+
+We're also saying that column `ppl_age` can be changed using this representation,
+perhaps because we have other means to charge it.
+
 ## Row representation
-The first thing you need to represent is each row as an object and to accomplish
+The next thing you need to represent is each row as an object and to accomplish
 that we'll create a file with the next code and save it in
-__ROOTDIR/site/models/representations/PersonRepresentation.php__:
+`ROOTDIR/site/models/representations/PersonRepresentation.php`:
 ```php
 <?php
 class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
+	protected $_corePropsHolder = 'people';
 }
 ```
-
-As you may noticed, there are a few instance properties that look rather important
-and are related to your table, so let's explain them along with others that may
-come in handy:
-
-* `$_CP_IDColumn`: This is the column name (without its prefix) for an unique
-identifier of each row. This implies that your table must have a primary key
-composed by a single column.
-* `$_CP_ColumnsPerfix`: To make things cleaner, this property specifies the prefix
-used on every column. We recommend this practice to make your queries more
-readable.
-* `$_CP_Table`: This is the table name where all your represented rows are stored.
-* `$_CP_NameColumn`: If you have a column that can point specifically each row by
-a characters string you might want to set its name on this property (without
-prefix). In our example it would be __username__.
-* `$_CP_ReadOnlyColumns`: It's a list of column names (without prefix) of columns
-that cannot be altered due to internal reason. In our example, let's say __age__
-can't be modified because there's a different mechanism in charge of that.
-* `$_CP_ColumnFilters`: It's a list of column names (without prefix) associated
-with a field filter to apply when it's read or saved.
-
-With all this, out example may become this:
-```php
-<?php
-class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
-	protected $_CP_NameColumn = 'username';
-	protected $_CP_ReadOnlyColumns = ['age'];
-}
-```
-### CP?
-Yup, "Core Property" :'(
+The property `$_corePropsHolder` tells our representation to load all its
+configuration from the JSON file we've created in the previous step.
 
 ## Table representation
-The second and last thing we need to represent is the table itself, and for that
-we take a similar action writing a code like the next one and storing it at
-__ROOTDIR/site/models/representations/PeopleFactory.php__ (it sounds weird to say
-"people factory", let's just ignore that fact):
+The last thing we need to represent is the table itself, and for that we take a
+similar action writing a code like the next one and storing it at
+`ROOTDIR/site/models/representations/PeopleFactory.php`
+(it sounds weird to say "people factory", let's just ignore that fact):
 ```php
 <?php
 class PeopleFactory extends \TooBasic\Representations\ItemsFactory {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'rep_';
-	protected $_CP_RepresentationClass = 'person';
-	protected $_CP_Table = 'people';
+	protected $_corePropsHolder = 'people';
 }
 ```
-Here you have some properties you already know, so let's explain those you don't
-
-* `$_CP_RepresentationClass`: This is a way to point the class we've created in
-the previous step and it will be used to obtain row representations. In our
-example, the right value would be __person__ and it will translate into
-__PersonRepresentation__ as a class name.
-* `$_CP_OrderBy`: It's a list of fields to use as sorting condition associated to
-a sorting direction. In our example, it may by
-`protected $_CP_OrderBy = ['fullname'=>'asc','username'=>'asc'];`.
 
 ## Let's use it
 Now, for the sake of our example, we'll create a model that updates the amount of
 children a person has. Let's write the next code and save it in
-__ROOTDIR/site/models/Kids.php__:
+`ROOTDIR/site/models/Kids.php`:
 ```php
 <?php
 class KidsModel extends \TooBasic\Model {
@@ -112,12 +107,12 @@ class KidsModel extends \TooBasic\Model {
 	protected function init() {}
 }
 ```
-And that's it. Now, what just happend here?:
+And that's it. Now, what just happened here?:
 
 * First, we used the short access `$this->representation->people` to load and use
-our class __PeopeFactory__.
+our class `PeopeFactory`.
 	* Also, this short access can be used inside a controller, a service or a
-shell tool.
+shell tool, and any object making use of __MagicProps__.
 * Then, we use a method of it called `item()` to obtain a represented row for an
 specific id.
 * We've checked if we actually obtained a row, that's our `if`.
@@ -136,6 +131,7 @@ _Which database?_
 The one you've set as default would be the first option, but you may change this
 behavior by acquiring the factory in a different way, check the next example:
 ```php
+<?php
 class KidsModel extends \TooBasic\Model {
 	public function childrenChanged($personId) {
 		$personNew = $this->representation->people->item($personId);
@@ -145,15 +141,15 @@ class KidsModel extends \TooBasic\Model {
 	protected function init() {}
 }
 ```
-In the example we've created a method that works with two database connections.
-The variable `$personNew` represents a person store inside the default database
+In this example we've created a method that works with two database connections.
+The variable `$personNew` represents a person stored inside the default database
 while `$personOld` may represent the same person stored in a backup database.
 Based on that idea, the method `childrenChanged()` allows us to know if the
 current person had changes in its children count since the last time the backup
 was updated.
 
-This is how you can obtain a people factory pointing to a different database, in
-our case __backup__.
+This is how you can obtain a _people_ factory pointing to a different database, in
+our case `backup`.
 
 ## New entries
 A representation also allows you to create new entries and then modify its
@@ -172,7 +168,7 @@ public function addPerson($name, $age) {
 	}
 }
 ```
-Here you see the use of a method called `create()` which inserts a new record in
+Here you see the use of a method called `create()` that inserts a new record in
 your table and returns the inserted ID.
 Of course, this magic has a few condition before it can work:
 
@@ -188,7 +184,8 @@ immediately.
 ### Disabling empty creation
 If for any reason you think that creating new entries the way __TooBasic__ does it
 doesn't fit with your needs, you can disable this mechanism setting the _core
-property_ `$_CP_DisableCreate` to `true`.
+property_ `disable_create` to `true` in your JSON file at
+`ROOTDIR/site/models/representations/people.json`.
 If you do so, every time something calls to `create()` you'll get an exception
 with the next message allowing you to track the place where you should write some
 code:
@@ -202,7 +199,7 @@ as `createWithName`):
 >Method 'create()' cannot be called directly. Use 'createWithName()' instead.
 
 ## Field Filters
-Let's suppose that our table gets a little more complex and it looks like this:
+Let's suppose that our table gets a bit more complex and it looks like this:
 
 | ppl_id | ppl_fullname | ppl_age | ppl_username | ppl_children | ppl_active |           ppl_info          |
 |:------:|--------------|:-------:|--------------|-------------:|:----------:|:----------------------------|
@@ -220,19 +217,27 @@ two values (a _boolean_) and `ppl_info` as string decoded into an object and bac
 to string before saving.
 
 Here is where the concept of _field filters_ comes in handy.
-Let's change our representation definition into something like this:
-```php
-<?php
-class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
-	protected $_CP_NameColumn = 'username';
-	protected $_CP_ReadOnlyColumns = ['age'];
-	protected $_CP_ColumnFilters = [
-		'active' => GC_DATABASE_FIELD_FILTER_BOOLEAN,
-		'info' => GC_DATABASE_FIELD_FILTER_JSON
-	];
+Let's change our _core properties_ configuration into something like this:
+```json
+{
+	"table": "people",
+	"representation_class": "person",
+	"columns_perfix": "ppl_",
+	"columns": {
+		"id": "id",
+		"name": "username"
+	},
+	"order_by": {
+		"fullname": "asc",
+		"username": "asc"
+	},
+	"read_only_columns": [
+		"age"
+	],
+	"column_filters": {
+		"active": "boolean",
+		"info": "json"
+	}
 }
 ```
 This simple modification tells __TooBasic__ to manage these fields the way we need
@@ -269,27 +274,32 @@ For example, let's suppose these two tables:
 |   2    | Germany   |
 |   3    | Findland  |
 
-A simple thing may want to do here is to get a person's entry and access its
+A simple thing you may want to do here is to get a person's entry and access its
 related country object without writing a lot of code.
 
 ### Representation definition
-To achieve this relationship we need to write a few specification in our person
-representation.
-```php
-<?php
-class PersonRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'ppl_';
-	protected $_CP_Table = 'people';
-	protected $_CP_ExtendedColumns = [
-		'country' => [
-			GC_REPRESENTATIONS_FACTORY => 'countries'
-		]
-	];
+To achieve this relationship we need to write a few specification in our person's
+_core properties_ specification:
+```json
+{
+	"table": "people",
+	"representation_class": "person",
+	"columns_perfix": "ppl_",
+	"columns": {
+		"id": "id"
+	},
+	"order_by": {
+		"fullname": "asc"
+	},
+	"extended_columns": {
+		"country": {
+			"factory": "countries"
+		}
+	}
 }
 ```
-If you look at the _core property_ `$_CP_ExtendedColumns` you'll find a list with
-two important things.
+If you look at the _core property_ `extended_columns` you'll find a list with
+two important things:
 
 * The key of each entry is the name (without prefixes) of a column that holds id's
 in another table.
@@ -302,17 +312,18 @@ factory class called `CountriesFactory`.
 ### Relationship specifications
 Each relationship specifications may have these values:
 
-* `GC_REPRESENTATIONS_FACTORY` (required): Specifies the name of an items factory
-that can solve ids in this relationship.
-* `GC_REPRESENTATIONS_METHOD` (optional): Allows to define a specific name for the
-method that will attend request for the column. This option solves possible method
-name collisions.
+* `factory`<sup>required<sup>: Specifies the name of an items factory that can
+solve ids in this relationship.
+* `method`<sup>optional<sup>: Allows to define a specific name for the method that
+will attend request for the column. This option solves possible method name
+collisions.
 
 ### Usage
 _Now, how do I use it?_
 Once you have the configuration suggested above, you can write something like this
 in your codes.
 ```php
+<?php
 class KidsModel extends \TooBasic\Model {
 	public function promptCountry($personId) {
 		$person = $this->representation->people->item($personId);
@@ -343,55 +354,65 @@ object as parameter (in our case a valid country).
 ## Sub-lists
 Based on the previous example for _sub-representations_ we may want to reach all
 people of certain country.
-If that's the case we may use another _core property_ called `$_CP_SubLists` and
-write something like this inside our country representation, probably at
-`ROOTDIR/site/models/representations/CountryRepresentation.php`:
-```php
-<?php
-class CountryRepresentation extends \TooBasic\Representations\ItemRepresentation {
-	protected $_CP_IDColumn = 'id';
-	protected $_CP_ColumnsPerfix = 'cou_';
-	protected $_CP_Table = 'countries';
-	protected $_CP_NameColumn = 'name';
-	protected $_CP_SubLists = [
-		'person' => [
-			GC_REPRESENTATIONS_COLUMN => 'country',
-			GC_REPRESENTATIONS_PLURAL => 'people'
-		]
-	];
+If that's the case we may use another _core property_ called `sub_lists` and write
+something like this inside our _core property_ JSON specification:
+```json
+{
+	"table": "people",
+	"representation_class": "person",
+	"columns_perfix": "ppl_",
+	"columns": {
+		"id": "id"
+	},
+	"order_by": {
+		"fullname": "asc"
+	},
+	"extended_columns": {
+		"country": {
+			"factory": "countries"
+		}
+	},
+	"sub_lists": {
+		"person": {
+			"column": "country",
+			"plural": "people"
+		}
+	}
 }
 ```
-This configuration provides two methods inside our _country_ representation that
+This configuration provides three methods inside our _country_ representation that
 can be used in this way:
 ```php
-<?php
 public function basicRun() {
 	$country = $this->representation->countries->item(1);
 	debugit([
 		'people ids'   => $country->personIds(),
-		'people items' => $country->people()
+		'people items' => $country->people(),
+		'a person' => $country->person(1)
 	], true);
 . . .
 ```
-Yes, that configuration created two methods called `personIds()` and `people()`
-that will interact with our _people_ representation factory and return a list of
-ids or even fully loaded items.
+Yes, that configuration created three methods called `personIds()`, `person()` and
+`people()` that will interact with our _people_ representation factory and return
+a list of ids, one or even a list of fully loaded items.
 
 Such configuration allows these fields:
 
-* `GC_REPRESENTATIONS_COLUMN`<sup>required</sup>: Name of the column where this
-representation is referred in the other table.
-* `GC_REPRESENTATIONS_PLURAL`: By default, __TooBasic__ assumes the sub-list name
-plus a `s` as plural name, but if it's something different this parameter allows
-the change.
-* `GC_REPRESENTATIONS_FACTORY`: When the factory does not match the plural name,
-this option let's you specify it.
-* `GC_REPRESENTATIONS_METHOD_IDS`: By default, __TooBasic__ assumes the sub-list
-name plus `Ids` as method name to retrieve a list of ids, but if you want
-something else, you may use this option.
-* `GC_REPRESENTATIONS_METHOD_ITEMS`: By default, __TooBasic__ assumes the plural
-name as method name to retrieve a list of fully loaded items, but if you want
-something else, you may use this option.
+* `column`<sup>required</sup>: Name of the column where this representation is
+referred in the other table.
+* `plural`: By default, __TooBasic__ assumes the sub-list name plus a `s` as
+plural name, but if it's something different this parameter allows the change.
+* `factory`: When the factory does not match the plural name, this option let's
+you specify it.
+* `id_method`: By default, __TooBasic__ assumes the sub-list name plus `Ids` as
+method name to retrieve a list of ids, but if you want something else, you may use
+this option.
+* `items_method`: By default, __TooBasic__ assumes the plural name as method name
+to retrieve a list of fully loaded items, but if you want something else, you may
+use this option.
+* `item_method`: By default, __TooBasic__ assumes the sub-list name as method name
+to retrieve one fully loaded item, but if you want something else, you may use
+this option.
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:
@@ -399,5 +420,6 @@ If you want or need, you may visit these documentation pages:
 * [Models](models.md)
 * [Database Connections](databases.md)
 * [TooBasic's Search Engine](searchengine.md)
+* [MagicProps](magicprop.md)
 
 <!--:GBSUMMARY:Databases:2:Representations:-->
