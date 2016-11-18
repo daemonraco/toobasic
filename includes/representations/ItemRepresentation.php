@@ -134,7 +134,8 @@ abstract class ItemRepresentation {
 	 */
 	protected $_queryAdapterPrefixes = false;
 	/**
-	 * @var type @todo doc
+	 * @var mixed[string] List of representations that has this one as
+	 * grouping criteria.
 	 */
 	protected $_subListsSpecs = false;
 	/**
@@ -285,7 +286,7 @@ abstract class ItemRepresentation {
 	public function __get($name) {
 		//
 		// Default values.
-		$out = null;
+		$out = false;
 		//
 		// Checking if it's core property request
 		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {

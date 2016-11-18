@@ -15,11 +15,9 @@ use TooBasic\Translate;
 
 /**
  * @class CorePropsJSON
- * @todo doc 
+ * This class can provided access to core properties defined inside a JSON file.
  */
 class CorePropsJSON extends CoreProps {
-	//
-	// Magic methods.
 	//
 	// Public methods.
 	public function load($path) {

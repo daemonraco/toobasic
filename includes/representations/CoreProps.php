@@ -17,7 +17,8 @@ use TooBasic\Translate;
 /**
  * @class CoreProps
  * @abstract
- * @todo doc
+ * This class represent a holder of core properties of table representations and
+ * its used by item's representations and items' factories.
  */
 abstract class CoreProps {
 	//
@@ -80,14 +81,15 @@ abstract class CoreProps {
 	//
 	// Magic methods.
 	/**
-	 * @todo doc
+	 * This method provides easy access to core property values.
 	 *
-	 * @param type $name @todo doc
-	 * @return type @todo doc
+	 * @param string $name Property name to look for.
+	 * @return mixed Returns the value of the request property or FALSE if not
+	 * found.
 	 */
 	public function __get($name) {
 		$propName = "_{$name}";
-		return isset($this->{$propName}) ? $this->{$propName} : null;
+		return isset($this->{$propName}) ? $this->{$propName} : false;
 	}
 	//
 	// Public class methods.

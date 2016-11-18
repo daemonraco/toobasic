@@ -119,15 +119,16 @@ abstract class ItemsFactory {
 		throw new Exception(Translate::Instance()->EX_obj_clone_forbidden);
 	}
 	/**
-	 * @todo doc
+	 * This magic method provides a quick access to core properties.
 	 *
-	 * @param type $name @todo doc
-	 * @return type @todo doc
+	 * @param string $name Property name to look for.
+	 * @return mixed Returns the value of the request property or FALSE if not
+	 * found.
 	 */
 	public function __get($name) {
 		//
 		// Default values.
-		$out = null;
+		$out = false;
 		//
 		// Checking if it's core property request
 		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
