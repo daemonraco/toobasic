@@ -459,9 +459,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				'id' => 'id'
 			],
 			'read_only_columns' => [],
-			'column_filters' => new \stdClass(),
-			'extended_columns' => new \stdClass(),
-			'sub_lists' => new \stdClass()
+			'column_filters' => (object)[],
+			'extended_columns' => (object)[],
+			'sub_lists' => (object)[]
 		];
 		//
 		// Name field.
@@ -631,55 +631,60 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Adding an id column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'id';
-			$field->type = new \stdClass();
-			$field->type->type = 'int';
-			$field->type->precision = 11;
-			$field->null = false;
-			$field->autoincrement = true;
-			$table->fields[] = $field;
+			$table->fields[] = [
+				'name' => 'id',
+				'type' => [
+					'type' => 'int',
+					'precision' => 11
+				],
+				'null' => false,
+				'autoincrement' => true
+			];
 		}
 		//
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
-			$field = new \stdClass();
-			$field->name = $column[GC_AFIELD_NAME];
-			$field->type = new \stdClass();
-			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			$field = [
+				'name' => $column[GC_AFIELD_NAME],
+				'type' => [
+					'type' => $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]
+				],
+				'default' => $column[GC_AFIELD_DEFAULT],
+				'null' => $column[GC_AFIELD_NULL]
+			];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
-				$field->type->values = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
+				$field['type']['values'] = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
 			} else {
-				$field->type->precision = $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION];
+				$field['type']['precision'] = $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION];
 			}
-			$field->default = $column[GC_AFIELD_DEFAULT];
-			$field->null = $column[GC_AFIELD_NULL];
 
 			$table->fields[] = $field;
 		}
 		//
 		// Adding a creation date column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'create_date';
-			$field->type = new \stdClass();
-			$field->type->type = 'timestamp';
-			$field->type->precision = false;
-			$field->null = false;
-			$field->default = 'CURRENT_TIMESTAMP';
-			$table->fields[] = $field;
+			$table->fields[] = [
+				'name' => 'create_date',
+				'type' => [
+					'type' => 'timestamp',
+					'precision' => false
+				],
+				'null' => false,
+				'default' => 'CURRENT_TIMESTAMP'
+			];
 		}
 		//
 		// Adding an indexation status column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'indexed';
-			$field->type = new \stdClass();
-			$field->type->type = 'varchar';
-			$field->type->precision = 1;
-			$field->null = false;
-			$field->default = 'N';
-			$table->fields[] = $field;
+			$table->fields[] = [
+				'name' => 'indexed',
+				'type' => [
+					'type' => 'varchar',
+					'precision' => 1
+				],
+				'null' => false,
+				'default' => 'N'
+			];
 		}
 		//
 		// Adding table.
@@ -687,27 +692,29 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
-			$index = new \stdClass();
-			$index->name = "{$this->_assignments['tablePrefix']}id";
-			$index->table = $this->_assignments['pluralName'];
+			$index = [
+				'name' => "{$this->_assignments['tablePrefix']}id",
+				'table' => $this->_assignments['pluralName'],
+				'type' => 'primary',
+				'fields' => ['id']
+			];
 			if(isset($this->_assignments['connection'])) {
-				$index->connection = $this->_assignments['connection'];
+				$index['connection'] = $this->_assignments['connection'];
 			}
-			$index->type = 'primary';
-			$index->fields = ['id'];
 			$specs->indexes[] = $index;
 		}
 		//
 		// Adding unique index for name field.
 		if(isset($this->_assignments['nameField'])) {
-			$index = new \stdClass();
-			$index->name = "{$this->_assignments['tablePrefix']}{$this->_assignments['nameField']}";
-			$index->table = $this->_assignments['pluralName'];
+			$index = [
+				'name' => "{$this->_assignments['tablePrefix']}{$this->_assignments['nameField']}",
+				'table' => $this->_assignments['pluralName'],
+				'type' => 'key',
+				'fields' => [$this->_assignments['nameField']]
+			];
 			if(isset($this->_assignments['connection'])) {
-				$index->connection = $this->_assignments['connection'];
+				$index['connection'] = $this->_assignments['connection'];
 			}
-			$index->type = 'key';
-			$index->fields = [$this->_assignments['nameField']];
 			$specs->indexes[] = $index;
 		}
 		//
