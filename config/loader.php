@@ -34,6 +34,7 @@ $SuperLoader['TooBasic\\ParamsStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}
 $SuperLoader['TooBasic\\Paths'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Paths.php";
 $SuperLoader['TooBasic\\Service'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Service.php";
 $SuperLoader['TooBasic\\Singleton'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Singleton.php";
+$SuperLoader['TooBasic\\SpecsValidator'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/SpecsValidator.php";
 $SuperLoader['TooBasic\\SuperglobalStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/SuperglobalStack.php";
 $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer.php";
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";

@@ -9,8 +9,8 @@ namespace TooBasic\Representations;
 
 //
 // Class aliases.
-use JSONValidator;
 use TooBasic\Exception;
+use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
@@ -22,7 +22,7 @@ class CorePropsJSON extends CoreProps {
 	// Public methods.
 	public function load($path) {
 		$jsonString = file_get_contents($path);
-		if(!self::GetValidator()->validate($jsonString, $info)) {
+		if(!SpecsValidator::ValidateJsonString('representation', $jsonString, $info)) {
 			throw new Exception(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
 		}
 		$json = json_decode($jsonString, true);
@@ -38,26 +38,5 @@ class CorePropsJSON extends CoreProps {
 		$this->_RepresentationClass = isset($json['representation_class']) ? $json['representation_class'] : '';
 		$this->_SubLists = isset($json['sub_lists']) ? $json['sub_lists'] : [];
 		$this->_Table = isset($json['table']) ? $json['table'] : '';
-	}
-	//
-	// Protected class methods.
-	/**
-	 * This class method provides access to a JSONValidator object loaded for
-	 * Representation's specifications.
-	 *
-	 * @return \JSONValidator Returns a loaded validator.
-	 */
-	protected static function GetValidator() {
-		//
-		// Validators cache.
-		static $validator = false;
-		//
-		// Checking if the validators is loaded.
-		if(!$validator) {
-			global $Directories;
-			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/representation.json");
-		}
-
-		return $validator;
 	}
 }

@@ -9,11 +9,11 @@ namespace TooBasic\Forms;
 
 //
 // Class aliases.
-use JSONValidator;
 use TooBasic\MagicProp;
 use TooBasic\Managers\RoutesManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
@@ -660,7 +660,7 @@ class Form {
 				$jsonString = file_get_contents($this->path());
 				//
 				// Validating JSON strucutre.
-				if(!self::GetValidator()->validate($jsonString, $info)) {
+				if(!SpecsValidator::ValidateJsonString('formbuilder', $jsonString, $info)) {
 					throw new FormsException(Translate::Instance()->EX_json_path_fail_specs(['path' => $this->path()])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
 				}
 				//
@@ -678,26 +678,5 @@ class Form {
 				throw new FormsException(Translate::Instance()->EX_unable_to_read_form_path(['path' => $this->path()]));
 			}
 		}
-	}
-	//
-	// Protected class methods.
-	/**
-	 * This class method provides access to a JSONValidator object loaded for
-	 * Form Builder specifications.
-	 *
-	 * @return \JSONValidator Returns a loaded validator.
-	 */
-	protected static function GetValidator() {
-		//
-		// Validators cache.
-		static $validator = false;
-		//
-		// Checking if the validators is loaded.
-		if(!$validator) {
-			global $Directories;
-			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/formbuilder.json");
-		}
-
-		return $validator;
 	}
 }

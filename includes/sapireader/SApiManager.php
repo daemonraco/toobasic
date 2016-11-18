@@ -9,9 +9,9 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use JSONValidator;
 use TooBasic\Paths;
 use TooBasic\SApiReaderException;
+use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
@@ -75,44 +75,6 @@ class SApiManager extends \TooBasic\Managers\Manager {
 	//
 	// Protected class methods.
 	/**
-	 * This class method provides access to a JSONValidator object loaded for
-	 * abstract Simple API Reader specifications.
-	 *
-	 * @return \JSONValidator Returns a loaded validator.
-	 */
-	protected static function GetAbstractValidator() {
-		//
-		// Validators cache.
-		static $validator = false;
-		//
-		// Checking if the validators is loaded.
-		if(!$validator) {
-			global $Directories;
-			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/sapireader-abs.json");
-		}
-
-		return $validator;
-	}
-	/**
-	 * This class method provides access to a JSONValidator object loaded for
-	 * Simple API Reader specifications.
-	 *
-	 * @return \JSONValidator Returns a loaded validator.
-	 */
-	protected static function GetValidator() {
-		//
-		// Validators cache.
-		static $validator = false;
-		//
-		// Checking if the validators is loaded.
-		if(!$validator) {
-			global $Directories;
-			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/sapireader.json");
-		}
-
-		return $validator;
-	}
-	/**
 	 * This class method holds the logic to load a JSON configuration from
 	 * files and also extend it with some subfiles.
 	 *
@@ -154,8 +116,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 			}
 			//
 			// Validating JSON strucutre.
-			$validator = $json->abstract ? self::GetAbstractValidator() : self::GetValidator();
-			if(!$validator->validate(json_encode($json), $info)) {
+			if(!SpecsValidator::ValidateJsonString($json->abstract ? 'sapireader-abs' : 'sapireader', json_encode($json), $info)) {
 				throw new SApiReaderException(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
 			}
 			//

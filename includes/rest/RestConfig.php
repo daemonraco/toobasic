@@ -9,9 +9,9 @@ namespace TooBasic;
 
 //
 // Class aliases.
-use JSONValidator;
 use TooBasic\MagicProp;
 use TooBasic\Managers\RestManagerException;
+use TooBasic\SpecsValidator;
 
 /**
  * @class RestConfig
@@ -33,29 +33,8 @@ class RestConfig extends Config {
 		parent::__construct($name, $mode);
 		//
 		// Checking JSON against specifiations.
-		if(!self::GetValidator()->validate(json_encode($this), $info)) {
+		if(!SpecsValidator::ValidateJsonString('rest', json_encode($this), $info)) {
 			throw new RestManagerException(MagicProp::Instance()->tr->EX_rest_config_broken." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
 		}
-	}
-	//
-	// Protected class methods.
-	/**
-	 * This class method provides access to a JSONValidator object loaded for
-	 * RESTful configurations.
-	 *
-	 * @return \JSONValidator Returns a loaded validator.
-	 */
-	protected static function GetValidator() {
-		//
-		// Validators cache.
-		static $validator = false;
-		//
-		// Checking if the validators is loaded.
-		if(!$validator) {
-			global $Directories;
-			$validator = JSONValidator::LoadFromFile("{$Directories[GC_DIRECTORIES_SPECS]}/rest.json");
-		}
-
-		return $validator;
 	}
 }
