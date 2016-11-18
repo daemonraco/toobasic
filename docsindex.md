@@ -400,6 +400,7 @@
 	* [Searchable items](docs/searchengine.md#searchable-items)
 	* [Searchable item factories](docs/searchengine.md#searchable-item-factories)
 * [Examples](docs/searchengine.md#examples)
+	* [Core properties](docs/searchengine.md#core-properties)
 	* [Representation](docs/searchengine.md#representation)
 	* [Factory](docs/searchengine.md#factory)
 	* [Configuration?](docs/searchengine.md#configuration)
