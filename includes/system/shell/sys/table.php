@@ -432,7 +432,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				if(!$this->isRaw()) {
 					//
 					// Setting table routes.
-					$tableRoute = new \stdClass();
+					$tableRoute = (object) [];
 					$tableRoute->singularName = $this->_names['singular-name'];
 					$tableRoute->pluralName = $this->_names['plural-name'];
 					$tableRoute->searchable = isset($this->_names['search-code']) ? $this->_names['search-code'] : false;
@@ -459,9 +459,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				'id' => 'id'
 			],
 			'read_only_columns' => [],
-			'column_filters' => (object)[],
-			'extended_columns' => (object)[],
-			'sub_lists' => (object)[]
+			'column_filters' => (object) [],
+			'extended_columns' => (object) [],
+			'sub_lists' => (object) []
 		];
 		//
 		// Name field.
@@ -611,27 +611,29 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->genAssignments();
 		//
 		// Main specs structure.
-		$specs = new \stdClass();
-		$specs->tables = [];
-		$specs->indexes = [];
+		$specs = [
+			'tables' => [],
+			'indexes' => []
+		];
 		//
 		// Table specs.
-		$table = new \stdClass();
-		$table->version = 1;
-		$table->usesFormBuilder = $this->_names['form-builder'];
-		$table->name = $this->_assignments['pluralName'];
-		$table->prefix = $this->_assignments['tablePrefix'];
+		$table = [
+			'version' => 1,
+			'usesFormBuilder' => $this->_names['form-builder'],
+			'name' => $this->_assignments['pluralName'],
+			'prefix' => $this->_assignments['tablePrefix']
+		];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
-			$table->engine = 'myisam';
+			$table['engine'] = 'myisam';
 		}
 		if(isset($this->_assignments['connection'])) {
-			$table->connection = $this->_assignments['connection'];
+			$table['connection'] = $this->_assignments['connection'];
 		}
-		$table->fields = [];
+		$table['fields'] = [];
 		//
 		// Adding an id column.
 		if(!$this->isRaw()) {
-			$table->fields[] = [
+			$table['fields'][] = [
 				'name' => 'id',
 				'type' => [
 					'type' => 'int',
@@ -658,12 +660,12 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$field['type']['precision'] = $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION];
 			}
 
-			$table->fields[] = $field;
+			$table['fields'][] = $field;
 		}
 		//
 		// Adding a creation date column.
 		if(!$this->isRaw()) {
-			$table->fields[] = [
+			$table['fields'][] = [
 				'name' => 'create_date',
 				'type' => [
 					'type' => 'timestamp',
@@ -676,7 +678,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		//
 		// Adding an indexation status column.
 		if(!$this->isRaw()) {
-			$table->fields[] = [
+			$table['fields'][] = [
 				'name' => 'indexed',
 				'type' => [
 					'type' => 'varchar',
@@ -688,7 +690,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		}
 		//
 		// Adding table.
-		$specs->tables[] = $table;
+		$specs['tables'][] = $table;
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
@@ -701,7 +703,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			if(isset($this->_assignments['connection'])) {
 				$index['connection'] = $this->_assignments['connection'];
 			}
-			$specs->indexes[] = $index;
+			$specs['indexes'][] = $index;
 		}
 		//
 		// Adding unique index for name field.
@@ -715,7 +717,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			if(isset($this->_assignments['connection'])) {
 				$index['connection'] = $this->_assignments['connection'];
 			}
-			$specs->indexes[] = $index;
+			$specs['indexes'][] = $index;
 		}
 		//
 		// Generating file content.
@@ -738,83 +740,86 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->genAssignments();
 		//
 		// Main specs structure.
-		$specs = new \stdClass();
-		$specs->tables = [];
+		$specs = [
+			'tables' => []
+		];
 		//
 		// Table specs.
-		$table = new \stdClass();
-		$table->version = 2;
-		$table->usesFormBuilder = $this->_names['form-builder'];
-		$table->name = $this->_assignments['pluralName'];
-		$table->prefix = $this->_assignments['tablePrefix'];
+		$table = [
+			'version' => 2,
+			'usesFormBuilder' => $this->_names['form-builder'],
+			'name' => $this->_assignments['pluralName'],
+			'prefix' => $this->_assignments['tablePrefix']
+		];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
-			$table->engine = 'myisam';
+			$table['engine'] = 'myisam';
 		}
 		if(isset($this->_assignments['connection'])) {
-			$table->connection = $this->_assignments['connection'];
+			$table['connection'] = $this->_assignments['connection'];
 		}
-		$table->fields = [];
+		$table['fields'] = [];
 		//
 		// Adding an id column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'int';
-			$field->autoincrement = true;
-			$table->fields['id'] = $field;
+			$table['fields']['id'] = [
+				'type' => 'int',
+				'autoincrement' => true
+			];
 		}
 		//
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
-			$field = new \stdClass();
-			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			$field = [
+				'type' => $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]
+			];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
-				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
-			} elseif($field->type == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PrecisionVarchar) {
-				$field->type = "{$field->type}:{$column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION]}";
+				$field['type'] = "{$field['type']}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+			} elseif($field['type'] == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PrecisionVarchar) {
+				$field['type'] = "{$field['type']}:{$column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION]}";
 			}
 			if($column[GC_AFIELD_DEFAULT]) {
-				$field->default = $column[GC_AFIELD_DEFAULT];
+				$field['default'] = $column[GC_AFIELD_DEFAULT];
 			} else {
-				$field = $field->type;
+				$field = $field['type'];
 			}
 
-			$table->fields[$column[GC_AFIELD_NAME]] = $field;
+			$table['fields'][$column[GC_AFIELD_NAME]] = $field;
 		}
 		//
 		// Adding a creation date column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'timestamp';
-			$field->null = false;
-			$field->default = 'CURRENT_TIMESTAMP';
-			$table->fields['create_date'] = $field;
+			$table['fields']['create_date'] = [
+				'type' => 'timestamp',
+				'null' => false,
+				'default' => 'CURRENT_TIMESTAMP'
+			];
 		}
 		//
 		// Adding an indexation status column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'varchar:1';
-			$field->null = false;
-			$field->default = 'N';
-			$table->fields['indexed'] = $field;
+			$table['fields']['indexed'] = [
+				'type' => 'varchar:1',
+				'null' => false,
+				'default' => 'N'
+			];
 		}
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
-			$table->primary = new \stdClass();
-			$table->primary->id = ['id'];
+			$table['primary'] = [
+				'id' => ['id']
+			];
 		}
 		//
 		// Adding unique index for name field.
 		if(isset($this->_assignments['nameField'])) {
-			$table->keys = new \stdClass();
-			$table->keys->{$this->_assignments['nameField']} = [
-				$this->_assignments['nameField']
+			$table['keys'] = [
+				$this->_assignments['nameField'] => [$this->_assignments['nameField']]
 			];
 		}
 		//
 		// Adding table.
-		$specs->tables[] = $table;
+		$specs['tables'][] = $table;
 		//
 		// Generating file content.
 		$output = json_encode($specs, JSON_PRETTY_PRINT);
@@ -835,20 +840,20 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->genAssignments();
 			//
 			// Delete button label
-			$auxTr = new \stdClass();
+			$auxTr = (object) [];
 			$auxTr->key = "btn_delete_{$this->_names['singular-name']}";
 			$auxTr->value = 'Delete this '.ucwords(str_replace('_', ' ', $this->_names['singular-name']));
 			$this->_translations[] = $auxTr;
 
 			foreach($this->_assignments['tableFields'] as $column) {
-				$auxTr = new \stdClass();
+				$auxTr = (object) [];
 				$auxTr->key = "table_column_{$column[GC_AFIELD_NAME]}";
 				$auxTr->value = ucwords(str_replace('_', ' ', $column[GC_AFIELD_NAME]));
 				$this->_translations[] = $auxTr;
 
 				if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 					foreach($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES] as $option) {
-						$auxTr = new \stdClass();
+						$auxTr = (object) [];
 						$auxTr->key = "select_option_{$option}";
 						$auxTr->value = ucwords(str_replace('_', ' ', $option));
 						$this->_translations[] = $auxTr;
