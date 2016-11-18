@@ -136,6 +136,7 @@ _Which database?_
 The one you've set as default would be the first option, but you may change this
 behavior by acquiring the factory in a different way, check the next example:
 ```php
+<?php
 class KidsModel extends \TooBasic\Model {
 	public function childrenChanged($personId) {
 		$personNew = $this->representation->people->item($personId);
@@ -313,6 +314,7 @@ _Now, how do I use it?_
 Once you have the configuration suggested above, you can write something like this
 in your codes.
 ```php
+<?php
 class KidsModel extends \TooBasic\Model {
 	public function promptCountry($personId) {
 		$person = $this->representation->people->item($personId);
@@ -364,7 +366,6 @@ class CountryRepresentation extends \TooBasic\Representations\ItemRepresentation
 This configuration provides two methods inside our _country_ representation that
 can be used in this way:
 ```php
-<?php
 public function basicRun() {
 	$country = $this->representation->countries->item(1);
 	debugit([
@@ -373,9 +374,9 @@ public function basicRun() {
 	], true);
 . . .
 ```
-Yes, that configuration created two methods called `personIds()` and `people()`
-that will interact with our _people_ representation factory and return a list of
-ids or even fully loaded items.
+Yes, that configuration created two methods called `personIds()`, `person()` and
+`people()` that will interact with our _people_ representation factory and return
+a list of ids or even fully loaded items.
 
 Such configuration allows these fields:
 
@@ -392,6 +393,9 @@ something else, you may use this option.
 * `GC_REPRESENTATIONS_METHOD_ITEMS`: By default, __TooBasic__ assumes the plural
 name as method name to retrieve a list of fully loaded items, but if you want
 something else, you may use this option.
+* `GC_REPRESENTATIONS_METHOD_ITEM`: By default, __TooBasic__ assumes the sub-list
+name as method name to retrieve one fully loaded item, but if you want something
+else, you may use this option.
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:

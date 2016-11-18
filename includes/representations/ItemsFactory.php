@@ -33,7 +33,7 @@ abstract class ItemsFactory {
 	//
 	// Protected core properties.
 	/**
-	 *   @deprecated remove on version 2.3.0 (issue #188)
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Generic prefix for all columns on the represented table.
 	 */
 	protected $_CP_ColumnsPerfix = '';

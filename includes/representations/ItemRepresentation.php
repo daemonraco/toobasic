@@ -244,15 +244,22 @@ abstract class ItemRepresentation {
 				throw new Exception(Translate::Instance()->EX_sub_list_without_column(['name' => $name]));
 			}
 			//
-			// Generating known method names.
+			// Generating known method names @{
 			if(!isset($specs[GC_REPRESENTATIONS_METHOD_IDS])) {
 				$specs[GC_REPRESENTATIONS_METHOD_IDS] = "{$name}Ids";
 			}
 			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_IDS]] = $name;
+
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_ITEM])) {
+				$specs[GC_REPRESENTATIONS_METHOD_ITEM] = $name;
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_ITEM]] = $name;
+
 			if(!isset($specs[GC_REPRESENTATIONS_METHOD_ITEMS])) {
 				$specs[GC_REPRESENTATIONS_METHOD_ITEMS] = $specs[GC_REPRESENTATIONS_PLURAL];
 			}
 			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_ITEMS]] = $name;
+			// @}
 		}
 		unset($specs);
 	}
@@ -652,6 +659,12 @@ abstract class ItemRepresentation {
 			$out = $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->idsBy(array_merge($conditions, [
 				$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_COLUMN] => $this->id()
 				]), $order);
+		}
+		//
+		// Item method.
+		if($this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_METHOD_ITEM] == $method) {
+			$id = isset($args[0]) ? $args[0] : false;
+			$out = $id === false ? null : $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->item($id);
 		}
 		//
 		// Items method.

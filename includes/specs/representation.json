@@ -32,6 +32,7 @@
 			"plural": "string",
 			"factory": "string",
 			"id_method": "string",
+			"item_method": "string",
 			"items_method": "string"
 		}
 	},

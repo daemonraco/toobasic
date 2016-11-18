@@ -220,6 +220,7 @@ define('GC_REPRESENTATIONS_FACTORY', 'factory');
 define('GC_REPRESENTATIONS_FACTORY_SHORTCUT', 'factory_shortcut');
 define('GC_REPRESENTATIONS_METHOD', 'method');
 define('GC_REPRESENTATIONS_METHOD_IDS', 'id_method');
+define('GC_REPRESENTATIONS_METHOD_ITEM', 'item_method');
 define('GC_REPRESENTATIONS_METHOD_ITEMS', 'items_method');
 define('GC_REPRESENTATIONS_PLURAL', 'plural');
 // @}
