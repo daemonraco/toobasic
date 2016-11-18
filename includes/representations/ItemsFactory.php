@@ -72,12 +72,13 @@ abstract class ItemsFactory {
 	 * @var string Represented table's name (without prefix).
 	 */
 	protected $_CP_Table = '';
-	/**
-	 * @var type @todo doc
-	 */
-	protected $_cp_pointer = false;
 	//
 	// Protected properties.	
+	/**
+	 * @var string Name of the class or JSON specs where core properties are
+	 * held.
+	 */
+	protected $_corePropsHolder = false;
 	/**
 	 * @var \TooBasic\Adapters\DB\Adapter Database connection shortcut.
 	 */
@@ -130,8 +131,8 @@ abstract class ItemsFactory {
 		//
 		// Checking if it's core property request
 		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
-			if($this->_cp_pointer) {
-				$out = CoreProps::GetCoreProps($this->_cp_pointer)->{$match['name']};
+			if($this->_corePropsHolder) {
+				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
 			} else {
 				$localName = "_CP_{$match['name']}";
 				$out = $this->{$localName};

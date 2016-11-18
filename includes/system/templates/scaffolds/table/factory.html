@@ -2,6 +2,6 @@
 
 class <%$factoryName%> extends <%if $isSearchable%>\TooBasic\Search\SearchableItemsFactory<%else%>\TooBasic\Representations\ItemsFactory<%/if%> {
 	//
-	// Protected core properties.
-	protected $_cp_pointer = '<%$pluralName%>';
+	// Protected properties.
+	protected $_corePropsHolder = '<%$pluralName%>';
 }

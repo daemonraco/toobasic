@@ -306,6 +306,7 @@
 	* [Usage](docs/representations.md#usage)
 	* [toArray()](docs/representations.md#toarray)
 	* [Setter](docs/representations.md#setter)
+* [Sub-lists](docs/representations.md#sub-lists)
 * [Suggestions](docs/representations.md#suggestions)
 
 ##  RESTful (docs/restful.md):
