@@ -291,8 +291,8 @@
 
 * [What it this?](docs/representations.md#what-it-this)
 * [A table](docs/representations.md#a-table)
+* [Core properties](docs/representations.md#core-properties)
 * [Row representation](docs/representations.md#row-representation)
-	* [CP?](docs/representations.md#cp)
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)

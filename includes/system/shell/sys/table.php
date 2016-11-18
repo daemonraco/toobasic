@@ -459,6 +459,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				'id' => 'id'
 			],
 			'read_only_columns' => [],
+			'disable_create' => false,
 			'column_filters' => (object) [],
 			'extended_columns' => (object) [],
 			'sub_lists' => (object) []
