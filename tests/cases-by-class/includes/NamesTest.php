@@ -43,6 +43,10 @@ class TooBasic_NamesTest extends TooBasic_TestCase {
 		$this->myClassTester('MyClassTool', 'ShellToolClass');
 		$this->myClassTester('MyTool', 'ShellToolClass', 'Tool');
 	}
+	public function testCorePropsClass() {
+		$this->myClassTester('MyClassCoreProps', 'CorePropsClass');
+//		$this->myClassTester('MyTool', 'CorePropsClass', 'CoreProps');
+	}
 	// @}
 	//
 	// Filename names @{

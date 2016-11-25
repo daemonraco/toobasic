@@ -28,4 +28,10 @@ class Selenium_ControllerSystoolTest extends TooBasic_SeleniumTestCase {
 		$html = $this->source();
 		$this->assertRegExp('/HelloWorldController/', $html, "Page does not contain the keyword 'HelloWorldController'.");
 	}
+	public function testRemoveController() {
+		$this->runCommand('php shell.php sys controller remove hello_world');
+
+		$this->assertFalse(is_file(TESTS_ROOTDIR."/site/controllers/hello_world.php"), 'Controller file was not removed');
+		$this->assertFalse(is_file(TESTS_ROOTDIR."/site/templates/action/hello_world.html"), 'View file was not removed');
+	}
 }

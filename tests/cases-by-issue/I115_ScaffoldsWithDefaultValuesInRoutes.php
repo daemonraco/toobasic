@@ -33,7 +33,8 @@ class I115_ScaffoldsWithDefaultValuesInRoutesTest extends TooBasic_TestCase {
 
 		$this->checkRoutes('action', '');
 
-		$this->runCommand(str_replace(' new ', ' remove ', $cmd));
+		$cmd = 'php shell.php sys controller remove hello_world';
+		$this->runCommand($cmd);
 		$this->checkRemovedRoutes('action', '');
 	}
 	public function testCreateService() {
@@ -50,7 +51,8 @@ class I115_ScaffoldsWithDefaultValuesInRoutesTest extends TooBasic_TestCase {
 
 		$this->checkRoutes('service', 'srv/');
 
-		$this->runCommand(str_replace(' new ', ' remove ', $cmd));
+		$cmd = 'php shell.php sys service remove hello_world';
+		$this->runCommand($cmd);
 		$this->checkRemovedRoutes('service', 'srv/');
 	}
 	// @}
