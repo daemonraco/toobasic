@@ -45,14 +45,14 @@ class Version2 extends VersionAdapter {
 		global $Connections;
 		//
 		// Basic callback entries:
-		$callbackEntries = array(
-			GC_AFIELD_BEFORE_CREATE => array(),
-			GC_AFIELD_AFTER_CREATE => array(),
-			GC_AFIELD_BEFORE_DROP => array(),
-			GC_AFIELD_AFTER_DROP => array(),
-			GC_AFIELD_BEFORE_UPDATE => array(),
-			GC_AFIELD_AFTER_UDPATE => array()
-		);
+		$callbackEntries = [
+			GC_AFIELD_BEFORE_CREATE => [],
+			GC_AFIELD_AFTER_CREATE => [],
+			GC_AFIELD_BEFORE_DROP => [],
+			GC_AFIELD_AFTER_DROP => [],
+			GC_AFIELD_BEFORE_UPDATE => [],
+			GC_AFIELD_AFTER_UDPATE => []
+		];
 		//
 		// Of there are not fields, this specification is ignored.
 		if(!$table->fields) {
@@ -60,36 +60,36 @@ class Version2 extends VersionAdapter {
 		} else {
 			//
 			// Default values.
-			$tableIndexFileds = array(
-				'keys' => array(),
-				'primary' => array(),
-				'indexes' => array()
-			);
-			$requiredTableFileds = array_merge(array(
+			$tableIndexFileds = [
+				'keys' => [],
+				'primary' => [],
+				'indexes' => []
+			];
+			$requiredTableFileds = array_merge([
 				'name',
 				'connection',
 				'prefix',
 				'engine',
 				'callbacks',
 				'version'
-				), array_keys($tableIndexFileds));
-			$tableFieldDefauls = array_merge(array(
+				], array_keys($tableIndexFileds));
+			$tableFieldDefauls = array_merge([
 				'version' => 2
-				), $tableIndexFileds);
-			$requiredFieldFileds = array(
+				], $tableIndexFileds);
+			$requiredFieldFileds = [
 				'type',
 				'autoincrement',
 				'null',
 				'comment',
 				'callbacks'
-			);
-			$fieldFieldDefauls = array(
+			];
+			$fieldFieldDefauls = [
 				'autoincrement' => false,
 				'null' => false,
-				'keys' => array(),
-				'primary' => array(),
-				'indexes' => array()
-			);
+				'keys' => [],
+				'primary' => [],
+				'indexes' => []
+			];
 			//
 			// Copying basic fields.
 			$auxTable = \TooBasic\objectCopyAndEnforce($requiredTableFileds, $table, new \stdClass(), $tableFieldDefauls);
@@ -101,10 +101,10 @@ class Version2 extends VersionAdapter {
 				// If there was a connection specified, an error
 				// is shown.
 				if($auxTable->connection) {
-					$out[GC_AFIELD_ERRORS][] = array(
+					$out[GC_AFIELD_ERRORS][] = [
 						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownConnection,
 						GC_AFIELD_MESSAGE => "Unknown connection named '{$auxTable->connection}'"
-					);
+					];
 				}
 				//
 				// Using default instalation connection.
@@ -124,7 +124,7 @@ class Version2 extends VersionAdapter {
 			$out[GC_AFIELD_KEY] = sha1("{$auxTable->connection}-{$auxTable->name}");
 			//
 			// Loading table fields @{
-			$auxTable->fields = array();
+			$auxTable->fields = [];
 			foreach($table->fields as $field => $spec) {
 				//
 				// Transforming simplest specs into a basic
@@ -159,7 +159,7 @@ class Version2 extends VersionAdapter {
 				// Analyzing NULL settings.
 				if($auxField->autoincrement) {
 					$auxField->null = false;
-				} elseif(in_array($auxField->type->type, array(DBStructureManager::ColumnTypeTimestamp))) {
+				} elseif(in_array($auxField->type->type, [DBStructureManager::ColumnTypeTimestamp])) {
 					$auxField->null = false;
 					$auxField->default = 'CURRENT_TIMESTAMP';
 					$auxField->hasDefault = true;
@@ -175,20 +175,20 @@ class Version2 extends VersionAdapter {
 				// Parsing and expanding column callbacks list.
 				foreach(array_keys($callbackEntries) as $callbackType) {
 					if(!isset($auxField->callbacks->{$callbackType})) {
-						$auxField->callbacks->{$callbackType} = array();
+						$auxField->callbacks->{$callbackType} = [];
 					} elseif(!is_array($auxField->callbacks->{$callbackType})) {
-						$auxField->callbacks->{$callbackType} = array(
+						$auxField->callbacks->{$callbackType} = [
 							$auxField->callbacks->{$callbackType}
-						);
+						];
 					}
 					foreach($auxField->callbacks->{$callbackType} as &$call) {
 						$callbackKey = "F_{$callbackType}_{$out[GC_AFIELD_KEY]}_{$auxField->fullname}";
 						if(!isset($out[GC_AFIELD_CALLBACKS][$callbackKey])) {
-							$out[GC_AFIELD_CALLBACKS][$callbackKey] = array();
+							$out[GC_AFIELD_CALLBACKS][$callbackKey] = [];
 						}
-						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = array(
+						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = [
 							GC_AFIELD_NAME => $call
-						);
+						];
 
 						$call = $callbackKey;
 					}
@@ -210,21 +210,21 @@ class Version2 extends VersionAdapter {
 				// Parsing and expanding table callbacks list.
 				foreach(array_keys($callbackEntries) as $callbackType) {
 					if(!isset($auxTable->callbacks->{$callbackType})) {
-						$auxTable->callbacks->{$callbackType} = array();
+						$auxTable->callbacks->{$callbackType} = [];
 					} elseif(!is_array($auxTable->callbacks->{$callbackType})) {
-						$auxTable->callbacks->{$callbackType} = array(
+						$auxTable->callbacks->{$callbackType} = [
 							$auxTable->callbacks->{$callbackType}
-						);
+						];
 					}
 
 					foreach($auxTable->callbacks->{$callbackType} as &$call) {
 						$callbackKey = "T_{$callbackType}_{$out[GC_AFIELD_KEY]}";
 						if(!isset($out[GC_AFIELD_CALLBACKS][$callbackKey])) {
-							$out[GC_AFIELD_CALLBACKS][$callbackKey] = array();
+							$out[GC_AFIELD_CALLBACKS][$callbackKey] = [];
 						}
-						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = array(
+						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = [
 							GC_AFIELD_NAME => $call
-						);
+						];
 
 						$call = $callbackKey;
 					}
@@ -269,12 +269,12 @@ class Version2 extends VersionAdapter {
 						//
 						// Basic clean callbacks
 						// structure.
-						$auxIndex->callbacks = array(
-							GC_AFIELD_BEFORE_CREATE => array(),
-							GC_AFIELD_AFTER_CREATE => array(),
-							GC_AFIELD_BEFORE_DROP => array(),
-							GC_AFIELD_AFTER_DROP => array()
-						);
+						$auxIndex->callbacks = [
+							GC_AFIELD_BEFORE_CREATE => [],
+							GC_AFIELD_AFTER_CREATE => [],
+							GC_AFIELD_BEFORE_DROP => [],
+							GC_AFIELD_AFTER_DROP => []
+						];
 						//
 						// Adding index to the list.
 						$out[GC_AFIELD_INDEXES][] = $auxIndex;
@@ -331,15 +331,15 @@ class Version2 extends VersionAdapter {
 						// is the actual type.
 						array_shift($expType);
 						$out->type = DBStructureManager::ColumnTypeEnum;
-						$out->values = array();
+						$out->values = [];
 						foreach($expType as $v) {
 							$out->values[] = $v;
 						}
 					} else {
-						$out[GC_AFIELD_ERRORS][] = array(
+						$out[GC_AFIELD_ERRORS][] = [
 							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
 							GC_AFIELD_MESSAGE => "Enumerative type without values"
-						);
+						];
 					}
 					break;
 				case DBStructureManager::ColumnTypeFloat:
@@ -353,17 +353,17 @@ class Version2 extends VersionAdapter {
 					$out->precision = false;
 					break;
 				default:
-					$errors[] = array(
+					$errors[] = [
 						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
 						GC_AFIELD_MESSAGE => "Unhandle type '{$expType[0]}'"
-					);
+					];
 					$out = false;
 			}
 		} else {
-			$errors[] = array(
+			$errors[] = [
 				GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
 				GC_AFIELD_MESSAGE => "Type '{$expType[0]}' is not allowed"
-			);
+			];
 		}
 
 		return $out;

@@ -6,14 +6,17 @@
 // Checking if jQuery was previously included.
 if (window.jQuery) {
 	//
+	// Checking namespace.
+	if (typeof window.TooBasic === 'undefined') {
+		window.TooBasic = {};
+	}
+	//
 	// Generic functions used by TooBasic components.
-	window.TooBasic = {
-		split: function (val) {
-			return val.split(/,\s*/);
-		},
-		extractLast: function (term) {
-			return window.TooBasic.split(term).pop();
-		}
+	window.TooBasic.split = function (val) {
+		return val.split(/,\s*/);
+	};
+	window.TooBasic.extractLast = function (term) {
+		return window.TooBasic.split(term).pop();
 	};
 	//
 	// Adding a new metod to reload ajax insertion.

@@ -93,8 +93,8 @@ abstract class FormType {
 		$out = '';
 		//
 		// Appending each attribute.
-		$ignoredAttrs = array('id');
-		$ignoredFormAttrs = array('action', 'method');
+		$ignoredAttrs = ['id'];
+		$ignoredFormAttrs = ['action', 'method'];
 		foreach(get_object_vars($attrs) as $k => $v) {
 			//
 			// Ignoring core attributes.

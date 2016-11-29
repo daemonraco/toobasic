@@ -21,7 +21,7 @@ $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_INTERNAL_SERVER_ERROR] = 'starterdo
 $Defaults[GC_DEFAULTS_ERROR_PAGES][HTTPERROR_NOT_FOUND] = 'starterdoc_'.HTTPERROR_NOT_FOUND;
 $Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['starterdoc_top'] = array(
 	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array(
-		'lib:jquery/jquery-2.1.3.min.js',
+		'lib:jquery/jquery-3.1.1.min.js',
 		'jquery.cssemoticons.min'
 	),
 	GC_DEFAULTS_HTMLASSETS_STYLES => array(

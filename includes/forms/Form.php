@@ -13,6 +13,7 @@ use TooBasic\MagicProp;
 use TooBasic\Managers\RoutesManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
@@ -121,7 +122,7 @@ class Form {
 	 * @return string Returns a HTML piece of code.
 	 * @throws \TooBasic\Forms\FormsException
 	 */
-	public function buildFor($item, $mode = false, $flags = array()) {
+	public function buildFor($item, $mode = false, $flags = []) {
 		//
 		// Global dependencies.
 		global $Defaults;
@@ -283,7 +284,7 @@ class Form {
 	 */
 	public function fieldExcludedModes($fieldName) {
 		$this->load();
-		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) ? $this->_config->form->fields->{$fieldName}->excludedModes : array();
+		return isset($this->_config->form->fields->{$fieldName}) && isset($this->_config->form->fields->{$fieldName}->excludedModes) ? $this->_config->form->fields->{$fieldName}->excludedModes : [];
 	}
 	/**
 	 * This method provides access to certain field's proper id.
@@ -344,7 +345,7 @@ class Form {
 	 */
 	public function fieldValues($fieldName) {
 		$this->load();
-		return isset($this->_config->form->fields->{$fieldName}) && $this->_config->form->fields->{$fieldName}->type == GC_FORMS_FIELDTYPE_ENUM ? $this->_config->form->fields->{$fieldName}->values : array();
+		return isset($this->_config->form->fields->{$fieldName}) && $this->_config->form->fields->{$fieldName}->type == GC_FORMS_FIELDTYPE_ENUM ? $this->_config->form->fields->{$fieldName}->values : [];
 	}
 	/**
 	 * This method provides access to a proper id for this form.
@@ -429,7 +430,7 @@ class Form {
 		// Loading all required settings.
 		$this->load();
 
-		return isset($this->_config->form->modes) ? array_keys(get_object_vars($this->_config->form->modes)) : array();
+		return isset($this->_config->form->modes) ? array_keys(get_object_vars($this->_config->form->modes)) : [];
 	}
 	/**
 	 * This method provides access to this form's name.
@@ -499,13 +500,7 @@ class Form {
 		global $Defaults;
 		//
 		// Checking required fields.
-		if(!isset($this->_config->form)) {
-			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_on_form([
-				'path' => '/form',
-				'form' => $this->name()
-			]));
-		}
-		if(!isset($this->_config->form->fields) || !count(get_object_vars($this->_config->form->fields))) {
+		if(!count(get_object_vars($this->_config->form->fields))) {
 			throw new FormsException(Translate::Instance()->EX_unable_to_find_path_or_empty_on_form([
 				'path' => '/form/fields',
 				'form' => $this->name()
@@ -513,7 +508,7 @@ class Form {
 		}
 		//
 		// Checking and expanding default form values.
-		$formFields = array(
+		$formFields = [
 			'type' => $Defaults[GC_DEFAULTS_FORMS_TYPE],
 			'name' => '',
 			'action' => '#',
@@ -522,25 +517,25 @@ class Form {
 			'modes' => false,
 			'buttons' => false,
 			'readonly' => false
-		);
+		];
 		$this->_config->form = \TooBasic\objectCopyAndEnforce(array_keys($formFields), new \stdClass(), $this->_config->form, $formFields);
 		//
 		// Required form objects.
-		foreach(array('attrs', 'modes', 'buttons') as $name) {
+		foreach(['attrs', 'modes', 'buttons'] as $name) {
 			if(!$this->_config->form->{$name}) {
 				$this->_config->form->{$name} = new \stdClass();
 			}
 		}
 		//
 		// Checking and expanding default field values.
-		$fieldFields = array(
+		$fieldFields = [
 			'type' => 'input',
 			'attrs' => false,
 			'value' => '',
 			'label' => false,
-			'values' => array(),
-			'excludedModes' => array()
-		);
+			'values' => [],
+			'excludedModes' => []
+		];
 		foreach($this->_config->form->fields as $name => $config) {
 			//
 			// Expanding the simple configuration.
@@ -557,7 +552,7 @@ class Form {
 			$config->label = !$config->label ? "label_formcontrol_{$name}" : $config->label;
 			//
 			// Required objects.
-			foreach(array('attrs') as $subName) {
+			foreach(['attrs'] as $subName) {
 				if(!$config->{$subName}) {
 					$config->{$subName} = new \stdClass();
 				}
@@ -616,11 +611,11 @@ class Form {
 	protected function checkConfigForButtons(&$buttons) {
 		//
 		// Checking buttons configuration.
-		$buttonFields = array(
+		$buttonFields = [
 			'type' => 'button',
 			'attrs' => false,
 			'label' => false
-		);
+		];
 		foreach($buttons as $name => $config) {
 			//
 			// Expanding the simple configuration.
@@ -637,7 +632,7 @@ class Form {
 			$config->label = $config->label ? $config->label : "btn_{$name}";
 			//
 			// Required objects.
-			foreach(array('attrs') as $subName) {
+			foreach(['attrs'] as $subName) {
 				if(!$config->{$subName}) {
 					$config->{$subName} = new \stdClass();
 				}
@@ -661,8 +656,16 @@ class Form {
 			// Checking path existence.
 			if($this->path() && is_readable($this->path())) {
 				//
+				// Loading configuration contents.
+				$jsonString = file_get_contents($this->path());
+				//
+				// Validating JSON strucutre.
+				if(!SpecsValidator::ValidateJsonString('formbuilder', $jsonString, $info)) {
+					throw new FormsException(Translate::Instance()->EX_json_path_fail_specs(['path' => $this->path()])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
+				}
+				//
 				// Loading configuration.
-				$this->_config = json_decode(file_get_contents($this->path()));
+				$this->_config = json_decode($jsonString);
 				//
 				// Checking configuration.
 				if($this->_config) {

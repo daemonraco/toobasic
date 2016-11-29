@@ -30,6 +30,8 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	const OptionSearchable = 'Searchable';
 	const OptionSpecsVersion = 'SpecsVersion';
 	const OptionSystem = 'System';
+	const PrecisionNameField = 64;
+	const PrecisionVarchar = 256;
 	//
 	// Protected properties.
 	protected $_raw = null;
@@ -72,53 +74,53 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				}
 				//
 				// Generating a table prefix.
-				$this->_assignments['tableFields'] = array();
+				$this->_assignments['tableFields'] = [];
 				$opt = $this->_options->option(self::OptionColumn);
 				if($opt->activated()) {
 					foreach($opt->value() as $column) {
 						$columnParts = explode(':', $column);
-						$field = array();
-						$field['name'] = $columnParts[0];
+						$field = [];
+						$field[GC_AFIELD_NAME] = $columnParts[0];
 
 						if(!isset($columnParts[1])) {
 							$columnParts = 'varchar';
 						}
 						$columnParts[1] = strtolower($columnParts[1]);
-						$field[GC_AFIELD_TYPE] = array();
+						$field[GC_AFIELD_TYPE] = [];
 						switch($columnParts[1]) {
 							case 'int':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'int';
-								$field[GC_AFIELD_TYPE]['precision'] = 11;
-								$field['default'] = 0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = 11;
+								$field[GC_AFIELD_DEFAULT] = 0;
 								$field['inForm'] = true;
 								break;
 							case 'blob':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'blob';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = '';
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = false;
 								break;
 							case 'float':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'float';
-								$field[GC_AFIELD_TYPE]['precision'] = 11;
-								$field['default'] = .0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = 11;
+								$field[GC_AFIELD_DEFAULT] = .0;
 								$field['inForm'] = true;
 								break;
 							case 'text':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'text';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = '';
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = true;
 								break;
 							case 'timestamp':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'timestamp';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
-								$field['default'] = 0;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
+								$field[GC_AFIELD_DEFAULT] = 0;
 								$field['inForm'] = false;
 								break;
 							case 'enum':
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'enum';
-								$field[GC_AFIELD_TYPE]['precision'] = false;
+								$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = false;
 								$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES] = $columnParts;
 								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 								array_shift($field[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
@@ -128,14 +130,18 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0] = 'Y';
 									$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][1] = 'N';
 								}
-								$field['default'] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
+								$field[GC_AFIELD_DEFAULT] = "'{$field[GC_AFIELD_TYPE][GC_AFIELD_VALUES][0]}'";
 								$field['inForm'] = true;
 								break;
 							case 'varchar':
 							default:
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
-								$field[GC_AFIELD_TYPE]['precision'] = 256;
-								$field['default'] = '';
+								if(isset($this->_names['name-field']) && $this->_names['name-field'] == $field[GC_AFIELD_NAME]) {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionNameField;
+								} else {
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionVarchar;
+								}
+								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = true;
 						}
 						$field['null'] = false;
@@ -173,7 +179,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					// Checking name field.
 					$found = false;
 					foreach($this->_assignments['tableFields'] as $field) {
-						if($field['name'] == $this->_names['name-field']) {
+						if($field[GC_AFIELD_NAME] == $this->_names['name-field']) {
 							//
 							// Checking type.
 							if($field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] != 'varchar') {
@@ -216,7 +222,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					$this->_requiredDirectories[] = dirname($path);
 
 					if(!isset($this->_configLines[$path])) {
-						$this->_configLines[$path] = array();
+						$this->_configLines[$path] = [];
 					}
 
 					$this->_configLines[$path][] = "function activateSearchFor{$this->_assignments['searchCode']}() {";
@@ -229,7 +235,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					$this->_requiredDirectories[] = dirname($path);
 
 					if(!isset($this->_configLines[$path])) {
-						$this->_configLines[$path] = array();
+						$this->_configLines[$path] = [];
 					}
 
 					$this->_configLines[$path][] = "activateSearchFor{$this->_assignments['searchCode']}();";
@@ -238,7 +244,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 					$this->_requiredDirectories[] = dirname($path);
 
 					if(!isset($this->_configLines[$path])) {
-						$this->_configLines[$path] = array();
+						$this->_configLines[$path] = [];
 					}
 
 					$this->_configLines[$path][] = "\\TooBasic\\MagicProp::Instance()->representation->{$this->_names['plural-name']};";
@@ -319,95 +325,100 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				}
 				//
 				// Files
-				$this->_files[] = array(
+				$this->_files[] = [
 					GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_DBSPECS]}/{$this->_names['plural-name']}.json"),
 					GC_AFIELD_GENERATOR => 'genSpecsFile',
 					GC_AFIELD_DESCRIPTION => 'specifications file'
-				);
+				];
 				if(!$this->isRaw()) {
 					if($this->_names['form-builder']) {
-						$this->_files[] = array(
+						$this->_files[] = [
 							GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_FORMS]}/table_{$this->_names['plural-name']}.json"),
 							GC_AFIELD_GENERATOR => 'genFormBuilderFile',
 							GC_AFIELD_DESCRIPTION => 'form builder specifications file'
-						);
+						];
 					}
-					$this->_files[] = array(
+					$this->_files[] = [
+						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['plural-name']}.json"),
+						GC_AFIELD_GENERATOR => 'genCorePropsFile',
+						GC_AFIELD_DESCRIPTION => 'core properties file'
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['representation-name']}.php"),
 						GC_AFIELD_TEMPLATE => 'representation.html',
 						GC_AFIELD_DESCRIPTION => 'representations file'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_REPRESENTATIONS]}/{$this->_names['factory-name']}.php"),
 						GC_AFIELD_TEMPLATE => 'factory.html',
 						GC_AFIELD_DESCRIPTION => 'representations factory file'
-					);
+					];
 					if(isset($this->_names['name-field'])) {
-						$this->_files[] = array(
+						$this->_files[] = [
 							GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_SERVICES]}/{$this->_names['predictive-service']}.php"),
 							GC_AFIELD_TEMPLATE => 'predictive.html',
 							GC_AFIELD_DESCRIPTION => 'predictive search service file'
-						);
+						];
 						$opt = $this->_options->option(self::OptionGenAutocomplete);
 						if($opt->activated()) {
-							$this->_files[] = array(
+							$this->_files[] = [
 								GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/{$this->_names['singular-name']}_predictive_{$this->_names['name-field']}.js"),
 								GC_AFIELD_TEMPLATE => 'autocomplete.html',
 								GC_AFIELD_DESCRIPTION => 'predictive search service file'
-							);
+							];
 						}
 					}
-					$this->_files[] = array(
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['list-action']}.php"),
 						GC_AFIELD_TEMPLATE => 'list_controller.html',
 						GC_AFIELD_DESCRIPTION => 'controller file to list table items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['list-action']}.html"),
 						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}list.html",
 						GC_AFIELD_DESCRIPTION => 'view file to list table items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['view-action']}.php"),
 						GC_AFIELD_TEMPLATE => 'view_controller.html',
 						GC_AFIELD_DESCRIPTION => 'controller file to view items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['view-action']}.html"),
 						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}view.html",
 						GC_AFIELD_DESCRIPTION => 'view file to view items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['edit-action']}.php"),
 						GC_AFIELD_TEMPLATE => 'edit_controller.html',
 						GC_AFIELD_DESCRIPTION => 'controller file to edit items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['edit-action']}.html"),
 						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}edit.html",
 						GC_AFIELD_DESCRIPTION => 'view file to edit items'
-					);
+					];
 
-					$this->_files[] = array(
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['add-action']}.php"),
 						GC_AFIELD_TEMPLATE => 'add_controller.html',
 						GC_AFIELD_DESCRIPTION => 'controller file to add items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['add-action']}.html"),
 						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}add.html",
 						GC_AFIELD_DESCRIPTION => 'view file to add items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names['delete-action']}.php"),
 						GC_AFIELD_TEMPLATE => 'delete_controller.html',
 						GC_AFIELD_DESCRIPTION => 'controller file to delete items'
-					);
-					$this->_files[] = array(
+					];
+					$this->_files[] = [
 						GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names['delete-action']}.html"),
 						GC_AFIELD_TEMPLATE => "{$this->_names['templates-prefix']}delete.html",
 						GC_AFIELD_DESCRIPTION => 'view file to delete items'
-					);
+					];
 				}
 			}
 		}
@@ -421,7 +432,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				if(!$this->isRaw()) {
 					//
 					// Setting table routes.
-					$tableRoute = new \stdClass();
+					$tableRoute = (object) [];
 					$tableRoute->singularName = $this->_names['singular-name'];
 					$tableRoute->pluralName = $this->_names['plural-name'];
 					$tableRoute->searchable = isset($this->_names['search-code']) ? $this->_names['search-code'] : false;
@@ -430,6 +441,55 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				}
 			}
 		}
+	}
+	protected function genCorePropsFile($path, $template, &$error) {
+		//
+		// Default values.
+		$out = true;
+		//
+		// Assignments.
+		$this->genAssignments();
+		//
+		// Main specs structure.
+		$specs = [
+			'table' => $this->_assignments['pluralName'],
+			'representation_class' => $this->_assignments['singularName'],
+			'columns_perfix' => $this->_assignments['tablePrefix'],
+			'columns' => [
+				'id' => 'id'
+			],
+			'read_only_columns' => [],
+			'disable_create' => false,
+			'column_filters' => (object) [],
+			'extended_columns' => (object) [],
+			'sub_lists' => (object) []
+		];
+		//
+		// Name field.
+		if(isset($this->_assignments['nameField'])) {
+			$specs['columns']['name'] = $this->_assignments['nameField'];
+			$specs['order_by'] = [
+				$this->_assignments['nameField'] => 'asc'
+			];
+		}
+		//
+		// Searchable configurations.
+		if($this->_assignments['isSearchable']) {
+			$specs['column_filters'] = [
+				'indexed' => GC_DATABASE_FIELD_FILTER_BOOLEAN
+			];
+		}
+		//
+		// Generating file content.
+		$output = json_encode($specs, JSON_PRETTY_PRINT);
+
+		$result = file_put_contents($path, $output);
+		if($result === false) {
+			$error = "Unable to write file '{$path}'";
+			$out = false;
+		}
+
+		return $out;
 	}
 	protected function genFormBuilderFile($path, $template, &$error) {
 		//
@@ -468,7 +528,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Adding an ID field.
 			$writer->addField('id', 'hidden');
-			$writer->excludeFieldFrom('id', array(GC_FORMS_BUILDMODE_CREATE));
+			$writer->excludeFieldFrom('id', [GC_FORMS_BUILDMODE_CREATE]);
 			//
 			// Adding specified columns.
 			foreach($this->_assignments['tableFields'] as $column) {
@@ -478,23 +538,23 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 						if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 							$type.= ':'.implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
 						}
-						$writer->addField($column['name'], $type);
-						$writer->setFieldDefault($column['name'], '');
-						$writer->setFieldEmptyOption($column['name'], 'select_option_NOOPTION', '');
+						$writer->addField($column[GC_AFIELD_NAME], $type);
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], '');
+						$writer->setFieldEmptyOption($column[GC_AFIELD_NAME], 'select_option_NOOPTION', '');
 						break;
 					case 'text':
-						$writer->addField($column['name'], 'text');
-						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						$writer->addField($column[GC_AFIELD_NAME], 'text');
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], $column[GC_AFIELD_DEFAULT] ? $column[GC_AFIELD_DEFAULT] : '');
 						break;
 					case 'int':
 					case 'varchar':
 					default:
-						$writer->addField($column['name'], 'input');
-						$writer->setFieldDefault($column['name'], $column['default'] ? $column['default'] : '');
+						$writer->addField($column[GC_AFIELD_NAME], 'input');
+						$writer->setFieldDefault($column[GC_AFIELD_NAME], $column[GC_AFIELD_DEFAULT] ? $column[GC_AFIELD_DEFAULT] : '');
 				}
 
-				$writer->setFieldLabel($column['name'], "table_column_{$column['name']}");
-				$writer->setFieldAttribute($column['name'], 'class', 'input-sm');
+				$writer->setFieldLabel($column[GC_AFIELD_NAME], "table_column_{$column[GC_AFIELD_NAME]}");
+				$writer->setFieldAttribute($column[GC_AFIELD_NAME], 'class', 'input-sm');
 			}
 			//@}
 			//
@@ -552,104 +612,113 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->genAssignments();
 		//
 		// Main specs structure.
-		$specs = new \stdClass();
-		$specs->tables = array();
-		$specs->indexes = array();
+		$specs = [
+			'tables' => [],
+			'indexes' => []
+		];
 		//
 		// Table specs.
-		$table = new \stdClass();
-		$table->version = 1;
-		$table->usesFormBuilder = $this->_names['form-builder'];
-		$table->name = $this->_assignments['pluralName'];
-		$table->prefix = $this->_assignments['tablePrefix'];
+		$table = [
+			'version' => 1,
+			'usesFormBuilder' => $this->_names['form-builder'],
+			'name' => $this->_assignments['pluralName'],
+			'prefix' => $this->_assignments['tablePrefix']
+		];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
-			$table->engine = 'myisam';
+			$table['engine'] = 'myisam';
 		}
 		if(isset($this->_assignments['connection'])) {
-			$table->connection = $this->_assignments['connection'];
+			$table['connection'] = $this->_assignments['connection'];
 		}
-		$table->fields = array();
+		$table['fields'] = [];
 		//
 		// Adding an id column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'id';
-			$field->type = new \stdClass();
-			$field->type->type = 'int';
-			$field->type->precision = 11;
-			$field->null = false;
-			$field->autoincrement = true;
-			$table->fields[] = $field;
+			$table['fields'][] = [
+				'name' => 'id',
+				'type' => [
+					'type' => 'int',
+					'precision' => 11
+				],
+				'null' => false,
+				'autoincrement' => true
+			];
 		}
 		//
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
-			$field = new \stdClass();
-			$field->name = $column['name'];
-			$field->type = new \stdClass();
-			$field->type->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			$field = [
+				'name' => $column[GC_AFIELD_NAME],
+				'type' => [
+					'type' => $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]
+				],
+				'default' => $column[GC_AFIELD_DEFAULT],
+				'null' => $column[GC_AFIELD_NULL]
+			];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
-				$field->type->values = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
+				$field['type']['values'] = $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES];
 			} else {
-				$field->type->precision = $column[GC_AFIELD_TYPE]['precision'];
+				$field['type']['precision'] = $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION];
 			}
-			$field->default = $column['default'];
-			$field->null = $column['null'];
 
-			$table->fields[] = $field;
+			$table['fields'][] = $field;
 		}
 		//
 		// Adding a creation date column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'create_date';
-			$field->type = new \stdClass();
-			$field->type->type = 'timestamp';
-			$field->type->precision = false;
-			$field->null = false;
-			$field->default = 'CURRENT_TIMESTAMP';
-			$table->fields[] = $field;
+			$table['fields'][] = [
+				'name' => 'create_date',
+				'type' => [
+					'type' => 'timestamp',
+					'precision' => false
+				],
+				'null' => false,
+				'default' => 'CURRENT_TIMESTAMP'
+			];
 		}
 		//
 		// Adding an indexation status column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->name = 'indexed';
-			$field->type = new \stdClass();
-			$field->type->type = 'varchar';
-			$field->type->precision = 1;
-			$field->null = false;
-			$field->default = 'N';
-			$table->fields[] = $field;
+			$table['fields'][] = [
+				'name' => 'indexed',
+				'type' => [
+					'type' => 'varchar',
+					'precision' => 1
+				],
+				'null' => false,
+				'default' => 'N'
+			];
 		}
 		//
 		// Adding table.
-		$specs->tables[] = $table;
+		$specs['tables'][] = $table;
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
-			$index = new \stdClass();
-			$index->name = "{$this->_assignments['tablePrefix']}id";
-			$index->table = $this->_assignments['pluralName'];
+			$index = [
+				'name' => "{$this->_assignments['tablePrefix']}id",
+				'table' => $this->_assignments['pluralName'],
+				'type' => 'primary',
+				'fields' => ['id']
+			];
 			if(isset($this->_assignments['connection'])) {
-				$index->connection = $this->_assignments['connection'];
+				$index['connection'] = $this->_assignments['connection'];
 			}
-			$index->type = 'primary';
-			$index->fields = array('id');
-			$specs->indexes[] = $index;
+			$specs['indexes'][] = $index;
 		}
 		//
 		// Adding unique index for name field.
 		if(isset($this->_assignments['nameField'])) {
-			$index = new \stdClass();
-			$index->name = "{$this->_assignments['tablePrefix']}{$this->_assignments['nameField']}";
-			$index->table = $this->_assignments['pluralName'];
+			$index = [
+				'name' => "{$this->_assignments['tablePrefix']}{$this->_assignments['nameField']}",
+				'table' => $this->_assignments['pluralName'],
+				'type' => 'key',
+				'fields' => [$this->_assignments['nameField']]
+			];
 			if(isset($this->_assignments['connection'])) {
-				$index->connection = $this->_assignments['connection'];
+				$index['connection'] = $this->_assignments['connection'];
 			}
-			$index->type = 'key';
-			$index->fields = array($this->_assignments['nameField']);
-			$specs->indexes[] = $index;
+			$specs['indexes'][] = $index;
 		}
 		//
 		// Generating file content.
@@ -672,83 +741,86 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$this->genAssignments();
 		//
 		// Main specs structure.
-		$specs = new \stdClass();
-		$specs->tables = array();
+		$specs = [
+			'tables' => []
+		];
 		//
 		// Table specs.
-		$table = new \stdClass();
-		$table->version = 2;
-		$table->usesFormBuilder = $this->_names['form-builder'];
-		$table->name = $this->_assignments['pluralName'];
-		$table->prefix = $this->_assignments['tablePrefix'];
+		$table = [
+			'version' => 2,
+			'usesFormBuilder' => $this->_names['form-builder'],
+			'name' => $this->_assignments['pluralName'],
+			'prefix' => $this->_assignments['tablePrefix']
+		];
 		if($this->_names[GC_AFIELD_TYPE] == 'mysql') {
-			$table->engine = 'myisam';
+			$table['engine'] = 'myisam';
 		}
 		if(isset($this->_assignments['connection'])) {
-			$table->connection = $this->_assignments['connection'];
+			$table['connection'] = $this->_assignments['connection'];
 		}
-		$table->fields = array();
+		$table['fields'] = [];
 		//
 		// Adding an id column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'int';
-			$field->autoincrement = true;
-			$table->fields['id'] = $field;
+			$table['fields']['id'] = [
+				'type' => 'int',
+				'autoincrement' => true
+			];
 		}
 		//
 		// Adding specified columns.
 		foreach($this->_assignments['tableFields'] as $column) {
-			$field = new \stdClass();
-			$field->type = $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE];
+			$field = [
+				'type' => $column[GC_AFIELD_TYPE][GC_AFIELD_TYPE]
+			];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
-				$field->type = "{$field->type}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+				$field['type'] = "{$field['type']}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
+			} elseif($field['type'] == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PrecisionVarchar) {
+				$field['type'] = "{$field['type']}:{$column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION]}";
 			}
-			if($column['default']) {
-				$field->default = $column['default'];
+			if($column[GC_AFIELD_DEFAULT]) {
+				$field['default'] = $column[GC_AFIELD_DEFAULT];
 			} else {
-				$field = $field->type;
+				$field = $field['type'];
 			}
 
-			$table->fields[$column['name']] = $field;
+			$table['fields'][$column[GC_AFIELD_NAME]] = $field;
 		}
 		//
 		// Adding a creation date column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'timestamp';
-			$field->null = false;
-			$field->default = 'CURRENT_TIMESTAMP';
-			$table->fields['create_date'] = $field;
+			$table['fields']['create_date'] = [
+				'type' => 'timestamp',
+				'null' => false,
+				'default' => 'CURRENT_TIMESTAMP'
+			];
 		}
 		//
 		// Adding an indexation status column.
 		if(!$this->isRaw()) {
-			$field = new \stdClass();
-			$field->type = 'varchar:1';
-			$field->null = false;
-			$field->default = 'N';
-			$table->fields['indexed'] = $field;
+			$table['fields']['indexed'] = [
+				'type' => 'varchar:1',
+				'null' => false,
+				'default' => 'N'
+			];
 		}
 		//
 		// Adding a primary key for column 'id'.
 		if($this->_names[GC_AFIELD_TYPE] != 'mysql') {
-			$table->primary = new \stdClass();
-			$table->primary->id = array(
-				"id"
-			);
+			$table['primary'] = [
+				'id' => ['id']
+			];
 		}
 		//
 		// Adding unique index for name field.
 		if(isset($this->_assignments['nameField'])) {
-			$table->key = new \stdClass();
-			$table->key->{$this->_assignments['nameField']} = array(
-				$this->_assignments['nameField']
-			);
+			$table['keys'] = [
+				$this->_assignments['nameField'] => [$this->_assignments['nameField']]
+			];
 		}
 		//
 		// Adding table.
-		$specs->tables[] = $table;
+		$specs['tables'][] = $table;
 		//
 		// Generating file content.
 		$output = json_encode($specs, JSON_PRETTY_PRINT);
@@ -769,20 +841,20 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$this->genAssignments();
 			//
 			// Delete button label
-			$auxTr = new \stdClass();
+			$auxTr = (object) [];
 			$auxTr->key = "btn_delete_{$this->_names['singular-name']}";
 			$auxTr->value = 'Delete this '.ucwords(str_replace('_', ' ', $this->_names['singular-name']));
 			$this->_translations[] = $auxTr;
 
 			foreach($this->_assignments['tableFields'] as $column) {
-				$auxTr = new \stdClass();
-				$auxTr->key = "table_column_{$column['name']}";
-				$auxTr->value = ucwords(str_replace('_', ' ', $column['name']));
+				$auxTr = (object) [];
+				$auxTr->key = "table_column_{$column[GC_AFIELD_NAME]}";
+				$auxTr->value = ucwords(str_replace('_', ' ', $column[GC_AFIELD_NAME]));
 				$this->_translations[] = $auxTr;
 
 				if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 					foreach($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES] as $option) {
-						$auxTr = new \stdClass();
+						$auxTr = (object) [];
 						$auxTr->key = "select_option_{$option}";
 						$auxTr->value = ucwords(str_replace('_', ' ', $option));
 						$this->_translations[] = $auxTr;
@@ -819,42 +891,42 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:text Column named 'colname' of type TEXT.\n";
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
 		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).";
-		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, array('--column', '-c'), Option::TypeMultiValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, ['--column', '-c'], Option::TypeMultiValue, $text, 'name'));
 
 		$text = "This parameters indicates which column shoud be consided as an unique name.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionNameField, array('--name-field', '-nf'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionNameField, ['--name-field', '-nf'], Option::TypeValue, $text, 'name'));
 
 		$text = "If your table doesn't use the default connection, you may specify it with this parameter.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionConnection, array('--connection', '-C'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionConnection, ['--connection', '-C'], Option::TypeValue, $text, 'name'));
 
 		$text = "If your plural names are getting all messed up, specify the value you want with this parameters.\n";
 		$text.= "For example, the plural of 'person' isn't 'persons', it's 'people'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionPlural, array('--plural', '-P'), Option::TypeValue, $text, 'plural-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionPlural, ['--plural', '-P'], Option::TypeValue, $text, 'plural-name'));
 
 		$text = "Sometimes there are specific matters related to the type of database you are using, so this parameters allows you to hint what your using, 'mysql', 'sqlite', etc.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSystem, array('--type'), Option::TypeValue, $text, 'db-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSystem, ['--type'], Option::TypeValue, $text, 'db-type'));
 
 		$text = "If you want to create a simple table without default columns and indexes, use this parameter.\n";
 		$text = "Note: This won't create controllers and ohter related stuff.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRaw, array('--raw', '-r'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRaw, ['--raw', '-r'], Option::TypeNoValue, $text));
 
 		$text = "Sets the specifications file version, possible values are: '1' and '2'.\n";
 		$text.= "By default it assumes '2'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSpecsVersion, array('--specs-version', '-sv'), Option::TypeValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSpecsVersion, ['--specs-version', '-sv'], Option::TypeValue, $text));
 
 		$text = 'This parameter activates the generation of JS scripts for autocompletion. ';
 		$text.= "It depends on parameter '--name-field'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionGenAutocomplete, array('--autocomplete', '-ac'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionGenAutocomplete, ['--autocomplete', '-ac'], Option::TypeNoValue, $text));
 
 		$text = 'All generated view will have a bootstrap structure.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, array('--bootstrap', '-bs'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, ['--bootstrap', '-bs'], Option::TypeNoValue, $text));
 
 		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
 		$text.= "Given value is used as item type for searchable items indexation.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, array('--searchable', '-sr'), Option::TypeValue, $text, 'item-code'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, ['--searchable', '-sr'], Option::TypeValue, $text, 'item-code'));
 
 		$text = "This option disables the use of form builders to generate each form.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, array('--no-forms-builder', '-nofb'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, ['--no-forms-builder', '-nofb'], Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

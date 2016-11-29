@@ -24,7 +24,7 @@ class ConfigLoaderSimple extends ConfigLoader {
 	 * @return string[] Returns a list of absolute paths.
 	 */
 	protected function paths() {
-		$out = array();
+		$out = [];
 
 		$aux = Paths::Instance()->configPath($this->_config->name(), Paths::ExtensionJSON);
 		if($aux) {

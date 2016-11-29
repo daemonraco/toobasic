@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.1.0');
+define('TOOBASIC_VERSION', '2.2.0');
 define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
@@ -101,12 +101,14 @@ define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
 define('GC_AFIELD_GENERATOR', 'generator');
+define('GC_AFIELD_HASH', 'hash');
 define('GC_AFIELD_HEADERS', 'headers');
 define('GC_AFIELD_HITS', 'hits');
 define('GC_AFIELD_HOST', 'host');
 define('GC_AFIELD_HOSTS', 'hosts');
 define('GC_AFIELD_ID', 'id');
 define('GC_AFIELD_INDEXES', 'indexes');
+define('GC_AFIELD_INFO', 'info');
 define('GC_AFIELD_INTERFACE', 'interface');
 define('GC_AFIELD_IGNORED', 'ignored');
 define('GC_AFIELD_ITEMS', 'items');
@@ -126,16 +128,19 @@ define('GC_AFIELD_METHODS', 'methods');
 define('GC_AFIELD_MIDDLE', 'middle');
 define('GC_AFIELD_MODULE_NAME', 'module-name');
 define('GC_AFIELD_NAME', 'name');
+define('GC_AFIELD_NULL', 'null');
 define('GC_AFIELD_ORIGIN', 'origin');
 define('GC_AFIELD_ORIGINS', 'origins');
 define('GC_AFIELD_PARAMS', 'params');
 define('GC_AFIELD_PARENT_DIRECTORY', 'parent-directory');
 define('GC_AFIELD_PATH', 'path');
 define('GC_AFIELD_POSSIBILITIES', 'possibilities');
+define('GC_AFIELD_PRECISION', 'precision');
 define('GC_AFIELD_QUERY', 'query');
 define('GC_AFIELD_REDIRECTOR', 'redirector');
 define('GC_AFIELD_RENDER', 'render');
 define('GC_AFIELD_REQUIRED_PARAMS', 'required_params');
+define('GC_AFIELD_RESOURCE', 'resource');
 define('GC_AFIELD_RESULT', 'result');
 define('GC_AFIELD_RIGHT', 'right');
 define('GC_AFIELD_ROUTES_PATH', 'routes-path');
@@ -170,11 +175,13 @@ define('GC_DIRECTORIES_ADAPTERS_CACHE', 'adapters-cache');
 define('GC_DIRECTORIES_ADAPTERS_DB', 'adapters-db');
 define('GC_DIRECTORIES_ADAPTERS_VIEW', 'adapters-view');
 define('GC_DIRECTORIES_MODULES', 'modules');
+define('GC_DIRECTORIES_REST', 'rest');
 define('GC_DIRECTORIES_SAPIREADER', 'sapireader');
 define('GC_DIRECTORIES_SEARCH', 'search');
 define('GC_DIRECTORIES_SHELL_INCLUDES', 'shell-includes');
 define('GC_DIRECTORIES_SHELL_FLAGS', 'shell-flags');
 define('GC_DIRECTORIES_SITE', 'site');
+define('GC_DIRECTORIES_SPECS', 'specs');
 define('GC_DIRECTORIES_SYSTEM', 'system');
 define('GC_DIRECTORIES_SYSTEM_CACHE', 'system-cache');
 // @}
@@ -208,8 +215,14 @@ define('GC_DATABASE_FIELD_FILTERS', 'field-filters');
 // @}
 //
 // Representations @{
+define('GC_REPRESENTATIONS_COLUMN', 'column');
 define('GC_REPRESENTATIONS_FACTORY', 'factory');
+define('GC_REPRESENTATIONS_FACTORY_SHORTCUT', 'factory_shortcut');
 define('GC_REPRESENTATIONS_METHOD', 'method');
+define('GC_REPRESENTATIONS_METHOD_IDS', 'id_method');
+define('GC_REPRESENTATIONS_METHOD_ITEM', 'item_method');
+define('GC_REPRESENTATIONS_METHOD_ITEMS', 'items_method');
+define('GC_REPRESENTATIONS_PLURAL', 'plural');
 // @}
 //
 // URIs @{
@@ -259,6 +272,7 @@ define('GC_REQUEST_LANGUAGE', 'lang');
 define('GC_REQUEST_LAYOUT', 'layout');
 define('GC_REQUEST_MODE', 'mode');
 define('GC_REQUEST_REDIRECTOR', 'redirectedfrom');
+define('GC_REQUEST_REST', 'rest');
 define('GC_REQUEST_ROUTE', 'route');
 define('GC_REQUEST_SERVICE', 'service');
 define('GC_REQUEST_SKIN', 'skin');
@@ -271,6 +285,7 @@ define('GC_SERVER_TOOBASIC_ROUTE', 'TOOBASIC_ROUTE');
 // Class Suffixes @{
 define('GC_CLASS_SUFFIX_CONFIG', 'Config');
 define('GC_CLASS_SUFFIX_CONTROLLER', 'Controller');
+define('GC_CLASS_SUFFIX_CORE_PROPS', 'CoreProps');
 define('GC_CLASS_SUFFIX_CRON', 'Cron');
 define('GC_CLASS_SUFFIX_EMAIL_CONTROLLER', 'Email');
 define('GC_CLASS_SUFFIX_FACTORY', 'Factory');
@@ -351,6 +366,16 @@ define('GC_SAPIREPORT_COLUMNTYPE_TEXT', 'text');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+// @}
+//
+// RESTful constants @{
+define('GC_REST_DEFAULT_KEY', '__DEFAULT__');
+define('GC_REST_TYPE_RESOURCE', 'resource');
+define('GC_REST_TYPE_SEARCH', 'search');
+define('GC_REST_TYPE_STATS', 'stats');
+define('GC_REST_POLICY_BLOCKED', 'blocked');
+define('GC_REST_POLICY_AUTH', 'auth');
+define('GC_REST_POLICY_ACTIVE', 'active');
 // @}
 //
 // Forms @{

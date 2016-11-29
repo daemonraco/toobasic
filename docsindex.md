@@ -51,7 +51,19 @@
 * [Easier with JSON](docs/configs.md#easier-with-json)
 	* [Multiple files](docs/configs.md#multiple-files)
 	* [Merged files](docs/configs.md#merged-files)
+* [Interpreters](docs/configs.md#interpreters)
 * [Suggestions](docs/configs.md#suggestions)
+
+##  Controllers (docs/controller.md):
+
+* [How to create a basic page](docs/controller.md#how-to-create-a-basic-page)
+	* [Controller](docs/controller.md#controller)
+	* [View](docs/controller.md#view)
+	* [Is that it?](docs/controller.md#is-that-it)
+	* [But?](docs/controller.md#but)
+* [Language](docs/controller.md#language)
+* [Even more basic](docs/controller.md#even-more-basic)
+* [Suggestions](docs/controller.md#suggestions)
 
 ##  Controller Exports (docs/controllerexports.md):
 
@@ -76,17 +88,6 @@
 	* [Attributes](docs/controllerexports.md#attributes)
 	* [Reloading](docs/controllerexports.md#reloading)
 * [Suggestions](docs/controllerexports.md#suggestions)
-
-##  Controllers (docs/controller.md):
-
-* [How to create a basic page](docs/controller.md#how-to-create-a-basic-page)
-	* [Controller](docs/controller.md#controller)
-	* [View](docs/controller.md#view)
-	* [Is that it?](docs/controller.md#is-that-it)
-	* [But?](docs/controller.md#but)
-* [Language](docs/controller.md#language)
-* [Even more basic](docs/controller.md#even-more-basic)
-* [Suggestions](docs/controller.md#suggestions)
 
 ##  Databases (docs/databases.md):
 
@@ -290,8 +291,8 @@
 
 * [What it this?](docs/representations.md#what-it-this)
 * [A table](docs/representations.md#a-table)
+* [Core properties](docs/representations.md#core-properties)
 * [Row representation](docs/representations.md#row-representation)
-	* [CP?](docs/representations.md#cp)
 * [Table representation](docs/representations.md#table-representation)
 * [Let's use it](docs/representations.md#lets-use-it)
 * [Database](docs/representations.md#database)
@@ -305,7 +306,32 @@
 	* [Usage](docs/representations.md#usage)
 	* [toArray()](docs/representations.md#toarray)
 	* [Setter](docs/representations.md#setter)
+* [Sub-lists](docs/representations.md#sub-lists)
 * [Suggestions](docs/representations.md#suggestions)
+
+##  RESTful (docs/restful.md):
+
+* [What it this?](docs/restful.md#what-it-this)
+* [Introduction](docs/restful.md#introduction)
+* [How to use it](docs/restful.md#how-to-use-it)
+* [Listing items](docs/restful.md#listing-items)
+	* [Limit and offset](docs/restful.md#limit-and-offset)
+	* [Expand](docs/restful.md#expand)
+* [Read an item](docs/restful.md#read-an-item)
+* [Update](docs/restful.md#update)
+* [Create](docs/restful.md#create)
+* [Delete](docs/restful.md#delete)
+* [Search](docs/restful.md#search)
+* [Statistics](docs/restful.md#statistics)
+* [Error messages](docs/restful.md#error-messages)
+* [Policies](docs/restful.md#policies)
+	* [Policies Types](docs/restful.md#policies-types)
+	* [Initial status](docs/restful.md#initial-status)
+	* [Full access to a representation](docs/restful.md#full-access-to-a-representation)
+	* [Partial access](docs/restful.md#partial-access)
+	* [Authorization](docs/restful.md#authorization)
+	* [Authorization levels](docs/restful.md#authorization-levels)
+* [Suggestions](docs/restful.md#suggestions)
 
 ##  Routes (docs/routes.md):
 
@@ -374,6 +400,7 @@
 	* [Searchable items](docs/searchengine.md#searchable-items)
 	* [Searchable item factories](docs/searchengine.md#searchable-item-factories)
 * [Examples](docs/searchengine.md#examples)
+	* [Core properties](docs/searchengine.md#core-properties)
 	* [Representation](docs/searchengine.md#representation)
 	* [Factory](docs/searchengine.md#factory)
 	* [Configuration?](docs/searchengine.md#configuration)
@@ -455,6 +482,7 @@
 * [Environment globals](docs/troubleshooting.md#environment-globals)
 	* [Where is my _php.ini_ file?](docs/troubleshooting.md#where-is-my-phpini-file)
 * [Smarty version](docs/troubleshooting.md#smarty-version)
+* [Strange configuration issue?](docs/troubleshooting.md#strange-configuration-issue)
 * [Suggestions](docs/troubleshooting.md#suggestions)
 
 ##  Adapters (docs/tech/adapters.md):
@@ -527,4 +555,20 @@
 * [Update](docs/tech/queryadapter.md#update)
 * [__TooBasic__ philosophy](docs/tech/queryadapter.md#toobasic-philosophy)
 * [Suggestions](docs/tech/queryadapter.md#suggestions)
+
+##  RESTful JavaScript Asset (docs/tech/restful-asset.md):
+
+* [What is this?](docs/tech/restful-asset.md#what-is-this)
+* [How do I activate it](docs/tech/restful-asset.md#how-do-i-activate-it)
+* [How to use it](docs/tech/restful-asset.md#how-to-use-it)
+	* [Wrong URL](docs/tech/restful-asset.md#wrong-url)
+* [Get all entries](docs/tech/restful-asset.md#get-all-entries)
+* [Get one item by id](docs/tech/restful-asset.md#get-one-item-by-id)
+* [Search](docs/tech/restful-asset.md#search)
+* [Stats](docs/tech/restful-asset.md#stats)
+* [Create](docs/tech/restful-asset.md#create)
+* [Update](docs/tech/restful-asset.md#update)
+* [Delete](docs/tech/restful-asset.md#delete)
+* [Going further](docs/tech/restful-asset.md#going-further)
+* [Suggestions](docs/tech/restful-asset.md#suggestions)
 

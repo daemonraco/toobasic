@@ -46,7 +46,7 @@ class DBPostgreSQL extends DB {
 		$stmt = $this->_db->prepare($query);
 		//
 		// Requesting a specific entry.
-		if($stmt->execute(array(':key' => $this->fullKey($prefix, $key)))) {
+		if($stmt->execute([':key' => $this->fullKey($prefix, $key)])) {
 			$row = $stmt->fetch();
 			if($row) {
 				$fdata = '';
@@ -91,9 +91,9 @@ class DBPostgreSQL extends DB {
 		$query.= " and        cch_date < now() - interval '{$this->_expirationLength} second' \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
+		$stmt->execute([
 			':key' => $this->fullKey($prefix, $key)
-		));
+		]);
 	}
 	/**
 	 * Checks if the table for cache entries storage exists.

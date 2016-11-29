@@ -1,0 +1,123 @@
+{
+    "form": {
+        "name": "test_form",
+        "fields": {
+            "id": {
+                "type": "hidden",
+                "excludedModes": [
+                    "create"
+                ]
+            },
+            "name": {
+                "type": "input",
+                "value": "",
+                "label": "table_column_name",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            },
+            "age": {
+                "type": "input",
+                "value": "",
+                "label": "table_column_age",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            },
+            "height": {
+                "type": "input",
+                "value": "",
+                "label": "table_column_height",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            },
+            "conf": {
+                "type": "text",
+                "value": "",
+                "label": "table_column_conf",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            },
+            "info": {
+                "type": "input",
+                "value": "",
+                "label": "table_column_info",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            },
+            "status": {
+                "type": "enum",
+                "values": [
+                    "SINGLE",
+                    "MARRIED"
+                ],
+                "value": "",
+                "emptyOption": {
+                    "label": "select_option_NOOPTION",
+                    "value": ""
+                },
+                "label": "table_column_status",
+                "attrs": {
+                    "class": "input-sm"
+                }
+            }
+        },
+        "type": "table",
+        "method": "post",
+        "attrs": {
+            "role": "form",
+            "ng-non-bindable": true
+        },
+        "modes": {
+            "remove": {
+                "attrs": {
+                    "onsubmit": "return confirm('Are you sure you want to remove this test?')"
+                },
+                "buttons": {
+                    "delete": {
+                        "type": "submit",
+                        "label": "btn_delete_test",
+                        "attrs": {
+                            "class": "btn-sm btn-danger"
+                        }
+                    }
+                }
+            },
+            "create": {
+                "buttons": {
+                    "add": {
+                        "type": "submit",
+                        "attrs": {
+                            "class": "btn-sm btn-success"
+                        }
+                    },
+                    "clear_fields": {
+                        "type": "reset",
+                        "attrs": {
+                            "class": "btn-sm btn-default"
+                        }
+                    }
+                }
+            },
+            "edit": {
+                "buttons": {
+                    "save": {
+                        "type": "submit",
+                        "attrs": {
+                            "class": "btn-sm btn-success"
+                        }
+                    },
+                    "restore_fields": {
+                        "type": "reset",
+                        "attrs": {
+                            "class": "btn-sm btn-default"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

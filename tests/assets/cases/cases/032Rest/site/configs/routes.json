@@ -1,0 +1,15 @@
+{
+    "tables": {
+        "test": {
+            "plural": "tests",
+            "predictive": false,
+            "searchable": false
+        }
+    },
+    "routes": [
+        {
+            "route": "srv\/restauth\/:auth:",
+            "service": "restauth"
+        }
+    ]
+}

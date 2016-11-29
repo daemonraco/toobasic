@@ -1,0 +1,55 @@
+{
+	"root": "FormBuilder",
+	"types": {
+		"FormBuilder": {
+			"form": "+Form"
+		},
+		"Form": {
+			"name": "string",
+			"type": "FormType",
+			"action": "string",
+			"method": "string",
+			"attrs": "Attributes",
+			"fields": "+FormFields",
+			"buttons": "Buttons",
+			"modes": "Modes"
+
+		},
+		"FormType": "/^(basic|bootstrap|table)$/",
+		"Attributes": "mixed{}",
+		"FormFields": "FormField{}",
+		"FormField": ["string", "FormFieldDef"],
+		"FormFieldDef": {
+			"type": "+FieldType",
+			"label": "string",
+			"attrs": "Attributes",
+			"excludedModes": "ExcludedModes",
+			"value": "mixed",
+			"values": "Values",
+			"emptyOption": "EmptyOption"
+
+		},
+		"FieldType": "/^(enum|hidden|input|password|text)$/",
+		"ExcludedModes": "string[]",
+		"Values": "mixed[]",
+		"EmptyOption": {
+			"value": "mixed",
+			"label": "string"
+		},
+		"Buttons": "Button{}",
+		"Button": ["string", "ButtonDef"],
+		"ButtonDef": {
+			"type": "+ButtonType",
+			"label": "string",
+			"attrs": "Attributes"
+		},
+		"ButtonType": "/^(button|reset|submit)$/",
+		"Modes": "Mode{}",
+		"Mode": {
+			"action": "string",
+			"method": "string",
+			"attrs": "Attributes",
+			"buttons": "Buttons"
+		}
+	}
+}

@@ -34,6 +34,8 @@ $SuperLoader['TooBasic\\ParamsStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}
 $SuperLoader['TooBasic\\Paths'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Paths.php";
 $SuperLoader['TooBasic\\Service'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Service.php";
 $SuperLoader['TooBasic\\Singleton'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Singleton.php";
+$SuperLoader['TooBasic\\SpecsValidator'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/SpecsValidator.php";
+$SuperLoader['TooBasic\\SuperglobalStack'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/SuperglobalStack.php";
 $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer.php";
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";
 // @}
@@ -98,6 +100,8 @@ $SuperLoader['TooBasic\\Adapters\\View\\XML'] = "{$Directories[GC_DIRECTORIES_AD
 //
 // Representations @{
 $SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/BooleanFilter.php";
+$SuperLoader['TooBasic\\Representations\\CoreProps'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CoreProps.php";
+$SuperLoader['TooBasic\\Representations\\CorePropsJSON'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CorePropsJSON.php";
 $SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
 $SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
 $SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
@@ -162,11 +166,24 @@ $SuperLoader['TooBasic\\Search\\SearchableItemRepresentation'] = "{$Directories[
 $SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIRECTORIES_SEARCH]}/SearchableItemsFactory.php";
 // @}
 //
+// RESTful @{
+$SuperLoader['TooBasic\\Managers\\RestManager'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
+$SuperLoader['TooBasic\\Managers\\RestManagerException'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
+$SuperLoader['TooBasic\\RestConfig'] = "{$Directories[GC_DIRECTORIES_REST]}/RestConfig.php";
+// @}
+//
 // Known librearies @{
 $SuperLoader['Smarty'] = array(
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
 );
+foreach(['json-validator', 'json-validator.git'] as $aux) {
+	if(is_readable("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php")) {
+		require_once "{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php";
+		break;
+	}
+}
+unset($aux);
 // @}
 //
 // This is the function in charge of loading TooBasic clases when they are
@@ -202,3 +219,10 @@ spl_autoload_register(function($class) {
 		}
 	}
 });
+//
+// Including Composer loader from installations inside libraries.
+$aux = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_LIBRARIES]}/vendor/autoload.php");
+if(is_readable($aux)) {
+	require_once $aux;
+}
+unset($aux);

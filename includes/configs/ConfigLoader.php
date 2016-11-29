@@ -10,6 +10,7 @@ namespace TooBasic\Configs;
 //
 // Class aliases.
 use TooBasic\Config;
+use TooBasic\ConfigException;
 use TooBasic\Translate;
 
 /**
@@ -58,7 +59,7 @@ abstract class ConfigLoader {
 		} else {
 			//
 			// If there are no file to load is a fatal error.
-			throw new ConfigException(Translate::Instance()->EX_unable_to_find_config_file_named(['name' => $this->name()]));
+			throw new ConfigException(Translate::Instance()->EX_unable_to_find_config_file_named(['name' => $this->_config->name()]));
 		}
 	}
 	//

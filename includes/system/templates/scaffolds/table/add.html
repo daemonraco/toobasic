@@ -3,7 +3,7 @@
 <%if $formBuilder%>
 %STYLEFT%$ctrl->formFor('table_<%$pluralName%>', false, 'create', $formFlags)%STYRIGHT%
 <%else%>
-<form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
+<form id="<%$singularName%>_form" name="<%$singularName%>_form" method="post" action="#" role="form" ng-non-bindable>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>
 <%if $field.type.type == 'varchar' || $field.type.type == 'int' || $field.type.type == 'float' %>

@@ -56,10 +56,10 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "This option creates a Forms Builder specification file based on given parameters.\n";
 		$text.= "It can be use with '--module' to generate the specification inside certain module.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, array('create', 'new', 'add'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, ['create', 'new', 'add'], Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option removes a Forms Builder specification file.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, array('remove', 'rm', 'delete'), Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option allows to specify a field. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -73,7 +73,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_INPUT."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_PASSWORD."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_TEXT."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionField, array('--field', '-f'), Option::TypeMultiValue, $text, 'name:type:...'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionField, ['--field', '-f'], Option::TypeMultiValue, $text, 'name:type:...'));
 
 		$text = "This option allows to specify a button. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -83,48 +83,48 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_BUTTON."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_RESET."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionButton, array('--button', '-b'), Option::TypeMultiValue, $text, 'name:type'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionButton, ['--button', '-b'], Option::TypeMultiValue, $text, 'name:type'));
 
 		$text = "This option specifies the default URL where a form should submit its data.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionAction, array('--action', '-a'), Option::TypeValue, $text, 'action'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionAction, ['--action', '-a'], Option::TypeValue, $text, 'action'));
 
 		$text = "This option specifies which method should be used when the form is submitted.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionMethod, array('--method', '-m'), Option::TypeValue, $text, 'method'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionMethod, ['--method', '-m'], Option::TypeValue, $text, 'method'));
 
 		$text = "This option specifies a form type. Available values are:";
 		foreach(array_keys($Defaults[GC_DEFAULTS_FORMS_TYPES]) as $type) {
 			$text.= "\n\t- '{$type}'";
 		}
-		$this->_options->addOption(Option::EasyFactory(self::OptionType, array('--type', '-t'), Option::TypeValue, $text, 'type'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionType, ['--type', '-t'], Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionModule, array('--module', '-M'), Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionModule, ['--module', '-M'], Option::TypeValue, $text, 'name'));
 
 		$text = "This option forces the creation of this form previously removing other definition sharing the same name.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionForced, array('--forced', '-F'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionForced, ['--forced', '-F'], Option::TypeNoValue, $text));
 
 		$text = "This option adds some automatic twiks for bootstrap. Available values are:";
 		$text.= "\n\t- 'thin': thin inputs.";
 		$text.= "\n\t- 'bcolors': Green submits and default for other buttons";
-		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, array('--bootstrap-extras', '-bx'), Option::TypeMultiValue, $text, 'twik'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, ['--bootstrap-extras', '-bx'], Option::TypeMultiValue, $text, 'twik'));
 	}
 	protected function checkParameters() {
-		$out = array(
+		$out = [
 			GC_AFIELD_STATUS => true,
 			GC_AFIELD_ERROR => '',
 			GC_AFIELD_TYPE => GC_FORMS_BUILDTYPE_BASIC,
 			GC_AFIELD_ACTION => '#',
 			GC_AFIELD_METHOD => 'get',
-			GC_AFIELD_FIELDS => array(),
-			GC_AFIELD_BUTTONS => array()
-		);
+			GC_AFIELD_FIELDS => [],
+			GC_AFIELD_BUTTONS => []
+		];
 
 		$fields = $this->params->opt->{self::OptionField};
 		$buttons = $this->params->opt->{self::OptionButton};
 
 		if($out[GC_AFIELD_STATUS]) {
 			if($fields) {
-				$fieldTypes = array(GC_FORMS_FIELDTYPE_HIDDEN, GC_FORMS_FIELDTYPE_INPUT, GC_FORMS_FIELDTYPE_PASSWORD, GC_FORMS_FIELDTYPE_TEXT, GC_FORMS_FIELDTYPE_ENUM);
+				$fieldTypes = [GC_FORMS_FIELDTYPE_HIDDEN, GC_FORMS_FIELDTYPE_INPUT, GC_FORMS_FIELDTYPE_PASSWORD, GC_FORMS_FIELDTYPE_TEXT, GC_FORMS_FIELDTYPE_ENUM];
 				foreach($fields as $field) {
 					$fieldParts = explode(':', str_replace(',', '_', $field));
 					$fieldName = array_shift($fieldParts);
@@ -149,9 +149,9 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 						}
 					}
 
-					$out[GC_AFIELD_FIELDS][$fieldName] = array(
+					$out[GC_AFIELD_FIELDS][$fieldName] = [
 						GC_AFIELD_TYPE => $fieldType
-					);
+					];
 				}
 			} else {
 				$out[GC_AFIELD_STATUS] = false;
@@ -161,7 +161,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 
 		if($out[GC_AFIELD_STATUS]) {
 			if($buttons) {
-				$buttonTypes = array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT);
+				$buttonTypes = [GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT];
 				foreach($buttons as $button) {
 					$buttonParts = explode(':', str_replace(',', '_', $button));
 					$buttonName = array_shift($buttonParts);
@@ -177,9 +177,9 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 						break;
 					}
 
-					$out[GC_AFIELD_BUTTONS][$buttonName] = array(
+					$out[GC_AFIELD_BUTTONS][$buttonName] = [
 						GC_AFIELD_TYPE => $buttonType
-					);
+					];
 				}
 			}
 		}
@@ -199,12 +199,12 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		if($out[GC_AFIELD_STATUS] && isset($this->params->opt->{self::OptionBootstrapExtras})) {
 			foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
 				if(!isset($out[GC_AFIELD_FIELDS][$k]['attrs'])) {
-					$out[GC_AFIELD_FIELDS][$k]['attrs'] = array('class' => '');
+					$out[GC_AFIELD_FIELDS][$k]['attrs'] = ['class' => ''];
 				}
 			}
 			foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
 				if(!isset($out[GC_AFIELD_BUTTONS][$k]['attrs'])) {
-					$out[GC_AFIELD_BUTTONS][$k]['attrs'] = array('class' => '');
+					$out[GC_AFIELD_BUTTONS][$k]['attrs'] = ['class' => ''];
 				}
 			}
 

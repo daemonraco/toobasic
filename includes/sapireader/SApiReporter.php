@@ -11,6 +11,7 @@ namespace TooBasic;
 // Class aliases
 use TooBasic\Managers\SApiManager;
 use TooBasic\Paths;
+use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
@@ -303,7 +304,15 @@ class SApiReporter extends Singleton {
 			if($path) {
 				//
 				// Loading JSON specification.
-				$json = json_decode(file_get_contents($path));
+				$jsonString = file_get_contents($path);
+				//
+				// Validating JSON strucutre.
+				if(!SpecsValidator::ValidateJsonString('sapireport', $jsonString, $info)) {
+					throw new SApiReportException(Translate::Instance()->EX_json_path_fail_specs(['path' => $path])." {$info[JV_FIELD_ERROR][JV_FIELD_MESSAGE]}");
+				}
+				//
+				// Decoding JSON specification.
+				$json = json_decode($jsonString);
 				//
 				// Checking the loaded object.
 				if($json) {

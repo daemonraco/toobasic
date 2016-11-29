@@ -48,10 +48,10 @@ class DBSQLite extends DB {
 		$query.= " and        cch_date < datetime('now', :limit) \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
+		$stmt->execute([
 			':key' => $this->fullKey($prefix, $key),
 			':limit' => "-{$this->_expirationLength} second"
-		));
+		]);
 	}
 	/**
 	 * Checks if the table for cache entries storage exists.

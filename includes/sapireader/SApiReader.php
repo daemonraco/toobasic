@@ -117,7 +117,7 @@ class SApiReader {
 	 * @return string Returns the result of calling a service.
 	 * @throws SApiReaderException
 	 */
-	public function call($method, $params = array()) {
+	public function call($method, $params = []) {
 		//
 		// Default values.
 		$response = false;
@@ -129,7 +129,7 @@ class SApiReader {
 			$methConf = $this->_config->services->{$method};
 			//
 			// List of parameters to use.
-			$callParams = array();
+			$callParams = [];
 			//
 			// Copying default values.
 			foreach($methConf->defaults as $k => $v) {
@@ -152,7 +152,7 @@ class SApiReader {
 			}
 			//
 			// Building params to send on POST.
-			$sendParams = array();
+			$sendParams = [];
 			foreach($methConf->sendParams as $name => $from) {
 				//
 				// Checking that it's been given.
@@ -214,7 +214,7 @@ class SApiReader {
 				//
 				// 'params' must exist and be a list.
 				if(!isset($srv->params) || !is_array($srv->params)) {
-					$srv->params = array();
+					$srv->params = [];
 				}
 				//
 				// 'sendParams' must exist and be an object.
@@ -251,7 +251,7 @@ class SApiReader {
 		}
 		//
 		// Generating headers.
-		$headers = array();
+		$headers = [];
 		foreach($this->_config->headers as $k => $v) {
 			$headers[] = "{$k}: {$v}";
 		}
@@ -325,7 +325,7 @@ class SApiReader {
 		}
 		//
 		// Checking main fields presence.
-		foreach(array('services', 'url', 'name', 'description') as $field) {
+		foreach(['services', 'url', 'name', 'description'] as $field) {
 			if(!isset($this->_config->{$field})) {
 				throw new SApiReaderException(Translate::Instance()->EX_conf_field_is_not_present(['field' => $field]));
 			}

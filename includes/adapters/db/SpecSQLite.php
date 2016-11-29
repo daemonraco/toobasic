@@ -20,8 +20,8 @@ class SpecSQLite extends SpecAdapter {
 	//
 	// Public methods.
 	public function addTableEntry(\stdClass $table, \stdClass $entry) {
-		$keys = array();
-		$values = array();
+		$keys = [];
+		$values = [];
 		foreach($entry->entry as $key => $value) {
 			$keys[] = $key;
 			$values[] = str_replace("'", "''", $value);
@@ -72,7 +72,7 @@ class SpecSQLite extends SpecAdapter {
 		$autoIncrement = count($this->_db->queryData("select * from sqlite_master where type = 'table' and name = '{$table->fullname}' and sql like '%autoincrement%'")) > 0;
 		//
 		// New columns.
-		$cmp = array();
+		$cmp = [];
 		foreach($table->fields as $fullname => $field) {
 			$found = false;
 			foreach($tableSpecs as $dbColumn) {
@@ -84,10 +84,10 @@ class SpecSQLite extends SpecAdapter {
 			if(!$found) {
 				$creates[] = $fullname;
 			} else {
-				$cmp[$fullname] = array(
+				$cmp[$fullname] = [
 					GC_AFIELD_DB => $found,
 					GC_AFIELD_SPEC => null
-				);
+				];
 			}
 		}
 		//
@@ -132,8 +132,8 @@ class SpecSQLite extends SpecAdapter {
 		}
 		//
 		// SQLite does not supports column modifications or dropping @{
-		$drops = array();
-		$updates = array();
+		$drops = [];
+		$updates = [];
 		// @}
 	}
 	public function createIndex(\stdClass $index) {
@@ -150,7 +150,7 @@ class SpecSQLite extends SpecAdapter {
 		$query.= "{$index->fullname} \n";
 		$query.= "        on {$index->table} (\n";
 
-		$lines = array();
+		$lines = [];
 		foreach($index->fields as $field) {
 			$lines[] = "                {$field}";
 		}
@@ -164,7 +164,7 @@ class SpecSQLite extends SpecAdapter {
 	public function createTable(\stdClass $table) {
 		$query = "create table {$table->fullname} ( \n";
 
-		$lines = array();
+		$lines = [];
 		foreach($table->fields as $field) {
 			$lines[] = "        {$this->buildFullColumnType($field)}";
 		}
@@ -198,7 +198,7 @@ class SpecSQLite extends SpecAdapter {
 		return $this->exec($query);
 	}
 	public function getIndexes() {
-		$out = array();
+		$out = [];
 
 		$query = "select  distinct name \n";
 		$query.= "from    sqlite_master \n";
@@ -211,7 +211,7 @@ class SpecSQLite extends SpecAdapter {
 		return $out;
 	}
 	public function getTables() {
-		$out = array();
+		$out = [];
 
 		$query = "select  distinct name \n";
 		$query.= "from    sqlite_master \n";
@@ -299,7 +299,7 @@ class SpecSQLite extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		}
-#		if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeVarchar))) {
+#		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
 #			$out.= 'collate utf8_bin ';
 #		}
 		if(!$spec->null) {
@@ -311,7 +311,7 @@ class SpecSQLite extends SpecAdapter {
 					$out.= 'default null ';
 				}
 			} else {
-				if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
+				if(in_array($spec->type->type, [DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar])) {
 					$out.= "default '{$spec->default}' ";
 				} else {
 					$out.= "default {$spec->default} ";

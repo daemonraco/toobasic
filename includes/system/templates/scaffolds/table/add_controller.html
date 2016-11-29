@@ -13,13 +13,13 @@ class <%$addActionController%> extends \TooBasic\Controller {
 	// Protected methods.
 	protected function basicRun() {
 <%if $formBuilder%>
-		$this->assign('formFlags', array(
+		$this->assign('formFlags', [
 <%if $templatesStyle == 'bootstrap'%>
 			GC_FORMS_BUILDFLAG_SPACER => "\t\t"
 <%else%>
 			GC_FORMS_BUILDFLAG_SPACER => ""
 <%/if%>
-		));
+		]);
 
 <%/if%>
 		return $this->status();

@@ -1,7 +1,7 @@
 <?php
 
 // TOOBASIC-SYSTOOL-LAYOUT[START]
-$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-2.1.3.min.js';
+$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-3.1.1.min.js';
 $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap.min.css';
 $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap-theme.min.css';
 $Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:bootstrap/js/bootstrap.min.js';

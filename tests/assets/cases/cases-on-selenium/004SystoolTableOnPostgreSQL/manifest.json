@@ -23,6 +23,7 @@
 		"/modules/mymodule/db/people.json",
 		"/modules/mymodule/forms/table_people.json",
 		"/modules/mymodule/langs/en_us.json",
+		"/modules/mymodule/models/representations/people.json",
 		"/modules/mymodule/models/representations/PeopleFactory.php",
 		"/modules/mymodule/models/representations/PersonRepresentation.php",
 		"/modules/mymodule/scripts/person_predictive_name.js",

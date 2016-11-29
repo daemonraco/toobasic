@@ -1,6 +1,6 @@
 Usage:
 	<%$program%> <suite-name> <case-name> [options]
-	<%$program%> <task-name>  [options]
+	<%$program%> <task-name> [options]
 
 Suites:
 	- cases
@@ -18,3 +18,10 @@ Tasks:
 	- add-asset
 		Creates an empty asset for certain case. Usage:
 		<%$program%> <suite-name> <case-index> <asset-path> [<asset-type>]
+		Asset Types:
+			- 'controller'
+			- 'empty'
+			- 'json'
+			- 'php'
+			- 'service'
+			- 'view'

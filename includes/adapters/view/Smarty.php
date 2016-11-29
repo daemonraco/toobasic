@@ -121,7 +121,7 @@ class Smarty extends Adapter {
 			global $Directories;
 			//
 			// Checking the existence of Smarty's special directories.
-			foreach(array(self::SmartyStuffDirectory, self::SmartyCacheDirectory, self::SmartyCompileDirectory, self::SmartyConfigDirectory) as $subPath) {
+			foreach([self::SmartyStuffDirectory, self::SmartyCacheDirectory, self::SmartyCompileDirectory, self::SmartyConfigDirectory] as $subPath) {
 				$dirPath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$subPath}");
 				if(!is_dir($dirPath)) {
 					mkdir($dirPath, $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS], true);

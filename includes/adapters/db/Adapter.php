@@ -30,6 +30,10 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 	 */
 	protected $_dblink = false;
 	/**
+	 * @var string Database name.
+	 */
+	protected $_dbname = false;
+	/**
 	 * @var string Tables prefix shortcut.
 	 */
 	protected $_prefix = '';
@@ -37,6 +41,9 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 	// Magic methods.
 	public function __construct($dbname) {
 		parent::__construct();
+		//
+		// Saving DB name.
+		$this->_dbname = $dbname;
 		//
 		// Loading global connections settings.
 		global $Connections;
@@ -184,6 +191,14 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 		return $this->_dblink;
 	}
 	/**
+	 * This method provides current addapted database name.
+	 *
+	 * @return string Returns a database name.
+	 */
+	public function name() {
+		return $this->_dbname;
+	}
+	/**
 	 * This method allows to prepare a statement based on a query.
 	 *
 	 * @param string $query SQL query to use for the statement creation.
@@ -303,7 +318,7 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed[] Returns a list of found items.
 	 */
 	public function queryData($query, $dieOnError = true) {
-		$out = array();
+		$out = [];
 
 		$result = $this->query($query, $dieOnError);
 		if($result) {

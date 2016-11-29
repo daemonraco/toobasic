@@ -24,6 +24,7 @@
 	* [Query Adapter](docs/tech/queryadapter.md)
 * Services
 	* [Services](docs/services.md)
+	* [RESTful](docs/restful.md)
 * Shell Tools
 	* [Shell Tools and Crons](docs/shelltools.md)
 * Configs

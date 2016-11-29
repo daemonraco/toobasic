@@ -3,7 +3,7 @@
 <%if $formBuilder%>
 %STYLEFT%$ctrl->formFor('table_<%$pluralName%>', $<%$singularName%>, 'edit', $formFlags)%STYRIGHT%
 <%else%>
-<form id="<%$singularName%>_form" method="post" href="#" role="form" ng-non-bindable>
+<form id="<%$singularName%>_form" name="<%$singularName%>_form" method="post" action="#" role="form" ng-non-bindable>
 	<input type="hidden" id="id" name="id" value="%STYLEFT%$<%$singularName%>.id%STYRIGHT%"/>
 	<table>
 <%foreach from=$tableFields item=field%><%if $field.inForm %>

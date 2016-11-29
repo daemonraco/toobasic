@@ -22,7 +22,7 @@ class ManifestsManager extends Manager {
 	/**
 	 * @var mixed[] List of found errors while checking.
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 	/**
 	 * @var boolean This flag is TRUE when the site is flagged as installed.
 	 */
@@ -254,7 +254,7 @@ class ManifestsManager extends Manager {
 		//
 		// Avoiding multiple loads.
 		if($this->_manifests === false) {
-			$this->_manifests = array();
+			$this->_manifests = [];
 			//
 			// Loading a representation for each module.
 			foreach($this->paths->modules() as $module) {
@@ -271,10 +271,10 @@ class ManifestsManager extends Manager {
 	 * found.
 	 */
 	protected function setError($code, $message, $module = false) {
-		$this->_errors[] = array(
+		$this->_errors[] = [
 			GC_AFIELD_CODE => $code,
 			GC_AFIELD_MESSAGE => $message,
 			GC_AFIELD_MODULE_NAME => $module
-		);
+		];
 	}
 }

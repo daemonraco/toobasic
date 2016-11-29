@@ -38,7 +38,7 @@ class MagicProp extends Singleton {
 	/**
 	 * @var \TooBasic\Singleton[string] List of loaded properties.
 	 */
-	protected $_properties = array();
+	protected $_properties = [];
 	/**
 	 * @var \TooBasic\CacheAdatper Current cache adapter's singleton.
 	 */

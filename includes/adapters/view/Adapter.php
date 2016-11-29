@@ -23,12 +23,12 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	/**
 	 * @var mixed[string] Full list of values assigned by default.
 	 */
-	protected $_autoAssigns = array();
+	protected $_autoAssigns = [];
 	/**
 	 * @var string[string] List of headers to be exported on the HTTP
 	 * response.
 	 */
-	protected $_headers = array();
+	protected $_headers = [];
 	//
 	// Magic methods.
 	/**

@@ -1,0 +1,33 @@
+{
+	"root": "SAPIReader",
+	"types": {
+		"SAPIReader": {
+			"abstract": "boolean",
+			"name": "string",
+			"description": "+string",
+			"url": "+string",
+			"headers": "Headers",
+			"services": "Services",
+			"type": "string",
+			"extends": "Extends"
+		},
+		"Headers": "Header{}",
+		"Header": "string",
+		"Services": "Service{}",
+		"Service": {
+			"method": "+string",
+			"uri": "+string",
+			"params": "ParamsList",
+			"sendParams": "Params",
+			"defaults": "Params"
+		},
+		"Params": "mixed{}",
+		"ParamsList": "string[]",
+		"Extends": [
+			"ExtendName",
+			"ExtendNames"
+		],
+		"ExtendName": "string",
+		"ExtendNames": "ExtendName[]"
+	}
+}

@@ -74,12 +74,16 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 			}
 
 			$opt = $this->_options->option(self::OptionParam);
+			$this->_assignments['cache_params'] = [];
+			$this->_assignments['required_params'] = [];
 			if($opt->activated()) {
-				$this->_assignments['cache_params'] = $opt->value();
-				$this->_assignments['required_params'] = $opt->value();
-			} else {
-				$this->_assignments['cache_params'] = array();
-				$this->_assignments['required_params'] = array();
+				foreach($opt->value() as $param) {
+					$param = explode(':', $param);
+					$param = array_shift($param);
+
+					$this->_assignments['cache_params'][] = $param;
+					$this->_assignments['required_params'][] = $param;
+				}
 			}
 		}
 	}
@@ -93,16 +97,16 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 			$this->_names['controller-name'] = Names::ControllerClass($this->_names[GC_AFIELD_NAME]);
 			//
 			// Files.
-			$this->_files[] = array(
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONTROLLERS]}/{$this->_names[GC_AFIELD_NAME]}.php"),
 				GC_AFIELD_TEMPLATE => 'controller.html',
 				GC_AFIELD_DESCRIPTION => 'controller file'
-			);
-			$this->_files[] = array(
+			];
+			$this->_files[] = [
 				GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_TEMPLATES]}/".GC_VIEW_MODE_ACTION."/{$this->_names[GC_AFIELD_NAME]}.html"),
 				GC_AFIELD_TEMPLATE => 'view.html',
 				GC_AFIELD_DESCRIPTION => 'view file'
-			);
+			];
 		}
 	}
 	protected function setOptions() {
@@ -118,14 +122,14 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCached, array('--cached', '-c'), Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCached, [ '--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
 
 		$text = 'This options allows to set a specific layout for your controller. ';
 		$text.= 'NOLAYOUT means force the controller to work without layout.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionLayout, array('--layout', '-l'), Option::TypeValue, $text, 'layout-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionLayout, ['--layout', '-l'], Option::TypeValue, $text, 'layout-name'));
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionParam, array('--param', '-p'), Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OptionParam, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

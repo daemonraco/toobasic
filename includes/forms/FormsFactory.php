@@ -21,7 +21,7 @@ class FormsFactory extends \TooBasic\Singleton {
 	/**
 	 * @var \TooBasic\Forms\Form[string] List of already loaded forms.
 	 */
-	protected $_forms = array();
+	protected $_forms = [];
 	//
 	// Magic methods.
 	/**

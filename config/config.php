@@ -112,11 +112,13 @@ $Directories[GC_DIRECTORIES_ADAPTERS_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/in
 $Directories[GC_DIRECTORIES_ADAPTERS_DB] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/db');
 $Directories[GC_DIRECTORIES_ADAPTERS_VIEW] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/adapters/view');
 $Directories[GC_DIRECTORIES_MODULES] = TB_Sanitizer::DirPath(ROOTDIR.'/modules');
+$Directories[GC_DIRECTORIES_REST] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/rest');
 $Directories[GC_DIRECTORIES_SAPIREADER] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/sapireader');
 $Directories[GC_DIRECTORIES_SEARCH] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/search');
 $Directories[GC_DIRECTORIES_SHELL_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/shell');
 $Directories[GC_DIRECTORIES_SHELL_FLAGS] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/shellflags');
 $Directories[GC_DIRECTORIES_SITE] = TB_Sanitizer::DirPath(ROOTDIR.'/site');
+$Directories[GC_DIRECTORIES_SPECS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/specs');
 $Directories[GC_DIRECTORIES_SYSTEM] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/system');
 $Directories[GC_DIRECTORIES_SYSTEM_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache/system');
 //
@@ -310,6 +312,7 @@ if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 // More necessary globals.
 $ActionName = isset($auxParamsManager->{GC_REQUEST_ACTION}) ? $auxParamsManager->{GC_REQUEST_ACTION} : $Defaults[GC_DEFAULTS_ACTION];
 $LayoutName = isset($auxParamsManager->{GC_REQUEST_LAYOUT}) ? $auxParamsManager->{GC_REQUEST_LAYOUT} : $Defaults[GC_DEFAULTS_LAYOUT];
+$RestPath = isset($auxParamsManager->{GC_REQUEST_REST}) ? $auxParamsManager->{GC_REQUEST_REST} : false;
 $ServiceName = isset($auxParamsManager->{GC_REQUEST_SERVICE}) ? $auxParamsManager->{GC_REQUEST_SERVICE} : false;
 $ModeName = isset($auxParamsManager->{GC_REQUEST_MODE}) ? $auxParamsManager->{GC_REQUEST_MODE} : false;
 $SkinName = \TooBasic\guessSkin();

@@ -33,11 +33,11 @@ class FormsManager extends \TooBasic\Managers\Manager {
 	public function createForm($name, $module = false) {
 		//
 		// Default values.
-		$out = array(
+		$out = [
 			GC_AFIELD_STATUS => true,
 			GC_AFIELD_ERROR => false,
 			GC_AFIELD_PATH => false
-		);
+		];
 		//
 		// Global dependencies.
 		global $Directories;
@@ -108,7 +108,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 	 * @param mixed[string] $flags List of extra parameters used to build.
 	 * @return string Returns a HTML piece of code.
 	 */
-	public function formFor($formName, $item = false, $mode = false, $flags = array()) {
+	public function formFor($formName, $item = false, $mode = false, $flags = []) {
 		//
 		// Default values
 		$out = '';
@@ -139,11 +139,11 @@ class FormsManager extends \TooBasic\Managers\Manager {
 	public function removeForm($name) {
 		//
 		// Default values.
-		$out = array(
+		$out = [
 			GC_AFIELD_STATUS => true,
 			GC_AFIELD_ERROR => false,
 			GC_AFIELD_PATH => false
-		);
+		];
 		//
 		// Checking form existence.
 		$form = new Form($name);

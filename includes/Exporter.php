@@ -24,7 +24,7 @@ abstract class Exporter extends AbstractExporter {
 	/**
 	 * @var string[string] Values shared among controllers.
 	 */
-	protected static $_Shares = array();
+	protected static $_Shares = [];
 	//
 	// Protected properties.
 	/**
@@ -41,10 +41,10 @@ abstract class Exporter extends AbstractExporter {
 	 * @var string[string] Lists of parameters used to generate a cache entry
 	 * key.
 	 */
-	protected $_cacheParams = array(
-		'GET' => array(),
-		'POST' => array()
-	);
+	protected $_cacheParams = [
+		'GET' => [],
+		'POST' => []
+	];
 	/**
 	 * @var string Format in which this controller/service is being displayed.
 	 */
@@ -57,10 +57,10 @@ abstract class Exporter extends AbstractExporter {
 	 * @var string[string][] List of required parameters grouped by request
 	 * method.
 	 */
-	protected $_requiredParams = array(
-		'GET' => array(),
-		'POST' => array()
-	);
+	protected $_requiredParams = [
+		'GET' => [],
+		'POST' => []
+	];
 	/**
 	 * @var \TooBasic\Adapters\View Pointer to the current view rendering
 	 * adapter.

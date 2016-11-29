@@ -75,7 +75,7 @@ class FormWriter {
 		$ok = true;
 		//
 		// Checking type.
-		if(!in_array($type, array(GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT))) {
+		if(!in_array($type, [GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT])) {
 			$error = "Unknown type '{$type}'";
 			$ok = false;
 		}
@@ -130,7 +130,7 @@ class FormWriter {
 		// Checking type.
 		$typeValues = explode(':', $type);
 		$type = array_shift($typeValues);
-		if(!in_array($type, array(GC_FORMS_FIELDTYPE_HIDDEN, GC_FORMS_FIELDTYPE_INPUT, GC_FORMS_FIELDTYPE_PASSWORD, GC_FORMS_FIELDTYPE_TEXT, GC_FORMS_FIELDTYPE_ENUM))) {
+		if(!in_array($type, [GC_FORMS_FIELDTYPE_HIDDEN, GC_FORMS_FIELDTYPE_INPUT, GC_FORMS_FIELDTYPE_PASSWORD, GC_FORMS_FIELDTYPE_TEXT, GC_FORMS_FIELDTYPE_ENUM])) {
 			$error = "Unknown type '{$type}'";
 			$ok = false;
 		}
@@ -176,7 +176,7 @@ class FormWriter {
 	public function excludeFieldFrom($fieldName, $modes, &$error = false) {
 		if(isset($this->_config->form->fields->{$fieldName})) {
 			if(!is_array($modes)) {
-				$modes = array();
+				$modes = [];
 			}
 
 			$this->_config->form->fields->{$fieldName}->excludedModes = $modes;

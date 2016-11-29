@@ -25,7 +25,7 @@ class ItemsFactoryProvider extends \TooBasic\Singleton {
 	/**
 	 * @var string[string] List of already loaded factory's class names.
 	 */
-	protected $_loadedClases = array();
+	protected $_loadedClases = [];
 	//
 	// Magic methods.
 	/**

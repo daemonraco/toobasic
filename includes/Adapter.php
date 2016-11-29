@@ -20,7 +20,7 @@ abstract class Adapter {
 	 * @var \TooBasic\Adapter[] List of loaded adapters. Avoids multiple
 	 * instances.
 	 */
-	protected static $_Adapters = array();
+	protected static $_Adapters = [];
 	//
 	// Magic methods.
 	public function __construct() {

@@ -97,7 +97,7 @@ class ActionsManager extends UrlManager {
 			if($autoDisplay) {
 				//
 				// Generating a full list of required headers.
-				$headers = array();
+				$headers = [];
 				//
 				// Adding layout headers if there was a layout
 				// executed.
@@ -155,7 +155,7 @@ class ActionsManager extends UrlManager {
 				//
 				// Checking configuration for parameter 'params'.
 				if(!isset($redirConf[GC_AFIELD_PARAMS])) {
-					$redirConf[GC_AFIELD_PARAMS] = array();
+					$redirConf[GC_AFIELD_PARAMS] = [];
 				} elseif(!is_array($redirConf[GC_AFIELD_PARAMS])) {
 					throw new Exception(Translate::Instance()->EX_wrong_redirection_conf_parameter_is_not_array(['redirector' => $redirector, 'param' => GC_AFIELD_PARAMS]));
 				}
@@ -348,9 +348,9 @@ class ActionsManager extends UrlManager {
 			//
 			// At this point, a redirector was triggered and it should
 			// be used to generate a execution result.
-			$lastRun = array(
+			$lastRun = [
 				GC_AFIELD_REDIRECTOR => $redirector
-			);
+			];
 		} else {
 			//
 			// At this point there was an error executing the

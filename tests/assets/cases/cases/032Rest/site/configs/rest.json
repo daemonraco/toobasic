@@ -1,0 +1,11 @@
+{
+	"resources": {
+		"tests": "active",
+		"auths": {
+			"show": "active",
+			"index": "auth",
+			"stats": "auth:user",
+			"search": "auth:admin:user"
+		}
+	}
+}

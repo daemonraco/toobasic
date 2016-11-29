@@ -23,17 +23,17 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		$text.= "call the remote API.\n";
 		$text.= "To use it, at least 3 extra parameters must be given, the configuration\n";
 		$text.= "name, the virtual method to use and every parameter required by such method.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCall, array('--call', '-c'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionCall, ['--call', '-c'], Option::TypeNoValue, $text));
 
 //		$text = "TODO help text for: '--check', '-C'.";
-//		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, array('--check', '-C'), Option::TypeValue, $text, 'config-name'));
+//		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, ['--check', '-C'], Option::TypeValue, $text, 'config-name'));
 
 		$text = "This option prompts a detailed list of available SimpleAPI configurations.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionList, array('--list', '-l'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionList, ['--list', '-l'], Option::TypeNoValue, $text));
 
 		$text = "This option can be used along with '--call' to prompt a more detailed result dump.\n";
 		$text = "Basically 'var_dump()' instead of 'print_r()'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSpecific, array('--specific', '-s'), Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OptionSpecific, ['--specific', '-s'], Option::TypeNoValue, $text));
 	}
 	protected function taskCall($spacer = "") {
 		$ok = true;

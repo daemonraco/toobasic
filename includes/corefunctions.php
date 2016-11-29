@@ -35,12 +35,12 @@ if(!function_exists('getallheaders')) {
 // doesn't have it.
 if(!function_exists('apache_request_headers')) {
 	function apache_request_headers() {
-		$arh = array();
+		$arh = [];
 		$rx_http = '/\AHTTP_/';
 		foreach($_SERVER as $key => $val) {
 			if(preg_match($rx_http, $key)) {
 				$arh_key = preg_replace($rx_http, '', $key);
-				$rx_matches = array();
+				$rx_matches = [];
 				// do some nasty string manipulations to restore
 				// the original letter case this should work in
 				// most cases.
@@ -177,7 +177,7 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 function recursive_unlink($path, $keepFather = false) {
 	//
 	// Creating a list of errors to be returned.
-	$out = array();
+	$out = [];
 	//
 	// Checking if the requested path exists.
 	if(is_readable($path)) {

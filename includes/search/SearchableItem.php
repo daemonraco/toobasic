@@ -59,4 +59,10 @@ interface SearchableItem {
 	 * @return string Returns a search item code.
 	 */
 	public function type();
+	/**
+	 * This method provides a full URI to access an indexed item.
+	 *
+	 * @return string Returns a search item full URI.
+	 */
+	public function viewLink();
 }

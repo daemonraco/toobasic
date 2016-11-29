@@ -1,4 +1,4 @@
-# TooBasic 2.1.0-mamba
+# TooBasic 2.2.0-mamba
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 
@@ -74,6 +74,8 @@ in [this link](docs/controller.md).
 If you are already using __TooBasic__ and you want to expand your possibilities,
 we suggest you visit this plugins:
 
+* [__JSInject__](https://github.com/daemonraco/toobasic-jsinject): Your PHP
+variables in your JS.
 * [__Logger__](https://github.com/daemonraco/toobasic-logger): To generate and
 manage log files in your site.
 * [__Workflows__](https://github.com/daemonraco/toobasic-workflows): If items in
@@ -103,6 +105,7 @@ related)
 	* [Languages](docs/language.md)
 	* [Configs](docs/configs.md)
 	* [Services](docs/services.md)
+	* [RESTful](docs/restful.md)
 	* [Cache](docs/cache.md)
 * If you want the heavy stuff:
 	* [Databases](docs/databases.md)

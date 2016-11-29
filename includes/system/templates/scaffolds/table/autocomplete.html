@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function <%$singularName%>_predictive_<%$nameField%>_start(){
 	$('.<%$singularName%>_predictive_<%$nameField%>').each(function () {
 		$(this).bind("keydown", function (event) {
 			if (event.keyCode === $.ui.keyCode.TAB &&
@@ -29,6 +29,9 @@ $(document).ready(function () {
 				val = val.join(', ') + ', ';
 				val = val.replace(/, ([ ]+)/g, ', ');
 				$(this).val(val);
+				//
+				// Trigger useful so solve some AngularJS issues.
+				$(this).trigger('input');
 
 				return false;
 			}
@@ -37,4 +40,6 @@ $(document).ready(function () {
 			return $('<li>' + item.<%$nameField%> + '</li>').appendTo(ul);
 		};
 	});
-});
+};
+
+$(document).ready(<%$singularName%>_predictive_<%$nameField%>_start);

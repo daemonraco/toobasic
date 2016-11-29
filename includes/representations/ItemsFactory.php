@@ -13,6 +13,7 @@ use TooBasic\Exception;
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
+use TooBasic\Representations\CoreProps;
 use TooBasic\Translate;
 
 /**
@@ -28,14 +29,16 @@ abstract class ItemsFactory {
 	/**
 	 * @var string[string] List of loaded representation classes.
 	 */
-	protected static $_LoadedClasses = array();
+	protected static $_LoadedClasses = [];
 	//
 	// Protected core properties.
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Generic prefix for all columns on the represented table.
 	 */
 	protected $_CP_ColumnsPerfix = '';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var boolean This flag indicates if method 'create()' is disabled or
 	 * not.
 	 * It can also have a string as value and it will be used as method name
@@ -43,29 +46,39 @@ abstract class ItemsFactory {
 	 */
 	protected $_CP_DisableCreate = false;
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
 	protected $_CP_IDColumn = '';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Name of a field containing names (without prefix).
 	 */
 	protected $_CP_NameColumn = 'name';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string[string] List of fields (without prefix) associated to a
 	 * sorting direction.
 	 */
 	protected $_CP_OrderBy = false;
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Name of a \TooBasic\Representations\ItemRepresentation
 	 * class.
 	 */
 	protected $_CP_RepresentationClass = '';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Represented table's name (without prefix).
 	 */
 	protected $_CP_Table = '';
 	//
 	// Protected properties.	
+	/**
+	 * @var string Name of the class or JSON specs where core properties are
+	 * held.
+	 */
+	protected $_corePropsHolder = false;
 	/**
 	 * @var \TooBasic\Adapters\DB\Adapter Database connection shortcut.
 	 */
@@ -91,12 +104,12 @@ abstract class ItemsFactory {
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	final protected function __constructor() {
+	final protected function __construct() {
 		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support empty entries creation.
-		if(!$this->_CP_IDColumn) {
-			$this->_CP_DisableCreate = true;
+		if(!$this->_cp_IDColumn) {
+			$this->_cp_DisableCreate = true;
 		}
 	}
 	/**
@@ -104,6 +117,30 @@ abstract class ItemsFactory {
 	 */
 	final public function __clone() {
 		throw new Exception(Translate::Instance()->EX_obj_clone_forbidden);
+	}
+	/**
+	 * This magic method provides a quick access to core properties.
+	 *
+	 * @param string $name Property name to look for.
+	 * @return mixed Returns the value of the request property or FALSE if not
+	 * found.
+	 */
+	public function __get($name) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Checking if it's core property request
+		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
+			if($this->_corePropsHolder) {
+				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
+			} else {
+				$localName = "_CP_{$match['name']}";
+				$out = $this->{$localName};
+			}
+		}
+
+		return $out;
 	}
 	//
 	// Public methods.
@@ -119,9 +156,9 @@ abstract class ItemsFactory {
 	public function create() {
 		//
 		// Checking if this method is disabled.
-		if(\boolval($this->_CP_DisableCreate)) {
-			if(is_string($this->_CP_DisableCreate)) {
-				throw new Exception(Translate::Instance()->EX_create_cannot_be_called_use(['method' => $this->_CP_DisableCreate]));
+		if(\boolval($this->_cp_DisableCreate)) {
+			if(is_string($this->_cp_DisableCreate)) {
+				throw new Exception(Translate::Instance()->EX_create_cannot_be_called_use(['method' => $this->_cp_DisableCreate]));
 			} else {
 				throw new Exception(Translate::Instance()->EX_create_cannot_be_called);
 			}
@@ -132,10 +169,10 @@ abstract class ItemsFactory {
 		//
 		// Generating a proper query to insert an empty entry.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_CP_Table, array(
-			GC_DBQUERY_NAMES_COLUMN_ID => $this->_CP_IDColumn,
-			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_CP_NameColumn
-			), $prefixes);
+		$query = $this->_db->queryAdapter()->createEmptyEntry($this->_cp_Table, [
+			GC_DBQUERY_NAMES_COLUMN_ID => $this->_cp_IDColumn,
+			GC_DBQUERY_NAMES_COLUMN_NAME => $this->_cp_NameColumn
+			], $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Attepting to create an entry.
@@ -160,21 +197,21 @@ abstract class ItemsFactory {
 	public function ids() {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Enforcing order configuration.
-		if(!is_array($this->_CP_OrderBy)) {
-			$this->_CP_OrderBy = array();
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
 		}
 		//
 		// Generating a proper query to obtain a full list of IDs.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array(), $prefixes, $this->_CP_OrderBy);
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, [], $prefixes, $this->_cp_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.
 		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
 			foreach($stmt->fetchAll() as $row) {
 				$out[] = $row[$idKey];
 			}
@@ -187,7 +224,7 @@ abstract class ItemsFactory {
 		return $out;
 	}
 	/**
-	 * This method retrieves a list of ID of all available entries where the
+	 * This method retrieves a list of IDs of all available entries where the
 	 * column flagged as name follows certain pattern.
 	 *
 	 * @return int[] Returns a list of IDs.
@@ -196,26 +233,26 @@ abstract class ItemsFactory {
 		//
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
-		if(!$this->_CP_NameColumn) {
+		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Enforcing order configuration.
-		if(!is_array($this->_CP_OrderBy)) {
-			$this->_CP_OrderBy = array();
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
 		}
 		//
 		// Generating a proper query to obtain a list of IDs.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array("*:{$this->_CP_NameColumn}" => $pattern), $prefixes, $this->_CP_OrderBy);
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, ["*:{$this->_cp_NameColumn}" => $pattern], $prefixes, $this->_cp_OrderBy);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Executing query and fetching IDs.
 		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
 			foreach($stmt->fetchAll() as $row) {
 				$out[] = $row[$idKey];
 			}
@@ -226,6 +263,78 @@ abstract class ItemsFactory {
 		}
 
 		return $out;
+	}
+	/**
+	 * This method retrieves a list of IDs in the represented table based on a
+	 * set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return int[] Returns a list of IDs.
+	 */
+	public function idsBy($conditions, $order = []) {
+		//
+		// Default values.
+		$out = [];
+		//
+		// Checking conditions.
+		if(!is_array($conditions)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$conditions',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Checking order.
+		if(!is_array($order)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$order',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Enforcing order configuration.
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
+		}
+		$order = $order ? $order : $this->_cp_OrderBy;
+		//
+		// Generating a proper query to obtain a list of IDs.
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
+			foreach($stmt->fetchAll() as $row) {
+				$out[] = $row[$idKey];
+			}
+		} else {
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
+		}
+
+		return $out;
+	}
+	/**
+	 * This method retrieves an ID in the represented table based on a set of
+	 * conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return int Returns the first ID that matches.
+	 */
+	public function idBy($conditions, $order = []) {
+		$ids = $this->idsBy($conditions, $order);
+		return array_shift($ids);
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -240,12 +349,12 @@ abstract class ItemsFactory {
 		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support this method.
-		if(!$this->_CP_IDColumn) {
+		if(!$this->_cp_IDColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_ID_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.
-		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
+		$item = self::GetClass($this->_cp_RepresentationClass, $this->_dbname);
 		//
 		// Attempting to load the information based on the id.
 		$item->load($id);
@@ -261,7 +370,7 @@ abstract class ItemsFactory {
 	 * This method allows to obtain a representation for certain item based on
 	 * its name.
 	 *
-	 * @param type $name Name to look for.
+	 * @param string $name Name to look for.
 	 * @return \TooBasic\Representations\ItemRepresentation Returns a
 	 * representation when found or NULL if not.
 	 * @throws \TooBasic\Exception
@@ -270,12 +379,12 @@ abstract class ItemsFactory {
 		//
 		// Checking if there's an name field configured, if not it means
 		// this representation doesn't support this method.
-		if(!$this->_CP_NameColumn) {
+		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
 		//
 		// Obtaining an object to hold the represented entry.
-		$item = self::GetClass($this->_CP_RepresentationClass, $this->_dbname);
+		$item = self::GetClass($this->_cp_RepresentationClass, $this->_dbname);
 		//
 		// Attempting to load the information based on the id.
 		$item->loadByName($name);
@@ -297,7 +406,7 @@ abstract class ItemsFactory {
 	public function items() {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Fetching all available dis and creating a representation for
 		// each one of them.
@@ -306,6 +415,47 @@ abstract class ItemsFactory {
 		}
 
 		return $out;
+	}
+	/**
+	 * This method retrieves a list of representations in the represented
+	 * table based on a set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return \TooBasic\Representations\ItemRepresentation[] Returns a list
+	 * of representations.
+	 */
+	public function itemsBy($conditions, $order = []) {
+		//
+		// Default values.
+		$out = [];
+		//
+		// Fetching all available dis and creating a representation for
+		// each one of them.
+		foreach($this->idsBy($conditions, $order) as $id) {
+			$out[$id] = $this->item($id);
+		}
+
+		return $out;
+	}
+	/**
+	 * This method retrieves a representations in the represented table based
+	 * on a set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return \TooBasic\Representations\ItemRepresentation Returns the first
+	 * representations that matches.
+	 */
+	public function itemBy($conditions, $order = []) {
+		$items = $this->itemsBy($conditions, $order);
+		return array_shift($items);
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -334,10 +484,10 @@ abstract class ItemsFactory {
 	 */
 	protected function queryAdapterPrefixes() {
 		if($this->_queryAdapterPrefixes === false) {
-			$this->_queryAdapterPrefixes = array(
+			$this->_queryAdapterPrefixes = [
 				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
-				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix
-			);
+				GC_DBQUERY_PREFIX_COLUMN => $this->_cp_ColumnsPerfix
+			];
 		}
 		return $this->_queryAdapterPrefixes;
 	}
@@ -355,7 +505,7 @@ abstract class ItemsFactory {
 	final public static function &Instance($dbname = false) {
 		//
 		// List of loaded singleton instances.
-		static $Instances = array();
+		static $Instances = [];
 		//
 		// When no database name is specified, the defualt must be used.
 		if($dbname === false) {
@@ -371,7 +521,7 @@ abstract class ItemsFactory {
 			// Generaring a list for each factory in which store
 			// instances associated to their database connection name.
 			if(!isset($Instances[$classname])) {
-				$Instances[$classname] = array();
+				$Instances[$classname] = [];
 			}
 			//
 			// Generating and initializing the instance.

@@ -44,11 +44,11 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	public function getEmail($index, $assertIt = true) {
 		return TooBasic_Helper::GetEmail($this, $index, $assertIt);
 	}
-	protected function getUrl($subUrl, $assertIt = true) {
-		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
-	}
 	protected function getJSONUrl($subUrl, $assertIt = true) {
 		return TooBasic_Helper::GetJSONUrl($this, $subUrl, $assertIt);
+	}
+	protected function getUrl($subUrl, $assertIt = true) {
+		return TooBasic_Helper::GetUrl($this, $subUrl, $assertIt);
 	}
 	protected function loadAssetsOf($path = false) {
 		$filePath = $path;
@@ -61,6 +61,12 @@ class TooBasic_TestCase extends PHPUnit_Framework_TestCase {
 	}
 	protected function runCommand($command, $assertResult = true, $assertReturnValue = true, $promptResult = true) {
 		return TooBasic_Helper::RunCommand($this, $command, $assertResult, $assertReturnValue, $promptResult);
+	}
+	protected function sendJSONUrl($subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
+		return TooBasic_Helper::SendJSONUrl($this, $subUrl, $method, $body, $assertIt, $jsonBody);
+	}
+	protected function sendUrl($subUrl, $method = 'GET', $body = null, $assertIt = true, $jsonBody = true) {
+		return TooBasic_Helper::SendUrl($this, $subUrl, $method, $body, $assertIt, $jsonBody);
 	}
 	// @}
 }

@@ -25,7 +25,7 @@ class SearchService extends \TooBasic\Service {
 		//
 		// Counting and flattening items.
 		$fullCount = 0;
-		$countByType = array();
+		$countByType = [];
 		foreach($results as $type => &$items) {
 			if(!isset($countByType[$type])) {
 				$countByType[$type] = 0;

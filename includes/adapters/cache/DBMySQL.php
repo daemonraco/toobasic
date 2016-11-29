@@ -39,9 +39,9 @@ class DBMySQL extends DB {
 		$query.= " and        cch_date < date_sub(now(), interval :limit second)\n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute(array(
+		$stmt->execute([
 			':key' => $this->fullKey($prefix, $key),
 			':limit' => $this->_expirationLength
-		));
+		]);
 	}
 }

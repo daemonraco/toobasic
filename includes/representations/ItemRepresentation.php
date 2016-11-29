@@ -13,6 +13,7 @@ use TooBasic\DBException;
 use TooBasic\Exception;
 use TooBasic\MagicProp;
 use TooBasic\Managers\DBManager;
+use TooBasic\Representations\CoreProps;
 use TooBasic\Representations\FieldFilterException;
 use TooBasic\Translate;
 
@@ -27,37 +28,55 @@ abstract class ItemRepresentation {
 	//
 	// Protected core properties.
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Generic prefix for all columns on the represented table.
 	 */
 	protected $_CP_ColumnsPerfix = '';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string[string] Associative list of field names and the filter to
 	 * be applied on them.
 	 */
-	protected $_CP_ColumnFilters = array();
+	protected $_CP_ColumnFilters = [];
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var mixed[string] Sub-representation associated columns
 	 * specifications.
 	 */
-	protected $_CP_ExtendedColumns = array();
+	protected $_CP_ExtendedColumns = [];
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Name of a field containing IDs (without prefix).
 	 */
 	protected $_CP_IDColumn = '';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Name of a field containing names (without prefix).
 	 */
 	protected $_CP_NameColumn = 'name';
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string[] List of fields that can't be alter by generic accessors.
 	 */
-	protected $_CP_ReadOnlyColumns = array();
+	protected $_CP_ReadOnlyColumns = [];
 	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
+	 * @var mixed[string] List of other representations that use current one
+	 * as grouping item.
+	 */
+	protected $_CP_SubLists = [];
+	/**
+	 * @deprecated remove on version 2.3.0 (issue #188)
 	 * @var string Represented table's name (without prefix).
 	 */
 	protected $_CP_Table = '';
 	//
 	// Protected properties.
+	/**
+	 * @var string Name of the class or JSON specs where core properties are
+	 * held.
+	 */
+	protected $_corePropsHolder = false;
 	/**
 	 * @var \TooBasic\Adapters\DB\Adapter Database connection shortcut
 	 */
@@ -81,18 +100,18 @@ abstract class ItemRepresentation {
 	 * @var mixed[string] This is the list of loaded sub-representation
 	 * associated with certain column.
 	 */
-	protected $_extendedColumns = array();
+	protected $_extendedColumns = [];
 	/**
 	 * @var string[string] Reverse list of methods associated to extended
 	 * column names.
 	 */
-	protected $_extendedColumnMethods = array();
+	protected $_extendedColumnMethods = [];
 	/**
 	 * @var mixed[string] List of properties stored in this object that does
 	 * not represent real field on database. These can also be called volatile
 	 * properties.
 	 */
-	protected $_extraProperties = array();
+	protected $_extraProperties = [];
 	/**
 	 * @var boolean This flag gets active when a field filter used by this
 	 * class always requires presistance.
@@ -109,11 +128,21 @@ abstract class ItemRepresentation {
 	/**
 	 * @var mixed[string] List of properties/columns loaded from database.
 	 */
-	protected $_properties = array();
+	protected $_properties = [];
 	/**
 	 * @var string[string] List of prefixes used by query adapters.
 	 */
 	protected $_queryAdapterPrefixes = false;
+	/**
+	 * @var mixed[string] List of representations that has this one as
+	 * grouping criteria.
+	 */
+	protected $_subListsSpecs = false;
+	/**
+	 * @var mixed[string] This is the list of loaded sub-listing associated
+	 * with current representation.
+	 */
+	protected $_subListsMethods = [];
 	//
 	// Magic methods.
 	/**
@@ -132,6 +161,8 @@ abstract class ItemRepresentation {
 
 		if(isset($this->_extendedColumnMethods[$method])) {
 			$out = $this->callSubRepresentation($this->_extendedColumnMethods[$method], $args);
+		} elseif(isset($this->_subListsMethods[$method])) {
+			$out = $this->callSubList($method, $args);
 		} else {
 			throw new Exception(Translate::Instance()->EX_Unknown_method(['method' => $method]));
 		}
@@ -154,7 +185,7 @@ abstract class ItemRepresentation {
 		$this->_dbprefix = $this->_db->prefix();
 		//
 		// Checking forced persistence and field filters validity.
-		foreach($this->_CP_ColumnFilters as $field => $filter) {
+		foreach($this->_cp_ColumnFilters as $field => $filter) {
 			//
 			// Checking field filter.
 			if(!isset($Database[GC_DATABASE_FIELD_FILTERS][$filter])) {
@@ -181,7 +212,7 @@ abstract class ItemRepresentation {
 		}
 		//
 		// Checking extended colums.
-		foreach($this->_CP_ExtendedColumns as $name => $specs) {
+		foreach($this->_cp_ExtendedColumns as $name => $specs) {
 			//
 			// Checking representation field.
 			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
@@ -196,6 +227,43 @@ abstract class ItemRepresentation {
 			// Caching a reverse list of methods.
 			$this->_extendedColumnMethods[$specs[GC_REPRESENTATIONS_METHOD]] = $name;
 		}
+		//
+		// Checking sub lists.
+		$this->_subListsSpecs = $this->_cp_SubLists;
+		foreach($this->_subListsSpecs as $name => &$specs) {
+			//
+			// Checking supposed fields.
+			if(!isset($specs[GC_REPRESENTATIONS_PLURAL])) {
+				$specs[GC_REPRESENTATIONS_PLURAL] = "{$name}s";
+			}
+			$specs[GC_REPRESENTATIONS_FACTORY_SHORTCUT] = false;
+			if(!isset($specs[GC_REPRESENTATIONS_FACTORY])) {
+				$specs[GC_REPRESENTATIONS_FACTORY] = $specs[GC_REPRESENTATIONS_PLURAL];
+			}
+			//
+			// Checking specs.
+			if(!isset($specs[GC_REPRESENTATIONS_COLUMN])) {
+				throw new Exception(Translate::Instance()->EX_sub_list_without_column(['name' => $name]));
+			}
+			//
+			// Generating known method names @{
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_IDS])) {
+				$specs[GC_REPRESENTATIONS_METHOD_IDS] = "{$name}Ids";
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_IDS]] = $name;
+
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_ITEM])) {
+				$specs[GC_REPRESENTATIONS_METHOD_ITEM] = $name;
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_ITEM]] = $name;
+
+			if(!isset($specs[GC_REPRESENTATIONS_METHOD_ITEMS])) {
+				$specs[GC_REPRESENTATIONS_METHOD_ITEMS] = $specs[GC_REPRESENTATIONS_PLURAL];
+			}
+			$this->_subListsMethods[$specs[GC_REPRESENTATIONS_METHOD_ITEMS]] = $name;
+			// @}
+		}
+		unset($specs);
 	}
 	/**
 	 * This magic method allows to directly print a representation.
@@ -204,7 +272,7 @@ abstract class ItemRepresentation {
 	 * representation.
 	 */
 	public function __toString() {
-		return $this->exists() ? get_called_class().'[('.$this->{$this->_CP_IDColumn}.')]' : 'NULL';
+		return $this->exists() ? get_called_class().'[('.$this->{$this->_cp_IDColumn}.')]' : 'NULL';
 	}
 	/**
 	 * This magic method provides a quick access to field values. If the
@@ -218,17 +286,28 @@ abstract class ItemRepresentation {
 	public function __get($name) {
 		//
 		// Default values.
-		$out = null;
+		$out = false;
 		//
-		// Generating a possible table field name.
-		$realName = "{$this->_CP_ColumnsPerfix}{$name}";
-		//
-		// Attepting to obtain a value either from knwon fields or from
-		// extra properties.
-		if(array_key_exists($realName, $this->_properties)) {
-			$out = $this->_properties[$realName];
-		} elseif(array_key_exists($name, $this->_extraProperties)) {
-			$out = $this->_extraProperties[$name];
+		// Checking if it's core property request
+		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
+			if($this->_corePropsHolder) {
+				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
+			} else {
+				$localName = "_CP_{$match['name']}";
+				$out = $this->{$localName};
+			}
+		} else {
+			//
+			// Generating a possible table field name.
+			$realName = "{$this->_cp_ColumnsPerfix}{$name}";
+			//
+			// Attepting to obtain a value either from knwon fields or from
+			// extra properties.
+			if(array_key_exists($realName, $this->_properties)) {
+				$out = $this->_properties[$realName];
+			} elseif(array_key_exists($name, $this->_extraProperties)) {
+				$out = $this->_extraProperties[$name];
+			}
 		}
 
 		return $out;
@@ -245,7 +324,7 @@ abstract class ItemRepresentation {
 	public function __set($name, $value) {
 		//
 		// Generating a possible table field name.
-		$realName = "{$this->_CP_ColumnsPerfix}{$name}";
+		$realName = "{$this->_cp_ColumnsPerfix}{$name}";
 		//
 		// Checking if its a known table column.
 		if(array_key_exists($realName, $this->_properties)) {
@@ -254,7 +333,7 @@ abstract class ItemRepresentation {
 			//	- the column is not the ID column.
 			//	- It's not a read only property.
 			//	- The value is different from the current one.
-			if($name != $this->_CP_IDColumn && !in_array($name, $this->_CP_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
+			if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
 				//
 				// Setting a new value.
 				$this->_properties[$realName] = $value;
@@ -300,13 +379,29 @@ abstract class ItemRepresentation {
 		return $this->_exists;
 	}
 	/**
+	 * This method forces the expansion of extend columns.
+	 *
+	 * @param boolean $deep When TRUE forwards the expansion to expanded
+	 * columns.
+	 */
+	public function expandExtendedColumns($deep = false) {
+		foreach($this->_cp_ExtendedColumns as $method => $conf) {
+			$subItem = $this->{$method}();
+			//
+			// Forwarding.
+			if($deep && $subItem) {
+				$subItem->expandExtendedColumns(true);
+			}
+		}
+	}
+	/**
 	 * This simple method returns current object's id.
 	 *
 	 * @return mixed Returns an ID based on the core property that conigures
 	 * its column name. When this is not a valid object it returns FALSE.
 	 */
 	public function id() {
-		return $this->exists() ? $this->{$this->_CP_IDColumn} : false;
+		return $this->exists() ? $this->{$this->_cp_IDColumn} : false;
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -336,7 +431,7 @@ abstract class ItemRepresentation {
 		//
 		// Generating a proper query.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_IDColumn => $id), $prefixes);
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, [$this->_cp_IDColumn => $id], $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Retrieving information.
@@ -384,11 +479,11 @@ abstract class ItemRepresentation {
 		//
 		// Checking that there's a name column configured, otherwise, this
 		// would represent a fatal error.
-		if($this->_CP_NameColumn) {
+		if($this->_cp_NameColumn) {
 			//
 			// Generating a proper query.
 			$prefixes = $this->queryAdapterPrefixes();
-			$query = $this->_db->queryAdapter()->select($this->_CP_Table, array($this->_CP_NameColumn => $name), $prefixes);
+			$query = $this->_db->queryAdapter()->select($this->_cp_Table, [$this->_cp_NameColumn => $name], $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Retrieving information based on a name.
@@ -400,14 +495,14 @@ abstract class ItemRepresentation {
 					//
 					// Forwarding the operation to the proper
 					// method.
-					$idKey = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+					$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
 					$this->load($row[$idKey]);
 				}
 			} else {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
 		} else {
-			throw new DBException(Translate::Instance()->EX_DB_no_name_column_set_for(['name' => $this->_CP_Table]));
+			throw new DBException(Translate::Instance()->EX_DB_no_name_column_set_for(['name' => $this->_cp_Table]));
 		}
 
 		return $this->exists();
@@ -429,21 +524,21 @@ abstract class ItemRepresentation {
 		// Checking that there's something to persist and also triggering
 		// specific checks before persisting.
 		if($this->dirty() && $this->prePersist()) {
-			$idName = "{$this->_CP_ColumnsPerfix}{$this->_CP_IDColumn}";
+			$idName = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
 			//
 			// Building the list of values to store associated to
 			// their column names.
-			$data = array();
+			$data = [];
 			foreach($this->_properties as $key => $value) {
-				$shortKey = substr($key, strlen($this->_CP_ColumnsPerfix));
-				if($idName != $key && !in_array($shortKey, $this->_CP_ReadOnlyColumns)) {
+				$shortKey = substr($key, strlen($this->_cp_ColumnsPerfix));
+				if($idName != $key && !in_array($shortKey, $this->_cp_ReadOnlyColumns)) {
 					$data[$shortKey] = $value;
 				}
 			}
 			//
 			// Generating the proper query to update the entry.
 			$prefixes = $this->queryAdapterPrefixes();
-			$query = $this->_db->queryAdapter()->update($this->_CP_Table, $data, array($this->_CP_IDColumn => $this->id), $prefixes);
+			$query = $this->_db->queryAdapter()->update($this->_cp_Table, $data, [$this->_cp_IDColumn => $this->id], $prefixes);
 			$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 			//
 			// Attemptting to update.
@@ -472,7 +567,7 @@ abstract class ItemRepresentation {
 		//
 		// Generating a proper query to erase an entry based on its id.
 		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->delete($this->_CP_Table, array($this->_CP_IDColumn => $this->id), $prefixes);
+		$query = $this->_db->queryAdapter()->delete($this->_cp_Table, [$this->_cp_IDColumn => $this->id], $prefixes);
 		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 		//
 		// Attemptting to remove it.
@@ -494,9 +589,9 @@ abstract class ItemRepresentation {
 	public function reset() {
 		$this->_dirty = false;
 		$this->_exists = false;
-		$this->_extendedColumns = array();
-		$this->_extraProperties = array();
-		$this->_properties = array();
+		$this->_extendedColumns = [];
+		$this->_extraProperties = [];
+		$this->_properties = [];
 	}
 	/**
 	 * This method allows to access this representation as simple array.
@@ -511,7 +606,7 @@ abstract class ItemRepresentation {
 		//
 		// Copying main properties.
 		foreach($this->_properties as $key => $value) {
-			$out[substr($key, strlen($this->_CP_ColumnsPerfix))] = $value;
+			$out[substr($key, strlen($this->_cp_ColumnsPerfix))] = $value;
 		}
 		//
 		// Copying/overriding main properties with their extended
@@ -525,7 +620,69 @@ abstract class ItemRepresentation {
 	//
 	// Protected methods.
 	/**
-	 * This method attends calles for sub-representation, either to get or set
+	 * This method attends calls items that have current one as groupping
+	 * criteria.
+	 *
+	 * @param string string Called method name.
+	 * @param mixed[] $args Parameters given when a method of this kind was
+	 * called.
+	 * @return mixed Return the proper result to the requested method.
+	 * @throws \TooBasic\Exception
+	 */
+	protected function callSubList($method, $args) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Spec name shortcut.
+		$specsName = $this->_subListsMethods[$method];
+		//
+		// Factory shortcut.
+		if(!$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]) {
+			//
+			// Expanding factory name and namespace.
+			$parts = explode('\\', $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY]);
+			$factoryName = array_pop($parts);
+			$factoryNamespace = count($parts) > 0 ? implode('\\', $parts) : false;
+			//
+			// Trying to load the factory shortcut.
+			$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT] = $this->magic()->representation->{$factoryName}($this->_db->name(), $factoryNamespace);
+			if(!$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]) {
+				throw new Exception(Translate::Instance()->EX_cannot_load_representation_factory_class([
+					'name' => $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY]
+				]));
+			}
+		}
+		//
+		// IDs method.
+		if($this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_METHOD_IDS] == $method) {
+			$conditions = isset($args[0]) && is_array($args[0]) ? $args[0] : [];
+			$order = isset($args[1]) && is_array($args[1]) ? $args[1] : [];
+			$out = $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->idsBy(array_merge($conditions, [
+				$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_COLUMN] => $this->id()
+				]), $order);
+		}
+		//
+		// Item method.
+		if($this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_METHOD_ITEM] == $method) {
+			$id = isset($args[0]) ? $args[0] : false;
+			$out = $id === false ? null : $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->item($id);
+		}
+		//
+		// Items method.
+		if($this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_METHOD_ITEMS] == $method) {
+			$conditions = isset($args[0]) && is_array($args[0]) ? $args[0] : [];
+			$order = isset($args[1]) && is_array($args[1]) ? $args[1] : [];
+			$out = $this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_FACTORY_SHORTCUT]->itemsBy(array_merge($conditions, [
+				$this->_subListsSpecs[$specsName][GC_REPRESENTATIONS_COLUMN] => $this->id()
+				]), $order);
+		}
+		//
+		// Returning results.
+		return $out;
+	}
+	/**
+	 * This method attends calls for sub-representation, either to get or set
 	 * them.
 	 *
 	 * @param string $column Name of the column associated with such call.
@@ -538,7 +695,7 @@ abstract class ItemRepresentation {
 	protected function callSubRepresentation($column, $args) {
 		//
 		// Checking column existence.
-		if(!array_key_exists($this->_CP_ColumnsPerfix.$column, $this->_properties)) {
+		if(!array_key_exists($this->_cp_ColumnsPerfix.$column, $this->_properties)) {
 			throw new Exception(Translate::Instance()->EX_unknown_column(['name' => $column]));
 		}
 		//
@@ -548,7 +705,10 @@ abstract class ItemRepresentation {
 			//
 			// Checking the right type.
 			if(!$newItem instanceof ItemRepresentation) {
-				throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of(['type' => 'ItemRepresentation']));
+				throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+					'name' => '$args[0]',
+					'type' => 'ItemRepresentation'
+				]));
 			}
 			//
 			// Setting new values.
@@ -567,7 +727,7 @@ abstract class ItemRepresentation {
 		if(!isset($this->_extendedColumns[$column])) {
 			//
 			// Expanding factory name and namespace.
-			$parts = explode('\\', $this->_CP_ExtendedColumns[$column][GC_REPRESENTATIONS_FACTORY]);
+			$parts = explode('\\', $this->_cp_ExtendedColumns[$column][GC_REPRESENTATIONS_FACTORY]);
 			$factoryName = array_pop($parts);
 			$factoryNamespace = count($parts) > 0 ? implode('\\', $parts) : false;
 			//
@@ -590,10 +750,10 @@ abstract class ItemRepresentation {
 		global $Database;
 		//
 		// Decoding each field with filters.
-		foreach($this->_CP_ColumnFilters as $name => $filter) {
+		foreach($this->_cp_ColumnFilters as $name => $filter) {
 			//
 			// Is it a knwon field?
-			$realName = "{$this->_CP_ColumnsPerfix}{$name}";
+			$realName = "{$this->_cp_ColumnsPerfix}{$name}";
 			if(array_key_exists($realName, $this->_properties)) {
 				//
 				// Shortcut.
@@ -616,10 +776,10 @@ abstract class ItemRepresentation {
 		global $Database;
 		//
 		// Encoding each field with filters.
-		foreach($this->_CP_ColumnFilters as $name => $filter) {
+		foreach($this->_cp_ColumnFilters as $name => $filter) {
 			//
 			// Is it a knwon field?
-			$realName = "{$this->_CP_ColumnsPerfix}{$name}";
+			$realName = "{$this->_cp_ColumnsPerfix}{$name}";
 			if(array_key_exists($realName, $this->_properties)) {
 				//
 				// Shortcut.
@@ -688,10 +848,10 @@ abstract class ItemRepresentation {
 	 */
 	protected function queryAdapterPrefixes() {
 		if($this->_queryAdapterPrefixes === false) {
-			$this->_queryAdapterPrefixes = array(
+			$this->_queryAdapterPrefixes = [
 				GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
-				GC_DBQUERY_PREFIX_COLUMN => $this->_CP_ColumnsPerfix
-			);
+				GC_DBQUERY_PREFIX_COLUMN => $this->_cp_ColumnsPerfix
+			];
 		}
 		return $this->_queryAdapterPrefixes;
 	}

@@ -27,13 +27,13 @@ function checkBasicPermissions() {
 	global $Directories;
 	//
 	// List of directories that required writting permissions.
-	$writableDirectories = array(
+	$writableDirectories = [
 		$Directories[GC_DIRECTORIES_CACHE],
 		Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/filecache"),
 		Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/langs"),
 		$Directories[GC_DIRECTORIES_SHELL_FLAGS],
 		$Directories[GC_DIRECTORIES_SYSTEM_CACHE]
-	);
+	];
 	//
 	// Checking each directory.
 	foreach($writableDirectories as $path) {
@@ -66,7 +66,7 @@ function classname($simpleName) {
 	$out = $simpleName;
 	//
 	// Cleaning special charaters
-	$out = str_replace(array('_', '-', ':'), ' ', $out);
+	$out = str_replace(['_', '-', ':'], ' ', $out);
 	$out = ucwords($out);
 	$out = str_replace(' ', '', $out);
 	//
@@ -83,7 +83,7 @@ function classname($simpleName) {
  * @param mixed[string] $flags List of extra parameters used to build.
  * @return string Returns a HTML piece of code.
  */
-function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = array()) {
+function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = []) {
 	return \TooBasic\Forms\FormsManager::Instance()->formFor($formName, $item, $mode, $flags);
 }
 /**
@@ -342,7 +342,7 @@ function guessSkin() {
  * @return string[] Flat list of dependencies.
  */
 function _configurationTreeSolver($fullList, $start) {
-	$out = array();
+	$out = [];
 
 	foreach($fullList[$start] as $subDependency) {
 		$out[] = $subDependency;
@@ -365,7 +365,7 @@ function getConfigurationFilesList() {
 	$pathsProvider = Paths::Instance();
 	//
 	// Full list of cofiguration files to load.
-	$out = array();
+	$out = [];
 	//
 	// Loading specific configurations for shell or web accesses.
 	if(defined('__SHELL__')) {
@@ -421,25 +421,25 @@ function getConfigurationFilesList() {
 		$manifestsProvider = ManifestsManager::Instance();
 		//
 		// Top config prefixes.
-		$topPrefixes = array(
+		$topPrefixes = [
 			$Directories[GC_DIRECTORIES_SYSTEM],
 			$Directories[GC_DIRECTORIES_SITE]
-		);
+		];
 		//
 		// Loading all manifests.
 		$manifests = $manifestsProvider->manifests();
 		//
 		// Building list of module path dependencies and a list of paths
 		// associated with their priorities.
-		$requirementLinks = array();
-		$modulePriorities = array();
+		$requirementLinks = [];
+		$modulePriorities = [];
 		foreach($manifests as $manifest) {
 			//
 			// Current module path.
 			$path = $manifest->modulePath();
 			//
 			// Default values.
-			$requirementLinks[$path] = array();
+			$requirementLinks[$path] = [];
 			$modulePriorities[$path] = 0;
 			//
 			// Checking the existence of requirements.
@@ -485,11 +485,11 @@ function getConfigurationFilesList() {
 		// @{
 		//
 		// Default values.
-		$pathsByPriority = array(
-			GC_AFIELD_TOP => array(),
-			GC_AFIELD_MIDDLE => array(),
-			GC_AFIELD_BOTTOM => array()
-		);
+		$pathsByPriority = [
+			GC_AFIELD_TOP => [],
+			GC_AFIELD_MIDDLE => [],
+			GC_AFIELD_BOTTOM => []
+		];
 		//
 		// Basic list order.
 		sort($out);
@@ -546,7 +546,7 @@ function getConfigurationFilesList() {
 	// Debugging loading mechanism.
 	if(isset(Params::Instance()->debugconfigs)) {
 		\TooBasic\debugThingInPage(function() use ($prioritiesData) {
-			foreach(array('http', 'shell') as $whatList) {
+			foreach(['http', 'shell'] as $whatList) {
 				if(!isset($prioritiesData->{$whatList})) {
 					continue;
 				}
@@ -609,12 +609,12 @@ function getConfigurationFilesList() {
  * @return \stdClass Returns the destination object with it's values overriden by
  * those in the origin object and, if it was necessary, with enforced fields.
  */
-function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $default = array()) {
+function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination, $default = []) {
 	//
 	// If the list of defaults is not an array, it's forced to be an empty
 	// array.
 	if(!is_array($default)) {
-		$default = array();
+		$default = [];
 	}
 	//
 	// Checking each required field.
@@ -655,7 +655,7 @@ function objectCopyAndEnforce($fields, \stdClass $origin, \stdClass $destination
 	return $destination;
 }
 function ordinalToCardinal($number) {
-	$ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
+	$ends = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
 
 	return (($number % 100) >= 11 && ($number % 100) <= 13) ? $number.'th' : $number.$ends[$number % 10];
 }

@@ -21,7 +21,7 @@ class DBManager extends Manager {
 	/**
 	 * @var \TooBasic\Adapters\DB\Adapter[string] List of known database connections.
 	 */
-	protected $_connections = array();
+	protected $_connections = [];
 	//
 	// Magic methods.
 	/**

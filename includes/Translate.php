@@ -23,7 +23,7 @@ class Translate extends Singleton {
 	 * @var string[string] This is the list of configured translation keys and
 	 * their values.
 	 */
-	protected $_tr = array();
+	protected $_tr = [];
 	/**
 	 * @var string Acronym of the current language.
 	 */
@@ -55,7 +55,7 @@ class Translate extends Singleton {
 	public function __call($key, $arguments) {
 		//
 		// Default values.
-		$params = array();
+		$params = [];
 		//
 		// If there's at least one argument they're analysed.
 		if(isset($arguments[0])) {
@@ -95,17 +95,17 @@ class Translate extends Singleton {
 	public function compileLangs() {
 		//
 		// Default values.
-		$results = array(
-			GC_AFIELD_COUNTS => array(
+		$results = [
+			GC_AFIELD_COUNTS => [
 				GC_AFIELD_KEYS => 0,
-				GC_AFIELD_KEYS_BY_LANG => array()
-			),
-			GC_AFIELD_LANGS => array(),
-			GC_AFIELD_FILES => array(),
-			GC_AFIELD_COMPILATIONS => array()
-		);
-		$filePaths = array();
-		$files = array();
+				GC_AFIELD_KEYS_BY_LANG => []
+			],
+			GC_AFIELD_LANGS => [],
+			GC_AFIELD_FILES => [],
+			GC_AFIELD_COMPILATIONS => []
+		];
+		$filePaths = [];
+		$files = [];
 		//
 		// Global dependencies.
 		global $Directories;
@@ -136,7 +136,7 @@ class Translate extends Singleton {
 			//
 			// Checking language group existence.
 			if(!isset($files[$info['filename']])) {
-				$files[$info['filename']] = array();
+				$files[$info['filename']] = [];
 			}
 			//
 			// Adding it to the list.
@@ -162,7 +162,7 @@ class Translate extends Singleton {
 			$compStructure->compiled = time();
 			//
 			// Loading each translation file.
-			$keys = array();
+			$keys = [];
 			foreach($paths as $path) {
 				//
 				// Loading and decoding each file.
@@ -187,7 +187,7 @@ class Translate extends Singleton {
 			$results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS] += $results[GC_AFIELD_COUNTS][GC_AFIELD_KEYS_BY_LANG][$lang];
 			//
 			// Converting keys into objects (compilation).
-			$keysObj = array();
+			$keysObj = [];
 			foreach($keys as $key => $value) {
 				$aux = new \stdClass();
 				$aux->key = $key;
@@ -218,7 +218,7 @@ class Translate extends Singleton {
 	 * translation.
 	 * @return string Returns a translation result.
 	 */
-	public function get($key, $params = array()) {
+	public function get($key, $params = []) {
 		//
 		// Default values.
 		$out = "@{$key}";
@@ -237,7 +237,7 @@ class Translate extends Singleton {
 				//
 				// '$params' must be an array.
 				if(!is_array($params)) {
-					$params = array();
+					$params = [];
 				}
 				//
 				// Replacing each parameter.
@@ -276,7 +276,7 @@ class Translate extends Singleton {
 		global $LanguageName;
 		//
 		// Catching current language.
-		$this->_currentLang = $LanguageName;
+		$this->_currentLang = $LanguageName ? $LanguageName : \TooBasic\guessLanguage();
 	}
 	/**
 	 * This method loads configurated translation for the current language.

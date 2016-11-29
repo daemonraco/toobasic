@@ -94,6 +94,9 @@
 			"key": "EX_broken_module_manifest",
 			"value": "Unable to parse manifest of module '%module%'"
 		}, {
+			"key": "EX_cannot_load_core_props_class",
+			"value": "Cannot load core properties class '%name%'."
+		}, {
 			"key": "EX_cannot_load_representation_class",
 			"value": "Cannot load item representation '%name%'."
 		}, {
@@ -162,6 +165,12 @@
 		}, {
 			"key": "EX_extended_column_without_factory",
 			"value": "Extended column '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
+		}, {
+			"key": "EX_sub_list_without_factory",
+			"value": "Representation sub-list '%name%' has not factory assigned (param 'GC_REPRESENTATIONS_FACTORY')."
+		}, {
+			"key": "EX_sub_list_without_column",
+			"value": "Representation sub-list '%name%' has not column assigned (param 'GC_REPRESENTATIONS_COLUMN')."
 		}, {
 			"key": "EX_form_has_no_specification",
 			"value": "Given form has no specification."
@@ -248,7 +257,7 @@
 			"value": "Type mismatch. Object expected but '%type%' was given."
 		}, {
 			"key": "EX_parameter_is_not_instances_of",
-			"value": "Given parameter is not an instances of '%type%'."
+			"value": "Given parameter '%name%' is not an instances of '%type%'."
 		}, {
 			"key": "EX_path_extends_unexisting_type",
 			"value": "Path '%path%' extends '%father%' but it doesn't exist."
@@ -417,6 +426,60 @@
 		}, {
 			"key": "EX_wrong_redirection_conf_parameter_is_not_array",
 			"value": "Wrong redirection configuration '%redirector%'. Parameter '%param%' is not an array."
+		}, {
+			"key": "EX_json_path_fail_specs",
+			"value": "JSON file at '%path%' doesn't match the specifications."
+		}, {
+			"key": "EX_wrong_rest_path",
+			"value": "Badly form REST path."
+		}, {
+			"key": "EX_unknown_rest_type",
+			"value": "Unknown REST call type '%type%'."
+		}, {
+			"key": "EX_rest_resource_no_resource",
+			"value": "Resource REST call requires a resource name."
+		}, {
+			"key": "EX_rest_stats_no_resource",
+			"value": "Stats REST call requires a resource name."
+		}, {
+			"key": "EX_rest_search_no_resource",
+			"value": "Search REST call requires a resource name."
+		}, {
+			"key": "EX_unknown_resource",
+			"value": "Unknown resource '%resource%'."
+		}, {
+			"key": "EX_unhandled_request_method",
+			"value": "Request method '%method%' is not handled."
+		}, {
+			"key": "EX_item_not_specified",
+			"value": "Item not specified."
+		}, {
+			"key": "EX_item_not_found",
+			"value": "Item '%id%' not found."
+		}, {
+			"key": "EX_unable_create_item",
+			"value": "Unable to create an item."
+		}, {
+			"key": "EX_bad_request_json_body",
+			"value": "Bad request JSON body."
+		}, {
+			"key": "EX_rest_config_broken",
+			"value": "The RESTful configuration is broken, check your 'rest.json' files."
+		}, {
+			"key": "EX_unknown_rest_action",
+			"value": "Unable to guess action name based on type '%type%' and method '%method%'."
+		}, {
+			"key": "EX_no_policies_for_type",
+			"value": "There are no policies for type '%type%'."
+		}, {
+			"key": "EX_unknown_rest_policy",
+			"value": "Unknown rest policy '%policy%'."
+		}, {
+			"key": "EX_rest_action_not_allowed",
+			"value": "Action '%action%' is not allow on resource '%resource%'."
+		}, {
+			"key": "EX_rest_action_not_authorized",
+			"value": "You are not authorized to use action '%action%' on resource '%resource%'."
 		}
 	]
 }

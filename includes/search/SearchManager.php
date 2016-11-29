@@ -62,10 +62,10 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		global $Search;
 		//
 		// Items table prefixes.
-		$itemsPrefixes = array(
+		$itemsPrefixes = [
 			GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 			GC_DBQUERY_PREFIX_COLUMN => 'sit_'
-		);
+		];
 		//
 		// Creating a query to remove all current associations.
 		$queryD = $this->_db->queryAdapter()->delete('tb_search_items', [
@@ -161,7 +161,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	protected function getTerms($terms, $create = false) {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Terms factory short cut.
 		$factory = $this->representation->search_terms(false, 'TooBasic\\Search');
@@ -208,19 +208,19 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	protected function expandResult($plainResult) {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Global dependencies.
 		global $Search;
 		//
 		// List of factory shortcuts.
-		$factories = array();
+		$factories = [];
 		//
 		// Generating temporary list based on search types to use.
 		foreach($plainResult[GC_AFIELD_TYPES] as $type) {
 			//
 			// Creating groups by type.
-			$out[$type] = array();
+			$out[$type] = [];
 			//
 			// Appending a factory shortcut.
 			if(isset($Search[GC_SEARCH_ENGINE_FACTORIES][$type])) {
@@ -232,9 +232,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Expanding each result.
 		foreach($plainResult[GC_AFIELD_ITEMS] as $plainItem) {
 			//
+			// Shortcut.
+			$type = $plainItem[GC_AFIELD_TYPE];
+			//
 			// Expanding only those elements belonging to an existing
 			// factory.
-			if(isset($factories[$plainItem[GC_AFIELD_TYPE]])) {
+			if(isset($factories[$type])) {
 				$out[$type][] = $factories[$plainItem[GC_AFIELD_TYPE]]->searchableItem($plainItem[GC_AFIELD_ID]);
 			}
 		}
@@ -261,22 +264,22 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	protected function plainSearch($terms) {
 		//
 		// Default values.
-		$out = array(
-			GC_AFIELD_ITEMS => array(),
-			GC_AFIELD_TYPES => array()
-		);
+		$out = [
+			GC_AFIELD_ITEMS => [],
+			GC_AFIELD_TYPES => []
+		];
 		//
 		// Items table prefixes.
-		$itemsPrefixes = array(
+		$itemsPrefixes = [
 			GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 			GC_DBQUERY_PREFIX_COLUMN => 'sit_'
-		);
+		];
 		//
 		// Terms table prefixes.
-		$termsPrefixes = array(
+		$termsPrefixes = [
 			GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 			GC_DBQUERY_PREFIX_COLUMN => 'ste_'
-		);
+		];
 		//
 		// Creating a query to search term.
 		$queryT = $this->_db->queryAdapter()->select('tb_search_terms', [
@@ -290,7 +293,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			], $itemsPrefixes);
 		$stmtI = $this->_db->prepare($queryI[GC_AFIELD_QUERY]);
 
-		$termIds = array();
+		$termIds = [];
 		foreach($terms as $term) {
 			$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
 			$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
@@ -320,11 +323,11 @@ class SearchManager extends \TooBasic\Managers\Manager {
 				if(isset($out[GC_AFIELD_ITEMS][$key])) {
 					$out[GC_AFIELD_ITEMS][$key][GC_AFIELD_HITS] ++;
 				} else {
-					$out[GC_AFIELD_ITEMS][$key] = array(
+					$out[GC_AFIELD_ITEMS][$key] = [
 						GC_AFIELD_TYPE => $type,
 						GC_AFIELD_ID => $id,
 						GC_AFIELD_HITS => 1
-					);
+					];
 				}
 				//
 				// Keeping track of all found types.

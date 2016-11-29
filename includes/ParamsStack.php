@@ -27,7 +27,7 @@ class ParamsStack {
 	/**
 	 * @var string[string] List of values held by this stack.
 	 */
-	protected $_params = array();
+	protected $_params = [];
 	//
 	// Magic methods.
 	/**
@@ -101,7 +101,6 @@ class ParamsStack {
 		// If the key is numerical, it is a mistake and therefore ignored.
 		if(!is_numeric($key)) {
 			$this->_params[$key] = $value;
-			$value = null;
 		}
 
 		return $value;
@@ -143,7 +142,7 @@ class ParamsStack {
 			global $Defaults;
 			//
 			// Default values.
-			$this->_debugs = array();
+			$this->_debugs = [];
 			//
 			// Avoiding analisis when debugs are disabled.
 			if(!$Defaults[GC_DEFAULTS_DISABLED_DEBUGS]) {

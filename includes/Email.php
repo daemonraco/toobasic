@@ -28,7 +28,7 @@ abstract class Email extends AbstractExporter {
 	/**
 	 * @var mixed[string] Assignments made for snippets.
 	 */
-	protected $_snippetAssignments = array();
+	protected $_snippetAssignments = [];
 	/**
 	 * @var string Current view template to render for this contorller.
 	 */
@@ -120,12 +120,12 @@ abstract class Email extends AbstractExporter {
 			}
 			//
 			// Genering the last execution structure.
-			$this->_lastRun = array(
+			$this->_lastRun = [
 				GC_AFIELD_STATUS => $this->_status,
 				GC_AFIELD_ASSIGNMENTS => $this->_assignments,
 				GC_AFIELD_ERRORS => $this->_errors,
 				GC_AFIELD_LASTERROR => $this->_lastError
-			);
+			];
 		}
 		//
 		// Rendering.
@@ -199,7 +199,7 @@ abstract class Email extends AbstractExporter {
 			}
 		}
 
-		return (string) $output;
+		return (string)$output;
 	}
 	/**
 	 * Allows to access the view name of this controller.

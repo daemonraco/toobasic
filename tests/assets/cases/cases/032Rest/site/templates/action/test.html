@@ -1,0 +1,5 @@
+<h4><%$tr->title_view_item_of_table('id', $test.id, 'tablename', 'tests')%></h4>
+
+<%$ctrl->formFor('table_tests', $test, 'view', $formFlags)%>
+<br/>
+<a href="<%$ctrl->link('?action=tests')%>"><%$tr->btn_back_to_list%></a>

@@ -19,8 +19,8 @@ class SpecMySQL extends SpecAdapter {
 	//
 	// Public methods.
 	public function addTableEntry(\stdClass $table, \stdClass $entry) {
-		$keys = array();
-		$values = array();
+		$keys = [];
+		$values = [];
 		foreach($entry->entry as $key => $value) {
 			$keys[] = $key;
 			$values[] = str_replace("'", "''", $value);
@@ -96,7 +96,7 @@ class SpecMySQL extends SpecAdapter {
 		$tableSpecs = $this->_db->query($query)->fetchAll();
 		//
 		// New columns.
-		$cmp = array();
+		$cmp = [];
 		foreach($table->fields as $fullname => $field) {
 			$found = false;
 			foreach($tableSpecs as $dbColumn) {
@@ -108,10 +108,10 @@ class SpecMySQL extends SpecAdapter {
 			if(!$found) {
 				$creates[] = $fullname;
 			} else {
-				$cmp[$fullname] = array(
+				$cmp[$fullname] = [
 					GC_AFIELD_DB => $found,
 					GC_AFIELD_SPEC => null
-				);
+				];
 			}
 		}
 		//
@@ -174,7 +174,7 @@ class SpecMySQL extends SpecAdapter {
 		$query.= "{$index->fullname} \n";
 		$query.= "        on {$index->table} (\n";
 
-		$lines = array();
+		$lines = [];
 		foreach($index->fields as $field) {
 			$lines[] = "                {$field}";
 		}
@@ -188,7 +188,7 @@ class SpecMySQL extends SpecAdapter {
 	public function createTable(\stdClass $table) {
 		$query = "create table {$table->fullname} ( \n";
 
-		$lines = array();
+		$lines = [];
 		foreach($table->fields as $field) {
 			$lines[] = "        {$this->buildFullColumnType($field)}";
 		}
@@ -241,7 +241,7 @@ class SpecMySQL extends SpecAdapter {
 		return $this->exec($query);
 	}
 	public function getIndexes() {
-		$out = array();
+		$out = [];
 
 		$query = "select  distinct index_name as name \n";
 		$query.= "from    information_schema.statistics \n";
@@ -259,7 +259,7 @@ class SpecMySQL extends SpecAdapter {
 		return $out;
 	}
 	public function getTables() {
-		$out = array();
+		$out = [];
 
 		$query = "select  distinct(table_name) as name \n";
 		$query.= "from    information_schema.statistics \n";
@@ -346,7 +346,7 @@ class SpecMySQL extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type)} ";
 		}
-		if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeVarchar))) {
+		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
 			$out.= 'collate utf8_bin ';
 		}
 		if(!$spec->null) {
@@ -358,7 +358,7 @@ class SpecMySQL extends SpecAdapter {
 					$out.= 'default null ';
 				}
 			} else {
-				if(in_array($spec->type->type, array(DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar))) {
+				if(in_array($spec->type->type, [DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar])) {
 					$out.= "default '{$spec->default}' ";
 				} else {
 					$out.= "default {$spec->default} ";

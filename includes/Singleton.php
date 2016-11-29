@@ -17,7 +17,7 @@ abstract class Singleton {
 	/**
 	 * Prevent users from directly creating the singleton's instance.
 	 */
-	protected function __constructor() {
+	protected function __construct() {
 		$this->init();
 	}
 	/**
@@ -46,7 +46,7 @@ abstract class Singleton {
 		//
 		// List of all known single instances associated to their class
 		// name.
-		static $Instances = array();
+		static $Instances = [];
 		//
 		// Obtaining the current class name.
 		$c = get_called_class();

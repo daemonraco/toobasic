@@ -42,7 +42,7 @@ class Paths extends Singleton {
 	/**
 	 * @var string[string][] List of lists for available custom directories.
 	 */
-	protected $_customPaths = array();
+	protected $_customPaths = [];
 	/**
 	 * @var string[] List of available styles directories.
 	 */
@@ -82,7 +82,7 @@ class Paths extends Singleton {
 	/**
 	 * @var string[] List of available language configurations directories.
 	 */
-	protected $_langPaths = array();
+	protected $_langPaths = [];
 	/**
 	 * @var string[string] List of available manifests directories.
 	 */
@@ -207,7 +207,7 @@ class Paths extends Singleton {
 		if($this->_disabledPathsCount != count($Defaults[GC_DEFAULTS_DISABLED_PATHS])) {
 			//
 			// Reseting list.
-			$this->_disabledPaths = array();
+			$this->_disabledPaths = [];
 			//
 			// Loading disabled paths.
 			foreach($Defaults[GC_DEFAULTS_DISABLED_PATHS] as $v) {
@@ -282,13 +282,13 @@ class Paths extends Singleton {
 	public function findAll($dirpath, $pattern = '*', $hiddens = false, $includeDirpaths = false) {
 		//
 		// Default values.
-		$out = array();
+		$out = [];
 		//
 		// Cleaning directory path.
 		$realpath = realpath($dirpath);
 		//
 		// Enforcing '$patterns' to be a list of patterns.
-		$patterns = is_array($pattern) ? $pattern : array($pattern);
+		$patterns = is_array($pattern) ? $pattern : [$pattern];
 		//
 		// Checking permission on the directory to analyze.
 		if($realpath && is_readable($realpath) && is_dir($realpath)) {
@@ -408,7 +408,7 @@ class Paths extends Singleton {
 			//
 			// Checking if compiled files are to be used or not.
 			if($Defaults[GC_DEFAULTS_LANGS_BUILT]) {
-				$this->_langPaths[$lang] = array();
+				$this->_langPaths[$lang] = [];
 				$this->_langPaths[$lang][] = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$Paths[GC_PATHS_LANGS]}");
 			} else {
 				$this->_langPaths[$lang] = $this->genPaths($Paths[GC_PATHS_LANGS]);
@@ -462,12 +462,14 @@ class Paths extends Singleton {
 	 * (extension is assumed 'php').
 	 * @param boolean $full Indicates if all found files has to be retunred or
 	 * only one.
+	 * @param string $extension Extention of the file to look for. By default
+	 * '*.php'.
 	 * @return mixed Returns an array with every path found or just one string
 	 * when it's not set as full. All paths are absolute.
 	 */
-	public function representationPath($representationName, $full = false) {
+	public function representationPath($representationName, $full = false, $extension = self::ExtensionPHP) {
 		global $Paths;
-		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, self::ExtensionPHP, $full);
+		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, $extension, $full);
 	}
 	/**
 	 * This method resets all status forcing this class to reaload all of them
@@ -476,7 +478,7 @@ class Paths extends Singleton {
 	public function reset() {
 		$this->_configPaths = false;
 		$this->_controllerPaths = false;
-		$this->_customPaths = array();
+		$this->_customPaths = [];
 		$this->_cssPaths = false;
 		$this->_dbSpecCallbackPaths = false;
 		$this->_dbSpecPaths = false;
@@ -485,7 +487,7 @@ class Paths extends Singleton {
 		$this->_emailControllerPaths = false;
 		$this->_imagesPaths = false;
 		$this->_jsPaths = false;
-		$this->_langPaths = array();
+		$this->_langPaths = [];
 		$this->_manifests = false;
 		$this->_modelsPaths = false;
 		$this->_modules = false;
@@ -635,7 +637,7 @@ class Paths extends Singleton {
 	protected function genPaths($folders, $skin = false) {
 		//
 		// Default values.
-		$list = array();
+		$list = [];
 		//
 		// Global dependencies.
 		global $Directories;
@@ -648,7 +650,7 @@ class Paths extends Singleton {
 		}
 		//
 		// Building the list of skin subpaths to use @{
-		$skinDirs = array();
+		$skinDirs = [];
 		if($skin) {
 			global $Paths;
 			$skinDirs[] = "{$Paths[GC_PATHS_SKINS]}/{$skin}";
@@ -661,7 +663,7 @@ class Paths extends Singleton {
 		// At this point '$folders' must be a list, if not it is
 		// transformed.
 		if(!is_array($folders)) {
-			$folders = array($folders);
+			$folders = [$folders];
 		}
 		//
 		// Loading all modules.
@@ -733,8 +735,8 @@ class Paths extends Singleton {
 	protected function find(&$list, $skin, $folders, $name, $extension = false, $full = false, $asUri = false) {
 		//
 		// Default values.
-		$out = array();
-		$debugPaths = array();
+		$out = [];
+		$debugPaths = [];
 		//
 		// Checking if this name must be ignored. This provides a way to
 		// disable file without removing them, just adding a dot or an
@@ -849,8 +851,8 @@ class Paths extends Singleton {
 			global $Directories;
 			//
 			// Default values.
-			$this->_modules = array();
-			$this->_manifests = array();
+			$this->_modules = [];
+			$this->_manifests = [];
 			//
 			// Loading all possible paths.
 			foreach(glob("{$Directories[GC_DIRECTORIES_MODULES]}/*", GLOB_ONLYDIR) as $pathname) {

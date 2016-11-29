@@ -47,7 +47,7 @@ class BootstrapType extends FormType {
 		$out.= ">\n";
 		//
 		// Fields.
-		$fields = array();
+		$fields = [];
 		foreach($this->_form->fields() as $fieldName) {
 			$fieldType = $this->_form->fieldType($fieldName);
 			$fieldAttrs = $this->_form->fieldAttributes($fieldName);
@@ -159,7 +159,7 @@ class BootstrapType extends FormType {
 		$out.= "\n".implode("\n\n\n", $fields);
 		//
 		// Generating buttons.
-		$buttons = array();
+		$buttons = [];
 		foreach($this->_form->buttonsFor($mode) as $buttonName) {
 			$buttonType = $this->_form->buttonType($buttonName, $mode);
 			$buttonId = $this->_form->buttonId($buttonName);

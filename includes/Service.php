@@ -18,18 +18,18 @@ abstract class Service extends Exporter {
 	/**
 	 * @var string[] Allowed headers by CORS policies of this service.
 	 */
-	protected $_corsAllowHeaders = array(
+	protected $_corsAllowHeaders = [
 		'Accept',
 		'Content-Type'
-	);
+	];
 	/**
 	 * @var string[] Allowed request by CORS policies of this service.
 	 */
-	protected $_corsAllowMethods = array();
+	protected $_corsAllowMethods = [];
 	/**
 	 * @var string[] Allowed sites by CORS policies of this service.
 	 */
-	protected $_corsAllowOrigin = array();
+	protected $_corsAllowOrigin = [];
 	/**
 	 * @var string[string] CORS specifications.
 	 */
@@ -37,7 +37,7 @@ abstract class Service extends Exporter {
 	/**
 	 * @var string[string] List of to be set on a response.
 	 */
-	protected $_headers = array();
+	protected $_headers = [];
 	/**
 	 * @var string[] List of attended methods.
 	 */
@@ -90,11 +90,11 @@ abstract class Service extends Exporter {
 			sort($this->_corsAllowOrigin);
 			//
 			// Building the specification structure.
-			$this->_corsSpecs = array(
+			$this->_corsSpecs = [
 				GC_AFIELD_HEADERS => $this->_corsAllowHeaders,
 				GC_AFIELD_METHODS => $this->_corsAllowMethods,
 				GC_AFIELD_ORIGINS => $this->_corsAllowOrigin
-			);
+			];
 		}
 
 		return $this->_corsSpecs;
@@ -108,13 +108,13 @@ abstract class Service extends Exporter {
 		//
 		// If there's no results yet it is generated.
 		if($this->_lastRun === false) {
-			$this->_lastRun = array(
+			$this->_lastRun = [
 				GC_AFIELD_STATUS => $this->_status,
 				GC_AFIELD_DATA => $this->_assignments,
 				GC_AFIELD_HEADERS => $this->_headers,
 				GC_AFIELD_ERROR => $this->lastError(),
 				GC_AFIELD_ERRORS => $this->errors()
-			);
+			];
 		}
 		//
 		// Setting current transaction ID.
@@ -129,7 +129,7 @@ abstract class Service extends Exporter {
 		if($this->_methods === false) {
 			//
 			// Default values.
-			$this->_methods = array();
+			$this->_methods = [];
 			//
 			// Creating a reflexion object to analyse a this service.
 			$reflectionObject = new \ReflectionClass($this);

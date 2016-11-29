@@ -38,12 +38,12 @@ class Timer extends Singleton {
 	 * @var int[string] This is a list of stop-watches associated with an
 	 * identifier.
 	 */
-	protected $_timers = array();
+	protected $_timers = [];
 	/**
 	 * @var int[string] This is a list of flags associated with an identifier
 	 * used to know if a stop-watch is running.
 	 */
-	protected $_timersRunning = array();
+	protected $_timersRunning = [];
 	/**
 	 * Class constructor.
 	 */

@@ -2,6 +2,42 @@
 
 This is a changes log based on issues and logic changes.
 
+## Version 2.2.0:
+
+* RESTful Representations ([#163](https://github.com/daemonraco/toobasic/issues/163))
+>Providing restful access to all resources even considering authorization checks.
+* Unify Representation's Core Properties ([#187](https://github.com/daemonraco/toobasic/issues/187))
+>All main properties of item representations and items factories get factorized
+>into a single and centralized file.
+* List of Dependant Representations ([#186](https://github.com/daemonraco/toobasic/issues/186))
+>If an item representation acts as grouping item for other representation, there's
+now a way to access its children through a method.
+* Update jQuery and Bootstrap Libs ([#185](https://github.com/daemonraco/toobasic/issues/185))
+>Default libraries for jQuery and Bootstrap get a version update.
+* Systool table limit name field ([#182](https://github.com/daemonraco/toobasic/issues/182))
+>To avoid issues with database index restrictions, name fields on tables get
+>restricted to 64 characters (only when created as scaffold).
+* Search By Any Field ([#179](https://github.com/daemonraco/toobasic/issues/179))
+>Representations add a way to retrieve items specifying any column and value.
+* Use JSON Validator ([#166](https://github.com/daemonraco/toobasic/issues/166))
+>Adding a JSON validation library.
+* JSON Validator for SApiReader ([#172](https://github.com/daemonraco/toobasic/issues/172))
+>Validating Simple API Reader JSON specifications ussing the new library.
+* JSON Validator for SApiReports ([#173](https://github.com/daemonraco/toobasic/issues/173))
+>Validating Simple API Reports JSON specifications ussing the new library.
+* JSON Validator for FormsBuilder Specs ([#171](https://github.com/daemonraco/toobasic/issues/171))
+>Validating FormBuilder JSON specifications ussing the new library.
+* JSON Validator for Database Specs ([#170](https://github.com/daemonraco/toobasic/issues/170))
+>Validating database JSON specifications ussing the new library.
+* Disable JSON Specs Validation When Installed ([#176](https://github.com/daemonraco/toobasic/issues/176))
+>JSON specifications are not checked when the site is flagged as _installed_.
+* Update libraries/README.md ([#174](https://github.com/daemonraco/toobasic/issues/174))
+>Updated internal documentation.
+* Unneeded defaults on service sys-tool ([#181](https://github.com/daemonraco/toobasic/issues/181))
+>Bug fix.
+* Remove All Routes When Destroying a Controller or Service ([#160](https://github.com/daemonraco/toobasic/issues/160))
+>Bug fix.
+
 ## Version 2.1.0:
 
 * Simple API Tester ([#151](https://github.com/daemonraco/toobasic/issues/151))

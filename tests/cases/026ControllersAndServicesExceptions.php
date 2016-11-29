@@ -26,7 +26,7 @@ class ControllersAndServicesExceptionsTest extends TooBasic_TestCase {
 		$this->assertRegExp(ASSERTION_PATTERN_SMARTY_EXCEPTION, $response, "Response to '{$url}' doesn't have a Smarty exception.");
 		$this->assertNotRegExp(ASSERTION_PATTERN_PHP_ERROR, $response, "Response to '{$url}' seems to have a PHP error.");
 
-		$this->assertRegExp('~Unable to load template file \'action/no_view.html\'~m', $response, "The response doesn't inform about a template error.");
+		$this->assertRegExp('~Unable to load template \'(.*)action/no_view.html\'~m', $response, "The response doesn't inform about a template error.");
 	}
 	public function testRequestingAControllerWithWrongParams() {
 		$response = $this->getUrl('?action=wrong_params');

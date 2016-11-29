@@ -1,0 +1,124 @@
+{
+	"root": "DBSpec",
+	"types": {
+		"DBSpec": {
+			"configs": "DBConfig",
+			"tables": "Tables",
+			"indexes": "Indexes",
+			"data": "Data"
+		},
+		"DBConfig": {
+			"prefixes": "+DBConfigPrefixes"
+		},
+		"DBConfigPrefixes": {
+			"index": "string",
+			"key": "string",
+			"primary": "string"
+		},
+		"Indexes": "Index[]",
+		"Index": {
+			"name": "+string",
+			"table": "+string",
+			"type": "+IndexType",
+			"fields": "+IndexFields",
+			"connection": "string"
+		},
+		"Data": "DataEntry[]",
+		"IndexFields": "string[]",
+		"IndexType": "/^(index|key|primary)$/",
+		"DataEntry": {
+			"table": "+string",
+			"checkfields": "+DataCheckfields",
+			"entries": "+DataEntryRows",
+			"connection": "string"
+		},
+		"DataCheckfields": "string[]",
+		"DataEntryRows": "DataEntryRow[]",
+		"DataEntryRow": "mixed{}",
+		"Tables": "Table[]",
+		"Table": [
+			"TableV1",
+			"TableV2"
+		],
+		"TableV1": {
+			"version": "TableVersion",
+			"name": "+string",
+			"prefix": "+string",
+			"fields": "+TableFieldsV1",
+			"connection": "string",
+			"comment": "string",
+			"engine": "string"
+		},
+		"TableV2": {
+			"version": "+TableVersion",
+			"name": "+string",
+			"prefix": "+string",
+			"fields": "+TableFieldsV2",
+			"primary": "TableIndexesV2",
+			"keys": "TableIndexesV2",
+			"indexes": "TableIndexesV2",
+			"connection": "string",
+			"comment": "string",
+			"engine": "string",
+			"usesFormBuilder": "boolean"
+		},
+		"TableVersion": "int",
+		"TableFieldsV1": "TableFieldV1[]",
+		"TableFieldV1": {
+			"name": "+string",
+			"type": "+TableFieldTypeV1",
+			"null": "boolean",
+			"autoincrement": "boolean",
+			"comment": "string",
+			"default": "mixed"
+		},
+		"TableFieldTypeV1": {
+			"type": "+FieldTypePatternV1",
+			"precision": "mixed",
+			"values": "ValuesList"
+		},
+		"FieldTypePatternV1": "/^(blob|enum|float|int|text|timestamp|varchar)(.*)$/",
+		"ValuesList": "mixed[]",
+		"TableFieldsV2": "TableFieldV2{}",
+		"TableFieldV2": [
+			"FieldTypePatternV2",
+			"TableFieldTypeV2"
+		],
+		"FieldTypePatternV2": "/^(blob|enum|float|int|text|timestamp|varchar)(.*)$/",
+		"TableFieldTypeV2": {
+			"type": "+FieldTypePatternV2",
+			"null": "boolean",
+			"autoincrement": "boolean",
+			"comment": "string",
+			"default": "mixed"
+		},
+		"TableIndexesV2": "TableIndexV2{}",
+		"TableIndexV2": "string[]"
+	},
+	"policies": {
+		"DBSpec": {
+			"strict": true
+		},
+		"DBConfig": {
+			"strict": true
+		},
+		"DBConfigPrefixes": {
+			"strict": true
+		},
+		"Index": {
+			"strict": true
+		},
+		"TableV2": {
+			"strict": true
+		},
+		"TableVersion": {
+			"only": [1, 2]
+		},
+		"TableFieldV1": {
+			"strict": true
+		},
+		"TableFieldTypeV2": {
+			"strict": true
+		}
+	}
+}

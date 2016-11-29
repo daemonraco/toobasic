@@ -20,10 +20,10 @@ abstract class BasicAdapter extends Adapter {
 	 * @var string[] List of assignments that have to ve clean before
 	 * rendering to avoid encoding problems.
 	 */
-	protected $_noise = array(
+	protected $_noise = [
 		'tr',
 		'ctrl'
-	);
+	];
 	//
 	// Magic methods.
 	/**

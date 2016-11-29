@@ -1,0 +1,57 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"usesFormBuilder": true,
+			"name": "tests",
+			"prefix": "tes_",
+			"fields": {
+				"id": {
+					"type": "int",
+					"autoincrement": true
+				},
+				"name": "varchar",
+				"age": "int",
+				"height": "float",
+				"conf": "text",
+				"info": "blob",
+				"status": {
+					"type": "enum:SINGLE:MARRIED",
+					"default": "'SINGLE'"
+				},
+				"create_date": {
+					"type": "timestamp",
+					"null": false,
+					"default": "CURRENT_TIMESTAMP"
+				},
+				"indexed": {
+					"type": "varchar:1",
+					"null": false,
+					"default": "N"
+				}
+			},
+			"primary": {
+				"id": [
+					"id"
+				]
+			}
+		}
+	],
+	"data": [
+		{
+			"table": "tests",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"name": "john doe",
+					"age": "38",
+					"height": "1.72",
+					"conf": null,
+					"info": "{\"somefield\":\"somevalue\"}",
+					"status": "SINGLE"
+				}
+			]
+		}
+	]
+}

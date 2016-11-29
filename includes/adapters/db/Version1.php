@@ -38,14 +38,14 @@ class Version1 extends VersionAdapter {
 		global $Connections;
 		//
 		// Basic callback entries:
-		$callbackEntries = array(
-			GC_AFIELD_BEFORE_CREATE => array(),
-			GC_AFIELD_AFTER_CREATE => array(),
-			GC_AFIELD_BEFORE_DROP => array(),
-			GC_AFIELD_AFTER_DROP => array(),
-			GC_AFIELD_BEFORE_UPDATE => array(),
-			GC_AFIELD_AFTER_UDPATE => array()
-		);
+		$callbackEntries = [
+			GC_AFIELD_BEFORE_CREATE => [],
+			GC_AFIELD_AFTER_CREATE => [],
+			GC_AFIELD_BEFORE_DROP => [],
+			GC_AFIELD_AFTER_DROP => [],
+			GC_AFIELD_BEFORE_UPDATE => [],
+			GC_AFIELD_AFTER_UDPATE => []
+		];
 		//
 		// Of there are not fields, this specification is ignored.
 		if(!$table->fields) {
@@ -53,7 +53,7 @@ class Version1 extends VersionAdapter {
 		} else {
 			//
 			// Copying basic fields.
-			$aux = \TooBasic\objectCopyAndEnforce(array('name', 'connection', 'prefix', 'engine', 'callbacks', 'version'), $table, new \stdClass(), array('version' => 1));
+			$aux = \TooBasic\objectCopyAndEnforce(['name', 'connection', 'prefix', 'engine', 'callbacks', 'version'], $table, new \stdClass(), ['version' => 1]);
 			//
 			// Checking specification connection against
 			// configuration.
@@ -62,10 +62,10 @@ class Version1 extends VersionAdapter {
 				// If there was a connection specified, an error
 				// is shown.
 				if($aux->connection) {
-					$out[GC_AFIELD_ERRORS][] = array(
+					$out[GC_AFIELD_ERRORS][] = [
 						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownConnection,
 						GC_AFIELD_MESSAGE => "Unknown connection named '{$aux->connection}'"
-					);
+					];
 				}
 				//
 				// Using default instalation connection.
@@ -85,11 +85,11 @@ class Version1 extends VersionAdapter {
 			$out[GC_AFIELD_KEY] = sha1("{$aux->connection}-{$aux->name}");
 			//
 			// Loading table fields @{
-			$aux->fields = array();
+			$aux->fields = [];
 			foreach($table->fields as $field) {
 				//
 				// Copying basic fields.
-				$auxField = \TooBasic\objectCopyAndEnforce(array('name', 'type', 'autoincrement', 'null', 'comment', 'callbacks'), $field, new \stdClass(), array('autoincrement' => false, 'null' => false));
+				$auxField = \TooBasic\objectCopyAndEnforce(['name', 'type', 'autoincrement', 'null', 'comment', 'callbacks'], $field, new \stdClass(), ['autoincrement' => false, 'null' => false]);
 				//
 				// Generating fullname.
 				$auxField->fullname = "{$aux->prefix}{$auxField->name}";
@@ -98,16 +98,16 @@ class Version1 extends VersionAdapter {
 				// error is set and it's ignored.
 				// Also if the type's type is unknown.
 				if(!isset($auxField->type->type)) {
-					$out[GC_AFIELD_ERRORS][] = array(
+					$out[GC_AFIELD_ERRORS][] = [
 						GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
 						GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' has no type"
-					);
+					];
 					continue;
 				} elseif(!in_array($auxField->type->type, self::$_AllowedColumnTypes)) {
-					$out[GC_AFIELD_ERRORS][] = array(
+					$out[GC_AFIELD_ERRORS][] = [
 						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
 						GC_AFIELD_MESSAGE => "Unknown field type '{$auxField->type->type}' for field '{$auxField->fullname}' on table '{$aux->name}'"
-					);
+					];
 					continue;
 				}
 				//
@@ -115,16 +115,16 @@ class Version1 extends VersionAdapter {
 				/** @todo check this, why there's no 'else'? */
 				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
 					if($auxField->type->type == DBStructureManager::ColumnTypeEnum && !isset($auxField->type->values)) {
-						$out[GC_AFIELD_ERRORS][] = array(
+						$out[GC_AFIELD_ERRORS][] = [
 							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
 							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value"
-						);
+						];
 						continue;
 					} elseif(!in_array($auxField->type->type, self::$_ColumnTypesWithoutPrecisions)) {
-						$out[GC_AFIELD_ERRORS][] = array(
+						$out[GC_AFIELD_ERRORS][] = [
 							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
 							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision"
-						);
+						];
 						continue;
 					}
 				}
@@ -143,20 +143,20 @@ class Version1 extends VersionAdapter {
 				// Parsing and expanding column callbacks list.
 				foreach(array_keys($callbackEntries) as $callbackType) {
 					if(!isset($auxField->callbacks->{$callbackType})) {
-						$auxField->callbacks->{$callbackType} = array();
+						$auxField->callbacks->{$callbackType} = [];
 					} elseif(!is_array($auxField->callbacks->{$callbackType})) {
-						$auxField->callbacks->{$callbackType} = array(
+						$auxField->callbacks->{$callbackType} = [
 							$auxField->callbacks->{$callbackType}
-						);
+						];
 					}
 					foreach($auxField->callbacks->{$callbackType} as &$call) {
 						$callbackKey = "F_{$callbackType}_{$out[GC_AFIELD_KEY]}_{$auxField->fullname}";
 						if(!isset($out[GC_AFIELD_CALLBACKS][$callbackKey])) {
-							$out[GC_AFIELD_CALLBACKS][$callbackKey] = array();
+							$out[GC_AFIELD_CALLBACKS][$callbackKey] = [];
 						}
-						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = array(
+						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = [
 							GC_AFIELD_NAME => $call
-						);
+						];
 
 						$call = $callbackKey;
 					}
@@ -178,21 +178,21 @@ class Version1 extends VersionAdapter {
 				// Parsing and expanding table callbacks list.
 				foreach(array_keys($callbackEntries) as $callbackType) {
 					if(!isset($aux->callbacks->{$callbackType})) {
-						$aux->callbacks->{$callbackType} = array();
+						$aux->callbacks->{$callbackType} = [];
 					} elseif(!is_array($aux->callbacks->{$callbackType})) {
-						$aux->callbacks->{$callbackType} = array(
+						$aux->callbacks->{$callbackType} = [
 							$aux->callbacks->{$callbackType}
-						);
+						];
 					}
 
 					foreach($aux->callbacks->{$callbackType} as &$call) {
 						$callbackKey = "T_{$callbackType}_{$out[GC_AFIELD_KEY]}";
 						if(!isset($out[GC_AFIELD_CALLBACKS][$callbackKey])) {
-							$out[GC_AFIELD_CALLBACKS][$callbackKey] = array();
+							$out[GC_AFIELD_CALLBACKS][$callbackKey] = [];
 						}
-						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = array(
+						$out[GC_AFIELD_CALLBACKS][$callbackKey][] = [
 							GC_AFIELD_NAME => $call
-						);
+						];
 
 						$call = $callbackKey;
 					}
