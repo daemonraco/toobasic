@@ -8,6 +8,7 @@
 		"/site/db/filters.json",
 		"/site/models/representations/FilterRepresentation.php",
 		"/site/models/representations/FiltersFactory.php",
+		"/site/models/representations/filters.json",
 		"/site/templates/action/edit.html",
 		"/site/templates/action/test.html"
 	],

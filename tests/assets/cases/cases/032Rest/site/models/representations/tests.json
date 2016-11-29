@@ -1,0 +1,13 @@
+{
+	"table": "tests",
+	"representation_class": "test",
+	"columns_perfix": "tes_",
+	"columns": {
+		"id": "id"
+	},
+	"column_filters": {
+		"indexed": "boolean",
+		"conf": "json",
+		"info": "json"
+	}
+}

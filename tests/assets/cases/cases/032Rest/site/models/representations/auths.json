@@ -1,0 +1,13 @@
+{
+	"table": "auths",
+	"representation_class": "auth",
+	"columns_perfix": "auth_",
+	"columns": {
+		"id": "id"
+	},
+	"column_filters": {
+		"indexed": "boolean",
+		"conf": "json",
+		"info": "json"
+	}
+}
