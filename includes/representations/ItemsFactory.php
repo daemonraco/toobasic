@@ -100,6 +100,23 @@ abstract class ItemsFactory {
 
 		return $out;
 	}
+	/**
+	 * This magic method allows to set a value to certain core property in
+	 * this representation.
+	 *
+	 * @param string $name Property name to look for.
+	 * @param mixed $value Value to assign.
+	 * @return mixed Returns the set value.
+	 */
+	public function __set($name, $value) {
+		//
+		// Checking if it's core property request
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']} = $value;
+		}
+
+		return $value;
+	}
 	//
 	// Public methods.
 	/**

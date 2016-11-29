@@ -273,43 +273,49 @@ abstract class ItemRepresentation {
 	 * later to modify the database, if not, an extra property will be alter.
 	 *
 	 * @param string $name Property name to look for.
-	 * @param mixed $value value to assign.
+	 * @param mixed $value Value to assign.
 	 * @return mixed Returns the set value.
 	 */
 	public function __set($name, $value) {
 		//
-		// Generating a possible table field name.
-		$realName = "{$this->_cp_ColumnsPerfix}{$name}";
-		//
-		// Checking if its a known table column.
-		if(array_key_exists($realName, $this->_properties)) {
-			//
-			// Checking that:
-			//	- the column is not the ID column.
-			//	- It's not a read only property.
-			//	- The value is different from the current one.
-			if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
-				//
-				// Setting a new value.
-				$this->_properties[$realName] = $value;
-				//
-				// Assuming it was not yet loaded if it's a
-				// extended column.
-				unset($this->_extendedColumns[$name]);
-				//
-				// Flagging this representation as dirty.
-				$this->_dirty = true;
-			} else {
-				//
-				// When the requeried conditions fail, this
-				// returned value must be the one that remains on
-				// the column.
-				$value = $this->_properties[$realName];
-			}
+		// Checking if it's core property request
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']} = $value;
 		} else {
 			//
-			// Storing the property as an extra property.
-			$this->_extraProperties[$name] = $value;
+			// Generating a possible table field name.
+			$realName = "{$this->_cp_ColumnsPerfix}{$name}";
+			//
+			// Checking if its a known table column.
+			if(array_key_exists($realName, $this->_properties)) {
+				//
+				// Checking that:
+				//	- the column is not the ID column.
+				//	- It's not a read only property.
+				//	- The value is different from the current one.
+				if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
+					//
+					// Setting a new value.
+					$this->_properties[$realName] = $value;
+					//
+					// Assuming it was not yet loaded if it's a
+					// extended column.
+					unset($this->_extendedColumns[$name]);
+					//
+					// Flagging this representation as dirty.
+					$this->_dirty = true;
+				} else {
+					//
+					// When the requeried conditions fail, this
+					// returned value must be the one that remains on
+					// the column.
+					$value = $this->_properties[$realName];
+				}
+			} else {
+				//
+				// Storing the property as an extra property.
+				$this->_extraProperties[$name] = $value;
+			}
 		}
 
 		return $value;

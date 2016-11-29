@@ -26,7 +26,9 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 		parent::__construct($dbname);
 		//
 		// Setting column 'indexed' to work as a boolean value.
-		$this->_cp_ColumnFilters['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$aux = $this->_cp_ColumnFilters;
+		$aux['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$this->_cp_ColumnFilters = $aux;
 	}
 	//
 	// Public methods.

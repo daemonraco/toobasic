@@ -91,6 +91,13 @@ abstract class CoreProps {
 		$propName = "_{$name}";
 		return isset($this->{$propName}) ? $this->{$propName} : false;
 	}
+	public function __set($name, $value) {
+		$propName = "_{$name}";
+		if(isset($this->{$propName})) {
+			$this->{$propName} = $value;
+		}
+		return $this->{$propName};
+	}
 	//
 	// Public class methods.
 	/**
