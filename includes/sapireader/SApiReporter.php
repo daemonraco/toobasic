@@ -42,8 +42,8 @@ class SApiReporter extends Singleton {
 	 * table code.
 	 *
 	 * @param string $report Name of the report to be rendered.
-	 * @param string $renderType Name of the mechanism to use when rendering. FALSE
-	 * means default.
+	 * @param string $renderType Name of the mechanism to use when rendering.
+	 * FALSE means default.
 	 * @return string Returns a HTML piece of code.
 	 * @throws \TooBasic\SApiReportException
 	 */
@@ -54,6 +54,13 @@ class SApiReporter extends Singleton {
 		//
 		// Global dependencies.
 		global $SApiReader;
+		//
+		// Expanding report specification.
+		$params = [];
+		if(is_array($report)) {
+			$params = $report;
+			$report = array_shift($params);
+		}
 		//
 		// Loading requested report definition.
 		$this->loadReport($report);
@@ -75,7 +82,7 @@ class SApiReporter extends Singleton {
 		$api = SApiManager::Instance()->{$conf->api};
 		//
 		// Requesting information to build the report.
-		$results = $api->call($conf->service, $conf->params);
+		$results = $api->call($conf->service, array_values(array_merge((array) $conf->params, $params)));
 		//
 		// Filtering results.
 		$list = $this->filterResults($report, $results);
