@@ -15,12 +15,6 @@ namespace TooBasic\Search;
  */
 abstract class SearchableItemRepresentation extends \TooBasic\Representations\ItemRepresentation implements \TooBasic\Search\SearchableItem {
 	//
-	// Protected core properties.
-	/**
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	//
 	// Magic methods.
 	/**
 	 * Class constructor.
@@ -32,7 +26,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 		parent::__construct($dbname);
 		//
 		// Setting column 'indexed' to work as a boolean value.
-		$this->_CP_ColumnFilters['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$this->_cp_ColumnFilters['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
 	}
 	//
 	// Public methods.
@@ -72,7 +66,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return string Returns a terms string.
 	 */
 	public function terms() {
-		return $this->{$this->_CP_NameColumn};
+		return $this->{$this->_cp_NameColumn};
 	}
 	/**
 	 * @abstract

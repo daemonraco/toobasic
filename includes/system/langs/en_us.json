@@ -480,6 +480,9 @@
 		}, {
 			"key": "EX_rest_action_not_authorized",
 			"value": "You are not authorized to use action '%action%' on resource '%resource%'."
+		}, {
+			"key": "EX_no_core_props_holder",
+			"value": "No core properties holder name set."
 		}
 	]
 }

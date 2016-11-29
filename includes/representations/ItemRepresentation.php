@@ -26,51 +26,6 @@ use TooBasic\Translate;
  */
 abstract class ItemRepresentation {
 	//
-	// Protected core properties.
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Generic prefix for all columns on the represented table.
-	 */
-	protected $_CP_ColumnsPerfix = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[string] Associative list of field names and the filter to
-	 * be applied on them.
-	 */
-	protected $_CP_ColumnFilters = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var mixed[string] Sub-representation associated columns
-	 * specifications.
-	 */
-	protected $_CP_ExtendedColumns = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing IDs (without prefix).
-	 */
-	protected $_CP_IDColumn = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[] List of fields that can't be alter by generic accessors.
-	 */
-	protected $_CP_ReadOnlyColumns = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var mixed[string] List of other representations that use current one
-	 * as grouping item.
-	 */
-	protected $_CP_SubLists = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Represented table's name (without prefix).
-	 */
-	protected $_CP_Table = '';
-	//
 	// Protected properties.
 	/**
 	 * @var string Name of the class or JSON specs where core properties are
@@ -179,6 +134,11 @@ abstract class ItemRepresentation {
 		//
 		// Global dependencies.
 		global $Database;
+		//
+		// Checking core properties holder name.
+		if(!$this->_corePropsHolder) {
+			throw new Exception(Translate::Instance()->EX_no_core_props_holder);
+		}
 		//
 		// Generating shortcuts.
 		$this->_db = DBManager::Instance()->{$dbname};
@@ -289,13 +249,8 @@ abstract class ItemRepresentation {
 		$out = false;
 		//
 		// Checking if it's core property request
-		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
-			if($this->_corePropsHolder) {
-				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
-			} else {
-				$localName = "_CP_{$match['name']}";
-				$out = $this->{$localName};
-			}
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
 		} else {
 			//
 			// Generating a possible table field name.

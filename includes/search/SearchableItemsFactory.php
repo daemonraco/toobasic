@@ -15,12 +15,6 @@ namespace TooBasic\Search;
  */
 abstract class SearchableItemsFactory extends \TooBasic\Representations\ItemsFactory implements \TooBasic\Search\SearchableFactory {
 	//
-	// Protected core properties.
-	/**
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	//
 	// Public methods.
 	/**
 	 * Provides access to a specific searchable items.

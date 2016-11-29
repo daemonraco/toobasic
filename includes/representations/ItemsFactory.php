@@ -31,48 +31,6 @@ abstract class ItemsFactory {
 	 */
 	protected static $_LoadedClasses = [];
 	//
-	// Protected core properties.
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Generic prefix for all columns on the represented table.
-	 */
-	protected $_CP_ColumnsPerfix = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var boolean This flag indicates if method 'create()' is disabled or
-	 * not.
-	 * It can also have a string as value and it will be used as method name
-	 * when its related exception is raised.
-	 */
-	protected $_CP_DisableCreate = false;
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing IDs (without prefix).
-	 */
-	protected $_CP_IDColumn = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[string] List of fields (without prefix) associated to a
-	 * sorting direction.
-	 */
-	protected $_CP_OrderBy = false;
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a \TooBasic\Representations\ItemRepresentation
-	 * class.
-	 */
-	protected $_CP_RepresentationClass = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Represented table's name (without prefix).
-	 */
-	protected $_CP_Table = '';
-	//
 	// Protected properties.	
 	/**
 	 * @var string Name of the class or JSON specs where core properties are
@@ -106,6 +64,11 @@ abstract class ItemsFactory {
 	 */
 	final protected function __construct() {
 		//
+		// Checking core properties holder name.
+		if(!$this->_corePropsHolder) {
+			throw new Exception(Translate::Instance()->EX_no_core_props_holder);
+		}
+		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support empty entries creation.
 		if(!$this->_cp_IDColumn) {
@@ -131,13 +94,8 @@ abstract class ItemsFactory {
 		$out = false;
 		//
 		// Checking if it's core property request
-		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
-			if($this->_corePropsHolder) {
-				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
-			} else {
-				$localName = "_CP_{$match['name']}";
-				$out = $this->{$localName};
-			}
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
 		}
 
 		return $out;
