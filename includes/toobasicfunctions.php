@@ -9,6 +9,9 @@ namespace TooBasic;
 
 //
 // Class aliases.
+use ReflectionClass;
+use ReflectionFunction;
+use ReflectionMethod;
 use TooBasic\Managers\ManifestsManager;
 
 //
@@ -96,6 +99,81 @@ function ctrlExports_formFor($formName, $item = false, $mode = false, $flags = [
  */
 function ctrlExports_sapiReport($report, $renderType = false) {
 	return \TooBasic\SApiReporter::Instance()->sareport($report, $renderType);
+}
+/**
+ * This function stops the execution and displays a debug page will a summary of
+ * controller exported methods.
+ */
+function debugControllerExports() {
+	global $Defaults;
+
+	\TooBasic\debugThingInPage(function() use ($Defaults) {
+		//
+		// Internal temporary methods.
+		function cleanDocComment($comment) {
+			$docs = explode("\n", $comment);
+			foreach($docs as $k => $v) {
+				$docs[$k] = trim($v);
+			}
+			$docs = implode("\n", $docs);
+
+			return trim($docs);
+		}
+		function methodWithParams($method, $alias = false) {
+			$params = [];
+			foreach($method->getParameters() as $p) {
+				$params[] = "\${$p->name}";
+			}
+			$name = $alias ? $alias : $method->name;
+			return "<code>\$ctrl->{$name}(".implode(', ', $params).")</code>";
+		}
+		//
+		// Dynamically assigned methods.
+		ksort($Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS]);
+		echo '<div class="panel panel-default">';
+		echo '<div class="panel-heading">Dynamic exported functions:</div>';
+		echo '<div class="panel-body">';
+		echo '<ul>';
+		foreach($Defaults[GC_DEFAULTS_CTRLEXPORTS_EXTENSIONS] as $func => $managerName) {
+			$manager = new ReflectionFunction($managerName);
+
+			echo "<li>".methodWithParams($manager, $func)."<ul>";
+			echo "<li><strong>Provider</strong>: {$managerName}</li>";
+			$docs = cleanDocComment($manager->getDocComment());
+			if($docs) {
+				echo "<li><strong>Docs</strong>:<pre>{$docs}</pre></li>";
+			}
+			echo "</ul></li>";
+		}
+		echo '</ul>';
+		echo '</div></div>';
+		//
+		// Basic methods.
+		echo '<div class="panel panel-default">';
+		echo '<div class="panel-heading">Dynamic exported functions:</div>';
+		echo '<div class="panel-body">';
+
+		$class = new ReflectionClass('\\TooBasic\\ControllerExports');
+		$methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
+		usort($methods, function ($a, $b) {
+			return $a->name > $b->name;
+		});
+
+		echo '<ul>';
+		foreach($methods as $method) {
+			if(!in_array($method->name, ['__call', '__construct'])) {
+				echo "<li>".methodWithParams($method)."";
+				$docs = cleanDocComment($method->getDocComment());
+				if($docs) {
+					echo "<pre>{$docs}</pre>";
+				}
+				echo "</li>";
+			}
+		}
+		echo '</ul>';
+
+		echo '</div></div>';
+	}, 'Controller Exports');
 }
 /**
  * This method prints in a basic but standard way some message.

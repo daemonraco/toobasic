@@ -291,6 +291,11 @@ if(isset($auxParamsManager->debugdebugs)) {
 	}, 'Debugs');
 }
 //
+// Debug controller dynamic exports.
+if(isset($auxParamsManager->debugctrl)) {
+	\TooBasic\debugControllerExports();
+}
+//
 // Necessary globals.
 $LanguageName = \TooBasic\guessLanguage();
 //
