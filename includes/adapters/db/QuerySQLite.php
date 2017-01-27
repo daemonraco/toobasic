@@ -90,7 +90,8 @@ class QuerySQLite extends QueryAdapter {
 		$fieldPrefix = '';
 		//
 		// Checking if this is a multi-table select.
-		if(is_array($table)) {
+		$isMultiTables = is_array($table);
+		if($isMultiTables) {
 			//
 			// Building 'from' sentence.
 			$first = true;
@@ -103,39 +104,39 @@ class QuerySQLite extends QueryAdapter {
 				$first = false;
 			}
 			$query.= implode(", \n", $auxList)." \n";
-			//
-			// Building 'where' sentence pieces.
-			$where = [];
-			foreach($whereFields as $key => $value) {
-				$xKey = self::ExpandFieldName($key);
-				if($xKey[GC_AFIELD_RESULT]) {
-					switch($xKey[GC_AFIELD_FLAG]) {
-						case 'C':
-							$where[] = "{$xKey[GC_AFIELD_NAME]} = {$value}";
-							break;
-						case '*':
-							$where[] = "{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
-							break;
-					}
-				} else {
-					$where[] = "{$key} = :{$key}";
-				}
-			}
 		} else {
 			$fieldPrefix = $prefixes[GC_DBQUERY_PREFIX_COLUMN];
 			//
 			// Building 'from' sentence.
 			$query.= "from    {$prefixes[GC_DBQUERY_PREFIX_TABLE]}{$table} \n";
-			//
-			// Building 'where' sentence pieces.
-			$where = [];
-			foreach($whereFields as $key => $value) {
-				$xKey = self::ExpandFieldName($key);
-				if($xKey[GC_AFIELD_RESULT] && $xKey[GC_AFIELD_FLAG] == '*') {
-					$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
-				} else {
-					$where[] = "{$prefixes[GC_DBQUERY_PREFIX_COLUMN]}{$key} = :{$key}";
-				}
+		}
+		//
+		// Building 'where' sentence pieces.
+		$where = [];
+		foreach($whereFields as $key => $value) {
+			$auxPrefix = $isMultiTables ? '' : $prefixes[GC_DBQUERY_PREFIX_COLUMN];
+			$xKey = self::ExpandFieldName($key);
+
+			switch($xKey[GC_AFIELD_FLAG]) {
+				case '*':
+					$where[] = "{$auxPrefix}{$xKey[GC_AFIELD_NAME]} like :{$xKey[GC_AFIELD_NAME]}";
+					break;
+				case '>':
+					$where[] = "{$auxPrefix}{$xKey[GC_AFIELD_NAME]} > :{$xKey[GC_AFIELD_NAME]}";
+					break;
+				case '<':
+					$where[] = "{$auxPrefix}{$xKey[GC_AFIELD_NAME]} < :{$xKey[GC_AFIELD_NAME]}";
+					break;
+				case '!':
+					$where[] = "{$auxPrefix}{$xKey[GC_AFIELD_NAME]} <> :{$xKey[GC_AFIELD_NAME]}";
+					break;
+				case 'C':
+					if($isMultiTables) {
+						$where[] = "{$auxPrefix}{$xKey[GC_AFIELD_NAME]} = {$value}";
+						break;
+					}
+				default:
+					$where[] = "{$auxPrefix}{$key} = :{$key}";
 			}
 		}
 		//
