@@ -170,33 +170,7 @@ abstract class ItemsFactory {
 	 * @return int[] Returns a list of IDs.
 	 */
 	public function ids() {
-		//
-		// Default values.
-		$out = [];
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		//
-		// Generating a proper query to obtain a full list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, [], $prefixes, $this->_cp_OrderBy);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
-			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
-		}
-
-		return $out;
+		return $this->idsBy([]);
 	}
 	/**
 	 * This method retrieves a list of IDs of all available entries where the
@@ -211,33 +185,8 @@ abstract class ItemsFactory {
 		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
-		//
-		// Default values.
-		$out = [];
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		//
-		// Generating a proper query to obtain a list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, ["*:{$this->_cp_NameColumn}" => $pattern], $prefixes, $this->_cp_OrderBy);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
-			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
-		}
 
-		return $out;
+		return $this->idsBy(["*:{$this->_cp_NameColumn}" => $pattern]);
 	}
 	/**
 	 * This method retrieves a list of IDs in the represented table based on a
@@ -357,19 +306,8 @@ abstract class ItemsFactory {
 		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
-		//
-		// Obtaining an object to hold the represented entry.
-		$item = self::GetClass($this->_cp_RepresentationClass, $this->_dbname);
-		//
-		// Attempting to load the information based on the id.
-		$item->loadByName($name);
-		//
-		// Was it found?
-		if(!$item->exists()) {
-			$item = null;
-		}
 
-		return $item;
+		return $this->itemBy([$this->_cp_NameColumn => $name]);
 	}
 	/**
 	 * This method retrieves a list of representations of all available
