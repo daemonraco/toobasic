@@ -8,12 +8,22 @@ class SearchCron extends TooBasic\Shell\ShellCron {
 	//
 	// Constants.
 	const OptionForceFullscan = 'ForceFullscan';
+	const OptionLimit = 'Limit';
+	const OptionOffset = 'Offset';
 	const OptionSearch = 'Search';
 	const OptionUpdate = 'Update';
 	//
 	// Protected methods.
 	protected function setOptions() {
 		$this->_options->setHelpText("This cron tool allows you to perform periodic tasks related to searchable items.");
+
+		$text = "When serching this option limits the amount of returned items.\n";
+		$text.= "Default is all items.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionLimit, ['--limit', '-l'], Option::TypeValue, $text, 'value'));
+
+		$text = "When serching and limiting this option tells where to start.\n";
+		$text.= "Default is from the begining.";
+		$this->_options->addOption(Option::EasyFactory(self::OptionOffset, ['--offset', '-o'], Option::TypeValue, $text, 'value'));
 
 		$text = "This options provides a simple interface to run a search.";
 		$this->_options->addOption(Option::EasyFactory(self::OptionSearch, ['--search', '-s'], Option::TypeValue, $text, 'value'));
@@ -37,9 +47,14 @@ class SearchCron extends TooBasic\Shell\ShellCron {
 	}
 	protected function taskSearch($spacer = "") {
 		$terms = $this->_options->option(self::OptionSearch)->value();
+		$limitOpt = $this->_options->option(self::OptionLimit);
+		$offsetOpt = $this->_options->option(self::OptionOffset);
+
+		$limit = $limitOpt->activated() ? $limitOpt->value() : 0;
+		$offset = $offsetOpt->activated() ? $offsetOpt->value() : 0;
 
 		echo "{$spacer}Searching for '{$terms}'\n";
-		$results = SearchManager::Instance()->search($terms);
+		$results = SearchManager::Instance()->search($terms, $limit, $offset);
 		foreach($results as $items) {
 			foreach($items as $item) {
 				echo "{$spacer}\t- {$item}\n";

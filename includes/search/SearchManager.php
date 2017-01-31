@@ -5,6 +5,7 @@ namespace TooBasic\Managers;
 //
 // Class aliases.
 use TooBasic\Search\SearchableItem;
+use TooBasic\Timer;
 
 /**
  * @class SearchManager
@@ -133,19 +134,53 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * string.
 	 *
 	 * @param string $termsString Terms to look for.
+	 * @param int $limit Maximum number of items to be returned.
+	 * @param int $offset Where to start (zero is from the beginning).
+	 * @param int $info Returns some search stats information.
 	 * @return mixed[string][] Returns a list of lists group by item types.
 	 */
-	public function search($termsString) {
+	public function search($termsString, $limit = 0, $offset = 0, &$info = false) {
+		//
+		// Default values.
+		$out = [];
+		//
+		// Timer shortcut;
+		$timer = Timer::Instance();
+		$timer->start(GC_AFIELD_FULL);
+		$timer->start(GC_AFIELD_SEARCH);
 		//
 		// Expanded list of terms.
 		$terms = self::ExpandTerms(self::SanitizeTerms($termsString));
 		//
 		// Basic search for items.
 		$plainResult = $this->plainSearch($terms);
+		$timer->stop(GC_AFIELD_SEARCH);
+		$timer->start(GC_AFIELD_EXPAND);
 		//
-		// Expanding all found items into full objects grouped by type and
-		// returning it as result.
-		return $this->expandResult($plainResult);
+		// Checking if only a portion is required.
+		if($limit > 0) {
+			$plainResult[GC_AFIELD_ITEMS] = array_slice($plainResult[GC_AFIELD_ITEMS], $offset, $limit);
+		}
+		//
+		// Expanding all found items into full objects grouped by type.
+		$out = $this->expandResult($plainResult);
+		$timer->stop(GC_AFIELD_EXPAND);
+		$timer->stop(GC_AFIELD_FULL);
+		//
+		// Saving some information.
+		$info = [
+			GC_AFIELD_TERMS => $terms,
+			GC_AFIELD_COUNT => count($plainResult[GC_AFIELD_ITEMS]),
+			GC_AFIELD_LIMIT => $limit,
+			GC_AFIELD_OFFSET => $offset,
+			GC_AFIELD_TIMERS => [
+				GC_AFIELD_FULL => $timer->timer(GC_AFIELD_FULL),
+				GC_AFIELD_EXPAND => $timer->timer(GC_AFIELD_EXPAND),
+				GC_AFIELD_SEARCH => $timer->timer(GC_AFIELD_SEARCH)
+			]
+		];
+
+		return $out;
 	}
 	//
 	// Protected methods.
@@ -339,10 +374,10 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$out[GC_AFIELD_ITEMS] = array_values($out[GC_AFIELD_ITEMS]);
 		//
 		// Cleaning types.
-		$out[GC_AFIELD_TYPES] = array_unique($out[GC_AFIELD_TYPES]);
+		$out[GC_AFIELD_TYPES] = array_values(array_unique($out[GC_AFIELD_TYPES]));
 		//
 		// Sorting by hits count (desc).
-		uasort($out[GC_AFIELD_ITEMS], function($a, $b) {
+		usort($out[GC_AFIELD_ITEMS], function($a, $b) {
 			return $a[GC_AFIELD_HITS] < $b[GC_AFIELD_HITS];
 		});
 
