@@ -103,6 +103,7 @@ define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
 define('GC_AFIELD_FULL', 'full');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
+define('GC_AFIELD_GARBAGE', 'garbage');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HASH', 'hash');
 define('GC_AFIELD_HEADERS', 'headers');

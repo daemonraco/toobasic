@@ -1,5 +1,7 @@
 <?php
 
+use TooBasic\Managers\SearchManager;
+
 /**
  * @class SearchService
  * This service provides access to TooBasic's Search Engine and runs a simple
@@ -20,28 +22,25 @@ class SearchService extends \TooBasic\Service {
 	 */
 	protected function basicRun() {
 		//
+		// Params
+		$limit = isset($this->params->get->limit) ? $this->params->get->limit : 0;
+		$offset = isset($this->params->get->offset) ? $this->params->get->offset : 0;
+		//
 		// Searching.
-		$results = \TooBasic\Managers\SearchManager::Instance()->search($this->params->get->terms);
+		$info = false;
+		$results = SearchManager::Instance()->search($this->params->get->terms, $limit, $offset, $info);
 		//
 		// Counting and flattening items.
-		$fullCount = 0;
-		$countByType = [];
-		foreach($results as $type => &$items) {
-			if(!isset($countByType[$type])) {
-				$countByType[$type] = 0;
-			}
-
-			foreach($items as &$item) {
-				$item = $item->toArray();
-				$countByType[$type] ++;
-				$fullCount++;
-			}
+		foreach($results as &$item) {
+			$item = $item->toArray();
 		}
 		//
 		// Assigning results.
 		$this->assign('results', $results);
-		$this->assign('count', $fullCount);
-		$this->assign('countByType', $countByType);
+		$this->assign('count', $info[GC_AFIELD_COUNT]);
+		$this->assign('countByType', $info[GC_AFIELD_COUNTS]);
+		$this->assign('garbage', $info[GC_AFIELD_GARBAGE]);
+		$this->assign('timers', $info[GC_AFIELD_TIMERS]);
 
 		return $this->status();
 	}
@@ -52,6 +51,8 @@ class SearchService extends \TooBasic\Service {
 		parent::init();
 		//
 		// Setting cache modifiers.
+		$this->_cacheParams['GET'][] = 'limit';
+		$this->_cacheParams['GET'][] = 'offset';
 		$this->_cacheParams['GET'][] = 'terms';
 		//
 		// Setting required parameters.

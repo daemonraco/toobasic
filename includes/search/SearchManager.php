@@ -163,7 +163,8 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		}
 		//
 		// Expanding all found items into full objects grouped by type.
-		$out = $this->expandResult($plainResult);
+		$garbageCount = 0;
+		$out = $this->expandResult($plainResult, $garbageCount);
 		$timer->stop(GC_AFIELD_EXPAND);
 		$timer->stop(GC_AFIELD_FULL);
 		//
@@ -171,13 +172,15 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$info = [
 			GC_AFIELD_TERMS => $terms,
 			GC_AFIELD_COUNT => count($plainResult[GC_AFIELD_ITEMS]),
+			GC_AFIELD_COUNTS => $plainResult[GC_AFIELD_COUNTS],
 			GC_AFIELD_LIMIT => $limit,
 			GC_AFIELD_OFFSET => $offset,
 			GC_AFIELD_TIMERS => [
 				GC_AFIELD_FULL => $timer->timer(GC_AFIELD_FULL),
 				GC_AFIELD_EXPAND => $timer->timer(GC_AFIELD_EXPAND),
 				GC_AFIELD_SEARCH => $timer->timer(GC_AFIELD_SEARCH)
-			]
+			],
+			GC_AFIELD_GARBAGE => $garbageCount
 		];
 
 		return $out;
@@ -237,13 +240,16 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * This method takes a plain search result and expands each item grouping
 	 * them by item type.
 	 *
-	 * @param type $plainResult
-	 * @return type
+	 * @param mixed[] $plainResult Plain search results.
+	 * @param int $garbageCount Number of lost items.
+	 * @return \TooBasic\Search\SearchableItem[] Returns a list of expanded
+	 * items.
 	 */
-	protected function expandResult($plainResult) {
+	protected function expandResult($plainResult, &$garbageCount = 0) {
 		//
 		// Default values.
 		$out = [];
+		$garbageCount = 0;
 		//
 		// Global dependencies.
 		global $Search;
@@ -253,9 +259,6 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Generating temporary list based on search types to use.
 		foreach($plainResult[GC_AFIELD_TYPES] as $type) {
-			//
-			// Creating groups by type.
-			$out[$type] = [];
 			//
 			// Appending a factory shortcut.
 			if(isset($Search[GC_SEARCH_ENGINE_FACTORIES][$type])) {
@@ -273,7 +276,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			// Expanding only those elements belonging to an existing
 			// factory.
 			if(isset($factories[$type])) {
-				$out[$type][] = $factories[$plainItem[GC_AFIELD_TYPE]]->searchableItem($plainItem[GC_AFIELD_ID]);
+				$item = $factories[$type]->searchableItem($plainItem[GC_AFIELD_ID]);
+				if($item) {
+					$out[] = $item;
+				} else {
+					$garbageCount++;
+				}
 			}
 		}
 
@@ -372,6 +380,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Cleaning items.
 		$out[GC_AFIELD_ITEMS] = array_values($out[GC_AFIELD_ITEMS]);
+		//
+		// Count by types.
+		$out[GC_AFIELD_COUNTS] = [];
+		foreach($out[GC_AFIELD_TYPES] as $type) {
+			$out[GC_AFIELD_COUNTS][$type] = isset($out[GC_AFIELD_COUNTS][$type]) ? $out[GC_AFIELD_COUNTS][$type] + 1 : 1;
+		}
 		//
 		// Cleaning types.
 		$out[GC_AFIELD_TYPES] = array_values(array_unique($out[GC_AFIELD_TYPES]));
