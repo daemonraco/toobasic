@@ -354,16 +354,13 @@ abstract class Selenium_SystoolTableOnDatabaseTest extends TooBasic_SeleniumTest
 		$this->assertEquals(1, $json->data->count, "At least one value should had been found.");
 
 		if($json->data->count == 1) {
-			$this->assertTrue(is_object($json->data->results), "Sub-field 'data->results' is not an object.");
+			$this->assertTrue(is_array($json->data->results), "Sub-field 'data->results' is not a list.");
+			$this->assertEquals($json->data->count, $json->data->countByType->PERSON, "Sub-field 'data->results->PERSON' has an unexpected amount of items.");
 
-			$this->assertTrue(isset($json->data->results->PERSON), "There's no sub-field 'data->results->PERSON'.");
-			$this->assertTrue(is_array($json->data->results->PERSON), "Sub-field 'data->results->PERSON' is not a list.");
-			$this->assertEquals($json->data->count, count($json->data->results->PERSON), "Sub-field 'data->results->PERSON' has an anexpected amount of items.");
-
-			$this->assertTrue(is_object($json->data->results->PERSON[0]), "The entry in sub-field 'data->results->PERSON' is not an object.");
+			$this->assertTrue(is_object($json->data->results[0]), "The entry in sub-field 'data->results[0]' is not an object.");
 			foreach($this->_fields as $field => $conf) {
-				$this->assertTrue(isset($json->data->results->PERSON[0]->{$field}), "The entry in sub-field 'data->results->PERSON' doesn't have a property called '{$field}'.");
-				$this->assertEquals($conf['update'], $json->data->results->PERSON[0]->{$field}, "The entry in sub-field 'data->results->PERSON' has an unexpected value for property '{$field}'.");
+				$this->assertTrue(isset($json->data->results[0]->{$field}), "The entry in sub-field 'data->results[0]' doesn't have a property called '{$field}'.");
+				$this->assertEquals($conf['update'], $json->data->results[0]->{$field}, "The entry in sub-field 'data->results[0]' has an unexpected value for property '{$field}'.");
 			}
 
 			$this->assertTrue(is_object($json->data->countByType), "Sub-field 'data->countByType' is not an object.");
