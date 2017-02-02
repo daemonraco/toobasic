@@ -52,9 +52,15 @@ class SearchCron extends TooBasic\Shell\ShellCron {
 
 		$limit = $limitOpt->activated() ? $limitOpt->value() : 0;
 		$offset = $offsetOpt->activated() ? $offsetOpt->value() : 0;
+		$info = false;
 
-		echo "{$spacer}Searching for '{$terms}'\n";
-		$results = SearchManager::Instance()->search($terms, $limit, $offset);
+		$results = SearchManager::Instance()->search($terms, $limit, $offset, $info);
+		echo "{$spacer}Searching for '".implode(' ', $info[GC_AFIELD_TERMS])."'\n";
+		echo "{$spacer}Total count: {$info[GC_AFIELD_COUNT]}".($info[GC_AFIELD_GARBAGE] ? "({$info[GC_AFIELD_GARBAGE]} lost)\n" : "\n");
+		echo "{$spacer}Elapsed time {$info[GC_AFIELD_TIMERS][GC_AFIELD_FULL]}ms:\n";
+		echo "{$spacer}\t- Searching: {$info[GC_AFIELD_TIMERS][GC_AFIELD_SEARCH]}ms\n";
+		echo "{$spacer}\t- Expanding: {$info[GC_AFIELD_TIMERS][GC_AFIELD_EXPAND]}ms\n";
+		echo "{$spacer}Results:\n";
 		foreach($results as $item) {
 			echo "{$spacer}\t- {$item}\n";
 		}

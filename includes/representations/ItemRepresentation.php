@@ -293,7 +293,7 @@ abstract class ItemRepresentation {
 				//	- the column is not the ID column.
 				//	- It's not a read only property.
 				//	- The value is different from the current one.
-				if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
+				if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] !== $value) {
 					//
 					// Setting a new value.
 					$this->_properties[$realName] = $value;
