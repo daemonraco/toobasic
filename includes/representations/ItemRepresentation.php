@@ -46,6 +46,10 @@ abstract class ItemRepresentation {
 	 */
 	protected $_dirty = false;
 	/**
+	 * @var string[] Track of changed properties.
+	 */
+	protected $_dirtyProperties = [];
+	/**
 	 *
 	 * @var bool This flag is true when the current object represent a actual
 	 * entry on database.
@@ -304,11 +308,14 @@ abstract class ItemRepresentation {
 					//
 					// Flagging this representation as dirty.
 					$this->_dirty = true;
+					//
+					// Tracking changed properties.
+					$this->_dirtyProperties[] = $name;
 				} else {
 					//
-					// When the requeried conditions fail, this
-					// returned value must be the one that remains on
-					// the column.
+					// When the requeried conditions fail,
+					// this returned value must be the one
+					// that remains on the column.
 					$value = $this->_properties[$realName];
 				}
 			} else {
@@ -479,13 +486,13 @@ abstract class ItemRepresentation {
 		// Default values.
 		$persisted = false;
 		//
-		// Analyzing field filters.
-		$this->encodeFieldFilters();
-		//
 		// Checking that there's something to persist and also triggering
 		// specific checks before persisting.
 		if($this->dirty() && $this->prePersist()) {
 			$idName = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
+			//
+			// Analyzing field filters.
+			$this->encodeFieldFilters();
 			//
 			// Building the list of values to store associated to
 			// their column names.
@@ -509,13 +516,15 @@ abstract class ItemRepresentation {
 				// and no longer dirty.
 				$persisted = true;
 				$this->_dirty = false;
+				$this->_dirtyProperties = [];
+				$this->postPersist();
 			} else {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
+			//
+			// Analyzing field filters back.
+			$this->decodeFieldFilters();
 		}
-		//
-		// Analyzing field filters back.
-		$this->decodeFieldFilters();
 
 		return $persisted;
 	}

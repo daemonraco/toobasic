@@ -19,6 +19,13 @@ interface SearchableItem {
 	//
 	// Public methods.
 	/**
+	 * This mehtod returns a specification of grouping criteria to be applied
+	 * on some entry.
+	 *
+	 * @return \stdClass Returns a criteria specification structure.
+	 */
+	public function criteria();
+	/**
 	 * This method provides access to current object's id.
 	 *
 	 * @return int Returns an ID.

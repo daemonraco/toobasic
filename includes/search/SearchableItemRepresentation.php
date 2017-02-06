@@ -33,6 +33,15 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	//
 	// Public methods.
 	/**
+	 * This mehtod returns a specification of grouping criteria to be applied
+	 * on some entry.
+	 *
+	 * @return \stdClass Returns a criteria specification structure.
+	 */
+	public function criteria() {
+		return (object)[];
+	}
+	/**
 	 * This method provides access to current representation's id.
 	 *
 	 * @return int Returns an ID.

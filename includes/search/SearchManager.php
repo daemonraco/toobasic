@@ -97,6 +97,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 					// item.
 					$type = $item->type();
 					$id = $item->id();
+					$criteria = self::StringCriteria(self::SimplifyCriteria($item->criteria()));
 					$terms = self::ExpandTerms(self::SanitizeTerms($item->terms()));
 					//
 					// Setting parameters.
@@ -109,7 +110,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 					$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
 					//
 					// Adding associations.
-					foreach($this->getTerms($terms, true) as $term) {
+					foreach(array_filter($this->getTerms($terms, $criteria, true)) as $term) {
 						//
 						// Setting parameters.
 						$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
@@ -136,13 +137,15 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * @param string $termsString Terms to look for.
 	 * @param int $limit Maximum number of items to be returned.
 	 * @param int $offset Where to start (zero is from the beginning).
+	 * @param \stdClass $criteria Set of specific filtering parameters.
 	 * @param int $info Returns some search stats information.
 	 * @return mixed[string][] Returns a list of lists group by item types.
 	 */
-	public function search($termsString, $limit = 0, $offset = 0, &$info = false) {
+	public function search($termsString, $limit = 0, $offset = 0, \stdClass $criteria = null, &$info = false) {
 		//
 		// Default values.
 		$out = [];
+		$criteria = is_object($criteria) ? $criteria : (object) [];
 		//
 		// Timer shortcut;
 		$timer = Timer::Instance();
@@ -153,7 +156,8 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$terms = self::ExpandTerms(self::SanitizeTerms($termsString));
 		//
 		// Basic search for items.
-		$plainResult = $this->plainSearch($terms);
+		$plainResult = $this->plainSearch($terms, $criteria);
+		$plainResultCount = count($plainResult[GC_AFIELD_ITEMS]);
 		$timer->stop(GC_AFIELD_SEARCH);
 		$timer->start(GC_AFIELD_EXPAND);
 		//
@@ -171,7 +175,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Saving some information.
 		$info = [
 			GC_AFIELD_TERMS => $terms,
-			GC_AFIELD_COUNT => count($plainResult[GC_AFIELD_ITEMS]),
+			GC_AFIELD_COUNT => $plainResultCount,
 			GC_AFIELD_COUNTS => $plainResult[GC_AFIELD_COUNTS],
 			GC_AFIELD_LIMIT => $limit,
 			GC_AFIELD_OFFSET => $offset,
@@ -192,11 +196,14 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * representation. Also, this method can create unknown terms when
 	 * indicated.
 	 *
-	 * @param string[] $terms
+	 * @param string[] $terms List of terms to load.
+	 * @param string $stringCriteria Set of specific filtering parameters in
+	 * string mode.
 	 * @param boolean $create Triggers the creation of unknown terms.
-	 * @return type
+	 * @return \TooBasic\Search\SearchTerm[string] Returns a list of found
+	 * terms.
 	 */
-	protected function getTerms($terms, $create = false) {
+	protected function getTerms($terms, $stringCriteria, $create = false) {
 		//
 		// Default values.
 		$out = [];
@@ -208,7 +215,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		foreach($terms as $term) {
 			//
 			// Attempting to uptaing the requeste item.
-			$auxTerm = $factory->itemByName($term);
+			$auxTerm = $factory->itemBy(['term' => $term, 'criteria' => $stringCriteria]);
 			//
 			// If it doesn't exist and it's required to be created, it
 			// is.
@@ -222,6 +229,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 				//
 				// Setting basic values.
 				$auxTerm->term = $term;
+				$auxTerm->criteria = $stringCriteria;
 				$auxTerm->count = 0;
 				//
 				// Persisting changes.
@@ -302,9 +310,10 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * result in a simple structure sorted by hit counts.
 	 *
 	 * @param string[] $terms List of terms to look for.
+	 * @param \stdClass $criteria Set of specific filtering parameters.
 	 * @return mixed[string] Plain search result.
 	 */
-	protected function plainSearch($terms) {
+	protected function plainSearch($terms, $criteria = false) {
 		//
 		// Default values.
 		$out = [
@@ -324,9 +333,16 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			GC_DBQUERY_PREFIX_COLUMN => 'ste_'
 		];
 		//
+		// Cleaning criterion entries
+		if(!is_object($criteria)) {
+			$criteria = (object) [];
+		}
+		$simplifyCriteria = self::SimplifyCriteria($criteria);
+		//
 		// Creating a query to search term.
 		$queryT = $this->_db->queryAdapter()->select('tb_search_terms', [
 			'*:term' => '',
+			'*:criteria' => ''
 			], $termsPrefixes);
 		$stmtT = $this->_db->prepare($queryT[GC_AFIELD_QUERY]);
 		//
@@ -337,12 +353,16 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$stmtI = $this->_db->prepare($queryI[GC_AFIELD_QUERY]);
 
 		$termIds = [];
-		foreach($terms as $term) {
-			$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
-			$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+		foreach($simplifyCriteria as $criterion) {
+			$queryT[GC_AFIELD_PARAMS][':criteria'] = $criterion ? "%:{$criterion}:%" : '%';
 
-			foreach($stmtT->fetchAll() as $row) {
-				$termIds[] = $row['ste_id'];
+			foreach($terms as $term) {
+				$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
+				$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+
+				foreach($stmtT->fetchAll() as $row) {
+					$termIds[] = $row['ste_id'];
+				}
 			}
 		}
 		$termIds = array_unique($termIds);
@@ -420,5 +440,47 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 */
 	protected static function ExpandTerms($termsString) {
 		return array_unique(array_filter(explode(' ', $termsString)));
+	}
+	/**
+	 * This method takes a set of filtering criteria and returns in a simpler
+	 * way (list of strings).
+	 *
+	 * @param \stdClass $criteria Set of specific filtering parameters.
+	 * @return string[] Returns the filtering parameters in a simpler mode.
+	 */
+	protected static function SimplifyCriteria(\stdClass $criteria) {
+		$out = [];
+		//
+		// Converting.
+		foreach($criteria as $k => $v) {
+			$out[] = "{$k}={$v}";
+		}
+
+		return $out;
+	}
+	/**
+	 * This method takes a set of filtering criteria given in a simple manner
+	 * and retruns it as a simple string.
+	 *
+	 * @param string[] $simpleCriteria Set of specific filtering parameters in
+	 * simple mode.
+	 * @return string Returns the filtering parameters as a single string.
+	 */
+	protected static function StringCriteria($simpleCriteria) {
+		//
+		// Concatenating criteria.
+		$stringCriteria = ':'.implode(':', $simpleCriteria).':';
+		//
+		// Cleaning multiple consecutive colons.
+		while(strpos($stringCriteria, '::') !== false) {
+			$stringCriteria = str_replace('::', ':', $stringCriteria);
+		}
+		//
+		// Cleaning the string with has no criterion.
+		if(!$stringCriteria == ':') {
+			$stringCriteria = '';
+		}
+
+		return $stringCriteria;
 	}
 }

@@ -28,7 +28,7 @@ class SearchService extends \TooBasic\Service {
 		//
 		// Searching.
 		$info = false;
-		$results = SearchManager::Instance()->search($this->params->get->terms, $limit, $offset, $info);
+		$results = SearchManager::Instance()->search($this->params->get->terms, $limit, $offset, null, $info);
 		//
 		// Counting and flattening items.
 		foreach($results as &$item) {

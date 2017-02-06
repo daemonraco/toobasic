@@ -181,7 +181,7 @@ protected function basicRun() {
 Using paging:
 ```php
 protected function basicRun() {
-	$results = \TooBasic\Managers\SearchManager::Instance()->search('JOHN dOe', 10, 20, $info);
+	$results = \TooBasic\Managers\SearchManager::Instance()->search('JOHN dOe', 10, 20, null, $info);
 	debugit([
 		"RESULTS" => $results,
 		"INFO"    => $info
