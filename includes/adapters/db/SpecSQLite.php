@@ -125,10 +125,6 @@ class SpecSQLite extends SpecAdapter {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
-#				$updates[] = $fullname;
-#				continue;
-#			}
 		}
 		//
 		// SQLite does not supports column modifications or dropping @{
@@ -299,9 +295,6 @@ class SpecSQLite extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		}
-#		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
-#			$out.= 'collate utf8_bin ';
-#		}
 		if(!$spec->null) {
 			$out.= 'not null ';
 		}
@@ -327,11 +320,6 @@ class SpecSQLite extends SpecAdapter {
 			}
 			/** @} */
 		}
-#		if($spec->comment) {
-#			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
-#		} else {
-#			$out.= "comment '' ";
-#		}
 
 		return $out;
 	}

@@ -371,8 +371,6 @@ class Adapter extends \TooBasic\Adapters\Adapter {
 						$out.= ";port={$connData[GC_CONNECTIONS_DB_PORT]}";
 					}
 					$out.= ";dbname={$connData[GC_CONNECTIONS_DB_NAME]}";
-					//$out.= ";user={$connData[GC_CONNECTIONS_DB_USERNAME]}";
-					//$out.= ";password={$connData[GC_CONNECTIONS_DB_PASSWORD]}";
 					break;
 			}
 		} else {

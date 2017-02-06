@@ -146,10 +146,6 @@ class SpecPostgreSQL extends SpecAdapter {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
-#				$updates[] = $fullname;
-#				continue;
-#			}
 		}
 	}
 	public function createIndex(\stdClass $index) {
@@ -339,9 +335,6 @@ class SpecPostgreSQL extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement, $isAlter)} ";
 		}
-#		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
-#			$out.= 'collate utf8_bin ';
-#		}
 		if(!$spec->null) {
 			if($isAlter) {
 				$out.= ", alter column {$spec->fullname} set not null ";
@@ -376,11 +369,6 @@ class SpecPostgreSQL extends SpecAdapter {
 			}
 			/** @} */
 		}
-#			if($spec->comment) {
-#				$out.= "comment '".str_replace("'", '', $spec->comment)."' ";
-#			} else {
-#				$out.= "comment '' ";
-#		}
 
 		return $out;
 	}

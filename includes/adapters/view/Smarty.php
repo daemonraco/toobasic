@@ -19,7 +19,6 @@ use \TooBasic\Sanitizer;
 class Smarty extends Adapter {
 	//
 	// Constants.
-//	const SmartyTemplatesDirectory = "/smarty/";
 	const SmartyStuffDirectory = '/smarty';
 	const SmartyCompileDirectory = '/smarty/compile';
 	const SmartyCacheDirectory = '/smarty/cache';
@@ -68,7 +67,6 @@ class Smarty extends Adapter {
 		$this->_smarty->setConfigDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyConfigDirectory));
 		$this->_smarty->setCacheDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyCacheDirectory));
 
-//		$this->caching = Smarty::CACHING_LIFETIME_CURRENT;
 		$this->_smarty->assign('app_name', __CLASS__);
 	}
 	//

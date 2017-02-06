@@ -1460,11 +1460,6 @@ abstract class Scaffold extends ShellTool {
 		if($ok) {
 			$ok = $this->removeAllRoutes("{$spacer}\t");
 		}
-#		//
-#		// Translations.
-#		if($ok) {
-#			$ok = $this->removeAllTranslations("{$spacer}\t");
-#		}
 		//
 		// PHP  configuration lines.
 		if($ok) {
