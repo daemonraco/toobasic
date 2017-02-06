@@ -338,6 +338,9 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$criteria = (object) [];
 		}
 		$simplifyCriteria = self::SimplifyCriteria($criteria);
+		if(empty($simplifyCriteria)) {
+			$simplifyCriteria[] = '';
+		}
 		//
 		// Creating a query to search term.
 		$queryT = $this->_db->queryAdapter()->select('tb_search_terms', [
