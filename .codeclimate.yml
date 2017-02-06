@@ -52,6 +52,8 @@ engines:
     - ee56e3d73abf3af3bc257a0d4d26ba6d
     - ca7a9bf5da93e0bfb90641b535fae781
     - 619bd9fa3af8b1fc6bd323a0b14a9aeb
+    - 4982b3a7baf07e616ad2bf51568d2861
+    - ebacd49297d42f80bd3746d0eb0caf55
 ratings:
   paths:
   - "**.php"

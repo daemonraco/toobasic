@@ -119,7 +119,7 @@ function debugControllerExports() {
 
 			return trim($docs);
 		}
-		function methodWithParams($method, $alias = false) {
+		function methodWithParams(ReflectionFunctionAbstract $method, $alias = false) {
 			$params = [];
 			foreach($method->getParameters() as $p) {
 				$params[] = "\${$p->name}";
