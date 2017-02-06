@@ -11,7 +11,6 @@ namespace TooBasic\Managers;
 // Class aliases.
 use TooBasic\Exception;
 use TooBasic\Representations\ItemsFactory;
-use TooBasic\Representations\ItemRepresentation;
 
 /**
  * @class RestManagerException

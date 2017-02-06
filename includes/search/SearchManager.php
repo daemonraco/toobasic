@@ -4,7 +4,6 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use TooBasic\Search\SearchableItem;
 use TooBasic\Timer;
 
 /**

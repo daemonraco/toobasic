@@ -9,7 +9,6 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use TooBasic\Config;
 use TooBasic\Names;
 
 /**
