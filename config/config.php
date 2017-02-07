@@ -102,6 +102,7 @@ $Directories = array();
 $Directories[GC_DIRECTORIES_CACHE] = TB_Sanitizer::DirPath(ROOTDIR.'/cache');
 $Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/configs');
 $Directories[GC_DIRECTORIES_CONFIGS] = TB_Sanitizer::DirPath(ROOTDIR.'/config');
+$Directories[GC_DIRECTORIES_EXCEPTIONS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/exceptions');
 $Directories[GC_DIRECTORIES_FORMS] = TB_Sanitizer::DirPath(ROOTDIR.'/includes/forms');
 $Directories[GC_DIRECTORIES_INCLUDES] = TB_Sanitizer::DirPath(ROOTDIR.'/includes');
 $Directories[GC_DIRECTORIES_LIBRARIES] = TB_Sanitizer::DirPath(ROOTDIR.'/libraries');

@@ -175,6 +175,7 @@ define('GC_AFIELD_VALUES', 'values');
 define('GC_DIRECTORIES_CACHE', 'cache');
 define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
+define('GC_DIRECTORIES_EXCEPTIONS', 'exceptions');
 define('GC_DIRECTORIES_FORMS', 'forms');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');

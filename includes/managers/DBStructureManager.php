@@ -15,15 +15,6 @@ use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
- * @class DBStructureManagerExeption
- * This is a specific exception class for fatal errors found on a database
- * structure check and update.
- */
-class DBStructureManagerException extends \TooBasic\DBException {
-	
-}
-
-/**
  * @class DBStructureManager
  */
 class DBStructureManager extends Manager {

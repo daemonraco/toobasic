@@ -13,20 +13,6 @@ use TooBasic\MagicProp;
 use TooBasic\Translate;
 
 /**
- * @class SApiReaderException
- */
-class SApiReaderException extends \TooBasic\Exception {
-	
-}
-
-/**
- * @class SApiReaderAbstractException
- */
-class SApiReaderAbstractException extends SApiReaderException {
-	
-}
-
-/**
  * @class SApiReader
  * This class is the basic representation of an API reader.
  * All the responses it can get are returned as they were read.

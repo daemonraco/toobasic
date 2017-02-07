@@ -13,13 +13,6 @@ use TooBasic\Exception;
 use TooBasic\Representations\ItemsFactory;
 
 /**
- * @class RestManagerException
- */
-class RestManagerException extends Exception {
-	
-}
-
-/**
  * @class RestManager
  * This manager interprets and solve rest calls.
  * Allowed calls:

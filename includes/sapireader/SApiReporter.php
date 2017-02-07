@@ -15,15 +15,6 @@ use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
- * @class SAReporterException
- * This type of exception is thrown whenever a error occurs with Simple API
- * Reporter.
- */
-class SApiReportException extends Exception {
-	
-}
-
-/**
  * @class SAReporter
  * This class holds the logic to access, change and also render Simple API
  * Reports.
