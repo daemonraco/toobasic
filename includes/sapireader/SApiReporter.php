@@ -73,7 +73,7 @@ class SApiReporter extends Singleton {
 		$api = SApiManager::Instance()->{$conf->api};
 		//
 		// Requesting information to build the report.
-		$results = $api->call($conf->service, array_values(array_merge((array) $conf->params, $params)));
+		$results = $api->call($conf->service, array_values(array_merge((array)$conf->params, $params)));
 		//
 		// Filtering results.
 		$list = $this->filterResults($report, $results);
@@ -209,7 +209,7 @@ class SApiReporter extends Singleton {
 	 * @return \stdClass[] Returns a filtered list.
 	 * @throws \TooBasic\SApiReportException
 	 */
-	protected function filterResults($report, $results) {
+	protected function filterResults($report, \stdClass $results) {
 		//
 		// Default values.
 		$list = false;
@@ -353,7 +353,7 @@ class SApiReporter extends Singleton {
 	 * @param string $path Path to be clean.
 	 * @return boolean Returns TRUE when it's set.
 	 */
-	public static function GetPathIsset($item, $path) {
+	public static function GetPathIsset(\stdClass $item, $path) {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path});");
 		return $out;
@@ -365,7 +365,7 @@ class SApiReporter extends Singleton {
 	 * @param string $path Path to be clean.
 	 * @return mixed Returns it's value or FALSE when it's not set.
 	 */
-	public static function GetPathValue($item, $path) {
+	public static function GetPathValue(\stdClass $item, $path) {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
 		return $out;

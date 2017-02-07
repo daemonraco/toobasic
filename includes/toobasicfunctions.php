@@ -10,6 +10,7 @@ namespace TooBasic;
 //
 // Class aliases.
 use ReflectionClass;
+use ReflectionFunctionAbstract;
 use ReflectionFunction;
 use ReflectionMethod;
 use TooBasic\Managers\ManifestsManager;
@@ -155,7 +156,7 @@ function debugControllerExports() {
 
 		$class = new ReflectionClass('\\TooBasic\\ControllerExports');
 		$methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
-		usort($methods, function ($a, $b) {
+		usort($methods, function (ReflectionFunctionAbstract $a, ReflectionFunctionAbstract $b) {
 			return $a->name > $b->name;
 		});
 

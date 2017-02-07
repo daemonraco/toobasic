@@ -188,10 +188,6 @@ class SpecSQLite extends SpecAdapter {
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
 		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'DROP COLUMN']));
-		$query = "alter table {$table->fullname} \n";
-		$query.= "        drop column {$columnName}";
-
-		return $this->exec($query);
 	}
 	public function getIndexes() {
 		$out = [];
@@ -238,12 +234,6 @@ class SpecSQLite extends SpecAdapter {
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
 		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'MODIFY COLUMN']));
-		$query = "alter table {$table->fullname} \n";
-
-		$field = $table->fields[$columnName];
-		$query.= "        modify column {$field->fullname} {$this->buildFullColumnType($field, false)}";
-
-		return $this->exec($query);
 	}
 	//
 	// Protected methods.

@@ -113,7 +113,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildColumn($columnConf, $item, $spacer) {
+	protected function buildColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		//
 		// Guessing the proper method name.
 		$method = 'build'.str_replace(' ', '', ucwords(str_replace('-', ' ', $columnConf->type))).'Column';
@@ -134,7 +134,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	abstract protected function buildButtonLinkColumn($columnConf, $item, $spacer);
+	abstract protected function buildButtonLinkColumn(\stdClass $columnConf, \stdClass $item, $spacer);
 	/**
 	 * This method reports certain value encased in a 'PRE' tag.
 	 *
@@ -143,7 +143,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	abstract protected function buildCodeColumn($columnConf, $item, $spacer);
+	abstract protected function buildCodeColumn(\stdClass $columnConf, \stdClass $item, $spacer);
 	/**
 	 * This method reports certain value as an image using a 'IMG' tag.
 	 *
@@ -152,7 +152,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	abstract protected function buildImageColumn($columnConf, $item, $spacer);
+	abstract protected function buildImageColumn(\stdClass $columnConf, \stdClass $item, $spacer);
 	/**
 	 * This method reports certain value as an anchor.
 	 *
@@ -161,7 +161,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	abstract protected function buildLinkColumn($columnConf, $item, $spacer);
+	abstract protected function buildLinkColumn(\stdClass $columnConf, \stdClass $item, $spacer);
 	/**
 	 * This method reports certain value simple escaped string encased in
 	 * 'SPAN' tags.
@@ -171,7 +171,7 @@ abstract class SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	abstract protected function buildTextColumn($columnConf, $item, $spacer);
+	abstract protected function buildTextColumn(\stdClass $columnConf, \stdClass $item, $spacer);
 	/**
 	 * This method tries to guess the proper label for a link based on its
 	 * configuration.
@@ -181,7 +181,7 @@ abstract class SApiReportType {
 	 * @param string $default Default value to use in case failure.
 	 * @return string Returns a printable label.
 	 */
-	protected function guessLabel($columnConf, $item, $default) {
+	protected function guessLabel(\stdClass $columnConf, \stdClass $item, $default) {
 		//
 		// Default values.
 		$out = '';
