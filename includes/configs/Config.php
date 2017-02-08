@@ -77,4 +77,13 @@ class Config extends \stdClass {
 	public function name() {
 		return $this->_name;
 	}
+	/**
+	 * This methods converts current configuration object into a pure array
+	 * structure and returns it.
+	 *
+	 * @return mixed[] Returns a multi-level array.
+	 */
+	public function toArray() {
+		return json_decode(json_encode($this), true);
+	}
 }
