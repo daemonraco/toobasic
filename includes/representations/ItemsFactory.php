@@ -14,6 +14,7 @@ use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
 use TooBasic\Representations\CoreProps;
+use TooBasic\Representations\ItemsStream;
 use TooBasic\Translate;
 
 /**
@@ -348,8 +349,8 @@ abstract class ItemsFactory {
 		//
 		// Fetching all available dis and creating a representation for
 		// each one of them.
-		foreach($this->idsBy($conditions, $order) as $id) {
-			$out[$id] = $this->item($id);
+		foreach($this->streamBy($conditions, $order) as $id => $item) {
+			$out[$id] = $item;
 		}
 
 		return $out;
@@ -377,6 +378,60 @@ abstract class ItemsFactory {
 	 */
 	public function lastDBError() {
 		return $this->_lastDBError;
+	}
+	/**
+	 * This method retrieves a list of IDs in the represented table based on a
+	 * set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of IDs.
+	 */
+	public function streamBy($conditions, $order = []) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Checking conditions.
+		if(!is_array($conditions)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$conditions',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Checking order.
+		if(!is_array($order)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$order',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Enforcing order configuration.
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
+		}
+		$order = $order ? $order : $this->_cp_OrderBy;
+		//
+		// Generating a proper query to obtain a list of IDs.
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$out = new ItemsStream($this, $this->_corePropsHolder, $stmt);
+		} else {
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
+		}
+
+		return $out;
 	}
 	//
 	// Protected methods.
