@@ -206,50 +206,12 @@ abstract class ItemsFactory {
 		$out = [];
 
 		$stream = $this->streamBy($conditions, $order);
-		for($i = 0; $i < $stream->length(); $i++) {
-			$stream->fetch();
-			$out[] = $stream->key();
+		if($stream) {
+			for($i = 0; $i < $stream->length(); $i++) {
+				$stream->fetch();
+				$out[] = $stream->key();
+			}
 		}
-
-//		//
-//		// Checking conditions.
-//		if(!is_array($conditions)) {
-//			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-//				'name', '$conditions',
-//				'type' => 'array'
-//			]));
-//		}
-//		//
-//		// Checking order.
-//		if(!is_array($order)) {
-//			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-//				'name', '$order',
-//				'type' => 'array'
-//			]));
-//		}
-//		//
-//		// Enforcing order configuration.
-//		if(!is_array($this->_cp_OrderBy)) {
-//			$this->_cp_OrderBy = [];
-//		}
-//		$order = $order ? $order : $this->_cp_OrderBy;
-//		//
-//		// Generating a proper query to obtain a list of IDs.
-//		$prefixes = $this->queryAdapterPrefixes();
-//		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
-//		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-//		//
-//		// Executing query and fetching IDs.
-//		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-//			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-//			foreach($stmt->fetchAll() as $row) {
-//				$out[] = $row[$idKey];
-//			}
-//		} else {
-//			//
-//			// Catching the last error for further analysis.
-//			$this->_lastDBError = $stmt->errorInfo();
-//		}
 
 		return $out;
 	}
@@ -267,8 +229,6 @@ abstract class ItemsFactory {
 	public function idBy($conditions, $order = []) {
 		$stream = $this->streamBy($conditions, $order);
 		return $stream->length() > 0 ? $stream->key() : false;
-//		$ids = $this->idsBy($conditions, $order);
-//		return array_shift($ids);
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -369,8 +329,6 @@ abstract class ItemsFactory {
 	public function itemBy($conditions, $order = []) {
 		$stream = $this->streamBy($conditions, $order);
 		return $stream->length() > 0 ? $stream->current() : false;
-//		$items = $this->itemsBy($conditions, $order);
-//		return array_shift($items);
 	}
 	/**
 	 * This method provids access to the last database error found.
