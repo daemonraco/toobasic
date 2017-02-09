@@ -204,45 +204,52 @@ abstract class ItemsFactory {
 		//
 		// Default values.
 		$out = [];
-		//
-		// Checking conditions.
-		if(!is_array($conditions)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$conditions',
-				'type' => 'array'
-			]));
+
+		$stream = $this->streamBy($conditions, $order);
+		for($i = 0; $i < $stream->length(); $i++) {
+			$stream->fetch();
+			$out[] = $stream->key();
 		}
-		//
-		// Checking order.
-		if(!is_array($order)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$order',
-				'type' => 'array'
-			]));
-		}
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		$order = $order ? $order : $this->_cp_OrderBy;
-		//
-		// Generating a proper query to obtain a list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
-			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
-		}
+
+//		//
+//		// Checking conditions.
+//		if(!is_array($conditions)) {
+//			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+//				'name', '$conditions',
+//				'type' => 'array'
+//			]));
+//		}
+//		//
+//		// Checking order.
+//		if(!is_array($order)) {
+//			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+//				'name', '$order',
+//				'type' => 'array'
+//			]));
+//		}
+//		//
+//		// Enforcing order configuration.
+//		if(!is_array($this->_cp_OrderBy)) {
+//			$this->_cp_OrderBy = [];
+//		}
+//		$order = $order ? $order : $this->_cp_OrderBy;
+//		//
+//		// Generating a proper query to obtain a list of IDs.
+//		$prefixes = $this->queryAdapterPrefixes();
+//		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
+//		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+//		//
+//		// Executing query and fetching IDs.
+//		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+//			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
+//			foreach($stmt->fetchAll() as $row) {
+//				$out[] = $row[$idKey];
+//			}
+//		} else {
+//			//
+//			// Catching the last error for further analysis.
+//			$this->_lastDBError = $stmt->errorInfo();
+//		}
 
 		return $out;
 	}
@@ -258,8 +265,10 @@ abstract class ItemsFactory {
 	 * @return int Returns the first ID that matches.
 	 */
 	public function idBy($conditions, $order = []) {
-		$ids = $this->idsBy($conditions, $order);
-		return array_shift($ids);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->key() : false;
+//		$ids = $this->idsBy($conditions, $order);
+//		return array_shift($ids);
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -318,17 +327,7 @@ abstract class ItemsFactory {
 	 * of representations.
 	 */
 	public function items() {
-		//
-		// Default values.
-		$out = [];
-		//
-		// Fetching all available dis and creating a representation for
-		// each one of them.
-		foreach($this->ids() as $id) {
-			$out[$id] = $this->item($id);
-		}
-
-		return $out;
+		return $this->itemsBy([]);
 	}
 	/**
 	 * This method retrieves a list of representations in the represented
@@ -368,8 +367,10 @@ abstract class ItemsFactory {
 	 * representations that matches.
 	 */
 	public function itemBy($conditions, $order = []) {
-		$items = $this->itemsBy($conditions, $order);
-		return array_shift($items);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->current() : false;
+//		$items = $this->itemsBy($conditions, $order);
+//		return array_shift($items);
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -378,6 +379,14 @@ abstract class ItemsFactory {
 	 */
 	public function lastDBError() {
 		return $this->_lastDBError;
+	}
+	/**
+	 * @todo doc
+	 *
+	 * @return \TooBasic\Representations\ItemsStream @todo doc
+	 */
+	public function stream() {
+		return $this->streamBy([]);
 	}
 	/**
 	 * This method retrieves a list of IDs in the represented table based on a
