@@ -310,7 +310,7 @@ abstract class ItemsFactory {
 		// Default values.
 		$out = [];
 		//
-		// Fetching all available dis and creating a representation for
+		// Fetching all available ids and creating a representation for
 		// each one of them.
 		foreach($this->streamBy($conditions, $order) as $id => $item) {
 			$out[$id] = $item;
@@ -343,9 +343,11 @@ abstract class ItemsFactory {
 		return $this->_lastDBError;
 	}
 	/**
-	 * @todo doc
+	 * Run a clean query retieveing a full stream of entries without any
+	 * filtering condition.
 	 *
-	 * @return \TooBasic\Representations\ItemsStream @todo doc
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
 	 */
 	public function stream() {
 		return $this->streamBy([]);
@@ -359,7 +361,8 @@ abstract class ItemsFactory {
 	 *
 	 * @param mixed[string] $conditions List of conditions to apply.
 	 * @param string[string] $order Query sorting conditions.
-	 * @return \TooBasic\Representations\ItemsStream Returns a stream of IDs.
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
 	 */
 	public function streamBy($conditions, $order = []) {
 		//
