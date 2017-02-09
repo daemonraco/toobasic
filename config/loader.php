@@ -116,6 +116,7 @@ $SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECT
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
+$SuperLoader['TooBasic\\Representations\\ItemsStream'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsStream.php";
 // @}
 //
 // Shell includes @{

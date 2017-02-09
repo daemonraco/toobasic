@@ -14,6 +14,7 @@ use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
 use TooBasic\Representations\CoreProps;
+use TooBasic\Representations\ItemsStream;
 use TooBasic\Translate;
 
 /**
@@ -204,43 +205,16 @@ abstract class ItemsFactory {
 		// Default values.
 		$out = [];
 		//
-		// Checking conditions.
-		if(!is_array($conditions)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$conditions',
-				'type' => 'array'
-			]));
-		}
+		// Getting the proper stream.
+		$stream = $this->streamBy($conditions, $order);
 		//
-		// Checking order.
-		if(!is_array($order)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$order',
-				'type' => 'array'
-			]));
-		}
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		$order = $order ? $order : $this->_cp_OrderBy;
-		//
-		// Generating a proper query to obtain a list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
+		// Checking results.
+		if($stream) {
 			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
+			// Reading each entry and extracting the id.
+			while($stream->fetch()) {
+				$out[] = $stream->key();
+			}
 		}
 
 		return $out;
@@ -257,8 +231,8 @@ abstract class ItemsFactory {
 	 * @return int Returns the first ID that matches.
 	 */
 	public function idBy($conditions, $order = []) {
-		$ids = $this->idsBy($conditions, $order);
-		return array_shift($ids);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->key() : false;
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -317,17 +291,7 @@ abstract class ItemsFactory {
 	 * of representations.
 	 */
 	public function items() {
-		//
-		// Default values.
-		$out = [];
-		//
-		// Fetching all available dis and creating a representation for
-		// each one of them.
-		foreach($this->ids() as $id) {
-			$out[$id] = $this->item($id);
-		}
-
-		return $out;
+		return $this->itemsBy([]);
 	}
 	/**
 	 * This method retrieves a list of representations in the represented
@@ -346,10 +310,10 @@ abstract class ItemsFactory {
 		// Default values.
 		$out = [];
 		//
-		// Fetching all available dis and creating a representation for
+		// Fetching all available ids and creating a representation for
 		// each one of them.
-		foreach($this->idsBy($conditions, $order) as $id) {
-			$out[$id] = $this->item($id);
+		foreach($this->streamBy($conditions, $order) as $id => $item) {
+			$out[$id] = $item;
 		}
 
 		return $out;
@@ -367,8 +331,8 @@ abstract class ItemsFactory {
 	 * representations that matches.
 	 */
 	public function itemBy($conditions, $order = []) {
-		$items = $this->itemsBy($conditions, $order);
-		return array_shift($items);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->current() : false;
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -377,6 +341,71 @@ abstract class ItemsFactory {
 	 */
 	public function lastDBError() {
 		return $this->_lastDBError;
+	}
+	/**
+	 * Run a clean query retieveing a full stream of entries without any
+	 * filtering condition.
+	 *
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
+	 */
+	public function stream() {
+		return $this->streamBy([]);
+	}
+	/**
+	 * This method retrieves a list of IDs in the represented table based on a
+	 * set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
+	 */
+	public function streamBy($conditions, $order = []) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Checking conditions.
+		if(!is_array($conditions)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$conditions',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Checking order.
+		if(!is_array($order)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$order',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Enforcing order configuration.
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
+		}
+		$order = $order ? $order : $this->_cp_OrderBy;
+		//
+		// Generating a proper query to obtain a list of IDs.
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$out = new ItemsStream($this, $this->_corePropsHolder, $stmt);
+		} else {
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
+		}
+
+		return $out;
 	}
 	//
 	// Protected methods.
