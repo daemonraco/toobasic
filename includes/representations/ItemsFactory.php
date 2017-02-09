@@ -204,11 +204,15 @@ abstract class ItemsFactory {
 		//
 		// Default values.
 		$out = [];
-
+		//
+		// Getting the proper stream.
 		$stream = $this->streamBy($conditions, $order);
+		//
+		// Checking results.
 		if($stream) {
-			for($i = 0; $i < $stream->length(); $i++) {
-				$stream->fetch();
+			//
+			// Reading each entry and extracting the id.
+			while($stream->fetch()) {
 				$out[] = $stream->key();
 			}
 		}

@@ -86,6 +86,7 @@ class ItemsStream implements \Iterator {
 	}
 	public function fetch() {
 		$this->fetchRow();
+		return $this->valid();
 	}
 	public function length() {
 		return $this->_statement->rowCount();
