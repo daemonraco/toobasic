@@ -196,7 +196,7 @@ class ItemsStream implements \Iterator {
 	 * @return int Returns the current id after the skipping.
 	 */
 	public function skip($offset) {
-		while($offset > 0) {
+		while($offset >= 0) {
 			$offset--;
 			$this->fetch();
 		}

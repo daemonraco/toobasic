@@ -559,17 +559,6 @@ class RestManager extends Manager {
 					break;
 				}
 			}
-//			$ids = $factory->ids();
-//			$ids = array_splice($ids, $offset, $limit);
-//			//
-//			// Loading each element.
-//			foreach($ids as $id) {
-//				$item = $factory->item($id);
-//				if($expand) {
-//					$item->expandExtendedColumns();
-//				}
-//				$response[] = $item->toArray();
-//			}
 		} else {
 			//
 			// Loading the requested item.
