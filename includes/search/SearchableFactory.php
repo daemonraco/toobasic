@@ -23,6 +23,12 @@ interface SearchableFactory {
 	 * @return \TooBasic\Search\SearchableItem[] Items to be analyzed.
 	 */
 	public function searchableItems();
+	/**
+	 * Provides access to a full list of searchable items.
+	 *
+	 * @return \TooBasic\Search\ItemsStream Items to be analyzed.
+	 */
+	public function searchableStream();
 	//
 	// Public class methods.
 	/**

@@ -39,7 +39,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$factory = $factoryClass::Instance();
 			//
 			// Setting each as not yet indexed.
-			foreach($factory->searchableItems() as $item) {
+			foreach($factory->searchableStream() as $item) {
 				$item->setIndexed(false);
 			}
 		}
@@ -89,7 +89,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$factory = $factoryClass::Instance();
 			//
 			// Checking each item.
-			foreach($factory->searchableItems() as $item) {
+			foreach($factory->searchableStream() as $item) {
 				if(!$item->isIndexed()) {
 					//
 					// Obtaining information from current

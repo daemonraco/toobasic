@@ -33,4 +33,12 @@ abstract class SearchableItemsFactory extends \TooBasic\Representations\ItemsFac
 	public function searchableItems() {
 		return $this->items();
 	}
+	/**
+	 * Provides access to a full list of searchable items.
+	 *
+	 * @return \TooBasic\Search\ItemsStream Items to be analyzed.
+	 */
+	public function searchableStream() {
+		return $this->items();
+	}
 }
