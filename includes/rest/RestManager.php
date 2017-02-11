@@ -541,17 +541,35 @@ class RestManager extends Manager {
 			}
 			//
 			// Loading and trimming.
-			$ids = $factory->ids();
-			$ids = array_splice($ids, $offset, $limit);
+			$stream = $factory->stream();
+			$stream->skip($offset);
 			//
 			// Loading each element.
-			foreach($ids as $id) {
-				$item = $factory->item($id);
+			$count = $limit;
+			while($count > 0) {
+				$count--;
+
+				$item = $stream->current();
 				if($expand) {
 					$item->expandExtendedColumns();
 				}
 				$response[] = $item->toArray();
+
+				if(!$stream->fetch()) {
+					break;
+				}
 			}
+//			$ids = $factory->ids();
+//			$ids = array_splice($ids, $offset, $limit);
+//			//
+//			// Loading each element.
+//			foreach($ids as $id) {
+//				$item = $factory->item($id);
+//				if($expand) {
+//					$item->expandExtendedColumns();
+//				}
+//				$response[] = $item->toArray();
+//			}
 		} else {
 			//
 			// Loading the requested item.
