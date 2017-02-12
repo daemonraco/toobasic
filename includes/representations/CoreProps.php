@@ -52,6 +52,11 @@ abstract class CoreProps {
 	 */
 	protected $_IDColumn = '';
 	/**
+	 * @var string Name of a field that keeps the indexation status (without
+	 * prefix).
+	 */
+	protected $_IndexColumn = 'indexed';
+	/**
 	 * @var string Name of a field containing names (without prefix).
 	 */
 	protected $_NameColumn = 'name';
@@ -91,6 +96,14 @@ abstract class CoreProps {
 		$propName = "_{$name}";
 		return isset($this->{$propName}) ? $this->{$propName} : false;
 	}
+	/**
+	 * This method provides easy access to core property values in order to
+	 * set values.
+	 *
+	 * @param string $name Name of the property to be set.
+	 * @param mixed $value Value to be set.
+	 * @return mixed Returns the final value in the property.
+	 */
 	public function __set($name, $value) {
 		$propName = "_{$name}";
 		if(isset($this->{$propName})) {

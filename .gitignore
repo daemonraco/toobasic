@@ -5,6 +5,7 @@
 /cache/langs/*
 /cache/system/*
 /libraries/*/*
+/libraries/composer.*
 /tools.sh
 /nbproject
 /modules/tests

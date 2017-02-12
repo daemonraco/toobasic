@@ -377,6 +377,8 @@ define('GC_SAPIREPORT_COLUMNTYPE_TEXT', 'text');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+define('GC_SEARCH_ENGINE_INDEXED', 'indexed');
+define('GC_SEARCH_ENGINE_UNINDEXED', 'unindexed');
 // @}
 //
 // RESTful constants @{

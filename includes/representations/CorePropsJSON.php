@@ -32,6 +32,7 @@ class CorePropsJSON extends CoreProps {
 		$this->_DisableCreate = isset($json['disable_create']) ? $json['disable_create'] : false;
 		$this->_ExtendedColumns = isset($json['extended_columns']) ? $json['extended_columns'] : [];
 		$this->_IDColumn = isset($json['columns']['id']) ? $json['columns']['id'] : '';
+		$this->_IndexColumn = isset($json['columns']['index']) ? $json['columns']['index'] : 'indexed';
 		$this->_NameColumn = isset($json['columns']['name']) ? $json['columns']['name'] : 'name';
 		$this->_OrderBy = isset($json['order_by']) ? $json['order_by'] : false;
 		$this->_ReadOnlyColumns = isset($json['read_only_columns']) ? $json['read_only_columns'] : [];

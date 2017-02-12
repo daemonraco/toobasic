@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file SearchManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Managers;
 
 //
@@ -89,41 +94,38 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$factory = $factoryClass::Instance();
 			//
 			// Checking each item.
-			foreach($factory->searchableStream() as $item) {
-				if(!$item->isIndexed()) {
-					//
-					// Obtaining information from current
-					// item.
-					$type = $item->type();
-					$id = $item->id();
-					$criteria = self::StringCriteria(self::SimplifyCriteria($item->criteria()));
-					$terms = self::ExpandTerms(self::SanitizeTerms($item->terms()));
+			foreach($factory->pendingStream() as $item) {
+				//
+				// Obtaining information from current item.
+				$type = $item->type();
+				$id = $item->id();
+				$criteria = self::StringCriteria(self::SimplifyCriteria($item->criteria()));
+				$terms = self::ExpandTerms(self::SanitizeTerms($item->terms()));
+				//
+				// Setting parameters.
+				$queryD[GC_AFIELD_PARAMS][':type'] = $type;
+				$queryI[GC_AFIELD_PARAMS][':type'] = $type;
+				$queryD[GC_AFIELD_PARAMS][':id'] = $id;
+				$queryI[GC_AFIELD_PARAMS][':id'] = $id;
+				//
+				// Removing all current associations.
+				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				//
+				// Adding associations.
+				foreach(array_filter($this->getTerms($terms, $criteria, true)) as $term) {
 					//
 					// Setting parameters.
-					$queryD[GC_AFIELD_PARAMS][':type'] = $type;
-					$queryI[GC_AFIELD_PARAMS][':type'] = $type;
-					$queryD[GC_AFIELD_PARAMS][':id'] = $id;
-					$queryI[GC_AFIELD_PARAMS][':id'] = $id;
+					$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
 					//
-					// Removing all current associations.
-					$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
-					//
-					// Adding associations.
-					foreach(array_filter($this->getTerms($terms, $criteria, true)) as $term) {
-						//
-						// Setting parameters.
-						$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
-						//
-						// Adding.
-						$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
-					}
-					//
-					// Setting current item as indexed.
-					$item->setIndexed(true);
-					//
-					// Counting indexed items.
-					$indexed++;
+					// Adding.
+					$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
 				}
+				//
+				// Setting current item as indexed.
+				$item->setIndexed(true);
+				//
+				// Counting indexed items.
+				$indexed++;
 			}
 		}
 

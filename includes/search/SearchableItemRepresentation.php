@@ -27,7 +27,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 		//
 		// Setting column 'indexed' to work as a boolean value.
 		$aux = $this->_cp_ColumnFilters;
-		$aux['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$aux[$this->_cp_IndexColumn] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
 		$this->_cp_ColumnFilters = $aux;
 	}
 	//
@@ -39,7 +39,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return \stdClass Returns a criteria specification structure.
 	 */
 	public function criteria() {
-		return (object)[];
+		return (object) [];
 	}
 	/**
 	 * This method provides access to current representation's id.
@@ -56,7 +56,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return boolean Returns TRUE when it's flagged as indexed.
 	 */
 	public function isIndexed() {
-		return $this->indexed;
+		return $this->{$this->_cp_IndexColumn};
 	}
 	/**
 	 * This method allows to modify current representation indexed status.
@@ -65,7 +65,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return boolean Returns the final result.
 	 */
 	public function setIndexed($status = true) {
-		$this->indexed = $status;
+		$this->{$this->_cp_IndexColumn} = $status;
 		$this->persist();
 
 		return $this->isIndexed();
