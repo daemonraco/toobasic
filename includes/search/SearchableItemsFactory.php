@@ -39,6 +39,6 @@ abstract class SearchableItemsFactory extends \TooBasic\Representations\ItemsFac
 	 * @return \TooBasic\Search\ItemsStream Items to be analyzed.
 	 */
 	public function searchableStream() {
-		return $this->items();
+		return $this->stream();
 	}
 }
