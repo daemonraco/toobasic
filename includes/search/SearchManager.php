@@ -29,6 +29,66 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	//
 	// Public methods.
 	/**
+	 * This method walks over every entry in the indexed items table and
+	 * checks they're still in the database. If an item is no longer in the
+	 * database it gets removed from the index.
+	 *
+	 * @return int Returns the count of entries removed.
+	 */
+	public function cleanUp() {
+		//
+		// Default values.
+		$count = 0;
+		//
+		// Global dependencies.
+		global $Search;
+		//
+		// Checking each factory.
+		$factories = [];
+		foreach($Search[GC_SEARCH_ENGINE_FACTORIES] as $type => $factoryClass) {
+			$factories[$type] = $factoryClass::Instance();
+		}
+		//
+		// Items table prefixes.
+		$itemsPrefixes = [
+			GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
+			GC_DBQUERY_PREFIX_COLUMN => 'sit_'
+		];
+		//
+		// Creating a query to get all associations.
+		$query = $this->_db->queryAdapter()->select('tb_search_items', [], $itemsPrefixes);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Creating a query to remove all current associations.
+		$queryD = $this->_db->queryAdapter()->delete('tb_search_items', [
+			'type' => 0,
+			'id' => 0
+			], $itemsPrefixes);
+		$stmtD = $this->_db->prepare($queryD[GC_AFIELD_QUERY]);
+		//
+		// Checking each item.
+		$stmt->execute();
+		while($row = $stmt->fetch()) {
+			$remove = false;
+			//
+			// Checking if the type is unknown or if the item doesn't
+			// exist.
+			if(!isset($factories[$row['sit_type']]) || !$factories[$row['sit_type']]->item($row['sit_id'])) {
+				$remove = true;
+			}
+			//
+			// Checking if this entry has to be removed.
+			if($remove) {
+				$queryD[GC_AFIELD_PARAMS][':type'] = $row['sit_type'];
+				$queryD[GC_AFIELD_PARAMS][':id'] = $row['sit_id'];
+				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				$count++;
+			}
+		}
+
+		return $count;
+	}
+	/**
 	 * This method modifies every known searchable item setting it as not
 	 * indexed and then triggers a full indexation.
 	 *
@@ -146,7 +206,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Default values.
 		$out = [];
-		$criteria = is_object($criteria) ? $criteria : (object) [];
+		$criteria = is_object($criteria) ? $criteria : (object)[];
 		//
 		// Timer shortcut;
 		$timer = Timer::Instance();
@@ -336,7 +396,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Cleaning criterion entries
 		if(!is_object($criteria)) {
-			$criteria = (object) [];
+			$criteria = (object)[];
 		}
 		$simplifyCriteria = self::SimplifyCriteria($criteria);
 		if(empty($simplifyCriteria)) {
