@@ -10,18 +10,20 @@ php:
 env:
   - TRAVISCI_PHPUNIT_CONF=''
   - TRAVISCI_PHPUNIT_CONF='-7.0'
+  - TRAVISCI_PHPUNIT_VERSION=':4.8.24'
+  - TRAVISCI_PHPUNIT_VERSION=':5.7'
 matrix:
   exclude:
-    - php: '7.1'
-      env: TRAVISCI_PHPUNIT_CONF=''
-    - php: '7.0'
-      env: TRAVISCI_PHPUNIT_CONF=''
-    - php: nightly
-      env: TRAVISCI_PHPUNIT_CONF=''
     - php: '5.5'
-      env: TRAVISCI_PHPUNIT_CONF='-7.0'
+      env: TRAVISCI_PHPUNIT_CONF='-7.0', TRAVISCI_PHPUNIT_VERSION=':5.7'
     - php: '5.6'
-      env: TRAVISCI_PHPUNIT_CONF='-7.0'
+      env: TRAVISCI_PHPUNIT_CONF='-7.0', TRAVISCI_PHPUNIT_VERSION=':4.8.24'
+    - php: '7.1'
+      env: TRAVISCI_PHPUNIT_CONF='', TRAVISCI_PHPUNIT_VERSION=':4.8.24'
+    - php: '7.0'
+      env: TRAVISCI_PHPUNIT_CONF='', TRAVISCI_PHPUNIT_VERSION=':4.8.24'
+    - php: nightly
+      env: TRAVISCI_PHPUNIT_CONF='', TRAVISCI_PHPUNIT_VERSION=':4.8.24'
   allow_failures:
     - php: nightly
     - php: '7.1'
