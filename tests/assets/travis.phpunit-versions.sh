@@ -4,7 +4,7 @@ export TRAVISCI_PHPUNIT_CONF='';
 export TRAVISCI_PHPUNIT_VERSION='5.7';
 
 if [[ $TRAVIS_PHP_VERSION == '5.5' ]]; then
-	export TRAVISCI_PHPUNIT_CONF='4.8.24';
+	export TRAVISCI_PHPUNIT_VERSION='4.8.24';
 elif [[ $TRAVIS_PHP_VERSION == '7.0' ]]; then
 	export TRAVISCI_PHPUNIT_CONF='-7.0';
 elif [[ $TRAVIS_PHP_VERSION == '7.1' ]]; then
