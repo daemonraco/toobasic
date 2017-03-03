@@ -48,7 +48,7 @@ __ROOTDIR/site/models/Pager.php__:
 class PagerModel extends \TooBasic\Model {
 	const SurroundingLength = 10;
 	public function snippetSets($maxPage, $currentPage) {
-		$out = array("show" => true);
+		$out = ["show" => true];
 		if($maxPage > 1) {
 			$pattern = "/^((.*)&|)page=([0-9]*)(.*)$/";
 			$currentPage = $currentPage > $maxPage ? $maxPage : $currentPage;
@@ -60,13 +60,13 @@ class PagerModel extends \TooBasic\Model {
 					$query.="&page=1";
 				}
 			}
-			$pages = array();
+			$pages = [];
 			for($i = 1; $i <= $maxPage; $i++) {
-				$pages[$i] = array(
+				$pages[$i] = [
 					"current" => $currentPage == $i,
 					"id" => $i,
 					"query" => preg_replace($pattern, "\$2&page={$i}\$4", $query)
-				);
+				];
 			}
 			$out["first"] = $pages[1];
 			$out["last"] = $pages[$maxPage];
@@ -190,9 +190,9 @@ controller:
 ```php
 class ExampleController extends \TooBasic\Controller {
 	protected function basicRun() {
-		$this->setSnippetDataSet("set1", array("key"=>"A","value"=>1));
-		$this->setSnippetDataSet("set2", array("key"=>"B","value"=>2));
-		$this->setSnippetDataSet("set3", array("key"=>"C","value"=>3));
+		$this->setSnippetDataSet("set1", ["key"=>"A","value"=>1]);
+		$this->setSnippetDataSet("set2", ["key"=>"B","value"=>2]);
+		$this->setSnippetDataSet("set3", ["key"=>"C","value"=>3]);
 		return true;
 	}
 }

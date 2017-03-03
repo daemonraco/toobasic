@@ -45,24 +45,24 @@ create a file called __ROOTDIR/site/configs/boxes_types.php__ containing somethi
 like this:
 ```php
 <?php
-$boxesTypes = array(
-	array(
+$boxesTypes = [
+	[
 		"name" => "small",
 		"width" => 5,
 		"length" => 6,
 		"depth" => 10
-	),array(
+	], [
 		"name" => "medium",
 		"width" => 10,
 		"length" => 12,
 		"depth" => 20
-	),array(
+	], [
 		"name" => "large",
 		"width" => 20,
 		"length" => 24,
 		"depth" => 40
-	)
-);
+	]
+];
 ```
 
 Now, _how do you access them?_

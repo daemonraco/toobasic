@@ -144,10 +144,10 @@ Now you can write something like this:
 protected function basicRun() {
 	$ft = $this->sapireader->fairytail;
 	$op = $this->sapireader->onepiece;
-	debugit(array(
+	debugit([
 		"Fairy Tail's list" => $ft->list,
 		"One Piece's list" => $op->list
-	), true);
+	], true);
 	return $this->status();
 }
 

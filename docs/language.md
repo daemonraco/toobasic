@@ -115,9 +115,9 @@ Then you can write something like this inside a controller:
 Or:
 ```php
 		. . .
-		$this->assign('welcome', $this->tr->mr_name(array(
+		$this->assign('welcome', $this->tr->mr_name([
 			'name' => $user->last_name
-		)));
+		]));
 		. . .
 
 ```

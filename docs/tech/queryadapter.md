@@ -52,11 +52,11 @@ The first thing you may need is a way to obtain every record from certain table 
 let's add a method like the next one:
 ```php
 public function all() {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-	);
-	$query = $this->_db->queryAdapter()->select('people', array(), $prefixes);
+	];
+	$query = $this->_db->queryAdapter()->select('people', [], $prefixes);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -70,15 +70,15 @@ and a parameters array useful for statement executions.
 
 Let's take a step by step look at our code:
 ```php
-$prefixes = array(
+$prefixes = [
 	GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 	GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-);
+];
 ```
 This part sets some required prefixes a simple select need to work.
 After calling the adapter, this list may change change so be warned.
 ```php
-$query = $this->_db->queryAdapter()->select('people', array(), $prefixes);
+$query = $this->_db->queryAdapter()->select('people', [], $prefixes);
 ```
 This step is the actual call to our query adapter asking to build a select query.
 As you can see it is obtained from a database connection letting you relax about
@@ -106,13 +106,13 @@ Of course, this part returns everything with prefixes so be careful when using i
 Let's say your results are a mess and you want to sort it, so let's do this:
 ```php
 public function all() {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-	);
-	$query = $this->_db->queryAdapter()->select('people', array(), $prefixes, array(
+	];
+	$query = $this->_db->queryAdapter()->select('people', [], $prefixes, [
 		'fullname' => 'asc'
-	));
+	]);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -125,13 +125,13 @@ Too many rows?
 Let's limit it:
 ```php
 public function all() {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-	);
-	$query = $this->_db->queryAdapter()->select('people', array(), $prefixes, array(
+	];
+	$query = $this->_db->queryAdapter()->select('people', [], $prefixes, [
 		'fullname' => 'asc'
-	), 100);
+	], 100);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -142,13 +142,13 @@ We've mentioned `where` conditions but we haven't used it, so let's suppose we
 need a method to obtain a specific person and write something like this:
 ```php
 public function person($id) {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-	);
-	$query = $this->_db->queryAdapter()->select('people', array(
+	];
+	$query = $this->_db->queryAdapter()->select('people', [
 		'id' => $id
-	), $prefixes);
+	], $prefixes);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -161,15 +161,15 @@ Up until now, our `select` adapter is rather strict, but if we need to obtain
 persons the a the last name _Doe_, we can use this trick:
 ```php
 public function searchPeople($pattern) {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'ppl_'
-	);
-	$query = $this->_db->queryAdapter()->select('people', array(
+	];
+	$query = $this->_db->queryAdapter()->select('people', [
 			'*:fullname' => $pattern
-		), $prefixes, array(
+		], $prefixes, [
 			'fullname' => 'asc'
-		));
+		]);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -187,17 +187,17 @@ we've seen therefore we're going to focus on the differences.
 First, let's write an example:
 ```php
 public function allFull() {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix
-	);
-	$query = $this->_db->queryAdapter()->select(array(
+	];
+	$query = $this->_db->queryAdapter()->select([
 			'people',
 			'invoices'
-		), array(
+		], [
 			'C:piv_person' => 'ppl_id'
-		), $prefixes, array(
+		], $prefixes, [
 			'ppl_fullname' => 'asc'
-		), 100);
+		], 100);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return $stmt->execute($query[GC_AFIELD_PARAMS]) ? $stmt->fetchAll() : false;
 }
@@ -221,15 +221,15 @@ Let's say you want to insert a new invoice for certain person, this means writin
 something like this:
 ```php
 public function addInvoice($person, $data, $status = 'N') {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'piv_'
-	);
-	$query = $this->_db->queryAdapter()->insert('invoices', array(
+	];
+	$query = $this->_db->queryAdapter()->insert('invoices', [
 			'person' => $person,
 			'data' => $data,
 			'payed' => $status
-		), $prefixes);
+		], $prefixes);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return boolval($stmt->execute($query[GC_AFIELD_PARAMS]));
 }
@@ -252,13 +252,13 @@ things like `$this->_db->lastInsertId($query[GC_AFIELD_SEQNAME])`.
 To delete invoices, we can create a method like this:
 ```php
 public function deleteInvoice($id) {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'piv_'
-	);
-	$query = $this->_db->queryAdapter()->delete('invoices', array(
+	];
+	$query = $this->_db->queryAdapter()->delete('invoices', [
 			'id' => $id
-		), $prefixes);
+		], $prefixes);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return boolval($stmt->execute($query[GC_AFIELD_PARAMS]));
 }
@@ -271,15 +271,15 @@ it may use partial conditions.
 If you need to update an invoice pay status, you may write this:
 ```php
 public function setInvoicePayed($id, $status = 'Y') {
-	$prefixes = array(
+	$prefixes = [
 		GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
 		GC_DBQUERY_PREFIX_COLUMN => 'piv_'
-	);
-	$query = $this->_db->queryAdapter()->update('invoices', array(
+	];
+	$query = $this->_db->queryAdapter()->update('invoices', [
 			'payed' => $status
-		), array(
+		], [
 			'id' => $id
-		), $prefixes);
+		], $prefixes);
 	$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
 	return boolval($stmt->execute($query[GC_AFIELD_PARAMS]));
 }

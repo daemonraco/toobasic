@@ -19,7 +19,7 @@ username and the same for password, and that every table has a prefix __ss___.
 Based on all of this, you might end with a configuration similar to this:
 ```php
 <?php
-$Connections[GC_CONNECTIONS_DB]['census'] = array(
+$Connections[GC_CONNECTIONS_DB]['census'] = [
 	GC_CONNECTIONS_DB_ENGINE => 'mysql',
 	GC_CONNECTIONS_DB_SERVER => 'localhost',
 	GC_CONNECTIONS_DB_PORT => false,
@@ -27,7 +27,7 @@ $Connections[GC_CONNECTIONS_DB]['census'] = array(
 	GC_CONNECTIONS_DB_USERNAME => 'censususr',
 	GC_CONNECTIONS_DB_PASSWORD => 'censususr',
 	GC_CONNECTIONS_DB_PREFIX => 'ss_'
-);
+];
 ```
 In this way, you create a configuration to connect to a database just using its
 name as reference.
@@ -65,7 +65,7 @@ class SomeModel extends \TooBasic\Model {
 		$db = \TooBasic\Managers\DBManager::Instance()->census;
 		$prefix = $db->prefix();
 		$stmt = $db->prepare("select * from {$prefix}sometable where smt_type = :type");
-		$stmt->execute(array(':type'=>$type));
+		$stmt->execute([':type' => $type]);
 		foreach($stmt->fetchAll() as $row) {
 			debugit($row);
 		}
@@ -95,7 +95,7 @@ A connection to a SQLite database should be transparent in most cases but its
 configuration is slightly different, take a look to this example:
 ```php
 <?php
-$Connections[GC_CONNECTIONS_DB]['census'] = array(
+$Connections[GC_CONNECTIONS_DB]['census'] = [
 	GC_CONNECTIONS_DB_ENGINE => 'sqlite',
 	GC_CONNECTIONS_DB_SERVER => "{$Directories[GC_DIRECTORIES_CACHE]}/census.sqlite3",
 	GC_CONNECTIONS_DB_PORT => false,
@@ -103,7 +103,7 @@ $Connections[GC_CONNECTIONS_DB]['census'] = array(
 	GC_CONNECTIONS_DB_USERNAME => false,
 	GC_CONNECTIONS_DB_PASSWORD => false,
 	GC_CONNECTIONS_DB_PREFIX => 'ss_'
-);
+];
 ```
 The main difference is we don't have a server providing our databases, we have a
 binary file instead, that's why our server parameters have changed this way.
@@ -115,7 +115,7 @@ A connection to a PostgreSQL database would have a similar configuration to MySQ
 databases, and it may look like this example:
 ```php
 <?php
-$Connections[GC_CONNECTIONS_DB]['census'] = array(
+$Connections[GC_CONNECTIONS_DB]['census'] = [
 	GC_CONNECTIONS_DB_ENGINE => 'pgsql',
 	GC_CONNECTIONS_DB_SERVER => 'localhost',
 	GC_CONNECTIONS_DB_PORT => false,
@@ -123,7 +123,7 @@ $Connections[GC_CONNECTIONS_DB]['census'] = array(
 	GC_CONNECTIONS_DB_USERNAME => 'censususr',
 	GC_CONNECTIONS_DB_PASSWORD => 'censususr',
 	GC_CONNECTIONS_DB_PREFIX => 'ss_'
-);
+];
 ```
 As you can see, the main difference is the engine/driver to use.
 

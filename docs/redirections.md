@@ -23,9 +23,9 @@ redirect condition (a.k.a _redirector_) called __login__.
 Open your site's configuration file at __ROOTDIR/site/config.php__ and add
 something like this:
 ```php
-$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
+$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = [
 	GC_AFIELD_ACTION => 'login'
-);
+];
 ```
 This simple step will configure a new redirector that redirects to our __login__
 controller.
@@ -81,12 +81,12 @@ arrives to it after a redirection saying things like "_You got here because
 To do that you may search for something in the URL parameter __redirectedfrom__ or
 write something like this:
 ```php
-$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
+$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = [
 	GC_AFIELD_ACTION => 'login',
-	GC_AFIELD_PARAMS => array(
+	GC_AFIELD_PARAMS => [
 		'showmessage' => 'reasons'
-	)
-);
+	]
+];
 ```
 In this way, when a user gets redirected, it may end up with this URL:
 
@@ -96,13 +96,13 @@ In this way, when a user gets redirected, it may end up with this URL:
 Layout allows a redirector to set a specific layout when changing the URL.
 For example:
 ```php
-$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = array(
+$Defaults[GC_DEFAULTS_REDIRECTIONS]['login'] = [
 	GC_AFIELD_ACTION => 'login',
 	GC_AFIELD_LAYOUT => 'errorlayout',
-	GC_AFIELD_PARAMS => array(
+	GC_AFIELD_PARAMS => [
 		'showmessage' => 'reasons'
-	)
-);
+	]
+];
 ```
 With this a user may end up at:
 

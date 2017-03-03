@@ -6,7 +6,7 @@
  */
 //
 // SuperLoader main list.
-$SuperLoader = array();
+$SuperLoader = [];
 //
 // Basics @{
 $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
@@ -177,10 +177,10 @@ $SuperLoader['TooBasic\\RestConfig'] = "{$Directories[GC_DIRECTORIES_REST]}/Rest
 // @}
 //
 // Known librearies @{
-$SuperLoader['Smarty'] = array(
+$SuperLoader['Smarty'] = [
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
-);
+];
 foreach(['json-validator', 'json-validator.git'] as $aux) {
 	if(is_readable("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php")) {
 		require_once "{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php";
@@ -190,7 +190,7 @@ foreach(['json-validator', 'json-validator.git'] as $aux) {
 unset($aux);
 // @}
 //
-// This is the function in charge of loading TooBasic clases when they are
+// This is the function in charge of loading TooBasic classes when they are
 // required.
 spl_autoload_register(function($class) {
 	global $Defaults;
@@ -200,7 +200,7 @@ spl_autoload_register(function($class) {
 		$path = false;
 
 		if(!is_array($SuperLoader[$class])) {
-			$SuperLoader[$class] = array($SuperLoader[$class]);
+			$SuperLoader[$class] = [$SuperLoader[$class]];
 		}
 		foreach($SuperLoader[$class] as $loaderPath) {
 			$path = \TooBasic\Sanitizer::DirPath($loaderPath);
