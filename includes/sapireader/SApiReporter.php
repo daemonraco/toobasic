@@ -206,10 +206,10 @@ class SApiReporter extends Singleton {
 	 *
 	 * @param string $report Name of a report to use as configuration.
 	 * @param \stdClass $results Full API result.
-	 * @return \stdClass[] Returns a filtered list.
+	 * @return \stdClass|array Returns a filtered list.
 	 * @throws \TooBasic\SApiReportException
 	 */
-	protected function filterResults($report, \stdClass $results) {
+	protected function filterResults($report, $results) {
 		//
 		// Default values.
 		$list = false;
