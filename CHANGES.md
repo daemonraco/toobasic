@@ -1,6 +1,82 @@
 # TooBasic: Changes
 This is a changes log based on Git's log.
 
+## Version 2.3.0:
+
+* Review ItemsStream on RESTFul Logics ([#213](https://github.com/daemonraco/toobasic/issues/213)).
+	* Adding a new middle class called `ItemsStream`.
+	* `ItemsFactory` implements a new method to make use of `ItemsStream` and also uses it in `itemsBy()`.
+	* Adapting methods in `ItemsFactory` to use streams instead of full lists (in other words `fetchAll()`).
+		>Methods that where adapted:
+		>* `idsBy($conditions, $order = [])`
+		>* `idBy($conditions, $order = [])`
+		>* `items()`
+		>* `itemsBy($conditions, $order = [])`
+		>* `itemBy($conditions, $order = [])`
+		>
+		>New methods related to streams and their similarities:
+		>* `stream()`
+		>	* `ids()`
+		>	* `items()`
+		>* `streamBy($conditions, $order = [])`
+		>	* `idsBy($conditions, $order = [])`
+		>	* `itemsBy($conditions, $order = [])`
+		>
+		>Methods that remain as they were:
+		>* `ids()`
+		>* `item($id)`
+		>* `idsByNamesLike($pattern)`
+		>* `itemByName($name)`
+		>* Using items stream.
+
+	* Compatibility bug fixes. I forgot that `SQLite` and `PDOStatement::rowCount()` don't see eye to eye.
+	* Using `ItemsStream` on `SearchManager`.
+* The internal search Engine:
+	* Criteria on Search Engine ([#199](https://github.com/daemonraco/toobasic/issues/199))
+		* Adding criteria mechanism.
+			* Updating table structures.
+			* Updating interfaces.
+			* Updating cron tools and services.
+			* Minor documentation updates (needs more).
+		* Updating and fixing representation:
+			* Track Dirty Properties ([#200](https://github.com/daemonraco/toobasic/issues/200))
+			* Persisting Calls Order ([#201](https://github.com/daemonraco/toobasic/issues/201))
+			* postPersist() is not being called ([#202](https://github.com/daemonraco/toobasic/issues/202))
+	* More stats information ([#196](https://github.com/daemonraco/toobasic/issues/196)).
+	* Tracks execution time.
+	* Returns stats.
+	* Search cron tool allows `limit` and `offset`.
+	* New constants.
+* Use `idsBy()` for `ids()` and others ([#180](https://github.com/daemonraco/toobasic/issues/180))
+	* Reusing methods instead of writing separated ones.
+* Adapters for MySQL, SQLite and PostgreSQL extend the use of column flags on selects ([#195](https://github.com/daemonraco/toobasic/issues/195)) allowing `>`, `<` and `!`.
+
+* Adding a new debug flag called `debugctrl` ([#192](https://github.com/daemonraco/toobasic/issues/192)).
+* Removing deprecated functionalities prior to v2.3.0 ([#188](https://github.com/daemonraco/toobasic/issues/188)).
+	* Removing old core properties on representations.
+	* Adding configuration checks and exceptions.
+	* Updating search engine table representations.
+* Simple API Reports dynamic parameters ([#194](https://github.com/daemonraco/toobasic/issues/194)).
+* Index Only Pending Items ([#216](https://github.com/daemonraco/toobasic/issues/216))
+	* `SearchManager` changes its internal logic to use only pending items when indexing.
+	* Representations and searchable representations (and factories) add a new configurable field to point which column holds the indexation status flag.
+		* Also methods to get which values mean indexed and unindexed in their respected tables.
+	* Addapting JSON specifications.
+	* Adding some pending ignores.
+* Adding a new method on `SearchManager` to search and remove index entries for lost items ([#198](https://github.com/daemonraco/toobasic/issues/198)).
+	* Search cron tools adds an option to call this functionality.
+* Adding some useful methods to configs interpreters.
+* Catching some more exceptions Simple API Reader sys-tool.
+* A bit of PSR-1 on constants.
+* Travis CI
+	* Flexible PHPUnit version configuration.
+	* PHP-7.1 becomes required.
+* Adapting test cases.
+* Updating submodule versions.
+* Updating documentation and code documentation.
+* Bug fixes everywhere.
+	* ...insert Buzz Lightyear meme here :)
+
 ## Version 2.2.0:
 
 * Psychotic Coding: `array()` to `[]`.
