@@ -50,7 +50,6 @@ This is a changes log based on Git's log.
 * Use `idsBy()` for `ids()` and others ([#180](https://github.com/daemonraco/toobasic/issues/180))
 	* Reusing methods instead of writing separated ones.
 * Adapters for MySQL, SQLite and PostgreSQL extend the use of column flags on selects ([#195](https://github.com/daemonraco/toobasic/issues/195)) allowing `>`, `<` and `!`.
-
 * Adding a new debug flag called `debugctrl` ([#192](https://github.com/daemonraco/toobasic/issues/192)).
 * Removing deprecated functionalities prior to v2.3.0 ([#188](https://github.com/daemonraco/toobasic/issues/188)).
 	* Removing old core properties on representations.
