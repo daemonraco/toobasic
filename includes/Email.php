@@ -180,7 +180,7 @@ abstract class Email extends AbstractExporter {
 		// Looking for the snippet.
 		$path = $this->paths->snippetPath($snippetName);
 		if($path) {
-			if($snippetDataSet == false || !isset($this->_snippetAssignments[$snippetDataSet])) {
+			if(!$snippetDataSet || !isset($this->_snippetAssignments[$snippetDataSet])) {
 				$snippetDataSet = false;
 			}
 			//

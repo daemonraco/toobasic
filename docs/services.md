@@ -250,9 +250,9 @@ For this reason there's a third way that is in the middle of the other two.
 If you want to make only your __login__ service available at any page in
 http://otherexample.com without changing the code, you may add this configuration:
 ```php
-$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV]['login'] = array(
+$Defaults[GC_DEFAULTS_SERVICE_ALLOWEDBYSRV]['login'] = [
 	'http://otherexample.com'
-);
+];
 ```
 
 ### Methods

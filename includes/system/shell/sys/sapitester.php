@@ -9,11 +9,11 @@ use TooBasic\SApiReaderException;
 class SapitesterSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
-	const ErrorWrongJson = 100;
-	const OptionCall = 'Call';
-	const OptionCheck = 'Check';
-	const OptionList = 'List';
-	const OptionSpecific = 'Specific';
+	const ERROR_WRONG_JSON = 100;
+	const OPTION_CALL = 'Call';
+	const OPTION_CHECK = 'Check';
+	const OPTION_LIST = 'List';
+	const OPTION_SPECIFIC = 'Specific';
 	//
 	// Protected methods.
 	protected function setOptions() {
@@ -23,17 +23,17 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		$text.= "call the remote API.\n";
 		$text.= "To use it, at least 3 extra parameters must be given, the configuration\n";
 		$text.= "name, the virtual method to use and every parameter required by such method.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCall, ['--call', '-c'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CALL, ['--call', '-c'], Option::TypeNoValue, $text));
 
 //		$text = "TODO help text for: '--check', '-C'.";
-//		$this->_options->addOption(Option::EasyFactory(self::OptionCheck, ['--check', '-C'], Option::TypeValue, $text, 'config-name'));
+//		$this->_options->addOption(Option::EasyFactory(self::OPTION_CHECK, ['--check', '-C'], Option::TypeValue, $text, 'config-name'));
 
 		$text = "This option prompts a detailed list of available SimpleAPI configurations.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionList, ['--list', '-l'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_LIST, ['--list', '-l'], Option::TypeNoValue, $text));
 
 		$text = "This option can be used along with '--call' to prompt a more detailed result dump.\n";
 		$text = "Basically 'var_dump()' instead of 'print_r()'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSpecific, ['--specific', '-s'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SPECIFIC, ['--specific', '-s'], Option::TypeNoValue, $text));
 	}
 	protected function taskCall($spacer = "") {
 		$ok = true;
@@ -90,7 +90,7 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 				eval("\$result=\$this->sapireader->{$virtualCmd};");
 
 				ob_start();
-				if($this->_options->option(self::OptionSpecific)->activated()) {
+				if($this->_options->option(self::OPTION_SPECIFIC)->activated()) {
 					var_dump($result);
 				} else {
 					print_r($result);
@@ -123,7 +123,7 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		global $Paths;
 		//
 		// Loading the configuration.
-		$sapiName = $this->_options->option(self::OptionCheck)->value();
+		$sapiName = $this->_options->option(self::OPTION_CHECK)->value();
 		$sapiPath = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], $sapiName, Paths::ExtensionJSON);
 		$sapiJSON = json_decode(file_get_contents($sapiPath));
 		$sapiOK = true;
@@ -148,7 +148,7 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 
 			echo "\n{$spacer}Configuration check result: ".($sapiOK ? Color::Green('Ok') : Color::Red('Failed'))."\n";
 		} else {
-			$this->setError(self::ErrorWrongJson, $this->tr->EX_JSON_invalid_file([
+			$this->setError(self::ERROR_WRONG_JSON, $this->tr->EX_JSON_invalid_file([
 					'path' => $sapiPath,
 					'errorcode' => json_last_error(),
 					'error' => json_last_error_msg()
@@ -180,6 +180,8 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 				} catch(SApiReaderAbstractException $e) {
 					$sapi = false;
 					echo "{$spacer}\t\t".Color::Yellow('abstract specification')."\n";
+				} catch(SApiReaderException $e) {
+					echo "{$spacer}\t\t".Color::Red('broken specification. '.$e->getMessage())."\n";
 				}
 
 				if($sapi) {

@@ -389,6 +389,7 @@
 	* [Exclusion by column](docs/sapireports.md#exclusion-by-column)
 	* [Global exclusions](docs/sapireports.md#global-exclusions)
 * [Show the report](docs/sapireports.md#show-the-report)
+	* [Dynamic parameters](docs/sapireports.md#dynamic-parameters)
 * [Suggestions](docs/sapireports.md#suggestions)
 
 ##  Search Engine (docs/searchengine.md):

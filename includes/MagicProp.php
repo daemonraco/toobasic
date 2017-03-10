@@ -12,14 +12,6 @@ namespace TooBasic;
 use TooBasic\Adapters\Adapter;
 
 /**
- * @class MagicPropException
- * This exeption is thrown whenever 'MagicProp' finds a halting error.
- */
-class MagicPropException extends Exception {
-	
-}
-
-/**
  * @class MagicProp
  * This class is some kind of facade for a set of important singletons and they
  * are:

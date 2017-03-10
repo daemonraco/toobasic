@@ -1,0 +1,13 @@
+{
+	"table": "filters",
+	"representation_class": "filter",
+	"columns_perfix": "fil_",
+	"columns": {
+		"id": "id"
+	},
+	"column_filters": {
+		"indexed": "boolean",
+		"props": "json",
+		"status": "boolean"
+	}
+}

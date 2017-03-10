@@ -1,61 +1,121 @@
 # TooBasic: What's New
-
 This is a changes log based on issues and logic changes.
+
+## Version 2.3.0:
+
+* __ItemsStream ([#212](https://github.com/daemonraco/toobasic/issues/212))__
+>Major improvement in the way _Representation Fatories_ retrieve and provide items
+>Giving a better way to walk over them improving memory usage.
+>Related issues:
+>* Review ItemsStream on RESTFul Logics ([#213](https://github.com/daemonraco/toobasic/issues/213))
+>* Review ItemsStream on Search Tools and Services ([#215](https://github.com/daemonraco/toobasic/issues/215))
+* __Track Dirty Properties ([#200](https://github.com/daemonraco/toobasic/issues/200))__
+>_Representations_ add a way to know which properties were modified and are
+>pending persistence. This allow the user to make better decision on methods like
+>'prePersist()'.
+* __Remove Lost Items on Search Engine Tables ([#198](https://github.com/daemonraco/toobasic/issues/198))__
+>The internal search engine adds a mechanism to search and clean indexed entries
+>that where removeds.
+* __Index Only Pending Items ([#216](https://github.com/daemonraco/toobasic/issues/216))__
+>Improves the way the internal search engine indexes items. Basically it use to
+>check every item for their indexation status and now it solves that with a simple
+>query and then indexes only pending items. In other words, the previous loging
+awful, awful indeed.
+* __Criteria on Search Engine ([#199](https://github.com/daemonraco/toobasic/issues/199))__
+>Adds a way to somehow tag indexed entries and separate search result in groups.
+* __Search Engine Improvements ([#196](https://github.com/daemonraco/toobasic/issues/196))__
+>Adds a few improvements:
+>* Tracks search times.
+>* Provides statistics from searches.
+>* Searchesallow limit and offsets.
+* __Set Zero on NULL fields ([#197](https://github.com/daemonraco/toobasic/issues/197))__
+>An old and never solved bug.
+* __Extend Query Adapter Flags on Conditions ([#195](https://github.com/daemonraco/toobasic/issues/195))__
+>Query adapters add the use of `>`, `<`, `!` on query conditions specification.
+* __Simple API Reports Dynamic Parameters ([#194](https://github.com/daemonraco/toobasic/issues/194))__
+>Giving more flexibility when invoking a Simple API Report. Visit
+>[Dynamic parameters](docs/sapireports.md#dynamic-parameters) for more information
+>about it.
+* __Debug Parameter for Controller Exports ([#192](https://github.com/daemonraco/toobasic/issues/192))__
+>Adding a new debug parameter called `debugctrl` to review functionlities exported
+>from the controller in views.
+* __Deprecated Functionalities (v2.3.0) ([#188](https://github.com/daemonraco/toobasic/issues/188))__
+>Removing functionalities flagged as deprecated mostrly related to changes in
+>'Representations' and some old core functions added to provide compatibility.
+* __Use 'idsBy()' for 'ids()' and others ([#180](https://github.com/daemonraco/toobasic/issues/180))__
+>Representations avoids duplicated code by using even more its internal and more
+>generic methods.
+* __Code quality__
+>Improvements in code quality validated by [SensioLabs](https://insight.sensiolabs.com/projects/a78eb001-d887-4214-a390-3a1993fc6d3c).
+> This changes are related to issues:
+>* [#203](https://github.com/daemonraco/toobasic/issues/203)
+>* [#204](https://github.com/daemonraco/toobasic/issues/204)
+>* [#205](https://github.com/daemonraco/toobasic/issues/205)
+>* [#206](https://github.com/daemonraco/toobasic/issues/206)
+>* [#207](https://github.com/daemonraco/toobasic/issues/207)
+>* [#208](https://github.com/daemonraco/toobasic/issues/208)
+>* [#209](https://github.com/daemonraco/toobasic/issues/209)
+>* [#210](https://github.com/daemonraco/toobasic/issues/210)
+>* [#211](https://github.com/daemonraco/toobasic/issues/211)
+* __Bug fixes everywhere__
+
+
+-- ---------------------------------------------------------------------------- --
 
 ## Version 2.2.0:
 
-* RESTful Representations ([#163](https://github.com/daemonraco/toobasic/issues/163))
+* __RESTful Representations ([#163](https://github.com/daemonraco/toobasic/issues/163))__
 >Providing restful access to all resources even considering authorization checks.
-* Unify Representation's Core Properties ([#187](https://github.com/daemonraco/toobasic/issues/187))
+* __Unify Representation's Core Properties ([#187](https://github.com/daemonraco/toobasic/issues/187))__
 >All main properties of item representations and items factories get factorized
 >into a single and centralized file.
-* List of Dependant Representations ([#186](https://github.com/daemonraco/toobasic/issues/186))
+* __List of Dependant Representations ([#186](https://github.com/daemonraco/toobasic/issues/186))__
 >If an item representation acts as grouping item for other representation, there's
 now a way to access its children through a method.
-* Update jQuery and Bootstrap Libs ([#185](https://github.com/daemonraco/toobasic/issues/185))
+* __Update jQuery and Bootstrap Libs ([#185](https://github.com/daemonraco/toobasic/issues/185))__
 >Default libraries for jQuery and Bootstrap get a version update.
-* Systool table limit name field ([#182](https://github.com/daemonraco/toobasic/issues/182))
+* __Systool table limit name field ([#182](https://github.com/daemonraco/toobasic/issues/182))__
 >To avoid issues with database index restrictions, name fields on tables get
 >restricted to 64 characters (only when created as scaffold).
-* Search By Any Field ([#179](https://github.com/daemonraco/toobasic/issues/179))
+* __Search By Any Field ([#179](https://github.com/daemonraco/toobasic/issues/179))__
 >Representations add a way to retrieve items specifying any column and value.
-* Use JSON Validator ([#166](https://github.com/daemonraco/toobasic/issues/166))
+* __Use JSON Validator ([#166](https://github.com/daemonraco/toobasic/issues/166))__
 >Adding a JSON validation library.
-* JSON Validator for SApiReader ([#172](https://github.com/daemonraco/toobasic/issues/172))
+* __JSON Validator for SApiReader ([#172](https://github.com/daemonraco/toobasic/issues/172))__
 >Validating Simple API Reader JSON specifications ussing the new library.
-* JSON Validator for SApiReports ([#173](https://github.com/daemonraco/toobasic/issues/173))
+* __JSON Validator for SApiReports ([#173](https://github.com/daemonraco/toobasic/issues/173))__
 >Validating Simple API Reports JSON specifications ussing the new library.
-* JSON Validator for FormsBuilder Specs ([#171](https://github.com/daemonraco/toobasic/issues/171))
+* __JSON Validator for FormsBuilder Specs ([#171](https://github.com/daemonraco/toobasic/issues/171))__
 >Validating FormBuilder JSON specifications ussing the new library.
-* JSON Validator for Database Specs ([#170](https://github.com/daemonraco/toobasic/issues/170))
+* __JSON Validator for Database Specs ([#170](https://github.com/daemonraco/toobasic/issues/170))__
 >Validating database JSON specifications ussing the new library.
-* Disable JSON Specs Validation When Installed ([#176](https://github.com/daemonraco/toobasic/issues/176))
+* __Disable JSON Specs Validation When Installed ([#176](https://github.com/daemonraco/toobasic/issues/176))__
 >JSON specifications are not checked when the site is flagged as _installed_.
-* Update libraries/README.md ([#174](https://github.com/daemonraco/toobasic/issues/174))
+* __Update libraries/README.md ([#174](https://github.com/daemonraco/toobasic/issues/174))__
 >Updated internal documentation.
-* Unneeded defaults on service sys-tool ([#181](https://github.com/daemonraco/toobasic/issues/181))
+* __Unneeded defaults on service sys-tool ([#181](https://github.com/daemonraco/toobasic/issues/181))__
 >Bug fix.
-* Remove All Routes When Destroying a Controller or Service ([#160](https://github.com/daemonraco/toobasic/issues/160))
+* __Remove All Routes When Destroying a Controller or Service ([#160](https://github.com/daemonraco/toobasic/issues/160))__
 >Bug fix.
 
 ## Version 2.1.0:
 
-* Simple API Tester ([#151](https://github.com/daemonraco/toobasic/issues/151))
+* __Simple API Tester ([#151](https://github.com/daemonraco/toobasic/issues/151))__
 >Now it's possible to use things like:
 >```text
 >php shell.php sys sapitester
 >```
-* Scaffolds with default values in routes ([#115](https://github.com/daemonraco/toobasic/issues/115))
+* __Scaffolds with default values in routes ([#115](https://github.com/daemonraco/toobasic/issues/115))__
 >Controllers and services _sys-tools_ generate multiple routes depending on parameter defaults.
-* Keyword 'table' for routes ([#147](https://github.com/daemonraco/toobasic/issues/147))
+* __Keyword 'table' for routes ([#147](https://github.com/daemonraco/toobasic/issues/147))__
 >Routes add the keyword `table`.
-* Debug Parameter for MagicProps ([#156](https://github.com/daemonraco/toobasic/issues/156))
+* __Debug Parameter for MagicProps ([#156](https://github.com/daemonraco/toobasic/issues/156))__
 >New debug parameter called `debugmagicprop`.
-* Exception translations ([#145](https://github.com/daemonraco/toobasic/issues/145))
+* __Exception translations ([#145](https://github.com/daemonraco/toobasic/issues/145))__
 >Almost all exception messages use translations.
-* Set Smarty Delimiters ([#153](https://github.com/daemonraco/toobasic/issues/153))
+* __Set Smarty Delimiters ([#153](https://github.com/daemonraco/toobasic/issues/153))__
 >Smarty delimiters can be changed.
-* Move Redis Support Into A Module ([#118](https://github.com/daemonraco/toobasic/issues/118))
+* __Move Redis Support Into A Module ([#118](https://github.com/daemonraco/toobasic/issues/118))__
 >Redis support in no longer a required part of __TooBasic__.
 
 ## Version 2.0.0:

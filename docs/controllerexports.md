@@ -204,9 +204,9 @@ Also, let's suppose our layout is called __my_layout__.
 
 The first thing to do is to create an specific configuration of assets:
 ```php
-$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['bottom_assets'] = array(
-	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array('magic_menu.fixes')
-);
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['bottom_assets'] = [
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => ['magic_menu.fixes']
+];
 ```
 Once you have this kind of configuration in your site, you can write something
 like this:
@@ -220,9 +220,9 @@ In this way, you'll be creating a section with only some specific assets.
 
 Now, let's say you have this:
 ```php
-$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['my_layout'] = array(
-	GC_DEFAULTS_HTMLASSETS_SCRIPTS => array('magic_menu.fixes')
-);
+$Defaults[GC_DEFAULTS_HTMLASSETS_SPECIFICS]['my_layout'] = [
+	GC_DEFAULTS_HTMLASSETS_SCRIPTS => ['magic_menu.fixes']
+];
 ```
 With this configuration you may either use `$ctrl->htmlAllScripts('my_layout')` or
 `$ctrl->htmlAllScripts(true)` and obtain the same result.
@@ -297,7 +297,7 @@ Let's suppose our add section requires a parameter called `pattern` what will
 allow targeted ads in future implementations.
 Let's also suppose our layout makes this assignment:
 ```php
-$this->assign('adsparams', array('pattern' => 'vodka'));
+$this->assign('adsparams', ['pattern' => 'vodka']);
 ```
 Then you change your layout's template to something like this:
 ```html
@@ -312,10 +312,10 @@ Then you change your layout's template to something like this:
 Something else you may want is to add some attributes to these `<div>` tags.
 Again let's say our layout makes this assignment:
 ```php
-$this->assign('adsattrs', array(
+$this->assign('adsattrs', [
 	'id' => 'mainAds',
 	'class' => 'AdsSection'
-));
+]);
 ```
 Then you change your template:
 ```html

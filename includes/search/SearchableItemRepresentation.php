@@ -15,12 +15,6 @@ namespace TooBasic\Search;
  */
 abstract class SearchableItemRepresentation extends \TooBasic\Representations\ItemRepresentation implements \TooBasic\Search\SearchableItem {
 	//
-	// Protected core properties.
-	/**
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	//
 	// Magic methods.
 	/**
 	 * Class constructor.
@@ -32,10 +26,21 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 		parent::__construct($dbname);
 		//
 		// Setting column 'indexed' to work as a boolean value.
-		$this->_CP_ColumnFilters['indexed'] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$aux = $this->_cp_ColumnFilters;
+		$aux[$this->_cp_IndexColumn] = GC_DATABASE_FIELD_FILTER_BOOLEAN;
+		$this->_cp_ColumnFilters = $aux;
 	}
 	//
 	// Public methods.
+	/**
+	 * This mehtod returns a specification of grouping criteria to be applied
+	 * on some entry.
+	 *
+	 * @return \stdClass Returns a criteria specification structure.
+	 */
+	public function criteria() {
+		return (object) [];
+	}
 	/**
 	 * This method provides access to current representation's id.
 	 *
@@ -51,7 +56,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return boolean Returns TRUE when it's flagged as indexed.
 	 */
 	public function isIndexed() {
-		return $this->indexed;
+		return $this->{$this->_cp_IndexColumn};
 	}
 	/**
 	 * This method allows to modify current representation indexed status.
@@ -60,7 +65,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return boolean Returns the final result.
 	 */
 	public function setIndexed($status = true) {
-		$this->indexed = $status;
+		$this->{$this->_cp_IndexColumn} = $status;
 		$this->persist();
 
 		return $this->isIndexed();
@@ -72,7 +77,7 @@ abstract class SearchableItemRepresentation extends \TooBasic\Representations\It
 	 * @return string Returns a terms string.
 	 */
 	public function terms() {
-		return $this->{$this->_CP_NameColumn};
+		return $this->{$this->_cp_NameColumn};
 	}
 	/**
 	 * @abstract

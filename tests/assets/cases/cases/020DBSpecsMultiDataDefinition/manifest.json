@@ -10,6 +10,7 @@
 		"/site/langs/en_us.json",
 		"/site/models/representations/DataFactory.php",
 		"/site/models/representations/DatumRepresentation.php",
+		"/site/models/representations/data.json",
 		"/site/templates/action/test.html"
 	],
 	"setUpScripts": [

@@ -8,14 +8,6 @@
 namespace TooBasic\Representations;
 
 /**
- * @class FieldFilterException
- * This exception represent any found error related to field filters.
- */
-class FieldFilterException extends \TooBasic\Exception {
-	
-}
-
-/**
  * @interface FieldFilterInterface
  * This interface is a work-around for strict rules: A static method could not be
  * abstract.

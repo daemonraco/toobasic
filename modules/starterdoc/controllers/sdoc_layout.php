@@ -17,9 +17,4 @@ class SdocLayoutController extends \TooBasic\Layout {
 
 		return $this->status();
 	}
-	protected function init() {
-		parent::init();
-
-//		$this->_cacheParams['GET'][] = 'someparam';
-	}
 }

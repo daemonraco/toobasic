@@ -171,10 +171,10 @@ class ManageUsersTool extends TooBasic\Shell\ShellTool {
                 $this->_options->setHelpText("TODO tool summary");
 
                 $text = "TODO help text for: '--dead-users', '-d'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, array('--dead-users', '-d'), TBS_Option::TypeNoValue, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, ['--dead-users', '-d'], TBS_Option::TypeNoValue, $text, 'value'));
 
                 $text = "TODO help text for: '--id', '-i'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, array('--id', '-i'), TBS_Option::TypeMultiValue, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, ['--id', '-i'], TBS_Option::TypeMultiValue, $text, 'value'));
         }
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);
@@ -237,10 +237,10 @@ class ManageUsersCron extends TooBasic\Shell\ShellCron {
                 $this->_options->setHelpText("TODO tool summary");
 
                 $text = "TODO help text for: '--dead-users', '-d'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, array('--dead-users', '-d'), TBS_Option::TypeNoValue, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, ['--dead-users', '-d'], TBS_Option::TypeNoValue, $text, 'value'));
 
                 $text = "TODO help text for: '--id', '-i'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, array('--id', '-i'), TBS_Option::TypeMultiValue, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, ['--id', '-i'], TBS_Option::TypeMultiValue, $text, 'value'));
         }
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);

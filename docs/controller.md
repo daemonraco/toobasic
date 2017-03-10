@@ -151,6 +151,7 @@ If you want, you may visit these documentation pages:
 
 * [Layouts](layout.md)
 * [Controller Exports](controllerexports.md)
+* [Redirections](redirections.md)
 * [Scaffolds](facilities.md)
 
 <!--:GBSUMMARY:MVC:1:Controllers:-->

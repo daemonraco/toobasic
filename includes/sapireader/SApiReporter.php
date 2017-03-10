@@ -15,15 +15,6 @@ use TooBasic\SpecsValidator;
 use TooBasic\Translate;
 
 /**
- * @class SAReporterException
- * This type of exception is thrown whenever a error occurs with Simple API
- * Reporter.
- */
-class SApiReportException extends Exception {
-	
-}
-
-/**
  * @class SAReporter
  * This class holds the logic to access, change and also render Simple API
  * Reports.
@@ -42,8 +33,8 @@ class SApiReporter extends Singleton {
 	 * table code.
 	 *
 	 * @param string $report Name of the report to be rendered.
-	 * @param string $renderType Name of the mechanism to use when rendering. FALSE
-	 * means default.
+	 * @param string $renderType Name of the mechanism to use when rendering.
+	 * FALSE means default.
 	 * @return string Returns a HTML piece of code.
 	 * @throws \TooBasic\SApiReportException
 	 */
@@ -54,6 +45,13 @@ class SApiReporter extends Singleton {
 		//
 		// Global dependencies.
 		global $SApiReader;
+		//
+		// Expanding report specification.
+		$params = [];
+		if(is_array($report)) {
+			$params = $report;
+			$report = array_shift($params);
+		}
 		//
 		// Loading requested report definition.
 		$this->loadReport($report);
@@ -75,7 +73,7 @@ class SApiReporter extends Singleton {
 		$api = SApiManager::Instance()->{$conf->api};
 		//
 		// Requesting information to build the report.
-		$results = $api->call($conf->service, $conf->params);
+		$results = $api->call($conf->service, array_values(array_merge((array)$conf->params, $params)));
 		//
 		// Filtering results.
 		$list = $this->filterResults($report, $results);
@@ -208,7 +206,7 @@ class SApiReporter extends Singleton {
 	 *
 	 * @param string $report Name of a report to use as configuration.
 	 * @param \stdClass $results Full API result.
-	 * @return \stdClass[] Returns a filtered list.
+	 * @return \stdClass|array Returns a filtered list.
 	 * @throws \TooBasic\SApiReportException
 	 */
 	protected function filterResults($report, $results) {
@@ -355,7 +353,7 @@ class SApiReporter extends Singleton {
 	 * @param string $path Path to be clean.
 	 * @return boolean Returns TRUE when it's set.
 	 */
-	public static function GetPathIsset($item, $path) {
+	public static function GetPathIsset(\stdClass $item, $path) {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path});");
 		return $out;
@@ -367,7 +365,7 @@ class SApiReporter extends Singleton {
 	 * @param string $path Path to be clean.
 	 * @return mixed Returns it's value or FALSE when it's not set.
 	 */
-	public static function GetPathValue($item, $path) {
+	public static function GetPathValue(\stdClass $item, $path) {
 		$path = self::GetPathCleaned($path);
 		eval("\$out=isset(\$item->{$path})?\$item->{$path}:false;");
 		return $out;

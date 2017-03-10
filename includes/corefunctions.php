@@ -5,24 +5,6 @@
  * @author Alejandro Dario Simi
  */
 //
-// Defining function 'get_called_class()' in case the current PHP version doesn't
-// have it.
-if(!function_exists('get_called_class')) {
-	function get_called_class() {
-		$bt = debug_backtrace();
-		$l = 0;
-		$matches = false;
-		do {
-			$l++;
-			$lines = file($bt[$l]['file']);
-			$callerLine = $lines[$bt[$l]['line'] - 1];
-			preg_match("/([a-zA-Z0-9\_]+)::{$bt[$l]['function']}/", $callerLine, $matches);
-		} while($matches[1] === 'parent' && $matches[1]);
-
-		return $matches[1];
-	}
-}
-//
 // Defining function 'getallheaders()' in case the current PHP version doesn't
 // have it.
 if(!function_exists('getallheaders')) {
@@ -45,7 +27,7 @@ if(!function_exists('apache_request_headers')) {
 				// the original letter case this should work in
 				// most cases.
 				$rx_matches = explode('_', strtolower($arh_key));
-				if(count($rx_matches) > 0 and strlen($arh_key) > 2) {
+				if(count($rx_matches) > 0 && strlen($arh_key) > 2) {
 					foreach($rx_matches as $ak_key => $ak_val) {
 						$rx_matches[$ak_key] = ucfirst($ak_val);
 					}
@@ -61,21 +43,6 @@ if(!function_exists('apache_request_headers')) {
 			$arh['Content-Length'] = $_SERVER['CONTENT_LENGTH'];
 		}
 		return($arh);
-	}
-}
-//
-// Defining function 'boolval()' in case the current PHP version doesn't have it.
-if(!function_exists('boolval')) {
-	function boolval($var) {
-		return $var == true;
-	}
-}
-//
-// Defining function 'json_last_error_msg()' in case the current PHP version
-// doesn't have it.
-if(!function_exists('json_last_error_msg')) {
-	function json_last_error_msg() {
-		return "Function 'json_last_error_msg()' is not supported in your PHP version";
 	}
 }
 /**

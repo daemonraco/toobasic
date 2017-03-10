@@ -125,10 +125,6 @@ class SpecSQLite extends SpecAdapter {
 				$updates[] = $fullname;
 				continue;
 			}
-#			if($data[GC_AFIELD_DB]['column_comment'] != $data[GC_AFIELD_SPEC]->comment) {
-#				$updates[] = $fullname;
-#				continue;
-#			}
 		}
 		//
 		// SQLite does not supports column modifications or dropping @{
@@ -192,10 +188,6 @@ class SpecSQLite extends SpecAdapter {
 	}
 	public function dropTableColumn(\stdClass $table, $columnName) {
 		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'DROP COLUMN']));
-		$query = "alter table {$table->fullname} \n";
-		$query.= "        drop column {$columnName}";
-
-		return $this->exec($query);
 	}
 	public function getIndexes() {
 		$out = [];
@@ -242,12 +234,6 @@ class SpecSQLite extends SpecAdapter {
 	}
 	public function updateTableColumn(\stdClass $table, $columnName) {
 		throw new Exception(Translate::Instance()->EX_SQLite_not_supported(['operation' => 'MODIFY COLUMN']));
-		$query = "alter table {$table->fullname} \n";
-
-		$field = $table->fields[$columnName];
-		$query.= "        modify column {$field->fullname} {$this->buildFullColumnType($field, false)}";
-
-		return $this->exec($query);
 	}
 	//
 	// Protected methods.
@@ -299,9 +285,6 @@ class SpecSQLite extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type, $spec->autoincrement)} ";
 		}
-#		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
-#			$out.= 'collate utf8_bin ';
-#		}
 		if(!$spec->null) {
 			$out.= 'not null ';
 		}
@@ -327,11 +310,6 @@ class SpecSQLite extends SpecAdapter {
 			}
 			/** @} */
 		}
-#		if($spec->comment) {
-#			$out.= "comment '".str_replace("'", "", $spec->comment)."' ";
-#		} else {
-#			$out.= "comment '' ";
-#		}
 
 		return $out;
 	}

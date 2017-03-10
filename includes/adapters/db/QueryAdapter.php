@@ -172,14 +172,19 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		foreach($where as $key => $value) {
 			$xKey = self::ExpandFieldName($key);
 
-			if($xKey[GC_AFIELD_RESULT]) {
-				switch($xKey[GC_AFIELD_FLAG]) {
-					case '*':
-						$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
-						break;
-				}
-			} else {
-				$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+			switch($xKey[GC_AFIELD_FLAG]) {
+				case '*':
+					$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = "%{$value}%";
+					break;
+				case 'C':
+					break;
+				default:
+					if($xKey[GC_AFIELD_RESULT]) {
+						$out[GC_AFIELD_PARAMS][":{$xKey[GC_AFIELD_NAME]}"] = $value;
+					} else {
+						$out[GC_AFIELD_PARAMS][":{$key}"] = $value;
+					}
+					break;
 			}
 		}
 		//
@@ -285,7 +290,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		];
 		//
 		// Expansion pattern.
-		$pattern = '/^((?P<flag>[*cC]{0,1}):)(?P<name>.*)$/';
+		$pattern = '/^((?P<flag>[*cC><!]{0,1}):)(?P<name>.*)$/';
 		//
 		// Checking field name.
 		$out[GC_AFIELD_RESULT] = preg_match($pattern, $name, $matches);

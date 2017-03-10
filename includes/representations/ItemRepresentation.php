@@ -26,51 +26,6 @@ use TooBasic\Translate;
  */
 abstract class ItemRepresentation {
 	//
-	// Protected core properties.
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Generic prefix for all columns on the represented table.
-	 */
-	protected $_CP_ColumnsPerfix = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[string] Associative list of field names and the filter to
-	 * be applied on them.
-	 */
-	protected $_CP_ColumnFilters = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var mixed[string] Sub-representation associated columns
-	 * specifications.
-	 */
-	protected $_CP_ExtendedColumns = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing IDs (without prefix).
-	 */
-	protected $_CP_IDColumn = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[] List of fields that can't be alter by generic accessors.
-	 */
-	protected $_CP_ReadOnlyColumns = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var mixed[string] List of other representations that use current one
-	 * as grouping item.
-	 */
-	protected $_CP_SubLists = [];
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Represented table's name (without prefix).
-	 */
-	protected $_CP_Table = '';
-	//
 	// Protected properties.
 	/**
 	 * @var string Name of the class or JSON specs where core properties are
@@ -90,6 +45,10 @@ abstract class ItemRepresentation {
 	 * yet store on database.
 	 */
 	protected $_dirty = false;
+	/**
+	 * @var string[] Track of changed properties.
+	 */
+	protected $_dirtyProperties = [];
 	/**
 	 *
 	 * @var bool This flag is true when the current object represent a actual
@@ -179,6 +138,11 @@ abstract class ItemRepresentation {
 		//
 		// Global dependencies.
 		global $Database;
+		//
+		// Checking core properties holder name.
+		if(!$this->_corePropsHolder) {
+			throw new Exception(Translate::Instance()->EX_no_core_props_holder);
+		}
 		//
 		// Generating shortcuts.
 		$this->_db = DBManager::Instance()->{$dbname};
@@ -289,13 +253,8 @@ abstract class ItemRepresentation {
 		$out = false;
 		//
 		// Checking if it's core property request
-		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
-			if($this->_corePropsHolder) {
-				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
-			} else {
-				$localName = "_CP_{$match['name']}";
-				$out = $this->{$localName};
-			}
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
 		} else {
 			//
 			// Generating a possible table field name.
@@ -318,43 +277,52 @@ abstract class ItemRepresentation {
 	 * later to modify the database, if not, an extra property will be alter.
 	 *
 	 * @param string $name Property name to look for.
-	 * @param mixed $value value to assign.
+	 * @param mixed $value Value to assign.
 	 * @return mixed Returns the set value.
 	 */
 	public function __set($name, $value) {
 		//
-		// Generating a possible table field name.
-		$realName = "{$this->_cp_ColumnsPerfix}{$name}";
-		//
-		// Checking if its a known table column.
-		if(array_key_exists($realName, $this->_properties)) {
-			//
-			// Checking that:
-			//	- the column is not the ID column.
-			//	- It's not a read only property.
-			//	- The value is different from the current one.
-			if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] != $value) {
-				//
-				// Setting a new value.
-				$this->_properties[$realName] = $value;
-				//
-				// Assuming it was not yet loaded if it's a
-				// extended column.
-				unset($this->_extendedColumns[$name]);
-				//
-				// Flagging this representation as dirty.
-				$this->_dirty = true;
-			} else {
-				//
-				// When the requeried conditions fail, this
-				// returned value must be the one that remains on
-				// the column.
-				$value = $this->_properties[$realName];
-			}
+		// Checking if it's core property request
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']} = $value;
 		} else {
 			//
-			// Storing the property as an extra property.
-			$this->_extraProperties[$name] = $value;
+			// Generating a possible table field name.
+			$realName = "{$this->_cp_ColumnsPerfix}{$name}";
+			//
+			// Checking if its a known table column.
+			if(array_key_exists($realName, $this->_properties)) {
+				//
+				// Checking that:
+				//	- the column is not the ID column.
+				//	- It's not a read only property.
+				//	- The value is different from the current one.
+				if($name != $this->_cp_IDColumn && !in_array($name, $this->_cp_ReadOnlyColumns) && $this->_properties[$realName] !== $value) {
+					//
+					// Setting a new value.
+					$this->_properties[$realName] = $value;
+					//
+					// Assuming it was not yet loaded if it's a
+					// extended column.
+					unset($this->_extendedColumns[$name]);
+					//
+					// Flagging this representation as dirty.
+					$this->_dirty = true;
+					//
+					// Tracking changed properties.
+					$this->_dirtyProperties[] = $name;
+				} else {
+					//
+					// When the requeried conditions fail,
+					// this returned value must be the one
+					// that remains on the column.
+					$value = $this->_properties[$realName];
+				}
+			} else {
+				//
+				// Storing the property as an extra property.
+				$this->_extraProperties[$name] = $value;
+			}
 		}
 
 		return $value;
@@ -518,13 +486,13 @@ abstract class ItemRepresentation {
 		// Default values.
 		$persisted = false;
 		//
-		// Analyzing field filters.
-		$this->encodeFieldFilters();
-		//
 		// Checking that there's something to persist and also triggering
 		// specific checks before persisting.
 		if($this->dirty() && $this->prePersist()) {
 			$idName = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
+			//
+			// Analyzing field filters.
+			$this->encodeFieldFilters();
 			//
 			// Building the list of values to store associated to
 			// their column names.
@@ -548,13 +516,15 @@ abstract class ItemRepresentation {
 				// and no longer dirty.
 				$persisted = true;
 				$this->_dirty = false;
+				$this->_dirtyProperties = [];
+				$this->postPersist();
 			} else {
 				$this->_lastDBError = $stmt->errorInfo();
 			}
+			//
+			// Analyzing field filters back.
+			$this->decodeFieldFilters();
 		}
-		//
-		// Analyzing field filters back.
-		$this->decodeFieldFilters();
 
 		return $persisted;
 	}

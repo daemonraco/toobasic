@@ -14,6 +14,7 @@ use TooBasic\Managers\DBManager;
 use TooBasic\Names;
 use TooBasic\Paths;
 use TooBasic\Representations\CoreProps;
+use TooBasic\Representations\ItemsStream;
 use TooBasic\Translate;
 
 /**
@@ -30,48 +31,6 @@ abstract class ItemsFactory {
 	 * @var string[string] List of loaded representation classes.
 	 */
 	protected static $_LoadedClasses = [];
-	//
-	// Protected core properties.
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Generic prefix for all columns on the represented table.
-	 */
-	protected $_CP_ColumnsPerfix = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var boolean This flag indicates if method 'create()' is disabled or
-	 * not.
-	 * It can also have a string as value and it will be used as method name
-	 * when its related exception is raised.
-	 */
-	protected $_CP_DisableCreate = false;
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing IDs (without prefix).
-	 */
-	protected $_CP_IDColumn = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a field containing names (without prefix).
-	 */
-	protected $_CP_NameColumn = 'name';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string[string] List of fields (without prefix) associated to a
-	 * sorting direction.
-	 */
-	protected $_CP_OrderBy = false;
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Name of a \TooBasic\Representations\ItemRepresentation
-	 * class.
-	 */
-	protected $_CP_RepresentationClass = '';
-	/**
-	 * @deprecated remove on version 2.3.0 (issue #188)
-	 * @var string Represented table's name (without prefix).
-	 */
-	protected $_CP_Table = '';
 	//
 	// Protected properties.	
 	/**
@@ -106,6 +65,11 @@ abstract class ItemsFactory {
 	 */
 	final protected function __construct() {
 		//
+		// Checking core properties holder name.
+		if(!$this->_corePropsHolder) {
+			throw new Exception(Translate::Instance()->EX_no_core_props_holder);
+		}
+		//
 		// Checking if there's an ID field configured, if not it means
 		// this representation doesn't support empty entries creation.
 		if(!$this->_cp_IDColumn) {
@@ -131,16 +95,28 @@ abstract class ItemsFactory {
 		$out = false;
 		//
 		// Checking if it's core property request
-		if(preg_match('~^_cp_(?<name>.*)$~', $name, $match)) {
-			if($this->_corePropsHolder) {
-				$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
-			} else {
-				$localName = "_CP_{$match['name']}";
-				$out = $this->{$localName};
-			}
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			$out = CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']};
 		}
 
 		return $out;
+	}
+	/**
+	 * This magic method allows to set a value to certain core property in
+	 * this representation.
+	 *
+	 * @param string $name Property name to look for.
+	 * @param mixed $value Value to assign.
+	 * @return mixed Returns the set value.
+	 */
+	public function __set($name, $value) {
+		//
+		// Checking if it's core property request
+		if(preg_match('~^_(cp|CP)_(?<name>.*)$~', $name, $match)) {
+			CoreProps::GetCoreProps($this->_corePropsHolder)->{$match['name']} = $value;
+		}
+
+		return $value;
 	}
 	//
 	// Public methods.
@@ -195,33 +171,7 @@ abstract class ItemsFactory {
 	 * @return int[] Returns a list of IDs.
 	 */
 	public function ids() {
-		//
-		// Default values.
-		$out = [];
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		//
-		// Generating a proper query to obtain a full list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, [], $prefixes, $this->_cp_OrderBy);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
-			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
-		}
-
-		return $out;
+		return $this->idsBy([]);
 	}
 	/**
 	 * This method retrieves a list of IDs of all available entries where the
@@ -236,33 +186,8 @@ abstract class ItemsFactory {
 		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
-		//
-		// Default values.
-		$out = [];
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		//
-		// Generating a proper query to obtain a list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, ["*:{$this->_cp_NameColumn}" => $pattern], $prefixes, $this->_cp_OrderBy);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
-			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
-		}
 
-		return $out;
+		return $this->idsBy(["*:{$this->_cp_NameColumn}" => $pattern]);
 	}
 	/**
 	 * This method retrieves a list of IDs in the represented table based on a
@@ -280,43 +205,16 @@ abstract class ItemsFactory {
 		// Default values.
 		$out = [];
 		//
-		// Checking conditions.
-		if(!is_array($conditions)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$conditions',
-				'type' => 'array'
-			]));
-		}
+		// Getting the proper stream.
+		$stream = $this->streamBy($conditions, $order);
 		//
-		// Checking order.
-		if(!is_array($order)) {
-			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
-				'name', '$order',
-				'type' => 'array'
-			]));
-		}
-		//
-		// Enforcing order configuration.
-		if(!is_array($this->_cp_OrderBy)) {
-			$this->_cp_OrderBy = [];
-		}
-		$order = $order ? $order : $this->_cp_OrderBy;
-		//
-		// Generating a proper query to obtain a list of IDs.
-		$prefixes = $this->queryAdapterPrefixes();
-		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
-		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
-		//
-		// Executing query and fetching IDs.
-		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$idKey = "{$this->_cp_ColumnsPerfix}{$this->_cp_IDColumn}";
-			foreach($stmt->fetchAll() as $row) {
-				$out[] = $row[$idKey];
-			}
-		} else {
+		// Checking results.
+		if($stream) {
 			//
-			// Catching the last error for further analysis.
-			$this->_lastDBError = $stmt->errorInfo();
+			// Reading each entry and extracting the id.
+			while($stream->fetch()) {
+				$out[] = $stream->key();
+			}
 		}
 
 		return $out;
@@ -333,8 +231,8 @@ abstract class ItemsFactory {
 	 * @return int Returns the first ID that matches.
 	 */
 	public function idBy($conditions, $order = []) {
-		$ids = $this->idsBy($conditions, $order);
-		return array_shift($ids);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->key() : false;
 	}
 	/**
 	 * This method allows to obtain a representation for certain item based on
@@ -382,19 +280,8 @@ abstract class ItemsFactory {
 		if(!$this->_cp_NameColumn) {
 			throw new Exception(Translate::Instance()->EX_representation_has_no_name_field_defined);
 		}
-		//
-		// Obtaining an object to hold the represented entry.
-		$item = self::GetClass($this->_cp_RepresentationClass, $this->_dbname);
-		//
-		// Attempting to load the information based on the id.
-		$item->loadByName($name);
-		//
-		// Was it found?
-		if(!$item->exists()) {
-			$item = null;
-		}
 
-		return $item;
+		return $this->itemBy([$this->_cp_NameColumn => $name]);
 	}
 	/**
 	 * This method retrieves a list of representations of all available
@@ -404,17 +291,7 @@ abstract class ItemsFactory {
 	 * of representations.
 	 */
 	public function items() {
-		//
-		// Default values.
-		$out = [];
-		//
-		// Fetching all available dis and creating a representation for
-		// each one of them.
-		foreach($this->ids() as $id) {
-			$out[$id] = $this->item($id);
-		}
-
-		return $out;
+		return $this->itemsBy([]);
 	}
 	/**
 	 * This method retrieves a list of representations in the represented
@@ -433,10 +310,10 @@ abstract class ItemsFactory {
 		// Default values.
 		$out = [];
 		//
-		// Fetching all available dis and creating a representation for
+		// Fetching all available ids and creating a representation for
 		// each one of them.
-		foreach($this->idsBy($conditions, $order) as $id) {
-			$out[$id] = $this->item($id);
+		foreach($this->streamBy($conditions, $order) as $id => $item) {
+			$out[$id] = $item;
 		}
 
 		return $out;
@@ -454,8 +331,8 @@ abstract class ItemsFactory {
 	 * representations that matches.
 	 */
 	public function itemBy($conditions, $order = []) {
-		$items = $this->itemsBy($conditions, $order);
-		return array_shift($items);
+		$stream = $this->streamBy($conditions, $order);
+		return $stream->length() > 0 ? $stream->current() : false;
 	}
 	/**
 	 * This method provids access to the last database error found.
@@ -464,6 +341,71 @@ abstract class ItemsFactory {
 	 */
 	public function lastDBError() {
 		return $this->_lastDBError;
+	}
+	/**
+	 * Run a clean query retieveing a full stream of entries without any
+	 * filtering condition.
+	 *
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
+	 */
+	public function stream() {
+		return $this->streamBy([]);
+	}
+	/**
+	 * This method retrieves a list of IDs in the represented table based on a
+	 * set of conditions.
+	 *
+	 * Conditions is an associative array where keys are field names without
+	 * prefixes and associated values are values to look for.
+	 *
+	 * @param mixed[string] $conditions List of conditions to apply.
+	 * @param string[string] $order Query sorting conditions.
+	 * @return \TooBasic\Representations\ItemsStream Returns a stream of found
+	 * items.
+	 */
+	public function streamBy($conditions, $order = []) {
+		//
+		// Default values.
+		$out = false;
+		//
+		// Checking conditions.
+		if(!is_array($conditions)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$conditions',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Checking order.
+		if(!is_array($order)) {
+			throw new Exception(Translate::Instance()->EX_parameter_is_not_instances_of([
+				'name', '$order',
+				'type' => 'array'
+			]));
+		}
+		//
+		// Enforcing order configuration.
+		if(!is_array($this->_cp_OrderBy)) {
+			$this->_cp_OrderBy = [];
+		}
+		$order = $order ? $order : $this->_cp_OrderBy;
+		//
+		// Generating a proper query to obtain a list of IDs.
+		$prefixes = $this->queryAdapterPrefixes();
+		$query = $this->_db->queryAdapter()->select($this->_cp_Table, $conditions, $prefixes, $order);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Executing query and fetching IDs.
+		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
+			$out = new ItemsStream($this, $this->_corePropsHolder, $stmt);
+		} else {
+			//
+			// Catching the last error for further analysis.
+			$this->_lastDBError = $stmt->errorInfo();
+		}
+
+		return $out;
 	}
 	//
 	// Protected methods.

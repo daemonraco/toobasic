@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @file SearchManager.php
+ * @author Alejandro Dario Simi
+ */
+
 namespace TooBasic\Managers;
 
 //
 // Class aliases.
-use TooBasic\Search\SearchableItem;
+use TooBasic\Timer;
 
 /**
  * @class SearchManager
@@ -24,6 +29,66 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	//
 	// Public methods.
 	/**
+	 * This method walks over every entry in the indexed items table and
+	 * checks they're still in the database. If an item is no longer in the
+	 * database it gets removed from the index.
+	 *
+	 * @return int Returns the count of entries removed.
+	 */
+	public function cleanUp() {
+		//
+		// Default values.
+		$count = 0;
+		//
+		// Global dependencies.
+		global $Search;
+		//
+		// Checking each factory.
+		$factories = [];
+		foreach($Search[GC_SEARCH_ENGINE_FACTORIES] as $type => $factoryClass) {
+			$factories[$type] = $factoryClass::Instance();
+		}
+		//
+		// Items table prefixes.
+		$itemsPrefixes = [
+			GC_DBQUERY_PREFIX_TABLE => $this->_dbprefix,
+			GC_DBQUERY_PREFIX_COLUMN => 'sit_'
+		];
+		//
+		// Creating a query to get all associations.
+		$query = $this->_db->queryAdapter()->select('tb_search_items', [], $itemsPrefixes);
+		$stmt = $this->_db->prepare($query[GC_AFIELD_QUERY]);
+		//
+		// Creating a query to remove all current associations.
+		$queryD = $this->_db->queryAdapter()->delete('tb_search_items', [
+			'type' => 0,
+			'id' => 0
+			], $itemsPrefixes);
+		$stmtD = $this->_db->prepare($queryD[GC_AFIELD_QUERY]);
+		//
+		// Checking each item.
+		$stmt->execute();
+		while($row = $stmt->fetch()) {
+			$remove = false;
+			//
+			// Checking if the type is unknown or if the item doesn't
+			// exist.
+			if(!isset($factories[$row['sit_type']]) || !$factories[$row['sit_type']]->item($row['sit_id'])) {
+				$remove = true;
+			}
+			//
+			// Checking if this entry has to be removed.
+			if($remove) {
+				$queryD[GC_AFIELD_PARAMS][':type'] = $row['sit_type'];
+				$queryD[GC_AFIELD_PARAMS][':id'] = $row['sit_id'];
+				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				$count++;
+			}
+		}
+
+		return $count;
+	}
+	/**
 	 * This method modifies every known searchable item setting it as not
 	 * indexed and then triggers a full indexation.
 	 *
@@ -39,7 +104,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$factory = $factoryClass::Instance();
 			//
 			// Setting each as not yet indexed.
-			foreach($factory->searchableItems() as $item) {
+			foreach($factory->searchableStream() as $item) {
 				$item->setIndexed(false);
 			}
 		}
@@ -89,40 +154,38 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			$factory = $factoryClass::Instance();
 			//
 			// Checking each item.
-			foreach($factory->searchableItems() as $item) {
-				if(!$item->isIndexed()) {
-					//
-					// Obtaining information from current
-					// item.
-					$type = $item->type();
-					$id = $item->id();
-					$terms = self::ExpandTerms(self::SanitizeTerms($item->terms()));
+			foreach($factory->pendingStream() as $item) {
+				//
+				// Obtaining information from current item.
+				$type = $item->type();
+				$id = $item->id();
+				$criteria = self::StringCriteria(self::SimplifyCriteria($item->criteria()));
+				$terms = self::ExpandTerms(self::SanitizeTerms($item->terms()));
+				//
+				// Setting parameters.
+				$queryD[GC_AFIELD_PARAMS][':type'] = $type;
+				$queryI[GC_AFIELD_PARAMS][':type'] = $type;
+				$queryD[GC_AFIELD_PARAMS][':id'] = $id;
+				$queryI[GC_AFIELD_PARAMS][':id'] = $id;
+				//
+				// Removing all current associations.
+				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				//
+				// Adding associations.
+				foreach(array_filter($this->getTerms($terms, $criteria, true)) as $term) {
 					//
 					// Setting parameters.
-					$queryD[GC_AFIELD_PARAMS][':type'] = $type;
-					$queryI[GC_AFIELD_PARAMS][':type'] = $type;
-					$queryD[GC_AFIELD_PARAMS][':id'] = $id;
-					$queryI[GC_AFIELD_PARAMS][':id'] = $id;
+					$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
 					//
-					// Removing all current associations.
-					$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
-					//
-					// Adding associations.
-					foreach($this->getTerms($terms, true) as $term) {
-						//
-						// Setting parameters.
-						$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
-						//
-						// Adding.
-						$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
-					}
-					//
-					// Setting current item as indexed.
-					$item->setIndexed(true);
-					//
-					// Counting indexed items.
-					$indexed++;
+					// Adding.
+					$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
 				}
+				//
+				// Setting current item as indexed.
+				$item->setIndexed(true);
+				//
+				// Counting indexed items.
+				$indexed++;
 			}
 		}
 
@@ -133,19 +196,59 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * string.
 	 *
 	 * @param string $termsString Terms to look for.
+	 * @param int $limit Maximum number of items to be returned.
+	 * @param int $offset Where to start (zero is from the beginning).
+	 * @param \stdClass $criteria Set of specific filtering parameters.
+	 * @param int $info Returns some search stats information.
 	 * @return mixed[string][] Returns a list of lists group by item types.
 	 */
-	public function search($termsString) {
+	public function search($termsString, $limit = 0, $offset = 0, \stdClass $criteria = null, &$info = false) {
+		//
+		// Default values.
+		$out = [];
+		$criteria = is_object($criteria) ? $criteria : (object)[];
+		//
+		// Timer shortcut;
+		$timer = Timer::Instance();
+		$timer->start(GC_AFIELD_FULL);
+		$timer->start(GC_AFIELD_SEARCH);
 		//
 		// Expanded list of terms.
 		$terms = self::ExpandTerms(self::SanitizeTerms($termsString));
 		//
 		// Basic search for items.
-		$plainResult = $this->plainSearch($terms);
+		$plainResult = $this->plainSearch($terms, $criteria);
+		$plainResultCount = count($plainResult[GC_AFIELD_ITEMS]);
+		$timer->stop(GC_AFIELD_SEARCH);
+		$timer->start(GC_AFIELD_EXPAND);
 		//
-		// Expanding all found items into full objects grouped by type and
-		// returning it as result.
-		return $this->expandResult($plainResult);
+		// Checking if only a portion is required.
+		if($limit > 0) {
+			$plainResult[GC_AFIELD_ITEMS] = array_slice($plainResult[GC_AFIELD_ITEMS], $offset, $limit);
+		}
+		//
+		// Expanding all found items into full objects grouped by type.
+		$garbageCount = 0;
+		$out = $this->expandResult($plainResult, $garbageCount);
+		$timer->stop(GC_AFIELD_EXPAND);
+		$timer->stop(GC_AFIELD_FULL);
+		//
+		// Saving some information.
+		$info = [
+			GC_AFIELD_TERMS => $terms,
+			GC_AFIELD_COUNT => $plainResultCount,
+			GC_AFIELD_COUNTS => $plainResult[GC_AFIELD_COUNTS],
+			GC_AFIELD_LIMIT => $limit,
+			GC_AFIELD_OFFSET => $offset,
+			GC_AFIELD_TIMERS => [
+				GC_AFIELD_FULL => $timer->timer(GC_AFIELD_FULL),
+				GC_AFIELD_EXPAND => $timer->timer(GC_AFIELD_EXPAND),
+				GC_AFIELD_SEARCH => $timer->timer(GC_AFIELD_SEARCH)
+			],
+			GC_AFIELD_GARBAGE => $garbageCount
+		];
+
+		return $out;
 	}
 	//
 	// Protected methods.
@@ -154,11 +257,14 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * representation. Also, this method can create unknown terms when
 	 * indicated.
 	 *
-	 * @param string[] $terms
+	 * @param string[] $terms List of terms to load.
+	 * @param string $stringCriteria Set of specific filtering parameters in
+	 * string mode.
 	 * @param boolean $create Triggers the creation of unknown terms.
-	 * @return type
+	 * @return \TooBasic\Search\SearchTerm[string] Returns a list of found
+	 * terms.
 	 */
-	protected function getTerms($terms, $create = false) {
+	protected function getTerms($terms, $stringCriteria, $create = false) {
 		//
 		// Default values.
 		$out = [];
@@ -170,7 +276,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		foreach($terms as $term) {
 			//
 			// Attempting to uptaing the requeste item.
-			$auxTerm = $factory->itemByName($term);
+			$auxTerm = $factory->itemBy(['term' => $term, 'criteria' => $stringCriteria]);
 			//
 			// If it doesn't exist and it's required to be created, it
 			// is.
@@ -184,6 +290,7 @@ class SearchManager extends \TooBasic\Managers\Manager {
 				//
 				// Setting basic values.
 				$auxTerm->term = $term;
+				$auxTerm->criteria = $stringCriteria;
 				$auxTerm->count = 0;
 				//
 				// Persisting changes.
@@ -202,13 +309,16 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * This method takes a plain search result and expands each item grouping
 	 * them by item type.
 	 *
-	 * @param type $plainResult
-	 * @return type
+	 * @param mixed[] $plainResult Plain search results.
+	 * @param int $garbageCount Number of lost items.
+	 * @return \TooBasic\Search\SearchableItem[] Returns a list of expanded
+	 * items.
 	 */
-	protected function expandResult($plainResult) {
+	protected function expandResult($plainResult, &$garbageCount = 0) {
 		//
 		// Default values.
 		$out = [];
+		$garbageCount = 0;
 		//
 		// Global dependencies.
 		global $Search;
@@ -218,9 +328,6 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		//
 		// Generating temporary list based on search types to use.
 		foreach($plainResult[GC_AFIELD_TYPES] as $type) {
-			//
-			// Creating groups by type.
-			$out[$type] = [];
 			//
 			// Appending a factory shortcut.
 			if(isset($Search[GC_SEARCH_ENGINE_FACTORIES][$type])) {
@@ -238,7 +345,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			// Expanding only those elements belonging to an existing
 			// factory.
 			if(isset($factories[$type])) {
-				$out[$type][] = $factories[$plainItem[GC_AFIELD_TYPE]]->searchableItem($plainItem[GC_AFIELD_ID]);
+				$item = $factories[$type]->searchableItem($plainItem[GC_AFIELD_ID]);
+				if($item) {
+					$out[] = $item;
+				} else {
+					$garbageCount++;
+				}
 			}
 		}
 
@@ -259,9 +371,10 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * result in a simple structure sorted by hit counts.
 	 *
 	 * @param string[] $terms List of terms to look for.
+	 * @param \stdClass $criteria Set of specific filtering parameters.
 	 * @return mixed[string] Plain search result.
 	 */
-	protected function plainSearch($terms) {
+	protected function plainSearch($terms, $criteria = false) {
 		//
 		// Default values.
 		$out = [
@@ -281,9 +394,19 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			GC_DBQUERY_PREFIX_COLUMN => 'ste_'
 		];
 		//
+		// Cleaning criterion entries
+		if(!is_object($criteria)) {
+			$criteria = (object)[];
+		}
+		$simplifyCriteria = self::SimplifyCriteria($criteria);
+		if(empty($simplifyCriteria)) {
+			$simplifyCriteria[] = '';
+		}
+		//
 		// Creating a query to search term.
 		$queryT = $this->_db->queryAdapter()->select('tb_search_terms', [
 			'*:term' => '',
+			'*:criteria' => ''
 			], $termsPrefixes);
 		$stmtT = $this->_db->prepare($queryT[GC_AFIELD_QUERY]);
 		//
@@ -294,12 +417,16 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$stmtI = $this->_db->prepare($queryI[GC_AFIELD_QUERY]);
 
 		$termIds = [];
-		foreach($terms as $term) {
-			$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
-			$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+		foreach($simplifyCriteria as $criterion) {
+			$queryT[GC_AFIELD_PARAMS][':criteria'] = $criterion ? "%:{$criterion}:%" : '%';
 
-			foreach($stmtT->fetchAll() as $row) {
-				$termIds[] = $row['ste_id'];
+			foreach($terms as $term) {
+				$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
+				$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+
+				foreach($stmtT->fetchAll() as $row) {
+					$termIds[] = $row['ste_id'];
+				}
 			}
 		}
 		$termIds = array_unique($termIds);
@@ -338,11 +465,17 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Cleaning items.
 		$out[GC_AFIELD_ITEMS] = array_values($out[GC_AFIELD_ITEMS]);
 		//
+		// Count by types.
+		$out[GC_AFIELD_COUNTS] = [];
+		foreach($out[GC_AFIELD_TYPES] as $type) {
+			$out[GC_AFIELD_COUNTS][$type] = isset($out[GC_AFIELD_COUNTS][$type]) ? $out[GC_AFIELD_COUNTS][$type] + 1 : 1;
+		}
+		//
 		// Cleaning types.
-		$out[GC_AFIELD_TYPES] = array_unique($out[GC_AFIELD_TYPES]);
+		$out[GC_AFIELD_TYPES] = array_values(array_unique($out[GC_AFIELD_TYPES]));
 		//
 		// Sorting by hits count (desc).
-		uasort($out[GC_AFIELD_ITEMS], function($a, $b) {
+		usort($out[GC_AFIELD_ITEMS], function($a, $b) {
 			return $a[GC_AFIELD_HITS] < $b[GC_AFIELD_HITS];
 		});
 
@@ -371,5 +504,47 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 */
 	protected static function ExpandTerms($termsString) {
 		return array_unique(array_filter(explode(' ', $termsString)));
+	}
+	/**
+	 * This method takes a set of filtering criteria and returns in a simpler
+	 * way (list of strings).
+	 *
+	 * @param \stdClass $criteria Set of specific filtering parameters.
+	 * @return string[] Returns the filtering parameters in a simpler mode.
+	 */
+	protected static function SimplifyCriteria(\stdClass $criteria) {
+		$out = [];
+		//
+		// Converting.
+		foreach($criteria as $k => $v) {
+			$out[] = "{$k}={$v}";
+		}
+
+		return $out;
+	}
+	/**
+	 * This method takes a set of filtering criteria given in a simple manner
+	 * and retruns it as a simple string.
+	 *
+	 * @param string[] $simpleCriteria Set of specific filtering parameters in
+	 * simple mode.
+	 * @return string Returns the filtering parameters as a single string.
+	 */
+	protected static function StringCriteria($simpleCriteria) {
+		//
+		// Concatenating criteria.
+		$stringCriteria = ':'.implode(':', $simpleCriteria).':';
+		//
+		// Cleaning multiple consecutive colons.
+		while(strpos($stringCriteria, '::') !== false) {
+			$stringCriteria = str_replace('::', ':', $stringCriteria);
+		}
+		//
+		// Cleaning the string with has no criterion.
+		if(!$stringCriteria == ':') {
+			$stringCriteria = '';
+		}
+
+		return $stringCriteria;
 	}
 }

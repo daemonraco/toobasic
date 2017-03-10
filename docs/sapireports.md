@@ -102,7 +102,7 @@ For that we're going to write the next configuration at
 ```
 Don't worry if you don't understand it because where are going to explain it in
 detail in further sections.
-In the mean time, this is how it may look like 
+In the mean time, this is how it may look like
 
 ![One Piece Wiki: Popular Articles](images/sapis/sapireports.png)
 
@@ -342,6 +342,30 @@ something like this:
 ```html
 {$ctrl->sapiReport('onepiece_popular', 'bootstrap')}
 ```
+
+### Dynamic parameters
+Let's say you created an _Simple API Reader_ specification that requires an ID to
+retrieve a list of items and a  _Simple API Report_ that uses it.
+Following our examples, you've provably defined the field `params` with something
+like this:
+```json
+"params": [
+	"MyID"
+]
+```
+Well, you may change it for something like this:
+```json
+"params": {
+	":id": "MyID"
+}
+```
+With this, you can render a report doing something like this in a view:
+```html
+{$ctrl->sapiReport(['my_report_name',':id'=>'MyOtherID'],'bootstrap')}
+```
+in this way, instead of sending `MyID` from your report towards the API, it will
+send the value `MyOtherID` allowing you to created different views for different
+reports using the same report and API specifications.
 
 ## Suggestions
 If you want or need it, you may visit these documentation pages:

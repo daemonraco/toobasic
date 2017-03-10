@@ -15,7 +15,8 @@
 		},
 		"Columns": {
 			"id": "+string",
-			"name": "string"
+			"name": "string",
+			"index": "string"
 		},
 		"ReadOnlyColumns": "string[]",
 		"OrderBy": "OrderByPattern{}",

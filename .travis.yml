@@ -7,24 +7,9 @@ php:
   - '7.0'
   - '7.1'
   - nightly
-env:
-  - TRAVISCI_PHPUNIT_CONF=''
-  - TRAVISCI_PHPUNIT_CONF='-7.0'
 matrix:
-  exclude:
-    - php: '7.1'
-      env: TRAVISCI_PHPUNIT_CONF=''
-    - php: '7.0'
-      env: TRAVISCI_PHPUNIT_CONF=''
-    - php: nightly
-      env: TRAVISCI_PHPUNIT_CONF=''
-    - php: '5.5'
-      env: TRAVISCI_PHPUNIT_CONF='-7.0'
-    - php: '5.6'
-      env: TRAVISCI_PHPUNIT_CONF='-7.0'
   allow_failures:
     - php: nightly
-    - php: '7.1'
 #
 # Required services.
 services:
@@ -43,7 +28,9 @@ notifications:
 #
 # Pre-installation steps.
 before_install:
-  - composer require phpunit/phpunit:4.8.24
+  - chmod +x ./tests/assets/travis.phpunit-versions.sh
+  - . ./tests/assets/travis.phpunit-versions.sh
+  - composer require phpunit/phpunit:${TRAVISCI_PHPUNIT_VERSION}
 #
 # Execution flow.
 before_script:
@@ -64,7 +51,7 @@ before_script:
   - "mkdir -p ~/.composer"
   - cp ./tests/assets/travis.composer.config.json ~/.composer/config.json
   - sed -i "s:%GITHUB_ACCESS_TOKEN%:${GITHUB_ACCESS_TOKEN}:g" ~/.composer/config.json
-  - composer require phpunit/phpunit-selenium:2.0.2
+  - composer require phpunit/phpunit-selenium:${TRAVISCI_PHPUNIT_SELENIUM_VERSION}
   #
   # Installing and configuring Apache 2.
   - sudo apt-get update > /dev/null

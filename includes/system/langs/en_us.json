@@ -480,6 +480,12 @@
 		}, {
 			"key": "EX_rest_action_not_authorized",
 			"value": "You are not authorized to use action '%action%' on resource '%resource%'."
+		}, {
+			"key": "EX_no_core_props_holder",
+			"value": "No core properties holder name set."
+		}, {
+			"key": "EX_items_stream_no_rewind",
+			"value": "ItemsStream does not support 'rewind()' a second time."
 		}
 	]
 }

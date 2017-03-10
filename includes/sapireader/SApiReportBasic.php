@@ -66,7 +66,7 @@ class SApiReportBasic extends SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildButtonLinkColumn($columnConf, $item, $spacer) {
+	protected function buildButtonLinkColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		//
 		// Default values.
 		$value = '';
@@ -95,7 +95,7 @@ class SApiReportBasic extends SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildCodeColumn($columnConf, $item, $spacer) {
+	protected function buildCodeColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		$value = SApiReporter::GetPathValue($item, $columnConf->path);
 		//
 		// Escaping tags.
@@ -111,7 +111,7 @@ class SApiReportBasic extends SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildImageColumn($columnConf, $item, $spacer) {
+	protected function buildImageColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		//
 		// Default values.
 		$value = '';
@@ -135,7 +135,7 @@ class SApiReportBasic extends SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildLinkColumn($columnConf, $item, $spacer) {
+	protected function buildLinkColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		//
 		// Default values.
 		$value = '';
@@ -165,7 +165,7 @@ class SApiReportBasic extends SApiReportType {
 	 * @param string $spacer String to prefix on each line.
 	 * @return string Returns a HTML code.
 	 */
-	protected function buildTextColumn($columnConf, $item, $spacer) {
+	protected function buildTextColumn(\stdClass $columnConf, \stdClass $item, $spacer) {
 		$value = SApiReporter::GetPathValue($item, $columnConf->path);
 		//
 		// Escaping tags.

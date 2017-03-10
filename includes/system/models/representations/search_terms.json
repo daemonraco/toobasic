@@ -1,0 +1,9 @@
+{
+	"table": "tb_search_terms",
+	"representation_class": "TooBasic\\Search\\SearchTerm",
+	"columns_perfix": "ste_",
+	"columns": {
+		"id": "id",
+		"name": "term"
+	}
+}

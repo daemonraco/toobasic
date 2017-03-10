@@ -10,13 +10,17 @@
 					"autoincrement": true
 				},
 				"term": "varchar:100",
+				"criteria": {
+					"type": "varchar:100",
+					"default": ""
+				},
 				"count": "int"
 			},
 			"primary": {
 				"id": ["id"]
 			},
 			"keys": {
-				"term": ["term"]
+				"term": ["term", "criteria"]
 			}
 		}
 	]

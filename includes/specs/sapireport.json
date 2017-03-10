@@ -12,7 +12,6 @@
 			"attrs": "Attributes"
 		},
 		"ReportType": "/^(basic|bootstrap)$/",
-		"MethodParams": "mixed[]",
 		"Columns": "Column[]",
 		"Column": {
 			"title": "+string",
@@ -40,6 +39,12 @@
 			"exclude": "ExceptionExclusions",
 			"isset": "boolean"
 		},
-		"ExceptionExclusions": "mixed[]"
+		"ExceptionExclusions": "mixed[]",
+		"MethodParams": [
+			"MethodParamsSimple",
+			"MethodParamsSpecific"
+		],
+		"MethodParamsSimple": "mixed[]",
+		"MethodParamsSpecific": "mixed{}"
 	}
 }

@@ -6,7 +6,7 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.2.0');
+define('TOOBASIC_VERSION', '2.3.0');
 define('TOOBASIC_VERSION_NAME', 'mamba');
 // @}
 //
@@ -83,6 +83,7 @@ define('GC_AFIELD_CODE', 'code');
 define('GC_AFIELD_COMPILATIONS', 'compilations');
 define('GC_AFIELD_CONNECTION', 'connection');
 define('GC_AFIELD_CORS', 'CORS');
+define('GC_AFIELD_COUNT', 'count');
 define('GC_AFIELD_COUNTS', 'counts');
 define('GC_AFIELD_DATA', 'data');
 define('GC_AFIELD_DEFAULT', 'default');
@@ -93,13 +94,16 @@ define('GC_AFIELD_DESCRIPTION', 'description');
 define('GC_AFIELD_END', 'end');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
+define('GC_AFIELD_EXPAND', 'expand');
 define('GC_AFIELD_EXTENSION', 'extension');
 define('GC_AFIELD_FIELD', 'field');
 define('GC_AFIELD_FIELDS', 'fields');
 define('GC_AFIELD_FILE', 'file');
 define('GC_AFIELD_FILES', 'files');
 define('GC_AFIELD_FLAG', 'flag');
+define('GC_AFIELD_FULL', 'full');
 define('GC_AFIELD_FULL_RENDER', 'full-render');
+define('GC_AFIELD_GARBAGE', 'garbage');
 define('GC_AFIELD_GENERATOR', 'generator');
 define('GC_AFIELD_HASH', 'hash');
 define('GC_AFIELD_HEADERS', 'headers');
@@ -120,6 +124,7 @@ define('GC_AFIELD_LANGS_PATH', 'langs-path');
 define('GC_AFIELD_LASTERROR', 'lasterror');
 define('GC_AFIELD_LAYOUT', 'layout');
 define('GC_AFIELD_LEFT', 'left');
+define('GC_AFIELD_LIMIT', 'limit');
 define('GC_AFIELD_LINE', 'line');
 define('GC_AFIELD_LOCATION', 'location');
 define('GC_AFIELD_MESSAGE', 'message');
@@ -129,6 +134,7 @@ define('GC_AFIELD_MIDDLE', 'middle');
 define('GC_AFIELD_MODULE_NAME', 'module-name');
 define('GC_AFIELD_NAME', 'name');
 define('GC_AFIELD_NULL', 'null');
+define('GC_AFIELD_OFFSET', 'offset');
 define('GC_AFIELD_ORIGIN', 'origin');
 define('GC_AFIELD_ORIGINS', 'origins');
 define('GC_AFIELD_PARAMS', 'params');
@@ -144,6 +150,7 @@ define('GC_AFIELD_RESOURCE', 'resource');
 define('GC_AFIELD_RESULT', 'result');
 define('GC_AFIELD_RIGHT', 'right');
 define('GC_AFIELD_ROUTES_PATH', 'routes-path');
+define('GC_AFIELD_SEARCH', 'search');
 define('GC_AFIELD_SEQNAME', 'seqname');
 define('GC_AFIELD_SERVICES', 'services');
 define('GC_AFIELD_SKIN', 'skin');
@@ -154,6 +161,9 @@ define('GC_AFIELD_STATUS', 'status');
 define('GC_AFIELD_SUBFOLDERS', 'subfolders');
 define('GC_AFIELD_TABLES', 'tables');
 define('GC_AFIELD_TEMPLATE', 'template');
+define('GC_AFIELD_TERMS', 'terms');
+define('GC_AFIELD_TIMER', 'timer');
+define('GC_AFIELD_TIMERS', 'timers');
 define('GC_AFIELD_TOP', 'top');
 define('GC_AFIELD_TRANSACTION', 'transaction');
 define('GC_AFIELD_TYPE', 'type');
@@ -165,6 +175,7 @@ define('GC_AFIELD_VALUES', 'values');
 define('GC_DIRECTORIES_CACHE', 'cache');
 define('GC_DIRECTORIES_CONFIG_INTERPRETERS', 'config-interpreters');
 define('GC_DIRECTORIES_CONFIGS', 'configs');
+define('GC_DIRECTORIES_EXCEPTIONS', 'exceptions');
 define('GC_DIRECTORIES_FORMS', 'forms');
 define('GC_DIRECTORIES_INCLUDES', 'includes');
 define('GC_DIRECTORIES_LIBRARIES', 'libraries');
@@ -366,6 +377,8 @@ define('GC_SAPIREPORT_COLUMNTYPE_TEXT', 'text');
 //
 // TooBasic's search engine @{
 define('GC_SEARCH_ENGINE_FACTORIES', 'factories');
+define('GC_SEARCH_ENGINE_INDEXED', 'indexed');
+define('GC_SEARCH_ENGINE_UNINDEXED', 'unindexed');
 // @}
 //
 // RESTful constants @{

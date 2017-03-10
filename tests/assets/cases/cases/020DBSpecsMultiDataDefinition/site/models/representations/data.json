@@ -1,0 +1,8 @@
+{
+	"table": "data",
+	"representation_class": "datum",
+	"columns_perfix": "dat_",
+	"columns": {
+		"id": "id"
+	}
+}

@@ -6,22 +6,19 @@
  */
 //
 // SuperLoader main list.
-$SuperLoader = array();
+$SuperLoader = [];
 //
 // Basics @{
 $SuperLoader['TooBasic\\AbstractExporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExporter.php";
 $SuperLoader['TooBasic\\AbstractExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/AbstractExports.php";
 $SuperLoader['TooBasic\\Adapters\\Adapter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Adapter.php";
-$SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Controller'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Controller.php";
 $SuperLoader['TooBasic\\ControllerExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ControllerExports.php";
-$SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Email'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Email.php";
 $SuperLoader['TooBasic\\EmailExports'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailExports.php";
 $SuperLoader['TooBasic\\EmailLayout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailLayout.php";
 $SuperLoader['TooBasic\\EmailPayload'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/EmailPayload.php";
 $SuperLoader['TooBasic\\ErrorController'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/ErrorController.php";
-$SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exception.php";
 $SuperLoader['TooBasic\\Exporter'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Exporter.php";
 $SuperLoader['TooBasic\\FactoryClass'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/FactoryClass.php";
 $SuperLoader['TooBasic\\Layout'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Layout.php";
@@ -40,9 +37,22 @@ $SuperLoader['TooBasic\\Timer'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Timer
 $SuperLoader['TooBasic\\Translate'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/Translate.php";
 // @}
 //
+// Exceptions @{
+$SuperLoader['TooBasic\\CacheException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/CacheException.php";
+$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/ConfigException.php";
+$SuperLoader['TooBasic\\DBException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/DBException.php";
+$SuperLoader['TooBasic\\Exception'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/Exception.php";
+$SuperLoader['TooBasic\\MagicPropException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/MagicPropException.php";
+$SuperLoader['TooBasic\\Managers\\DBStructureManagerException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/DBStructureManagerException.php";
+$SuperLoader['TooBasic\\Managers\\RestManagerException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/RestManagerException.php";
+$SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/FieldFilterException.php";
+$SuperLoader['TooBasic\\SApiReaderAbstractException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/SApiReaderAbstractException.php";
+$SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/SApiReaderException.php";
+$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_EXCEPTIONS]}/SApiReportException.php";
+// @}
+//
 // MagicProps @{
 $SuperLoader['TooBasic\\MagicProp'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
-$SuperLoader['TooBasic\\MagicPropException'] = "{$Directories[GC_DIRECTORIES_INCLUDES]}/MagicProp.php";
 // @}
 //
 // Managers @{
@@ -50,7 +60,6 @@ $SuperLoader['TooBasic\\Managers\\ActionsManager'] = "{$Directories[GC_DIRECTORI
 $SuperLoader['TooBasic\\Managers\\ConfigsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ConfigsManager.php";
 $SuperLoader['TooBasic\\Managers\\DBManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBManager.php";
 $SuperLoader['TooBasic\\Managers\\DBStructureManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
-$SuperLoader['TooBasic\\Managers\\DBStructureManagerException'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/DBStructureManager.php";
 $SuperLoader['TooBasic\\Managers\\EmailsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/EmailsManager.php";
 $SuperLoader['TooBasic\\Managers\\Manager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/Manager.php";
 $SuperLoader['TooBasic\\Managers\\ManifestsManager'] = "{$Directories[GC_DIRECTORIES_MANAGERS]}/ManifestsManager.php";
@@ -103,11 +112,11 @@ $SuperLoader['TooBasic\\Representations\\BooleanFilter'] = "{$Directories[GC_DIR
 $SuperLoader['TooBasic\\Representations\\CoreProps'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CoreProps.php";
 $SuperLoader['TooBasic\\Representations\\CorePropsJSON'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/CorePropsJSON.php";
 $SuperLoader['TooBasic\\Representations\\FieldFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
-$SuperLoader['TooBasic\\Representations\\FieldFilterException'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/FieldFilter.php";
 $SuperLoader['TooBasic\\Representations\\JSONFilter'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/JSONFilter.php";
 $SuperLoader['TooBasic\\Representations\\ItemRepresentation'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemRepresentation.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactory'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactory.php";
 $SuperLoader['TooBasic\\Representations\\ItemsFactoryProvider'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsFactoryProvider.php";
+$SuperLoader['TooBasic\\Representations\\ItemsStream'] = "{$Directories[GC_DIRECTORIES_REPRESENTATIONS]}/ItemsStream.php";
 // @}
 //
 // Shell includes @{
@@ -124,7 +133,6 @@ $SuperLoader['TooBasic\\Shell\\Scaffold'] = "{$Directories[GC_DIRECTORIES_SHELL_
 // Config interpreters includes @{
 $SuperLoader['TooBasic\\Config'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
 $SuperLoader['TooBasic\\ComplexConfig'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ComplexConfig.php";
-$SuperLoader['TooBasic\\ConfigException'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/Config.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoader'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoader.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoaderMerge'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMerge.php";
 $SuperLoader['TooBasic\\Configs\\ConfigLoaderMulti'] = "{$Directories[GC_DIRECTORIES_CONFIG_INTERPRETERS]}/ConfigLoaderMulti.php";
@@ -134,13 +142,10 @@ $SuperLoader['TooBasic\\Configs\\ConfigLoaderSimple'] = "{$Directories[GC_DIRECT
 // Simple API Reader includes @{
 $SuperLoader['TooBasic\\Managers\\SApiManager'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiManager.php";
 $SuperLoader['TooBasic\\SApiReader'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
-$SuperLoader['TooBasic\\SApiReaderAbstractException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
-$SuperLoader['TooBasic\\SApiReaderException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReader.php";
 $SuperLoader['TooBasic\\SApiReaderJSON'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderJSON.php";
 $SuperLoader['TooBasic\\SApiReaderXML'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReaderXML.php";
 
 $SuperLoader['TooBasic\\SApiReporter'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReporter.php";
-$SuperLoader['TooBasic\\SApiReportException'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportException.php";
 $SuperLoader['TooBasic\\SApiReportBasic'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBasic.php";
 $SuperLoader["TooBasic\\SApiReportBootstrap"] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportBootstrap.php";
 $SuperLoader['TooBasic\\SApiReportType'] = "{$Directories[GC_DIRECTORIES_SAPIREADER]}/SApiReportType.php";
@@ -168,15 +173,14 @@ $SuperLoader['TooBasic\\Search\\SearchableItemsFactory'] = "{$Directories[GC_DIR
 //
 // RESTful @{
 $SuperLoader['TooBasic\\Managers\\RestManager'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
-$SuperLoader['TooBasic\\Managers\\RestManagerException'] = "{$Directories[GC_DIRECTORIES_REST]}/RestManager.php";
 $SuperLoader['TooBasic\\RestConfig'] = "{$Directories[GC_DIRECTORIES_REST]}/RestConfig.php";
 // @}
 //
 // Known librearies @{
-$SuperLoader['Smarty'] = array(
+$SuperLoader['Smarty'] = [
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty/Smarty.class.php",
 	"{$Directories[GC_DIRECTORIES_LIBRARIES]}/smarty.git/libs/Smarty.class.php"
-);
+];
 foreach(['json-validator', 'json-validator.git'] as $aux) {
 	if(is_readable("{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php")) {
 		require_once "{$Directories[GC_DIRECTORIES_LIBRARIES]}/{$aux}/json-validator.php";
@@ -186,7 +190,7 @@ foreach(['json-validator', 'json-validator.git'] as $aux) {
 unset($aux);
 // @}
 //
-// This is the function in charge of loading TooBasic clases when they are
+// This is the function in charge of loading TooBasic classes when they are
 // required.
 spl_autoload_register(function($class) {
 	global $Defaults;
@@ -196,7 +200,7 @@ spl_autoload_register(function($class) {
 		$path = false;
 
 		if(!is_array($SuperLoader[$class])) {
-			$SuperLoader[$class] = array($SuperLoader[$class]);
+			$SuperLoader[$class] = [$SuperLoader[$class]];
 		}
 		foreach($SuperLoader[$class] as $loaderPath) {
 			$path = \TooBasic\Sanitizer::DirPath($loaderPath);

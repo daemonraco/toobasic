@@ -178,11 +178,27 @@ protected function basicRun() {
 	return $this->status();
 }
 ```
+Using paging:
+```php
+protected function basicRun() {
+	$results = \TooBasic\Managers\SearchManager::Instance()->search('JOHN dOe', 10, 20, null, $info);
+	debugit([
+		"RESULTS" => $results,
+		"INFO"    => $info
+	], true);
+	return $this->status();
+}
+```
+
 ### Service
 You can also access a basic service that allows provides you with the same basic
 search functionality:
 
 >http://www.example.com/mysite/?service=search&terms=JOHN%20dOe
+
+You may also use it like this to work in paging mode:
+
+>http://www.example.com/mysite/?service=search&terms=JOHN%20dOe&limit=10&offset=20
 
 ## Suggestions
 If you want or need, you may visit these documentation pages:

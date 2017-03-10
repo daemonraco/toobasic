@@ -140,8 +140,8 @@ use \TooBasic\Shell\Option as TBS_Option;
 class UsersTool extends \TooBasic\Shell\ShellTool {
 	protected function setOptions() {
 		$this->_options->setHelpText("This tool allows to perform certain tasks related with users.");
-		$this->_options->addOption(TBS_Option::EasyFactory("ListInvalids", array("-l","--list"), TBS_Option::TypeNoValue, "Prompts a list of users that have to be removed due to inactivity."));
-		$this->_options->addOption(TBS_Option::EasyFactory("RemoveInvalids", array("-rm","--remove-invalids"), TBS_Option::TypeNoValue, "Removes users that have become invalid due to inactivity."));
+		$this->_options->addOption(TBS_Option::EasyFactory("ListInvalids", ["-l","--list"], TBS_Option::TypeNoValue, "Prompts a list of users that have to be removed due to inactivity."));
+		$this->_options->addOption(TBS_Option::EasyFactory("RemoveInvalids", ["-rm","--remove-invalids"], TBS_Option::TypeNoValue, "Removes users that have become invalid due to inactivity."));
 	}
 	protected function taskListInvalids($spacer = "") {
 		echo "{$spacer}Invalids users:\n";
@@ -237,24 +237,21 @@ To accomplish this we are going to add a configuration like this into, let's say
 __ROOTDIR/site/configs/config_shell.php__
 ```php
 <?php
-$CronProfiles["mysite_cron"] = array(
-	array(
+$CronProfiles["mysite_cron"] = [
+	[
 		GC_CRONPROFILES_TOOL => "users",
-		GC_CRONPROFILES_PARAMS => array("--clean-inactives")
-	),
-	array(
+		GC_CRONPROFILES_PARAMS => ["--clean-inactives"]
+	], [
 		GC_CRONPROFILES_TOOL => "users",
-		GC_CRONPROFILES_PARAMS => array("--remove-banned")
-	),
-	array(
+		GC_CRONPROFILES_PARAMS => ["--remove-banned"]
+	], [
 		GC_CRONPROFILES_TOOL => "posts",
-		GC_CRONPROFILES_PARAMS => array("--remove-spam")
-	),
-	array(
+		GC_CRONPROFILES_PARAMS => ["--remove-spam"]
+	], [
 		GC_CRONPROFILES_TOOL => "comments",
-		GC_CRONPROFILES_PARAMS => array("--kick-impolite", "severe")
-	)
-);
+		GC_CRONPROFILES_PARAMS => ["--kick-impolite", "severe"]
+	]
+];
 ```
 Now, let's change our _crontab_ configuration into something like this:
 ```sh
@@ -294,11 +291,11 @@ the next section.
 Following the examples we can add a code like the ext one to our sites
 configuration:
 ```php
-$Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES]['ulist'] = array(
+$Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES]['ulist'] = [
 	'sys',
 	'shell',
 	'remove'
-);
+];
 ```
 Using this configuration, __TooBasic__ will expand command line parameters before
 executing the proper command line.

@@ -11,14 +11,6 @@ namespace TooBasic\Managers;
 // Class aliases.
 use TooBasic\Exception;
 use TooBasic\Representations\ItemsFactory;
-use TooBasic\Representations\ItemRepresentation;
-
-/**
- * @class RestManagerException
- */
-class RestManagerException extends Exception {
-	
-}
 
 /**
  * @class RestManager
@@ -549,16 +541,23 @@ class RestManager extends Manager {
 			}
 			//
 			// Loading and trimming.
-			$ids = $factory->ids();
-			$ids = array_splice($ids, $offset, $limit);
+			$stream = $factory->stream();
+			$stream->skip($offset);
 			//
 			// Loading each element.
-			foreach($ids as $id) {
-				$item = $factory->item($id);
+			$count = $limit;
+			while($count > 0) {
+				$count--;
+
+				$item = $stream->current();
 				if($expand) {
 					$item->expandExtendedColumns();
 				}
 				$response[] = $item->toArray();
+
+				if(!$stream->fetch()) {
+					break;
+				}
 			}
 		} else {
 			//

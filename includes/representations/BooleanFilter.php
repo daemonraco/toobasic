@@ -7,10 +7,6 @@
 
 namespace TooBasic\Representations;
 
-//
-// Class aliases.
-use TooBasic\Representations\FieldFilterException;
-
 /**
  * @class BooleanFilter
  * This filter manages table field values as boolean.
