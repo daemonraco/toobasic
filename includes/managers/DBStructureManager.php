@@ -21,11 +21,11 @@ class DBStructureManager extends Manager {
 	//
 	// Constants.
 	const ERROR_OK = 0;
-	const ErrorDefault = 1;
-	const ErrorUnknownTable = 2;
-	const ErrorUnknownType = 3;
-	const ErrorUnknownConnection = 4;
-	const ErrorUnknownCallback = 5;
+	const ERROR_DEFAULT = 1;
+	const ERROR_UNKNOWN_TABLE = 2;
+	const ERROR_UNKNOWN_TYPE = 3;
+	const ERROR_UNKNOWN_CONNECTION = 4;
+	const ERROR_UNKNOWN_CALLBACK = 5;
 	const ColumnTypeBlob = 'blob';
 	const ColumnTypeEnum = 'enum';
 	const ColumnTypeFloat = 'float';
@@ -404,7 +404,7 @@ class DBStructureManager extends Manager {
 			foreach($subCallbacks as &$data) {
 				$data[GC_AFIELD_PATH] = Paths::Instance()->dbSpecCallbackPaths($data[GC_AFIELD_NAME]);
 				if(!$data[GC_AFIELD_PATH]) {
-					$this->setError(self::ErrorUnknownCallback, "Unable to find database spec callback '{$data[GC_AFIELD_NAME]}'");
+					$this->setError(self::ERROR_UNKNOWN_CALLBACK, "Unable to find database spec callback '{$data[GC_AFIELD_NAME]}'");
 				}
 			}
 		}
@@ -454,7 +454,7 @@ class DBStructureManager extends Manager {
 			// Checking if current index belongs to a knwon table, if
 			// not, an error is set and it gets remove from specs.
 			if(!isset($this->_specs->tables[$tKey])) {
-				$this->setError(self::ErrorUnknownTable, "Index '{$index->fullname}' uses an unknown table called '{$index->table}'");
+				$this->setError(self::ERROR_UNKNOWN_TABLE, "Index '{$index->fullname}' uses an unknown table called '{$index->table}'");
 				unset($this->_specs->indexes[$iKey]);
 			} else {
 				//
@@ -1016,7 +1016,7 @@ class DBStructureManager extends Manager {
 			// Checking connection.
 			if(!isset($Connections[GC_CONNECTIONS_DB][$aux->connection])) {
 				if($aux->connection) {
-					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
+					$this->setError(self::ERROR_UNKNOWN_CONNECTION, "Unknown connection named '{$aux->connection}'");
 				}
 				$aux->connection = $this->_dbManager->getInstallName();
 			}
@@ -1081,7 +1081,7 @@ class DBStructureManager extends Manager {
 				// If there was a connection specified, an error
 				// is shown.
 				if($aux->connection) {
-					$this->setError(self::ErrorUnknownConnection, "Unknown connection named '{$aux->connection}'");
+					$this->setError(self::ERROR_UNKNOWN_CONNECTION, "Unknown connection named '{$aux->connection}'");
 				}
 				//
 				// Using default instalation connection.

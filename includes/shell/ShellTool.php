@@ -21,8 +21,8 @@ use \TooBasic\MagicPropException;
 abstract class ShellTool {
 	//
 	// Constants.
-	const ErrorWrongParameters = 1;
-	const ErrorNoTask = 2;
+	const ERROR_WRONG_PARAMETERS = 1;
+	const ERROR_NO_TASK = 2;
 	const OPTION_NAME_HELP = 'Help';
 	const OPTION_NAME_INFO = 'Info';
 	const OPTION_NAME_VERSION = 'Version';
@@ -120,7 +120,7 @@ abstract class ShellTool {
 			//
 			// If there's an error on the command line parametrs, it's
 			// informed and a help text is shown.
-			$this->setCoreError(self::ErrorWrongParameters, "There's something wrong with your parameters");
+			$this->setCoreError(self::ERROR_WRONG_PARAMETERS, "There's something wrong with your parameters");
 			$this->taskHelp($spacer);
 		}
 	}
@@ -188,7 +188,7 @@ abstract class ShellTool {
 	 * terminal.
 	 */
 	protected function mainTask($spacer = '') {
-		$this->setCoreError(self::ErrorNoTask, 'No task specified');
+		$this->setCoreError(self::ERROR_NO_TASK, 'No task specified');
 		$this->taskHelp($spacer);
 	}
 	/**

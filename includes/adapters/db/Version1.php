@@ -63,7 +63,7 @@ class Version1 extends VersionAdapter {
 				// is shown.
 				if($aux->connection) {
 					$out[GC_AFIELD_ERRORS][] = [
-						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownConnection,
+						GC_AFIELD_CODE => DBStructureManager::ERROR_UNKNOWN_CONNECTION,
 						GC_AFIELD_MESSAGE => "Unknown connection named '{$aux->connection}'"
 					];
 				}
@@ -99,13 +99,13 @@ class Version1 extends VersionAdapter {
 				// Also if the type's type is unknown.
 				if(!isset($auxField->type->type)) {
 					$out[GC_AFIELD_ERRORS][] = [
-						GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
+						GC_AFIELD_CODE => DBStructureManager::ERROR_DEFAULT,
 						GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' has no type"
 					];
 					continue;
 				} elseif(!in_array($auxField->type->type, self::$_AllowedColumnTypes)) {
 					$out[GC_AFIELD_ERRORS][] = [
-						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
+						GC_AFIELD_CODE => DBStructureManager::ERROR_UNKNOWN_TYPE,
 						GC_AFIELD_MESSAGE => "Unknown field type '{$auxField->type->type}' for field '{$auxField->fullname}' on table '{$aux->name}'"
 					];
 					continue;
@@ -116,13 +116,13 @@ class Version1 extends VersionAdapter {
 				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
 					if($auxField->type->type == DBStructureManager::ColumnTypeEnum && !isset($auxField->type->values)) {
 						$out[GC_AFIELD_ERRORS][] = [
-							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
+							GC_AFIELD_CODE => DBStructureManager::ERROR_DEFAULT,
 							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value"
 						];
 						continue;
 					} elseif(!in_array($auxField->type->type, self::$_ColumnTypesWithoutPrecisions)) {
 						$out[GC_AFIELD_ERRORS][] = [
-							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
+							GC_AFIELD_CODE => DBStructureManager::ERROR_DEFAULT,
 							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' has no precision"
 						];
 						continue;

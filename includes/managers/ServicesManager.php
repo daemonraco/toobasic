@@ -25,9 +25,9 @@ class ServicesManager extends UrlManager {
 	//
 	// Magic methods.
 	const ERROR_OK = 0;
-	const ErrorUnknown = 1;
-	const ErrorJSONEncode = 2;
-	const ErrorUnknownService = 3;
+	const ERROR_UNKNOWN = 1;
+	const ERROR_JSON_ENCODE = 2;
+	const ERROR_UNKNOWN_SERVICE = 3;
 	//
 	// Public methods.
 	/**
@@ -80,7 +80,7 @@ class ServicesManager extends UrlManager {
 				// Geneating a error response.
 				$out = json_encode([
 					GC_AFIELD_ERROR => [
-						GC_AFIELD_CODE => self::ErrorJSONEncode,
+						GC_AFIELD_CODE => self::ERROR_JSON_ENCODE,
 						GC_AFIELD_MESSAGE => 'Unable to encode output'
 					],
 					GC_AFIELD_DATA => null
@@ -159,7 +159,7 @@ class ServicesManager extends UrlManager {
 				// GEnerating an error description for the fact
 				// that the service was not found.
 				$error = [
-					GC_AFIELD_CODE => self::ErrorUnknownService,
+					GC_AFIELD_CODE => self::ERROR_UNKNOWN_SERVICE,
 					GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found",
 					GC_AFIELD_LOCATION => [
 						GC_AFIELD_METHOD => __CLASS__.'::'.__FUNCTION__.'()',
@@ -313,7 +313,7 @@ class ServicesManager extends UrlManager {
 			//
 			// Setting the right error information.
 			$aux = [
-				GC_AFIELD_CODE => self::ErrorUnknownService,
+				GC_AFIELD_CODE => self::ERROR_UNKNOWN_SERVICE,
 				GC_AFIELD_MESSAGE => "Service '{$serviceName}' not found"
 			];
 			$lastRun[GC_AFIELD_ERROR] = $aux;

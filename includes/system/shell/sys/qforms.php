@@ -348,7 +348,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 				$writer->save();
 			}
 		} else {
-			$this->setError(self::ErrorWrongParameters, $paramsResult[GC_AFIELD_ERROR]);
+			$this->setError(self::ERROR_WRONG_PARAMETERS, $paramsResult[GC_AFIELD_ERROR]);
 		}
 	}
 	protected function taskRemove($spacer = "", $name = false) {

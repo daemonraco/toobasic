@@ -20,8 +20,8 @@ class Manifest {
 	//
 	// Constants.
 	const ERROR_OK = 0;
-	const ErrorPHPVersion = 1;
-	const ErrorTooBasciVersion = 2;
+	const ERROR_PHP_VERSION = 1;
+	const ERROR_TOOBASIC_VERSION = 2;
 	//
 	// Protected properties.
 	/**
@@ -96,12 +96,12 @@ class Manifest {
 		//
 		// Checking required PHP version.
 		if(version_compare(self::CleanVersion(PHP_VERSION), self::CleanVersion($this->_information->required_versions->php)) < 0) {
-			$this->setError(self::ErrorPHPVersion, "This module requires at least version {$this->_information->required_versions->php} of PHP");
+			$this->setError(self::ERROR_PHP_VERSION, "This module requires at least version {$this->_information->required_versions->php} of PHP");
 		}
 		//
 		// Checking required TooBasic version.
 		if(version_compare(self::CleanVersion(TOOBASIC_VERSION), self::CleanVersion($this->_information->required_versions->toobasic)) < 0) {
-			$this->setError(self::ErrorPHPVersion, "This module requires at least version {$this->_information->required_versions->toobasic} of TooBasic");
+			$this->setError(self::ERROR_PHP_VERSION, "This module requires at least version {$this->_information->required_versions->toobasic} of TooBasic");
 		}
 		//
 		// Checking cross-module dependencies.
@@ -123,10 +123,10 @@ class Manifest {
 					// Comparing version.
 					$modVersion = $manifest->information()->version;
 					if(version_compare(self::CleanVersion($modVersion), self::CleanVersion($reqVersion)) < 0) {
-						$this->setError(self::ErrorPHPVersion, "Required version '{$reqVersion}' for module '{$manifest->information()->name}' (found version '{$modVersion}')");
+						$this->setError(self::ERROR_PHP_VERSION, "Required version '{$reqVersion}' for module '{$manifest->information()->name}' (found version '{$modVersion}')");
 					}
 				} else {
-					$this->setError(self::ErrorPHPVersion, "Unable to obtain version number for module 'UCODE:{$matches['ucode']}'. Please make sure it is installed?");
+					$this->setError(self::ERROR_PHP_VERSION, "Unable to obtain version number for module 'UCODE:{$matches['ucode']}'. Please make sure it is installed?");
 				}
 			}
 		}

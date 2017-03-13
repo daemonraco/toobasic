@@ -20,13 +20,13 @@ use \TooBasic\Shell\Options;
 class ShellManager extends Manager {
 	//
 	// Constants.
-	const ErrorNoMode = 1;
-	const ErrorNotValidMode = 2;
-	const ErrorNoToolName = 3;
-	const ErrorNoToolClass = 4;
-	const ErrorUnknownTool = 5;
-	const ErrorNoProfileName = 6;
-	const ErrorUnknownProfile = 7;
+	const ERROR_NO_MODE = 1;
+	const ERROR_NOT_VALID_MODE = 2;
+	const ERROR_NO_TOOL_NAME = 3;
+	const ERROR_NO_TOOL_CLASS = 4;
+	const ERROR_UNKNOWN_TOOL = 5;
+	const ERROR_NO_PROFILE_NAME = 6;
+	const ERROR_UNKNOWN_PROFILE = 7;
 	const ModeAlias = 'alias';
 	const ModeCron = 'cron';
 	const ModeProfile = 'profile';
@@ -125,9 +125,9 @@ class ShellManager extends Manager {
 					//
 					// Setting the proper error.
 					if($this->_mode) {
-						$this->setError(self::ErrorNotValidMode, "Mode '{$this->_mode}' is not valid");
+						$this->setError(self::ERROR_NOT_VALID_MODE, "Mode '{$this->_mode}' is not valid");
 					} else {
-						$this->setError(self::ErrorNoMode, 'No mode specified');
+						$this->setError(self::ERROR_NO_MODE, 'No mode specified');
 					}
 					//
 					// Showing available modes.
@@ -312,10 +312,10 @@ class ShellManager extends Manager {
 						// Creating an instance of the tool's class.
 						$this->_toolClass = new $className();
 					} else {
-						$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
+						$this->setError(self::ERROR_NO_TOOL_CLASS, "Class '{$className}' doesn't exist");
 					}
 				} else {
-					$this->setError(self::ErrorUnknownTool, "Unkown cron tool called '{$this->_tool}'");
+					$this->setError(self::ERROR_UNKNOWN_TOOL, "Unkown cron tool called '{$this->_tool}'");
 				}
 			}
 			//
@@ -331,7 +331,7 @@ class ShellManager extends Manager {
 		} else {
 			//
 			// Setting the proper error.
-			$this->setError(self::ErrorNoToolName, 'No tool name specified');
+			$this->setError(self::ERROR_NO_TOOL_NAME, 'No tool name specified');
 			//
 			// Showing all available tools as a hint.
 			echo "{$spacer}Available crons:\n";
@@ -391,12 +391,12 @@ class ShellManager extends Manager {
 					$this->runCron("{$spacer}\t", array_merge($mainParams, $tool[GC_CRONPROFILES_PARAMS], $extraParams));
 				}
 			} else {
-				$this->setError(self::ErrorUnknownProfile, "Unkown profile called '{$this->_profile}'");
+				$this->setError(self::ERROR_UNKNOWN_PROFILE, "Unkown profile called '{$this->_profile}'");
 			}
 		} else {
 			//
 			// Setting the proper error.
-			$this->setError(self::ErrorNoProfileName, 'No profile name specified');
+			$this->setError(self::ERROR_NO_PROFILE_NAME, 'No profile name specified');
 			//
 			// Showing all available profiles as a hint.
 			echo "{$spacer}Available profiles:\n";
@@ -458,10 +458,10 @@ class ShellManager extends Manager {
 						// Creating an instance of the tool's class.
 						$this->_toolClass = new $className();
 					} else {
-						$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
+						$this->setError(self::ERROR_NO_TOOL_CLASS, "Class '{$className}' doesn't exist");
 					}
 				} else {
-					$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
+					$this->setError(self::ERROR_UNKNOWN_TOOL, "Unkown tool called '{$this->_tool}'");
 				}
 			}
 			//
@@ -477,7 +477,7 @@ class ShellManager extends Manager {
 		} else {
 			//
 			// Setting the proper error.
-			$this->setError(self::ErrorNoToolName, 'No tool name specified');
+			$this->setError(self::ERROR_NO_TOOL_NAME, 'No tool name specified');
 			//
 			// Showing all available tools as a hint.
 			echo "{$spacer}Available tools:\n";
@@ -528,10 +528,10 @@ class ShellManager extends Manager {
 						// Creating an instance of the tool's class.
 						$this->_toolClass = new $className();
 					} else {
-						$this->setError(self::ErrorNoToolClass, "Class '{$className}' doesn't exist");
+						$this->setError(self::ERROR_NO_TOOL_CLASS, "Class '{$className}' doesn't exist");
 					}
 				} else {
-					$this->setError(self::ErrorUnknownTool, "Unkown tool called '{$this->_tool}'");
+					$this->setError(self::ERROR_UNKNOWN_TOOL, "Unkown tool called '{$this->_tool}'");
 				}
 			}
 			//
@@ -547,7 +547,7 @@ class ShellManager extends Manager {
 		} else {
 			//
 			// Setting the proper error.
-			$this->setError(self::ErrorNoToolName, 'No tool name specified');
+			$this->setError(self::ERROR_NO_TOOL_NAME, 'No tool name specified');
 			//
 			// Showing all available tools as a hint.
 			echo "{$spacer}Available tools:\n";

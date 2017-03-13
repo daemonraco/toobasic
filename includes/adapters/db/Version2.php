@@ -102,7 +102,7 @@ class Version2 extends VersionAdapter {
 				// is shown.
 				if($auxTable->connection) {
 					$out[GC_AFIELD_ERRORS][] = [
-						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownConnection,
+						GC_AFIELD_CODE => DBStructureManager::ERROR_UNKNOWN_CONNECTION,
 						GC_AFIELD_MESSAGE => "Unknown connection named '{$auxTable->connection}'"
 					];
 				}
@@ -337,7 +337,7 @@ class Version2 extends VersionAdapter {
 						}
 					} else {
 						$out[GC_AFIELD_ERRORS][] = [
-							GC_AFIELD_CODE => DBStructureManager::ErrorDefault,
+							GC_AFIELD_CODE => DBStructureManager::ERROR_DEFAULT,
 							GC_AFIELD_MESSAGE => "Enumerative type without values"
 						];
 					}
@@ -354,14 +354,14 @@ class Version2 extends VersionAdapter {
 					break;
 				default:
 					$errors[] = [
-						GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
+						GC_AFIELD_CODE => DBStructureManager::ERROR_UNKNOWN_TYPE,
 						GC_AFIELD_MESSAGE => "Unhandle type '{$expType[0]}'"
 					];
 					$out = false;
 			}
 		} else {
 			$errors[] = [
-				GC_AFIELD_CODE => DBStructureManager::ErrorUnknownType,
+				GC_AFIELD_CODE => DBStructureManager::ERROR_UNKNOWN_TYPE,
 				GC_AFIELD_MESSAGE => "Type '{$expType[0]}' is not allowed"
 			];
 		}

@@ -23,7 +23,7 @@ use \TooBasic\Shell\Option;
 abstract class ShellCron extends ShellTool {
 	//
 	// Constants.
-	const ErrorRunning = 3;
+	const ERROR_RUNNING = 3;
 	const OPTION_NAME_CLEAR_FLAG = 'ClearFlag';
 	//
 	// Magic methods.
@@ -66,7 +66,7 @@ abstract class ShellCron extends ShellTool {
 			//
 			// If there's an error on the command line parametrs, it's
 			// informed and a help text is shown.
-			$this->setCoreError(self::ErrorWrongParameters, "There's something wrong with your parameters");
+			$this->setCoreError(self::ERROR_WRONG_PARAMETERS, "There's something wrong with your parameters");
 			$this->taskHelp($spacer);
 		}
 	}
@@ -98,7 +98,7 @@ abstract class ShellCron extends ShellTool {
 		//
 		// Checking for flags of another execution instance.
 		if(is_file($flagPath)) {
-			$this->setCoreError(self::ErrorRunning, "There's another instance of this task already running");
+			$this->setCoreError(self::ERROR_RUNNING, "There's another instance of this task already running");
 		} else {
 			//
 			// Creating a flag file.

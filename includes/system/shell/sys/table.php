@@ -183,14 +183,14 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 							//
 							// Checking type.
 							if($field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] != 'varchar') {
-								$this->setError(self::ErrorWrongParameters, "Column '{$this->_names['name-field']}' is not a varchar field.");
+								$this->setError(self::ERROR_WRONG_PARAMETERS, "Column '{$this->_names['name-field']}' is not a varchar field.");
 							}
 							$found = true;
 							break;
 						}
 					}
 					if(!$found) {
-						$this->setError(self::ErrorWrongParameters, "Column '{$this->_names['name-field']}' was not specified.");
+						$this->setError(self::ERROR_WRONG_PARAMETERS, "Column '{$this->_names['name-field']}' was not specified.");
 					}
 					//
 					// Assigning fields.
@@ -597,7 +597,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		} elseif(($opt->value() + 0) == 1) {
 			$out = $this->genSpecsFileV1($path, $error);
 		} else {
-			$this->setError(self::ErrorWrongParameters, "Unknown specifications file version '{$opt->value()}'");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "Unknown specifications file version '{$opt->value()}'");
 		}
 
 

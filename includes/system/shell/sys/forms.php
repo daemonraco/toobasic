@@ -258,11 +258,11 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} elseif(!$buttonType) {
-			$this->setError(self::ErrorWrongParameters, "No button type specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No button type specified");
 		} elseif(!in_array($buttonType, [GC_FORMS_BUTTONTYPE_BUTTON, GC_FORMS_BUTTONTYPE_RESET, GC_FORMS_BUTTONTYPE_SUBMIT])) {
-			$this->setError(self::ErrorWrongParameters, "Invalid button type specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "Invalid button type specified");
 		} else {
 			//
 			// Loading helpers.
@@ -301,9 +301,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} elseif(!$fieldType) {
-			$this->setError(self::ErrorWrongParameters, "No field type specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No field type specified");
 		} else {
 			//
 			// Loading helpers.
@@ -437,7 +437,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 				}
 			}
 		} else {
-			$this->setError(self::ErrorWrongParameters, "Unknown form called '{$name}'");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "Unknown form called '{$name}'");
 		}
 	}
 	protected function taskCreate($spacer = "") {
@@ -485,7 +485,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -528,7 +528,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -568,9 +568,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$attrName) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -613,7 +613,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -655,7 +655,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -694,9 +694,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$attrName) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -733,7 +733,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -770,7 +770,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -808,7 +808,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -850,7 +850,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -891,7 +891,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -929,7 +929,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -974,11 +974,11 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$attrName) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$attrValue) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1022,9 +1022,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$labelValue) {
-			$this->setError(self::ErrorWrongParameters, "No label value specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No label value specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1068,11 +1068,11 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$attrName) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$attrValue) {
-			$this->setError(self::ErrorWrongParameters, "No attribute name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute name specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1110,9 +1110,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$modeValues) {
-			$this->setError(self::ErrorWrongParameters, "No label value specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No label value specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			$modeValues = explode(':', str_replace(',', ':', $modeValues));
 			//
@@ -1151,9 +1151,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$labelValue) {
-			$this->setError(self::ErrorWrongParameters, "No label value specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No label value specified");
 		} elseif(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1192,9 +1192,9 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} elseif(!$attrValue) {
-			$this->setError(self::ErrorWrongParameters, "No attribute value specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No attribute value specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1237,7 +1237,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1279,7 +1279,7 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} else {
 			//
 			// Loading helpers.
@@ -1319,11 +1319,11 @@ class FormsSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Checking params.
 		if(!$formName) {
-			$this->setError(self::ErrorWrongParameters, "No form name specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form name specified");
 		} elseif(!$formType) {
-			$this->setError(self::ErrorWrongParameters, "No form type specified");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "No form type specified");
 		} elseif(!isset($Defaults[GC_DEFAULTS_FORMS_TYPES][$formType])) {
-			$this->setError(self::ErrorWrongParameters, "Unknown type '{$formType}'");
+			$this->setError(self::ERROR_WRONG_PARAMETERS, "Unknown type '{$formType}'");
 		} else {
 			//
 			// Loading helpers.
