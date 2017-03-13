@@ -21,8 +21,8 @@ use TooBasic\Translate;
 class Version2 extends VersionAdapter {
 	//
 	// Constants.
-	const PrecisionFloat = 11;
-	const PrecisionInt = 11;
+	const PRECISION_FLOAT = 11;
+	const PRECISION_INT = 11;
 	const PRECISION_VARCHAR = 256;
 	//
 	// Public methods.
@@ -159,7 +159,7 @@ class Version2 extends VersionAdapter {
 				// Analyzing NULL settings.
 				if($auxField->autoincrement) {
 					$auxField->null = false;
-				} elseif(in_array($auxField->type->type, [DBStructureManager::ColumnTypeTimestamp])) {
+				} elseif(in_array($auxField->type->type, [DBStructureManager::COLUMN_TYPE_TIMESTAMP])) {
 					$auxField->null = false;
 					$auxField->default = 'CURRENT_TIMESTAMP';
 					$auxField->hasDefault = true;
@@ -316,21 +316,21 @@ class Version2 extends VersionAdapter {
 			//
 			// Analyzing type.
 			switch($expType[0]) {
-				case DBStructureManager::ColumnTypeInt:
-					$out->type = DBStructureManager::ColumnTypeInt;
-					$out->precision = isset($expType[1]) ? $expType[1] : self::PrecisionInt;
+				case DBStructureManager::COLUMN_TYPE_INT:
+					$out->type = DBStructureManager::COLUMN_TYPE_INT;
+					$out->precision = isset($expType[1]) ? $expType[1] : self::PRECISION_INT;
 					break;
-				case DBStructureManager::ColumnTypeVarchar:
-					$out->type = DBStructureManager::ColumnTypeVarchar;
+				case DBStructureManager::COLUMN_TYPE_VARCHAR:
+					$out->type = DBStructureManager::COLUMN_TYPE_VARCHAR;
 					$out->precision = isset($expType[1]) ? $expType[1] : self::PRECISION_VARCHAR;
 					break;
-				case DBStructureManager::ColumnTypeEnum:
+				case DBStructureManager::COLUMN_TYPE_ENUM:
 					if(isset($expType[1])) {
 						//
 						// Ignoring first value becuase it
 						// is the actual type.
 						array_shift($expType);
-						$out->type = DBStructureManager::ColumnTypeEnum;
+						$out->type = DBStructureManager::COLUMN_TYPE_ENUM;
 						$out->values = [];
 						foreach($expType as $v) {
 							$out->values[] = $v;
@@ -342,13 +342,13 @@ class Version2 extends VersionAdapter {
 						];
 					}
 					break;
-				case DBStructureManager::ColumnTypeFloat:
-					$out->type = DBStructureManager::ColumnTypeFloat;
-					$out->precision = isset($expType[1]) ? $expType[1] : self::PrecisionFloat;
+				case DBStructureManager::COLUMN_TYPE_FLOAT:
+					$out->type = DBStructureManager::COLUMN_TYPE_FLOAT;
+					$out->precision = isset($expType[1]) ? $expType[1] : self::PRECISION_FLOAT;
 					break;
-				case DBStructureManager::ColumnTypeBlob:
-				case DBStructureManager::ColumnTypeText:
-				case DBStructureManager::ColumnTypeTimestamp:
+				case DBStructureManager::COLUMN_TYPE_BLOB:
+				case DBStructureManager::COLUMN_TYPE_TEXT:
+				case DBStructureManager::COLUMN_TYPE_TIMESTAMP:
 					$out->type = $expType[0];
 					$out->precision = false;
 					break;

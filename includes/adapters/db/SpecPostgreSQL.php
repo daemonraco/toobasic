@@ -291,10 +291,10 @@ class SpecPostgreSQL extends SpecAdapter {
 			$out = 'serial';
 		} else {
 			switch($type->type) {
-				case DBStructureManager::ColumnTypeBlob:
+				case DBStructureManager::COLUMN_TYPE_BLOB:
 					$out = 'bytea';
 					break;
-				case DBStructureManager::ColumnTypeEnum:
+				case DBStructureManager::COLUMN_TYPE_ENUM:
 					$length = 0;
 					foreach($type->values as $val) {
 						$len = strlen($val);
@@ -302,19 +302,19 @@ class SpecPostgreSQL extends SpecAdapter {
 					}
 					$out = "varchar({$length})";
 					break;
-				case DBStructureManager::ColumnTypeFloat:
+				case DBStructureManager::COLUMN_TYPE_FLOAT:
 					$out = "float({$type->precision})";
 					break;
-				case DBStructureManager::ColumnTypeText:
+				case DBStructureManager::COLUMN_TYPE_TEXT:
 					$out = 'text';
 					break;
-				case DBStructureManager::ColumnTypeVarchar:
+				case DBStructureManager::COLUMN_TYPE_VARCHAR:
 					$out = "varchar({$type->precision})";
 					break;
-				case DBStructureManager::ColumnTypeTimestamp:
+				case DBStructureManager::COLUMN_TYPE_TIMESTAMP:
 					$out = 'timestamp';
 					break;
-				case DBStructureManager::ColumnTypeInt:
+				case DBStructureManager::COLUMN_TYPE_INT:
 					$out = "numeric({$type->precision})";
 					break;
 				default:
@@ -354,7 +354,7 @@ class SpecPostgreSQL extends SpecAdapter {
 						$out.= 'default null ';
 					}
 				} else {
-					if(in_array($spec->type->type, [DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar])) {
+					if(in_array($spec->type->type, [DBStructureManager::COLUMN_TYPE_BLOB, DBStructureManager::COLUMN_TYPE_TEXT, DBStructureManager::COLUMN_TYPE_VARCHAR])) {
 						$out.= "default '{$spec->default}' ";
 					} else {
 						$out.= "default {$spec->default} ";
@@ -383,14 +383,14 @@ class SpecPostgreSQL extends SpecAdapter {
 			}
 		} else {
 			switch($data[GC_AFIELD_SPEC]->type->type) {
-				case DBStructureManager::ColumnTypeInt:
+				case DBStructureManager::COLUMN_TYPE_INT:
 					if($data[GC_AFIELD_DB]['udt_name'] != 'numeric') {
 						$same = false;
 					} elseif($data[GC_AFIELD_DB]['numeric_precision'] != $data[GC_AFIELD_SPEC]->type->precision) {
 						$same = false;
 					}
 					break;
-				case DBStructureManager::ColumnTypeEnum:
+				case DBStructureManager::COLUMN_TYPE_ENUM:
 					if($data[GC_AFIELD_DB]['udt_name'] != 'varchar') {
 						$same = false;
 					} else {
@@ -404,12 +404,12 @@ class SpecPostgreSQL extends SpecAdapter {
 						}
 					}
 					break;
-				case DBStructureManager::ColumnTypeFloat:
+				case DBStructureManager::COLUMN_TYPE_FLOAT:
 					if($data[GC_AFIELD_DB]['udt_name'] != 'float8' && $data[GC_AFIELD_DB]['udt_name'] != 'float4') {
 						$same = false;
 					}
 					break;
-				case DBStructureManager::ColumnTypeBlob:
+				case DBStructureManager::COLUMN_TYPE_BLOB:
 					//
 					// Non-precision types.
 					if($data[GC_AFIELD_DB]['udt_name'] != 'bytea') {
@@ -417,8 +417,8 @@ class SpecPostgreSQL extends SpecAdapter {
 						$same = false;
 					}
 					break;
-				case DBStructureManager::ColumnTypeText:
-				case DBStructureManager::ColumnTypeTimestamp:
+				case DBStructureManager::COLUMN_TYPE_TEXT:
+				case DBStructureManager::COLUMN_TYPE_TIMESTAMP:
 					//
 					// Non-precision types.
 					if($data[GC_AFIELD_DB]['udt_name'] != $data[GC_AFIELD_SPEC]->type->type) {

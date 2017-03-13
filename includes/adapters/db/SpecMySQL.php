@@ -142,7 +142,7 @@ class SpecMySQL extends SpecAdapter {
 			}
 			if($data[GC_AFIELD_SPEC]->hasDefault) {
 				$auxDefaultValue = $data[GC_AFIELD_SPEC]->default;
-				if($data[GC_AFIELD_SPEC]->type->type == DBStructureManager::ColumnTypeEnum) {
+				if($data[GC_AFIELD_SPEC]->type->type == DBStructureManager::COLUMN_TYPE_ENUM) {
 					$auxDefaultValue = substr($auxDefaultValue, 1, strlen($auxDefaultValue) - 2);
 				}
 
@@ -311,25 +311,25 @@ class SpecMySQL extends SpecAdapter {
 		$out = '';
 
 		switch($type->type) {
-			case DBStructureManager::ColumnTypeBlob:
+			case DBStructureManager::COLUMN_TYPE_BLOB:
 				$out = 'blob';
 				break;
-			case DBStructureManager::ColumnTypeEnum:
+			case DBStructureManager::COLUMN_TYPE_ENUM:
 				$out = "enum('".implode("','", $type->values)."')";
 				break;
-			case DBStructureManager::ColumnTypeFloat:
+			case DBStructureManager::COLUMN_TYPE_FLOAT:
 				$out = 'float';
 				break;
-			case DBStructureManager::ColumnTypeText:
+			case DBStructureManager::COLUMN_TYPE_TEXT:
 				$out = 'text';
 				break;
-			case DBStructureManager::ColumnTypeVarchar:
+			case DBStructureManager::COLUMN_TYPE_VARCHAR:
 				$out = "varchar({$type->precision})";
 				break;
-			case DBStructureManager::ColumnTypeTimestamp:
+			case DBStructureManager::COLUMN_TYPE_TIMESTAMP:
 				$out = 'timestamp';
 				break;
-			case DBStructureManager::ColumnTypeInt:
+			case DBStructureManager::COLUMN_TYPE_INT:
 				$out = "int({$type->precision})";
 				break;
 			default:
@@ -346,7 +346,7 @@ class SpecMySQL extends SpecAdapter {
 		} else {
 			$out = "{$this->buildColumnType($spec->type)} ";
 		}
-		if(in_array($spec->type->type, [DBStructureManager::ColumnTypeVarchar])) {
+		if(in_array($spec->type->type, [DBStructureManager::COLUMN_TYPE_VARCHAR])) {
 			$out.= 'collate utf8_bin ';
 		}
 		if(!$spec->null) {
@@ -358,7 +358,7 @@ class SpecMySQL extends SpecAdapter {
 					$out.= 'default null ';
 				}
 			} else {
-				if(in_array($spec->type->type, [DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar])) {
+				if(in_array($spec->type->type, [DBStructureManager::COLUMN_TYPE_BLOB, DBStructureManager::COLUMN_TYPE_TEXT, DBStructureManager::COLUMN_TYPE_VARCHAR])) {
 					$out.= "default '{$spec->default}' ";
 				} else {
 					$out.= "default {$spec->default} ";

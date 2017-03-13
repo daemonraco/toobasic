@@ -25,23 +25,23 @@ abstract class VersionAdapter extends \TooBasic\Adapters\Adapter {
 	 * @var string[] List of known and allowed column types.
 	 */
 	protected static $_AllowedColumnTypes = [
-		DBStructureManager::ColumnTypeBlob,
-		DBStructureManager::ColumnTypeEnum,
-		DBStructureManager::ColumnTypeFloat,
-		DBStructureManager::ColumnTypeInt,
-		DBStructureManager::ColumnTypeText,
-		DBStructureManager::ColumnTypeTimestamp,
-		DBStructureManager::ColumnTypeVarchar
+		DBStructureManager::COLUMN_TYPE_BLOB,
+		DBStructureManager::COLUMN_TYPE_ENUM,
+		DBStructureManager::COLUMN_TYPE_FLOAT,
+		DBStructureManager::COLUMN_TYPE_INT,
+		DBStructureManager::COLUMN_TYPE_TEXT,
+		DBStructureManager::COLUMN_TYPE_TIMESTAMP,
+		DBStructureManager::COLUMN_TYPE_VARCHAR
 	];
 	/**
 	 * @var string[] List of known column types that doesn't require a size
 	 * specification.
 	 */
 	protected static $_ColumnTypesWithoutPrecisions = [
-		DBStructureManager::ColumnTypeBlob,
-		DBStructureManager::ColumnTypeEnum,
-		DBStructureManager::ColumnTypeText,
-		DBStructureManager::ColumnTypeTimestamp,
+		DBStructureManager::COLUMN_TYPE_BLOB,
+		DBStructureManager::COLUMN_TYPE_ENUM,
+		DBStructureManager::COLUMN_TYPE_TEXT,
+		DBStructureManager::COLUMN_TYPE_TIMESTAMP,
 	];
 	//
 	// Protected properties

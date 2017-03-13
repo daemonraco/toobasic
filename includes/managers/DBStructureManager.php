@@ -26,23 +26,23 @@ class DBStructureManager extends Manager {
 	const ERROR_UNKNOWN_TYPE = 3;
 	const ERROR_UNKNOWN_CONNECTION = 4;
 	const ERROR_UNKNOWN_CALLBACK = 5;
-	const ColumnTypeBlob = 'blob';
-	const ColumnTypeEnum = 'enum';
-	const ColumnTypeFloat = 'float';
-	const ColumnTypeInt = 'int';
-	const ColumnTypeText = 'text';
-	const ColumnTypeTimestamp = 'timestamp';
-	const ColumnTypeVarchar = 'varchar';
-	const TaskTypeCreateColumn = 'create-column';
-	const TaskTypeCreateIndex = 'create-indexes';
-	const TaskTypeCreateTable = 'create-tables';
-	const TaskTypeDropColumn = 'drop-column';
-	const TaskTypeDropIndex = 'drop-indexes';
-	const TaskTypeDropTable = 'drop-tables';
-	const TaskTypeUpdateColumn = 'update-column';
-	const TaskTypeUpdateData = 'update-data';
-	const TaskTypeUpdateIndex = 'update-index';
-	const TaskStatus = 'status';
+	const COLUMN_TYPE_BLOB = 'blob';
+	const COLUMN_TYPE_ENUM = 'enum';
+	const COLUMN_TYPE_FLOAT = 'float';
+	const COLUMN_TYPE_INT = 'int';
+	const COLUMN_TYPE_TEXT = 'text';
+	const COLUMN_TYPE_TIMESTAMP = 'timestamp';
+	const COLUMN_TYPE_VARCHAR = 'varchar';
+	const TASK_TYPE_CREATE_COLUMN = 'create-column';
+	const TASK_TYPE_CREATE_INDEX = 'create-indexes';
+	const TASK_TYPE_CREATE_TABLE = 'create-tables';
+	const TASK_TYPE_DROP_COLUMN = 'drop-column';
+	const TASK_TYPE_DROP_INDEX = 'drop-indexes';
+	const TASK_TYPE_DROP_TABLE = 'drop-tables';
+	const TASK_TYPE_UPDATE_COLUMN = 'update-column';
+	const TASK_TYPE_UPDATE_DATA = 'update-data';
+	const TASK_TYPE_UPDATE_INDEX = 'update-index';
+	const TASK_STATUS = 'status';
 	// 
 	// Protected properties.
 	/**
@@ -113,7 +113,7 @@ class DBStructureManager extends Manager {
 			//
 			// Avoiding multiple checks.
 			if($this->_tasks !== false) {
-				$ok = $this->_tasks[self::TaskStatus];
+				$ok = $this->_tasks[self::TASK_STATUS];
 			} else {
 				//
 				// Default values.
@@ -122,15 +122,15 @@ class DBStructureManager extends Manager {
 				// List of tasks required to remove structure
 				// issues grouped by type.
 				$this->_tasks = [
-					self::TaskTypeCreateIndex => [],
-					self::TaskTypeCreateColumn => [],
-					self::TaskTypeCreateTable => [],
-					self::TaskTypeDropColumn => [],
-					self::TaskTypeDropIndex => [],
-					self::TaskTypeDropTable => [],
-					self::TaskTypeUpdateColumn => [],
-					self::TaskTypeUpdateData => [],
-					self::TaskTypeUpdateIndex => []
+					self::TASK_TYPE_CREATE_INDEX => [],
+					self::TASK_TYPE_CREATE_COLUMN => [],
+					self::TASK_TYPE_CREATE_TABLE => [],
+					self::TASK_TYPE_DROP_COLUMN => [],
+					self::TASK_TYPE_DROP_INDEX => [],
+					self::TASK_TYPE_DROP_TABLE => [],
+					self::TASK_TYPE_UPDATE_COLUMN => [],
+					self::TASK_TYPE_UPDATE_DATA => [],
+					self::TASK_TYPE_UPDATE_INDEX => []
 				];
 				//
 				// Checking tables existence.
@@ -146,7 +146,7 @@ class DBStructureManager extends Manager {
 						// At this point, the table is
 						// added as a required task and
 						// the out status is set as FALSE.
-						$this->_tasks[self::TaskTypeCreateTable][] = $tKey;
+						$this->_tasks[self::TASK_TYPE_CREATE_TABLE][] = $tKey;
 						$ok = false;
 					} else {
 						// 
@@ -159,7 +159,7 @@ class DBStructureManager extends Manager {
 						// Checking if there's a missing
 						// column.
 						if($creates) {
-							$this->_tasks[self::TaskTypeCreateColumn][$tKey] = $creates;
+							$this->_tasks[self::TASK_TYPE_CREATE_COLUMN][$tKey] = $creates;
 							$ok = false;
 						}
 						//
@@ -168,7 +168,7 @@ class DBStructureManager extends Manager {
 						// added as task unless the site
 						// is flagged to keep unknowns.
 						if(!$adapter->keepUnknowns() && $drops) {
-							$this->_tasks[self::TaskTypeDropColumn][$tKey] = $drops;
+							$this->_tasks[self::TASK_TYPE_DROP_COLUMN][$tKey] = $drops;
 							$ok = false;
 						}
 						//
@@ -176,7 +176,7 @@ class DBStructureManager extends Manager {
 						// that does not match with it's
 						// definition.
 						if($updates) {
-							$this->_tasks[self::TaskTypeUpdateColumn][$tKey] = $updates;
+							$this->_tasks[self::TASK_TYPE_UPDATE_COLUMN][$tKey] = $updates;
 							$ok = false;
 						}
 					}
@@ -195,13 +195,13 @@ class DBStructureManager extends Manager {
 						// At this point, the index is
 						// added as a required task and
 						// the out status is set as FALSE.
-						$this->_tasks[self::TaskTypeCreateIndex][] = $iKey;
+						$this->_tasks[self::TASK_TYPE_CREATE_INDEX][] = $iKey;
 						$ok = false;
 					} else {
 						//
 						// Checking index definition.
 						if(!$adapter->compareIndex($index)) {
-							$this->_tasks[self::TaskTypeUpdateIndex][] = $iKey;
+							$this->_tasks[self::TASK_TYPE_UPDATE_INDEX][] = $iKey;
 							$ok = false;
 						}
 					}
@@ -218,7 +218,7 @@ class DBStructureManager extends Manager {
 					$adapter = $this->getAdapter($table->connection);
 					//
 					// Creating a sub list of tasks.
-					$this->_tasks[self::TaskTypeUpdateData][$tKey] = [];
+					$this->_tasks[self::TASK_TYPE_UPDATE_DATA][$tKey] = [];
 					//
 					// Checking each required entry.
 					foreach($entries as $eKey => $entry) {
@@ -228,7 +228,7 @@ class DBStructureManager extends Manager {
 							// entry is not present
 							// and should be
 							// reinserted.
-							$this->_tasks[self::TaskTypeUpdateData][$tKey][] = $eKey;
+							$this->_tasks[self::TASK_TYPE_UPDATE_DATA][$tKey][] = $eKey;
 							$ok = false;
 						}
 					}
@@ -236,9 +236,9 @@ class DBStructureManager extends Manager {
 				//
 				// Removing empty task's sub-lists to improve
 				// further operations.
-				foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
+				foreach($this->_tasks[self::TASK_TYPE_UPDATE_DATA] as $tKey => $eKeys) {
 					if(!$eKeys) {
-						unset($this->_tasks[self::TaskTypeUpdateData][$tKey]);
+						unset($this->_tasks[self::TASK_TYPE_UPDATE_DATA][$tKey]);
 					}
 				}
 				//
@@ -261,7 +261,7 @@ class DBStructureManager extends Manager {
 							// added as a task for
 							// further removal.
 							if(!in_array($dbIndex, $connection[GC_AFIELD_INDEXES])) {
-								$this->_tasks[self::TaskTypeDropIndex][] = [
+								$this->_tasks[self::TASK_TYPE_DROP_INDEX][] = [
 									GC_AFIELD_CONNECTION => $connName,
 									GC_AFIELD_NAME => $dbIndex
 								];
@@ -277,7 +277,7 @@ class DBStructureManager extends Manager {
 							// added as a task for
 							// further removal.
 							if(!in_array($dbTable, $connection[GC_AFIELD_TABLES])) {
-								$this->_tasks[self::TaskTypeDropTable][] = [
+								$this->_tasks[self::TASK_TYPE_DROP_TABLE][] = [
 									GC_AFIELD_CONNECTION => $connName,
 									GC_AFIELD_NAME => $dbTable
 								];
@@ -288,7 +288,7 @@ class DBStructureManager extends Manager {
 				}
 				//
 				// Saving current status for further checks.
-				$this->_tasks[self::TaskStatus] = $ok;
+				$this->_tasks[self::TASK_STATUS] = $ok;
 			}
 		} else {
 			//
@@ -508,7 +508,7 @@ class DBStructureManager extends Manager {
 	protected function createColumns() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeCreateColumn] as $tKey => $columns) {
+		foreach($this->_tasks[self::TASK_TYPE_CREATE_COLUMN] as $tKey => $columns) {
 			//
 			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
@@ -551,7 +551,7 @@ class DBStructureManager extends Manager {
 	protected function createIndexes() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeCreateIndex] as $iKey) {
+		foreach($this->_tasks[self::TASK_TYPE_CREATE_INDEX] as $iKey) {
 			$index = $this->_specs->indexes[$iKey];
 			//
 			// Fetching the right database structure adapter.
@@ -588,7 +588,7 @@ class DBStructureManager extends Manager {
 	protected function createTables() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeCreateTable] as $tKey) {
+		foreach($this->_tasks[self::TASK_TYPE_CREATE_TABLE] as $tKey) {
 			$table = $this->_specs->tables[$tKey];
 			//
 			// Fetching the right database structure adapter.
@@ -625,7 +625,7 @@ class DBStructureManager extends Manager {
 	protected function dropColumns() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeDropColumn] as $tKey => $columns) {
+		foreach($this->_tasks[self::TASK_TYPE_DROP_COLUMN] as $tKey => $columns) {
 			$table = $this->_specs->tables[$tKey];
 			//
 			// Fetching the right database structure adapter.
@@ -666,7 +666,7 @@ class DBStructureManager extends Manager {
 	protected function dropIndexes() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeDropIndex] as $data) {
+		foreach($this->_tasks[self::TASK_TYPE_DROP_INDEX] as $data) {
 			//
 			// Fetching the right database structure adapter.
 			$adapter = $this->getAdapter($data[GC_AFIELD_CONNECTION]);
@@ -702,7 +702,7 @@ class DBStructureManager extends Manager {
 	protected function dropTables() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeDropTable] as $data) {
+		foreach($this->_tasks[self::TASK_TYPE_DROP_TABLE] as $data) {
 			//
 			// Guessing callback keys.
 			$callbackKeyBefore = "T_before_drop_{$data[GC_AFIELD_NAME]}";
@@ -890,7 +890,7 @@ class DBStructureManager extends Manager {
 	protected function insertData() {
 		//
 		// Checking tasks
-		foreach($this->_tasks[self::TaskTypeUpdateData] as $tKey => $eKeys) {
+		foreach($this->_tasks[self::TASK_TYPE_UPDATE_DATA] as $tKey => $eKeys) {
 			//
 			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
@@ -1286,7 +1286,7 @@ class DBStructureManager extends Manager {
 	protected function updateColumns() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeUpdateColumn] as $tKey => $columns) {
+		foreach($this->_tasks[self::TASK_TYPE_UPDATE_COLUMN] as $tKey => $columns) {
 			//
 			// Fetching table specs.
 			$table = $this->_specs->tables[$tKey];
@@ -1329,7 +1329,7 @@ class DBStructureManager extends Manager {
 	protected function updateIndexes() {
 		//
 		// Checking tasks.
-		foreach($this->_tasks[self::TaskTypeUpdateIndex] as $iKey) {
+		foreach($this->_tasks[self::TASK_TYPE_UPDATE_INDEX] as $iKey) {
 			//
 			// Fetching index specs.
 			$index = $this->_specs->indexes[$iKey];

@@ -244,10 +244,10 @@ class SpecSQLite extends SpecAdapter {
 			$out = 'integer';
 		} else {
 			switch($type->type) {
-				case DBStructureManager::ColumnTypeBlob:
+				case DBStructureManager::COLUMN_TYPE_BLOB:
 					$out = 'blob';
 					break;
-				case DBStructureManager::ColumnTypeEnum:
+				case DBStructureManager::COLUMN_TYPE_ENUM:
 					$length = 0;
 					foreach($type->values as $val) {
 						$len = strlen($val);
@@ -255,19 +255,19 @@ class SpecSQLite extends SpecAdapter {
 					}
 					$out = "varchar({$length})";
 					break;
-				case DBStructureManager::ColumnTypeFloat:
+				case DBStructureManager::COLUMN_TYPE_FLOAT:
 					$out = "float({$type->precision})";
 					break;
-				case DBStructureManager::ColumnTypeText:
+				case DBStructureManager::COLUMN_TYPE_TEXT:
 					$out = 'text';
 					break;
-				case DBStructureManager::ColumnTypeVarchar:
+				case DBStructureManager::COLUMN_TYPE_VARCHAR:
 					$out = "varchar({$type->precision})";
 					break;
-				case DBStructureManager::ColumnTypeTimestamp:
+				case DBStructureManager::COLUMN_TYPE_TIMESTAMP:
 					$out = 'timestamp';
 					break;
-				case DBStructureManager::ColumnTypeInt:
+				case DBStructureManager::COLUMN_TYPE_INT:
 					$out = "int({$type->precision})";
 					break;
 				default:
@@ -294,7 +294,7 @@ class SpecSQLite extends SpecAdapter {
 					$out.= 'default null ';
 				}
 			} else {
-				if(in_array($spec->type->type, [DBStructureManager::ColumnTypeBlob, DBStructureManager::ColumnTypeText, DBStructureManager::ColumnTypeVarchar])) {
+				if(in_array($spec->type->type, [DBStructureManager::COLUMN_TYPE_BLOB, DBStructureManager::COLUMN_TYPE_TEXT, DBStructureManager::COLUMN_TYPE_VARCHAR])) {
 					$out.= "default '{$spec->default}' ";
 				} else {
 					$out.= "default {$spec->default} ";

@@ -23,11 +23,11 @@ use TooBasic\Translate;
 class RoutesManager extends Manager {
 	//
 	// Constants.
-	const PatternTypeLiteral = 'L';
-	const PatternTypeParameter = 'P';
-	const ValueTypeEnumerative = 'enum';
-	const ValueTypeInteger = 'integer';
-	const ValueTypeString = 'string';
+	const PATTERN_TYPE_LITERAL = 'L';
+	const PATTERN_TYPE_PARAMETER = 'P';
+	const VALUE_TYPE_ENUMERATIVE = 'enum';
+	const VALUE_TYPE_INTEGER = 'integer';
+	const VALUE_TYPE_STRING = 'string';
 	//
 	// Protected properties.
 	/**
@@ -145,9 +145,9 @@ class RoutesManager extends Manager {
 						// Checking what type of
 						// parameters is the current
 						// piece.
-						if($piece->type == self::PatternTypeLiteral) {
+						if($piece->type == self::PATTERN_TYPE_LITERAL) {
 							$newPath[] = $piece->name;
-						} elseif($piece->type == self::PatternTypeParameter) {
+						} elseif($piece->type == self::PATTERN_TYPE_PARAMETER) {
 							//
 							// Is there a parameter
 							// with the same name of
@@ -157,13 +157,13 @@ class RoutesManager extends Manager {
 								//
 								// Checking found piece type.
 								switch($piece->valueType) {
-									case self::ValueTypeInteger:
+									case self::VALUE_TYPE_INTEGER:
 										$wrong = !is_numeric($auxQuery[$piece->name]);
 										break;
-									case self::ValueTypeString:
+									case self::VALUE_TYPE_STRING:
 										$wrong = !is_string($auxQuery[$piece->name]);
 										break;
-									case self::ValueTypeEnumerative:
+									case self::VALUE_TYPE_ENUMERATIVE:
 										$wrong = !in_array($auxQuery[$piece->name], $piece->values);
 										break;
 								}
@@ -280,14 +280,14 @@ class RoutesManager extends Manager {
 						// given in the request.
 						// Not matching
 						$matches = false;
-					} elseif($route->pattern[$i]->type == self::PatternTypeLiteral) {
+					} elseif($route->pattern[$i]->type == self::PATTERN_TYPE_LITERAL) {
 						//
 						// At this point, matching depends
 						// on a exact match between the
 						// given piece and the one
 						// requiered by the pattern.
 						$matches = $route->pattern[$i]->name == $path[$i];
-					} elseif($route->pattern[$i]->type == self::PatternTypeParameter) {
+					} elseif($route->pattern[$i]->type == self::PATTERN_TYPE_PARAMETER) {
 						//
 						// At this point, the piece of URL
 						// may be considered as a value
@@ -297,14 +297,14 @@ class RoutesManager extends Manager {
 						// Checking if there's a format
 						// conditions and enforcing it.
 						switch($route->pattern[$i]->valueType) {
-							case self::ValueTypeInteger:
+							case self::VALUE_TYPE_INTEGER:
 								$settings[$route->pattern[$i]->name] = $settings[$route->pattern[$i]->name] + 0;
 								$matches = is_numeric($settings[$route->pattern[$i]->name]);
 								break;
-							case self::ValueTypeString:
+							case self::VALUE_TYPE_STRING:
 								$matches = is_string($settings[$route->pattern[$i]->name]);
 								break;
-							case self::ValueTypeEnumerative:
+							case self::VALUE_TYPE_ENUMERATIVE:
 								$matches = in_array($path[$i], $route->pattern[$i]->values);
 								break;
 						}
@@ -429,7 +429,7 @@ class RoutesManager extends Manager {
 			if(preg_match('/:(?<pname>[^:]*):(?<vtype>[^:]*)(:(?<vtypedata>.*)|)/', $piece, $matches)) {
 				//
 				// Setting the right type for this piece.
-				$patPiece->type = self::PatternTypeParameter;
+				$patPiece->type = self::PATTERN_TYPE_PARAMETER;
 				//
 				// Saving the name to associate with a parameter.
 				$patPiece->name = $matches['pname'];
@@ -439,16 +439,16 @@ class RoutesManager extends Manager {
 				switch($matches['vtype']) {
 					case 'int':
 					case 'integer':
-						$patPiece->valueType = self::ValueTypeInteger;
+						$patPiece->valueType = self::VALUE_TYPE_INTEGER;
 						break;
 					case 'str':
 					case 'string':
-						$patPiece->valueType = self::ValueTypeString;
+						$patPiece->valueType = self::VALUE_TYPE_STRING;
 						break;
 					case 'enum':
 						$vdata = isset($matches['vtypedata']) ? explode(',', $matches['vtypedata']) : [];
 						if($vdata) {
-							$patPiece->valueType = self::ValueTypeEnumerative;
+							$patPiece->valueType = self::VALUE_TYPE_ENUMERATIVE;
 							$patPiece->values = $vdata;
 						}
 						break;
@@ -459,7 +459,7 @@ class RoutesManager extends Manager {
 				//
 				// At this point, the piece of route has to be an
 				// exact match.
-				$patPiece->type = self::PatternTypeLiteral;
+				$patPiece->type = self::PATTERN_TYPE_LITERAL;
 				$patPiece->name = $piece;
 			}
 			//
@@ -495,16 +495,16 @@ class RoutesManager extends Manager {
 				$i++;
 				$out.= "\t\t[{$i}] '{$pat->name}'";
 				switch($pat->type) {
-					case self::PatternTypeParameter:
+					case self::PATTERN_TYPE_PARAMETER:
 						$out.= "[parameter]";
 						switch($pat->valueType) {
-							case self::ValueTypeInteger:
+							case self::VALUE_TYPE_INTEGER:
 								$out.= ' (must be numeric)';
 								break;
-							case self::ValueTypeString:
+							case self::VALUE_TYPE_STRING:
 								$out.= ' (must be a string)';
 								break;
-							case self::ValueTypeEnumerative:
+							case self::VALUE_TYPE_ENUMERATIVE:
 								$out.= "\n\t\t\tMust be one of these:";
 								foreach($pat->values as $val) {
 									$out.= "\n\t\t\t\t- '{$val}'";
@@ -512,7 +512,7 @@ class RoutesManager extends Manager {
 								break;
 						}
 						break;
-					case self::PatternTypeLiteral:
+					case self::PATTERN_TYPE_LITERAL:
 					default:
 						$out.= "[literal] (must be an exact match)";
 						break;

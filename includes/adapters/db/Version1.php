@@ -114,7 +114,7 @@ class Version1 extends VersionAdapter {
 				// Analysing column's precision.
 				/** @todo check this, why there's no 'else'? */
 				if(!isset($auxField->type->precision) || !$auxField->type->precision) {
-					if($auxField->type->type == DBStructureManager::ColumnTypeEnum && !isset($auxField->type->values)) {
+					if($auxField->type->type == DBStructureManager::COLUMN_TYPE_ENUM && !isset($auxField->type->values)) {
 						$out[GC_AFIELD_ERRORS][] = [
 							GC_AFIELD_CODE => DBStructureManager::ERROR_DEFAULT,
 							GC_AFIELD_MESSAGE => "Field '{$auxField->fullname}' of table '{$aux->name}' is enumerative and has no value"

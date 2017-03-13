@@ -27,11 +27,11 @@ class ShellManager extends Manager {
 	const ERROR_UNKNOWN_TOOL = 5;
 	const ERROR_NO_PROFILE_NAME = 6;
 	const ERROR_UNKNOWN_PROFILE = 7;
-	const ModeAlias = 'alias';
-	const ModeCron = 'cron';
-	const ModeProfile = 'profile';
-	const ModeTool = 'tool';
-	const ModeSys = 'sys';
+	const MODE_ALIAS = 'alias';
+	const MODE_CRON = 'cron';
+	const MODE_PROFILE = 'profile';
+	const MODE_SYS = 'sys';
+	const MODE_TOOL = 'tool';
 	//
 	// Protected properties.
 	/**
@@ -101,21 +101,21 @@ class ShellManager extends Manager {
 			//
 			// Checking what to do based on the selected mode.
 			switch($this->_mode) {
-				case self::ModeAlias:
+				case self::MODE_ALIAS:
 					$this->displayAliases($spacer);
 					break;
-				case self::ModeProfile:
+				case self::MODE_PROFILE:
 					$this->_profile = $this->_tool;
 					$this->_tool = false;
 					$this->runProfile($spacer, $options->unknownParams());
 					break;
-				case self::ModeTool:
+				case self::MODE_TOOL:
 					$this->runTool($spacer);
 					break;
-				case self::ModeCron:
+				case self::MODE_CRON:
 					$this->runCron($spacer);
 					break;
-				case self::ModeSys:
+				case self::MODE_SYS:
 					$this->runSys($spacer);
 					break;
 				default:
@@ -132,11 +132,11 @@ class ShellManager extends Manager {
 					//
 					// Showing available modes.
 					echo "{$spacer}Available modes are:\n";
-					echo "{$spacer}\t- ".self::ModeTool."\n";
-					echo "{$spacer}\t- ".self::ModeProfile."\n";
-					echo "{$spacer}\t- ".self::ModeCron."\n";
-					echo "{$spacer}\t- ".self::ModeAlias."\n";
-					echo "{$spacer}\t- ".self::ModeSys."\n";
+					echo "{$spacer}\t- ".self::MODE_TOOL."\n";
+					echo "{$spacer}\t- ".self::MODE_PROFILE."\n";
+					echo "{$spacer}\t- ".self::MODE_CRON."\n";
+					echo "{$spacer}\t- ".self::MODE_ALIAS."\n";
+					echo "{$spacer}\t- ".self::MODE_SYS."\n";
 					echo "\n";
 			}
 		}
@@ -162,7 +162,7 @@ class ShellManager extends Manager {
 			$param = $argv[1];
 			//
 			// Checking if there's an alias avoiding core values.
-			if(!in_array($param, [self::ModeAlias, self::ModeCron, self::ModeProfile, self::ModeTool, self::ModeSys]) && isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
+			if(!in_array($param, [self::MODE_ALIAS, self::MODE_CRON, self::MODE_PROFILE, self::MODE_TOOL, self::MODE_SYS]) && isset($Defaults[GC_DEFAULTS_SHELLTOOLS_ALIASES][$param])) {
 				$aux = [];
 				//
 				// Copying each value.
@@ -374,7 +374,7 @@ class ShellManager extends Manager {
 					// parameters.
 					$mainParams = [
 						$this->_script,
-						self::ModeCron,
+						self::MODE_CRON,
 						$this->_tool
 					];
 					//
