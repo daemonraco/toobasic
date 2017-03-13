@@ -346,36 +346,36 @@ class RoutesManager extends Manager {
 					// if they were not given by the URL query
 					// section.
 					if(!isset($this->_params->{$key})) {
-						$this->_params->addValues(Params::TypeGET, [$key => $value]);
+						$this->_params->addValues(Params::TYPE_GET, [$key => $value]);
 					}
 				}
 				//
 				// Setting parameters found in the URL associated
 				// with the route.
 				foreach($settings as $key => $value) {
-					$this->_params->addValues(Params::TypeGET, [$key => $value]);
+					$this->_params->addValues(Params::TYPE_GET, [$key => $value]);
 				}
 				//
 				// If there's an extra piece that was not
 				// consumed, it is readed as '_route'.
 				if($extraRoute) {
-					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_EXTRA_ROUTE => $extraRoute]);
+					$this->_params->addValues(Params::TYPE_GET, [GC_REQUEST_EXTRA_ROUTE => $extraRoute]);
 				}
 				//
 				// Setting the action/controller to exectute (or
 				// service).
 				if(boolval($matchingRoute->service)) {
-					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_SERVICE => $matchingRoute->service]);
+					$this->_params->addValues(Params::TYPE_GET, [GC_REQUEST_SERVICE => $matchingRoute->service]);
 				} else {
-					$this->_params->addValues(Params::TypeGET, [GC_REQUEST_ACTION => $matchingRoute->action]);
+					$this->_params->addValues(Params::TYPE_GET, [GC_REQUEST_ACTION => $matchingRoute->action]);
 				}
 				//
 				// Adding route specs as a '$_SERVER' value.
-				$this->_params->addValues(Params::TypeSERVER, [GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route]);
+				$this->_params->addValues(Params::TYPE_SERVER, [GC_SERVER_TOOBASIC_ROUTE => $matchingRoute->route]);
 
 				$debugInfo['parameters'] = $this->_params->get->all();
 			} else {
-				$this->_params->addValues(Params::TypeGET, [GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND]);
+				$this->_params->addValues(Params::TYPE_GET, [GC_REQUEST_ACTION => HTTPERROR_NOT_FOUND]);
 				$this->_lastErrorMessage = "Unable to find a matching route for '".Sanitizer::UriPath(ROOTURI."/{$this->_params->route}")."'.";
 			}
 		} else {

@@ -174,7 +174,7 @@ abstract class Service extends Exporter {
 		if($this->_status) {
 			//
 			// Obtaining a proper cache key prefix.
-			$prefixComputing = $this->cachePrefix(Exporter::PrefixService);
+			$prefixComputing = $this->cachePrefix(Exporter::PREFIX_SERVICE);
 			//
 			// Cached data block default.
 			$dataBlock = false;

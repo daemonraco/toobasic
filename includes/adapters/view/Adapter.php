@@ -50,7 +50,7 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	public function autoAssigns() {
 		$this->_autoAssigns['ROOTDIR'] = ROOTDIR;
 		$this->_autoAssigns['ROOTURL'] = ROOTURI;
-		$this->_autoAssigns['SERVER'] = Params::Instance()->allOf(Params::TypeSERVER);
+		$this->_autoAssigns['SERVER'] = Params::Instance()->allOf(Params::TYPE_SERVER);
 	}
 	/**
 	 * Allows all headers to be set on a HTTP response.

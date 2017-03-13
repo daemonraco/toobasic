@@ -140,7 +140,7 @@ abstract class Controller extends Exporter {
 			//
 			// Generating a cache key prefix for the computing cache
 			// entry.
-			$prefixComputing = $this->cachePrefix(Exporter::PrefixComputing);
+			$prefixComputing = $this->cachePrefix(Exporter::PREFIX_COMPUTING);
 			//
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.
@@ -199,7 +199,7 @@ abstract class Controller extends Exporter {
 			//
 			// Generating a cache key prefix for the rendering cache
 			// entry.
-			$prefixRender = $this->cachePrefix(Exporter::PrefixRender);
+			$prefixRender = $this->cachePrefix(Exporter::PREFIX_RENDER);
 			//
 			// If this controller uses cache, it tries to obtain the
 			// previous execution.

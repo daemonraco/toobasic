@@ -163,18 +163,18 @@ use TooBasic\Shell\Option as TBS_Option;
 class ManageUsersTool extends TooBasic\Shell\ShellTool {
         //
         // Constants.
-        const OptionDeadUsers = 'DeadUsers';
-        const OptionId = 'Id';
+        const OPTION_DEAD_USERS = 'DeadUsers';
+        const OPTION_ID = 'Id';
         //
         // Protected methods.
         protected function setOptions() {
                 $this->_options->setHelpText("TODO tool summary");
 
                 $text = "TODO help text for: '--dead-users', '-d'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, ['--dead-users', '-d'], TBS_Option::TYPE_NO_VALUE, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_DEAD_USERS, ['--dead-users', '-d'], TBS_Option::TYPE_NO_VALUE, $text, 'value'));
 
                 $text = "TODO help text for: '--id', '-i'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, ['--id', '-i'], TBS_Option::TYPE_MULTI_VALUE, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_ID, ['--id', '-i'], TBS_Option::TYPE_MULTI_VALUE, $text, 'value'));
         }
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);
@@ -229,18 +229,18 @@ use TooBasic\Shell\Option as TBS_Option;
 class ManageUsersCron extends TooBasic\Shell\ShellCron {
         //
         // Constants.
-        const OptionDeadUsers = 'DeadUsers';
-        const OptionId = 'Id';
+        const OPTION_DEAD_USERS = 'DeadUsers';
+        const OPTION_ID = 'Id';
         //
         // Protected methods.
         protected function setOptions() {
                 $this->_options->setHelpText("TODO tool summary");
 
                 $text = "TODO help text for: '--dead-users', '-d'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionDeadUsers, ['--dead-users', '-d'], TBS_Option::TYPE_NO_VALUE, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_DEAD_USERS, ['--dead-users', '-d'], TBS_Option::TYPE_NO_VALUE, $text, 'value'));
 
                 $text = "TODO help text for: '--id', '-i'.";
-                $this->_options->addOption(TBS_Option::EasyFactory(self::OptionId, ['--id', '-i'], TBS_Option::TYPE_MULTI_VALUE, $text, 'value'));
+                $this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_ID, ['--id', '-i'], TBS_Option::TYPE_MULTI_VALUE, $text, 'value'));
         }
         protected function taskDeadUsers($spacer = "") {
                 debugit("TODO write some valid code for this option.", true);

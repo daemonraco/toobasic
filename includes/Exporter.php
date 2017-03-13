@@ -16,9 +16,9 @@ namespace TooBasic;
 abstract class Exporter extends AbstractExporter {
 	//
 	// Constants.
-	const PrefixComputing = 'C';
-	const PrefixRender = 'R';
-	const PrefixService = 'S';
+	const PREFIX_COMPUTING = 'C';
+	const PREFIX_RENDER = 'R';
+	const PREFIX_SERVICE = 'S';
 	//
 	// Protected class properties.
 	/**
@@ -235,7 +235,7 @@ abstract class Exporter extends AbstractExporter {
 		//
 		// If this prefix is for a rendered view, it should contain
 		// current format too.
-		if($extra == self::PrefixRender) {
+		if($extra == self::PREFIX_RENDER) {
 			$extra = "{$extra}_".strtoupper($this->_format);
 		}
 		//

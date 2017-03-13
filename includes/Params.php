@@ -19,15 +19,15 @@ use TooBasic\Shell\OptionsStack;
 class Params extends Singleton {
 	//
 	// Constants.
-	const TypeCOOKIE = 'cookie';
-	const TypeENV = 'env';
-	const TypeGET = 'get';
-	const TypeHEADERS = 'headers';
-	const TypeOPTIONS = 'opt';
-	const TypePOST = 'post';
-	const TypeSERVER = 'server';
-	const TypeSESSION = 'session';
-	const TypeINTERNAL = 'internal';
+	const TYPE_COOKIE = 'cookie';
+	const TYPE_ENV = 'env';
+	const TYPE_GET = 'get';
+	const TYPE_HEADERS = 'headers';
+	const TYPE_OPTIONS = 'opt';
+	const TYPE_POST = 'post';
+	const TYPE_SERVER = 'server';
+	const TYPE_SESSION = 'session';
+	const TYPE_INTERNAL = 'internal';
 	//
 	// Protected properties.
 	/**
@@ -234,16 +234,16 @@ class Params extends Singleton {
 	 * This method loads all params stacks.
 	 */
 	protected function loadParams() {
-		$this->_paramsStacks[self::TypeOPTIONS] = defined('__SHELL__') ? new OptionsStack([]) : new ParamsStack([]);
-		$this->_paramsStacks[self::TypePOST] = new ParamsStack($_POST);
-		$this->_paramsStacks[self::TypeGET] = new ParamsStack($_GET);
-		$this->_paramsStacks[self::TypeENV] = new ParamsStack($_ENV);
-		$this->_paramsStacks[self::TypeCOOKIE] = new SuperglobalStack('_COOKIE');
-		$this->_paramsStacks[self::TypeSERVER] = new ParamsStack($_SERVER);
-		$this->_paramsStacks[self::TypeSESSION] = new SuperglobalStack('_SESSION');
-		$this->_paramsStacks[self::TypeHEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack([]);
+		$this->_paramsStacks[self::TYPE_OPTIONS] = defined('__SHELL__') ? new OptionsStack([]) : new ParamsStack([]);
+		$this->_paramsStacks[self::TYPE_POST] = new ParamsStack($_POST);
+		$this->_paramsStacks[self::TYPE_GET] = new ParamsStack($_GET);
+		$this->_paramsStacks[self::TYPE_ENV] = new ParamsStack($_ENV);
+		$this->_paramsStacks[self::TYPE_COOKIE] = new SuperglobalStack('_COOKIE');
+		$this->_paramsStacks[self::TYPE_SERVER] = new ParamsStack($_SERVER);
+		$this->_paramsStacks[self::TYPE_SESSION] = new SuperglobalStack('_SESSION');
+		$this->_paramsStacks[self::TYPE_HEADERS] = !defined('__SHELL__') ? new ParamsStack(\getallheaders()) : new ParamsStack([]);
 		//
 		// Internal stack for custom purposes.
-		$this->_paramsStacks[self::TypeINTERNAL] = new ParamsStack([]);
+		$this->_paramsStacks[self::TYPE_INTERNAL] = new ParamsStack([]);
 	}
 }

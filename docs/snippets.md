@@ -46,7 +46,7 @@ __ROOTDIR/site/models/Pager.php__:
 ```php
 <?php
 class PagerModel extends \TooBasic\Model {
-	const SurroundingLength = 10;
+	const SURROUNDING_LENGTH = 10;
 	public function snippetSets($maxPage, $currentPage) {
 		$out = ["show" => true];
 		if($maxPage > 1) {
@@ -72,10 +72,10 @@ class PagerModel extends \TooBasic\Model {
 			$out["last"] = $pages[$maxPage];
 			$out["previous"] = $pages[$currentPage == 1 ? 1 : $currentPage - 1];
 			$out["next"] = $pages[$currentPage == $maxPage ? $maxPage : $currentPage + 1];
-			$minIndex = $currentPage - self::SurroundingLength;
-			$minIndex = $minIndex > ($maxPage - (self::SurroundingLength * 2) ) ? ($maxPage - (self::SurroundingLength * 2) ) : $minIndex;
+			$minIndex = $currentPage - self::SURROUNDING_LENGTH;
+			$minIndex = $minIndex > ($maxPage - (self::SURROUNDING_LENGTH * 2) ) ? ($maxPage - (self::SURROUNDING_LENGTH * 2) ) : $minIndex;
 			$minIndex = $minIndex < 1 ? 1 : $minIndex;
-			$out["pages"] = array_slice($pages, $minIndex - 1, (self::SurroundingLength * 2) + 1, true);
+			$out["pages"] = array_slice($pages, $minIndex - 1, (self::SURROUNDING_LENGTH * 2) + 1, true);
 		} else {
 			$out["show"] = false;
 		}
@@ -129,15 +129,15 @@ Let's add some code using our snippet:
 * Modify your controller into something like this:
 ```php
 class ThingsController extends \TooBasic\Controller {
-	const MaxPerPage = 100;
+	const MAX_PER_PAGE = 100;
 	protected function basicRun() {
 		$out = true;
 		$thingsToShow = $this->model->stuff->things();
 		$currentPage = isset($this->params->get->page) ? $this->params->get->page : 1;
 		$currentPage = $currentPage > 0 ? $currentPage : 1;
 		$totalCount = count($thingsToShow);
-		$thingsToShow = array_slice($thingsToShow, ($currentPage - 1) * self::MaxPerPage, self::MaxPerPage, true);
-		$this->setSnippetDataSet("pagerdata", $this->model->pager->snippetSets(ceil($totalCount / self::MaxPerPage), $currentPage));
+		$thingsToShow = array_slice($thingsToShow, ($currentPage - 1) * self::MAX_PER_PAGE, self::MAX_PER_PAGE, true);
+		$this->setSnippetDataSet("pagerdata", $this->model->pager->snippetSets(ceil($totalCount / self::MAX_PER_PAGE), $currentPage));
 		$this->assign("things", $thingsToShow);
 		return $out;
 	}
