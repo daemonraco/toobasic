@@ -191,7 +191,7 @@ You can also change your controllers and use something like this:
 ```php
 <?php
 class MyactionController extends \TooBasic\Controller {
-	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE;
 	public function basicRun() {
 		. . .
 ```
@@ -200,17 +200,17 @@ configured.
 
 Available constants are:
 
-* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeDouble`: Double of
+* `\TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_DOUBLE`: Double of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge`: Same size as
+* `\TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE`: Same size as
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeMedium`: A half of
+* `\TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_MEDIUM`: A half of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
-* `\TooBasic\Adapters\Cache\Adapter::ExpirationSizeSmall`: A quarter of
+* `\TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_SMALL`: A quarter of
 `$Defaults[GC_DEFAULTS_CACHE_EXPIRATION]`.
 
 Any other value will be considered as
-`\TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge`, including the boolean `true` used
+`\TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE`, including the boolean `true` used
 in versions before 0.3.0.
 
 <!--:GBSUMMARY:Cache:1:Cache:-->

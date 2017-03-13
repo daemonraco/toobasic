@@ -19,10 +19,10 @@ use \TooBasic\Sanitizer;
 class Smarty extends Adapter {
 	//
 	// Constants.
-	const SmartyStuffDirectory = '/smarty';
-	const SmartyCompileDirectory = '/smarty/compile';
-	const SmartyCacheDirectory = '/smarty/cache';
-	const SmartyConfigDirectory = '/smarty/configs';
+	const SMARTY_STUFF_DIRECTORY = '/smarty';
+	const SMARTY_COMPILE_DIRECTORY = '/smarty/compile';
+	const SMARTY_CACHE_DIRECTORY = '/smarty/cache';
+	const SMARTY_CONFIG_DIRECTORY = '/smarty/configs';
 	//
 	// Protected properties.
 	/**
@@ -63,9 +63,9 @@ class Smarty extends Adapter {
 		}
 		//
 		// Setting special Smarty directories.
-		$this->_smarty->setCompileDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyCompileDirectory));
-		$this->_smarty->setConfigDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyConfigDirectory));
-		$this->_smarty->setCacheDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyCacheDirectory));
+		$this->_smarty->setCompileDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SMARTY_COMPILE_DIRECTORY));
+		$this->_smarty->setConfigDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SMARTY_CONFIG_DIRECTORY));
+		$this->_smarty->setCacheDir(Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SMARTY_CACHE_DIRECTORY));
 
 		$this->_smarty->assign('app_name', __CLASS__);
 	}
@@ -119,7 +119,7 @@ class Smarty extends Adapter {
 			global $Directories;
 			//
 			// Checking the existence of Smarty's special directories.
-			foreach([self::SmartyStuffDirectory, self::SmartyCacheDirectory, self::SmartyCompileDirectory, self::SmartyConfigDirectory] as $subPath) {
+			foreach([self::SMARTY_STUFF_DIRECTORY, self::SMARTY_CACHE_DIRECTORY, self::SMARTY_COMPILE_DIRECTORY, self::SMARTY_CONFIG_DIRECTORY] as $subPath) {
 				$dirPath = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/{$subPath}");
 				if(!is_dir($dirPath)) {
 					mkdir($dirPath, $Defaults[GC_DEFAULTS_CACHE_PERMISSIONS], true);
@@ -128,7 +128,7 @@ class Smarty extends Adapter {
 			//
 			// TooBasic creates a '.htaccess' file special for smarty
 			// required to avoid some attacks.
-			$htaccess = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SmartyStuffDirectory.'/.htaccess');
+			$htaccess = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SMARTY_STUFF_DIRECTORY.'/.htaccess');
 			if(!is_file($htaccess)) {
 				//
 				// Creating a basic '.htaccess' file to forbid

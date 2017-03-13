@@ -17,10 +17,10 @@ namespace TooBasic\Adapters\Cache;
 abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	//
 	// Constants.
-	const ExpirationSizeDouble = 'double';
-	const ExpirationSizeLarge = 'large';
-	const ExpirationSizeMedium = 'medium';
-	const ExpirationSizeSmall = 'small';
+	const EXPIRATION_SIZE_DOUBLE = 'double';
+	const EXPIRATION_SIZE_LARGE = 'large';
+	const EXPIRATION_SIZE_MEDIUM = 'medium';
+	const EXPIRATION_SIZE_SMALL = 'small';
 	//
 	// Protected properties.
 	/**
@@ -46,7 +46,7 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	 * @return mixed Return the infomation stored in the request cache entry
 	 * or NULL if none found.
 	 */
-	abstract public function get($prefix, $key, $delay = self::ExpirationSizeLarge);
+	abstract public function get($prefix, $key, $delay = self::EXPIRATION_SIZE_LARGE);
 	/**
 	 * This method stores information in cache and associates it to a certain
 	 * cache key.
@@ -56,7 +56,7 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	 * @param mixed $data Information to store.
 	 * @param int $delay Amount of seconds the entry lasts.
 	 */
-	abstract public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge);
+	abstract public function save($prefix, $key, $data, $delay = self::EXPIRATION_SIZE_LARGE);
 	//
 	// Protected methods.
 	/**
@@ -64,7 +64,7 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 	 * expiration time based on the general expiration time and a multiplier.
 	 *
 	 * @param string $delay Name of the multiplier to use. If unknwon it will
-	 * always be considered as Adapter::ExpirationSizeLarge.
+	 * always be considered as Adapter::EXPIRATION_SIZE_LARGE.
 	 * @return int Returns an amount of seconds.
 	 */
 	protected function expirationLength($delay) {
@@ -74,16 +74,16 @@ abstract class Adapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Guessing the right amount.
 		switch($delay) {
-			case self::ExpirationSizeMedium:
+			case self::EXPIRATION_SIZE_MEDIUM:
 				$out = ceil($this->_expirationLength / 2);
 				break;
-			case self::ExpirationSizeSmall:
+			case self::EXPIRATION_SIZE_SMALL:
 				$out = ceil($this->_expirationLength / 4);
 				break;
-			case self::ExpirationSizeDouble:
+			case self::EXPIRATION_SIZE_DOUBLE:
 				$out = $this->_expirationLength * 2;
 				break;
-			case self::ExpirationSizeLarge:
+			case self::EXPIRATION_SIZE_LARGE:
 			default:
 				$out = $this->_expirationLength;
 				break;

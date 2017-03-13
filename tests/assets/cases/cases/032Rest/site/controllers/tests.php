@@ -8,7 +8,7 @@
 class TestsController extends \TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = false; # \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
+	protected $_cached = false; # \TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE;
 	//
 	// Protected methods.
 	protected function basicRun() {

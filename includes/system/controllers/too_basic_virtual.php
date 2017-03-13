@@ -12,7 +12,7 @@ use \TooBasic\Adapters\Cache\Adapter as TB_CacheAdapter;
 class TooBasicVirtualController extends \TooBasic\Controller {
 	//
 	// Protected properties.	
-	protected $_cached = TB_CacheAdapter::ExpirationSizeDouble;
+	protected $_cached = TB_CacheAdapter::EXPIRATION_SIZE_DOUBLE;
 	//
 	// Protected methods.
 	protected function basicRun() {

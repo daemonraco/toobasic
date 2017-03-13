@@ -3,7 +3,7 @@
 class KnownDebugsController extends TooBasic\Controller {
 	//
 	// Protected properties
-	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE;
 	protected $_layout = false;
 	//
 	// Protected methods.

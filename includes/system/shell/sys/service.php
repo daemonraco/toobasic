@@ -35,22 +35,22 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 			$this->_assignments['service'] = $this->_names['service-name'];
 			$this->_assignments['init'] = true;
 			$this->_assignments['nocache'] = false;
-			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
+			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_LARGE';
 
 			$opt = $this->_options->option(self::OPTION_CACHED);
 			if($opt->activated()) {
 				switch($opt->value()) {
 					case 'double':
-						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeDouble';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_DOUBLE';
 						break;
 					case 'large':
-						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_LARGE';
 						break;
 					case 'medium':
-						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeMedium';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_MEDIUM';
 						break;
 					case 'small':
-						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeSmall';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_SMALL';
 						break;
 					case 'NOCACHE':
 						$this->_assignments['cached'] = 'false';
@@ -58,7 +58,7 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 						break;
 					case 'large':
 					default:
-						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
+						$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::EXPIRATION_SIZE_LARGE';
 				}
 			}
 

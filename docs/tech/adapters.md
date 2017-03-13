@@ -96,14 +96,14 @@ class CacheAdapterCouchBase extends \TooBasic\Adapters\Cache\Adapter {
 		. . .
 
 	}
-	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
+	public function get($prefix, $key, $delay = self::EXPIRATION_SIZE_LARGE) {
 		$data = null;
 
 		. . .
 
 		return $data;
 	}
-	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
+	public function save($prefix, $key, $data, $delay = self::EXPIRATION_SIZE_LARGE) {
 
 		. . . 
 

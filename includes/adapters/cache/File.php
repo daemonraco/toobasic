@@ -14,8 +14,8 @@ namespace TooBasic\Adapters\Cache;
 class File extends Adapter {
 	//
 	// Constants.
-	const SubFolder = 'filecache';
-	const CacheExtension = 'data';
+	const SUB_FOLDER = 'filecache';
+	const CACHE_EXTENSION = 'data';
 	//
 	// Public methods.
 	/**
@@ -36,7 +36,7 @@ class File extends Adapter {
 	 * @return mixed Return the infomation stored in the request cache entry
 	 * or NULL if none found.
 	 */
-	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
+	public function get($prefix, $key, $delay = self::EXPIRATION_SIZE_LARGE) {
 		$path = $this->path($prefix, $key);
 		//
 		// Cleaning expired.
@@ -58,7 +58,7 @@ class File extends Adapter {
 	 * @param mixed $data Information to store.
 	 * @param int $delay Amount of seconds the entry lasts.
 	 */
-	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
+	public function save($prefix, $key, $data, $delay = self::EXPIRATION_SIZE_LARGE) {
 		file_put_contents($this->path($prefix, $key, true), serialize($data));
 	}
 	//
@@ -90,7 +90,7 @@ class File extends Adapter {
 		$key = sha1($key);
 		$prefix = str_replace('/', '_', $prefix);
 		$prefix.= ($prefix ? '_' : '');
-		$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SubFolder."/{$prefix}{$key}.".self::CacheExtension);
+		$path = \TooBasic\Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_CACHE]}/".self::SUB_FOLDER."/{$prefix}{$key}.".self::CACHE_EXTENSION);
 
 		return $path;
 	}

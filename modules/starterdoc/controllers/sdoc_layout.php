@@ -8,7 +8,7 @@
 class SdocLayoutController extends \TooBasic\Layout {
 	//
 	// Protected properties
-	protected $_cached = \TooBasic\Adapters\Cache\Adapter::ExpirationSizeLarge;
+	protected $_cached = \TooBasic\Adapters\Cache\Adapter::EXPIRATION_SIZE_LARGE;
 	//
 	// Protected methods.
 	protected function basicRun() {

@@ -31,7 +31,7 @@ class DBPostgreSQL extends DB {
 	 * @return mixed Return the infomation stored in the request cache entry
 	 * or NULL if none found.
 	 */
-	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
+	public function get($prefix, $key, $delay = self::EXPIRATION_SIZE_LARGE) {
 		//
 		// Default values.
 		$data = null;

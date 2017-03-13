@@ -79,7 +79,7 @@ class Memcached extends Adapter {
 	 * @return mixed Return the infomation stored in the request cache entry
 	 * or NULL if none found.
 	 */
-	public function get($prefix, $key, $delay = self::ExpirationSizeLarge) {
+	public function get($prefix, $key, $delay = self::EXPIRATION_SIZE_LARGE) {
 		$fullKey = $this->fullKey($prefix, $key);
 
 		$data = $this->_conn->get($fullKey);
@@ -108,7 +108,7 @@ class Memcached extends Adapter {
 	 * @param mixed $data Information to store.
 	 * @param int $delay Amount of seconds the entry lasts.
 	 */
-	public function save($prefix, $key, $data, $delay = self::ExpirationSizeLarge) {
+	public function save($prefix, $key, $data, $delay = self::EXPIRATION_SIZE_LARGE) {
 		$fullKey = $this->fullKey($prefix, $key);
 		$this->_conn->delete($fullKey);
 		$this->_conn->set($fullKey, serialize($data), time() + $this->expirationLength($delay));
