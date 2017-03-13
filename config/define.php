@@ -6,8 +6,8 @@
  */
 //
 // TooBasic generic constants @{
-define('TOOBASIC_VERSION', '2.3.0');
-define('TOOBASIC_VERSION_NAME', 'mamba');
+define('TOOBASIC_VERSION', '3.0.0');
+define('TOOBASIC_VERSION_NAME', 'basilisk');
 // @}
 //
 // HTTP errors @{

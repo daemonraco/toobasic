@@ -1,4 +1,4 @@
-# TooBasic 2.3.0-mamba
+# TooBasic 3.0.0-basilisk
 
 ![ ](docs/images/TooBasic-logo-128px.png)
 
