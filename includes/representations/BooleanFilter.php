@@ -14,8 +14,8 @@ namespace TooBasic\Representations;
 class BooleanFilter extends FieldFilter {
 	//
 	// Constants.
-	const ValueTrue = 'Y';
-	const ValueFalse = 'N';
+	const VALUE_TRUE = 'Y';
+	const VALUE_FALSE = 'N';
 	//
 	// Public class methods.
 	/**
@@ -27,7 +27,7 @@ class BooleanFilter extends FieldFilter {
 	 * @throws \TooBasic\Representations\FieldFilterException
 	 */
 	public static function Decode($in) {
-		return ($in == self::ValueTrue);
+		return ($in == self::VALUE_TRUE);
 	}
 	/**
 	 * This method takes a `boolean` and encodes it into a plain value.
@@ -37,7 +37,7 @@ class BooleanFilter extends FieldFilter {
 	 * @throws \TooBasic\Representations\FieldFilterException
 	 */
 	public static function Encode($in) {
-		return \boolval($in) ? self::ValueTrue : self::ValueFalse;
+		return \boolval($in) ? self::VALUE_TRUE : self::VALUE_FALSE;
 	}
 	/**
 	 * This method allows to know if this filters always requires persistence.

@@ -22,17 +22,17 @@ use TooBasic\Translate;
 abstract class ComplexConfig extends Config {
 	//
 	// Constants.
-	const PathTypeAny = 'any';
-	const PathTypeList = 'list';
-	const PathTypeNumeric = 'numeric';
-	const PathTypeObject = 'object';
-	const PathTypeString = 'string';
+	const PATH_TYPE_ANY = 'any';
+	const PATH_TYPE_LIST = 'list';
+	const PATH_TYPE_NUMERIC = 'numeric';
+	const PATH_TYPE_OBJECT = 'object';
+	const PATH_TYPE_STRING = 'string';
 	//
 	// Protected core properties.
 	/**
 	 * @var string[string] Assocative list of required property paths and
 	 * their types. For example:
-	 * 	'parent->subproperty->somevalue' => \TooBasic\ComplexConfig::PathTypeList
+	 * 	'parent->subproperty->somevalue' => \TooBasic\ComplexConfig::PATH_TYPE_LIST
 	 */
 	protected $_CP_RequiredPaths = [];
 	//
@@ -81,31 +81,31 @@ abstract class ComplexConfig extends Config {
 				// Checking property's type.
 				$rightType = null;
 				switch($type) {
-					case self::PathTypeList:
+					case self::PATH_TYPE_LIST:
 						eval("\$rightType=is_array(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_a_list(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
-					case self::PathTypeNumeric:
+					case self::PATH_TYPE_NUMERIC:
 						eval("\$rightType=is_numeric(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_numeric(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
-					case self::PathTypeObject:
+					case self::PATH_TYPE_OBJECT:
 						eval("\$rightType=is_object(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_an_object(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
-					case self::PathTypeString:
+					case self::PATH_TYPE_STRING:
 						eval("\$rightType=is_string(\$this->{$path});");
 						if(!$rightType) {
 							throw new ConfigException(Translate::Instance()->EX_MSG_obj_path_is_not_a_string(['message' => $basicErrorMessage, 'path' => $path]));
 						}
 						break;
-					case self::PathTypeAny:
+					case self::PATH_TYPE_ANY:
 						//
 						// No controls here.
 						break;

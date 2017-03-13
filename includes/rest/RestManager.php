@@ -41,12 +41,12 @@ class RestManager extends Manager {
 	/**
 	 * Default amount of items on action 'search'.
 	 */
-	const ListsLimit = 10;
+	const LISTS_LIMIT = 10;
 	/**
 	 * Maximum limit on action 'search', it will never return more than this
 	 * amount.
 	 */
-	const ListsMaxLimit = 100;
+	const LISTS_MAX_LIMIT = 100;
 	//
 	// Protected properties.
 	/**
@@ -533,11 +533,11 @@ class RestManager extends Manager {
 			//
 			// Loading parameters
 			$offset = isset($this->params->get->offset) ? $this->params->get->offset : 0;
-			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::ListsLimit;
+			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::LISTS_LIMIT;
 			//
 			// Safe-guarding limits.
-			if($limit > self::ListsMaxLimit) {
-				$limit = self::ListsMaxLimit;
+			if($limit > self::LISTS_MAX_LIMIT) {
+				$limit = self::LISTS_MAX_LIMIT;
 			}
 			//
 			// Loading and trimming.
@@ -712,12 +712,12 @@ class RestManager extends Manager {
 			//
 			// Loading parameters.
 			$offset = isset($this->params->get->offset) ? $this->params->get->offset : 0;
-			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::ListsLimit;
+			$limit = isset($this->params->get->limit) ? $this->params->get->limit : self::LISTS_LIMIT;
 			$expand = isset($this->params->get->expand);
 			//
 			// Safe-guarding limits.
-			if($limit > self::ListsMaxLimit) {
-				$limit = self::ListsMaxLimit;
+			if($limit > self::LISTS_MAX_LIMIT) {
+				$limit = self::LISTS_MAX_LIMIT;
 			}
 			//
 			// Searching and trimming.
