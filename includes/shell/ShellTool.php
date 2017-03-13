@@ -23,9 +23,9 @@ abstract class ShellTool {
 	// Constants.
 	const ErrorWrongParameters = 1;
 	const ErrorNoTask = 2;
-	const OptionNameHelp = 'Help';
-	const OptionNameInfo = 'Info';
-	const OptionNameVersion = 'Version';
+	const OPTION_NAME_HELP = 'Help';
+	const OPTION_NAME_INFO = 'Info';
+	const OPTION_NAME_VERSION = 'Version';
 	//
 	// Protected properties.
 	/**
@@ -52,9 +52,9 @@ abstract class ShellTool {
 	public function __construct() {
 		//
 		// Setting core option names.
-		$this->_coreTasks[] = self::OptionNameHelp;
-		$this->_coreTasks[] = self::OptionNameVersion;
-		$this->_coreTasks[] = self::OptionNameInfo;
+		$this->_coreTasks[] = self::OPTION_NAME_HELP;
+		$this->_coreTasks[] = self::OPTION_NAME_VERSION;
+		$this->_coreTasks[] = self::OPTION_NAME_INFO;
 		//
 		// Starting options settings.
 		$this->starterOptions();
@@ -256,19 +256,19 @@ abstract class ShellTool {
 		$this->_options->addMainOption('ignored_tool');
 		//
 		// Adding core options @{
-		$auxOption = new Option(self::OptionNameHelp);
+		$auxOption = new Option(self::OPTION_NAME_HELP);
 		$auxOption->addTrigger('--help');
 		$auxOption->addTrigger('-h');
 		$auxOption->setHelpText('Shows this help text.');
 		$this->_options->addOption($auxOption);
 
-		$auxOption = new Option(self::OptionNameVersion);
+		$auxOption = new Option(self::OPTION_NAME_VERSION);
 		$auxOption->addTrigger('--version');
 		$auxOption->addTrigger('-V');
 		$auxOption->setHelpText("Shows this tool's version number.");
 		$this->_options->addOption($auxOption);
 
-		$auxOption = new Option(self::OptionNameInfo);
+		$auxOption = new Option(self::OPTION_NAME_INFO);
 		$auxOption->addTrigger('--info');
 		$auxOption->addTrigger('-I');
 		$auxOption->setHelpText("Shows this tool's information.");

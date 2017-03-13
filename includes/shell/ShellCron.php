@@ -24,7 +24,7 @@ abstract class ShellCron extends ShellTool {
 	//
 	// Constants.
 	const ErrorRunning = 3;
-	const OptionNameClearFlag = 'ClearFlag';
+	const OPTION_NAME_CLEAR_FLAG = 'ClearFlag';
 	//
 	// Magic methods.
 	/**
@@ -34,7 +34,7 @@ abstract class ShellCron extends ShellTool {
 		parent::__construct();
 		//
 		// Adding a new core option.
-		$this->_coreTasks[] = self::OptionNameClearFlag;
+		$this->_coreTasks[] = self::OPTION_NAME_CLEAR_FLAG;
 	}
 	//
 	// Public methods.
@@ -140,7 +140,7 @@ abstract class ShellCron extends ShellTool {
 	protected function starterOptions() {
 		parent::starterOptions();
 
-		$auxOption = new Option(self::OptionNameClearFlag);
+		$auxOption = new Option(self::OPTION_NAME_CLEAR_FLAG);
 		$auxOption->addTrigger('-CF');
 		$auxOption->setHelpText('Updates all tag members counts');
 		$this->_options->addOption($auxOption);

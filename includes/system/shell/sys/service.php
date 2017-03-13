@@ -16,7 +16,7 @@ use TooBasic\Shell\Option;
 class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 	//
 	// Constants.
-	const OptionCached = 'Cached';
+	const OPTION_CACHED = 'Cached';
 	//
 	// Protected properties.
 	protected $_genRoutePrefix = 'srv/';
@@ -37,7 +37,7 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 			$this->_assignments['nocache'] = false;
 			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 
-			$opt = $this->_options->option(self::OptionCached);
+			$opt = $this->_options->option(self::OPTION_CACHED);
 			if($opt->activated()) {
 				switch($opt->value()) {
 					case 'double':
@@ -62,7 +62,7 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 				}
 			}
 
-			$opt = $this->_options->option(self::OptionParam);
+			$opt = $this->_options->option(self::OPTION_PARAM);
 			$this->_assignments['cache_params'] = [];
 			$this->_assignments['required_params'] = [];
 			if($opt->activated()) {
@@ -99,17 +99,17 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 		parent::setOptions();
 
 		$text = 'Allows you to create a new service and deploy it in your site.';
-		$this->_options->option(self::OptionCreate)->setHelpText($text, 'service-name');
+		$this->_options->option(self::OPTION_CREATE)->setHelpText($text, 'service-name');
 
 		$text = 'Allows you to eliminate a service from your site.';
-		$this->_options->option(self::OptionRemove)->setHelpText($text, 'service-name');
+		$this->_options->option(self::OPTION_REMOVE)->setHelpText($text, 'service-name');
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCached, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionParam, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

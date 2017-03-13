@@ -13,13 +13,13 @@ use TooBasic\Translate as TB_Translate;
 class TranslateTool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
-	const OptionCompile = 'Compile';
+	const OPTION_COMPILE = 'Compile';
 	//
 	// Protected methods.
 	protected function setOptions() {
 		$this->_options->setHelpText('This tool provides a way to perform certain batch task related with translations.');
 
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OptionCompile, ['-c', '--compile'], TBS_Option::TypeNoValue));
+		$this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_COMPILE, ['-c', '--compile'], TBS_Option::TypeNoValue));
 	}
 	protected function taskCompile($spacer = '') {
 		echo "{$spacer}Compiling languages:\n";

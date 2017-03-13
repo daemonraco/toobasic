@@ -24,7 +24,7 @@ use TooBasic\Translate;
 class ServicesManager extends UrlManager {
 	//
 	// Magic methods.
-	const ErrorOk = 0;
+	const ERROR_OK = 0;
 	const ErrorUnknown = 1;
 	const ErrorJSONEncode = 2;
 	const ErrorUnknownService = 3;

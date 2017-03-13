@@ -19,19 +19,19 @@ use TooBasic\Shell\Option;
 class TableSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
-	const OptionBootstrap = 'Bootstrap';
-	const OptionColumn = 'Column';
-	const OptionConnection = 'Connection';
-	const OptionGenAutocomplete = 'GenAutocomplete';
-	const OptionNameField = 'NameField';
-	const OptionNoFormBuilder = 'NoFormBuilder';
-	const OptionPlural = 'Plural';
-	const OptionRaw = 'Raw';
-	const OptionSearchable = 'Searchable';
-	const OptionSpecsVersion = 'SpecsVersion';
-	const OptionSystem = 'System';
-	const PrecisionNameField = 64;
-	const PrecisionVarchar = 256;
+	const OPTION_BOOTSTRAP = 'Bootstrap';
+	const OPTION_COLUMN = 'Column';
+	const OPTION_CONNECTION = 'Connection';
+	const OPTION_GEN_AUTOCOMPLETE = 'GenAutocomplete';
+	const OPTION_NAME_FIELD = 'NameField';
+	const OPTION_NO_FORM_BUILDER = 'NoFormBuilder';
+	const OPTION_PLURAL = 'Plural';
+	const OPTION_RAW = 'Raw';
+	const OPTION_SEARCHABLE = 'Searchable';
+	const OPTION_SPECS_VERSION = 'SpecsVersion';
+	const OPTION_SYSTEM = 'System';
+	const PRECISION_NAME_FIELD = 64;
+	const PRECISION_VARCHAR = 256;
 	//
 	// Protected properties.
 	protected $_raw = null;
@@ -68,14 +68,14 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_assignments['tablePrefix'] = substr(str_replace('_', '', $this->_names['plural-name']), 0, 3).'_';
 				//
 				// Connection settings.
-				$opt = $this->_options->option(self::OptionConnection);
+				$opt = $this->_options->option(self::OPTION_CONNECTION);
 				if($opt->activated()) {
 					$this->_assignments['connection'] = $opt->value();
 				}
 				//
 				// Generating a table prefix.
 				$this->_assignments['tableFields'] = [];
-				$opt = $this->_options->option(self::OptionColumn);
+				$opt = $this->_options->option(self::OPTION_COLUMN);
 				if($opt->activated()) {
 					foreach($opt->value() as $column) {
 						$columnParts = explode(':', $column);
@@ -137,9 +137,9 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 							default:
 								$field[GC_AFIELD_TYPE][GC_AFIELD_TYPE] = 'varchar';
 								if(isset($this->_names['name-field']) && $this->_names['name-field'] == $field[GC_AFIELD_NAME]) {
-									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionNameField;
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PRECISION_NAME_FIELD;
 								} else {
-									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PrecisionVarchar;
+									$field[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] = self::PRECISION_VARCHAR;
 								}
 								$field[GC_AFIELD_DEFAULT] = '';
 								$field['inForm'] = true;
@@ -216,7 +216,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			if(isset($this->_names['search-code'])) {
 				//
 				// Checking module and parent directory.
-				$opt = $this->_options->option(self::OptionModule);
+				$opt = $this->_options->option(self::OPTION_MODULE);
 				if($opt->activated()) {
 					$path = Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_CONFIGS]}/config.php");
 					$this->_requiredDirectories[] = dirname($path);
@@ -272,30 +272,30 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_names['templates-style'] = 'default';
 				//
 				// Checking form mechanism.
-				$opt = $this->_options->option(self::OptionNoFormBuilder);
+				$opt = $this->_options->option(self::OPTION_NO_FORM_BUILDER);
 				$this->_names['form-builder'] = !$opt->activated();
 				//
 				// Checking plural name.
-				$opt = $this->_options->option(self::OptionPlural);
+				$opt = $this->_options->option(self::OPTION_PLURAL);
 				if($opt->activated()) {
 					$this->_names['plural-name'] = $opt->value();
 				}
 				//
 				// Checking bootstrap option.
-				$opt = $this->_options->option(self::OptionBootstrap);
+				$opt = $this->_options->option(self::OPTION_BOOTSTRAP);
 				if($opt->activated()) {
 					$this->_names['templates-prefix'] = 'bootstrap/';
 					$this->_names['templates-style'] = 'bootstrap';
 				}
 				//
 				// Checking type.
-				$opt = $this->_options->option(self::OptionSystem);
+				$opt = $this->_options->option(self::OPTION_SYSTEM);
 				if($opt->activated()) {
 					$this->_names[GC_AFIELD_TYPE] = strtolower($opt->value());
 				}
 				//
 				// Checking search engine flags.
-				$opt = $this->_options->option(self::OptionSearchable);
+				$opt = $this->_options->option(self::OPTION_SEARCHABLE);
 				if($opt->activated()) {
 					$this->_names['search-code'] = substr(strtoupper($opt->value()), 0, 10);
 				}
@@ -317,7 +317,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 				$this->_names['delete-action-controller'] = Names::ControllerClass($this->_names['delete-action']);
 				//
 				// Name field and service.
-				$opt = $this->_options->option(self::OptionNameField);
+				$opt = $this->_options->option(self::OPTION_NAME_FIELD);
 				if(!$this->isRaw() && $opt->activated()) {
 					$this->_names['name-field'] = $opt->value();
 					$this->_names['predictive-service'] = "{$this->_names['plural-name']}_predictive";
@@ -359,7 +359,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 							GC_AFIELD_TEMPLATE => 'predictive.html',
 							GC_AFIELD_DESCRIPTION => 'predictive search service file'
 						];
-						$opt = $this->_options->option(self::OptionGenAutocomplete);
+						$opt = $this->_options->option(self::OPTION_GEN_AUTOCOMPLETE);
 						if($opt->activated()) {
 							$this->_files[] = [
 								GC_AFIELD_PATH => Sanitizer::DirPath("{$this->_names[GC_AFIELD_PARENT_DIRECTORY]}/{$Paths[GC_PATHS_JS]}/{$this->_names['singular-name']}_predictive_{$this->_names['name-field']}.js"),
@@ -516,7 +516,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			$writer = new FormWriter($form);
 			//
 			// Basic values.
-			$writer->setType($this->params->opt->{self::OptionBootstrap} ? GC_FORMS_BUILDTYPE_BOOTSTRAP : GC_FORMS_BUILDTYPE_TABLE);
+			$writer->setType($this->params->opt->{self::OPTION_BOOTSTRAP} ? GC_FORMS_BUILDTYPE_BOOTSTRAP : GC_FORMS_BUILDTYPE_TABLE);
 			$writer->setName("{$this->_names['singular-name']}_form");
 			$writer->setMethod('post');
 			//
@@ -591,7 +591,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	protected function genSpecsFile($path, $template, &$error) {
 		$out = false;
 
-		$opt = $this->_options->option(self::OptionSpecsVersion);
+		$opt = $this->_options->option(self::OPTION_SPECS_VERSION);
 		if(!$opt->activated() || ($opt->value() + 0) == 2) {
 			$out = $this->genSpecsFileV2($path, $error);
 		} elseif(($opt->value() + 0) == 1) {
@@ -775,7 +775,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 			];
 			if(isset($column[GC_AFIELD_TYPE][GC_AFIELD_VALUES])) {
 				$field['type'] = "{$field['type']}:".implode(':', $column[GC_AFIELD_TYPE][GC_AFIELD_VALUES]);
-			} elseif($field['type'] == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PrecisionVarchar) {
+			} elseif($field['type'] == 'varchar' && $column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION] != self::PRECISION_VARCHAR) {
 				$field['type'] = "{$field['type']}:{$column[GC_AFIELD_TYPE][GC_AFIELD_PRECISION]}";
 			}
 			if($column[GC_AFIELD_DEFAULT]) {
@@ -865,7 +865,7 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 	}
 	protected function isRaw() {
 		if($this->_raw === null) {
-			$this->_raw = $this->_options->option(self::OptionRaw)->activated();
+			$this->_raw = $this->_options->option(self::OPTION_RAW)->activated();
 		}
 
 		return $this->_raw;
@@ -877,10 +877,10 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 
 		$text = 'Allows you to create a new table and deploy it in your site. ';
 		$text.= 'Name must be in singular, this tool will guess the plural version, but if it\'s wrong you can use the option \'--plural\'';
-		$this->_options->option(self::OptionCreate)->setHelpText($text, 'name');
+		$this->_options->option(self::OPTION_CREATE)->setHelpText($text, 'name');
 
 		$text = 'Allows you to eliminate a table from your site. ';
-		$this->_options->option(self::OptionRemove)->setHelpText($text, 'name');
+		$this->_options->option(self::OPTION_REMOVE)->setHelpText($text, 'name');
 
 		$text = 'Adds a column to your table specification. ';
 		$text.= "By default all columns are varchar(256) unless you specify something like this:\n";
@@ -891,42 +891,42 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:text Column named 'colname' of type TEXT.\n";
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
 		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).";
-		$this->_options->addOption(Option::EasyFactory(self::OptionColumn, ['--column', '-c'], Option::TypeMultiValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_COLUMN, ['--column', '-c'], Option::TypeMultiValue, $text, 'name'));
 
 		$text = "This parameters indicates which column shoud be consided as an unique name.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionNameField, ['--name-field', '-nf'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_NAME_FIELD, ['--name-field', '-nf'], Option::TypeValue, $text, 'name'));
 
 		$text = "If your table doesn't use the default connection, you may specify it with this parameter.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionConnection, ['--connection', '-C'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CONNECTION, ['--connection', '-C'], Option::TypeValue, $text, 'name'));
 
 		$text = "If your plural names are getting all messed up, specify the value you want with this parameters.\n";
 		$text.= "For example, the plural of 'person' isn't 'persons', it's 'people'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionPlural, ['--plural', '-P'], Option::TypeValue, $text, 'plural-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PLURAL, ['--plural', '-P'], Option::TypeValue, $text, 'plural-name'));
 
 		$text = "Sometimes there are specific matters related to the type of database you are using, so this parameters allows you to hint what your using, 'mysql', 'sqlite', etc.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSystem, ['--type'], Option::TypeValue, $text, 'db-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SYSTEM, ['--type'], Option::TypeValue, $text, 'db-type'));
 
 		$text = "If you want to create a simple table without default columns and indexes, use this parameter.\n";
 		$text = "Note: This won't create controllers and ohter related stuff.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRaw, ['--raw', '-r'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_RAW, ['--raw', '-r'], Option::TypeNoValue, $text));
 
 		$text = "Sets the specifications file version, possible values are: '1' and '2'.\n";
 		$text.= "By default it assumes '2'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSpecsVersion, ['--specs-version', '-sv'], Option::TypeValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SPECS_VERSION, ['--specs-version', '-sv'], Option::TypeValue, $text));
 
 		$text = 'This parameter activates the generation of JS scripts for autocompletion. ';
 		$text.= "It depends on parameter '--name-field'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionGenAutocomplete, ['--autocomplete', '-ac'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_GEN_AUTOCOMPLETE, ['--autocomplete', '-ac'], Option::TypeNoValue, $text));
 
 		$text = 'All generated view will have a bootstrap structure.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrap, ['--bootstrap', '-bs'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP, ['--bootstrap', '-bs'], Option::TypeNoValue, $text));
 
 		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
 		$text.= "Given value is used as item type for searchable items indexation.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionSearchable, ['--searchable', '-sr'], Option::TypeValue, $text, 'item-code'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SEARCHABLE, ['--searchable', '-sr'], Option::TypeValue, $text, 'item-code'));
 
 		$text = "This option disables the use of form builders to generate each form.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionNoFormBuilder, ['--no-forms-builder', '-nofb'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_NO_FORM_BUILDER, ['--no-forms-builder', '-nofb'], Option::TypeNoValue, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

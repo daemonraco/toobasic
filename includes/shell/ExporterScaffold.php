@@ -17,7 +17,7 @@ use TooBasic\Shell\Scaffold;
 class ExporterScaffold extends Scaffold {
 	//
 	// Constants.
-	const OptionParam = 'Param';
+	const OPTION_PARAM = 'Param';
 	//
 	// Protected methods.
 	protected function genRoutes() {
@@ -25,7 +25,7 @@ class ExporterScaffold extends Scaffold {
 			parent::genRoutes();
 			//
 			// Controller's route.
-			$opt = $this->_options->option(self::OptionParam);
+			$opt = $this->_options->option(self::OPTION_PARAM);
 			//
 			// Expanding parameters.
 			$params = [];

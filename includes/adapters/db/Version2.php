@@ -23,7 +23,7 @@ class Version2 extends VersionAdapter {
 	// Constants.
 	const PrecisionFloat = 11;
 	const PrecisionInt = 11;
-	const PrecisionVarchar = 256;
+	const PRECISION_VARCHAR = 256;
 	//
 	// Public methods.
 	/**
@@ -322,7 +322,7 @@ class Version2 extends VersionAdapter {
 					break;
 				case DBStructureManager::ColumnTypeVarchar:
 					$out->type = DBStructureManager::ColumnTypeVarchar;
-					$out->precision = isset($expType[1]) ? $expType[1] : self::PrecisionVarchar;
+					$out->precision = isset($expType[1]) ? $expType[1] : self::PRECISION_VARCHAR;
 					break;
 				case DBStructureManager::ColumnTypeEnum:
 					if(isset($expType[1])) {

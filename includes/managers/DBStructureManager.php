@@ -20,7 +20,7 @@ use TooBasic\Translate;
 class DBStructureManager extends Manager {
 	//
 	// Constants.
-	const ErrorOk = 0;
+	const ERROR_OK = 0;
 	const ErrorDefault = 1;
 	const ErrorUnknownTable = 2;
 	const ErrorUnknownType = 3;

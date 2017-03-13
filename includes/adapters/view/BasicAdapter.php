@@ -27,7 +27,7 @@ abstract class BasicAdapter extends Adapter {
 	//
 	// Magic methods.
 	/**
-	 * Class constrctor.
+	 * Class constructor.
 	 */
 	public function __construct() {
 		parent::__construct();

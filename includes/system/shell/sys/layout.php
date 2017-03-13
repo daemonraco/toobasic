@@ -16,12 +16,12 @@ use TooBasic\Shell\Option;
 class LayoutSystool extends TooBasic\Shell\Scaffold {
 	//
 	// Constants.
-	const OptionCached = 'Cached';
-	const OptionFluid = 'Fluid';
-	const OptionType = 'Type';
-	const TypeBasic = 'basic';
-	const TypeBootstrap = 'bootstrap';
-	const TypeTable = 'table';
+	const OPTION_CACHED = 'Cached';
+	const OPTION_FLUID = 'Fluid';
+	const OPTION_TYPE = 'Type';
+	const TYPE_BASIC = 'basic';
+	const TYPE_BOOTSTRAP = 'bootstrap';
+	const TYPE_TABLE = 'table';
 	//
 	// Protected properties.
 	protected $_scaffoldName = 'layout';
@@ -39,11 +39,11 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 			//
 			// Is it fluid?.
-			$opt = $this->_options->option(self::OptionFluid);
+			$opt = $this->_options->option(self::OPTION_FLUID);
 			$this->_assignments['containerFluid'] = $opt->activated();
 			//
 			// Type.
-			$opt = $this->_options->option(self::OptionCached);
+			$opt = $this->_options->option(self::OPTION_CACHED);
 			if($opt->activated()) {
 				switch($opt->value()) {
 					case 'double':
@@ -69,8 +69,8 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			}
 			//
 			// Checking bootstrap option.
-			$opt = $this->_options->option(self::OptionType);
-			if($opt->activated() && $opt->value() == self::TypeBootstrap) {
+			$opt = $this->_options->option(self::OPTION_TYPE);
+			if($opt->activated() && $opt->value() == self::TYPE_BOOTSTRAP) {
 				$this->_assignments['name_nav'] = $this->_names['name-nav'];
 				$this->_assignments['controller_nav'] = $this->_names['layout-name-nav'];
 			}
@@ -95,7 +95,7 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 
 			$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_SCRIPTS][] = 'lib:jquery/jquery-2.1.3.min.js';";
 
-			if(isset($this->_names['templates-type']) && $this->_names['templates-type'] == self::TypeBootstrap) {
+			if(isset($this->_names['templates-type']) && $this->_names['templates-type'] == self::TYPE_BOOTSTRAP) {
 				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap.min.css';";
 				$this->_configLines[$path][] = "\$Defaults[GC_DEFAULTS_HTMLASSETS][GC_DEFAULTS_HTMLASSETS_STYLES][] = 'lib:bootstrap/css/bootstrap-theme.min.css';";
 
@@ -120,21 +120,21 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 			//
 			// Checking bootstrap option.
 			$serparatedBSNav = false;
-			$opt = $this->_options->option(self::OptionType);
+			$opt = $this->_options->option(self::OPTION_TYPE);
 			if($opt->activated()) {
 				$this->_names['templates-type'] = $opt->value();
 				switch($opt->value()) {
-					case self::TypeTable:
+					case self::TYPE_TABLE:
 						$this->_names['templates-prefix'] = 'table/';
 						break;
-					case self::TypeBootstrap:
+					case self::TYPE_BOOTSTRAP:
 						$this->_names['templates-prefix'] = 'bs/';
 						$serparatedBSNav = true;
 						break;
-					case self::TypeBasic:
+					case self::TYPE_BASIC:
 					default:
 						$this->_names['templates-prefix'] = '/';
-						$this->_names['templates-type'] = self::TypeBasic;
+						$this->_names['templates-type'] = self::TYPE_BASIC;
 				}
 			}
 			//
@@ -182,24 +182,24 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		parent::setOptions();
 
 		$text = 'Allows you to create a new layout and deploy it in your site.';
-		$this->_options->option(self::OptionCreate)->setHelpText($text, 'layout-name');
+		$this->_options->option(self::OPTION_CREATE)->setHelpText($text, 'layout-name');
 
 		$text = 'Allows you to eliminate a layout and its artifacts from your site.';
-		$this->_options->option(self::OptionRemove)->setHelpText($text, 'layout-name');
+		$this->_options->option(self::OPTION_REMOVE)->setHelpText($text, 'layout-name');
 
 		$text = "This options allows you to choose a initial structure for your new layout. Options are:\n";
 		$text.= "\t- 'basic' (the default)\n";
 		$text.= "\t- 'bootstrap'\n";
 		$text.= "\t- 'table'\n";
 		$text.= "\t- other values are considered 'basic'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionType, ['--type', '-t'], Option::TypeValue, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TypeValue, $text, 'value'));
 
 		$text = 'When using Twitter Bootstrap, main containers are fluid.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionFluid, ['--fluid', '-f'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FLUID, ['--fluid', '-f'], Option::TypeNoValue, $text));
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCached, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

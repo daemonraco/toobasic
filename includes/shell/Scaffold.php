@@ -22,10 +22,10 @@ use TooBasic\Sanitizer;
 abstract class Scaffold extends ShellTool {
 	//
 	// Constants.
-	const OptionCreate = 'Create';
-	const OptionForced = 'Forced';
-	const OptionModule = 'Module';
-	const OptionRemove = 'Remove';
+	const OPTION_CREATE = 'Create';
+	const OPTION_FORCED = 'Forced';
+	const OPTION_MODULE = 'Module';
+	const OPTION_REMOVE = 'Remove';
 	//
 	// Protected properties.
 	/**
@@ -766,8 +766,8 @@ abstract class Scaffold extends ShellTool {
 			//
 			// Base name.
 			$baseName = '';
-			$cOpt = $this->_options->option(self::OptionCreate);
-			$rOpt = $this->_options->option(self::OptionRemove);
+			$cOpt = $this->_options->option(self::OPTION_CREATE);
+			$rOpt = $this->_options->option(self::OPTION_REMOVE);
 			if($cOpt->activated()) {
 				$baseName = $cOpt->value();
 			} elseif($rOpt->activated()) {
@@ -780,7 +780,7 @@ abstract class Scaffold extends ShellTool {
 			$this->_names[GC_AFIELD_PARENT_DIRECTORY] = false;
 			//
 			// Checking module and parent directory.
-			$opt = $this->_options->option(self::OptionModule);
+			$opt = $this->_options->option(self::OPTION_MODULE);
 			if($opt->activated()) {
 				$this->_names[GC_AFIELD_MODULE_NAME] = $opt->value();
 				$this->_names[GC_AFIELD_PARENT_DIRECTORY] = "{$Directories[GC_DIRECTORIES_MODULES]}/{$this->_names[GC_AFIELD_MODULE_NAME]}";
@@ -890,7 +890,7 @@ abstract class Scaffold extends ShellTool {
 		//
 		// Checking given options if it hasn't been done yet.
 		if($this->_forced === null) {
-			$this->_forced = $this->_options->option(self::OptionForced)->activated();
+			$this->_forced = $this->_options->option(self::OPTION_FORCED)->activated();
 		}
 
 		return $this->_forced;
@@ -1340,17 +1340,17 @@ abstract class Scaffold extends ShellTool {
 	 * suggested that inherited classes update their help texts.
 	 */
 	protected function setOptions() {
-		$text = 'Use: $this->_options->option(self::OptionCreate)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, ['create', 'new', 'add'], Option::TypeValue, $text, 'name'));
+		$text = 'Use: $this->_options->option(self::OPTION_CREATE)->setHelpText(\'text\', \'valueName\');';
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TypeValue, $text, 'name'));
 
-		$text = 'Use: $this->_options->option(self::OptionRemove)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'name'));
+		$text = 'Use: $this->_options->option(self::OPTION_REMOVE)->setHelpText(\'text\', \'valueName\');';
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'name'));
 
 		$text = 'Generate files inside a module.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionModule, ['--module', '-m'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-m'], Option::TypeValue, $text, 'name'));
 
 		$text = 'Overwrite files when they exist (routes are excluded).';
-		$this->_options->addOption(Option::EasyFactory(self::OptionForced, ['--forced'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced'], Option::TypeNoValue, $text));
 	}
 	/**
 	 * This is the main task in charge of creating scaffold assets.

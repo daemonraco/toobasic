@@ -16,8 +16,8 @@ use TooBasic\Shell\Option;
 class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 	//
 	// Constants.
-	const OptionCached = 'Cached';
-	const OptionLayout = 'Layout';
+	const OPTION_CACHED = 'Cached';
+	const OPTION_LAYOUT = 'Layout';
 	//
 	// Protected properties.
 	protected $_genRoutePrefix = '';
@@ -38,7 +38,7 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 			$this->_assignments['nocache'] = false;
 			$this->_assignments['cached'] = '\\TooBasic\\Adapters\\Cache\\Adapter::ExpirationSizeLarge';
 
-			$opt = $this->_options->option(self::OptionCached);
+			$opt = $this->_options->option(self::OPTION_CACHED);
 			if($opt->activated()) {
 				switch($opt->value()) {
 					case 'double':
@@ -64,7 +64,7 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 			}
 
 			$this->_assignments['layout'] = false;
-			$opt = $this->_options->option(self::OptionLayout);
+			$opt = $this->_options->option(self::OPTION_LAYOUT);
 			if($opt->activated()) {
 				if($opt->value() == 'NOLAYOUT') {
 					$this->_assignments['layout'] = 'false';
@@ -73,7 +73,7 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 				}
 			}
 
-			$opt = $this->_options->option(self::OptionParam);
+			$opt = $this->_options->option(self::OPTION_PARAM);
 			$this->_assignments['cache_params'] = [];
 			$this->_assignments['required_params'] = [];
 			if($opt->activated()) {
@@ -115,21 +115,21 @@ class ControllerSystool extends TooBasic\Shell\ExporterScaffold {
 		parent::setOptions();
 
 		$text = 'Allows you to create a new controller and deploy it in your site.';
-		$this->_options->option(self::OptionCreate)->setHelpText($text, 'controller-name');
+		$this->_options->option(self::OPTION_CREATE)->setHelpText($text, 'controller-name');
 
 		$text = 'Allows you to eliminate a controller and its view from your site.';
-		$this->_options->option(self::OptionRemove)->setHelpText($text, 'controller-name');
+		$this->_options->option(self::OPTION_REMOVE)->setHelpText($text, 'controller-name');
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OptionCached, [ '--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, [ '--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
 
 		$text = 'This options allows to set a specific layout for your controller. ';
 		$text.= 'NOLAYOUT means force the controller to work without layout.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionLayout, ['--layout', '-l'], Option::TypeValue, $text, 'layout-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_LAYOUT, ['--layout', '-l'], Option::TypeValue, $text, 'layout-name'));
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
-		$this->_options->addOption(Option::EasyFactory(self::OptionParam, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

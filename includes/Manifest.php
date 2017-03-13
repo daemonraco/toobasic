@@ -19,7 +19,7 @@ use TooBasic\Sanitizer;
 class Manifest {
 	//
 	// Constants.
-	const ErrorOK = 0;
+	const ERROR_OK = 0;
 	const ErrorPHPVersion = 1;
 	const ErrorTooBasciVersion = 2;
 	//

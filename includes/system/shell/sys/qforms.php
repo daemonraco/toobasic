@@ -20,18 +20,18 @@ use TooBasic\Shell\Option;
 class QformsSystool extends TooBasic\Shell\ShellTool {
 	//
 	// Constants.
-	const OptionAction = 'Action';
-	const OptionBootstrapExtras = 'BootstrapExtras';
-	const OptionButton = 'Button';
-	const OptionCreate = 'Create';
-	const OptionForced = 'Forced';
-	const OptionField = 'Field';
-	const OptionMethod = 'Method';
-	const OptionModule = 'Module';
-	const OptionRemove = 'Remove';
-	const OptionType = 'Type';
-	const TwikBColors = 'bcolors';
-	const TwikThin = 'thin';
+	const OPTION_ACTION = 'Action';
+	const OPTION_BOOTSTRAP_EXTRAS = 'BootstrapExtras';
+	const OPTION_BUTTON = 'Button';
+	const OPTION_CREATE = 'Create';
+	const OPTION_FORCED = 'Forced';
+	const OPTION_FIELD = 'Field';
+	const OPTION_METHOD = 'Method';
+	const OPTION_MODULE = 'Module';
+	const OPTION_REMOVE = 'Remove';
+	const OPTION_TYPE = 'Type';
+	const TWIK_BCOLORS = 'bcolors';
+	const TWIK_THIN = 'thin';
 	//
 	// Protected properties.
 	/**
@@ -56,10 +56,10 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "This option creates a Forms Builder specification file based on given parameters.\n";
 		$text.= "It can be use with '--module' to generate the specification inside certain module.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionCreate, ['create', 'new', 'add'], Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option removes a Forms Builder specification file.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionRemove, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'form-name'));
 
 		$text = "This option allows to specify a field. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -73,7 +73,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_INPUT."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_PASSWORD."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_TEXT."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionField, ['--field', '-f'], Option::TypeMultiValue, $text, 'name:type:...'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FIELD, ['--field', '-f'], Option::TypeMultiValue, $text, 'name:type:...'));
 
 		$text = "This option allows to specify a button. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -83,30 +83,30 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_BUTTON."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_RESET."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionButton, ['--button', '-b'], Option::TypeMultiValue, $text, 'name:type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BUTTON, ['--button', '-b'], Option::TypeMultiValue, $text, 'name:type'));
 
 		$text = "This option specifies the default URL where a form should submit its data.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionAction, ['--action', '-a'], Option::TypeValue, $text, 'action'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_ACTION, ['--action', '-a'], Option::TypeValue, $text, 'action'));
 
 		$text = "This option specifies which method should be used when the form is submitted.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionMethod, ['--method', '-m'], Option::TypeValue, $text, 'method'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_METHOD, ['--method', '-m'], Option::TypeValue, $text, 'method'));
 
 		$text = "This option specifies a form type. Available values are:";
 		foreach(array_keys($Defaults[GC_DEFAULTS_FORMS_TYPES]) as $type) {
 			$text.= "\n\t- '{$type}'";
 		}
-		$this->_options->addOption(Option::EasyFactory(self::OptionType, ['--type', '-t'], Option::TypeValue, $text, 'type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TypeValue, $text, 'type'));
 
 		$text = "Generate files inside a module.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionModule, ['--module', '-M'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-M'], Option::TypeValue, $text, 'name'));
 
 		$text = "This option forces the creation of this form previously removing other definition sharing the same name.";
-		$this->_options->addOption(Option::EasyFactory(self::OptionForced, ['--forced', '-F'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced', '-F'], Option::TypeNoValue, $text));
 
 		$text = "This option adds some automatic twiks for bootstrap. Available values are:";
 		$text.= "\n\t- 'thin': thin inputs.";
 		$text.= "\n\t- 'bcolors': Green submits and default for other buttons";
-		$this->_options->addOption(Option::EasyFactory(self::OptionBootstrapExtras, ['--bootstrap-extras', '-bx'], Option::TypeMultiValue, $text, 'twik'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP_EXTRAS, ['--bootstrap-extras', '-bx'], Option::TypeMultiValue, $text, 'twik'));
 	}
 	protected function checkParameters() {
 		$out = [
@@ -119,8 +119,8 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 			GC_AFIELD_BUTTONS => []
 		];
 
-		$fields = $this->params->opt->{self::OptionField};
-		$buttons = $this->params->opt->{self::OptionButton};
+		$fields = $this->params->opt->{self::OPTION_FIELD};
+		$buttons = $this->params->opt->{self::OPTION_BUTTON};
 
 		if($out[GC_AFIELD_STATUS]) {
 			if($fields) {
@@ -185,18 +185,18 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		}
 
 		if($out[GC_AFIELD_STATUS]) {
-			if(isset($this->params->opt->{self::OptionAction})) {
-				$out[GC_AFIELD_ACTION] = $this->params->opt->{self::OptionAction};
+			if(isset($this->params->opt->{self::OPTION_ACTION})) {
+				$out[GC_AFIELD_ACTION] = $this->params->opt->{self::OPTION_ACTION};
 			}
-			if(isset($this->params->opt->{self::OptionMethod})) {
-				$out[GC_AFIELD_METHOD] = $this->params->opt->{self::OptionMethod};
+			if(isset($this->params->opt->{self::OPTION_METHOD})) {
+				$out[GC_AFIELD_METHOD] = $this->params->opt->{self::OPTION_METHOD};
 			}
-			if(isset($this->params->opt->{self::OptionType})) {
-				$out[GC_AFIELD_TYPE] = $this->params->opt->{self::OptionType};
+			if(isset($this->params->opt->{self::OPTION_TYPE})) {
+				$out[GC_AFIELD_TYPE] = $this->params->opt->{self::OPTION_TYPE};
 			}
 		}
 
-		if($out[GC_AFIELD_STATUS] && isset($this->params->opt->{self::OptionBootstrapExtras})) {
+		if($out[GC_AFIELD_STATUS] && isset($this->params->opt->{self::OPTION_BOOTSTRAP_EXTRAS})) {
 			foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
 				if(!isset($out[GC_AFIELD_FIELDS][$k]['attrs'])) {
 					$out[GC_AFIELD_FIELDS][$k]['attrs'] = ['class' => ''];
@@ -208,9 +208,9 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 				}
 			}
 
-			foreach($this->params->opt->{self::OptionBootstrapExtras} as $twik) {
+			foreach($this->params->opt->{self::OPTION_BOOTSTRAP_EXTRAS} as $twik) {
 				switch($twik) {
-					case self::TwikThin:
+					case self::TWIK_THIN:
 						foreach($out[GC_AFIELD_FIELDS] as $k => $v) {
 							$out[GC_AFIELD_FIELDS][$k]['attrs']['class'].= ' input-sm';
 						}
@@ -218,7 +218,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 							$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'].= ' btn-sm';
 						}
 						break;
-					case self::TwikBColors:
+					case self::TWIK_BCOLORS:
 						foreach($out[GC_AFIELD_BUTTONS] as $k => $v) {
 							if($v[GC_AFIELD_TYPE] == GC_FORMS_BUTTONTYPE_SUBMIT) {
 								$out[GC_AFIELD_BUTTONS][$k]['attrs']['class'].= ' btn-success';
@@ -254,8 +254,8 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 	protected function taskCreate($spacer = "") {
 		//
 		// Default values.
-		$formName = $this->params->opt->{self::OptionCreate};
-		$module = $this->params->opt->{self::OptionModule};
+		$formName = $this->params->opt->{self::OPTION_CREATE};
+		$module = $this->params->opt->{self::OPTION_MODULE};
 		//
 		// Loading helpers.
 		$this->loadHelpers();
@@ -271,7 +271,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 			$writer = false;
 			//
 			// Checking forced parameter.
-			if(isset($this->params->opt->{self::OptionForced})) {
+			if(isset($this->params->opt->{self::OPTION_FORCED})) {
 				$this->taskRemove($spacer, $formName);
 			}
 			//
@@ -354,7 +354,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 	protected function taskRemove($spacer = "", $name = false) {
 		//
 		// Default values.
-		$formName = $name ? $name : $this->params->opt->{self::OptionRemove};
+		$formName = $name ? $name : $this->params->opt->{self::OPTION_REMOVE};
 		//
 		// Loading helpers.
 		$this->loadHelpers();
