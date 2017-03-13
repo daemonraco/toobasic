@@ -140,8 +140,8 @@ use \TooBasic\Shell\Option as TBS_Option;
 class UsersTool extends \TooBasic\Shell\ShellTool {
 	protected function setOptions() {
 		$this->_options->setHelpText("This tool allows to perform certain tasks related with users.");
-		$this->_options->addOption(TBS_Option::EasyFactory("ListInvalids", ["-l","--list"], TBS_Option::TypeNoValue, "Prompts a list of users that have to be removed due to inactivity."));
-		$this->_options->addOption(TBS_Option::EasyFactory("RemoveInvalids", ["-rm","--remove-invalids"], TBS_Option::TypeNoValue, "Removes users that have become invalid due to inactivity."));
+		$this->_options->addOption(TBS_Option::EasyFactory("ListInvalids", ["-l","--list"], TBS_Option::TYPE_NO_VALUE, "Prompts a list of users that have to be removed due to inactivity."));
+		$this->_options->addOption(TBS_Option::EasyFactory("RemoveInvalids", ["-rm","--remove-invalids"], TBS_Option::TYPE_NO_VALUE, "Removes users that have become invalid due to inactivity."));
 	}
 	protected function taskListInvalids($spacer = "") {
 		echo "{$spacer}Invalids users:\n";

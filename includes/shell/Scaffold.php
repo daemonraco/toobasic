@@ -1341,16 +1341,16 @@ abstract class Scaffold extends ShellTool {
 	 */
 	protected function setOptions() {
 		$text = 'Use: $this->_options->option(self::OPTION_CREATE)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = 'Use: $this->_options->option(self::OPTION_REMOVE)->setHelpText(\'text\', \'valueName\');';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = 'Generate files inside a module.';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-m'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-m'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = 'Overwrite files when they exist (routes are excluded).';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced'], Option::TYPE_NO_VALUE, $text));
 	}
 	/**
 	 * This is the main task in charge of creating scaffold assets.

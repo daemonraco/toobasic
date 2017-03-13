@@ -57,7 +57,7 @@ class OptionsStack extends ParamsStack {
 		if($opt) {
 			//
 			// Checking if it is an option with or without value.
-			if($opt->type() == Option::TypeNoValue) {
+			if($opt->type() == Option::TYPE_NO_VALUE) {
 				$out = $opt->activated();
 			} else {
 				//
@@ -121,7 +121,7 @@ class OptionsStack extends ParamsStack {
 			$opt = $this->_options->option($optName);
 			//
 			// Getting the proper value.
-			$out[$opt->name()] = $opt->type() == Option::TypeNoValue ? true : $opt->value();
+			$out[$opt->name()] = $opt->type() == Option::TYPE_NO_VALUE ? true : $opt->value();
 		}
 
 		return $out;

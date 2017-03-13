@@ -106,10 +106,10 @@ class ServiceSystool extends TooBasic\Shell\ExporterScaffold {
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TYPE_VALUE, $text, 'delay-size'));
 
 		$text = 'Adds a param to be use as cache key and url requirement.';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TYPE_MULTI_VALUE, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

@@ -94,14 +94,14 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 				];
 				switch($paramType) {
 					case 'M':
-						$aux[GC_AFIELD_TYPE] = 'TypeMultiValue';
+						$aux[GC_AFIELD_TYPE] = 'TYPE_MULTI_VALUE';
 						break;
 					case 'V':
-						$aux[GC_AFIELD_TYPE] = 'TypeValue';
+						$aux[GC_AFIELD_TYPE] = 'TYPE_VALUE';
 						break;
 					case 'N':
 					default:
-						$aux[GC_AFIELD_TYPE] = 'TypeNoValue';
+						$aux[GC_AFIELD_TYPE] = 'TYPE_NO_VALUE';
 						break;
 				}
 
@@ -176,7 +176,7 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 
 		$text = 'This option allows you to select which type of tool you want to create. ';
 		$text.= 'Options are: cron or tool';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TypeValue, $text, 'tool-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TYPE_VALUE, $text, 'tool-type'));
 
 		$text = 'Adds a param to be use in command line. ';
 		$text.= 'You can specify a type by writing something like \'--param name:V\'. ';
@@ -184,10 +184,10 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- 'N' for simple parameters (default).\n";
 		$text.= "\t- 'V' for options with one value.\n";
 		$text.= "\t- 'M' for options with multiple values.\n";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PARAM, ['--param', '-p'], Option::TYPE_MULTI_VALUE, $text, 'param-name'));
 
 		$text = 'Adds a param that triggers a method.';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_MASTER_PARAM, ['--master-param', '-mp'], Option::TypeMultiValue, $text, 'param-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_MASTER_PARAM, ['--master-param', '-mp'], Option::TYPE_MULTI_VALUE, $text, 'param-name'));
 	}
 	protected function taskCreate($spacer = '') {
 		$ok = true;

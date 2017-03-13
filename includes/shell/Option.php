@@ -15,9 +15,9 @@ namespace TooBasic\Shell;
 class Option {
 	//
 	// Constants.
-	const TypeNoValue = 'novalue';
-	const TypeValue = 'value';
-	const TypeMultiValue = 'multivalue';
+	const TYPE_NO_VALUE = 'novalue';
+	const TYPE_VALUE = 'value';
+	const TYPE_MULTI_VALUE = 'multivalue';
 	// 
 	// Protected properties.
 	/**
@@ -73,7 +73,7 @@ class Option {
 	 * @param string $name Name to assign and identify this option.
 	 * @param string $type Mechanism to be used by this option.
 	 */
-	public function __construct($name, $type = self::TypeNoValue) {
+	public function __construct($name, $type = self::TYPE_NO_VALUE) {
 		$this->_name = $name;
 		$this->_type = $type;
 		//
@@ -131,8 +131,8 @@ class Option {
 				//
 				// Internal list of options that require values.
 				static $needingMoreTypes = [
-					self::TypeValue,
-					self::TypeMultiValue
+					self::TYPE_VALUE,
+					self::TYPE_MULTI_VALUE
 				];
 				//
 				// Setting this option as activated.
@@ -171,7 +171,7 @@ class Option {
 			//
 			// Piece of text to expess how values are specified.
 			$values = '';
-			if(in_array($this->_type, [self::TypeMultiValue, self::TypeValue])) {
+			if(in_array($this->_type, [self::TYPE_MULTI_VALUE, self::TYPE_VALUE])) {
 				$values = " <{$this->_helpValueName}>";
 			}
 			//
@@ -273,13 +273,13 @@ class Option {
 			//
 			// Choosing the proper value to be returned.
 			switch($this->_type) {
-				case self::TypeNoValue:
+				case self::TYPE_NO_VALUE:
 					$out = true;
 					break;
-				case self::TypeValue:
+				case self::TYPE_VALUE:
 					$out = $this->_lastValue;
 					break;
-				case self::TypeMultiValue:
+				case self::TYPE_MULTI_VALUE:
 					$out = $this->_values;
 					break;
 			}
@@ -317,7 +317,7 @@ class Option {
 	 * specified.
 	 * @return \TooBasic\Shell\Option Returns a new object already set.
 	 */
-	public static function EasyFactory($name, $triggers, $type = self::TypeNoValue, $helpText = false, $helpTextValue = 'value') {
+	public static function EasyFactory($name, $triggers, $type = self::TYPE_NO_VALUE, $helpText = false, $helpTextValue = 'value') {
 		//
 		// Building a new option object.
 		$out = new self($name, $type);

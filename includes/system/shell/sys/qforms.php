@@ -56,10 +56,10 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 
 		$text = "This option creates a Forms Builder specification file based on given parameters.\n";
 		$text.= "It can be use with '--module' to generate the specification inside certain module.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CREATE, ['create', 'new', 'add'], Option::TYPE_VALUE, $text, 'form-name'));
 
 		$text = "This option removes a Forms Builder specification file.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TypeValue, $text, 'form-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_REMOVE, ['remove', 'rm', 'delete'], Option::TYPE_VALUE, $text, 'form-name'));
 
 		$text = "This option allows to specify a field. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -73,7 +73,7 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_INPUT."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_PASSWORD."'.";
 		$text.= "\n\t- '".GC_FORMS_FIELDTYPE_TEXT."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_FIELD, ['--field', '-f'], Option::TypeMultiValue, $text, 'name:type:...'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FIELD, ['--field', '-f'], Option::TYPE_MULTI_VALUE, $text, 'name:type:...'));
 
 		$text = "This option allows to specify a button. ";
 		$text.= "Its value must be a string separated by colons (':') where each piece is:\n";
@@ -83,30 +83,30 @@ class QformsSystool extends TooBasic\Shell\ShellTool {
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_BUTTON."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_SUBMIT."'.";
 		$text.= "\n\t- '".GC_FORMS_BUTTONTYPE_RESET."'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_BUTTON, ['--button', '-b'], Option::TypeMultiValue, $text, 'name:type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BUTTON, ['--button', '-b'], Option::TYPE_MULTI_VALUE, $text, 'name:type'));
 
 		$text = "This option specifies the default URL where a form should submit its data.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_ACTION, ['--action', '-a'], Option::TypeValue, $text, 'action'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_ACTION, ['--action', '-a'], Option::TYPE_VALUE, $text, 'action'));
 
 		$text = "This option specifies which method should be used when the form is submitted.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_METHOD, ['--method', '-m'], Option::TypeValue, $text, 'method'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_METHOD, ['--method', '-m'], Option::TYPE_VALUE, $text, 'method'));
 
 		$text = "This option specifies a form type. Available values are:";
 		foreach(array_keys($Defaults[GC_DEFAULTS_FORMS_TYPES]) as $type) {
 			$text.= "\n\t- '{$type}'";
 		}
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TypeValue, $text, 'type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TYPE_VALUE, $text, 'type'));
 
 		$text = "Generate files inside a module.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-M'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_MODULE, ['--module', '-M'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = "This option forces the creation of this form previously removing other definition sharing the same name.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced', '-F'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FORCED, ['--forced', '-F'], Option::TYPE_NO_VALUE, $text));
 
 		$text = "This option adds some automatic twiks for bootstrap. Available values are:";
 		$text.= "\n\t- 'thin': thin inputs.";
 		$text.= "\n\t- 'bcolors': Green submits and default for other buttons";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP_EXTRAS, ['--bootstrap-extras', '-bx'], Option::TypeMultiValue, $text, 'twik'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP_EXTRAS, ['--bootstrap-extras', '-bx'], Option::TYPE_MULTI_VALUE, $text, 'twik'));
 	}
 	protected function checkParameters() {
 		$out = [

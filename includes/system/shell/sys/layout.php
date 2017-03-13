@@ -192,14 +192,14 @@ class LayoutSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- 'bootstrap'\n";
 		$text.= "\t- 'table'\n";
 		$text.= "\t- other values are considered 'basic'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TypeValue, $text, 'value'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_TYPE, ['--type', '-t'], Option::TYPE_VALUE, $text, 'value'));
 
 		$text = 'When using Twitter Bootstrap, main containers are fluid.';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_FLUID, ['--fluid', '-f'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_FLUID, ['--fluid', '-f'], Option::TYPE_NO_VALUE, $text));
 
 		$text = 'This options allows to set how long a cache entry should be kept for it. ';
 		$text.= 'Options are: double, large, medium, small, NOCACHE';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TypeValue, $text, 'delay-size'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CACHED, ['--cached', '-c'], Option::TYPE_VALUE, $text, 'delay-size'));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();

@@ -19,7 +19,7 @@ class TranslateTool extends TooBasic\Shell\ShellTool {
 	protected function setOptions() {
 		$this->_options->setHelpText('This tool provides a way to perform certain batch task related with translations.');
 
-		$this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_COMPILE, ['-c', '--compile'], TBS_Option::TypeNoValue));
+		$this->_options->addOption(TBS_Option::EasyFactory(self::OPTION_COMPILE, ['-c', '--compile'], TBS_Option::TYPE_NO_VALUE));
 	}
 	protected function taskCompile($spacer = '') {
 		echo "{$spacer}Compiling languages:\n";

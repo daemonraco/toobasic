@@ -891,42 +891,42 @@ class TableSystool extends TooBasic\Shell\Scaffold {
 		$text.= "\t- colname:text Column named 'colname' of type TEXT.\n";
 		$text.= "\t- colname:timestamp Column named 'colname' of type TIMESTAMP.\n";
 		$text.= "\t- colname:varchar Column named 'colname' of type VARCHAR(256) (this is the default).";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_COLUMN, ['--column', '-c'], Option::TypeMultiValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_COLUMN, ['--column', '-c'], Option::TYPE_MULTI_VALUE, $text, 'name'));
 
 		$text = "This parameters indicates which column shoud be consided as an unique name.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_NAME_FIELD, ['--name-field', '-nf'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_NAME_FIELD, ['--name-field', '-nf'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = "If your table doesn't use the default connection, you may specify it with this parameter.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_CONNECTION, ['--connection', '-C'], Option::TypeValue, $text, 'name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_CONNECTION, ['--connection', '-C'], Option::TYPE_VALUE, $text, 'name'));
 
 		$text = "If your plural names are getting all messed up, specify the value you want with this parameters.\n";
 		$text.= "For example, the plural of 'person' isn't 'persons', it's 'people'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_PLURAL, ['--plural', '-P'], Option::TypeValue, $text, 'plural-name'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_PLURAL, ['--plural', '-P'], Option::TYPE_VALUE, $text, 'plural-name'));
 
 		$text = "Sometimes there are specific matters related to the type of database you are using, so this parameters allows you to hint what your using, 'mysql', 'sqlite', etc.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_SYSTEM, ['--type'], Option::TypeValue, $text, 'db-type'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SYSTEM, ['--type'], Option::TYPE_VALUE, $text, 'db-type'));
 
 		$text = "If you want to create a simple table without default columns and indexes, use this parameter.\n";
 		$text = "Note: This won't create controllers and ohter related stuff.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_RAW, ['--raw', '-r'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_RAW, ['--raw', '-r'], Option::TYPE_NO_VALUE, $text));
 
 		$text = "Sets the specifications file version, possible values are: '1' and '2'.\n";
 		$text.= "By default it assumes '2'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_SPECS_VERSION, ['--specs-version', '-sv'], Option::TypeValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SPECS_VERSION, ['--specs-version', '-sv'], Option::TYPE_VALUE, $text));
 
 		$text = 'This parameter activates the generation of JS scripts for autocompletion. ';
 		$text.= "It depends on parameter '--name-field'.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_GEN_AUTOCOMPLETE, ['--autocomplete', '-ac'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_GEN_AUTOCOMPLETE, ['--autocomplete', '-ac'], Option::TYPE_NO_VALUE, $text));
 
 		$text = 'All generated view will have a bootstrap structure.';
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP, ['--bootstrap', '-bs'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_BOOTSTRAP, ['--bootstrap', '-bs'], Option::TYPE_NO_VALUE, $text));
 
 		$text = "When this option is given, generated representations and factories incorporate TooBasic's search engine logic.\n";
 		$text.= "Given value is used as item type for searchable items indexation.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_SEARCHABLE, ['--searchable', '-sr'], Option::TypeValue, $text, 'item-code'));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_SEARCHABLE, ['--searchable', '-sr'], Option::TYPE_VALUE, $text, 'item-code'));
 
 		$text = "This option disables the use of form builders to generate each form.";
-		$this->_options->addOption(Option::EasyFactory(self::OPTION_NO_FORM_BUILDER, ['--no-forms-builder', '-nofb'], Option::TypeNoValue, $text));
+		$this->_options->addOption(Option::EasyFactory(self::OPTION_NO_FORM_BUILDER, ['--no-forms-builder', '-nofb'], Option::TYPE_NO_VALUE, $text));
 	}
 	protected function taskCreate($spacer = '') {
 		$this->genNames();
