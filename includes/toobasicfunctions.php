@@ -17,9 +17,9 @@ use TooBasic\Managers\ManifestsManager;
 
 //
 // Global constants for the generic debug message printer @{
-const DebugThingTypeOk = 'ok';
-const DebugThingTypeError = 'error';
-const DebugThingTypeWarning = 'warning';
+const DEBUG_THING_TYPE_OK = 'ok';
+const DEBUG_THING_TYPE_ERROR = 'error';
+const DEBUG_THING_TYPE_WARNING = 'warning';
 // @}
 /**
  * This basic function checks for writing permissions on core directories, if any
@@ -44,14 +44,14 @@ function checkBasicPermissions() {
 		//
 		// Checking if it really is a directory.
 		if(!is_dir($path)) {
-			debugThing("'{$path}' is not a directory", \TooBasic\DebugThingTypeError);
+			debugThing("'{$path}' is not a directory", \TooBasic\DEBUG_THING_TYPE_ERROR);
 			die;
 		}
 		//
 		// Checking if the current system user has permissions to write
 		// inside it.
 		if(!is_writable($path)) {
-			debugThing("'{$path}' is not writable", \TooBasic\DebugThingTypeError);
+			debugThing("'{$path}' is not writable", \TooBasic\DEBUG_THING_TYPE_ERROR);
 			die;
 		}
 	}
@@ -184,7 +184,7 @@ function debugControllerExports() {
  * @param string $title If present, the shown message will present this parameter
  * as a title.
  */
-function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
+function debugThing($thing, $type = \TooBasic\DEBUG_THING_TYPE_OK, $title = null) {
 	//
 	// Storing data displayed in a buffer for post processing.
 	ob_start();
@@ -240,26 +240,26 @@ function debugThing($thing, $type = \TooBasic\DebugThingTypeOk, $title = null) {
 		$shellOut .= "+{$delim}\n";
 
 		switch($type) {
-			case \TooBasic\DebugThingTypeError:
+			case \TooBasic\DEBUG_THING_TYPE_ERROR:
 				echo Shell\Color::Red($shellOut);
 				break;
-			case \TooBasic\DebugThingTypeWarning:
+			case \TooBasic\DEBUG_THING_TYPE_WARNING:
 				echo Shell\Color::Yellow($shellOut);
 				break;
-			case \TooBasic\DebugThingTypeOk:
+			case \TooBasic\DEBUG_THING_TYPE_OK:
 			default:
 				echo $shellOut;
 		}
 	} else {
 		$style = '';
 		switch($type) {
-			case \TooBasic\DebugThingTypeError:
+			case \TooBasic\DEBUG_THING_TYPE_ERROR:
 				$style = 'border:dashed red 2px;color:red;';
 				break;
-			case \TooBasic\DebugThingTypeWarning:
+			case \TooBasic\DEBUG_THING_TYPE_WARNING:
 				$style = 'border:dashed orange 2px;color:orangered;';
 				break;
-			case \TooBasic\DebugThingTypeOk:
+			case \TooBasic\DEBUG_THING_TYPE_OK:
 			default:
 				$style = 'border:dashed gray 1px;color:black;';
 		}

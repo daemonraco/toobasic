@@ -30,7 +30,7 @@ class Exception extends \Exception {
 				$position++;
 			}
 		};
-		debugThing($func, DebugThingTypeError);
+		debugThing($func, DEBUG_THING_TYPE_ERROR);
 		die;
 	}
 	public static function DisplayWebPage(\Exception &$exception) {

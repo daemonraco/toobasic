@@ -79,7 +79,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Debugging.
 		if($this->_debugQueries) {
-			\TooBasic\debugThing($out, \TooBasic\DebugThingTypeOk);
+			\TooBasic\debugThing($out, \TooBasic\DEBUG_THING_TYPE_OK);
 		}
 
 		return $out;
@@ -126,7 +126,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Debugging.
 		if($this->_debugQueries) {
-			\TooBasic\debugThing($out, \TooBasic\DebugThingTypeOk);
+			\TooBasic\debugThing($out, \TooBasic\DEBUG_THING_TYPE_OK);
 		}
 
 		return $out;
@@ -190,7 +190,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Debugging.
 		if($this->_debugQueries) {
-			\TooBasic\debugThing($out, \TooBasic\DebugThingTypeOk);
+			\TooBasic\debugThing($out, \TooBasic\DEBUG_THING_TYPE_OK);
 		}
 
 		return $out;
@@ -239,7 +239,7 @@ abstract class QueryAdapter extends \TooBasic\Adapters\Adapter {
 		//
 		// Debugging.
 		if($this->_debugQueries) {
-			\TooBasic\debugThing($out, \TooBasic\DebugThingTypeOk);
+			\TooBasic\debugThing($out, \TooBasic\DEBUG_THING_TYPE_OK);
 		}
 
 		return $out;

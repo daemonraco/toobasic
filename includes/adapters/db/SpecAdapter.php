@@ -78,7 +78,7 @@ abstract class SpecAdapter extends \TooBasic\Adapters\Adapter {
 
 		if(!$out) {
 			$info = $this->_db->errorInfo();
-			\TooBasic\debugThing("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_db->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", \TooBasic\DebugThingTypeError);
+			\TooBasic\debugThing("Unable to run query: {$query}. {$this->_engine} Error: [{$this->_db->errorCode()}] {$info[0]}-{$info[1]}-{$info[2]}", \TooBasic\DEBUG_THING_TYPE_ERROR);
 		}
 
 		return $out;
