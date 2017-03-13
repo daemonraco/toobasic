@@ -24,6 +24,6 @@ class ConfigLoaderMulti extends ConfigLoader {
 	 * @return string[] Returns a list of absolute paths.
 	 */
 	protected function paths() {
-		return Paths::Instance()->configPath($this->_config->name(), Paths::ExtensionJSON, true);
+		return Paths::Instance()->configPath($this->_config->name(), Paths::EXTENSION_JSON, true);
 	}
 }

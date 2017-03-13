@@ -76,7 +76,7 @@ Take a look at this examples:
 echo \TooBasic\Paths::Instance()->configPath("boxes_types")."\n";
 //
 // This line will find and return the path 'ROOTDIR/site/configs/boxes_types.json'.
-echo \TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::ExtensionJSON)."\n";
+echo \TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::EXTENSION_JSON)."\n";
 ```
 
 _Where is the magic in this?_ The real magic comes when you install a module, if
@@ -90,8 +90,8 @@ what you wanted to hear (... I mean, read), well there's a work around for that
 and it will look like this:
 ```php
 <?php
-print_r(\TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::ExtensionPHP, true));
-print_r(\TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::ExtensionJSON, true));
+print_r(\TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::EXTENSION_PHP, true));
+print_r(\TooBasic\Paths::Instance()->configPath("boxes_types", \TooBasic\Paths::EXTENSION_JSON, true));
 ```
 Now we are using a `print_r` because we are going to get an array with all found
 paths.

@@ -155,7 +155,7 @@ abstract class CoreProps {
 				} else {
 					//
 					// Guessing JSON definition file.
-					$filename = Paths::Instance()->representationPath($name, false, Paths::ExtensionJSON);
+					$filename = Paths::Instance()->representationPath($name, false, Paths::EXTENSION_JSON);
 					if($filename) {
 						//
 						// Loading generic object.

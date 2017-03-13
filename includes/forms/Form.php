@@ -56,7 +56,7 @@ class Form {
 		//
 		// Guessing names.
 		$fileName = Names::SnakeFilename($this->name());
-		$this->_path = Paths::Instance()->customPaths($Paths[GC_PATHS_FORMS], $fileName, Paths::ExtensionJSON);
+		$this->_path = Paths::Instance()->customPaths($Paths[GC_PATHS_FORMS], $fileName, Paths::EXTENSION_JSON);
 	}
 	//
 	// Public methods.

@@ -95,7 +95,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 		$pathsMgr = Paths::Instance();
 		//
 		// Searching main files.
-		$path = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $name, Paths::ExtensionJSON);
+		$path = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $name, Paths::EXTENSION_JSON);
 		if($path) {
 			//
 			// Global dependencies.
@@ -144,7 +144,7 @@ class SApiManager extends \TooBasic\Managers\Manager {
 				foreach($extends as $subName) {
 					//
 					// Searching extension file.
-					$exPath = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $subName, Paths::ExtensionJSON);
+					$exPath = $pathsMgr->customPaths($Paths[GC_PATHS_SAPIREADER], $subName, Paths::EXTENSION_JSON);
 					//
 					// Saving track.
 					$json->extended[$subName] = $exPath;

@@ -451,16 +451,16 @@ function getConfigurationFilesList() {
 		//
 		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		$out = $pathsProvider->configPath('config_shell', Paths::ExtensionPHP, true);
+		$out = $pathsProvider->configPath('config_shell', Paths::EXTENSION_PHP, true);
 	} else {
 		//
 		// Loading each extension and site sub-config file named
 		// 'config_http.php'.
-		$out = $pathsProvider->configPath('config_http', Paths::ExtensionPHP, true);
+		$out = $pathsProvider->configPath('config_http', Paths::EXTENSION_PHP, true);
 	}
 	//
 	// Loading each extension and site sub-config file named 'config.php'.
-	$out = array_merge($pathsProvider->configPath('config', Paths::ExtensionPHP, true), $out);
+	$out = array_merge($pathsProvider->configPath('config', Paths::EXTENSION_PHP, true), $out);
 	//
 	// Priorities @{
 	//

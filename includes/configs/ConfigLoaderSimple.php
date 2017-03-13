@@ -26,7 +26,7 @@ class ConfigLoaderSimple extends ConfigLoader {
 	protected function paths() {
 		$out = [];
 
-		$aux = Paths::Instance()->configPath($this->_config->name(), Paths::ExtensionJSON);
+		$aux = Paths::Instance()->configPath($this->_config->name(), Paths::EXTENSION_JSON);
 		if($aux) {
 			$out[] = $aux;
 		}

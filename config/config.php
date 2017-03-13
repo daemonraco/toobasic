@@ -281,7 +281,7 @@ $auxParamsManager = \TooBasic\Params::Instance();
 //
 // Debugs lister.
 if(isset($auxParamsManager->debugdebugs)) {
-	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::ExtensionJSON)), true);
+	$config = json_decode(file_get_contents(TB_Paths::Instance()->configPath('known_debugs', TB_Paths::EXTENSION_JSON)), true);
 	ksort($config['debugs']);
 	\TooBasic\debugThingInPage(function() use ($config) {
 		echo '<dl class="dl-horizontal">';

@@ -13,8 +13,8 @@ class TestController extends \TooBasic\Controller {
 	// Protected methods.
 	protected function basicRun() {
 		$this->assign('testConfigurationFileSearches', $this->paths->configPath('phpunit_conf'));
-		$this->assign('testPhpConfigurationFileSearches', $this->paths->configPath('phpunit_conf', \TooBasic\Paths::ExtensionPHP));
-		$this->assign('testJsonConfigurationFileSearches', $this->paths->configPath('phpunit_conf', \TooBasic\Paths::ExtensionJSON));
+		$this->assign('testPhpConfigurationFileSearches', $this->paths->configPath('phpunit_conf', \TooBasic\Paths::EXTENSION_PHP));
+		$this->assign('testJsonConfigurationFileSearches', $this->paths->configPath('phpunit_conf', \TooBasic\Paths::EXTENSION_JSON));
 		$this->assign('testControllerFilesSearches', $this->paths->controllerPath('phpunit_ctrl'));
 		$this->assign('testCustomFilesSearches', $this->paths->customPaths('phpunit_custom', 'phpunit_cust', 'ext'));
 		$this->assign('testEmailFilesSearches', $this->paths->emailControllerPath('phpunit_mail'));

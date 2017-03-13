@@ -219,7 +219,7 @@ abstract class Controller extends Exporter {
 				// Rendering and obtaining results @{
 				$this->_viewAdapter->autoAssigns();
 				$this->_lastRun[GC_AFIELD_HEADERS] = $this->_viewAdapter->headers();
-				$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::ExtensionTemplate));
+				$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("{$this->_mode}/{$this->_viewName}.".Paths::EXTENSION_TEMPLATE));
 				// @}
 				//
 				// Storing a cache entry if it's active.

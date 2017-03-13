@@ -16,13 +16,13 @@ namespace TooBasic;
 class Paths extends Singleton {
 	//
 	// Constants.
-	const ExtensionCSS = 'css';
-	const ExtensionHTML = 'html';
-	const ExtensionJS = 'js';
-	const ExtensionJSON = 'json';
-	const ExtensionPHP = 'php';
-	const ExtensionSQL = 'sql';
-	const ExtensionTemplate = 'html';
+	const EXTENSION_CSS = 'css';
+	const EXTENSION_HTML = 'html';
+	const EXTENSION_JS = 'js';
+	const EXTENSION_JSON = 'json';
+	const EXTENSION_PHP = 'php';
+	const EXTENSION_SQL = 'sql';
+	const EXTENSION_TEMPLATE = 'html';
 	//
 	// Protected class properties.
 	/**
@@ -141,7 +141,7 @@ class Paths extends Singleton {
 	 * @return mixed Returns an array with every path found or just one string
 	 * when it's not set as full. All paths are absolute.
 	 */
-	public function configPath($configName, $extension = self::ExtensionPHP, $full = false) {
+	public function configPath($configName, $extension = self::EXTENSION_PHP, $full = false) {
 		global $Paths;
 		return $this->find($this->_configPaths, false, $Paths[GC_PATHS_CONFIGS], $configName, $extension, $full);
 	}
@@ -158,7 +158,7 @@ class Paths extends Singleton {
 	 */
 	public function controllerPath($actionName, $full = false) {
 		global $Paths;
-		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::ExtensionPHP, $full);
+		return $this->find($this->_controllerPaths, false, $Paths[GC_PATHS_CONTROLLERS], $actionName, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This methods allows to search files inside a custom subfolder.
@@ -233,7 +233,7 @@ class Paths extends Singleton {
 	 */
 	public function emailControllerPath($emailName, $full = false) {
 		global $Paths;
-		return $this->find($this->_emailControllerPaths, false, $Paths[GC_PATHS_EMAIL_CONTROLLERS], $emailName, self::ExtensionPHP, $full);
+		return $this->find($this->_emailControllerPaths, false, $Paths[GC_PATHS_EMAIL_CONTROLLERS], $emailName, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all style files matching
@@ -248,7 +248,7 @@ class Paths extends Singleton {
 	 */
 	public function cssPath($cssName, $full = false) {
 		global $Paths;
-		return $this->find($this->_cssPaths, true, $Paths[GC_PATHS_CSS], $cssName, self::ExtensionCSS, $full);
+		return $this->find($this->_cssPaths, true, $Paths[GC_PATHS_CSS], $cssName, self::EXTENSION_CSS, $full);
 	}
 	/**
 	 * This method looks for a database structure callback file.
@@ -259,7 +259,7 @@ class Paths extends Singleton {
 	 */
 	public function dbSpecCallbackPaths($callbackName) {
 		global $Paths;
-		return $this->find($this->_dbSpecCallbackPaths, false, $Paths[GC_PATHS_DBSPECSCALLBACK], $callbackName, self::ExtensionSQL, false);
+		return $this->find($this->_dbSpecCallbackPaths, false, $Paths[GC_PATHS_DBSPECSCALLBACK], $callbackName, self::EXTENSION_SQL, false);
 	}
 	/**
 	 * This method returns the full list of database structure specifications.
@@ -268,7 +268,7 @@ class Paths extends Singleton {
 	 */
 	public function dbSpecPaths() {
 		global $Paths;
-		return $this->find($this->_dbSpecPaths, false, $Paths[GC_PATHS_DBSPECS], '*', self::ExtensionJSON, true);
+		return $this->find($this->_dbSpecPaths, false, $Paths[GC_PATHS_DBSPECS], '*', self::EXTENSION_JSON, true);
 	}
 	/**
 	 * Search recursively for files matching a given patterns.
@@ -373,7 +373,7 @@ class Paths extends Singleton {
 	 */
 	public function jsPath($jsName, $full = false) {
 		global $Paths;
-		return $this->find($this->_jsPaths, true, $Paths[GC_PATHS_JS], $jsName, self::ExtensionJS, $full);
+		return $this->find($this->_jsPaths, true, $Paths[GC_PATHS_JS], $jsName, self::EXTENSION_JS, $full);
 	}
 	/**
 	 * This method allows to get a list of directories where non compiled
@@ -416,7 +416,7 @@ class Paths extends Singleton {
 		}
 		//
 		// Looking for files.
-		$out = $this->find($this->_langPaths[$lang], false, $Paths[GC_PATHS_LANGS], $lang, self::ExtensionJSON, true);
+		$out = $this->find($this->_langPaths[$lang], false, $Paths[GC_PATHS_LANGS], $lang, self::EXTENSION_JSON, true);
 		//
 		// Returning found paths.
 		return $out;
@@ -434,7 +434,7 @@ class Paths extends Singleton {
 	 */
 	public function modelPath($modelName, $full = false) {
 		global $Paths;
-		return $this->find($this->_modelsPaths, false, $Paths[GC_PATHS_MODELS], $modelName, self::ExtensionPHP, $full);
+		return $this->find($this->_modelsPaths, false, $Paths[GC_PATHS_MODELS], $modelName, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method allows to access the list of manifest files for each active
@@ -467,7 +467,7 @@ class Paths extends Singleton {
 	 * @return mixed Returns an array with every path found or just one string
 	 * when it's not set as full. All paths are absolute.
 	 */
-	public function representationPath($representationName, $full = false, $extension = self::ExtensionPHP) {
+	public function representationPath($representationName, $full = false, $extension = self::EXTENSION_PHP) {
 		global $Paths;
 		return $this->find($this->_representationPaths, false, $Paths[GC_PATHS_REPRESENTATIONS], $representationName, $extension, $full);
 	}
@@ -507,7 +507,7 @@ class Paths extends Singleton {
 	 */
 	public function routesPaths($fileName = 'routes') {
 		global $Paths;
-		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], $fileName, self::ExtensionJSON, true);
+		return $this->find($this->_routesPaths, false, $Paths[GC_PATHS_CONFIGS], $fileName, self::EXTENSION_JSON, true);
 	}
 	/**
 	 * This method provides a way to get one or all service files matching
@@ -522,7 +522,7 @@ class Paths extends Singleton {
 	 */
 	public function servicePath($serviceName, $full = false) {
 		global $Paths;
-		return $this->find($this->_servicePaths, false, $Paths[GC_PATHS_SERVICES], $serviceName, self::ExtensionPHP, $full);
+		return $this->find($this->_servicePaths, false, $Paths[GC_PATHS_SERVICES], $serviceName, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all cron shell tool files
@@ -537,7 +537,7 @@ class Paths extends Singleton {
 	 */
 	public function shellCron($name, $full = false) {
 		global $Paths;
-		return $this->find($this->_shellCronsPaths, false, $Paths[GC_PATHS_SHELL_CRONS], $name, self::ExtensionPHP, $full);
+		return $this->find($this->_shellCronsPaths, false, $Paths[GC_PATHS_SHELL_CRONS], $name, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all system shell tool files
@@ -552,7 +552,7 @@ class Paths extends Singleton {
 	 */
 	public function shellSys($name, $full = false) {
 		global $Paths;
-		return $this->find($this->_shellSysPaths, false, $Paths[GC_PATHS_SHELL_SYSTOOLS], $name, self::ExtensionPHP, $full);
+		return $this->find($this->_shellSysPaths, false, $Paths[GC_PATHS_SHELL_SYSTOOLS], $name, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all shell tool files matching
@@ -567,7 +567,7 @@ class Paths extends Singleton {
 	 */
 	public function shellTool($name, $full = false) {
 		global $Paths;
-		return $this->find($this->_shellToolsPaths, false, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::ExtensionPHP, $full);
+		return $this->find($this->_shellToolsPaths, false, $Paths[GC_PATHS_SHELL_TOOLS], $name, self::EXTENSION_PHP, $full);
 	}
 	/**
 	 * This method provides a way to get one or all snippet files matching
@@ -582,7 +582,7 @@ class Paths extends Singleton {
 	 */
 	public function snippetPath($snippetName, $full = false) {
 		global $Paths;
-		return $this->find($this->_snippetsPaths, true, $Paths[GC_PATHS_SNIPPETS], $snippetName, self::ExtensionTemplate, $full);
+		return $this->find($this->_snippetsPaths, true, $Paths[GC_PATHS_SNIPPETS], $snippetName, self::EXTENSION_TEMPLATE, $full);
 	}
 	/**
 	 * This method allows to get a list of directories where template files
@@ -619,7 +619,7 @@ class Paths extends Singleton {
 		}
 		//
 		// Looking for and returning template's path.
-		return $this->find($this->_templatesPaths, true, $Paths[GC_PATHS_TEMPLATES], Sanitizer::DirPath("{$mode}/{$templateName}"), self::ExtensionTemplate, false);
+		return $this->find($this->_templatesPaths, true, $Paths[GC_PATHS_TEMPLATES], Sanitizer::DirPath("{$mode}/{$templateName}"), self::EXTENSION_TEMPLATE, false);
 	}
 	//
 	// Protected methods.

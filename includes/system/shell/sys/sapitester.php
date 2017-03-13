@@ -124,7 +124,7 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		//
 		// Loading the configuration.
 		$sapiName = $this->_options->option(self::OPTION_CHECK)->value();
-		$sapiPath = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], $sapiName, Paths::ExtensionJSON);
+		$sapiPath = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], $sapiName, Paths::EXTENSION_JSON);
 		$sapiJSON = json_decode(file_get_contents($sapiPath));
 		$sapiOK = true;
 
@@ -165,7 +165,7 @@ class SapitesterSystool extends TooBasic\Shell\ShellTool {
 		// Global dependencies.
 		global $Paths;
 
-		$paths = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], '*', Paths::ExtensionJSON, true);
+		$paths = $this->paths->customPaths($Paths[GC_PATHS_SAPIREADER], '*', Paths::EXTENSION_JSON, true);
 		if($paths) {
 			echo "{$spacer}These is the list of available SimpleAPI configurations:\n";
 

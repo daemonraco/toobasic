@@ -38,7 +38,7 @@ return isset($this->params->get->userid);
 * `$this->paths`:  To access the singleton `Paths` and then any of its public
 methods. For example:
 ```php
-$namesConfigPath = $this->paths->configPath("known_names", \TooBasic\Paths::ExtensionJSON);
+$namesConfigPath = $this->paths->configPath("known_names", \TooBasic\Paths::EXTENSION_JSON);
 ```
 * `$this->translate`: To access the singleton `Translate` and then any of its
 public methods. For example:

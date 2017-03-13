@@ -134,7 +134,7 @@ abstract class Email extends AbstractExporter {
 			//
 			// Rendering and obtaining results @{
 			$this->_viewAdapter->autoAssigns();
-			$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("email/{$this->_viewName}.".Paths::ExtensionTemplate));
+			$this->_lastRun[GC_AFIELD_RENDER] = $this->_viewAdapter->render($this->assignments(), Sanitizer::DirPath("email/{$this->_viewName}.".Paths::EXTENSION_TEMPLATE));
 			// @}
 		}
 

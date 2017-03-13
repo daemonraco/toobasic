@@ -296,7 +296,7 @@ class SApiReporter extends Singleton {
 			global $Paths;
 			//
 			// Looking for the right file path.
-			$path = Paths::Instance()->customPaths($Paths[GC_PATHS_SAPIREPORTS], $report, Paths::ExtensionJSON);
+			$path = Paths::Instance()->customPaths($Paths[GC_PATHS_SAPIREPORTS], $report, Paths::EXTENSION_JSON);
 			//
 			// Checking path.
 			if($path) {

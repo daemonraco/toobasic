@@ -50,7 +50,7 @@ class FormsManager extends \TooBasic\Managers\Manager {
 		} else {
 			$dir = Sanitizer::DirPath("{$Directories[GC_DIRECTORIES_SITE]}/{$Paths[GC_PATHS_FORMS]}");
 		}
-		$out[GC_AFIELD_PATH] = "{$dir}/{$name}.".Paths::ExtensionJSON;
+		$out[GC_AFIELD_PATH] = "{$dir}/{$name}.".Paths::EXTENSION_JSON;
 		//
 		// Checking form existence.
 		$auxForm = new Form($name);
