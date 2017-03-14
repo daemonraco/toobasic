@@ -92,6 +92,9 @@ class ShellSystool extends TooBasic\Shell\Scaffold {
 					'name' => str_replace(' ', '', ucwords(implode(' ', explode('-', $name)))),
 					'triggers' => $optTriggers
 				];
+				$aux['constant'] = strtoupper(Names::SnakeFilename($aux['name']));
+				/** @fixme 'SnakeFilename' does the job but it does not look like the right one. */
+
 				switch($paramType) {
 					case 'M':
 						$aux[GC_AFIELD_TYPE] = 'TYPE_MULTI_VALUE';
