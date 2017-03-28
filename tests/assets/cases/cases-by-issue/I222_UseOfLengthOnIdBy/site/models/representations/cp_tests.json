@@ -1,0 +1,12 @@
+{
+	"table": "tests",
+	"representation_class": "test",
+	"columns_perfix": "tst_",
+	"columns": {
+		"id": "id",
+		"name": "name"
+	},
+	"order_by": {
+		"name": "asc"
+	}
+}

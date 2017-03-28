@@ -1,0 +1,46 @@
+{
+	"tables": [
+		{
+			"version": 2,
+			"name": "tests",
+			"prefix": "tst_",
+			"fields": {
+				"id": {
+					"type": "int",
+					"autoincrement": true
+				},
+				"name": "varchar:64"
+			},
+			"primary": {
+				"id": ["id"]
+			}
+		}
+	],
+	"data": [
+		{
+			"table": "tests",
+			"checkfields": ["id"],
+			"entries": [
+				{
+					"id": 1,
+					"name": "Canada"
+				}, {
+					"id": 2,
+					"name": "Argentina"
+				}, {
+					"id": 3,
+					"name": "Angola"
+				}, {
+					"id": 4,
+					"name": "Mexico"
+				}, {
+					"id": 5,
+					"name": "Japan"
+				}, {
+					"id": 6,
+					"name": "Java"
+				}
+			]
+		}
+	]
+}

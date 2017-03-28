@@ -398,7 +398,8 @@ abstract class ItemsFactory {
 		//
 		// Executing query and fetching IDs.
 		if($stmt->execute($query[GC_AFIELD_PARAMS])) {
-			$out = new ItemsStream($this, $this->_corePropsHolder, $stmt);
+			$query[GC_AFIELD_DB] = $this->_db;
+			$out = new ItemsStream($this, $this->_corePropsHolder, $stmt, $query);
 		} else {
 			//
 			// Catching the last error for further analysis.

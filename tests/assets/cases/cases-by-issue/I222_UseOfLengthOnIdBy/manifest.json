@@ -1,0 +1,23 @@
+{
+	"assets": [
+		"\/modules\/starterdoc\/.inactive",
+		"\/site\/case_config.php",
+		"\/site\/config.php",
+		"\/site\/db\/tests.json",
+		"\/site\/models\/representations\/TestRepresentation.php",
+		"\/site\/models\/representations\/TestsFactory.php",
+		"\/site\/models\/representations\/cp_tests.json",
+		"\/site\/services\/test.php",
+		"\/site\/sqlite_config.php"
+	],
+	"assetDirectories": [
+		"\/site",
+		"\/site\/db",
+		"\/site\/models",
+		"\/site\/models\/representations",
+		"\/site\/services"
+	],
+	"generatedAssets": [],
+	"setUpScripts": [],
+	"tearDownScripts": []
+}

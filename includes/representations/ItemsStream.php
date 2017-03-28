@@ -51,9 +51,17 @@ class ItemsStream implements \Iterator {
 	 */
 	protected $_factory = false;
 	/**
+	 * @var int Size of the current statement.
+	 */
+	protected $_length = false;
+	/**
 	 * @var boolean Indicates if the internal SQL statement hasn't been used.
 	 */
 	protected $_pristine = true;
+	/**
+	 * @var mixed[string] Information about the current used query.
+	 */
+	protected $_queryInfo = false;
 	/**
 	 * @var \PDOStatement SQL statement shortcut.
 	 */
@@ -69,13 +77,15 @@ class ItemsStream implements \Iterator {
 	 * represented item in this stream.
 	 * @param PDOStatement $statement Already executed statement from which
 	 * obtain each entry.
+	 * @param mixed[string] $queryInfo Information about the used query.
 	 */
-	public function __construct(ItemsFactory $factory, $corePropsHolder, PDOStatement $statement) {
+	public function __construct(ItemsFactory $factory, $corePropsHolder, PDOStatement $statement, $queryInfo = false) {
 		//
 		// Storing shortcuts.
 		$this->_corePropsHolder = $corePropsHolder;
 		$this->_factory = $factory;
 		$this->_statement = $statement;
+		$this->_queryInfo = $queryInfo;
 		//
 		// Initializing.
 		$this->init();
@@ -146,7 +156,27 @@ class ItemsStream implements \Iterator {
 	 * @return int Returns a row count.
 	 */
 	public function length() {
-		return $this->_statement->rowCount();
+		if($this->_length === false) {
+			//
+			// SQLite does not fully support PDOStatement::rowCount()
+			// in its current version, therefore this workaround
+			// provides a way to get the right amount of retrieved
+			// items.
+			// Downside: It actually runs a second query to count.
+			// Issue: https://github.com/daemonraco/toobasic/issues/222
+			if($this->_queryInfo[GC_AFIELD_DB]->engine() == 'sqlite') {
+				$query = "select count(*) as entries from ({$this->_queryInfo[GC_AFIELD_QUERY]}) temp";
+				$stmt = $this->_queryInfo[GC_AFIELD_DB]->prepare($query);
+
+				if($stmt->execute($this->_queryInfo[GC_AFIELD_PARAMS])) {
+					$row = $stmt->fetch();
+					$this->_length = $row['entries'];
+				}
+			} else {
+				$this->_length = $this->_statement->rowCount();
+			}
+		}
+		return $this->_length;
 	}
 	/**
 	 * This method fetches another row set from the internal statement and

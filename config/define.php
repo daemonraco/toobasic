@@ -92,6 +92,7 @@ define('GC_AFIELD_DISABLED', 'disabled');
 define('GC_AFIELD_DB', 'db');
 define('GC_AFIELD_DESCRIPTION', 'description');
 define('GC_AFIELD_END', 'end');
+define('GC_AFIELD_ENGINE', 'engine');
 define('GC_AFIELD_ERROR', 'error');
 define('GC_AFIELD_ERRORS', 'errors');
 define('GC_AFIELD_EXPAND', 'expand');
