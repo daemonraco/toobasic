@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\Cache;
 
+//
+// Class aliases.
+use TooBasic\Params;
+
 /**
  * @class DBSQLite
  * This class provides and cache adaptation for entries stored on SQLite
@@ -48,10 +52,15 @@ class DBSQLite extends DB {
 		$query.= " and        cch_date < datetime('now', :limit) \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute([
+		$stmtOk = $stmt->execute([
 			':key' => $this->fullKey($prefix, $key),
 			':limit' => "-{$this->_expirationLength} second"
 		]);
+		//
+		// Debugging errors.
+		if(isset(Params::Instance()->debugdberrors) && !$stmtOk) {
+			debugit($stmt);
+		}
 	}
 	/**
 	 * Checks if the table for cache entries storage exists.

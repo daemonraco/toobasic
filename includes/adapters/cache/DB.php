@@ -10,6 +10,7 @@ namespace TooBasic\Adapters\Cache;
 //
 // Class aliases.
 use TooBasic\Managers\DBManager;
+use TooBasic\Params;
 
 /**
  * @class DB
@@ -33,7 +34,11 @@ abstract class DB extends Adapter {
 	 * @var string Tables prefix.
 	 */
 	protected $_dbprefix = '';
-	// 
+	/**
+	 * @var boolean When TRUE, all query execution errors are shown for debug.
+	 */
+	protected $_debugDBErrors = false;
+	//
 	// Magic methods.
 	/**
 	 * Class constructor.
@@ -53,6 +58,9 @@ abstract class DB extends Adapter {
 		if(!$Defaults[GC_DEFAULTS_INSTALLED]) {
 			$this->checkTables();
 		}
+		//
+		// Loading debug flags.
+		$this->_debugDBErrors = isset(Params::Instance()->debugdberrors);
 	}
 	//
 	// Public methods.
@@ -67,9 +75,14 @@ abstract class DB extends Adapter {
 		$query.= "where       cch_key = :key \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute([
+		$stmtOk = $stmt->execute([
 			':key' => $this->fullKey($prefix, $key)
 		]);
+		//
+		// Debugging errors.
+		if($this->_debugDBErrors && !$stmtOk) {
+			debugit($stmt);
+		}
 	}
 	/**
 	 * This method retieves a cache entry data.
@@ -102,6 +115,8 @@ abstract class DB extends Adapter {
 				// Decoding.
 				$data = unserialize(gzuncompress($row['cch_data']));
 			}
+		} elseif($this->_debugDBErrors) {
+			debugit($stmt);
 		}
 
 		return $data;
@@ -134,7 +149,12 @@ abstract class DB extends Adapter {
 		$compressedData = gzcompress(serialize($data), $this->_compressionRate);
 		$stmt->bindParam(':data', $compressedData, \PDO::PARAM_LOB);
 
-		$stmt->execute();
+		$stmtOk = $stmt->execute();
+		//
+		// Debugging errors.
+		if($this->_debugDBErrors && !$stmtOk) {
+			debugit($stmt);
+		}
 	}
 	//
 	// Protected methods.

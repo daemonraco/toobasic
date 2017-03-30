@@ -49,11 +49,11 @@ if(!function_exists('apache_request_headers')) {
  * Prompt an object in a pretty way and adding some useful info like where it is
  * being called from.
  * 
- * @param type $data Object to be prompt.
- * @param type $final When true, abort the execution after prompting.
- * @param type $specific Uses 'var_dump()' instead of 'print_r()'.
- * @param type $name Adds a title to the seccion where the object is prompted.
- * @param type $showTrace Adds callback trace.
+ * @param mixed $data Object to be prompt.
+ * @param boolean $final When true, abort the execution after prompting.
+ * @param boolean $specific Uses 'var_dump()' instead of 'print_r()'.
+ * @param string $name Adds a title to the seccion where the object is prompted.
+ * @param boolean $showTrace Adds callback trace.
  */
 function debugit($data, $final = false, $specific = false, $name = null, $showTrace = false) {
 	//
@@ -64,22 +64,47 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 	if($specific) {
 		var_dump($data);
 	} else {
-		if(is_bool($data)) {
-			// 
-			// When it's boolean, should say true or false.
-			echo (boolval($data) ? 'true' : 'false')."\n";
-		} elseif(is_null($data)) {
-			// 
-			// When it's null, should NULL.
-			echo "NULL\n";
-		} elseif(is_object($data) || is_array($data)) {
-			// 
-			// When it's an object, should 'NULL'print_r()'.
-			print_r($data);
-		} else {
-			//
-			// Otherwise, it goes directly.
-			echo "{$data}\n";
+		$type = gettype($data);
+		switch($type) {
+			case 'boolean':
+				//
+				// When it's boolean, should say true or false.
+				echo (boolval($data) ? 'true' : 'false')."\n";
+				break;
+			case 'NULL':
+				//
+				// When it's null, should NULL.
+				echo "NULL\n";
+				break;
+			case 'array':
+				//
+				// When it's an object, should use 'print_r()'.
+				print_r($data);
+				break;
+			case 'object':
+				$class = get_class($data);
+				//
+				// Depending on the type it may be shown
+				// differently.
+				switch($class) {
+					case 'PDOStatement':
+						echo "Query: {$data->queryString}\n";
+
+						$info = $data->errorInfo();
+						echo "Error Information:\n";
+						echo "\tError code:        {$info[0]}\n";
+						echo "\tDriver error code: {$info[1]}\n";
+						echo "\tError message:     {$info[2]}\n";
+						break;
+					default:
+						//
+						// When it's a simple object, should use 'print_r()'.
+						print_r($data);
+				}
+			default:
+				//
+				// Otherwise, it goes directly.
+				echo "{$data}\n";
 		}
 	}
 	//

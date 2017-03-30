@@ -9,6 +9,7 @@ namespace TooBasic\Managers;
 
 //
 // Class aliases.
+use TooBasic\Params;
 use TooBasic\Timer;
 
 /**
@@ -26,6 +27,10 @@ class SearchManager extends \TooBasic\Managers\Manager {
 	 * @var string Database connection name shortcut.
 	 */
 	protected $_dbprefix = '';
+	/**
+	 * @var boolean When TRUE, all query execution errors are shown for debug.
+	 */
+	protected $_debugDBErrors = false;
 	//
 	// Public methods.
 	/**
@@ -67,7 +72,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		$stmtD = $this->_db->prepare($queryD[GC_AFIELD_QUERY]);
 		//
 		// Checking each item.
-		$stmt->execute();
+		$stmtOk = $stmt->execute();
+		//
+		// Debugging errors.
+		if($this->_debugDBErrors && !$stmtOk) {
+			debugit($stmt);
+		}
 		while($row = $stmt->fetch()) {
 			$remove = false;
 			//
@@ -81,7 +91,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 			if($remove) {
 				$queryD[GC_AFIELD_PARAMS][':type'] = $row['sit_type'];
 				$queryD[GC_AFIELD_PARAMS][':id'] = $row['sit_id'];
-				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				$stmtDOk = $stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				//
+				// Debugging errors.
+				if($this->_debugDBErrors && !$stmtDOk) {
+					debugit($stmtD);
+				}
 				$count++;
 			}
 		}
@@ -169,7 +184,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 				$queryI[GC_AFIELD_PARAMS][':id'] = $id;
 				//
 				// Removing all current associations.
-				$stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				$stmtDOk = $stmtD->execute($queryD[GC_AFIELD_PARAMS]);
+				//
+				// Debugging errors.
+				if($this->_debugDBErrors && !$stmtDOk) {
+					debugit($stmtD);
+				}
 				//
 				// Adding associations.
 				foreach(array_filter($this->getTerms($terms, $criteria, true)) as $term) {
@@ -178,7 +198,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 					$queryI[GC_AFIELD_PARAMS][':term'] = $term->id;
 					//
 					// Adding.
-					$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
+					$stmtIOk = $stmtI->execute($queryI[GC_AFIELD_PARAMS]);
+					//
+					// Debugging errors.
+					if($this->_debugDBErrors && !$stmtIOk) {
+						debugit($stmtI);
+					}
 				}
 				//
 				// Setting current item as indexed.
@@ -365,6 +390,9 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Generating shortcuts.
 		$this->_db = DBManager::Instance()->getDefault();
 		$this->_dbprefix = $this->_db->prefix();
+		//
+		// Loading debug flags.
+		$this->_debugDBErrors = isset(Params::Instance()->debugdberrors);
 	}
 	/**
 	 * This method performs a basic search for a list of terms and returns the
@@ -422,7 +450,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 
 			foreach($terms as $term) {
 				$queryT[GC_AFIELD_PARAMS][':term'] = "%{$term}%";
-				$stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+				$stmtTOk = $stmtT->execute($queryT[GC_AFIELD_PARAMS]);
+				//
+				// Debugging errors.
+				if($this->_debugDBErrors && !$stmtTOk) {
+					debugit($stmtT);
+				}
 
 				foreach($stmtT->fetchAll() as $row) {
 					$termIds[] = $row['ste_id'];
@@ -434,7 +467,12 @@ class SearchManager extends \TooBasic\Managers\Manager {
 		// Retreiving item associations.
 		foreach($termIds as $term) {
 			$queryI[GC_AFIELD_PARAMS][':term'] = $term;
-			$stmtI->execute($queryI[GC_AFIELD_PARAMS]);
+			$stmtIOk = $stmtI->execute($queryI[GC_AFIELD_PARAMS]);
+			//
+			// Debugging errors.
+			if($this->_debugDBErrors && !$stmtIOk) {
+				debugit($stmtI);
+			}
 			//
 			// Analyzing each found item.
 			foreach($stmtI->fetchAll() as $row) {
