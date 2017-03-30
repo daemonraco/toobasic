@@ -101,6 +101,7 @@ function debugit($data, $final = false, $specific = false, $name = null, $showTr
 						// When it's a simple object, should use 'print_r()'.
 						print_r($data);
 				}
+				break;
 			default:
 				//
 				// Otherwise, it goes directly.
