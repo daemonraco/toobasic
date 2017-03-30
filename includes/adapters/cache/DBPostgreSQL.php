@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\Cache;
 
+//
+// Class aliases.
+use TooBasic\Params;
+
 /**
  * @class DBPostgreSQL
  * This class provides and cache adaptation for entries stored on PostgreSQL
@@ -59,6 +63,8 @@ class DBPostgreSQL extends DB {
 				// Decoding.
 				$data = unserialize(gzuncompress($fdata));
 			}
+		} elseif(isset(Params::Instance()->debugdberrors)) {
+			debugit($stmt);
 		}
 
 		return $data;
@@ -91,9 +97,14 @@ class DBPostgreSQL extends DB {
 		$query.= " and        cch_date < now() - interval '{$this->_expirationLength} second' \n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute([
+		$stmtOk = $stmt->execute([
 			':key' => $this->fullKey($prefix, $key)
 		]);
+		//
+		// Debugging errors.
+		if(isset(Params::Instance()->debugdberrors) && !$stmtOk) {
+			debugit($stmt);
+		}
 	}
 	/**
 	 * Checks if the table for cache entries storage exists.

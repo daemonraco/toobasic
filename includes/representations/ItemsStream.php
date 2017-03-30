@@ -12,6 +12,7 @@ namespace TooBasic\Representations;
 use PDO;
 use PDOStatement;
 use TooBasic\Exception;
+use TooBasic\Params;
 use TooBasic\Representations\CoreProps;
 use TooBasic\Translate;
 
@@ -171,6 +172,8 @@ class ItemsStream implements \Iterator {
 				if($stmt->execute($this->_queryInfo[GC_AFIELD_PARAMS])) {
 					$row = $stmt->fetch();
 					$this->_length = $row['entries'];
+				} elseif(isset(Params::Instance()->debugdberrors)) {
+					debugit($stmt);
 				}
 			} else {
 				$this->_length = $this->_statement->rowCount();

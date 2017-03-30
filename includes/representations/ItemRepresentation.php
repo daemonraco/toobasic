@@ -13,6 +13,7 @@ use TooBasic\DBException;
 use TooBasic\Exception;
 use TooBasic\MagicProp;
 use TooBasic\Managers\DBManager;
+use TooBasic\Params;
 use TooBasic\Representations\CoreProps;
 use TooBasic\Representations\FieldFilterException;
 use TooBasic\Translate;
@@ -40,6 +41,10 @@ abstract class ItemRepresentation {
 	 * @var string Database connection name shortcut.
 	 */
 	protected $_dbprefix = '';
+	/**
+	 * @var boolean When TRUE, all query execution errors are shown for debug.
+	 */
+	protected $_debugDBErrors = false;
 	/**
 	 * @var bool This flag indicates if a property has been modified and not
 	 * yet store on database.
@@ -228,6 +233,9 @@ abstract class ItemRepresentation {
 			// @}
 		}
 		unset($specs);
+		//
+		// Loading debug flags.
+		$this->_debugDBErrors = isset(Params::Instance()->debugdberrors);
 	}
 	/**
 	 * This magic method allows to directly print a representation.
@@ -405,6 +413,11 @@ abstract class ItemRepresentation {
 		// Retrieving information.
 		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$this->_lastDBError = $stmt->errorInfo();
+			//
+			// Debugging errors.
+			if($this->_debugDBErrors) {
+				debugit($stmt);
+			}
 		} else {
 			$data = $stmt->fetch();
 		}
@@ -468,6 +481,11 @@ abstract class ItemRepresentation {
 				}
 			} else {
 				$this->_lastDBError = $stmt->errorInfo();
+				//
+				// Debugging errors.
+				if($this->_debugDBErrors) {
+					debugit($stmt);
+				}
 			}
 		} else {
 			throw new DBException(Translate::Instance()->EX_DB_no_name_column_set_for(['name' => $this->_cp_Table]));
@@ -520,6 +538,11 @@ abstract class ItemRepresentation {
 				$this->postPersist();
 			} else {
 				$this->_lastDBError = $stmt->errorInfo();
+				//
+				// Debugging errors.
+				if($this->_debugDBErrors) {
+					debugit($stmt);
+				}
 			}
 			//
 			// Analyzing field filters back.
@@ -543,6 +566,11 @@ abstract class ItemRepresentation {
 		// Attemptting to remove it.
 		if(!$stmt->execute($query[GC_AFIELD_PARAMS])) {
 			$this->_lastDBError = $stmt->errorInfo();
+			//
+			// Debugging errors.
+			if($this->_debugDBErrors) {
+				debugit($stmt);
+			}
 		}
 		//
 		// Reloading this representation to ensure it was remove.

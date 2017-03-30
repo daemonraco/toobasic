@@ -7,6 +7,10 @@
 
 namespace TooBasic\Adapters\Cache;
 
+//
+// Class aliases.
+use TooBasic\Params;
+
 /**
  * @class DBMySQL
  * This class provides and cache adaptation for entries stored on MySQL databeses.
@@ -39,9 +43,14 @@ class DBMySQL extends DB {
 		$query.= " and        cch_date < date_sub(now(), interval :limit second)\n";
 		$stmt = $this->_db->prepare($query);
 
-		$stmt->execute([
+		$stmtOk = $stmt->execute([
 			':key' => $this->fullKey($prefix, $key),
 			':limit' => $this->_expirationLength
 		]);
+		//
+		// Debugging errors.
+		if(isset(Params::Instance()->debugdberrors) && !$stmtOk) {
+			debugit($stmt);
+		}
 	}
 }

@@ -12,6 +12,7 @@ namespace TooBasic\Representations;
 use TooBasic\Exception;
 use TooBasic\Managers\DBManager;
 use TooBasic\Names;
+use TooBasic\Params;
 use TooBasic\Paths;
 use TooBasic\Representations\CoreProps;
 use TooBasic\Representations\ItemsStream;
@@ -51,6 +52,10 @@ abstract class ItemsFactory {
 	 */
 	protected $_dbprefix = '';
 	/**
+	 * @var boolean When TRUE, all query execution errors are shown for debug.
+	 */
+	protected $_debugDBErrors = false;
+	/**
 	 * @var string[] Last database error detected.
 	 */
 	protected $_lastDBError = false;
@@ -75,6 +80,9 @@ abstract class ItemsFactory {
 		if(!$this->_cp_IDColumn) {
 			$this->_cp_DisableCreate = true;
 		}
+		//
+		// Loading debug flags.
+		$this->_debugDBErrors = isset(Params::Instance()->debugdberrors);
 	}
 	/**
 	 * Prevent users from clone the singleton's instance.
@@ -160,6 +168,11 @@ abstract class ItemsFactory {
 			//
 			// Catching the last error for further analysis.
 			$this->_lastDBError = $stmt->errorInfo();
+			//
+			// Debugging errors.
+			if($this->_debugDBErrors) {
+				debugit($stmt);
+			}
 		}
 
 		return $out;
@@ -404,6 +417,11 @@ abstract class ItemsFactory {
 			//
 			// Catching the last error for further analysis.
 			$this->_lastDBError = $stmt->errorInfo();
+			//
+			// Debugging errors.
+			if($this->_debugDBErrors) {
+				debugit($stmt);
+			}
 		}
 
 		return $out;

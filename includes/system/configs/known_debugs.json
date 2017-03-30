@@ -31,6 +31,7 @@
 		"debugconfigs": "Shows information about how system configs are loaded.",
 		"debugformconfig": "Displays loaded form builder configuration after sanitation.",
 		"debugmagicprop": "Displays information about currently configured magic properties.",
-		"debugctrl": "Displays dynamic and static controller exported function."
+		"debugctrl": "Displays dynamic and static controller exported function.",
+		"debugdberrors": "When a query inside TooBasic is executed with errors the statement is shown (without parameters for security reasons)."
 	}
 }
